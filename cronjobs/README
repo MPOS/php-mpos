@@ -1,0 +1,22 @@
+
+Install:
+--------
+
+These scripts should not really be placed inside of the webroot.  They should be run 
+from the shell via a cronjob.  Set something up like this:
+
+# m     h       dom     mon     dow     command
+  *     *       *       *       *       /full/path/to/pool_update.sh 1>/dev/null 2>/dev/null
+
+Also be sure to define in each of these scripts the full path to the include directory.
+See the top of each script in the cronjob directory for details. 
+
+
+
+Notes:
+------
+These scripts (from version 2.x.x forward) are intended to run every 60 secs.  Best results will be achieved 
+if you configure your server to run them at the same interval.  You risk missing new block information being
+inserted into the database the longer you set the interval between these scripts running.  Database load has 
+been significantly improved from version 2.x.x forward and it should now be perfectly safe to run these 
+scripts every 60 secs. 
