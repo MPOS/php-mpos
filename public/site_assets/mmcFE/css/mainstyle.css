@@ -29,9 +29,8 @@ a.menu:hover{
   font-size: 20px;
   font-weight: bold;
   color: #000;
-
   margin:5px;
-  margin-top:65px;
+  margin-top:5px;
   width:auto;
   float:left;
 }
@@ -53,7 +52,7 @@ a.menu:hover{
   position:absolute;
 
   right:5px;
-  top:87px;
+  top:22px;
   float:right;
 }
 
