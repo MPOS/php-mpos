@@ -14,9 +14,6 @@ if ($bitcoin->can_connect() === true){
   $_SESSION['POPUP'][] = array('CONTENT' => 'Unable to connect to pushpool service: ' . $bitcoin->can_connect(), 'TYPE' => 'errormsg');
 }
 
-// TODO: For testing
-$dDifficulty = 396;
-
 // Top 15 hashrate list
 $stmt = $mysqli->prepare("SELECT username, id, hashrate FROM webUsers WHERE hashrate != '0' ORDER BY hashrate DESC LIMIT 15");
 $stmt->execute();
