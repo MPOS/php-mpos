@@ -58,7 +58,7 @@
     </tr>
     <tr>
       <td class="leftheader">Next Network Block</td>
-      <td><a href="http://explorer.litecoin.net/search?q={$CURRENTBLOCK}" target="_new">{$CURRENTBLOCK + 1}</a> &nbsp;&nbsp;<font size="1"> (Current: <a href="http://explorer.litecoin.net/search?q={$CURRENTBLOCK}" target="_new">{$CURRENTBLOCK})</a></font></td>
+      <td><a href="http://explorer.litecoin.net/search?q={$CURRENTBLOCK + 1}" target="_new">{$CURRENTBLOCK + 1}</a> &nbsp;&nbsp;<font size="1"> (Current: <a href="http://explorer.litecoin.net/search?q={$CURRENTBLOCK}" target="_new">{$CURRENTBLOCK})</a></font></td>
     </tr>
     <tr>
       <td class="leftheader">Last Block Found</td>
