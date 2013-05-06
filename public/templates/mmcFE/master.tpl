@@ -73,10 +73,10 @@
           {include file="global/footer.tpl"}
         </div>
       </div>
-      <div id="debug">
-        {include file="system/debugger.tpl"}
-      </div>
     </div>
+  </div>
+  <div id="debug">
+    {include file="system/debugger.tpl"}
   </div>
 </div>
 </body>
