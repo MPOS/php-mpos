@@ -16,7 +16,7 @@
       {assign var=user value="."|explode:$BLOCKSFOUND[block].username} 
       <tr class="{cycle values="odd,even"}">
         <td>{$BLOCKSFOUND[block].blockNumber}</td>
-        <td>{$BLOCKSFOUND[block].confirmed}</td>
+        <td>{if $BLOCKSFOUND[block].confirms >= 120}<font color="green">Confirmed</font>{else}<font color="orange">{$BLOCKSFOUND[block].confirms - 120} left</font>{/if}</td>
         <td>{$user.0}</td>
         <td>{$BLOCKSFOUND[block].timestamp|date_format:"%d/%m/%Y %H:%M:%S"}</td>
         <td>{$BLOCKSFOUND[block].shares|number_format}</td>
