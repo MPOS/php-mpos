@@ -1,4 +1,6 @@
 0.0.1 (Mar 7th 2013)
 --------------------
 
-* First release on GitHub, basic working version
+* WiP Upload of all files currently available
+* Added upstream script collections
+* Added SQL structure 
