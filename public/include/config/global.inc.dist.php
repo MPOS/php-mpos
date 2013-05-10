@@ -7,7 +7,7 @@ if (!defined('SECURITY'))
 define('THEME', 'mmcFE');
 
 // Our include directory for additional features
-define('INCLUDE_DIR', 'include');
+define('INCLUDE_DIR', BASEPATH . 'include');
 
 // Our class directory
 define('CLASS_DIR', INCLUDE_DIR . '/classes');
