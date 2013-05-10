@@ -18,18 +18,8 @@ limitations under the License.
 
  */
 
-// MODIFY THIS
-// We need to find our include files so set this properly
-define("BASEPATH", "../public/");
-
-// Our security check
-define("SECURITY", 1);
-
-// Include our configuration (holding defines for the requires)
-require_once(BASEPATH . '/include/config/global.inc.php');
-
-// We include all needed files here, even though our templates could load them themself
-require_once(BASEPATH . INCLUDE_DIR . '/autoloader.inc.php');
+// Include all settings and classes
+require_once('shared.inc.php');
 
 // Fetch our last block found from the DB as a starting point
 $strLastBlockHash = $block->getLast()->blockhash;
