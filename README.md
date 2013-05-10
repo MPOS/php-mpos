@@ -1,7 +1,7 @@
 Description
 ===========
 
-mmcFE-ng is a web frontend for Pooled Mining.
+mmcFE-ng is a web frontend for Pooled LTC Mining.
 
 This is based on mmcFE, the original work by Greedi:
 https://github.com/Greedi/mmcFE
@@ -15,7 +15,7 @@ future.
 Requirements
 ============
 
-* PHP MySQLnd Driver
+* PHP mysqlnd Driver
 * MySQL Server
 * pushpoold
 * litecoind
@@ -30,8 +30,7 @@ Disclaimer
 ==========
 
 Since this is a heavy WIP there is no official support yet. The frontend
-might work already but the entire backend (cronjobs) has not been
-modified from the original yet and *will not work*. If you have a
-working backend please get in touch with me - maybe with some
-collaboration this project could be a great starting point for anyone
-that likes to run their own pool.
+might work already but the entire backend (cronjobs) are currently
+focused on but *not working yet*. If you have a working backend please
+get in touch with me - maybe with some collaboration this project could
+be a great starting point for anyone that likes to run their own pool.
