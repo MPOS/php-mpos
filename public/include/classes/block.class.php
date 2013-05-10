@@ -8,7 +8,7 @@ class Block {
   private $sError = '';
   private $table = 'blocks';
   // This defines each block
-  public $height, $blockhash, $confirmations, $difficulty, $time;
+  public $height, $blockhash, $confirmations, $time, $accounted;
 
   public function __construct($debug, $mysqli, $salt) {
     $this->debug = $debug;
@@ -31,6 +31,17 @@ class Block {
       $result = $stmt->get_result();
       $stmt->close();
       return $result->fetch_object();
+    }
+    return false;
+  }
+
+  public function getAll($order='DESC') {
+    $stmt = $this->mysqli->prepare("SELECT * FROM $this->table ORDER BY height $order");
+    if ($this->checkStmt($stmt)) {
+      $stmt->execute();
+      $result = $stmt->get_result();
+      $stmt->close();
+      return $result->fetch_all(MYSQLI_ASSOC);
     }
     return false;
   }
