@@ -27,22 +27,27 @@ $aAllBlocks = $block->getAll('ASC');
 foreach ($aAllBlocks as $iIndex => $aBlock) {
   if (!$aBlock['accounted']) {
     $iPrevBlockTime = $aAllBlocks[$iIndex - 1]['time'];
-    if ($iPrevBlockTime) {
-      echo "Found a previous block with timestamp: $iPrevBlockTime\n";
+    if (!$iPrevBlockTime) {
+      $iPrevBlockTime = 0;
     }
     $aAccountShares = $share->getSharesForAccountsByTimeframe($aBlock['time'], $iPrevBlockTime);
+    $iRoundShares = $share->getRoundSharesByTimeframe($aBlock['time'], $iPrevBlockTime);
     $strFinder = $share->getFinderByTimeframe($aBlock['time'], $iPrevBlockTime);
-    echo "Block Information:\n";
-    echo "Height\tTime\t\tFinder\n\n";
-    echo $aBlock['height'] . "\t" . $aBlock['time'] . "\t" . $strFinder . "\n";
-    echo "\nShares details:\n\n";
-    echo "ID\tUsername\tValid\tInvalid\n\n";
-    foreach ($aAccountShares as $aData) {
-      echo $aData['id'] . "\t" . $aData['username'] . "\t" . $aData['valid'] . "\t" . $aData['invalid'] . "\n";
+    echo "Height\tTime\t\tShares\tFinder\n";
+    echo $aBlock['height'] . "\t" . $aBlock['time'] . "\t" . $iRoundShares . "\t" . $strFinder . "\n\n";
+    echo "ID\tUsername\tValid\tInvalid\tPercentage\tPayout\n";
+    foreach ($aAccountShares as $key => $aData) {
+      $aData['percentage'] = ( 100 / $iRoundShares ) * $aData['valid'];
+      $aData['payout'] = ( $aData['percentage'] / 100 ) * $config['reward'];
+      echo $aData['id'] . "\t" .
+           $aData['username'] . "\t" .
+           $aData['valid'] . "\t" .
+           $aData['invalid'] . "\t" .
+           $aData['percentage'] . "\t" .
+           $aData['payout'] . "\t" . 
+           "\n";
     }
-    echo "\n";
-    // TODO: Find all shares for this blocks round and account the users
-    // propotional to their shares for this block
+    echo "------------------------------------------------------------------------\n\n";
   }
   // TODO: We have accounted all shares for a block so mark it accounted
   // and delete all the shares we just accounted for.

@@ -68,6 +68,23 @@ class Share {
     return false;
   }
 
+  public function getRoundSharesByTimeframe($current='', $old='') {
+    $stmt = $this->mysqli->prepare("SELECT
+                                      count(id) as total
+                                    FROM $this->table
+                                    WHERE our_result = 'Y'
+                                      AND UNIX_TIMESTAMP(time) BETWEEN ? AND ?
+                                    ");
+    echo $this->mysqli->error;
+    if ($this->checkStmt($stmt)) {
+      $stmt->bind_param('ii', $old, $current);
+      $stmt->execute();
+      $result = $stmt->get_result();
+      $stmt->close();
+      return $result->fetch_object()->total;
+    }
+    return false;
+  }
   public function getFinderByTimeframe($current='', $old='') {
     $stmt = $this->mysqli->prepare("SELECT
                                       SUBSTRING_INDEX( `username` , '.', 1 ) AS account
