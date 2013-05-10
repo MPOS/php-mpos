@@ -17,7 +17,7 @@ class Debug {
     /**
      * @var integer $DEBUG enable (1) or disable (0) debugging
      */
-    private static $DEBUG;
+    private $DEBUG;
 
     /**
      * @var array $debugInfo Data array with debugging information
@@ -27,7 +27,7 @@ class Debug {
     /**
      * @var float $startTime Start time of our debugger
      */
-    private static $floatStartTime;
+    private $floatStartTime;
 
     /**
      * Construct our class
