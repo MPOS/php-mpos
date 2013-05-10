@@ -18,6 +18,9 @@ limitations under the License.
 
  */
 
+// This should be okay
+define("BASEPATH", "./");
+
 // Our security check
 define("SECURITY", 1);
 
@@ -26,17 +29,11 @@ session_start();
 $session_id = session_id();
 
 // Include our configuration (holding defines for the requires)
-require_once('include/config/global.inc.php');
+require_once(BASEPATH . 'include/config/global.inc.php');
 
 // Load Classes, they name defines the $ variable used
 // We include all needed files here, even though our templates could load them themself
-require_once(CLASS_DIR . '/debug.class.php');
-require_once(CLASS_DIR . '/bitcoin.class.php');
-require_once(INCLUDE_DIR . '/database.inc.php');
-require_once(INCLUDE_DIR . '/smarty.inc.php');
-// Load classes that need the above as dependencies
-require_once(CLASS_DIR . '/user.class.php');
-require_once(CLASS_DIR . '/settings.class.php');
+require_once(INCLUDE_DIR . '/autoloader.inc.php');
 
 // Create our pages array from existing files
 if (is_dir(INCLUDE_DIR . '/pages/')) {
