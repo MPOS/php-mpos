@@ -14,11 +14,16 @@ class Settings {
 
   public function getValue($name) {
     $query = $this->mysqli->prepare("SELECT value FROM $this->table WHERE setting=? LIMIT 1");
-    $query->bind_param('s', $name);
-    $query->execute();
-    $query->bind_result($value);
-    $query->fetch();
-    $query->close();
+    if ($query) {
+      $query->bind_param('s', $name);
+      $query->execute();
+      $query->bind_result($value);
+      $query->fetch();
+      $query->close();
+    } else {
+      $this->debug->append("Failed to fetch variable $name from $this->table");
+      return false;
+    }
     return $value;
   }
 }

@@ -44,7 +44,7 @@ if (is_dir(INCLUDE_DIR . '/pages/')) {
         $filename = basename($filepath);
         $pagename = substr($filename, 0, strlen($filename) - 8);
         $arrPages[$pagename] = $filename;
-        $debug->append("Adding $pagename as " . $filename . " to accessible pages", 2);
+        $debug->append("Adding $pagename as " . $filename . " to accessible pages", 4);
     }
 }
 
@@ -57,7 +57,7 @@ if (is_dir(INCLUDE_DIR . '/pages/' . $page)) {
         $filename = basename($filepath);
         $pagename = substr($filename, 0, strlen($filename) - 8);
         $arrActions[$pagename] = $filename;
-        $debug->append("Adding $pagename as " . $filename . ".inc.php to accessible actions", 2);
+        $debug->append("Adding $pagename as " . $filename . ".inc.php to accessible actions", 4);
     }
 }
 // Default to empty (nothing) if nothing set or not known

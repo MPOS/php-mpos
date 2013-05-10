@@ -5,20 +5,31 @@ if (!defined('SECURITY'))
   die('Hacking attempt');
 
 class User {
+  private $sError = '';
+  private $userID = false;
+  private $table = 'webUsers';
+  private $user = array();
+  private $tableAccountBalance = 'accountBalance';
+  private $tablePoolWorker = 'pool_worker';
+  private $tableLedger = 'ledger';
+
   public function __construct($debug, $mysqli, $salt) {
-    $this->error = '';
-    $this->userID = false;
     $this->debug = $debug;
     $this->mysqli = $mysqli;
     $this->salt = $salt;
-    $this->table = 'webUsers';
-    $this->user = array();
-    $this->tableAccountBalance = 'accountBalance';
-    $this->tablePoolWorker = 'pool_worker';
-    $this->tableLedger = 'ledger';
+    $this->debug->append("Instantiated User class", 2);
+  }
+
+  // get and set methods
+  private function setErrorMessage($msg) {
+    $this->sError = $msg;
+  }
+  public function getError() {
+    return $this->sError;
   }
 
   public function checkLogin($username, $password) {
+    $this->debug->append("Checking login for $username with password $password", 2);
     if ( $this->checkUserPassword($username, $password) ) {
       $this->createSession($username);
       return true;
@@ -27,6 +38,7 @@ class User {
   }
 
   public function checkPin($userId, $pin=false) {
+    $this->debug->append("Confirming PIN for $userId and pin $pin", 2);
     $stmt = $this->mysqli->prepare("SELECT pin FROM $this->table WHERE id=? AND pin=? LIMIT 1");
     $pin_hash = hash('sha256', $pin.$this->salt);
     $stmt->bind_param('is', $userId, $pin_hash);
@@ -55,24 +67,30 @@ class User {
   }
   private function updateSingle($userID, $field, $table) {
     $stmt = $this->mysqli->prepare("UPDATE $table SET " . $field['name'] . " = ? WHERE userId = ? LIMIT 1");
-    $stmt->bind_param($field['type'].'i', $field['value'], $userID);
-    $stmt->execute();
-    $stmt->close();
-    return true;
+    if ($this->checkStmt($stmt)) {
+      $stmt->bind_param($field['type'].'i', $field['value'], $userID);
+      $stmt->execute();
+      $stmt->close();
+      return true;
+    }
+    return false;
   }
 
   public function addLedger($userID, $balance, $address, $fee=0.1) {
     $stmt = $this->mysqli->prepare("INSERT INTO $this->tableLedger (userId, transType, amount, sendAddress, feeAmount) VALUES (?, 'Debit_MP', ?, ?, ?)");
-    $stmt->bind_param('idsd', $userID, $balance, $address, $fee);
-    $stmt->execute();
-    $stmt->close();
-    return true;
+    if ($this->checkStmt($stmt)) {
+      $stmt->bind_param('idsd', $userID, $balance, $address, $fee);
+      $stmt->execute();
+      $stmt->close();
+      return true;
+    }
+    return false;
   }
 
   private function checkStmt($bState) {
     if ($bState ===! true) {
       $this->debug->append("Failed to prepare statement: " . $this->mysqli->error);
-      $this->error = 'Unable to prepare database statement';
+      $this->setErrorMessage('Internal application Error');
       return false;
     }
     return true;
@@ -80,11 +98,11 @@ class User {
 
   public function updatePassword($userID, $current, $new1, $new2) {
     if ($new1 !== $new2) {
-      $this->error = 'New passwords do not match';
+      $this->setErrorMessage( 'New passwords do not match' );
       return false;
     }
     if ( strlen($new1) < 8 ) {
-      $this->error = 'New password is too short, please use more than 8 chars';
+      $this->setErrorMessage( 'New password is too short, please use more than 8 chars' );
       return false;
     }
     $current = hash('sha256', $current.$this->salt);
@@ -98,7 +116,7 @@ class User {
       }
       $stmt->close();
     }
-    $this->error = 'Unable to update password, current password wrong?';
+    $this->setErrorMessage( 'Unable to update password, current password wrong?' );
     return false;
   }
 
@@ -152,14 +170,17 @@ class User {
   private function checkUserPassword($username, $password) {
     $user = array();
     $stmt = $this->mysqli->prepare("SELECT username, id FROM $this->table WHERE username=? AND pass=? LIMIT 1");
-    $stmt->bind_param('ss', $username, hash('sha256', $password.$this->salt));
-    $stmt->execute();
-    $stmt->bind_result($row_username, $row_id);
-    $stmt->fetch();
-    $stmt->close();
-    // Store the basic login information
-    $this->user = array('username' => $row_username, 'id' => $row_id);
-    return $username === $row_username;
+    if ($this->checkStmt($stmt)) {
+      $stmt->bind_param('ss', $username, hash('sha256', $password.$this->salt));
+      $stmt->execute();
+      $stmt->bind_result($row_username, $row_id);
+      $stmt->fetch();
+      $stmt->close();
+      // Store the basic login information
+      $this->user = array('username' => $row_username, 'id' => $row_id);
+      return $username === $row_username;
+    }
+    return false;
   }
 
   private function createSession($username) {
@@ -192,10 +213,9 @@ class User {
       $result = $stmt->get_result();
       $stmt->close();
       return $result->fetch_array();
-    } else {
-      echo $this->mysqli->error;
-      echo "FAIL";
     }
+    $this->debug->append("Failed to fetch user information for $userID");
+    return false;
   }
 
   // Get 15 most recent transactions
@@ -243,8 +263,8 @@ class User {
     if ($this->checkStmt($stmt)) {
       $stmt->bind_param('iss', $userID, $workerName, $workerPassword);
       if (!$stmt->execute()) {
-        $this->error = 'Failed to add worker';
-        if ($stmt->sqlstate == '23000') $this->error = 'Worker already exists';
+        $this->setErrorMessage( 'Failed to add worker' );
+        if ($stmt->sqlstate == '23000') $this->setErrorMessage( 'Worker already exists' );
         return false;
       }
       return true;
@@ -259,7 +279,7 @@ class User {
         $stmt->close;
         return true;
       } else {
-        $this->error = 'Unable to delete worker';
+        $this->setErrorMessage( 'Unable to delete worker' );
       }
     }
     return false;
@@ -267,23 +287,23 @@ class User {
 
   public function register($username, $password1, $password2, $pin, $email1='', $email2='') {
     if (strlen($password1) < 8) { 
-      $this->error = 'Password is too short, minimum of 8 characters required';
+      $this->setErrorMessage( 'Password is too short, minimum of 8 characters required' );
       return false;
     }
     if ($password1 !== $password2) {
-      $this->error = 'Password do not match';
+      $this->setErrorMessage( 'Password do not match' );
       return false;
     }
     if (!empty($email1) && !filter_var($email1, FILTER_VALIDATE_EMAIL)) {
-      $this->error = 'Invalid e-mail address';
+      $this->setErrorMessage( 'Invalid e-mail address' );
       return false;
     }
     if ($email1 !== $email2) {
-      $this->error = 'E-mail do not match';
+      $this->setErrorMessage( 'E-mail do not match' );
       return false;
     }
     if (!is_numeric($pin) || strlen($pin) > 4) {
-      $this->error = 'Invalid PIN';
+      $this->setErrorMessage( 'Invalid PIN' );
       return false;
     }
     $apikey = hash("sha256",$username.$salt);
@@ -297,14 +317,17 @@ class User {
           '0', '0', '0', '0',
           ?, '0', '0', '0', ?)
           ");
-    $stmt->bind_param('sssis', $username, hash("sha256", $password1.$this->salt), $email1, $pin, $apikey);
-    if (!$stmt->execute()) {
-      $this->error = 'Unable to register';
-      if ($stmt->sqlstate == '23000') $this->error = 'Username already exists';
-      return false;
+    if ($this->checkStmt($stmt)) {
+      $stmt->bind_param('sssis', $username, hash("sha256", $password1.$this->salt), $email1, $pin, $apikey);
+      if (!$stmt->execute()) {
+        $this->setErrorMessage( 'Unable to register' );
+        if ($stmt->sqlstate == '23000') $this->setErrorMessage( 'Username already exists' );
+        return false;
+      }
+      $stmt->close();
+      return true;
     }
-    $stmt->close();
-    return true;
+    return false;
   }
 }
 
