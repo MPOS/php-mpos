@@ -25,7 +25,7 @@
           <td>{$TRANSACTIONS[transaction].transType}</td>
           <td>{$TRANSACTIONS[transaction].sendAddress}</td>
           <td>{if $TRANSACTIONS[transaction].assocBlock == 0}n/a{else}{$TRANSACTIONS[transaction].assocBlock}{/if}</td>
-          <td><font color="{if $TRANSACTIONS[transaction].amount > 0}green{else}red{/if}">{$TRANSACTIONS[transaction].amount}</td>
+          <td><font color="{if $TRANSACTIONS[transaction].transType == Credit}green{else}red{/if}">{$TRANSACTIONS[transaction].amount}</td>
         </tr>
 {/section}
       </tbody>
