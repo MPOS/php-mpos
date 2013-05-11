@@ -44,15 +44,20 @@ foreach ($aAllBlocks as $iIndex => $aBlock) {
            $aData['invalid'] . "\t" .
            $aData['percentage'] . "\t" .
            $aData['payout'] . "\t";
-      if (!$statistics->updateShareStatistics($aData, $aBlock['id'])) {
-        echo "Stats Failed" . "\n";
-      }
+
+      // Do all database updates for statistics and payouts
+      $strStatus = "OK";
+      // if (!$statistics->updateShareStatistics($aData, $aBlock['id']))
+      //  $strStatus = "Stats Failed";
+      if (!$transaction->addCredit($aData['id'], $aData['payout'], $aBlock['id']))
+        $strStatus = "Transaction Failed";
+      echo "$strStatus\n";
     }
     echo "------------------------------------------------------------------------\n\n";
 
     // Now that we have all shares counted internally let's update the tables
     // Set shares as counted and mark block as accounted for
-    // $share->setCountedByTimeframe($aBlock['time'], $iPrevBlockTime);
-    // $block->setAccounted($aBlock['blockhash']);
+    $share->setCountedByTimeframe($aBlock['time'], $iPrevBlockTime);
+    $block->setAccounted($aBlock['blockhash']);
   }
 }
