@@ -62,6 +62,22 @@ class Block {
     return false;
   }
 
+  public function setAccounted($blockhash='') {
+    if ($blockhash == '') return false;
+    $stmt = $this->mysqli->prepare("UPDATE $this->table SET accounted = 1 WHERE blockhash = ?");
+    if ($this->checkStmt($stmt)) {
+      $stmt->bind_param('s', $blockhash);
+      if (!$stmt->execute()) {
+        $this->debug->append("Failed to execute statement: " . $stmt->error);
+        $stmt->close();
+        return false;
+      }
+      $stmt->close();
+      return true;
+    }
+    return false;
+  }
+
   private function checkStmt($bState) {
     if ($bState ===! true) {
       $this->debug->append("Failed to prepare statement: " . $this->mysqli->error);
