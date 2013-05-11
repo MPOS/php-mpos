@@ -122,26 +122,17 @@ class User {
 
   public function updateAccount($userID, $address, $threshold, $donate) {
     $bUser = false;
-    $bAccount = false;
     $threshold = min(250, max(0, floatval($threshold)));
     if ($threshold < 1) $threshold = 0.0;
     $donate = min(100, max(0, floatval($donate)));
-    $stmt = $this->mysqli->prepare("UPDATE $this->tableAccountBalance SET sendAddress = ?, threshold = ? WHERE userId = ?");
-    $stmt->bind_param('ssi', $address, $threshold, $userID);
-    $stmt->execute();
-    if ( $stmt->errno == 0 ) {
-      $bAccount = true;
-    }
-    $stmt->close();
 
-    $stmt = $this->mysqli->prepare("UPDATE $this->table SET donate_percent = ? WHERE id = ?");
-    $stmt->bind_param('di', $donate, $userID);
+    $stmt = $this->mysqli->prepare("UPDATE $this->table SET coin_address = ?, ap_threshold = ?, donate_percent = ? WHERE id = ?");
+    $stmt->bind_param('sddi', $address, $threshold, $donate, $userID);
     $stmt->execute();
     if ( $stmt->errno == 0 ) {
-      $bUser = true;
+      $stmt->close();
+      return true;
     }
-    $stmt->close();
-    if ($bAccount && $bUser) return true;
     return false;
   }
   // set/get methods
@@ -152,7 +143,7 @@ class User {
     return $this->getSingle($userID, 'userId', 'balance', $this->tableAccountBalance);
   }
   public function getLtcAddress($userID) {
-    return $this->getSingle($userID, 'userId', 'sendAddress', $this->tableAccountBalance);
+    return $this->getSingle($userID, 'id', 'coin_address', $this->table);
   }
   public function getUserName($userID) {
     return $this->getSingle($userID, 'id', 'username', $this->table);
@@ -201,18 +192,19 @@ class User {
     $this->debug->append("Fetching user information for user id: $userID");
     $stmt = $this->mysqli->prepare("
       SELECT
-      u.id, u.username, u.pin, u.pass, u.admin, u.share_count, u.stale_share_count, u.shares_this_round, u.hashrate, u.api_key,
-      IFNULL(u.donate_percent, '0') as donate_percent, IFNULL(u.round_estimate, '0') as round_estimate, a.sendAddress, a.threshold,
-      a.balance
-      FROM $this->table as u LEFT JOIN $this->tableAccountBalance as a
-      ON u.id = a.userId
-      WHERE u.id=? LIMIT 0,1");
+      id, username, pin, pass, admin,
+      IFNULL(donate_percent, '0') as donate_percent, coin_address, ap_threshold
+      FROM $this->table
+      WHERE id = ? LIMIT 0,1");
     if ($this->checkStmt($stmt)) {
       $stmt->bind_param('i', $userID);
-      $stmt->execute();
+      if (!$stmt->execute()) {
+        $this->debug->append('Failed to execute statement');
+        return false;
+      }
       $result = $stmt->get_result();
       $stmt->close();
-      return $result->fetch_array();
+      return $result->fetch_assoc();
     }
     $this->debug->append("Failed to fetch user information for $userID");
     return false;
