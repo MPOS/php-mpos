@@ -73,12 +73,12 @@ if (!empty($action)) {
 $smarty->assign("PAGE", $page);
 $smarty->assign("ACTION", $action);
 
+// Now with all loaded and processed, setup some globals we need for smarty templates
+require_once(INCLUDE_DIR . '/smarty_globals.inc.php');
+
 // Debguger 
 $debug->append("Loading debug information into template", 4);
 $smarty->assign('DebuggerInfo', $debug->getDebugInfo());
-
-// Now with all loaded and processed, setup some globals we need for smarty templates
-require_once(INCLUDE_DIR . '/smarty_globals.inc.php');
 
 // Display our page
 if (!@$supress_master)

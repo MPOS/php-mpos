@@ -23,6 +23,7 @@ define('SALT', 'LJKEHFuhgu7%&¤Hg783tr7gf¤%¤fyegfredfoGHYFGYe(%/(&%6');
 $config = array(
   'difficulty' => '31',         // Target difficulty for this pool
   'reward' => '50',             // Reward for finding blocks
+  'confirmations' => '120',     // Confirmations per block found to credit transactions
   'wallet' => array(
     'type' => 'http',            // http or https are supported
     'host' => 'localhost:9332',
