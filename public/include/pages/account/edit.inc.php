@@ -56,7 +56,7 @@ if ( ! $user->checkPin($_SESSION['USERDATA']['id'], $_POST['authPin']) && $_POST
     if ($user->updatePassword($_SESSION['USERDATA']['id'], $_POST['currentPassword'], $_POST['newPassword'], $_POST['newPassword2'])) {
       $_SESSION['POPUP'][] = array('CONTENT' => 'Password updated', 'TYPE' => 'success');
     } else {
-      $_SESSION['POPUP'][] = array('CONTENT' => $user->error, 'TYPE' => 'errormsg');
+      $_SESSION['POPUP'][] = array('CONTENT' => $user->getError(), 'TYPE' => 'errormsg');
     }
     break;
   }
