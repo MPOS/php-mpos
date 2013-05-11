@@ -27,6 +27,7 @@ if (!$strLastBlockHash) {
   $strLastBlockHash = '';
 }
 
+// Fetch all transactions since our last block
 if ( $bitcoin->can_connect() === true ){
   $aTransactions = $bitcoin->query('listsinceblock', $strLastBlockHash);
   $iDifficulty = $bitcoin->query('getdifficulty');
@@ -35,6 +36,13 @@ if ( $bitcoin->can_connect() === true ){
   exit(1);
 }
 
+// Nothing to do so bail out
+if (empty($aTransactions)) {
+  verbose("No new transactions since last block\n");
+  exit(0);
+}
+
+// Table header
 verbose("Blockhash\t\tHeight\tAmount\tConfirmations\tDiff\t\tTime\t\t\tStatus\n");
 
 foreach ($aTransactions['transactions'] as $iIndex => $aData) {

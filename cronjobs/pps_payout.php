@@ -21,8 +21,13 @@ limitations under the License.
 // Include all settings and classes
 require_once('shared.inc.php');
 
-// Fetch all accounted blocks
+// Fetch all unaccounted blocks
 $aAllBlocks = $block->getAllUnaccounted('ASC');
+if (empty($aAllBlocks)) {
+  verbose("No new unaccounted blocks found\n");
+  exit(0);
+}
+
 foreach ($aAllBlocks as $iIndex => $aBlock) {
   if (!$aBlock['accounted']) {
     $iPrevBlockTime = @$aAllBlocks[$iIndex - 1]['time'];
@@ -30,6 +35,10 @@ foreach ($aAllBlocks as $iIndex => $aBlock) {
       $iPrevBlockTime = 0;
     }
     $aAccountShares = $share->getSharesForAccountsByTimeframe($aBlock['time'], $iPrevBlockTime);
+    if (empty($aAccountShares)) {
+      verbose("No shares found for this block\n");
+      continue;
+    }
     $iRoundShares = $share->getRoundSharesByTimeframe($aBlock['time'], $iPrevBlockTime);
     $strFinder = $share->getFinderByTimeframe($aBlock['time'], $iPrevBlockTime);
     verbose("ID\tHeight\tTime\t\tShares\tFinder\n");
