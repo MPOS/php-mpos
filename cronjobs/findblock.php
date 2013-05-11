@@ -22,25 +22,36 @@ limitations under the License.
 require_once('shared.inc.php');
 
 // Fetch our last block found from the DB as a starting point
-$strLastBlockHash = $block->getLast()->blockhash;
+$strLastBlockHash = @$block->getLast()->blockhash;
 if (!$strLastBlockHash) { 
   $strLastBlockHash = '';
 }
 
-try {
+if ( $bitcoin->can_connect() === true ){
   $aTransactions = $bitcoin->query('listsinceblock', $strLastBlockHash);
-} catch (Exception $e) {
-  echo "Unable to connect to bitcoin RPC\n";
+  $iDifficulty = $bitcoin->query('getdifficulty');
+} else {
+  echo "Aborted: " . $bitcoin->can_connect() . "\n";
   exit(1);
 }
+
+echo "Blockhash\t\tHeight\tAmount\tConfirmations\tDiff\t\tTime\t\t\tStatus\n";
 
 foreach ($aTransactions['transactions'] as $iIndex => $aData) {
   if ( $aData['category'] == 'generate' || $aData['category'] == 'immature' ) {
     $aBlockInfo = $bitcoin->query('getblock', $aData['blockhash']);
     $aData['height'] = $aBlockInfo['height'];
-    if ( ! $block->addBlock($aData) ) {
-      echo "Failed to add block: " . $aData['height'] , "\n";
-      echo "Error : " . $block->getError() . "\n";
+    $aData['difficulty'] = $iDifficulty;
+    echo substr($aData['blockhash'], 0, 15) . "...\t" .
+         $aData['height'] . "\t" .
+         $aData['amount'] . "\t" .
+         $aData['confirmations'] . "\t\t" .
+         $aData['difficulty'] . "\t" .
+         strftime("%Y-%m-%d %H:%M:%S", $aData['time']) . "\t";
+    if ( $block->addBlock($aData) ) {
+      echo "Added\n";
+    } else {
+      echo "Failed" . "\n";
     }
   }
 }
