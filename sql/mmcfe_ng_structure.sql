@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Erstellungszeit: 11. Mai 2013 um 20:18
+-- Erstellungszeit: 11. Mai 2013 um 23:51
 -- Server Version: 5.5.31-0ubuntu0.13.04.1
 -- PHP-Version: 5.4.9-4ubuntu2
 
@@ -39,7 +39,7 @@ CREATE TABLE IF NOT EXISTS `accounts` (
   `ap_threshold` float DEFAULT '0',
   `coin_address` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=6 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -58,8 +58,8 @@ CREATE TABLE IF NOT EXISTS `blocks` (
   `accounted` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   UNIQUE KEY `height` (`height`,`blockhash`),
-  KEY `timestamp` (`time`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='Discovered blocks persisted from Litecoin Service' AUTO_INCREMENT=5 ;
+  KEY `time` (`time`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Discovered blocks persisted from Litecoin Service' AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -76,7 +76,7 @@ CREATE TABLE IF NOT EXISTS `pool_worker` (
   `hashrate` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `p_username` (`username`)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=21 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -88,7 +88,7 @@ CREATE TABLE IF NOT EXISTS `settings` (
   `setting` varchar(255) NOT NULL,
   `value` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`setting`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -106,8 +106,10 @@ CREATE TABLE IF NOT EXISTS `shares` (
   `solution` varchar(257) NOT NULL,
   `time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
-  KEY `time` (`time`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1507278 ;
+  KEY `time` (`time`),
+  KEY `upstream_result` (`upstream_result`),
+  KEY `our_result` (`our_result`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -124,7 +126,7 @@ CREATE TABLE IF NOT EXISTS `shares_archive` (
   `block_id` int(10) unsigned NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `share_id` (`share_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='Archive shares for potential later debugging purposes' AUTO_INCREMENT=145 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Archive shares for potential later debugging purposes' AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -139,7 +141,8 @@ CREATE TABLE IF NOT EXISTS `statistics_shares` (
   `valid` int(11) NOT NULL,
   `invalid` int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
-  KEY `account_id` (`account_id`)
+  KEY `account_id` (`account_id`),
+  KEY `block_id` (`block_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
@@ -155,11 +158,13 @@ CREATE TABLE IF NOT EXISTS `transactions` (
   `sendAddress` varchar(255) CHARACTER SET utf8 DEFAULT NULL,
   `amount` varchar(40) CHARACTER SET utf8 DEFAULT '0',
   `feeAmount` varchar(40) CHARACTER SET utf8 DEFAULT '0',
-  `block_id` int(255) DEFAULT '0',
+  `block_id` int(255) DEFAULT NULL,
   `timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
-  KEY `assocBlock` (`block_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=8 ;
+  KEY `block_id` (`block_id`),
+  KEY `account_id` (`account_id`),
+  KEY `type` (`type`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
