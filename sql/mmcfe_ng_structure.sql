@@ -29,10 +29,10 @@ SET time_zone = "+00:00";
 CREATE TABLE IF NOT EXISTS `accounts` (
   `id` int(255) NOT NULL AUTO_INCREMENT,
   `admin` int(1) NOT NULL,
-  `username` varchar(40) CHARACTER SET latin1 NOT NULL,
-  `pass` varchar(255) CHARACTER SET latin1 NOT NULL,
-  `email` varchar(255) CHARACTER SET latin1 NOT NULL COMMENT 'Assocaited email: used for validating users, and re-setting passwords',
-  `loggedIp` varchar(255) CHARACTER SET latin1 NOT NULL,
+  `username` varchar(40) CHARACTER SET utf8 NOT NULL,
+  `pass` varchar(255) CHARACTER SET utf8 NOT NULL,
+  `email` varchar(255) CHARACTER SET utf8 NOT NULL COMMENT 'Assocaited email: used for validating users, and re-setting passwords',
+  `loggedIp` varchar(255) CHARACTER SET utf8 NOT NULL,
   `sessionTimeoutStamp` int(255) NOT NULL,
   `pin` varchar(65) NOT NULL COMMENT 'four digit pin to allow account changes',
   `donate_percent` float DEFAULT '0',
@@ -59,7 +59,7 @@ CREATE TABLE IF NOT EXISTS `blocks` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `height` (`height`,`blockhash`),
   KEY `timestamp` (`time`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 COMMENT='Discovered blocks persisted from Litecoin Service' AUTO_INCREMENT=5 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='Discovered blocks persisted from Litecoin Service' AUTO_INCREMENT=5 ;
 
 -- --------------------------------------------------------
 
@@ -76,7 +76,7 @@ CREATE TABLE IF NOT EXISTS `pool_worker` (
   `hashrate` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `p_username` (`username`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=21 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=21 ;
 
 -- --------------------------------------------------------
 
@@ -88,7 +88,7 @@ CREATE TABLE IF NOT EXISTS `settings` (
   `setting` varchar(255) NOT NULL,
   `value` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`setting`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -124,7 +124,7 @@ CREATE TABLE IF NOT EXISTS `shares_archive` (
   `block_id` int(10) unsigned NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `share_id` (`share_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 COMMENT='Archive shares for potential later debugging purposes' AUTO_INCREMENT=145 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='Archive shares for potential later debugging purposes' AUTO_INCREMENT=145 ;
 
 -- --------------------------------------------------------
 
@@ -140,7 +140,7 @@ CREATE TABLE IF NOT EXISTS `statistics_shares` (
   `invalid` int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   KEY `account_id` (`account_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 -- --------------------------------------------------------
 
@@ -159,7 +159,7 @@ CREATE TABLE IF NOT EXISTS `transactions` (
   `timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   KEY `assocBlock` (`block_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=8 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=8 ;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
