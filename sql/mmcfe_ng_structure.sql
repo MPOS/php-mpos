@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Erstellungszeit: 10. Mai 2013 um 22:41
+-- Erstellungszeit: 11. Mai 2013 um 20:18
 -- Server Version: 5.5.31-0ubuntu0.13.04.1
 -- PHP-Version: 5.4.9-4ubuntu2
 
@@ -23,24 +23,6 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
--- Tabellenstruktur für Tabelle `accountBalance`
---
-
-CREATE TABLE IF NOT EXISTS `accountBalance` (
-  `id` int(255) NOT NULL AUTO_INCREMENT,
-  `userId` int(255) NOT NULL,
-  `balance` varchar(40) DEFAULT NULL,
-  `sendAddress` varchar(255) DEFAULT '',
-  `paid` varchar(40) DEFAULT '0',
-  `threshold` decimal(4,2) DEFAULT '0.00',
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `userId` (`userId`),
-  KEY `b_userId` (`userId`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=6 ;
-
--- --------------------------------------------------------
-
---
 -- Tabellenstruktur für Tabelle `accounts`
 --
 
@@ -52,8 +34,10 @@ CREATE TABLE IF NOT EXISTS `accounts` (
   `email` varchar(255) CHARACTER SET latin1 NOT NULL COMMENT 'Assocaited email: used for validating users, and re-setting passwords',
   `loggedIp` varchar(255) CHARACTER SET latin1 NOT NULL,
   `sessionTimeoutStamp` int(255) NOT NULL,
-  `pin` varchar(255) CHARACTER SET latin1 NOT NULL COMMENT 'four digit pin to allow account changes',
-  `donate_percent` varchar(11) CHARACTER SET latin1 DEFAULT '0',
+  `pin` varchar(65) NOT NULL COMMENT 'four digit pin to allow account changes',
+  `donate_percent` float DEFAULT '0',
+  `ap_threshold` float DEFAULT '0',
+  `coin_address` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8 AUTO_INCREMENT=6 ;
 
@@ -69,30 +53,13 @@ CREATE TABLE IF NOT EXISTS `blocks` (
   `blockhash` char(64) CHARACTER SET utf8 NOT NULL,
   `confirmations` int(10) unsigned NOT NULL,
   `amount` float NOT NULL,
+  `difficulty` float NOT NULL,
   `time` int(11) NOT NULL,
   `accounted` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   UNIQUE KEY `height` (`height`,`blockhash`),
   KEY `timestamp` (`time`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 COMMENT='Discovered blocks persisted from Litecoin Service' AUTO_INCREMENT=25 ;
-
--- --------------------------------------------------------
-
---
--- Tabellenstruktur für Tabelle `ledger`
---
-
-CREATE TABLE IF NOT EXISTS `ledger` (
-  `id` int(255) NOT NULL AUTO_INCREMENT,
-  `userId` int(255) NOT NULL,
-  `transType` varchar(40) DEFAULT NULL,
-  `sendAddress` varchar(255) DEFAULT '',
-  `amount` varchar(40) DEFAULT '0',
-  `feeAmount` varchar(40) DEFAULT '0',
-  `assocBlock` int(255) DEFAULT '0',
-  `timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=16 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 COMMENT='Discovered blocks persisted from Litecoin Service' AUTO_INCREMENT=5 ;
 
 -- --------------------------------------------------------
 
@@ -138,8 +105,61 @@ CREATE TABLE IF NOT EXISTS `shares` (
   `reason` varchar(50) DEFAULT NULL,
   `solution` varchar(257) NOT NULL,
   `time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=1507278 ;
+  PRIMARY KEY (`id`),
+  KEY `time` (`time`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1507278 ;
+
+-- --------------------------------------------------------
+
+--
+-- Tabellenstruktur für Tabelle `shares_archive`
+--
+
+CREATE TABLE IF NOT EXISTS `shares_archive` (
+  `id` int(255) unsigned NOT NULL AUTO_INCREMENT,
+  `share_id` int(255) unsigned NOT NULL,
+  `username` varchar(120) CHARACTER SET utf8 NOT NULL,
+  `our_result` enum('Y','N') CHARACTER SET utf8 DEFAULT NULL,
+  `upstream_result` enum('Y','N') CHARACTER SET utf8 DEFAULT NULL,
+  `block_id` int(10) unsigned NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `share_id` (`share_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 COMMENT='Archive shares for potential later debugging purposes' AUTO_INCREMENT=145 ;
+
+-- --------------------------------------------------------
+
+--
+-- Tabellenstruktur für Tabelle `statistics_shares`
+--
+
+CREATE TABLE IF NOT EXISTS `statistics_shares` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `account_id` int(10) unsigned NOT NULL,
+  `block_id` int(10) unsigned NOT NULL,
+  `valid` int(11) NOT NULL,
+  `invalid` int(11) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`),
+  KEY `account_id` (`account_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 AUTO_INCREMENT=1 ;
+
+-- --------------------------------------------------------
+
+--
+-- Tabellenstruktur für Tabelle `transactions`
+--
+
+CREATE TABLE IF NOT EXISTS `transactions` (
+  `id` int(255) NOT NULL AUTO_INCREMENT,
+  `account_id` int(255) unsigned NOT NULL,
+  `type` varchar(40) CHARACTER SET utf8 DEFAULT NULL,
+  `sendAddress` varchar(255) CHARACTER SET utf8 DEFAULT NULL,
+  `amount` varchar(40) CHARACTER SET utf8 DEFAULT '0',
+  `feeAmount` varchar(40) CHARACTER SET utf8 DEFAULT '0',
+  `block_id` int(255) DEFAULT '0',
+  `timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  KEY `assocBlock` (`block_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=latin1 AUTO_INCREMENT=8 ;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
