@@ -8,7 +8,7 @@ class Block {
   private $sError = '';
   private $table = 'blocks';
   // This defines each block
-  public $height, $blockhash, $confirmations, $difficulty, $time;
+  public $height, $blockhash, $confirmations, $time, $accounted;
 
   public function __construct($debug, $mysqli, $salt) {
     $this->debug = $debug;
@@ -35,12 +35,24 @@ class Block {
     return false;
   }
 
-  public function addBlock($block) {
-    $stmt = $this->mysqli->prepare("INSERT INTO $this->table (height, blockhash, confirmations, amount, time) VALUES (?, ?, ?, ?, ?)");
+  public function getAll($order='DESC') {
+    $stmt = $this->mysqli->prepare("SELECT * FROM $this->table ORDER BY height $order");
     if ($this->checkStmt($stmt)) {
-      $stmt->bind_param('isidi', $block['height'], $block['blockhash'], $block['confirmations'], $block['amount'], $block['time']);
+      $stmt->execute();
+      $result = $stmt->get_result();
+      $stmt->close();
+      return $result->fetch_all(MYSQLI_ASSOC);
+    }
+    return false;
+  }
+
+  public function addBlock($block) {
+    $stmt = $this->mysqli->prepare("INSERT INTO $this->table (height, blockhash, confirmations, amount, difficulty, time) VALUES (?, ?, ?, ?, ?, ?)");
+    if ($this->checkStmt($stmt)) {
+      $stmt->bind_param('isiddi', $block['height'], $block['blockhash'], $block['confirmations'], $block['amount'], $block['difficulty'], $block['time']);
       if (!$stmt->execute()) {
         $this->debug->append("Failed to execute statement: " . $stmt->error);
+        $this->setErrorMessage($stmt->error);
         $stmt->close();
         return false;
       }
