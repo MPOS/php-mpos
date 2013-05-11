@@ -21,5 +21,5 @@ limitations under the License.
 // Include all settings and classes
 require_once('shared.inc.php');
 
-// UPDATE ledger AS l INNER JOIN blocks as b ON l.assocBlock = b.height SET l.confirmed = 1 WHERE b.confirmations > 120 AND l.confirmed = 0;
-$ledger->confirmTransactions();
+// Confirm any outstanding credits
+$ledger->confirmCredits();

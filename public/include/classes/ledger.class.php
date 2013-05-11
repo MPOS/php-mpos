@@ -24,8 +24,7 @@ class Ledger {
     return $this->sError;
   }
 
-  public function confirmTransactions() {
-    // Confirm all outstanding transactions
+  public function confirmCredits() {
     $stmt = $this->mysqli->prepare("UPDATE
                               ledger AS l
                             INNER JOIN blocks as b ON l.assocBlock = b.height
