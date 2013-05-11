@@ -300,14 +300,8 @@ class User {
     }
     $apikey = hash("sha256",$username.$salt);
     $stmt = $this->mysqli->prepare("
-      INSERT INTO $this->table (
-        admin, username, pass, email,
-        loggedIp, sessionTimeoutStamp, accountLocked, accountFailedAttempts,
-        pin, share_count, stale_share_count, shares_this_round, api_key)
-        VALUES (
-          0, ?, ?, ?,
-          '0', '0', '0', '0',
-          ?, '0', '0', '0', ?)
+      INSERT INTO $this->table (username, pass, email, pin, api_key)
+        VALUES (?, ?, ?, ?, ?)
           ");
     if ($this->checkStmt($stmt)) {
       $stmt->bind_param('sssis', $username, hash("sha256", $password1.$this->salt), $email1, $pin, $apikey);
