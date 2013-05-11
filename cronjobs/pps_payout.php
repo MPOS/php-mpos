@@ -22,7 +22,7 @@ limitations under the License.
 require_once('shared.inc.php');
 
 // Fetch our last block found from the DB as a starting point
-$aAllBlocks = $block->getAll('ASC');
+$aAllBlocks = $block->getAllUnaccounted('ASC');
 foreach ($aAllBlocks as $iIndex => $aBlock) {
   if (!$aBlock['accounted']) {
     $iPrevBlockTime = @$aAllBlocks[$iIndex - 1]['time'];

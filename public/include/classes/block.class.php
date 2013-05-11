@@ -35,6 +35,17 @@ class Block {
     return false;
   }
 
+  public function getAllUnaccounted($order='ASC') {
+    $stmt = $this->mysqli->prepare("SELECT * FROM $this->table WHERE accounted = 0 ORDER BY height $order");
+    if ($this->checkStmt($stmt)) {
+      $stmt->execute();
+      $result = $stmt->get_result();
+      $stmt->close();
+      return $result->fetch_all(MYSQLI_ASSOC);
+    }
+    return false;
+  }
+
   public function getAll($order='DESC') {
     $stmt = $this->mysqli->prepare("SELECT * FROM $this->table ORDER BY height $order");
     if ($this->checkStmt($stmt)) {
