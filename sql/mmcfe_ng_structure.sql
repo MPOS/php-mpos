@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Erstellungszeit: 12. Mai 2013 um 00:03
+-- Erstellungszeit: 12. Mai 2013 um 00:20
 -- Server Version: 5.5.31-0ubuntu0.13.04.1
 -- PHP-Version: 5.4.9-4ubuntu2
 
@@ -34,12 +34,13 @@ CREATE TABLE IF NOT EXISTS `accounts` (
   `email` varchar(255) DEFAULT NULL COMMENT 'Assocaited email: used for validating users, and re-setting passwords',
   `loggedIp` varchar(255) DEFAULT NULL,
   `sessionTimeoutStamp` int(255) DEFAULT NULL,
-  `pin` varchar(65) NOT NULL COMMENT 'four digit pin to allow account changes',
-  `api_key` varchar(65) DEFAULT NULL,
+  `pin` varchar(255) NOT NULL COMMENT 'four digit pin to allow account changes',
+  `api_key` varchar(255) DEFAULT NULL,
   `donate_percent` float DEFAULT '0',
   `ap_threshold` float DEFAULT '0',
   `coin_address` varchar(255) DEFAULT NULL,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `username` (`username`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------

@@ -294,7 +294,7 @@ class User {
       $this->setErrorMessage( 'E-mail do not match' );
       return false;
     }
-    if (!is_numeric($pin) || strlen($pin) > 4) {
+    if (!is_numeric($pin) || strlen($pin) > 4 || strlen($pin) < 4) {
       $this->setErrorMessage( 'Invalid PIN' );
       return false;
     }
@@ -304,7 +304,7 @@ class User {
         VALUES (?, ?, ?, ?, ?)
           ");
     if ($this->checkStmt($stmt)) {
-      $stmt->bind_param('sssis', $username, hash("sha256", $password1.$this->salt), $email1, $pin, $apikey);
+      $stmt->bind_param('sssss', $username, hash("sha256", $password1.$this->salt), $email1, hash("sha256", $pin.$this->salt), $apikey);
       if (!$stmt->execute()) {
         $this->setErrorMessage( 'Unable to register' );
         if ($stmt->sqlstate == '23000') $this->setErrorMessage( 'Username already exists' );
