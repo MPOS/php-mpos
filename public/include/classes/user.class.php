@@ -7,7 +7,7 @@ if (!defined('SECURITY'))
 class User {
   private $sError = '';
   private $userID = false;
-  private $table = 'webUsers';
+  private $table = 'accounts';
   private $user = array();
   private $tableAccountBalance = 'accountBalance';
   private $tablePoolWorker = 'pool_worker';

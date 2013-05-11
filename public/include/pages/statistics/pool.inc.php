@@ -14,16 +14,16 @@ if ($bitcoin->can_connect() === true){
   $_SESSION['POPUP'][] = array('CONTENT' => 'Unable to connect to pushpool service: ' . $bitcoin->can_connect(), 'TYPE' => 'errormsg');
 }
 
+/** Disabled Stats
 // Top 15 hashrate list
-$stmt = $mysqli->prepare("SELECT username, id, hashrate FROM webUsers WHERE hashrate != '0' ORDER BY hashrate DESC LIMIT 15");
+$stmt = $mysqli->prepare("SELECT username, id, hashrate FROM accounts WHERE hashrate != '0' ORDER BY hashrate DESC LIMIT 15");
 $stmt->execute();
 $hashrates= $stmt->get_result();
 $aHashData = $hashrates->fetch_all(MYSQLI_ASSOC);
 $stmt->close();
 
 // Top 15 Contributors
-# SELECT id, shares_this_round AS shares FROM webUsers WHERE shares_this_round > 0 ORDER BY shares DESC LIMIT
-$stmt = $mysqli->prepare("SELECT id, shares_this_round AS shares, username FROM webUsers WHERE shares_this_round > 0 ORDER BY shares DESC LIMIT 15");
+$stmt = $mysqli->prepare("SELECT id, shares_this_round AS shares, username FROM accounts WHERE shares_this_round > 0 ORDER BY shares DESC LIMIT 15");
 $stmt->execute();
 $contributors = $stmt->get_result();
 $aContributorData = $contributors->fetch_all(MYSQLI_ASSOC);
@@ -36,8 +36,9 @@ $blocks = $stmt->get_result();
 $aBlockData = $blocks->fetch_array();
 $stmt->close();
 
+ */
 // Grab the last 10 blocks found
-$stmt = $mysqli->prepare("SELECT DISTINCT w.shareCount AS shares, w.username, n.blockNumber, n.confirms, n.timestamp FROM winning_shares w, networkBlocks n WHERE w.blockNumber = n.blockNumber ORDER BY w.blockNumber DESC LIMIT 10");
+$stmt = $mysqli->prepare("SELECT DISTINCT * FROM blocks ORDER BY height DESC LIMIT 10");
 $stmt->execute();
 $blocksfound = $stmt->get_result();
 $aBlocksFoundData = $blocksfound->fetch_all(MYSQLI_ASSOC);

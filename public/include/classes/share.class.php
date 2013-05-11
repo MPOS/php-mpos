@@ -40,6 +40,8 @@ class Share {
                                         UNIX_TIMESTAMP(time) BETWEEN ? AND ?
                                       AND
                                         our_result = 'Y'
+                                      AND
+                                        counted = 0
                                       GROUP BY account
                                     ) validT
                                     LEFT JOIN
@@ -52,12 +54,13 @@ class Share {
                                         UNIX_TIMESTAMP(time) BETWEEN ? AND ?
                                       AND
                                         our_result = 'N'
+                                      AND
+                                        counted = 0
                                       GROUP BY account
                                     ) invalidT
                                     ON validT.account = invalidT.account
                                     INNER JOIN accounts a ON a.username = validT.account
                                     GROUP BY a.username DESC");
-    echo $this->mysqli->error;
     if ($this->checkStmt($stmt)) {
       $stmt->bind_param('iiii', $old, $current, $old, $current);
       $stmt->execute();
@@ -73,9 +76,9 @@ class Share {
                                       count(id) as total
                                     FROM $this->table
                                     WHERE our_result = 'Y'
-                                      AND UNIX_TIMESTAMP(time) BETWEEN ? AND ?
+                                    AND UNIX_TIMESTAMP(time) BETWEEN ? AND ?
+                                    AND counted = 0
                                     ");
-    echo $this->mysqli->error;
     if ($this->checkStmt($stmt)) {
       $stmt->bind_param('ii', $old, $current);
       $stmt->execute();
@@ -85,20 +88,38 @@ class Share {
     }
     return false;
   }
-  public function getFinderByTimeframe($current='', $old='') {
-    $stmt = $this->mysqli->prepare("SELECT
-                                      SUBSTRING_INDEX( `username` , '.', 1 ) AS account
-                                    FROM $this->table
-                                    WHERE upstream_result = 'Y'
-                                      AND UNIX_TIMESTAMP(time) BETWEEN ? AND ?
-                                    ORDER BY id DESC");
-    echo $this->mysqli->error;
+
+  public function setCountedByTimeframe($current='', $old='') {
+    $stmt = $this->mysqli->prepare("UPDATE $this->table
+                                    SET
+                                      counted = 1
+                                    WHERE
+                                      UNIX_TIMESTAMP(time) BETWEEN ? AND ?
+                                    AND counted = 0
+                                    ");
     if ($this->checkStmt($stmt)) {
       $stmt->bind_param('ii', $old, $current);
       $stmt->execute();
       $result = $stmt->get_result();
       $stmt->close();
-      return $result->fetch_object()->account;
+      return true;
+    }
+    return false;
+  }
+
+  public function getFinderByTimeframe($current='', $old='') {
+    $stmt = $this->mysqli->prepare("SELECT
+      SUBSTRING_INDEX( `username` , '.', 1 ) AS account
+      FROM $this->table
+      WHERE upstream_result = 'Y'
+      AND UNIX_TIMESTAMP(time) BETWEEN ? AND ?
+      ORDER BY id DESC");
+    if ($this->checkStmt($stmt)) {
+      $stmt->bind_param('ii', $old, $current);
+      $stmt->execute();
+      $result = $stmt->get_result();
+      $stmt->close();
+      return @$result->fetch_object()->account;
     }
     return false;
   }

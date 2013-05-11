@@ -15,11 +15,11 @@
 {section block $BLOCKSFOUND}
       {assign var=user value="."|explode:$BLOCKSFOUND[block].username} 
       <tr class="{cycle values="odd,even"}">
-        <td>{$BLOCKSFOUND[block].blockNumber}</td>
-        <td>{if $BLOCKSFOUND[block].confirms >= 120}<font color="green">Confirmed</font>{else}<font color="orange">{$BLOCKSFOUND[block].confirms - 120} left</font>{/if}</td>
-        <td>{$user.0}</td>
-        <td>{$BLOCKSFOUND[block].timestamp|date_format:"%d/%m/%Y %H:%M:%S"}</td>
-        <td>{$BLOCKSFOUND[block].shares|number_format}</td>
+        <td>{$BLOCKSFOUND[block].height}</td>
+        <td>{if $BLOCKSFOUND[block].confirmations >= 120}<font color="green">Confirmed</font>{else}<font color="orange">{$BLOCKSFOUND[block].confirms - 120} left</font>{/if}</td>
+        <td>{$user.0|default:"unknown"}</td>
+        <td>{$BLOCKSFOUND[block].time|date_format:"%d/%m/%Y %H:%M:%S"}</td>
+        <td>{$BLOCKSFOUND[block].difficulty|number_format}</td>
       </tr>
 {/section}
     </tbody>
