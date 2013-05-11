@@ -25,9 +25,9 @@ class Statistics {
   }
 
   public function updateShareStatistics($aStats, $iBlockId) {
-    $stmt = $this->mysqli->prepare("INSERT INTO $this->table (account_id, valid, invalid, block_id) VALUES (?, ?, ?, ?, ?)");
+    $stmt = $this->mysqli->prepare("INSERT INTO $this->table (account_id, valid, invalid, block_id) VALUES (?, ?, ?, ?)");
     if ($this->checkStmt($stmt)) {
-      $stmt->bind_param('iiiddi', $aStats['id'], $aStats['valid'], $aStats['invalid'], $iBlockId);
+      $stmt->bind_param('iiii', $aStats['id'], $aStats['valid'], $aStats['invalid'], $iBlockId);
       if ($stmt->execute()) {
         return true;
       }
