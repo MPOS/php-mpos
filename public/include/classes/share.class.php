@@ -37,11 +37,11 @@ class Share {
                                         COUNT(id) AS valid
                                       FROM $this->table
                                       WHERE
-                                        UNIX_TIMESTAMP(time) BETWEEN ? AND ?
+                                        UNIX_TIMESTAMP(time) > ?
+                                      AND
+                                        UNIX_TIMESTAMP(time) <= ?
                                       AND
                                         our_result = 'Y'
-                                      AND
-                                        counted = 0
                                       GROUP BY account
                                     ) validT
                                     LEFT JOIN
@@ -51,11 +51,11 @@ class Share {
                                         COUNT(id) AS invalid
                                       FROM $this->table
                                       WHERE
-                                        UNIX_TIMESTAMP(time) BETWEEN ? AND ?
+                                        UNIX_TIMESTAMP(time) > ?
+                                      AND
+                                        UNIX_TIMESTAMP(time) <= ?
                                       AND
                                         our_result = 'N'
-                                      AND
-                                        counted = 0
                                       GROUP BY account
                                     ) invalidT
                                     ON validT.account = invalidT.account
@@ -76,8 +76,10 @@ class Share {
                                       count(id) as total
                                     FROM $this->table
                                     WHERE our_result = 'Y'
-                                    AND UNIX_TIMESTAMP(time) BETWEEN ? AND ?
-                                    AND counted = 0
+                                    AND
+                                      UNIX_TIMESTAMP(time) > ?
+                                    AND
+                                      UNIX_TIMESTAMP(time) <= ?
                                     ");
     if ($this->checkStmt($stmt)) {
       $stmt->bind_param('ii', $old, $current);
@@ -89,19 +91,28 @@ class Share {
     return false;
   }
 
-  public function setCountedByTimeframe($current='', $old='') {
-    $stmt = $this->mysqli->prepare("UPDATE $this->table
-                                    SET
-                                      counted = 1
+  public function moveArchiveByTimeframe($current='', $old='',$block_id) {
+    $archive_stmt = $this->mysqli->prepare("INSERT INTO shares_archive (share_id, username, our_result, upstream_result, block_id)
+                                    SELECT id, username, our_result, upstream_result, ?
+                                    FROM $this->table
                                     WHERE
-                                      UNIX_TIMESTAMP(time) BETWEEN ? AND ?
-                                    AND counted = 0
-                                    ");
-    if ($this->checkStmt($stmt)) {
-      $stmt->bind_param('ii', $old, $current);
-      $stmt->execute();
-      $result = $stmt->get_result();
-      $stmt->close();
+                                      UNIX_TIMESTAMP(time) > ?
+                                    AND
+                                      UNIX_TIMESTAMP(time) <= ?
+                                      ");
+    $delete_stmt = $this->mysqli->prepare("DELETE FROM $this->table
+                                           WHERE
+                                             UNIX_TIMESTAMP(time) > ?
+                                           AND
+                                             UNIX_TIMESTAMP(time) <= ?
+      ");
+    if ($this->checkStmt($archive_stmt) && $this->checkStmt($delete_stmt)) {
+      $archive_stmt->bind_param('iii', $block_id, $old, $current);
+      $archive_stmt->execute();
+      $delete_stmt->bind_param('ii', $old, $current);
+      $delete_stmt->execute();
+      $delete_stmt->close();
+      $archive_stmt->close();
       return true;
     }
     return false;
@@ -112,7 +123,10 @@ class Share {
       SUBSTRING_INDEX( `username` , '.', 1 ) AS account
       FROM $this->table
       WHERE upstream_result = 'Y'
-      AND UNIX_TIMESTAMP(time) BETWEEN ? AND ?
+      AND
+        UNIX_TIMESTAMP(time) > ?
+      AND
+        UNIX_TIMESTAMP(time) <= ?
       ORDER BY id DESC");
     if ($this->checkStmt($stmt)) {
       $stmt->bind_param('ii', $old, $current);

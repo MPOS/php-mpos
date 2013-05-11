@@ -21,7 +21,7 @@ limitations under the License.
 // Include all settings and classes
 require_once('shared.inc.php');
 
-// Fetch our last block found from the DB as a starting point
+// Fetch all accounted blocks
 $aAllBlocks = $block->getAllUnaccounted('ASC');
 foreach ($aAllBlocks as $iIndex => $aBlock) {
   if (!$aBlock['accounted']) {
@@ -32,32 +32,31 @@ foreach ($aAllBlocks as $iIndex => $aBlock) {
     $aAccountShares = $share->getSharesForAccountsByTimeframe($aBlock['time'], $iPrevBlockTime);
     $iRoundShares = $share->getRoundSharesByTimeframe($aBlock['time'], $iPrevBlockTime);
     $strFinder = $share->getFinderByTimeframe($aBlock['time'], $iPrevBlockTime);
-    echo "ID\tHeight\tTime\t\tShares\tFinder\n";
-    echo $aBlock['id'] . "\t" . $aBlock['height'] . "\t" . $aBlock['time'] . "\t" . $iRoundShares . "\t" . $strFinder . "\n\n";
-    echo "ID\tUsername\tValid\tInvalid\tPercentage\tPayout\t\tStatus\n";
+    verbose("ID\tHeight\tTime\t\tShares\tFinder\n");
+    verbose($aBlock['id'] . "\t" . $aBlock['height'] . "\t" . $aBlock['time'] . "\t" . $iRoundShares . "\t" . $strFinder . "\n\n");
+    verbose("ID\tUsername\tValid\tInvalid\tPercentage\tPayout\t\tStatus\n");
     foreach ($aAccountShares as $key => $aData) {
       $aData['percentage'] = number_format(round(( 100 / $iRoundShares ) * $aData['valid'], 10),10);
       $aData['payout'] = number_format(round(( $aData['percentage'] / 100 ) * $config['reward'], 10), 10);
-      echo $aData['id'] . "\t" .
+      verbose($aData['id'] . "\t" .
            $aData['username'] . "\t" .
            $aData['valid'] . "\t" .
            $aData['invalid'] . "\t" .
            $aData['percentage'] . "\t" .
-           $aData['payout'] . "\t";
+           $aData['payout'] . "\t");
 
       // Do all database updates for statistics and payouts
       $strStatus = "OK";
-      // if (!$statistics->updateShareStatistics($aData, $aBlock['id']))
-      //  $strStatus = "Stats Failed";
+      if (!$statistics->updateShareStatistics($aData, $aBlock['id']))
+        $strStatus = "Stats Failed";
       if (!$transaction->addCredit($aData['id'], $aData['payout'], $aBlock['id']))
         $strStatus = "Transaction Failed";
-      echo "$strStatus\n";
+      verbose("$strStatus\n");
     }
-    echo "------------------------------------------------------------------------\n\n";
+    verbose("------------------------------------------------------------------------\n\n");
 
-    // Now that we have all shares counted internally let's update the tables
-    // Set shares as counted and mark block as accounted for
-    $share->setCountedByTimeframe($aBlock['time'], $iPrevBlockTime);
+    // Move counted shares to archive for this blockhash
+    $share->moveArchiveByTimeframe($aBlock['time'], $iPrevBlockTime, $aBlock['id']);
     $block->setAccounted($aBlock['blockhash']);
   }
 }

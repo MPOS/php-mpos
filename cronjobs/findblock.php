@@ -31,27 +31,27 @@ if ( $bitcoin->can_connect() === true ){
   $aTransactions = $bitcoin->query('listsinceblock', $strLastBlockHash);
   $iDifficulty = $bitcoin->query('getdifficulty');
 } else {
-  echo "Aborted: " . $bitcoin->can_connect() . "\n";
+  verbose("Aborted: " . $bitcoin->can_connect() . "\n");
   exit(1);
 }
 
-echo "Blockhash\t\tHeight\tAmount\tConfirmations\tDiff\t\tTime\t\t\tStatus\n";
+verbose("Blockhash\t\tHeight\tAmount\tConfirmations\tDiff\t\tTime\t\t\tStatus\n");
 
 foreach ($aTransactions['transactions'] as $iIndex => $aData) {
   if ( $aData['category'] == 'generate' || $aData['category'] == 'immature' ) {
     $aBlockInfo = $bitcoin->query('getblock', $aData['blockhash']);
     $aData['height'] = $aBlockInfo['height'];
     $aData['difficulty'] = $iDifficulty;
-    echo substr($aData['blockhash'], 0, 15) . "...\t" .
+    verbose(substr($aData['blockhash'], 0, 15) . "...\t" .
          $aData['height'] . "\t" .
          $aData['amount'] . "\t" .
          $aData['confirmations'] . "\t\t" .
          $aData['difficulty'] . "\t" .
-         strftime("%Y-%m-%d %H:%M:%S", $aData['time']) . "\t";
+         strftime("%Y-%m-%d %H:%M:%S", $aData['time']) . "\t");
     if ( $block->addBlock($aData) ) {
-      echo "Added\n";
+      verbose("Added\n");
     } else {
-      echo "Failed" . "\n";
+      verbose("Failed" . "\n");
     }
   }
 }
