@@ -19,14 +19,16 @@
       </thead>
       <tbody style="font-size:12px;">
 {section transaction $TRANSACTIONS}
+        {if (($TRANSACTIONS[transaction].type == 'Credit' and $TRANSACTIONS[transaction].confirmations >= 120) or $TRANSACTIONS[transaction].type != 'Credit')}
         <tr class="{cycle values="odd,even"}">
           <td>{$TRANSACTIONS[transaction].id}</td>
           <td>{$TRANSACTIONS[transaction].timestamp}</td>
-          <td>{$TRANSACTIONS[transaction].transType}</td>
+          <td>{$TRANSACTIONS[transaction].type}</td>
           <td>{$TRANSACTIONS[transaction].sendAddress}</td>
-          <td>{if $TRANSACTIONS[transaction].assocBlock == 0}n/a{else}{$TRANSACTIONS[transaction].assocBlock}{/if}</td>
-          <td><font color="{if $TRANSACTIONS[transaction].transType == Credit}green{else}red{/if}">{$TRANSACTIONS[transaction].amount}</td>
+          <td>{if $TRANSACTIONS[transaction].height == 0}n/a{else}{$TRANSACTIONS[transaction].height}{/if}</td>
+          <td><font color="{if $TRANSACTIONS[transaction].type == Credit}green{else}red{/if}">{$TRANSACTIONS[transaction].amount}</td>
         </tr>
+        {/if}
 {/section}
       </tbody>
     </table>
@@ -38,27 +40,31 @@
     <table cellpadding="1" cellspacing="1" width="98%" class="sortable">
       <thead style="font-size:13px;">
         <tr>
-          <th>Block #</th>
-          <th>Estimated Reward</th>
-          <th>Valid Shares</th>
-          <th>Donation / Fee</th>
-          <th>Validity</th>
+          <th class="header" style="cursor: pointer;">TX #</th>
+          <th class="header" style="cursor: pointer;">Date</th>
+          <th class="header" style="cursor: pointer;">TX Type</th>
+          <th class="header" style="cursor: pointer;">Payment Address</th>
+          <th class="header" style="cursor: pointer;">Block #</th>
+          <th class="header" style="cursor: pointer;">Amount</th>
         </tr>
       </thead>
       <tbody style="font-size:12px;">
-        <tr>
-          <td>TODO</td>
-          <td>TODO</td>
-          <td>TODO</td>
-          <td>TODO</td>
-          <td>TODO</td>
+{section transaction $TRANSACTIONS}
+        {if $TRANSACTIONS[transaction].type == 'Credit' && $TRANSACTIONS[transaction].confirmations < 120}
+        <tr class="{cycle values="odd,even"}">
+          <td>{$TRANSACTIONS[transaction].id}</td>
+          <td>{$TRANSACTIONS[transaction].timestamp}</td>
+          <td>{$TRANSACTIONS[transaction].type}</td>
+          <td>{$TRANSACTIONS[transaction].sendAddress}</td>
+          <td>{if $TRANSACTIONS[transaction].height == 0}n/a{else}{$TRANSACTIONS[transaction].height}{/if}</td>
+          <td><font color="{if $TRANSACTIONS[transaction].type == Credit}green{else}red{/if}">{$TRANSACTIONS[transaction].amount}</td>
         </tr>
+        {assign var="sum" value="`$sum+$TRANSACTIONS[transaction].amount`"}
+        {/if}
+{/section}
         <tr>
-          <td><b>Unconfirmed Totals:</b></td>
-          <td><b>0.00000000</b></td>
-          <td></td>
-          <td><b>0.00000000</b></td>
-          <td></td>
+          <td colspan="5"><b>Unconfirmed Totals:</b></td>
+          <td><b>{$sum}</b></td>
         </tr>
       </tbody>
     </table>

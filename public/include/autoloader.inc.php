@@ -9,5 +9,5 @@ require_once(CLASS_DIR . '/user.class.php');
 require_once(CLASS_DIR . '/block.class.php');
 require_once(CLASS_DIR . '/share.class.php');
 require_once(CLASS_DIR . '/statistics.class.php');
-require_once(CLASS_DIR . '/ledger.class.php');
+require_once(CLASS_DIR . '/transaction.class.php');
 require_once(CLASS_DIR . '/settings.class.php');
