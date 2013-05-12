@@ -13,7 +13,7 @@ class Transaction {
     $this->debug = $debug;
     $this->mysqli = $mysqli;
     $this->config = $config;
-    $this->debug->append("Instantiated Ledger class", 2);
+    $this->debug->append("Instantiated Transaction class", 2);
   }
 
   // get and set methods
@@ -24,13 +24,12 @@ class Transaction {
     return $this->sError;
   }
 
-  public function addCredit($account_id, $amount, $block_id) {
-    $strType = 'Credit';
-    $stmt = $this->mysqli->prepare("INSERT INTO $this->table (account_id, amount, block_id, type) VALUES (?, ?, ?, ?)");
-    echo $this->mysqli->error;
+  public function addTransaction($account_id, $amount, $type='Credit', $block_id=NULL, $coin_address=NULL, $fee=0) {
+    $stmt = $this->mysqli->prepare("INSERT INTO $this->table (account_id, amount, block_id, type, coin_address, fee_amount) VALUES (?, ?, ?, ?, ?, ?)");
     if ($this->checkStmt($stmt)) {
-      $stmt->bind_param("idis", $account_id, $amount, $block_id, $strType);
+      $stmt->bind_param("idissd", $account_id, $amount, $block_id, $type, $coin_address, $fee);
       if ($stmt->execute()) {
+        $this->setErrorMessage("Failed to store transaction");
         $stmt->close();
         return true;
       }
@@ -38,23 +37,7 @@ class Transaction {
     return false;
   }
 
-  public function confirmCredits() {
-    $stmt = $this->mysqli->prepare("UPDATE
-                              ledger AS l
-                            INNER JOIN blocks as b ON l.assocBlock = b.height
-                            SET l.confirmed = 1
-                            WHERE b.confirmations > 120
-                            AND l.confirmed = 0");
-    if ($this->checkStmt($stmt)) {
-      if (!$stmt->execute()) {
-        $this->debug->append("Failed to execute statement: " . $stmt->error);
-        $stmt->close();
-        return false;
-      }
-      $stmt->close();
-      return true;
-    }
-    return false;
+  public function addDebit($account_id, $amount, $type='AP') {
   }
 
   public function getTransactions($account_id, $start=0) {
@@ -63,17 +46,16 @@ class Transaction {
         t.id AS id,
         t.type AS type,
         t.amount AS amount,
-        t.sendAddress AS sendAddress,
+        t.coin_address AS coin_address,
         t.timestamp AS timestamp,
         b.height AS height,
         b.confirmations AS confirmations
       FROM transactions AS t
       LEFT JOIN blocks AS b ON t.block_id = b.id
       WHERE t.account_id = ?
-      ORDER BY timestamp DESC
-      LIMIT ? , 30");
+      ORDER BY id DESC");
     if ($this->checkStmt($stmt)) {
-      if(!$stmt->bind_param('ii', $account_id, $start)) return false;
+      if(!$stmt->bind_param('i', $account_id)) return false;
       $stmt->execute();
       $result = $stmt->get_result();
       return $result->fetch_all(MYSQLI_ASSOC);
@@ -93,7 +75,7 @@ class Transaction {
 
   public function getBalance($account_id) {
     $stmt = $this->mysqli->prepare("
-      SELECT IFNULL(c.credit - d.debit, 0) AS balance
+      SELECT IFNULL(c.credit, 0) - IFNULL(d.debit,0) AS balance
       FROM (
         SELECT account_id, sum(t.amount) AS credit
         FROM $this->table AS t

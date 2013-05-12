@@ -28,25 +28,33 @@ if (empty($aAllBlocks)) {
   exit(0);
 }
 
+$count = 0;
 foreach ($aAllBlocks as $iIndex => $aBlock) {
   if (!$aBlock['accounted']) {
-    $iPrevBlockTime = @$aAllBlocks[$iIndex - 1]['time'];
-    if (!$iPrevBlockTime) {
-      $iPrevBlockTime = 0;
+    if ($share->setUpstream(@$aAllBlocks[$iIndex - 1]['time'])) {
+      $share->setLastUpstreamId();
     }
-    $aAccountShares = $share->getSharesForAccountsByTimeframe($aBlock['time'], $iPrevBlockTime);
-    if (empty($aAccountShares)) {
-      verbose("No shares found for this block\n");
+
+    if ($share->setUpstream($aBlock['time'])) {
+      $iCurrentUpstreamId = $share->getUpstreamId();
+    } else {
+      verbose("Unable to fetch blocks upstream share\n");
+      verbose($share->getError() . "\n");
       continue;
     }
-    $iRoundShares = $share->getRoundSharesByTimeframe($aBlock['time'], $iPrevBlockTime);
-    $strFinder = $share->getFinderByTimeframe($aBlock['time'], $iPrevBlockTime);
-    verbose("ID\tHeight\tTime\t\tShares\tFinder\n");
-    verbose($aBlock['id'] . "\t" . $aBlock['height'] . "\t" . $aBlock['time'] . "\t" . $iRoundShares . "\t" . $strFinder . "\n\n");
+    $aAccountShares = $share->getSharesForAccounts($share->getLastUpstreamId(), $iCurrentUpstreamId);
+    $iRoundShares = $share->getRoundShares($share->getLastUpstreamId(), $iCurrentUpstreamId);
+    verbose("ID\tHeight\tTime\t\tShares\tFinder\t\tShare ID\tPrevious Share\n");
+    verbose($aBlock['id'] . "\t" . $aBlock['height'] . "\t" . $aBlock['time'] . "\t" . $iRoundShares . "\t" . $share->getUpstreamFinder() . "\t" . $share->getUpstreamId() . "\t\t" . $share->getLastUpstreamId() . "\n\n");
+    if (empty($aAccountShares)) {
+      verbose("\nNo shares found for this block\n\n");
+      sleep(2);
+      continue;
+    }
     verbose("ID\tUsername\tValid\tInvalid\tPercentage\tPayout\t\tStatus\n");
     foreach ($aAccountShares as $key => $aData) {
-      $aData['percentage'] = number_format(round(( 100 / $iRoundShares ) * $aData['valid'], 10),10);
-      $aData['payout'] = number_format(round(( $aData['percentage'] / 100 ) * $config['reward'], 10), 10);
+      $aData['percentage'] = number_format(round(( 100 / $iRoundShares ) * $aData['valid'], 8), 8);
+      $aData['payout'] = number_format(round(( $aData['percentage'] / 100 ) * $config['reward'], 8), 8);
       verbose($aData['id'] . "\t" .
            $aData['username'] . "\t" .
            $aData['valid'] . "\t" .
@@ -58,14 +66,14 @@ foreach ($aAllBlocks as $iIndex => $aBlock) {
       $strStatus = "OK";
       if (!$statistics->updateShareStatistics($aData, $aBlock['id']))
         $strStatus = "Stats Failed";
-      if (!$transaction->addCredit($aData['id'], $aData['payout'], $aBlock['id']))
+      if (!$transaction->addTransaction($aData['id'], $aData['payout'], 'Credit', $aBlock['id']))
         $strStatus = "Transaction Failed";
       verbose("$strStatus\n");
     }
     verbose("------------------------------------------------------------------------\n\n");
 
-    // Move counted shares to archive for this blockhash
-    $share->moveArchiveByTimeframe($aBlock['time'], $iPrevBlockTime, $aBlock['id']);
+    // Move counted shares to archive before this blockhash upstream share
+    $share->moveArchive($share->getLastUpstreamId(), $iCurrentUpstreamId, $aBlock['id']);
     $block->setAccounted($aBlock['blockhash']);
   }
 }

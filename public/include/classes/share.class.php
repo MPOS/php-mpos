@@ -7,6 +7,8 @@ if (!defined('SECURITY'))
 class Share {
   private $sError = '';
   private $table = 'shares';
+  private $oUpstream;
+  private $iLastUpstreamId;
   // This defines each share
   public $rem_host, $username, $our_result, $upstream_result, $reason, $solution, $time;
 
@@ -24,7 +26,7 @@ class Share {
     return $this->sError;
   }
 
-  public function getSharesForAccountsByTimeframe($current='', $old='') {
+  public function getSharesForAccounts($previous_upstream=0, $current_upstream) {
     $stmt = $this->mysqli->prepare("SELECT
                                      a.id,
                                      validT.account AS username,
@@ -36,12 +38,8 @@ class Share {
                                         SUBSTRING_INDEX( `username` , '.', 1 ) as account,
                                         COUNT(id) AS valid
                                       FROM $this->table
-                                      WHERE
-                                        UNIX_TIMESTAMP(time) > ?
-                                      AND
-                                        UNIX_TIMESTAMP(time) <= ?
-                                      AND
-                                        our_result = 'Y'
+                                      WHERE id BETWEEN ? AND ?
+                                        AND our_result = 'Y'
                                       GROUP BY account
                                     ) validT
                                     LEFT JOIN
@@ -50,19 +48,15 @@ class Share {
                                         SUBSTRING_INDEX( `username` , '.', 1 ) as account,
                                         COUNT(id) AS invalid
                                       FROM $this->table
-                                      WHERE
-                                        UNIX_TIMESTAMP(time) > ?
-                                      AND
-                                        UNIX_TIMESTAMP(time) <= ?
-                                      AND
-                                        our_result = 'N'
+                                      WHERE id BETWEEN ? AND ?
+                                        AND our_result = 'N'
                                       GROUP BY account
                                     ) invalidT
                                     ON validT.account = invalidT.account
                                     INNER JOIN accounts a ON a.username = validT.account
                                     GROUP BY a.username DESC");
     if ($this->checkStmt($stmt)) {
-      $stmt->bind_param('iiii', $old, $current, $old, $current);
+      $stmt->bind_param('iiii', $previous_upstream, $current_upstream, $previous_upstream, $current_upstream);
       $stmt->execute();
       $result = $stmt->get_result();
       $stmt->close();
@@ -71,18 +65,15 @@ class Share {
     return false;
   }
 
-  public function getRoundSharesByTimeframe($current='', $old='') {
+  public function getRoundShares($previous_upstream=0, $current_upstream) {
     $stmt = $this->mysqli->prepare("SELECT
                                       count(id) as total
                                     FROM $this->table
                                     WHERE our_result = 'Y'
-                                    AND
-                                      UNIX_TIMESTAMP(time) > ?
-                                    AND
-                                      UNIX_TIMESTAMP(time) <= ?
+                                    AND id BETWEEN ? AND ?
                                     ");
     if ($this->checkStmt($stmt)) {
-      $stmt->bind_param('ii', $old, $current);
+      $stmt->bind_param('ii', $previous_upstream, $current_upstream);
       $stmt->execute();
       $result = $stmt->get_result();
       $stmt->close();
@@ -91,25 +82,16 @@ class Share {
     return false;
   }
 
-  public function moveArchiveByTimeframe($current='', $old='',$block_id) {
+  public function moveArchive($previous_upstream=0, $current_upstream,$block_id) {
     $archive_stmt = $this->mysqli->prepare("INSERT INTO shares_archive (share_id, username, our_result, upstream_result, block_id)
                                     SELECT id, username, our_result, upstream_result, ?
                                     FROM $this->table
-                                    WHERE
-                                      UNIX_TIMESTAMP(time) > ?
-                                    AND
-                                      UNIX_TIMESTAMP(time) <= ?
-                                      ");
-    $delete_stmt = $this->mysqli->prepare("DELETE FROM $this->table
-                                           WHERE
-                                             UNIX_TIMESTAMP(time) > ?
-                                           AND
-                                             UNIX_TIMESTAMP(time) <= ?
-      ");
+                                    WHERE id BETWEEN ? AND ?");
+    $delete_stmt = $this->mysqli->prepare("DELETE FROM $this->table WHERE id BETWEEN ? AND ?");
     if ($this->checkStmt($archive_stmt) && $this->checkStmt($delete_stmt)) {
-      $archive_stmt->bind_param('iii', $block_id, $old, $current);
+      $archive_stmt->bind_param('iii', $block_id, $previous_upstream, $current_upstream);
       $archive_stmt->execute();
-      $delete_stmt->bind_param('ii', $old, $current);
+      $delete_stmt->bind_param('ii', $previous_upstream, $current_upstream);
       $delete_stmt->execute();
       $delete_stmt->close();
       $archive_stmt->close();
@@ -118,22 +100,35 @@ class Share {
     return false;
   }
 
-  public function getFinderByTimeframe($current='', $old='') {
+  public function setLastUpstreamId() {
+    $this->iLastUpstreamId = @$this->oUpstream->id ? $this->oUpstream->id : 0;
+  }
+  public function getLastUpstreamId() {
+    return $this->iLastUpstreamId;
+  }
+  public function getUpstreamFinder() {
+    return $this->oUpstream->account;
+  }
+  public function getUpstreamId() {
+    return @$this->oUpstream->id;
+  }
+  public function setUpstream($time='') {
     $stmt = $this->mysqli->prepare("SELECT
-      SUBSTRING_INDEX( `username` , '.', 1 ) AS account
-      FROM $this->table
-      WHERE upstream_result = 'Y'
-      AND
-        UNIX_TIMESTAMP(time) > ?
-      AND
-        UNIX_TIMESTAMP(time) <= ?
-      ORDER BY id DESC");
+                                      SUBSTRING_INDEX( `username` , '.', 1 ) AS account, id
+                                    FROM $this->table
+                                    WHERE upstream_result = 'Y'
+                                    AND UNIX_TIMESTAMP(time) BETWEEN ? AND (? + 1)
+                                    ORDER BY id ASC LIMIT 1");
     if ($this->checkStmt($stmt)) {
-      $stmt->bind_param('ii', $old, $current);
+      $stmt->bind_param('ii', $time, $time);
       $stmt->execute();
-      $result = $stmt->get_result();
+      if (! $result = $stmt->get_result()) {
+        $this->setErrorMessage("No result returned from query");
+        $stmt->close();
+      }
       $stmt->close();
-      return @$result->fetch_object()->account;
+      $this->oUpstream = $result->fetch_object();
+      return true;
     }
     return false;
   }
