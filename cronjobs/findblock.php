@@ -35,8 +35,9 @@ if ( $bitcoin->can_connect() === true ){
   exit(1);
 }
 
+var_dump($aTransactions);
 // Nothing to do so bail out
-if (empty($aTransactions)) {
+if (empty($aTransactions['transactions'])) {
   verbose("No new transactions since last block\n");
   exit(0);
 }
