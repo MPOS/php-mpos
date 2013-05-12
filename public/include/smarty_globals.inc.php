@@ -16,7 +16,8 @@ $aGlobal = array(
   'workers' => $settings->getValue('currentworkers'),
   'currentroundshares' => $settings->getValue('currentroundshares'),
   'statstime' => $settings->getValue('statstime'),
-  'motd' => $settings->getValue('motd')
+  'motd' => $settings->getValue('motd'),
+  'confirmations' => $config['confirmations']
 );
 // Append additional user information not from user table
 $aGlobal['userdata']['balance'] = $transaction->getBalance($_SESSION['USERDATA']['id']);
