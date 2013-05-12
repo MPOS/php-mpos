@@ -26,6 +26,10 @@ class User {
     return $this->sError;
   }
 
+  public function getUserName($userID) {
+    return $this->getSingle($userID, 'id', 'username', $this->table);
+  }
+
   public function checkLogin($username, $password) {
     $this->debug->append("Checking login for $username with password $password", 2);
     if ( $this->checkUserPassword($username, $password) ) {
@@ -199,8 +203,8 @@ class User {
     $apikey = hash("sha256",$username.$salt);
     $stmt = $this->mysqli->prepare("
       INSERT INTO $this->table (username, pass, email, pin, api_key)
-        VALUES (?, ?, ?, ?, ?)
-          ");
+      VALUES (?, ?, ?, ?, ?)
+      ");
     if ($this->checkStmt($stmt)) {
       $stmt->bind_param('sssss', $username, hash("sha256", $password1.$this->salt), $email1, hash("sha256", $pin.$this->salt), $apikey);
       if (!$stmt->execute()) {
