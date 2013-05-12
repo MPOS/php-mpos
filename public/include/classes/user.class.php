@@ -27,7 +27,7 @@ class User {
   }
 
   public function getUserName($userID) {
-    return $this->getSingle($userID, 'id', 'username', $this->table);
+    return $this->getSingle($userID, 'username');
   }
 
   public function checkLogin($username, $password) {
@@ -51,22 +51,23 @@ class User {
     return $pin_hash === $row_pin;
   }
 
-  private function getSingle($userID, $search='id', $field='id', $table='') {
-    if ( empty($table) ) {
-      $table = $this->table;
-    }
-    // Hack for inconsistent field names
-    $stmt = $this->mysqli->prepare("SELECT $field FROM $table WHERE $search=? LIMIT 1");
+  private function getSingle($userID, $search='id') {
+    $stmt = $this->mysqli->prepare("SELECT $search FROM $this->table WHERE id = ? LIMIT 1");
     if ($this->checkStmt($stmt)) {
       $stmt->bind_param('i', $userID);
       $stmt->execute();
-      $stmt->bind_result($value);
+      $stmt->bind_result($retval);
       $stmt->fetch();
       $stmt->close();
-      return $value;
+      return $retval;
     }
     return false;
   }
+
+  public function getCoinAddress($userID) {
+    return $this->getSingle($userID, 'coin_address');
+  }
+
   private function updateSingle($userID, $field, $table) {
     $stmt = $this->mysqli->prepare("UPDATE $table SET " . $field['name'] . " = ? WHERE userId = ? LIMIT 1");
     if ($this->checkStmt($stmt)) {
