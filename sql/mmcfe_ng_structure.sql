@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Erstellungszeit: 12. Mai 2013 um 00:20
+-- Erstellungszeit: 12. Mai 2013 um 16:52
 -- Server Version: 5.5.31-0ubuntu0.13.04.1
 -- PHP-Version: 5.4.9-4ubuntu2
 
@@ -62,23 +62,6 @@ CREATE TABLE IF NOT EXISTS `blocks` (
   UNIQUE KEY `height` (`height`,`blockhash`),
   KEY `time` (`time`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Discovered blocks persisted from Litecoin Service';
-
--- --------------------------------------------------------
-
---
--- Tabellenstruktur für Tabelle `pool_worker`
---
-
-CREATE TABLE IF NOT EXISTS `pool_worker` (
-  `id` int(255) NOT NULL AUTO_INCREMENT,
-  `associatedUserId` int(255) NOT NULL,
-  `username` char(50) DEFAULT NULL,
-  `password` char(255) DEFAULT NULL,
-  `active` tinyint(4) DEFAULT '0',
-  `hashrate` int(11) DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `p_username` (`username`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -156,16 +139,34 @@ CREATE TABLE IF NOT EXISTS `statistics_shares` (
 CREATE TABLE IF NOT EXISTS `transactions` (
   `id` int(255) NOT NULL AUTO_INCREMENT,
   `account_id` int(255) unsigned NOT NULL,
-  `type` varchar(40) DEFAULT NULL,
-  `sendAddress` varchar(255) DEFAULT NULL,
-  `amount` varchar(40) DEFAULT '0',
-  `feeAmount` varchar(40) DEFAULT '0',
+  `type` enum('Credit','Debit_MP','Debit_AP') DEFAULT NULL,
+  `coin_address` varchar(255) DEFAULT NULL,
+  `amount` double DEFAULT '0',
+  `fee_amount` float DEFAULT '0',
   `block_id` int(255) DEFAULT NULL,
   `timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   KEY `block_id` (`block_id`),
   KEY `account_id` (`account_id`),
   KEY `type` (`type`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
+-- Tabellenstruktur für Tabelle `workers`
+--
+
+CREATE TABLE IF NOT EXISTS `workers` (
+  `id` int(255) NOT NULL AUTO_INCREMENT,
+  `account_id` int(255) NOT NULL,
+  `username` char(50) DEFAULT NULL,
+  `password` char(255) DEFAULT NULL,
+  `active` tinyint(4) DEFAULT '0',
+  `hashrate` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `username` (`username`),
+  KEY `account_id` (`account_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
