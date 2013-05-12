@@ -21,7 +21,6 @@ if ( ! $user->checkPin($_SESSION['USERDATA']['id'], $_POST['authPin']) && $_POST
         try {
           $bitcoin->validateaddress($sCoinAddress);
         } catch (BitcoinClientException $e) {
-          var_dump($e);
           $_SESSION['POPUP'][] = array('CONTENT' => 'Invalid payment address: ' . $sUserSendAddress, 'TYPE' => 'errormsg');
           $continue = false;
         }
@@ -31,7 +30,6 @@ if ( ! $user->checkPin($_SESSION['USERDATA']['id'], $_POST['authPin']) && $_POST
             $bitcoin->sendtoaddress($sCoinAddress, $dBalance - 0.1);
           } catch (BitcoinClientException $e) {
             $_SESSION['POPUP'][] = array('CONTENT' => 'Failed to send LTC, please contact site support immidiately', 'TYPE' => 'errormsg');
-            var_dump($e);
             $continue = false;
           }
         }
