@@ -13,29 +13,31 @@ if ( ! $user->checkPin($_SESSION['USERDATA']['id'], $_POST['authPin']) && $_POST
 } else {
   switch ($_POST['do']) {
   case 'cashOut':
-    $dUserBalance = $user->getBalance($_SESSION['USERDATA']['id']);
-    $sUserSendAddress = $user->getLtcAddress($_SESSION['USERDATA']['id']);
-    $dUserPaid = $user->getPaid($_SESSION['USERDATA']['id']);
-    if ($dUserBalance > 0.1) {
+    $continue = true;
+    $dBalance = $transaction->getBalance($_SESSION['USERDATA']['id']);
+    $sCoinAddress = $user->getCoinAddress($_SESSION['USERDATA']['id']);
+    if ($dBalance > 0.1) {
       if ($bitcoin->can_connect() === true) {
         try {
-          $bitcoin->validateaddress($sUserSendAddress);
+          $bitcoin->validateaddress($sCoinAddress);
         } catch (BitcoinClientException $e) {
+          var_dump($e);
           $_SESSION['POPUP'][] = array('CONTENT' => 'Invalid payment address: ' . $sUserSendAddress, 'TYPE' => 'errormsg');
+          $continue = false;
         }
-        // Remove the transfer fee
-        $dUserBalance = $dUserBalance - 0.1;
-        try {
-          $bitcoin->sendtoaddress($sUserSendAddress, $dUserBalance);
-        } catch (BitcoinClientException $e) {
-          $_SESSION['POPUP'][] = array('CONTENT' => 'Failed to send LTC, please contact site support immidiately', 'TYPE' => 'errormsg');
+        if ($continue == true) {
+          // Remove the transfer fee and send to address
+          try {
+            $bitcoin->sendtoaddress($sCoinAddress, $dBalance - 0.1);
+          } catch (BitcoinClientException $e) {
+            $_SESSION['POPUP'][] = array('CONTENT' => 'Failed to send LTC, please contact site support immidiately', 'TYPE' => 'errormsg');
+            var_dump($e);
+            $continue = false;
+          }
         }
         // Set balance to 0, add to paid out, insert to ledger
-        if ( $user->setBalance($_SESSION['USERDATA']['id'], 0) && 
-          $user->setPaid($_SESSION['USERDATA']['id'], $dUserPaid + $dUserBalance) && 
-          $user->addLedger($_SESSION['USERDATA']['id'], $dUserBalance, $sUserSendAddress) ) {
+        if ($continue == true && $transaction->addTransaction($_SESSION['USERDATA']['id'], $dBalance, 'Debit_MP', NULL, $sCoinAddress))
           $_SESSION['POPUP'][] = array('CONTENT' => 'Transaction completed', 'TYPE' => 'success');
-        }
       } else {
         $_SESSION['POPUP'][] = array('CONTENT' => 'Unable to connect to pushpool service', 'TYPE' => 'errormsg');
       }

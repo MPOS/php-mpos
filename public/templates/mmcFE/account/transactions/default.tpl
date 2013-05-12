@@ -19,7 +19,7 @@
       </thead>
       <tbody style="font-size:12px;">
 {section transaction $TRANSACTIONS}
-        {if (($TRANSACTIONS[transaction].type == 'Credit' and $TRANSACTIONS[transaction].confirmations >= 120) or $TRANSACTIONS[transaction].type != 'Credit')}
+        {if (($TRANSACTIONS[transaction].type == 'Credit' and $TRANSACTIONS[transaction].confirmations >= $GLOBAL.confirmations) or $TRANSACTIONS[transaction].type != 'Credit')}
         <tr class="{cycle values="odd,even"}">
           <td>{$TRANSACTIONS[transaction].id}</td>
           <td>{$TRANSACTIONS[transaction].timestamp}</td>
@@ -50,7 +50,7 @@
       </thead>
       <tbody style="font-size:12px;">
 {section transaction $TRANSACTIONS}
-        {if $TRANSACTIONS[transaction].type == 'Credit' && $TRANSACTIONS[transaction].confirmations < 120}
+        {if $TRANSACTIONS[transaction].type == 'Credit' && $TRANSACTIONS[transaction].confirmations < $GLOBAL.confirmations}
         <tr class="{cycle values="odd,even"}">
           <td>{$TRANSACTIONS[transaction].id}</td>
           <td>{$TRANSACTIONS[transaction].timestamp}</td>
