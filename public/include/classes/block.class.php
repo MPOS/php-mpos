@@ -46,6 +46,29 @@ class Block {
     return false;
   }
 
+  public function getAllUnconfirmed($confirmations='120') {
+    $stmt = $this->mysqli->prepare("SELECT id, blockhash, confirmations FROM $this->table WHERE confirmations < ?");
+    if ($this->checkStmt($stmt)) {
+      $stmt->bind_param("i", $confirmations);
+      $stmt->execute();
+      $result = $stmt->get_result();
+      $stmt->close();
+      return $result->fetch_all(MYSQLI_ASSOC);
+    }
+    return false;
+  }
+
+  public function setConfirmations($block_id, $confirmations) {
+    $stmt = $this->mysqli->prepare("UPDATE $this->table SET confirmations = ? WHERE id = ?");
+    if ($this->checkStmt($stmt)) {
+      $stmt->bind_param("ii", $confirmations, $block_id) or die($stmt->error);
+      $stmt->execute() or die("Failed");
+      $stmt->close();
+      return true;
+    }
+    return false;
+  }
+
   public function getAll($order='DESC') {
     $stmt = $this->mysqli->prepare("SELECT * FROM $this->table ORDER BY height $order");
     if ($this->checkStmt($stmt)) {
