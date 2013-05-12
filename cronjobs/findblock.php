@@ -30,7 +30,6 @@ if (!$strLastBlockHash) {
 // Fetch all transactions since our last block
 if ( $bitcoin->can_connect() === true ){
   $aTransactions = $bitcoin->query('listsinceblock', $strLastBlockHash);
-  $iDifficulty = $bitcoin->query('getdifficulty');
 } else {
   verbose("Aborted: " . $bitcoin->can_connect() . "\n");
   exit(1);
@@ -49,7 +48,7 @@ foreach ($aTransactions['transactions'] as $iIndex => $aData) {
   if ( $aData['category'] == 'generate' || $aData['category'] == 'immature' ) {
     $aBlockInfo = $bitcoin->query('getblock', $aData['blockhash']);
     $aData['height'] = $aBlockInfo['height'];
-    $aData['difficulty'] = $iDifficulty;
+    $aData['difficulty'] = $aBlockInfo['difficulty'];
     verbose(substr($aData['blockhash'], 0, 15) . "...\t" .
          $aData['height'] . "\t" .
          $aData['amount'] . "\t" .
