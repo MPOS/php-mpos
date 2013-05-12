@@ -30,15 +30,15 @@ $aContributorData = $contributors->fetch_all(MYSQLI_ASSOC);
 $stmt->close();
 
 // Grab the last block found
-$stmt = $mysqli->prepare("SELECT n.blockNumber, n.confirms, n.timestamp FROM winning_shares w, networkBlocks n WHERE w.blockNumber = n.blockNumber ORDER BY w.blockNumber DESC LIMIT 1");
+$stmt = $mysqli->prepare("SELECT id, confirmations, timestamp FROM blocks ORDER BY height DESC LIMIT 1");
 $stmt->execute();
 $blocks = $stmt->get_result();
 $aBlockData = $blocks->fetch_array();
 $stmt->close();
-
  */
+
 // Grab the last 10 blocks found
-$stmt = $mysqli->prepare("SELECT DISTINCT * FROM blocks ORDER BY height DESC LIMIT 10");
+$stmt = $mysqli->prepare("SELECT * FROM blocks ORDER BY height DESC LIMIT 10");
 $stmt->execute();
 $blocksfound = $stmt->get_result();
 $aBlocksFoundData = $blocksfound->fetch_all(MYSQLI_ASSOC);
