@@ -10,8 +10,6 @@ class User {
   private $table = 'accounts';
   private $user = array();
   private $tableAccountBalance = 'accountBalance';
-  private $tablePoolWorker = 'pool_worker';
-  private $tableLedger = 'ledger';
 
   public function __construct($debug, $mysqli, $salt) {
     $this->debug = $debug;
@@ -76,17 +74,6 @@ class User {
     return false;
   }
 
-  public function addLedger($userID, $balance, $address, $fee=0.1) {
-    $stmt = $this->mysqli->prepare("INSERT INTO $this->tableLedger (userId, transType, amount, sendAddress, feeAmount) VALUES (?, 'Debit_MP', ?, ?, ?)");
-    if ($this->checkStmt($stmt)) {
-      $stmt->bind_param('idsd', $userID, $balance, $address, $fee);
-      $stmt->execute();
-      $stmt->close();
-      return true;
-    }
-    return false;
-  }
-
   private function checkStmt($bState) {
     if ($bState ===! true) {
       $this->debug->append("Failed to prepare statement: " . $this->mysqli->error);
@@ -134,28 +121,6 @@ class User {
       return true;
     }
     return false;
-  }
-  // set/get methods
-  public function getPaid($userID) {
-    return $this->getSingle($userID, 'userId', 'paid', $this->tableAccountBalance);
-  }
-  public function getBalance($userID) {
-    return $this->getSingle($userID, 'userId', 'balance', $this->tableAccountBalance);
-  }
-  public function getLtcAddress($userID) {
-    return $this->getSingle($userID, 'id', 'coin_address', $this->table);
-  }
-  public function getUserName($userID) {
-    return $this->getSingle($userID, 'id', 'username', $this->table);
-  }
-
-  public function setPaid($userID, $paid) {
-    $field = array('name' => 'paid', 'type' => 'd', 'value' => $paid);
-    return $this->updateSingle($userID, $field, $this->tableAccountBalance);
-  }
-  public function setBalance($userID, $balance) {
-    $field = array('name' => 'balance', 'type' => 'd', 'value' => $balance);
-    return $this->updateSingle($userID, $field, $this->tableAccountBalance);
   }
 
   private function checkUserPassword($username, $password) {
@@ -207,73 +172,6 @@ class User {
       return $result->fetch_assoc();
     }
     $this->debug->append("Failed to fetch user information for $userID");
-    return false;
-  }
-
-  // Get 15 most recent transactions
-  public function getTransactions($userID, $start=0) {
-    $stmt = $this->mysqli->prepare("SELECT * FROM $this->tableLedger where userId = ? ORDER BY timestamp DESC LIMIT ?,15");
-    if ($this->checkStmt($stmt)) {
-      if(!$stmt->bind_param('ii', $userID, $start)) return false;
-      $stmt->execute();
-      $result = $stmt->get_result();
-      return $result->fetch_all(MYSQLI_ASSOC);
-    }
-    return false;
-  }
-
-  // Worker code, could possibly be moved to it's own class someday
-  public function updateWorkers($userID, $data) {
-    $username = $this->getUserName($userID);
-    foreach ($data as $key => $value) {
-      // Prefix the WebUser to Worker name
-      $value['username'] = "$username." . $value['username'];
-      $stmt = $this->mysqli->prepare("UPDATE $this->tablePoolWorker SET password = ?, username = ? WHERE associatedUserId = ? AND id = ?");
-      if ($this->checkStmt($stmt)) {
-        if (!$stmt->bind_param('ssii', $value['password'], $value['username'], $userID, $key)) return false;
-        if (!$stmt->execute()) return false;
-        $stmt->close();
-      }
-    }
-    return true;
-  }
-  public function getWorkers($userID) {
-    $stmt = $this->mysqli->prepare("SELECT id, username, password, active, hashrate FROM $this->tablePoolWorker WHERE associatedUserId = ? ORDER BY username ASC");
-    if ($this->checkStmt($stmt)) {
-      if (!$stmt->bind_param('i', $userID)) return false;
-      if (!$stmt->execute()) return false;
-      $result = $stmt->get_result();
-      $stmt->close();
-      return $result->fetch_all(MYSQLI_ASSOC);
-    }
-    return false;
-  }
-  public function addWorker($userID, $workerName, $workerPassword) {
-    $username = $this->getUserName($userID);
-    $workerName = "$username.$workerName";
-    $stmt = $this->mysqli->prepare("INSERT INTO pool_worker (associatedUserId, username, password) VALUES(?, ?, ?)");
-    if ($this->checkStmt($stmt)) {
-      $stmt->bind_param('iss', $userID, $workerName, $workerPassword);
-      if (!$stmt->execute()) {
-        $this->setErrorMessage( 'Failed to add worker' );
-        if ($stmt->sqlstate == '23000') $this->setErrorMessage( 'Worker already exists' );
-        return false;
-      }
-      return true;
-    }
-    return false;
-  }
-  public function deleteWorker($userID, $workerID) {
-    $stmt = $this->mysqli->prepare("DELETE FROM $this->tablePoolWorker WHERE associatedUserId = ? AND id = ?");
-    if ($this->checkStmt($stmt)) {
-      $stmt->bind_param('ii', $userID, $workerID);
-      if ($stmt->execute() && $stmt->affected_rows == 1) {
-        $stmt->close;
-        return true;
-      } else {
-        $this->setErrorMessage( 'Unable to delete worker' );
-      }
-    }
     return false;
   }
 
