@@ -57,6 +57,20 @@ class Worker {
     }
     return false;
   }
+
+  public function getCountAllActiveWorkers() {
+    $stmt = $this->mysqli->prepare("SELECT count(id) AS total FROM $this->table WHERE active = 1");
+    if ($this->checkStmt($stmt)) {
+      if (!$stmt->execute()) {
+        return false;
+      }
+      $result = $stmt->get_result();
+      $stmt->close();
+      return $result->fetch_object()->total;
+    }
+    return false;
+  }
+
   public function addWorker($account_id, $workerName, $workerPassword) {
     $username = $this->user->getUserName($account_id);
     $workerName = "$username.$workerName";
