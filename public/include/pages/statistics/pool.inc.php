@@ -38,7 +38,7 @@ $aBlockData = $blocks->fetch_array();
 $stmt->close();
 
 // Grab the last 10 blocks found
-$stmt = $mysqli->prepare("SELECT * FROM blocks ORDER BY height DESC LIMIT 10");
+$stmt = $mysqli->prepare("SELECT b.*, a.username as finder FROM blocks AS b LEFT JOIN accounts AS a ON b.account_id = a.id ORDER BY height DESC LIMIT 10");
 $stmt->execute();
 $blocksfound = $stmt->get_result();
 $aBlocksFoundData = $blocksfound->fetch_all(MYSQLI_ASSOC);

@@ -7,19 +7,20 @@
         <th scope="col" align="left">Validity</th>
         <th scope="col" align="left">Finder</th>
         <th scope="col" align="left">Date / Time</th>
+        <th scope="col" align="left">Difficulty</th>
         <th scope="col" align="left">Shares</th>
       </tr>
     </thead>
     <tbody>
 {assign var=rank value=1}
 {section block $BLOCKSFOUND}
-      {assign var=user value="."|explode:$BLOCKSFOUND[block].finder} 
       <tr class="{cycle values="odd,even"}">
         <td>{$BLOCKSFOUND[block].height}</td>
         <td>{if $BLOCKSFOUND[block].confirmations >= 120}<font color="green">Confirmed</font>{else}{120 - $BLOCKSFOUND[block].confirmations} left{/if}</td>
-        <td>{$user.0|default:"unknown"}</td>
+        <td>{$BLOCKSFOUND[block].finder|default:"unknown"}</td>
         <td>{$BLOCKSFOUND[block].time|date_format:"%d/%m/%Y %H:%M:%S"}</td>
-        <td>{$BLOCKSFOUND[block].difficulty|number_format}</td>
+        <td>{$BLOCKSFOUND[block].difficulty|number_format:"8"}</td>
+        <td>{$BLOCKSFOUND[block].shares|number_format}</td>
       </tr>
 {/section}
     </tbody>
