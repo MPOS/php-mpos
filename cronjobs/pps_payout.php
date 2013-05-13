@@ -44,13 +44,19 @@ foreach ($aAllBlocks as $iIndex => $aBlock) {
     }
     $aAccountShares = $share->getSharesForAccounts($share->getLastUpstreamId(), $iCurrentUpstreamId);
     $iRoundShares = $share->getRoundShares($share->getLastUpstreamId(), $iCurrentUpstreamId);
-    verbose("ID\tHeight\tTime\t\tShares\tFinder\t\tShare ID\tPrevious Share\n");
-    verbose($aBlock['id'] . "\t" . $aBlock['height'] . "\t" . $aBlock['time'] . "\t" . $iRoundShares . "\t" . $share->getUpstreamFinder() . "\t" . $share->getUpstreamId() . "\t\t" . $share->getLastUpstreamId() . "\n\n");
+    verbose("ID\tHeight\tTime\t\tShares\tFinder\t\tShare ID\tPrev Share\tStatus\n");
+    verbose($aBlock['id'] . "\t" . $aBlock['height'] . "\t" . $aBlock['time'] . "\t" . $iRoundShares . "\t" . $share->getUpstreamFinder() . "\t" . $share->getUpstreamId() . "\t\t" . $share->getLastUpstreamId());
     if (empty($aAccountShares)) {
       verbose("\nNo shares found for this block\n\n");
       sleep(2);
       continue;
     }
+    $strStatus = "OK";
+    if (!$block->setFinder($aBlock['id'], $user->getUserId($share->getUpstreamFinder())))
+      $strStatus = "Finder Failed";
+    if (!$block->setShares($aBlock['id'], $iRoundShares))
+      $strStatus = "Shares Failed";
+    verbose("\t\t$strStatus\n\n");
     verbose("ID\tUsername\tValid\tInvalid\tPercentage\tPayout\t\tStatus\n");
     foreach ($aAccountShares as $key => $aData) {
       $aData['percentage'] = number_format(round(( 100 / $iRoundShares ) * $aData['valid'], 8), 8);
@@ -62,7 +68,7 @@ foreach ($aAllBlocks as $iIndex => $aBlock) {
            $aData['percentage'] . "\t" .
            $aData['payout'] . "\t");
 
-      // Do all database updates for statistics and payouts
+      // Do all database updates for block, statistics and payouts
       $strStatus = "OK";
       if (!$statistics->updateShareStatistics($aData, $aBlock['id']))
         $strStatus = "Stats Failed";
@@ -74,6 +80,6 @@ foreach ($aAllBlocks as $iIndex => $aBlock) {
 
     // Move counted shares to archive before this blockhash upstream share
     $share->moveArchive($share->getLastUpstreamId(), $iCurrentUpstreamId, $aBlock['id']);
-    $block->setAccounted($aBlock['blockhash']);
+    $block->setAccounted($aBlock['id']);
   }
 }

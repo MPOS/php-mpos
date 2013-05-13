@@ -26,8 +26,12 @@ class User {
     return $this->sError;
   }
 
-  public function getUserName($userID) {
-    return $this->getSingle($userID, 'username');
+  public function getUserName($id) {
+    return $this->getSingle($id, 'username');
+  }
+
+  public function getUserId($username) {
+    return $this->getSingle($username, 'id', 'username');
   }
 
   public function checkLogin($username, $password) {
@@ -51,10 +55,10 @@ class User {
     return $pin_hash === $row_pin;
   }
 
-  private function getSingle($userID, $search='id') {
-    $stmt = $this->mysqli->prepare("SELECT $search FROM $this->table WHERE id = ? LIMIT 1");
+  private function getSingle($value, $search='id', $field='id') {
+    $stmt = $this->mysqli->prepare("SELECT $search FROM $this->table WHERE $field = ? LIMIT 1");
     if ($this->checkStmt($stmt)) {
-      $stmt->bind_param('i', $userID);
+      $stmt->bind_param('i', $value);
       $stmt->execute();
       $stmt->bind_result($retval);
       $stmt->fetch();

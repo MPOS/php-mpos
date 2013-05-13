@@ -77,17 +77,17 @@ class Transaction {
     $stmt = $this->mysqli->prepare("
       SELECT IFNULL(c.credit, 0) - IFNULL(d.debit,0) AS balance
       FROM (
-        SELECT account_id, sum(t.amount) AS credit
+        SELECT t.account_id, sum(t.amount) AS credit
         FROM $this->table AS t
         LEFT JOIN $this->tableBlocks AS b ON t.block_id = b.id
         WHERE type = 'Credit'
         AND b.confirmations > ?
-        AND account_id = ? ) AS c
+        AND t.account_id = ? ) AS c
       LEFT JOIN (
-        SELECT account_id, sum(amount) AS debit
-        FROM $this->table
+        SELECT t.account_id, sum(amount) AS debit
+        FROM $this->table AS t
         WHERE type IN ('Debit_MP','Debit_AP')
-        AND account_id = ? ) AS d
+        AND t.account_id = ? ) AS d
       ON c.account_id = d.account_id
       ");
     if ($this->checkStmt($stmt)) {

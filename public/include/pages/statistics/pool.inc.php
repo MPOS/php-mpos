@@ -28,14 +28,14 @@ $stmt->execute();
 $contributors = $stmt->get_result();
 $aContributorData = $contributors->fetch_all(MYSQLI_ASSOC);
 $stmt->close();
+ */
 
 // Grab the last block found
-$stmt = $mysqli->prepare("SELECT id, confirmations, timestamp FROM blocks ORDER BY height DESC LIMIT 1");
+$stmt = $mysqli->prepare("SELECT * FROM blocks ORDER BY height DESC LIMIT 1");
 $stmt->execute();
 $blocks = $stmt->get_result();
 $aBlockData = $blocks->fetch_array();
 $stmt->close();
- */
 
 // Grab the last 10 blocks found
 $stmt = $mysqli->prepare("SELECT * FROM blocks ORDER BY height DESC LIMIT 10");
@@ -47,7 +47,7 @@ $stmt->close();
 // Estimated time to find the next block
 $iEstTime = (($dDifficulty * bcpow(2,$config['difficulty'])) / ( $settings->getValue('currenthashrate') * 1000));
 $now = new DateTime( "now" );
-$dTimeSinceLast = ($now->getTimestamp() - $aBlockData['timestamp']);
+$dTimeSinceLast = ($now->getTimestamp() - $aBlockData['time']);
 
 // Propagate content our template
 $smarty->assign("ESTTIME", $iEstTime);
@@ -56,7 +56,7 @@ $smarty->assign("CONTRIBUTORS", $aContributorData);
 $smarty->assign("BLOCKSFOUND", $aBlocksFoundData);
 $smarty->assign("TOPHASHRATES", $aHashData);
 $smarty->assign("CURRENTBLOCK", $iBlock);
-$smarty->assign("LASTBLOCK", $aBlockData['blockNumber']);
+$smarty->assign("LASTBLOCK", $aBlockData['height']);
 $smarty->assign("DIFFICULTY", $dDifficulty);
 $smarty->assign("TARGETDIFF", $config['difficulty']);
 $smarty->assign("REWARD", $config['reward']);

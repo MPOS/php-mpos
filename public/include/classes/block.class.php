@@ -96,20 +96,32 @@ class Block {
     return false;
   }
 
-  public function setAccounted($blockhash='') {
-    if ($blockhash == '') return false;
-    $stmt = $this->mysqli->prepare("UPDATE $this->table SET accounted = 1 WHERE blockhash = ?");
+  private function updateSingle($block_id, $field, $value) {
+    $stmt = $this->mysqli->prepare("UPDATE $this->table SET $field = ? WHERE id = ?");
     if ($this->checkStmt($stmt)) {
-      $stmt->bind_param('s', $blockhash);
+      $stmt->bind_param('ii', $value, $block_id);
       if (!$stmt->execute()) {
-        $this->debug->append("Failed to execute statement: " . $stmt->error);
+        $this->debug->append("Failed to update block ID $block_id with finder ID $account_id");
         $stmt->close();
         return false;
       }
       $stmt->close();
       return true;
     }
-    return false;
+      return false;
+  }
+
+  public function setFinder($block_id, $account_id=NULL) {
+    return $this->updateSingle($block_id, 'account_id', $account_id);
+  }
+
+  public function setShares($block_id, $shares=NULL) {
+    return $this->updateSingle($block_id, 'shares', $shares);
+  }
+
+  public function setAccounted($block_id=NULL) {
+    if (empty($block_id)) return false;
+    return $this->updateSingle($block_id, 'accounted', 1);
   }
 
   private function checkStmt($bState) {
