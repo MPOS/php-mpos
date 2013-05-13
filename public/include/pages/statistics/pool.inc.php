@@ -30,14 +30,12 @@ if (!$aHashData = $memcache->get('aHashData')) {
 			    WHERE time > DATE_SUB(now(), INTERVAL 10 MINUTE)
 			    GROUP BY account
 			    ORDER BY hashrate DESC LIMIT 15");
-echo $mysqli->error;
   $stmt->execute();
   $hashrates= $stmt->get_result();
   $aHashData = $hashrates->fetch_all(MYSQLI_ASSOC);
   $stmt->close();
   $memcache->set('aHashData', $aHashData, 60);
 }
-
 
 if (! $aContributerData = $memcache->get('aContributerData') ) {
   // Top 15 Contributers
@@ -64,7 +62,12 @@ $aBlocksFoundData = $blocksfound->fetch_all(MYSQLI_ASSOC);
 $stmt->close();
 
 // Estimated time to find the next block
-$iEstTime = (($dDifficulty * bcpow(2,$config['difficulty'])) / ( $settings->getValue('currenthashrate') * 1000));
+if (!$iCurrentPoolHashrate = $memcache->get('iCurrentPoolHashrate')) {
+  $debug->append('Fetching iCurrentPoolHashrate from database');
+  $iCurrentPoolHashrate =  $statistics->getCurrentHashrate();
+  $memcache->set('iCurrentPoolHashrate', $iCurrentPoolHashrate, 60);
+}
+$iEstTime = (($dDifficulty * bcpow(2,$config['difficulty'])) / $iCurrentPoolHashrate);
 $now = new DateTime( "now" );
 if (!empty($aBlockData)) {
   $dTimeSinceLast = ($now->getTimestamp() - $aBlockData['time']);
