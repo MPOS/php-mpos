@@ -43,7 +43,7 @@
     <input type="hidden" name="page" value="{$smarty.request.page}">
     <input type="hidden" name="action" value="{$smarty.request.action}">
     <input type="hidden" name="do" value="add">
-    TheSerapher.<input type="text" name="username" value="user" size="10" maxlength="20"> · <input type="text" name="password" value="password" size="10" maxlength="20">&nbsp;<input type="submit" value="Add New Worker" style="padding:5px;">
+    {$smarty.session.USERDATA.username}.<input type="text" name="username" value="user" size="10" maxlength="20"> · <input type="text" name="password" value="password" size="10" maxlength="20">&nbsp;<input type="submit" value="Add New Worker" style="padding:5px;">
   </form>
 </center>
 {include file="global/block_footer.tpl"}
