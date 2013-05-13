@@ -10,9 +10,11 @@ class Statistics {
   // This defines each statistic 
   public $valid, $invalid, $block, $user;
 
-  public function __construct($debug, $mysqli, $salt) {
+  public function __construct($debug, $mysqli, $config, $share) {
     $this->debug = $debug;
     $this->mysqli = $mysqli;
+    $this->share = $share;
+    $this->config = $config;
     $this->debug->append("Instantiated Share class", 2);
   }
 
@@ -35,6 +37,13 @@ class Statistics {
     return false;
   }
 
+  public function getCurrentHashrate() {
+    $stmt = $this->mysqli->prepare("SELECT ROUND(COUNT(id) * POW(2, " . $this->config['difficulty'] . ")/600/1000) AS hashrate FROM " . $this->share->getTableName() . " WHERE time > DATE_SUB(now(), INTERVAL 10 MINUTE)");
+    if ($this->checkStmt($stmt) && $stmt->execute() && $result = $stmt->get_result() ) {
+      return $result->fetch_object()->hashrate;
+    }
+  }
+
   private function checkStmt($bState) {
     if ($bState ===! true) {
       $this->debug->append("Failed to prepare statement: " . $this->mysqli->error);
@@ -45,4 +54,4 @@ class Statistics {
   }
 }
 
-$statistics = new Statistics($debug, $mysqli, SALT);
+$statistics = new Statistics($debug, $mysqli, $config, $share);
