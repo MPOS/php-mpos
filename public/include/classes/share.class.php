@@ -104,10 +104,10 @@ class Share {
     $this->iLastUpstreamId = @$this->oUpstream->id ? $this->oUpstream->id : 0;
   }
   public function getLastUpstreamId() {
-    return $this->iLastUpstreamId;
+    return @$this->iLastUpstreamId;
   }
   public function getUpstreamFinder() {
-    return $this->oUpstream->account;
+    return @$this->oUpstream->account;
   }
   public function getUpstreamId() {
     return @$this->oUpstream->id;
