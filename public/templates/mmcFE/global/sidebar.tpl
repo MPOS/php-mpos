@@ -8,12 +8,8 @@
                   <p>
                     <b><u>Your Current Hashrate</u></b><br/>
                     <i><b>{$GLOBAL.userdata.hashrate} KH/s</b></i><br/><br/>
-                    <u><b>
-                      Paid Shares</b></u><span id='tt'><img src='{$PATH}/images/questionmark.png' height='15px' width='15px' title='All submitted shares from previous rounds which are already accounted and paid for.'></span><br/>
-                      Your Valid: <i><b>{$GLOBAL.userdata.share_count - $GLOBAL.userdata.stale_share_count}</b></i><br/>
-                      Invalid: <i><b>{$GLOBAL.userdata.stale_share_count}</b></i><br/><br/>
                       <u><b>Unpaid Shares</b></u><span id='tt'><img src='{$PATH}/images/questionmark.png' height='15px' width='15px' title='Submitted shares between the last 120 confirms block until now.'></span><br/>
-                      Your Valid: <b><i>{$GLOBAL.userdata.shares_this_round}</i><font size='1px'></font></b><br/>
+                      Your Valid: <b><i>{$GLOBAL.userdata.shares}</i><font size='1px'></font></b><br/>
                       Pool Valid: <b><i>{$GLOBAL.currentroundshares}</i> <font size='1px'></font></b><br/><br>
                       <u><b>Round Shares </b></u><span id='tt'><img src='{$PATH}/images/questionmark.png' height='15px' width='15px' title='Submitted shares since last found block (ie. round shares)'></span><br/>
                       Pool Valid: <b><i>{$GLOBAL.currentroundshares}</i></b><br><br>
