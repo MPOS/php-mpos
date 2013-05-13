@@ -8,6 +8,7 @@
         <th align="left" scope="col">User Name</th>
         <th align="left" scope="col">KH/s</th>
         <th align="left">Ł/Day<font size="1"> (est)</font></th>
+        <th align="left">Ł/Day<font size="1"> (est)</font></th>
       </tr>
     </thead>
     <tbody>
@@ -15,9 +16,10 @@
 {section hashrate $TOPHASHRATES}
       <tr class="{cycle values="odd,even"}">
         <td>{$rank++}</td>
-        <td>{$TOPHASHRATES[hashrate].username}</td>
+        <td>{$TOPHASHRATES[hashrate].account}</td>
         <td>{$TOPHASHRATES[hashrate].hashrate|number_format}</td>
-        <td>{math equation="round(( 24 / (((diff * pow(2,targetdiff)) / (hashrate * 1000)) / 3600) * reward ),3)" diff=$DIFFICULTY targetdiff=$TARGETDIFF hashrate=$TOPHASHRATES[hashrate].hashrate reward=$REWARD}</td>
+        <td>{math equation="round(( 24 / (((diff * pow(2,targetdiff)) / hashrate) / 3600) * reward ),3)" diff=$DIFFICULTY targetdiff=$TARGETDIFF hashrate=$TOPHASHRATES[hashrate].hashrate reward=$REWARD}</td>
+	<td>{$TOPHASHRATES[hashrate].ltcday|number_format}
       </tr>
 {/section}
     </tbody>
@@ -25,7 +27,7 @@
 </center>
 {include file="global/block_footer.tpl"}
 
-{include file="global/block_header.tpl" BLOCK_HEADER="Top 15 Contributors" ALIGN="right" BUTTONS=array(More,Less)}
+{include file="global/block_header.tpl" BLOCK_HEADER="Top 15 Contributers" ALIGN="right" BUTTONS=array(More,Less)}
 <center>
   <table class="" width="100%" style="font-size:13px;">
     <thead>
@@ -36,7 +38,7 @@
 {section contributor $CONTRIBUTORS}
       <tr class="{cycle values="odd,even"}">
         <td>{$rank++}</td>
-        <td>{$CONTRIBUTORS[contributor].username}</td>
+        <td>{$CONTRIBUTORS[contributor].account}</td>
         <td>{$CONTRIBUTORS[contributor].shares|number_format}</td>
       </tr>
 {/section}

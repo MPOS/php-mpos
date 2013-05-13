@@ -4,31 +4,58 @@
 if (!defined('SECURITY'))
     die('Hacking attempt');
 
+// Use Memcache to store our data
+$m = new Memcached();
+$m->addServer('localhost', 11211);
+
 // Fetch data from litecoind
 if ($bitcoin->can_connect() === true){
-  $dDifficulty = $bitcoin->query('getdifficulty');
-  $iBlock = $bitcoin->query('getblockcount');
+  if (!$dDifficulty = $m->get('dDifficulty')) {
+    $dDifficulty = $bitcoin->query('getdifficulty');
+    $m->set('dDifficulty', $dDifficulty, 60);
+  }
+  if (!$iBlock = $m->get('iBlock')) {
+    $iBlock = $bitcoin->query('getblockcount');
+    $m->set('iBlock', $iBlock, 60);
+  }
 } else {
   $iDifficulty = 1;
   $iBlock = 0;
   $_SESSION['POPUP'][] = array('CONTENT' => 'Unable to connect to pushpool service: ' . $bitcoin->can_connect(), 'TYPE' => 'errormsg');
 }
 
-/** Disabled Stats
-// Top 15 hashrate list
-$stmt = $mysqli->prepare("SELECT username, id, hashrate FROM accounts WHERE hashrate != '0' ORDER BY hashrate DESC LIMIT 15");
-$stmt->execute();
-$hashrates= $stmt->get_result();
-$aHashData = $hashrates->fetch_all(MYSQLI_ASSOC);
-$stmt->close();
+if (!$aHashData = $m->get('aHashData')) {
+  $debug->append('Hashrates expired in memcache');
+  // Top 15 hashrate list
+  $stmt = $mysqli->prepare("SELECT
+				ROUND(COUNT(id) * POW(2," . $config['difficulty'] . ")/600/1000,2) AS hashrate,
+				SUBSTRING_INDEX( `username` , '.', 1 ) AS account
+			    FROM shares
+			    WHERE time > DATE_SUB(now(), INTERVAL 10 MINUTE)
+			    GROUP BY account
+			    ORDER BY hashrate DESC LIMIT 15");
+echo $mysqli->error;
+  $stmt->execute();
+  $hashrates= $stmt->get_result();
+  $aHashData = $hashrates->fetch_all(MYSQLI_ASSOC);
+  $stmt->close();
+  $m->set('aHashData', $aHashData, 1);
+} else {
+  $debug->append("Found aHashData in memcache");
+}
 
-// Top 15 Contributors
-$stmt = $mysqli->prepare("SELECT id, shares_this_round AS shares, username FROM accounts WHERE shares_this_round > 0 ORDER BY shares DESC LIMIT 15");
-$stmt->execute();
-$contributors = $stmt->get_result();
-$aContributorData = $contributors->fetch_all(MYSQLI_ASSOC);
-$stmt->close();
- */
+
+if (! $aContributerData = $m->get('aContributerData') ) {
+  // Top 15 Contributers
+  $stmt = $mysqli->prepare("SELECT count(id) AS shares, SUBSTRING_INDEX( `username` , '.', 1 ) AS account FROM shares GROUP BY account LIMIT 15");
+  $stmt->execute();
+  $contributers = $stmt->get_result();
+  $aContributerData = $contributers->fetch_all(MYSQLI_ASSOC);
+  $stmt->close();
+  $m->set('aContributerData', $aContributerData, 60);
+} else {
+  $debug->append("Found aContributerData in memcache");
+}
 
 // Grab the last block found
 $stmt = $mysqli->prepare("SELECT * FROM blocks ORDER BY height DESC LIMIT 1");
