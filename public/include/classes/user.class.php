@@ -167,9 +167,16 @@ class User {
     $stmt = $this->mysqli->prepare("
       SELECT
       id, username, pin, pass, admin,
-      IFNULL(donate_percent, '0') as donate_percent, coin_address, ap_threshold
+      IFNULL(donate_percent, '0') as donate_percent, coin_address, ap_threshold,
+      (
+        SELECT ROUND(COUNT(id) * POW(2,21)/600/1000) FROM shares WHERE $this->table.username = SUBSTRING_INDEX( `username` , '.', 1 ) AND time > DATE_SUB(now(), INTERVAL 10 MINUTE)
+      ) AS hashrate,
+      (
+        SELECT COUNT(id) FROM shares WHERE $this->table.username = SUBSTRING_INDEX( `username` , '.', 1 ) AND UNIX_TIMESTAMP(time) >IFNULL((SELECT MAX(time) FROM blocks),0)
+      ) AS shares
       FROM $this->table
       WHERE id = ? LIMIT 0,1");
+echo $this->mysqli->error;
     if ($this->checkStmt($stmt)) {
       $stmt->bind_param('i', $userID);
       if (!$stmt->execute()) {
