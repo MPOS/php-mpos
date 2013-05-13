@@ -8,7 +8,6 @@
         <th align="left" scope="col">User Name</th>
         <th align="left" scope="col">KH/s</th>
         <th align="left">Ł/Day<font size="1"> (est)</font></th>
-        <th align="left">Ł/Day<font size="1"> (est)</font></th>
       </tr>
     </thead>
     <tbody>
@@ -19,7 +18,6 @@
         <td>{$TOPHASHRATES[hashrate].account}</td>
         <td>{$TOPHASHRATES[hashrate].hashrate|number_format}</td>
         <td>{math equation="round(( 24 / (((diff * pow(2,targetdiff)) / hashrate) / 3600) * reward ),3)" diff=$DIFFICULTY targetdiff=$TARGETDIFF hashrate=$TOPHASHRATES[hashrate].hashrate reward=$REWARD}</td>
-	<td>{$TOPHASHRATES[hashrate].ltcday|number_format}
       </tr>
 {/section}
     </tbody>
@@ -64,7 +62,7 @@
     </tr>
     <tr>
       <td class="leftheader">Last Block Found</td>
-      <td><a href="http://explorer.litecoin.net/search?q={$LASTBLOCK}" target="_new">{$LASTBLOCK}</a></td>
+      <td><a href="http://explorer.litecoin.net/search?q={$LASTBLOCK}" target="_new">{$LASTBLOCK|default:"0"}</a></td>
     </tr>
     <tr>
       <td class="leftheader">Current Difficulty</td>
