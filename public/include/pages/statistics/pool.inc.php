@@ -4,19 +4,15 @@
 if (!defined('SECURITY'))
     die('Hacking attempt');
 
-// Use Memcache to store our data
-$m = new Memcached();
-$m->addServer('localhost', 11211);
-
 // Fetch data from litecoind
 if ($bitcoin->can_connect() === true){
-  if (!$dDifficulty = $m->get('dDifficulty')) {
+  if (!$dDifficulty = $memcache->get('dDifficulty')) {
     $dDifficulty = $bitcoin->query('getdifficulty');
-    $m->set('dDifficulty', $dDifficulty, 60);
+    $memcache->set('dDifficulty', $dDifficulty, 60);
   }
-  if (!$iBlock = $m->get('iBlock')) {
+  if (!$iBlock = $memcache->get('iBlock')) {
     $iBlock = $bitcoin->query('getblockcount');
-    $m->set('iBlock', $iBlock, 60);
+    $memcache->set('iBlock', $iBlock, 60);
   }
 } else {
   $iDifficulty = 1;
@@ -24,7 +20,7 @@ if ($bitcoin->can_connect() === true){
   $_SESSION['POPUP'][] = array('CONTENT' => 'Unable to connect to pushpool service: ' . $bitcoin->can_connect(), 'TYPE' => 'errormsg');
 }
 
-if (!$aHashData = $m->get('aHashData')) {
+if (!$aHashData = $memcache->get('aHashData')) {
   $debug->append('Hashrates expired in memcache');
   // Top 15 hashrate list
   $stmt = $mysqli->prepare("SELECT
@@ -39,22 +35,18 @@ echo $mysqli->error;
   $hashrates= $stmt->get_result();
   $aHashData = $hashrates->fetch_all(MYSQLI_ASSOC);
   $stmt->close();
-  $m->set('aHashData', $aHashData, 1);
-} else {
-  $debug->append("Found aHashData in memcache");
+  $memcache->set('aHashData', $aHashData, 60);
 }
 
 
-if (! $aContributerData = $m->get('aContributerData') ) {
+if (! $aContributerData = $memcache->get('aContributerData') ) {
   // Top 15 Contributers
-  $stmt = $mysqli->prepare("SELECT count(id) AS shares, SUBSTRING_INDEX( `username` , '.', 1 ) AS account FROM shares GROUP BY account LIMIT 15");
+  $stmt = $mysqli->prepare("SELECT count(id) AS shares, SUBSTRING_INDEX( `username` , '.', 1 ) AS account FROM shares GROUP BY account ORDER BY shares DESC LIMIT 15");
   $stmt->execute();
   $contributers = $stmt->get_result();
   $aContributerData = $contributers->fetch_all(MYSQLI_ASSOC);
   $stmt->close();
-  $m->set('aContributerData', $aContributerData, 60);
-} else {
-  $debug->append("Found aContributerData in memcache");
+  $memcache->set('aContributerData', $aContributerData, 60);
 }
 
 // Grab the last block found
@@ -74,12 +66,16 @@ $stmt->close();
 // Estimated time to find the next block
 $iEstTime = (($dDifficulty * bcpow(2,$config['difficulty'])) / ( $settings->getValue('currenthashrate') * 1000));
 $now = new DateTime( "now" );
-$dTimeSinceLast = ($now->getTimestamp() - $aBlockData['time']);
+if (!empty($aBlockData)) {
+  $dTimeSinceLast = ($now->getTimestamp() - $aBlockData['time']);
+} else {
+  $dTimeSinceLast = 0;
+}
 
 // Propagate content our template
 $smarty->assign("ESTTIME", $iEstTime);
 $smarty->assign("TIMESINCELAST", $dTimeSinceLast);
-$smarty->assign("CONTRIBUTORS", $aContributorData);
+$smarty->assign("CONTRIBUTORS", $aContributerData);
 $smarty->assign("BLOCKSFOUND", $aBlocksFoundData);
 $smarty->assign("TOPHASHRATES", $aHashData);
 $smarty->assign("CURRENTBLOCK", $iBlock);
