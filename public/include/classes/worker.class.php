@@ -8,10 +8,11 @@ class Worker {
   private $sError = '';
   private $table = 'workers';
 
-  public function __construct($debug, $mysqli, $user) {
+  public function __construct($debug, $mysqli, $user, $share) {
     $this->debug = $debug;
     $this->mysqli = $mysqli;
     $this->user = $user;
+    $this->share = $share;
     $this->debug->append("Instantiated Worker class", 2);
   }
 
@@ -47,7 +48,12 @@ class Worker {
     return true;
   }
   public function getWorkers($account_id) {
-    $stmt = $this->mysqli->prepare("SELECT id, username, password, active, hashrate FROM $this->table WHERE account_id = ? ORDER BY username ASC");
+    $stmt = $this->mysqli->prepare("
+      SELECT $this->table.username, $this->table.password,
+      ( SELECT SIGN(count(id)) FROM " . $this->share->getTableName() . " WHERE username = $this->table.username AND time > DATE_SUB(now(), INTERVAL 10 MINUTE)) AS active,
+      ( SELECT ROUND(COUNT(id) * POW(2,21)/600/1000) FROM " . $this->share->getTableName() . " WHERE username = $this->table.username AND time > DATE_SUB(now(), INTERVAL 10 MINUTE)) AS hashrate
+      FROM $this->table
+      WHERE account_id = ?");
     if ($this->checkStmt($stmt)) {
       if (!$stmt->bind_param('i', $account_id)) return false;
       if (!$stmt->execute()) return false;
@@ -59,7 +65,7 @@ class Worker {
   }
 
   public function getCountAllActiveWorkers() {
-    $stmt = $this->mysqli->prepare("SELECT count(id) AS total FROM $this->table WHERE active = 1");
+    $stmt = $this->mysqli->prepare("SELECT COUNT(DISTINCT username) AS total FROM "  . $this->share->getTableName() . " WHERE time > DATE_SUB(now(), INTERVAL 10 MINUTE)");
     if ($this->checkStmt($stmt)) {
       if (!$stmt->execute()) {
         return false;
@@ -101,4 +107,4 @@ class Worker {
   }
 }
 
-$worker = new Worker($debug, $mysqli, $user);
+$worker = new Worker($debug, $mysqli, $user, $share);
