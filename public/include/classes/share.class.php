@@ -26,6 +26,21 @@ class Share {
     return $this->sError;
   }
 
+  public function getTableName() {
+    return $this->table;
+  }
+
+  public function getRoundShares() {
+    $stmt = $this->mysqli->prepare("SELECT count(id) AS total FROM $this->table WHERE UNIX_TIMESTAMP(time) >IFNULL((SELECT MAX(time) FROM blocks),0)");
+    if ($this->checkStmt($stmt)) {
+      $stmt->execute();
+      $result = $stmt->get_result();
+      $stmt->close();
+      return $result->fetch_object()->total;
+    }
+    return false;
+  }
+  
   public function getSharesForAccounts($previous_upstream=0, $current_upstream) {
     $stmt = $this->mysqli->prepare("SELECT
                                      a.id,
@@ -61,23 +76,6 @@ class Share {
       $result = $stmt->get_result();
       $stmt->close();
       return $result->fetch_all(MYSQLI_ASSOC);
-    }
-    return false;
-  }
-
-  public function getRoundShares($previous_upstream=0, $current_upstream) {
-    $stmt = $this->mysqli->prepare("SELECT
-                                      count(id) as total
-                                    FROM $this->table
-                                    WHERE our_result = 'Y'
-                                    AND id BETWEEN ? AND ?
-                                    ");
-    if ($this->checkStmt($stmt)) {
-      $stmt->bind_param('ii', $previous_upstream, $current_upstream);
-      $stmt->execute();
-      $result = $stmt->get_result();
-      $stmt->close();
-      return $result->fetch_object()->total;
     }
     return false;
   }
