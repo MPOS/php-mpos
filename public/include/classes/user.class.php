@@ -171,21 +171,7 @@ class User {
     $stmt = $this->mysqli->prepare("
       SELECT
       id, username, pin, pass, admin,
-      IFNULL(donate_percent, '0') as donate_percent, coin_address, ap_threshold,
-      (
-        SELECT COUNT(id)
-        FROM shares
-        WHERE $this->table.username = SUBSTRING_INDEX( `username` , '.', 1 )
-        AND UNIX_TIMESTAMP(time) >IFNULL((SELECT MAX(time) FROM blocks),0)
-        AND our_result = 'Y'
-      ) AS valid,
-      (
-        SELECT COUNT(id)
-        FROM shares
-        WHERE $this->table.username = SUBSTRING_INDEX( `username` , '.', 1 )
-        AND UNIX_TIMESTAMP(time) >IFNULL((SELECT MAX(time) FROM blocks),0)
-        AND our_result = 'N'
-      ) AS invalid
+      IFNULL(donate_percent, '0') as donate_percent, coin_address, ap_threshold
       FROM $this->table
       WHERE id = ? LIMIT 0,1");
     echo $this->mysqli->error;

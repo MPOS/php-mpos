@@ -87,6 +87,31 @@ class Statistics {
     return false;
   }
 
+  public function getUserShares($account_id) {
+    $stmt = $this->mysqli->prepare("
+      SELECT
+      (
+        SELECT COUNT(s.id)
+        FROM " . $this->share->getTableName() . " AS s, " . $this->user->getTableName() . " AS u
+        WHERE u.username = SUBSTRING_INDEX( s.username, '.', 1 )
+        AND UNIX_TIMESTAMP(s.time) >IFNULL((SELECT MAX(b.time) FROM blocks AS b),0)
+        AND our_result = 'Y'
+        AND u.id = ?
+      ) AS valid,
+      (
+        SELECT COUNT(s.id)
+        FROM " . $this->share->getTableName() . " AS s, " . $this->user->getTableName() . " AS u
+        WHERE u.username = SUBSTRING_INDEX( s.username, '.', 1 )
+        AND UNIX_TIMESTAMP(s.time) >IFNULL((SELECT MAX(b.time) FROM blocks AS b),0)
+        AND our_result = 'N'
+        AND u.id = ?
+      ) AS invalid"); 
+    if ($stmt && $stmt->bind_param("ii", $account_id, $account_id) && $stmt->execute() && $result = $stmt->get_result()) return $result->fetch_assoc();
+    // Catchall
+    $this->debug->append("Unable to fetch user round shares: " . $this->mysqli->error);
+    return false;
+  }
+
   public function getUserHashrate($account_id) {
     $stmt = $this->mysqli->prepare("
       SELECT ROUND(COUNT(s.id) * POW(2,21)/600/1000) AS hashrate
