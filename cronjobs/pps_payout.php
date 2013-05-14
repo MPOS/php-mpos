@@ -43,7 +43,8 @@ foreach ($aAllBlocks as $iIndex => $aBlock) {
       continue;
     }
     $aAccountShares = $share->getSharesForAccounts($share->getLastUpstreamId(), $iCurrentUpstreamId);
-    $iRoundShares = $share->getRoundShares($share->getLastUpstreamId(), $iCurrentUpstreamId);
+    $aRoundShares = $share->getRoundShares($share->getLastUpstreamId(), $iCurrentUpstreamId);
+    $iRoundShares = $aRoundShares['valid'];
     verbose("ID\tHeight\tTime\t\tShares\tFinder\t\tShare ID\tPrev Share\tStatus\n");
     verbose($aBlock['id'] . "\t" . $aBlock['height'] . "\t" . $aBlock['time'] . "\t" . $iRoundShares . "\t" . $share->getUpstreamFinder() . "\t" . $share->getUpstreamId() . "\t\t" . $share->getLastUpstreamId());
     if (empty($aAccountShares)) {
