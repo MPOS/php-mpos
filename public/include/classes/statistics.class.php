@@ -38,10 +38,33 @@ class Statistics {
   }
 
   public function getCurrentHashrate() {
-    $stmt = $this->mysqli->prepare("SELECT ROUND(COUNT(id) * POW(2, " . $this->config['difficulty'] . ")/600/1000) AS hashrate FROM " . $this->share->getTableName() . " WHERE time > DATE_SUB(now(), INTERVAL 10 MINUTE)");
+    $stmt = $this->mysqli->prepare("
+      SELECT SUM(hashrate) AS hashrate FROM
+      (
+        SELECT ROUND(COUNT(id) * POW(2, " . $this->config['difficulty'] . ")/600/1000) AS hashrate FROM " . $this->share->getTableName() . " WHERE time > DATE_SUB(now(), INTERVAL 10 MINUTE)
+        UNION
+        SELECT ROUND(COUNT(id) * POW(2, " . $this->config['difficulty'] . ")/600/1000) AS hashrate FROM " . $this->share->getArchiveTableName() . " WHERE time > DATE_SUB(now(), INTERVAL 10 MINUTE)
+      ) AS sum
+      ");
     if ($this->checkStmt($stmt) && $stmt->execute() && $result = $stmt->get_result() ) {
       return $result->fetch_object()->hashrate;
     }
+    return false;
+  }
+
+  public function getCurrentShareRate() {
+    $stmt = $this->mysqli->prepare("
+      SELECT ROUND(SUM(sharerate) / 600, 2) AS sharerate FROM
+      (
+        SELECT COUNT(id) AS sharerate FROM " . $this->share->getTableName() . " WHERE time > DATE_SUB(now(), INTERVAL 10 MINUTE)
+        UNION ALL
+        SELECT COUNT(id) AS sharerate FROM " . $this->share->getArchiveTableName() . " WHERE time > DATE_SUB(now(), INTERVAL 10 MINUTE)
+      ) AS sum
+      ");
+    if ($this->checkStmt($stmt) && $stmt->execute() && $result = $stmt->get_result() ) {
+      return $result->fetch_object()->sharerate;
+    }
+    return false;
   }
 
   private function checkStmt($bState) {
