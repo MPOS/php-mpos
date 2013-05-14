@@ -7,10 +7,10 @@ if (!defined('SECURITY'))
 // Globally available variables
 $debug->append('Global smarty variables', 3);
 
-if (!$iRoundShares = $memcache->get('iRoundShares')) {
-  $debug->append('Fetching iRoundShares from database');
-  $iRoundShares = $share->getRoundShares();
-  $memcache->set('iRoundShares', $iRoundShares, 60);
+if (!$aRoundShares = $memcache->get('aRoundShares')) {
+  $debug->append('Fetching aRoundShares from database');
+  $aRoundShares = $share->getRoundShares();
+  $memcache->set('aRoundShares', $aRoundShares, 60);
 }
 
 if (!$iCurrentActiveWorkers = $memcache->get('iCurrentActiveWorkers')) {
@@ -32,11 +32,13 @@ $aGlobal = array(
   'ltc_usd' => $settings->getValue('btcesell'),
   'hashrate' => $iCurrentPoolHashrate,
   'workers' => $iCurrentActiveWorkers,
-  'currentroundshares' => $iRoundShares,
+  'roundshares' => $aRoundShares,
   'statstime' => $settings->getValue('statstime'),
   'motd' => $settings->getValue('motd'),
-  'confirmations' => $config['confirmations']
+  'confirmations' => $config['confirmations'],
+  'reward' => $config['reward']
 );
+
 // Append additional user information not from user table
 $aGlobal['userdata']['balance'] = $transaction->getBalance($_SESSION['USERDATA']['id']);
 
