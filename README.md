@@ -90,6 +90,7 @@ Pushpoold
 
 Please ensure the passwords are read from the proper table by adding this to your configuration:
 
+```
   # database settings
   "database" : {
     "engine" : "mysql",
@@ -100,7 +101,7 @@ Please ensure the passwords are read from the proper table by adding this to you
     "sharelog" : true,
     "stmt.pwdb":"SELECT `password` FROM `workers` WHERE `username` = ?",
     "stmt.sharelog":"INSERT INTO shares (rem_host, username, our_result, upstream_result, reason, solution) VALUES (?, ?, ?, ?, ?, ?)"
-  },```
+  },
 
 ```
 
