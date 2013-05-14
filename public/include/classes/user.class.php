@@ -162,15 +162,16 @@ class User {
     return true;
   }
 
+  public function getTableName() {
+    return $this->table;
+  }
+
   public function getUserData($userID) {
     $this->debug->append("Fetching user information for user id: $userID");
     $stmt = $this->mysqli->prepare("
       SELECT
       id, username, pin, pass, admin,
       IFNULL(donate_percent, '0') as donate_percent, coin_address, ap_threshold,
-      (
-        SELECT ROUND(COUNT(id) * POW(2,21)/600/1000) FROM shares WHERE $this->table.username = SUBSTRING_INDEX( `username` , '.', 1 ) AND time > DATE_SUB(now(), INTERVAL 10 MINUTE)
-      ) AS hashrate,
       (
         SELECT COUNT(id)
         FROM shares
