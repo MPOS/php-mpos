@@ -172,11 +172,22 @@ class User {
         SELECT ROUND(COUNT(id) * POW(2,21)/600/1000) FROM shares WHERE $this->table.username = SUBSTRING_INDEX( `username` , '.', 1 ) AND time > DATE_SUB(now(), INTERVAL 10 MINUTE)
       ) AS hashrate,
       (
-        SELECT COUNT(id) FROM shares WHERE $this->table.username = SUBSTRING_INDEX( `username` , '.', 1 ) AND UNIX_TIMESTAMP(time) >IFNULL((SELECT MAX(time) FROM blocks),0)
-      ) AS shares
+        SELECT COUNT(id)
+        FROM shares
+        WHERE $this->table.username = SUBSTRING_INDEX( `username` , '.', 1 )
+        AND UNIX_TIMESTAMP(time) >IFNULL((SELECT MAX(time) FROM blocks),0)
+        AND our_result = 'Y'
+      ) AS valid,
+      (
+        SELECT COUNT(id)
+        FROM shares
+        WHERE $this->table.username = SUBSTRING_INDEX( `username` , '.', 1 )
+        AND UNIX_TIMESTAMP(time) >IFNULL((SELECT MAX(time) FROM blocks),0)
+        AND our_result = 'N'
+      ) AS invalid
       FROM $this->table
       WHERE id = ? LIMIT 0,1");
-echo $this->mysqli->error;
+    echo $this->mysqli->error;
     if ($this->checkStmt($stmt)) {
       $stmt->bind_param('i', $userID);
       if (!$stmt->execute()) {
