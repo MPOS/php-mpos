@@ -85,15 +85,26 @@ Please create the `mmcfe-ng/public/include/config/global.inc.php`
 configuration from the supplied template
 `mmcfe-ng/public/include/config/global.inc.dist.php`.
 
-Please validate your settings, then try to access the site.
-You should now be able to register a new account, setup a worker
-and get started!
+Database
+========
+
+Now that the software is ready we need to import the database.
+You will find the SQL file in the `mmcfe-ng/sql` folder.
+Import this file into an existing database and you should
+have the proper structure ready.
+
+TODO
+====
+
+I tried to cover most features available in mmcFE. There might be some missing still
+(like graphs, some stats) but if you figure there is a core function missing please let
+me know by creating an [Issue][1] marked as `Feature Request`.
 
 Disclaimer
 ==========
 
 This is a *WIP Project*. Most functionality is now added, the core
 features are available and the backend cronjobs are working. If you
-encounter any problems related to the code please create a new [Issue] [1]
+encounter any problems related to the code please create a new [Issue][1]
 
   [1]: https://github.com/TheSerapher/php-mmcfe-ng/issues "Issue"
