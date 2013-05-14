@@ -15,22 +15,85 @@ future.
 Requirements
 ============
 
-* PHP mysqlnd Driver
+This setup has been tested on Ubuntu 12.04, Ubuntu 13.04 and CentOS.
+It should also work on any related distribution (RHEL, Debian).
+For support on how to get `litecoind` or `pushpoold` to work, please ask
+in the appropriate forums.
+
+* Apache2
+ * libapache2-mod-php5
+* PHP 5.4+ (5.3 might work too)
+ * php5-mysqlnd
+ * php5-memcached
 * MySQL Server
+ * mysql-server
+* memcached
 * pushpoold
 * litecoind
 
 Installation
 ============
 
-No definite guide yet since this project is not in a working state as of
-yet.
+Please ensure you fullfill the minimal installation requirements listed above
+and install any missing packages or software.
+
+Download Source
+---------------
+
+Download the (stable) master branch from Github:
+
+```
+git clone -b master git://github.com/TheSerapher/php-mmcfe-ng.git mmcfe-ng
+```
+
+Or, if you are not using git, use the ZIP file provided:
+
+```
+wget https://github.com/TheSerapher/php-mmcfe-ng/archive/master.zip
+unzip master.zip
+mv php-mmcfe-ng-master mmcfe-ng
+```
+
+Permissions
+-----------
+
+Please ensure your webuser (e.g. `www-data`, `apache`) has write access to
+the `mmcfe-ng/public/templates/compile` folder! Otherwise compiled
+templates can not be stored:
+
+```
+sudo chown www-data mmcfe-ng/public/templates/compile
+```
+
+Apache2 Configuration
+---------------------
+
+Please point your website document root to the `mmcfe-ng/public` folder
+and enable auto-index for `index.php`.
+
+Memcache
+--------
+
+Please install and start a default memcache instance. Not only would you
+need one for `pushpoold` but the statistics page is storing data in
+`memcache` as well to improve performance.
+
+Configuration
+-------------
+
+Please create the `mmcfe-ng/public/include/config/global.inc.php`
+configuration from the supplied template
+`mmcfe-ng/public/include/config/global.inc.dist.php`.
+
+Please validate your settings, then try to access the site.
+You should now be able to register a new account, setup a worker
+and get started!
 
 Disclaimer
 ==========
 
-Since this is a heavy WIP there is no official support yet. The frontend
-might work already but the entire backend (cronjobs) are currently
-focused on but *not working yet*. If you have a working backend please
-get in touch with me - maybe with some collaboration this project could
-be a great starting point for anyone that likes to run their own pool.
+This is a *WIP Project*. Most functionality is now added, the core
+features are available and the backend cronjobs are working. If you
+encounter any problems related to the code please create a new [Issue] [1]
+
+  [1]: https://github.com/TheSerapher/php-mmcfe-ng/issues "Issue"
