@@ -17,7 +17,7 @@
         <td>{$rank++}</td>
         <td>{$TOPHASHRATES[hashrate].account}</td>
         <td>{$TOPHASHRATES[hashrate].hashrate|number_format}</td>
-        <td>{math equation="round(( 24 / (((diff * pow(2,targetdiff)) / hashrate) / 3600) * reward ),3)" diff=$DIFFICULTY targetdiff=$TARGETDIFF hashrate=$TOPHASHRATES[hashrate].hashrate reward=$REWARD}</td>
+        <td>{math equation="round(reward / ( diff * pow(2,32) / ( hashrate * 1000 ) / 3600 / 24),3)" diff=$DIFFICULTY reward=$REWARD hashrate=$TOPHASHRATES[hashrate].hashrate}</td>
       </tr>
 {/section}
     </tbody>

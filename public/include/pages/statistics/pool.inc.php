@@ -67,7 +67,7 @@ if (!$iCurrentPoolHashrate = $memcache->get('iCurrentPoolHashrate')) {
   $iCurrentPoolHashrate =  $statistics->getCurrentHashrate();
   $memcache->set('iCurrentPoolHashrate', $iCurrentPoolHashrate, 60);
 }
-$iEstTime = (($dDifficulty * bcpow(2,$config['difficulty'])) / $iCurrentPoolHashrate);
+$iEstTime = ((($dDifficulty * pow(2,32)) / $iCurrentPoolHashrate) / 3600);
 $now = new DateTime( "now" );
 if (!empty($aBlockData)) {
   $dTimeSinceLast = ($now->getTimestamp() - $aBlockData['time']);
@@ -84,7 +84,6 @@ $smarty->assign("TOPHASHRATES", $aHashData);
 $smarty->assign("CURRENTBLOCK", $iBlock);
 $smarty->assign("LASTBLOCK", $aBlockData['height']);
 $smarty->assign("DIFFICULTY", $dDifficulty);
-$smarty->assign("TARGETDIFF", $config['difficulty']);
 $smarty->assign("REWARD", $config['reward']);
 
 if ($_SESSION['AUTHENTICATED']) {
