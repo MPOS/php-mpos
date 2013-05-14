@@ -31,6 +31,7 @@ $aGlobal = array(
   'websitename' => $settings->getValue('websitename'),
   'ltc_usd' => $settings->getValue('btcesell'),
   'hashrate' => $iCurrentPoolHashrate,
+  'sharerate' => $statistics->getCurrentShareRate(),
   'workers' => $iCurrentActiveWorkers,
   'roundshares' => $aRoundShares,
   'statstime' => $settings->getValue('statstime'),
