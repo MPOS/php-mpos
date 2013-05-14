@@ -31,45 +31,57 @@ class Share {
   }
 
   public function getRoundShares() {
-    $stmt = $this->mysqli->prepare("SELECT count(id) AS total FROM $this->table WHERE UNIX_TIMESTAMP(time) >IFNULL((SELECT MAX(time) FROM blocks),0)");
+    $stmt = $this->mysqli->prepare("
+      SELECT
+        ( SELECT IFNULL(count(id), 0)
+        FROM $this->table
+        WHERE UNIX_TIMESTAMP(time) >IFNULL((SELECT MAX(time) FROM blocks),0)
+        AND our_result = 'Y' ) as valid,
+        ( SELECT IFNULL(count(id), 0)
+      FROM $this->table
+      WHERE UNIX_TIMESTAMP(time) >IFNULL((SELECT MAX(time) FROM blocks),0)
+      AND our_result = 'N' ) as invalid
+    ");
+    echo $this->mysqli->error;
     if ($this->checkStmt($stmt)) {
+
       $stmt->execute();
       $result = $stmt->get_result();
       $stmt->close();
-      return $result->fetch_object()->total;
+      return $result->fetch_assoc();
     }
     return false;
   }
-  
+
   public function getSharesForAccounts($previous_upstream=0, $current_upstream) {
     $stmt = $this->mysqli->prepare("SELECT
-                                     a.id,
-                                     validT.account AS username,
-                                     sum(validT.valid) as valid,
-                                     IFNULL(sum(invalidT.invalid),0) as invalid
-                                    FROM
-                                    (
-                                      SELECT DISTINCT
-                                        SUBSTRING_INDEX( `username` , '.', 1 ) as account,
-                                        COUNT(id) AS valid
-                                      FROM $this->table
-                                      WHERE id BETWEEN ? AND ?
-                                        AND our_result = 'Y'
-                                      GROUP BY account
-                                    ) validT
-                                    LEFT JOIN
-                                    (
-                                      SELECT DISTINCT
-                                        SUBSTRING_INDEX( `username` , '.', 1 ) as account,
-                                        COUNT(id) AS invalid
-                                      FROM $this->table
-                                      WHERE id BETWEEN ? AND ?
-                                        AND our_result = 'N'
-                                      GROUP BY account
-                                    ) invalidT
-                                    ON validT.account = invalidT.account
-                                    INNER JOIN accounts a ON a.username = validT.account
-                                    GROUP BY a.username DESC");
+      a.id,
+      validT.account AS username,
+      sum(validT.valid) as valid,
+      IFNULL(sum(invalidT.invalid),0) as invalid
+      FROM
+      (
+        SELECT DISTINCT
+        SUBSTRING_INDEX( `username` , '.', 1 ) as account,
+          COUNT(id) AS valid
+          FROM $this->table
+          WHERE id BETWEEN ? AND ?
+          AND our_result = 'Y'
+          GROUP BY account
+        ) validT
+        LEFT JOIN
+        (
+          SELECT DISTINCT
+          SUBSTRING_INDEX( `username` , '.', 1 ) as account,
+            COUNT(id) AS invalid
+            FROM $this->table
+            WHERE id BETWEEN ? AND ?
+            AND our_result = 'N'
+            GROUP BY account
+          ) invalidT
+          ON validT.account = invalidT.account
+          INNER JOIN accounts a ON a.username = validT.account
+          GROUP BY a.username DESC");
     if ($this->checkStmt($stmt)) {
       $stmt->bind_param('iiii', $previous_upstream, $current_upstream, $previous_upstream, $current_upstream);
       $stmt->execute();
@@ -82,9 +94,9 @@ class Share {
 
   public function moveArchive($previous_upstream=0, $current_upstream,$block_id) {
     $archive_stmt = $this->mysqli->prepare("INSERT INTO shares_archive (share_id, username, our_result, upstream_result, block_id)
-                                    SELECT id, username, our_result, upstream_result, ?
-                                    FROM $this->table
-                                    WHERE id BETWEEN ? AND ?");
+      SELECT id, username, our_result, upstream_result, ?
+      FROM $this->table
+      WHERE id BETWEEN ? AND ?");
     $delete_stmt = $this->mysqli->prepare("DELETE FROM $this->table WHERE id BETWEEN ? AND ?");
     if ($this->checkStmt($archive_stmt) && $this->checkStmt($delete_stmt)) {
       $archive_stmt->bind_param('iii', $block_id, $previous_upstream, $current_upstream);
@@ -112,11 +124,11 @@ class Share {
   }
   public function setUpstream($time='') {
     $stmt = $this->mysqli->prepare("SELECT
-                                      SUBSTRING_INDEX( `username` , '.', 1 ) AS account, id
-                                    FROM $this->table
-                                    WHERE upstream_result = 'Y'
-                                    AND UNIX_TIMESTAMP(time) BETWEEN ? AND (? + 1)
-                                    ORDER BY id ASC LIMIT 1");
+      SUBSTRING_INDEX( `username` , '.', 1 ) AS account, id
+      FROM $this->table
+      WHERE upstream_result = 'Y'
+      AND UNIX_TIMESTAMP(time) BETWEEN ? AND (? + 1)
+      ORDER BY id ASC LIMIT 1");
     if ($this->checkStmt($stmt)) {
       $stmt->bind_param('ii', $time, $time);
       $stmt->execute();
