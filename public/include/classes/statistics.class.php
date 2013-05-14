@@ -67,6 +67,28 @@ class Statistics {
     return false;
   }
 
+  public function getRoundShares() {
+    $stmt = $this->mysqli->prepare("
+      SELECT
+      ( SELECT IFNULL(count(id), 0)
+      FROM " . $this->share->getTableName() . "
+      WHERE UNIX_TIMESTAMP(time) >IFNULL((SELECT MAX(time) FROM blocks),0)
+      AND our_result = 'Y' ) as valid,
+      ( SELECT IFNULL(count(id), 0)
+      FROM " . $this->share->getTableName() . "
+      WHERE UNIX_TIMESTAMP(time) >IFNULL((SELECT MAX(time) FROM blocks),0)
+      AND our_result = 'N' ) as invalid
+      ");
+    if ($this->checkStmt($stmt)) {
+
+      $stmt->execute();
+      $result = $stmt->get_result();
+      $stmt->close();
+      return $result->fetch_assoc();
+    }
+    return false;
+  }
+
   private function checkStmt($bState) {
     if ($bState ===! true) {
       $this->debug->append("Failed to prepare statement: " . $this->mysqli->error);

@@ -9,7 +9,7 @@ $debug->append('Global smarty variables', 3);
 
 if (!$aRoundShares = $memcache->get('aRoundShares')) {
   $debug->append('Fetching aRoundShares from database');
-  $aRoundShares = $share->getRoundShares();
+  $aRoundShares = $statistics->getRoundShares();
   $memcache->set('aRoundShares', $aRoundShares, 60);
 }
 
