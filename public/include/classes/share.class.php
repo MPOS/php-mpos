@@ -7,6 +7,7 @@ if (!defined('SECURITY'))
 class Share {
   private $sError = '';
   private $table = 'shares';
+  private $tableArchive = 'shares_archive';
   private $oUpstream;
   private $iLastUpstreamId;
   // This defines each share
@@ -26,6 +27,9 @@ class Share {
     return $this->sError;
   }
 
+  public function getArchiveTableName() {
+    return $this->tableArchive;
+  }
   public function getTableName() {
     return $this->table;
   }
@@ -93,8 +97,8 @@ class Share {
   }
 
   public function moveArchive($previous_upstream=0, $current_upstream,$block_id) {
-    $archive_stmt = $this->mysqli->prepare("INSERT INTO shares_archive (share_id, username, our_result, upstream_result, block_id)
-      SELECT id, username, our_result, upstream_result, ?
+    $archive_stmt = $this->mysqli->prepare("INSERT INTO $this->tableArchive (share_id, username, our_result, upstream_result, block_id, time)
+      SELECT id, username, our_result, upstream_result, ?, time
       FROM $this->table
       WHERE id BETWEEN ? AND ?");
     $delete_stmt = $this->mysqli->prepare("DELETE FROM $this->table WHERE id BETWEEN ? AND ?");
