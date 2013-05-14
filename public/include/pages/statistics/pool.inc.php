@@ -67,7 +67,10 @@ if (!$iCurrentPoolHashrate = $memcache->get('iCurrentPoolHashrate')) {
   $iCurrentPoolHashrate =  $statistics->getCurrentHashrate();
   $memcache->set('iCurrentPoolHashrate', $iCurrentPoolHashrate, 60);
 }
-$iEstTime = ((($dDifficulty * pow(2,32)) / $iCurrentPoolHashrate) / 3600);
+// Time in seconds, not hours, using modifier in smarty to translate
+$iEstTime = $dDifficulty * pow(2,32) / ($iCurrentPoolHashrate * 1000);
+
+// Time since last block
 $now = new DateTime( "now" );
 if (!empty($aBlockData)) {
   $dTimeSinceLast = ($now->getTimestamp() - $aBlockData['time']);
