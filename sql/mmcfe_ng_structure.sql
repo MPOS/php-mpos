@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Erstellungszeit: 14. Mai 2013 um 16:10
+-- Erstellungszeit: 14. Mai 2013 um 16:12
 -- Server Version: 5.5.31-0ubuntu0.13.04.1
 -- PHP-Version: 5.4.9-4ubuntu2
 
@@ -113,7 +113,8 @@ CREATE TABLE IF NOT EXISTS `shares_archive` (
   `block_id` int(10) unsigned NOT NULL,
   `time` datetime NOT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `share_id` (`share_id`)
+  UNIQUE KEY `share_id` (`share_id`),
+  KEY `time` (`time`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='Archive shares for potential later debugging purposes';
 
 -- --------------------------------------------------------
