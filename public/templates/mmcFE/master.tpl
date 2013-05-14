@@ -6,23 +6,12 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico">
     <link rel="stylesheet" href="{$PATH}/css/mainstyle.css" type="text/css" />
-    <script type="text/javascript" src="{$PATH}/js/jquery-1.6.2.min.js"></script>
-    <script type="text/javascript" src="{$PATH}/js/jquery.tools.min.js"></script>
-    <script type="text/javascript" src="{$PATH}/js/jquery.js"></script>
-    <script type="text/javascript" src="{$PATH}/js/jquery.img.preload.js"></script>
-    <script type="text/javascript" src="{$PATH}/js/jquery.filestyle.mini.js"></script>
-    <script type="text/javascript" src="{$PATH}/js/jquery.wysiwyg.js"></script>
-    <script type="text/javascript" src="{$PATH}/js/jquery.date_input.pack.js"></script>
-    <script type="text/javascript" src="{$PATH}/js/facebox.js"></script>
-    <script type="text/javascript" src="{$PATH}/js/jquery.visualize.js"></script>
-    <script type="text/javascript" src="{$PATH}/js/jquery.visualize.tooltip.js"></script>
-    <script type="text/javascript" src="{$PATH}/js/jquery.select_skin.js"></script>
-    <script type="text/javascript" src="{$PATH}/js/jquery.tablesorter.min.js"></script>
-    <script type="text/javascript" src="{$PATH}/js/ajaxupload.js"></script>
-    <script type="text/javascript" src="{$PATH}/js/jquery.pngfix.js"></script>
-    <script type="text/javascript" src="{$PATH}/js/custom.js"></script>
-    <script type="text/javascript" src="{$PATH}/js/tools.js"></script>
-    <!--[if IE]><script type="text/javascript" src="js/excanvas.js"></script><![endif]-->
+    <script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
+    <script src="{$PATH}/js/jquery.browser.js"></script>
+    <script src="{$PATH}/js/jquery.tablesorter.min.js"></script>
+    <script src="{$PATH}/js/custom.js"></script>
+    <script src="{$PATH}/js/tools.js"></script>
+    <!--[if IE]><script type="text/javascript" src="{$PATH}/js/excanvas.js"></script><![endif]-->
     <style type="text/css" media="all">
       @import url("{$PATH}/css/style.css");
       @import url("{$PATH}/css/jquery.wysiwyg.css");
@@ -30,7 +19,7 @@
       @import url("{$PATH}/css/visualize.css");
       @import url("{$PATH}/css/date_input.css");
     </style>
-    <!--[if lt IE 8]><style type="text/css" media="all">@import url("css/ie.css");</style><![endif]-->
+    <!--[if lt IE 8]><style type="text/css" media="all">@import url("{$PATH}/css/ie.css");</style><![endif]-->
   </head>
 
 <body>
