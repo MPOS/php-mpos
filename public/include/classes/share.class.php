@@ -34,25 +34,19 @@ class Share {
     return $this->table;
   }
 
-  public function getRoundShares() {
-    $stmt = $this->mysqli->prepare("
-      SELECT
-        ( SELECT IFNULL(count(id), 0)
-        FROM $this->table
-        WHERE UNIX_TIMESTAMP(time) >IFNULL((SELECT MAX(time) FROM blocks),0)
-        AND our_result = 'Y' ) as valid,
-        ( SELECT IFNULL(count(id), 0)
+  public function getRoundShares($previous_upstream=0, $current_upstream) {
+    $stmt = $this->mysqli->prepare("SELECT
+      count(id) as total
       FROM $this->table
-      WHERE UNIX_TIMESTAMP(time) >IFNULL((SELECT MAX(time) FROM blocks),0)
-      AND our_result = 'N' ) as invalid
-    ");
-    echo $this->mysqli->error;
+      WHERE our_result = 'Y'
+      AND id BETWEEN ? AND ?
+      ");
     if ($this->checkStmt($stmt)) {
-
+      $stmt->bind_param('ii', $previous_upstream, $current_upstream);
       $stmt->execute();
       $result = $stmt->get_result();
       $stmt->close();
-      return $result->fetch_assoc();
+      return $result->fetch_object()->total;
     }
     return false;
   }
