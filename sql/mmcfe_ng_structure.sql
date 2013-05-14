@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Erstellungszeit: 13. Mai 2013 um 16:03
+-- Erstellungszeit: 14. Mai 2013 um 16:10
 -- Server Version: 5.5.31-0ubuntu0.13.04.1
 -- PHP-Version: 5.4.9-4ubuntu2
 
@@ -17,7 +17,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8 */;
 
 --
--- Datenbank: `mmcfe_ng`
+-- Datenbank: `mmcfe_ng_db`
 --
 
 -- --------------------------------------------------------
@@ -111,6 +111,7 @@ CREATE TABLE IF NOT EXISTS `shares_archive` (
   `our_result` enum('Y','N') DEFAULT NULL,
   `upstream_result` enum('Y','N') DEFAULT NULL,
   `block_id` int(10) unsigned NOT NULL,
+  `time` datetime NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `share_id` (`share_id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='Archive shares for potential later debugging purposes';
