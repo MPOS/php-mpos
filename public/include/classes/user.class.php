@@ -27,11 +27,11 @@ class User {
   }
 
   public function getUserName($id) {
-    return $this->getSingle($id, 'username');
+    return $this->getSingle($id, 'username', 'id');
   }
 
   public function getUserId($username) {
-    return $this->getSingle($username, 'id', 'username');
+    return $this->getSingle($username, 'id', 'username', 's');
   }
 
   public function checkLogin($username, $password) {
@@ -55,10 +55,10 @@ class User {
     return $pin_hash === $row_pin;
   }
 
-  private function getSingle($value, $search='id', $field='id') {
+  private function getSingle($value, $search='id', $field='id', $type="i") {
     $stmt = $this->mysqli->prepare("SELECT $search FROM $this->table WHERE $field = ? LIMIT 1");
     if ($this->checkStmt($stmt)) {
-      $stmt->bind_param('i', $value);
+      $stmt->bind_param($type, $value);
       $stmt->execute();
       $stmt->bind_result($retval);
       $stmt->fetch();
@@ -69,7 +69,7 @@ class User {
   }
 
   public function getCoinAddress($userID) {
-    return $this->getSingle($userID, 'coin_address');
+    return $this->getSingle($userID, 'coin_address', 'id', 's');
   }
 
   private function updateSingle($userID, $field, $table) {
