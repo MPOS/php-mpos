@@ -139,6 +139,31 @@ class Statistics {
     $this->debug->append("Failed to fetch hashrate: " . $this->mysqli->error);
     return false;
   }
-}
 
+  public function getHourlyHashrateByAccount($account_id) {
+    $stmt = $this->mysqli->prepare("
+      SELECT
+      ROUND(COUNT(s.id) * POW(2, 12)/600/1000) AS hashrate,
+        HOUR(s.time) AS hour
+        FROM " . $this->share->getTableName() . " AS s, accounts AS a
+        WHERE time < NOW() - INTERVAL 1 HOUR AND time > NOW() - INTERVAL 25 HOUR
+        AND a.username = SUBSTRING_INDEX( s.username, '.', 1 )
+        AND a.id = ?
+        GROUP BY HOUR(time)
+        UNION ALL
+        SELECT
+        ROUND(COUNT(s.id) * POW(2, 12)/600/1000) AS hashrate,
+          HOUR(s.time) AS hour
+          FROM " . $this->share->getArchiveTableName() . " AS s, accounts AS a
+          WHERE time < NOW() - INTERVAL 1 HOUR AND time > NOW() - INTERVAL 25 HOUR
+          AND a.username = SUBSTRING_INDEX( s.username, '.', 1 )
+          AND a.id = ?
+          GROUP BY HOUR(time)");
+    if ($this->checkStmt($stmt) && $stmt->bind_param("ii", $account_id, $account_id) && $stmt->execute() && $hourlyhashrates = $stmt->get_result())
+      return $hourlyhashrates->fetch_all(MYSQLI_ASSOC);
+    // Catchall
+    $this->debug->append("Failed to fetch hourly hashrate: " . $this->mysqli->error);
+    return false;
+  }
+}
 $statistics = new Statistics($debug, $mysqli, $config, $share, $user);

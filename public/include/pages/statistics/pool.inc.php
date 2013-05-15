@@ -21,30 +21,23 @@ if ($bitcoin->can_connect() === true){
 }
 
 if (!$aHashData = $memcache->get('aHashData')) {
-  $debug->append('Hashrates expired in memcache');
+  $debug->append('STA Fetching Hashrates from database');
   // Top 15 hashrate list
-  $stmt = $mysqli->prepare("SELECT
+  $stmt = $mysqli->prepare("
+        SELECT
+        COUNT(id) AS shares,
 				ROUND(COUNT(id) * POW(2," . $config['difficulty'] . ")/600/1000,2) AS hashrate,
 				SUBSTRING_INDEX( `username` , '.', 1 ) AS account
-			    FROM shares
-			    WHERE time > DATE_SUB(now(), INTERVAL 10 MINUTE)
-			    GROUP BY account
-			    ORDER BY hashrate DESC LIMIT 15");
+			  FROM shares
+			  WHERE time > DATE_SUB(now(), INTERVAL 10 MINUTE)
+			  GROUP BY account
+			  ORDER BY hashrate DESC LIMIT 15");
   $stmt->execute();
   $hashrates= $stmt->get_result();
   $aHashData = $hashrates->fetch_all(MYSQLI_ASSOC);
   $stmt->close();
   $memcache->set('aHashData', $aHashData, 60);
-}
-
-if (! $aContributerData = $memcache->get('aContributerData') ) {
-  // Top 15 Contributers
-  $stmt = $mysqli->prepare("SELECT count(id) AS shares, SUBSTRING_INDEX( `username` , '.', 1 ) AS account FROM shares GROUP BY account ORDER BY shares DESC LIMIT 15");
-  $stmt->execute();
-  $contributers = $stmt->get_result();
-  $aContributerData = $contributers->fetch_all(MYSQLI_ASSOC);
-  $stmt->close();
-  $memcache->set('aContributerData', $aContributerData, 60);
+  $debug->append('END Fetching Hashrates from database');
 }
 
 // Grab the last block found
