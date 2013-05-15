@@ -114,7 +114,7 @@ class Statistics {
 
   public function getUserHashrate($account_id) {
     $stmt = $this->mysqli->prepare("
-      SELECT ROUND(COUNT(s.id) * POW(2,21)/600/1000) AS hashrate
+      SELECT ROUND(COUNT(s.id) * POW(2, " . $this->config['difficulty'] . ")/600/1000) AS hashrate
       FROM " . $this->share->getTableName() . " AS s,
         " . $this->user->getTableName() . " AS u
         WHERE u.username = SUBSTRING_INDEX( s.username, '.', 1 )
