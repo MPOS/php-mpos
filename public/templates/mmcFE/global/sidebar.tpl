@@ -19,10 +19,6 @@
                       <b><i>{math equation="round(( x / y ) * z, 8)" x=$GLOBAL.userdata.shares.valid y=$GLOBAL.roundshares.valid z=$GLOBAL.reward}</i> <font size='1px'>LTC</font></b><br><br>
                       <u><b>Account Balance</b></u><br><b><i>{$GLOBAL.userdata.balance|default:"0"}</i><font size='1px'> LTC</font></b><br/><br>
                     </p>
-                    <center><hr width="90%"></center>
-                    <div style="margin-top:-13px; margin-bottom:-15px;">
-                      <p><b><font size="1">Stats last updated:</b><br><i>{$GLOBAL.statstime|date_format:"%T"} GMT+1<br>(updated every 60 secs)</font></i><br/></p>
-                    </div>
                   </div>
                   <div class="bendl"></div>
                   <div class="bendr"></div>
