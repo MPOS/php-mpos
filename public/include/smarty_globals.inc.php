@@ -37,15 +37,12 @@ if (!$iCurrentPoolShareRate = $memcache->get('iCurrentPoolShareRate')) {
 }
 
 $aGlobal = array(
-  'slogan' => $settings->getValue('slogan'),
-  'websitename' => $settings->getValue('websitename'),
-  'ltc_usd' => $settings->getValue('btcesell'),
+  'slogan' => $config['website']['slogan'],
+  'websitename' => $config['website']['name'],
   'hashrate' => $iCurrentPoolHashrate,
   'sharerate' => $iCurrentPoolShareRate,
   'workers' => $iCurrentActiveWorkers,
   'roundshares' => $aRoundShares,
-  'statstime' => $settings->getValue('statstime'),
-  'motd' => $settings->getValue('motd'),
   'confirmations' => $config['confirmations'],
   'reward' => $config['reward']
 );
