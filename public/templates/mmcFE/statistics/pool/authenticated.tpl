@@ -20,7 +20,7 @@
         <td>{$TOPHASHRATES[hashrate].account}</td>
         <td>{$TOPHASHRATES[hashrate].hashrate|number_format}</td>
         <td>{$TOPHASHRATES[hashrate].shares|number_format}</td>
-        <td>{math equation="round(shares / 600,3)" shares=$TOPHASHRATES[hashrate].shares}</td>
+        <td>{$TOPHASHRATES[hashrate].sharesps}</td>
         <td>{math equation="round(reward / ( diff * pow(2,32) / ( hashrate * 1000 ) / 3600 / 24),3)" diff=$DIFFICULTY reward=$REWARD hashrate=$TOPHASHRATES[hashrate].hashrate}</td>
       </tr>
 {/section}
