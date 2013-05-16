@@ -4,7 +4,6 @@
           <div id="ministats">
             <table border="0">
               <tr>
-                <td><li>Ł/usd: {$GLOBAL.ltc_usd}&nbsp;&nbsp;&nbsp;&nbsp;</li></td>
                 <td><li>Pool Hashrate: {$GLOBAL.hashrate / 1000} MH/s&nbsp;&nbsp;&nbsp;&nbsp;</li></td>
                 <td><li>Pool Sharerate: {$GLOBAL.sharerate} Shares/s&nbsp;&nbsp;&nbsp;&nbsp;</li></td>
                 <td><li>Pool Workers: {$GLOBAL.workers}&nbsp;&nbsp;&nbsp;&nbsp;</li></td>
