@@ -21,45 +21,15 @@ if ($bitcoin->can_connect() === true){
 }
 
 if (!$aHashData = $memcache->get('aHashData')) {
-  $debug->append('Hashrates expired in memcache');
-  // Top 15 hashrate list
-  $stmt = $mysqli->prepare("SELECT
-				ROUND(COUNT(id) * POW(2," . $config['difficulty'] . ")/600/1000,2) AS hashrate,
-				SUBSTRING_INDEX( `username` , '.', 1 ) AS account
-			    FROM shares
-			    WHERE time > DATE_SUB(now(), INTERVAL 10 MINUTE)
-			    GROUP BY account
-			    ORDER BY hashrate DESC LIMIT 15");
-  $stmt->execute();
-  $hashrates= $stmt->get_result();
-  $aHashData = $hashrates->fetch_all(MYSQLI_ASSOC);
-  $stmt->close();
+  $debug->append('STA Fetching Hashrates from database');
+  $aHashData = $statistics->getTopContributors();
   $memcache->set('aHashData', $aHashData, 60);
+  $debug->append('END Fetching Hashrates from database');
 }
-
-if (! $aContributerData = $memcache->get('aContributerData') ) {
-  // Top 15 Contributers
-  $stmt = $mysqli->prepare("SELECT count(id) AS shares, SUBSTRING_INDEX( `username` , '.', 1 ) AS account FROM shares GROUP BY account ORDER BY shares DESC LIMIT 15");
-  $stmt->execute();
-  $contributers = $stmt->get_result();
-  $aContributerData = $contributers->fetch_all(MYSQLI_ASSOC);
-  $stmt->close();
-  $memcache->set('aContributerData', $aContributerData, 60);
-}
-
-// Grab the last block found
-$stmt = $mysqli->prepare("SELECT * FROM blocks ORDER BY height DESC LIMIT 1");
-$stmt->execute();
-$blocks = $stmt->get_result();
-$aBlockData = $blocks->fetch_array();
-$stmt->close();
 
 // Grab the last 10 blocks found
-$stmt = $mysqli->prepare("SELECT b.*, a.username as finder FROM blocks AS b LEFT JOIN accounts AS a ON b.account_id = a.id ORDER BY height DESC LIMIT 10");
-$stmt->execute();
-$blocksfound = $stmt->get_result();
-$aBlocksFoundData = $blocksfound->fetch_all(MYSQLI_ASSOC);
-$stmt->close();
+$aBlocksFoundData = $statistics->getBlocksFound(10);
+$aBlockData = $aBlocksFoundData[0];
 
 // Estimated time to find the next block
 if (!$iCurrentPoolHashrate = $memcache->get('iCurrentPoolHashrate')) {
@@ -81,7 +51,6 @@ if (!empty($aBlockData)) {
 // Propagate content our template
 $smarty->assign("ESTTIME", $iEstTime);
 $smarty->assign("TIMESINCELAST", $dTimeSinceLast);
-$smarty->assign("CONTRIBUTORS", $aContributerData);
 $smarty->assign("BLOCKSFOUND", $aBlocksFoundData);
 $smarty->assign("TOPHASHRATES", $aHashData);
 $smarty->assign("CURRENTBLOCK", $iBlock);
