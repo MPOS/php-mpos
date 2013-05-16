@@ -23,6 +23,9 @@ class Block {
   public function getError() {
     return $this->sError;
   }
+  public function getTableName() {
+    return $this->table;
+  }
 
   public function getLast() {
     $stmt = $this->mysqli->prepare("SELECT * FROM $this->table ORDER BY height DESC LIMIT 1");
@@ -108,7 +111,7 @@ class Block {
       $stmt->close();
       return true;
     }
-      return false;
+    return false;
   }
 
   public function setFinder($block_id, $account_id=NULL) {
