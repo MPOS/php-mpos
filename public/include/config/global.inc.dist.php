@@ -16,11 +16,15 @@ define('CLASS_DIR', INCLUDE_DIR . '/classes');
 define('PAGES_DIR', INCLUDE_DIR . '/pages');
 
 // Set debugging level for our debug class
-define('DEBUG', 5);
+define('DEBUG', 0);
 
-define('SALT', 'LJKEHFuhgu7%&¤Hg783tr7gf¤%¤fyegfredfoGHYFGYe(%/(&%6');
+define('SALT', 'PLEASEMAKEMESOMETHINGRANDOM');
 
 $config = array(
+  'website' => array(
+    'name' => 'The Pool',
+    'slogan' => 'Resistance is futile',
+  ),
   'difficulty' => '31',         // Target difficulty for this pool
   'reward' => '50',             // Reward for finding blocks
   'confirmations' => '120',     // Confirmations per block found to credit transactions
