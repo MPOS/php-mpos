@@ -159,6 +159,7 @@ class Statistics {
   public function getTopContributors($limit=15) {
     $stmt = $this->mysqli->prepare("
       SELECT
+        ROUND(COUNT(id) / 60 / 10, 2) AS sharesps,
         ROUND(COUNT(id) * POW(2," . $this->config['difficulty'] . ")/600/1000,2) AS hashrate,
         SUBSTRING_INDEX( username, '.', 1 ) AS account
       FROM " . $this->share->getTableName() . "
