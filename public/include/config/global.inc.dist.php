@@ -28,6 +28,13 @@ $config = array(
   'difficulty' => '31',         // Target difficulty for this pool
   'reward' => '50',             // Reward for finding blocks
   'confirmations' => '120',     // Confirmations per block found to credit transactions
+  'memcache' => array(
+    'host'      => 'localhost', // Memcache Host
+    'post'      => 11211,       // Memcache Port
+    'keyprefix' => 'mmcfe_ng_', // Prefix for all keys
+    'expiration'=> '90',        // Cache time
+    'splay'     => '15'         // Splay time
+  ),
   'wallet' => array(
     'type' => 'http',            // http or https are supported
     'host' => 'localhost:9332',

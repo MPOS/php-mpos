@@ -8,11 +8,11 @@ if (!defined('SECURITY'))
 if ($bitcoin->can_connect() === true){
   if (!$dDifficulty = $memcache->get('dDifficulty')) {
     $dDifficulty = $bitcoin->query('getdifficulty');
-    $memcache->set('dDifficulty', $dDifficulty, 60);
+    $memcache->set('dDifficulty', $dDifficulty);
   }
   if (!$iBlock = $memcache->get('iBlock')) {
     $iBlock = $bitcoin->query('getblockcount');
-    $memcache->set('iBlock', $iBlock, 60);
+    $memcache->set('iBlock', $iBlock);
   }
 } else {
   $iDifficulty = 1;
@@ -21,31 +21,17 @@ if ($bitcoin->can_connect() === true){
 }
 
 // Top share contributors
-if (!$aContributorsShares = $memcache->get('aContributorsShares')) {
-  $debug->append('STA Fetching contributor shares from database');
-  $aContributorsShares = $statistics->getTopContributors('shares', 15);
-  $memcache->set('aContributorsShares', $aContributorsShares, 60);
-  $debug->append('END Fetching contributor shares from database');
-}
+$aContributorsShares = $statistics->getTopContributors('shares', 15);
 
 // Top hash contributors
-if (!$aContributorsHashes = $memcache->get('aContributorsHashes')) {
-  $debug->append('STA Fetching contributor hashes from database');
   $aContributorsHashes = $statistics->getTopContributors('hashes', 15);
-  $memcache->set('aContributorsHashes', $aContributorsHashes, 60);
-  $debug->append('END Fetching contributor hashes from database');
-}
 
 // Grab the last 10 blocks found
 $aBlocksFoundData = $statistics->getBlocksFound(10);
 $aBlockData = $aBlocksFoundData[0];
 
 // Estimated time to find the next block
-if (!$iCurrentPoolHashrate = $memcache->get('iCurrentPoolHashrate')) {
-  $debug->append('Fetching iCurrentPoolHashrate from database');
-  $iCurrentPoolHashrate =  $statistics->getCurrentHashrate();
-  $memcache->set('iCurrentPoolHashrate', $iCurrentPoolHashrate, 60);
-}
+$iCurrentPoolHashrate =  $statistics->getCurrentHashrate();
 // Time in seconds, not hours, using modifier in smarty to translate
 $iEstTime = $dDifficulty * pow(2,32) / ($iCurrentPoolHashrate * 1000);
 
