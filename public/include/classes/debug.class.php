@@ -66,7 +66,7 @@ class Debug {
         }
         return $backtrace;
     }
-    
+
     /**
      * We fill our data array here
      * @param string $msg Debug Message
