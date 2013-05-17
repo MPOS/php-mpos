@@ -156,31 +156,37 @@ class Statistics {
     return false;
   }
 
-  public function getTopContributors($limit=15) {
-    $stmt = $this->mysqli->prepare("
-      SELECT
-        ROUND(COUNT(id) / 60 / 10, 2) AS sharesps,
-        ROUND(COUNT(id) * POW(2," . $this->config['difficulty'] . ")/600/1000,2) AS hashrate,
-        SUBSTRING_INDEX( username, '.', 1 ) AS account
-      FROM " . $this->share->getTableName() . "
-      WHERE time > DATE_SUB(now(), INTERVAL 10 MINUTE)
-      GROUP BY account
-      ORDER BY hashrate DESC LIMIT ?");
-    if ($this->checkStmt($stmt) && $stmt->bind_param("i", $limit) && $stmt->execute() && $hashrates= $stmt->get_result()) {
-      $aHashData = $hashrates->fetch_all(MYSQLI_ASSOC);
-      $stmt->close();
-    } else {
+  public function getTopContributors($type='shares', $limit=15) {
+    switch ($type) {
+    case 'shares':
+      $stmt = $this->mysqli->prepare("
+        SELECT
+            COUNT(id) AS shares,
+            SUBSTRING_INDEX( username, '.', 1 ) AS account
+        FROM " . $this->share->getTableName() . "
+        GROUP BY account
+        LIMIT ?");
+      if ($this->checkStmt($stmt) && $stmt->bind_param("i", $limit) && $stmt->execute() && $result = $stmt->get_result())
+        return $result->fetch_all(MYSQLI_ASSOC);
+      $this->debug->append("Fetching shares failed: ");
       return false;
+      break;
+
+    case 'hashes':
+      $stmt = $this->mysqli->prepare("
+        SELECT
+          ROUND(COUNT(id) * POW(2," . $this->config['difficulty'] . ")/600/1000,2) AS hashrate,
+          SUBSTRING_INDEX( username, '.', 1 ) AS account
+        FROM " . $this->share->getTableName() . "
+        WHERE time > DATE_SUB(now(), INTERVAL 10 MINUTE)
+        GROUP BY account
+        ORDER BY hashrate DESC LIMIT ?");
+      if ($this->checkStmt($stmt) && $stmt->bind_param("i", $limit) && $stmt->execute() && $result = $stmt->get_result())
+        return $result->fetch_all(MYSQLI_ASSOC);
+      $this->debug->append("Fetching shares failed: ");
+      return false;
+      break;
     }
-    foreach ($aHashData as $key => $aData) {
-      $stmt = $this->mysqli->prepare("SELECT COUNT(id) FROM " . $this->share->getTableName() . " WHERE SUBSTRING_INDEX( username , '.', 1 ) = ?");
-      if ($stmt->bind_param("s", $aData['username']) && $stmt->execute() && $result = $stmt->get_result()) {
-        $aHashData[$key]['shares'] = $this->getUserShares($this->user->getUserId($aData['account']))['valid'];
-      } else {
-        continue;
-      }
-    }
-    return $aHashData;
   }
 
   public function getHourlyHashrateByAccount($account_id) {
