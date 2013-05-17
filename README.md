@@ -76,7 +76,8 @@ Memcache
 
 Please install and start a default memcache instance. Not only would you
 need one for `pushpoold` but the statistics page is storing data in
-`memcache` as well to improve performance.
+`memcache` as well to improve performance. Your memcache can be
+configured in the global configuration file (see below).
 
 Configuration
 -------------

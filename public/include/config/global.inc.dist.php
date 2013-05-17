@@ -25,9 +25,17 @@ $config = array(
     'name' => 'The Pool',
     'slogan' => 'Resistance is futile',
   ),
-  'difficulty' => '31',         // Target difficulty for this pool
-  'reward' => '50',             // Reward for finding blocks
-  'confirmations' => '120',     // Confirmations per block found to credit transactions
+  'difficulty' => '31',         // Target difficulty for this pool as set in pushpoold json
+  'reward' => '50',             // Reward for finding blocks, fixed value but changes someday
+  'confirmations' => '120',     // Confirmations per block needed to credit transactions
+  'memcache' => array(
+    'enabled'   => true,
+    'host'      => 'localhost', // Memcache Host
+    'post'      => 11211,       // Memcache Port
+    'keyprefix' => 'mmcfe_ng_', // Prefix for all keys
+    'expiration'=> '90',        // Cache time
+    'splay'     => '15'         // Splay time
+  ),
   'wallet' => array(
     'type' => 'http',            // http or https are supported
     'host' => 'localhost:9332',
