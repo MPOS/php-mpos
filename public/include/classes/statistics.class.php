@@ -165,6 +165,7 @@ class Statistics {
             SUBSTRING_INDEX( username, '.', 1 ) AS account
         FROM " . $this->share->getTableName() . "
         GROUP BY account
+        ORDER BY shares
         LIMIT ?");
       if ($this->checkStmt($stmt) && $stmt->bind_param("i", $limit) && $stmt->execute() && $result = $stmt->get_result())
         return $result->fetch_all(MYSQLI_ASSOC);
