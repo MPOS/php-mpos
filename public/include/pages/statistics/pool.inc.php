@@ -20,11 +20,20 @@ if ($bitcoin->can_connect() === true){
   $_SESSION['POPUP'][] = array('CONTENT' => 'Unable to connect to pushpool service: ' . $bitcoin->can_connect(), 'TYPE' => 'errormsg');
 }
 
-if (!$aHashData = $memcache->get('aHashData')) {
-  $debug->append('STA Fetching Hashrates from database');
-  $aHashData = $statistics->getTopContributors();
-  $memcache->set('aHashData', $aHashData, 60);
-  $debug->append('END Fetching Hashrates from database');
+// Top share contributors
+if (!$aContributorsShares = $memcache->get('aContributorsShares')) {
+  $debug->append('STA Fetching contributor shares from database');
+  $aContributorsShares = $statistics->getTopContributors('shares', 15);
+  $memcache->set('aContributorsShares', $aContributorsShares, 60);
+  $debug->append('END Fetching contributor shares from database');
+}
+
+// Top hash contributors
+if (!$aContributorsHashes = $memcache->get('aContributorsHashes')) {
+  $debug->append('STA Fetching contributor hashes from database');
+  $aContributorsHashes = $statistics->getTopContributors('hashes', 15);
+  $memcache->set('aContributorsHashes', $aContributorsHashes, 60);
+  $debug->append('END Fetching contributor hashes from database');
 }
 
 // Grab the last 10 blocks found
@@ -52,7 +61,8 @@ if (!empty($aBlockData)) {
 $smarty->assign("ESTTIME", $iEstTime);
 $smarty->assign("TIMESINCELAST", $dTimeSinceLast);
 $smarty->assign("BLOCKSFOUND", $aBlocksFoundData);
-$smarty->assign("TOPHASHRATES", $aHashData);
+$smarty->assign("CONTRIBSHARES", $aContributorsShares);
+$smarty->assign("CONTRIBHASHES", $aContributorsHashes);
 $smarty->assign("CURRENTBLOCK", $iBlock);
 $smarty->assign("LASTBLOCK", $aBlockData['height']);
 $smarty->assign("DIFFICULTY", $dDifficulty);
