@@ -29,6 +29,7 @@ $config = array(
   'reward' => '50',             // Reward for finding blocks
   'confirmations' => '120',     // Confirmations per block found to credit transactions
   'memcache' => array(
+    'enabled'   => true,
     'host'      => 'localhost', // Memcache Host
     'post'      => 11211,       // Memcache Port
     'keyprefix' => 'mmcfe_ng_', // Prefix for all keys
