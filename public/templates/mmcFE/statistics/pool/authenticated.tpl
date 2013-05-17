@@ -1,34 +1,8 @@
 {include file="global/block_header.tpl" BLOCK_HEADER="Pool Statistics" BLOCK_STYLE="clear:none;"}
-{include file="global/block_header.tpl" BLOCK_HEADER="Top Contributers"}
-<center>
-  <table width="100%" border="0" style="font-size:13px;" class="sortable">
-    <thead>
-      <tr style="background-color:#B6DAFF;">
-        <th align="left">Rank</th>
-        <th align="left" scope="col">User Name</th>
-        <th align="left" scope="col">KH/s</th>
-        <th align="left" scope="col">Shares</th>
-        <th align="left" scope="col">Shares/s</th>
-        <th align="left">Ł/Day<font size="1"> (est)</font></th>
-      </tr>
-    </thead>
-    <tbody>
-{assign var=rank value=1}
-{section hashrate $TOPHASHRATES}
-      <tr class="{cycle values="odd,even"}">
-        <td>{$rank++}</td>
-        <td>{$TOPHASHRATES[hashrate].account}</td>
-        <td>{$TOPHASHRATES[hashrate].hashrate|number_format}</td>
-        <td>{$TOPHASHRATES[hashrate].shares|number_format}</td>
-        <td>{$TOPHASHRATES[hashrate].sharesps}</td>
-        <td>{math equation="round(reward / ( diff * pow(2,32) / ( hashrate * 1000 ) / 3600 / 24),3)" diff=$DIFFICULTY reward=$REWARD hashrate=$TOPHASHRATES[hashrate].hashrate}</td>
-      </tr>
-{/section}
-    </tbody>
-  </table>
-  <div id="pagination" class="pagination"></div>
-</center>
-{include file="global/block_footer.tpl"}
+
+{include file="statistics/pool/contributors_shares.tpl"}
+
+{include file="statistics/pool/contributors_hashrate.tpl"}
 
 {include file="global/block_header.tpl" BLOCK_HEADER="Server Stats" BLOCK_STYLE="clear:all;" STYLE="padding-left:5px;padding-right:5px;"}
 <table class="" width="100%" style="font-size:13px;">
