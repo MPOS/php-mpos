@@ -25,7 +25,7 @@ class StatsCache extends Memcached {
     if (! $this->config['memcache']['enabled']) return false;
     if (empty($expiration))
       $expiration = $this->config['memcache']['expiration'] + rand( -$this->config['memcache']['splay'], $this->config['memcache']['splay']);
-    $this->debug->append("Stroing " . $this->config['memcache']['keyprefix'] . "$key with expiration of $expiration");
+    $this->debug->append("Storing " . $this->config['memcache']['keyprefix'] . "$key with expiration $expiration", 3);
     return parent::set($this->config['memcache']['keyprefix'] . $key, $value, $expiration);
   }
 
