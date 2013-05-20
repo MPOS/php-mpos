@@ -45,7 +45,7 @@ foreach ($aAllBlocks as $iIndex => $aBlock) {
     }
     $aAccountShares = $share->getSharesForAccounts($share->getLastUpstreamId(), $iCurrentUpstreamId);
     $iRoundShares = $share->getRoundShares($share->getLastUpstreamId(), $iCurrentUpstreamId);
-    verbose("ID\tHeight\tTime\t\tShares\tFinder\t\tShare ID\tPrev Share\tStatus\n");
+    verbose("ID\tHeight\tTime\t\tShares\tFinder\t\tShare ID\tPrev Share\t\tStatus\n");
     verbose($aBlock['id'] . "\t" . $aBlock['height'] . "\t" . $aBlock['time'] . "\t" . $iRoundShares . "\t" . $share->getUpstreamFinder() . "\t" . $share->getUpstreamId() . "\t\t" . $share->getLastUpstreamId());
     if (empty($aAccountShares)) {
       verbose("\nNo shares found for this block\n\n");
@@ -58,24 +58,37 @@ foreach ($aAllBlocks as $iIndex => $aBlock) {
     if (!$block->setShares($aBlock['id'], $iRoundShares))
       $strStatus = "Shares Failed";
     verbose("\t\t$strStatus\n\n");
-    verbose("ID\tUsername\tValid\tInvalid\tPercentage\tPayout\t\tStatus\n");
+    verbose("ID\tUsername\tValid\tInvalid\tPercentage\tPayout\t\tDonation\t\tStatus\n");
     foreach ($aAccountShares as $key => $aData) {
+      // Payout based on shares, PPS system
       $aData['percentage'] = number_format(round(( 100 / $iRoundShares ) * $aData['valid'], 8), 8);
       $aData['payout'] = number_format(round(( $aData['percentage'] / 100 ) * $config['reward'], 8), 8);
+
+      // Calculate donation amount for Donation transaction
+      $aData['donation'] = $user->getDonatePercent($user->getUserId($aData['username'])) / 100 * $aData['payout'];
+
+      // Verbose output of this users calculations
       verbose($aData['id'] . "\t" .
            $aData['username'] . "\t" .
            $aData['valid'] . "\t" .
            $aData['invalid'] . "\t" .
            $aData['percentage'] . "\t" .
-           $aData['payout'] . "\t");
+           $aData['payout'] . "\t" .
+           $aData['donation'] . "\t");
 
-      // Do all database updates for block, statistics and payouts
       $strStatus = "OK";
+      // Update user share statistics
       if (!$statistics->updateShareStatistics($aData, $aBlock['id']))
         $strStatus = "Stats Failed";
+      // Add new credit transaction
       if (!$transaction->addTransaction($aData['id'], $aData['payout'], 'Credit', $aBlock['id']))
         $strStatus = "Transaction Failed";
-      verbose("$strStatus\n");
+      // Add new donation debit
+      if ($aData['donation'] > 0) {
+        if (!$transaction->addTransaction($aData['id'], $aData['donation'], 'Donation', $aBlock['id']))
+          $strStatus = "Donation Failed";
+      }
+      verbose("\t\t$strStatus\n");
     }
     verbose("------------------------------------------------------------------------\n\n");
 
