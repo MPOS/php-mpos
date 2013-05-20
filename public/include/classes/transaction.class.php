@@ -76,7 +76,7 @@ class Transaction {
 
   public function getBalance($account_id) {
     $stmt = $this->mysqli->prepare("
-      SELECT IFNULL(t1.credit, 0) - IFNULL(t2.debit, 0) - IFNULL(t3.other, 0) AS balance
+      SELECT ROUND(IFNULL(t1.credit, 0) - IFNULL(t2.debit, 0) - IFNULL(t3.other, 0), 8) AS balance
       FROM
       (
         SELECT sum(t.amount) AS credit
