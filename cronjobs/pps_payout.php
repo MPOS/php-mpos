@@ -65,7 +65,7 @@ foreach ($aAllBlocks as $iIndex => $aBlock) {
       $aData['payout'] = number_format(round(( $aData['percentage'] / 100 ) * $config['reward'], 8), 8);
 
       // Calculate donation amount for Donation transaction
-      $aData['donation'] = $user->getDonatePercent($user->getUserId($aData['username'])) / 100 * $aData['payout'];
+      $aData['donation'] = number_format(round($user->getDonatePercent($user->getUserId($aData['username'])) / 100 * $aData['payout'], 8), 8);
 
       // Verbose output of this users calculations
       verbose($aData['id'] . "\t" .
