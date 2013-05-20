@@ -62,6 +62,8 @@ if (! empty($users)) {
       } else {
         verbose("FAILED\n");
       }
+    } else {
+      verbose("SKIPPED\n");
     }
   }
 } else {
