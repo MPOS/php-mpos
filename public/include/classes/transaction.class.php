@@ -9,10 +9,11 @@ class Transaction {
   private $table = 'transactions';
   private $tableBlocks = 'blocks';
 
-  public function __construct($debug, $mysqli, $config) {
+  public function __construct($debug, $mysqli, $config, $block) {
     $this->debug = $debug;
     $this->mysqli = $mysqli;
     $this->config = $config;
+    $this->block = $block;
     $this->debug->append("Instantiated Transaction class", 2);
   }
 
@@ -75,23 +76,33 @@ class Transaction {
 
   public function getBalance($account_id) {
     $stmt = $this->mysqli->prepare("
-      SELECT IFNULL(c.credit, 0) - IFNULL(d.debit,0) AS balance
-      FROM (
-        SELECT t.account_id, sum(t.amount) AS credit
+      SELECT IFNULL(t1.credit, 0) - IFNULL(t2.debit, 0) - IFNULL(t3.other, 0) AS balance
+      FROM
+      (
+        SELECT sum(t.amount) AS credit
         FROM $this->table AS t
-        LEFT JOIN $this->tableBlocks AS b ON t.block_id = b.id
-        WHERE type = 'Credit'
-        AND b.confirmations > ?
-        AND t.account_id = ? ) AS c
-      LEFT JOIN (
-        SELECT t.account_id, sum(amount) AS debit
+        LEFT JOIN " . $this->block->getTableName() . " AS b ON t.block_id = b.id
+        WHERE t.type = 'Credit'
+        AND b.confirmations >= ?
+        AND t.account_id = ?
+      ) AS t1,
+      (
+        SELECT sum(t.amount) AS debit
         FROM $this->table AS t
-        WHERE type IN ('Debit_MP','Debit_AP')
-        AND t.account_id = ? ) AS d
-      ON c.account_id = d.account_id
+        WHERE t.type IN ('Debit_MP', 'Debit_AP')
+        AND t.account_id = ?
+      ) AS t2,
+      (
+        SELECT sum(t.amount) AS other
+        FROM $this->table AS t
+        LEFT JOIN " . $this->block->getTableName() . " AS b ON t.block_id = b.id
+        WHERE t.type IN ('Donation')
+        AND b.confirmations >= ?
+        AND t.account_id = ?
+      ) AS t3
       ");
     if ($this->checkStmt($stmt)) {
-      $stmt->bind_param("iii", $this->config['confirmations'], $account_id, $account_id);
+      $stmt->bind_param("iiiii", $this->config['confirmations'], $account_id, $account_id, $this->config['confirmations'], $account_id);
       if (!$stmt->execute()) {
         $this->debug->append("Unable to execute statement: " . $stmt->error);
         $this->setErrorMessage("Fetching balance failed");
@@ -104,4 +115,4 @@ class Transaction {
   }
 }
 
-$transaction = new Transaction($debug, $mysqli, $config);
+$transaction = new Transaction($debug, $mysqli, $config, $block);

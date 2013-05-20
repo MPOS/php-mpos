@@ -115,7 +115,19 @@ class User {
    * @return data string Coin Address
    **/
   public function getCoinAddress($userID) {
-    return $this->getSingle($userID, 'coin_address', 'id', 's');
+    return $this->getSingle($userID, 'coin_address', 'id');
+  }
+
+  /**
+   * Fetch users donation value 
+   * @param userID int UserID
+   * @return data string Coin Address
+   **/
+  public function getDonatePercent($userID) {
+    $dPercent = $this->getSingle($userID, 'donate_percent', 'id');
+    if ($dPercent > 100) $dPercent = 100;
+    if ($dPercent < 0) $dPercent = 0;
+    return $dPercent;
   }
 
   /**
