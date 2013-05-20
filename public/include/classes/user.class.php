@@ -122,10 +122,9 @@ class User {
    * Update a single row in a table
    * @param userID int Account ID
    * @param field string Field to update
-   * @param table string Table to update
    * @return bool
    **/
-  private function updateSingle($userID, $field, $table) {
+  private function updateSingle($userID, $field) {
     $stmt = $this->mysqli->prepare("UPDATE $this->table SET " . $field['name'] . " = ? WHERE userId = ? LIMIT 1");
     if ($this->checkStmt($stmt)) {
       $stmt->bind_param($field['type'].'i', $field['value'], $userID);
