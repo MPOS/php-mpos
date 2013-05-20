@@ -1,25 +1,61 @@
-              <div class="block" style="clear:none; margin-top:15px; margin-left:13px;">
-                <div class="block_head">
-                  <div class="bheadl"></div>
-                  <div class="bheadr"></div>
-                  <h1>Dashboard</h1>
+            <div class="block" style="clear:none; margin-top:15px; margin-left:13px;">
+              <div class="block_head">
+                <div class="bheadl"></div>
+                <div class="bheadr"></div>
+                <h1>Dashboard</h1>
+              </div>
+              <div class="block_content" style="padding-top:10px;">
+                <table class="sidebar">
+                    <tr><td colspan="2"><b>Your Current Hashrate</b></td></tr>
+                    <tr><td colspan="2">{$GLOBAL.userdata.hashrate} KH/s</td></tr>
+                    <tr>
+                      <td colspan="2"><b><u>Unpaid Shares</u></b> <span id='tt'><img src='{$PATH}/images/questionmark.png' height='15px' width='15px' title='Submitted shares between the last 120 confirms block until now.'></span><td>
+                    </tr>
+                    <tr>
+                      <td><b>Your Valid<b></td>
+                      <td><i>{$GLOBAL.userdata.shares.valid}</i><font size='1px'></font></b></td>
+                    </tr>
+                    <tr>
+                      <td><b>Pool Valid</td>
+                      <td><i>{$GLOBAL.roundshares.valid}</i> <font size='1px'></font></b></td>
+                    </tr>
+                    <tr>
+                      <td colspan="2"><b><u>Round Shares</u></b> <span id='tt'><img src='{$PATH}/images/questionmark.png' height='15px' width='15px' title='Submitted shares since last found block (ie. round shares)'></span></td>
+                    </tr>
+                    <tr>
+                      <td><b>Pool Valid</b></td>
+                      <td><i>{$GLOBAL.roundshares.valid}</i></td>
+                    </tr>
+                    <tr>
+                      <td><b>Pool Invalid</b></td>
+                      <td><i>{$GLOBAL.roundshares.invalid}</i></td>
+                    </tr>
+                    <tr>
+                      <td><b>Your Invalid</b></td>
+                      <td><i>{$GLOBAL.userdata.shares.invalid}</i><font size='1px'></font></td>
+                    </tr>
+                    {math assign="block" equation="round(( x / y ) * z, 3)" x=$GLOBAL.userdata.shares.valid y=$GLOBAL.roundshares.valid z=$GLOBAL.reward}
+                    {math assign="donation" equation="round(((d / 100) * est), 3)" d=$GLOBAL.userdata.donate_percent est=$block}
+                    <tr>
+                      <td colspan="2"><b><u>Round Estimate</u></b></td>
+                    </tr>
+                    <tr>
+                      <td><b>Block</b></td>
+                      <td>{$block} LTC</td>
+                    </tr>
+                    <tr>
+                      <td><b>Donation</b></td>
+                      <td>{$donation} LTC</td>
+                    </tr>
+                    <tr>
+                      <td><b>Payout</b></td>
+                      <td>{math equation="block - donation" block=$block donation=$donation} LTC</td>
+                    </tr>
+                    <tr><td colspan="2">&nbsp;</td></tr>
+                    <tr><td colspan="2"><b><u>Account Balance</u></b></td></tr>
+                    <tr><td colspan="2"><b>{$GLOBAL.userdata.balance|default:"0"} LTC</td></tr>
+                  </table>
                 </div>
-                <div class="block_content" style="padding-top:10px;">
-                  <p>
-                    <b><u>Your Current Hashrate</u></b><br/>
-                    <i><b>{$GLOBAL.userdata.hashrate} KH/s</b></i><br/><br/>
-                      <u><b>Unpaid Shares</b></u><span id='tt'><img src='{$PATH}/images/questionmark.png' height='15px' width='15px' title='Submitted shares between the last 120 confirms block until now.'></span><br/>
-                      Your Valid: <b><i>{$GLOBAL.userdata.shares.valid}</i><font size='1px'></font></b><br/>
-                      Pool Valid: <b><i>{$GLOBAL.roundshares.valid}</i> <font size='1px'></font></b><br/><br>
-                      <u><b>Round Shares </b></u><span id='tt'><img src='{$PATH}/images/questionmark.png' height='15px' width='15px' title='Submitted shares since last found block (ie. round shares)'></span><br/>
-                      Pool Valid: <b><i>{$GLOBAL.roundshares.valid}</i></b><br>
-                      Pool Inalid: <b><i>{$GLOBAL.roundshares.invalid}</i></b><br>
-                      Your Invalid: <b><i>{$GLOBAL.userdata.shares.invalid}</i><font size='1px'></font></b><br/><br>
-                      <u><b>Round Estimate</b></u><font size='1'></font></u><br>
-                      <b><i>{math equation="round(( x / y ) * z, 8)" x=$GLOBAL.userdata.shares.valid y=$GLOBAL.roundshares.valid z=$GLOBAL.reward}</i> <font size='1px'>LTC</font></b><br><br>
-                      <u><b>Account Balance</b></u><br><b><i>{$GLOBAL.userdata.balance|default:"0"}</i><font size='1px'> LTC</font></b><br/><br>
-                    </p>
-                  </div>
-                  <div class="bendl"></div>
-                  <div class="bendr"></div>
-                </div>
+              <div class="bendl"></div>
+              <div class="bendr"></div>
+            </div>
