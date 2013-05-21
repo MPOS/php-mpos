@@ -58,14 +58,19 @@ foreach ($aAllBlocks as $iIndex => $aBlock) {
     if (!$block->setShares($aBlock['id'], $iRoundShares))
       $strStatus = "Shares Failed";
     verbose("\t\t$strStatus\n\n");
-    verbose("ID\tUsername\tValid\tInvalid\tPercentage\tPayout\t\tDonation\t\tStatus\n");
+    verbose("ID\tUsername\tValid\tInvalid\tPercentage\tPayout\t\tDonation\tFee\t\tStatus\n");
     foreach ($aAccountShares as $key => $aData) {
       // Payout based on shares, PPS system
       $aData['percentage'] = number_format(round(( 100 / $iRoundShares ) * $aData['valid'], 8), 8);
       $aData['payout'] = number_format(round(( $aData['percentage'] / 100 ) * $config['reward'], 8), 8);
+      // Defaults
+      $aData['fee' ] = 0;
+      $aData['donation'] = 0;
 
-      // Calculate donation amount for Donation transaction
-      $aData['donation'] = number_format(round($user->getDonatePercent($user->getUserId($aData['username'])) / 100 * $aData['payout'], 8), 8);
+      if ($config['fees'] > 0)
+        $aData['fee'] = number_format(round($config['fees'] / 100 * $aData['payout'], 8), 8);
+      // Calculate donation amount, fees not included
+      $aData['donation'] = number_format(round($user->getDonatePercent($user->getUserId($aData['username'])) / 100 * ( $aData['payout'] - $aData['fee']), 8), 8);
 
       // Verbose output of this users calculations
       verbose($aData['id'] . "\t" .
@@ -74,7 +79,8 @@ foreach ($aAllBlocks as $iIndex => $aBlock) {
            $aData['invalid'] . "\t" .
            $aData['percentage'] . "\t" .
            $aData['payout'] . "\t" .
-           $aData['donation'] . "\t");
+           $aData['donation'] . "\t" .
+           $aData['fee'] . "\t");
 
       $strStatus = "OK";
       // Update user share statistics
@@ -84,11 +90,13 @@ foreach ($aAllBlocks as $iIndex => $aBlock) {
       if (!$transaction->addTransaction($aData['id'], $aData['payout'], 'Credit', $aBlock['id']))
         $strStatus = "Transaction Failed";
       // Add new donation debit
-      if ($aData['donation'] > 0) {
+      if ($aData['donation'] > 0)
         if (!$transaction->addTransaction($aData['id'], $aData['donation'], 'Donation', $aBlock['id']))
           $strStatus = "Donation Failed";
-      }
-      verbose("\t\t$strStatus\n");
+      if ($aData['fee'] > 0 && $config['fees'] > 0)
+        if (!$transaction->addTransaction($aData['id'], $aData['fee'], 'Fee', $aBlock['id']))
+          $strStatus = "Fee Failed";
+      verbose("\t$strStatus\n");
     }
     verbose("------------------------------------------------------------------------\n\n");
 
