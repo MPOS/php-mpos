@@ -146,7 +146,6 @@ CREATE TABLE IF NOT EXISTS `transactions` (
   `type` enum('Credit','Debit_MP','Debit_AP','Fee','Donation') DEFAULT NULL,
   `coin_address` varchar(255) DEFAULT NULL,
   `amount` double DEFAULT '0',
-  `fee_amount` float DEFAULT '0',
   `block_id` int(255) DEFAULT NULL,
   `timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),

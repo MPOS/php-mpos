@@ -34,22 +34,24 @@
                       <td><b>Your Invalid</b></td>
                       <td><i>{$GLOBAL.userdata.shares.invalid}</i><font size='1px'></font></td>
                     </tr>
-                    {math assign="block" equation="round(( x / y ) * z, 3)" x=$GLOBAL.userdata.shares.valid y=$GLOBAL.roundshares.valid z=$GLOBAL.reward}
-                    {math assign="donation" equation="round(((d / 100) * est), 3)" d=$GLOBAL.userdata.donate_percent est=$block}
                     <tr>
                       <td colspan="2"><b><u>Round Estimate</u></b></td>
                     </tr>
                     <tr>
                       <td><b>Block</b></td>
-                      <td>{$block} LTC</td>
+                      <td>{$GLOBAL.userdata.est_block} LTC</td>
                     </tr>
                     <tr>
                       <td><b>Donation</b></td>
-                      <td>{$donation} LTC</td>
+                      <td>{$GLOBAL.userdata.est_donation} LTC</td>
+                    </tr>
+                    <tr>
+                      <td><b>Fees</b></td>
+                      <td>{$GLOBAL.userdata.est_fee} LTC</td>
                     </tr>
                     <tr>
                       <td><b>Payout</b></td>
-                      <td>{math equation="block - donation" block=$block donation=$donation} LTC</td>
+                      <td>{$GLOBAL.userdata.est_payout} LTC</td>
                     </tr>
                     <tr><td colspan="2">&nbsp;</td></tr>
                     <tr><td colspan="2"><b><u>Account Balance</u></b></td></tr>
