@@ -42,12 +42,12 @@
                       <td>{$GLOBAL.userdata.est_block} LTC</td>
                     </tr>
                     <tr>
-                      <td><b>Donation</b></td>
-                      <td>{$GLOBAL.userdata.est_donation} LTC</td>
-                    </tr>
-                    <tr>
                       <td><b>Fees</b></td>
                       <td>{$GLOBAL.userdata.est_fee} LTC</td>
+                    </tr>
+                    <tr>
+                      <td><b>Donation</b></td>
+                      <td>{$GLOBAL.userdata.est_donation} LTC</td>
                     </tr>
                     <tr>
                       <td><b>Payout</b></td>
