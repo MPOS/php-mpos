@@ -16,7 +16,7 @@
 {section block $BLOCKSFOUND}
       <tr class="{cycle values="odd,even"}">
         <td>{$BLOCKSFOUND[block].height}</td>
-        <td>{if $BLOCKSFOUND[block].confirmations >= 120}<font color="green">Confirmed</font>{else}{120 - $BLOCKSFOUND[block].confirmations} left{/if}</td>
+        <td>{if $BLOCKSFOUND[block].confirmations >= $GLOBAL.confirmations}<font color="green">Confirmed</font>{else}{$GLOBAL.confirmations - $BLOCKSFOUND[block].confirmations} left{/if}</td>
         <td>{$BLOCKSFOUND[block].finder|default:"unknown"}</td>
         <td>{$BLOCKSFOUND[block].time|date_format:"%d/%m/%Y %H:%M:%S"}</td>
         <td>{$BLOCKSFOUND[block].difficulty|number_format:"8"}</td>
@@ -27,6 +27,6 @@
   </table>
 </center>
 <ul>
-  <li>Note: <font color="orange">Round Earnings are not credited until 120 confirms.</font></li>
+  <li>Note: <font color="orange">Round Earnings are not credited until {$GLOBAL.confirmations} confirms.</font></li>
 </ul>
 {include file="global/block_footer.tpl"}
