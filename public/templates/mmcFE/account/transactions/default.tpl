@@ -1,11 +1,6 @@
 {include file="global/block_header.tpl" BLOCK_HEADER="Transaction Log" BUTTONS=array(Confirmed,Unconfirmed)}
 <div class="block_content tab_content" id="Confirmed" style="clear:;">
   <center>
-    <p>
-      <font color="" size="1">
-        <b>ATP</b> = Auto Threshold Payment, <b>MP</b> = Manual Payment, <b>Don_Fee</b> = donation amount + pool fees (if applicable)
-      </font>
-    </p>
     <table cellpadding="1" cellspacing="1" width="98%" class="sortable">
       <thead style="font-size:13px;">
         <tr>
@@ -19,12 +14,18 @@
       </thead>
       <tbody style="font-size:12px;">
 {section transaction $TRANSACTIONS}
-        {if (($TRANSACTIONS[transaction].type == 'Credit' and $TRANSACTIONS[transaction].confirmations >= $GLOBAL.confirmations) or $TRANSACTIONS[transaction].type != 'Credit')}
+        {if (
+          ($TRANSACTIONS[transaction].type == 'Credit' and $TRANSACTIONS[transaction].confirmations >= $GLOBAL.confirmations)
+          or ($TRANSACTIONS[transaction].type == 'Donation' and $TRANSACTIONS[transaction].confirmations >= $GLOBAL.confirmations)
+          or ($TRANSACTIONS[transaction].type == 'Fee' and $TRANSACTIONS[transaction].confirmations >= $GLOBAL.confirmations)
+          or $TRANSACTIONS[transaction].type == 'Debit_AP'
+          or $TRANSACTIONS[transaction].type == 'Debit_MP'
+        )}
         <tr class="{cycle values="odd,even"}">
           <td>{$TRANSACTIONS[transaction].id}</td>
           <td>{$TRANSACTIONS[transaction].timestamp}</td>
           <td>{$TRANSACTIONS[transaction].type}</td>
-          <td>{$TRANSACTIONS[transaction].sendAddress}</td>
+          <td>{$TRANSACTIONS[transaction].coin_address}</td>
           <td>{if $TRANSACTIONS[transaction].height == 0}n/a{else}{$TRANSACTIONS[transaction].height}{/if}</td>
           <td><font color="{if $TRANSACTIONS[transaction].type == Credit}green{else}red{/if}">{$TRANSACTIONS[transaction].amount}</td>
         </tr>
@@ -32,11 +33,15 @@
 {/section}
       </tbody>
     </table>
+    <p>
+      <font color="" size="1">
+        <b>Credit_AP</b> = Auto Threshold Payment, <b>Credit_MP</b> = Manual Payment, <b>Donation</b> = Donation, <b>Fee</b> = Pool Fees (if applicable)
+      </font>
+    </p>
   </center>
 </div>
 <div class="block_content tab_content" id="Unconfirmed" style="">
   <center>
-    <p><font color="" sizeze="1">Listed below are your estimated rewards and donations/fees for all blocks awaiting 120 confirmations.</font></p>
     <table cellpadding="1" cellspacing="1" width="98%" class="sortable">
       <thead style="font-size:13px;">
         <tr>
@@ -50,24 +55,33 @@
       </thead>
       <tbody style="font-size:12px;">
 {section transaction $TRANSACTIONS}
-        {if $TRANSACTIONS[transaction].type == 'Credit' && $TRANSACTIONS[transaction].confirmations < $GLOBAL.confirmations}
+        {if (
+          $TRANSACTIONS[transaction].type == 'Credit' && $TRANSACTIONS[transaction].confirmations < $GLOBAL.confirmations
+          or ($TRANSACTIONS[transaction].type == 'Donation' and $TRANSACTIONS[transaction].confirmations < $GLOBAL.confirmations)
+          or ($TRANSACTIONS[transaction].type == 'Fee' and $TRANSACTIONS[transaction].confirmations < $GLOBAL.confirmations)
+        )}
         <tr class="{cycle values="odd,even"}">
           <td>{$TRANSACTIONS[transaction].id}</td>
           <td>{$TRANSACTIONS[transaction].timestamp}</td>
           <td>{$TRANSACTIONS[transaction].type}</td>
-          <td>{$TRANSACTIONS[transaction].sendAddress}</td>
+          <td>{$TRANSACTIONS[transaction].coin_address}</td>
           <td>{if $TRANSACTIONS[transaction].height == 0}n/a{else}{$TRANSACTIONS[transaction].height}{/if}</td>
           <td><font color="{if $TRANSACTIONS[transaction].type == Credit}green{else}red{/if}">{$TRANSACTIONS[transaction].amount}</td>
         </tr>
-        {assign var="sum" value="`$sum+$TRANSACTIONS[transaction].amount`"}
+          {if $TRANSACTIONS[transaction].type == Credit}
+            {assign var="credits" value="`$credits+$TRANSACTIONS[transaction].amount`"}
+          {else}
+            {assign var="debits" value="`$debits+$TRANSACTIONS[transaction].amount`"}
+          {/if}
         {/if}
 {/section}
         <tr>
           <td colspan="5"><b>Unconfirmed Totals:</b></td>
-          <td><b>{$sum}</b></td>
+          <td><b>{$credits - $debits}</b></td>
         </tr>
       </tbody>
     </table>
+    <p><font color="" sizeze="1">Listed are your estimated rewards and donations/fees for all blocks awaiting {$GLOBAL.confirmations} confirmations.</font></p>
   </center>
 </div>
 {include file="global/block_footer.tpl"}

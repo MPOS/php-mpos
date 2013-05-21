@@ -34,6 +34,12 @@ class User {
     return $this->getSingle($username, 'id', 'username', 's');
   }
 
+  /**
+   * Check user login
+   * @param username string Username
+   * @param password string Password
+   * @return bool
+   **/
   public function checkLogin($username, $password) {
     $this->debug->append("Checking login for $username with password $password", 2);
     if ( $this->checkUserPassword($username, $password) ) {
@@ -43,6 +49,12 @@ class User {
     return false;
   }
 
+  /**
+   * Check the users PIN for confirmation
+   * @param userID int User ID
+   * @param pin int PIN to check
+   * @return bool
+   **/
   public function checkPin($userId, $pin=false) {
     $this->debug->append("Confirming PIN for $userId and pin $pin", 2);
     $stmt = $this->mysqli->prepare("SELECT pin FROM $this->table WHERE id=? AND pin=? LIMIT 1");
@@ -55,6 +67,14 @@ class User {
     return $pin_hash === $row_pin;
   }
 
+  /**
+   * Get a single row from the table
+   * @param value string Value to search for
+   * @param search Return column to search for
+   * @param field string Search column
+   * @param type string Type of value
+   * @return array Return result
+   **/
   private function getSingle($value, $search='id', $field='id', $type="i") {
     $stmt = $this->mysqli->prepare("SELECT $search FROM $this->table WHERE $field = ? LIMIT 1");
     if ($this->checkStmt($stmt)) {
@@ -68,12 +88,56 @@ class User {
     return false;
   }
 
-  public function getCoinAddress($userID) {
-    return $this->getSingle($userID, 'coin_address', 'id', 's');
+  /**
+   * Get all users that have auto payout setup
+   * @param none
+   * @return data array All users with payout setup
+   **/
+  public function getAllAutoPayout() {
+    $stmt = $this->mysqli->prepare("
+      SELECT
+        id, username, coin_address, ap_threshold
+      FROM " . $this->getTableName() . "
+      WHERE ap_threshold > 0
+      AND coin_address IS NOT NULL
+      ");
+    if ( $this->checkStmt($stmt) && $stmt->execute() && $result = $stmt->get_result()) {
+      return $result->fetch_all(MYSQLI_ASSOC);
+    }
+    $this->debug->append("Unable to fetch users with AP set");
+    echo $this->mysqli->error;
+    return false;
   }
 
-  private function updateSingle($userID, $field, $table) {
-    $stmt = $this->mysqli->prepare("UPDATE $table SET " . $field['name'] . " = ? WHERE userId = ? LIMIT 1");
+  /**
+   * Fetch users coin address
+   * @param userID int UserID
+   * @return data string Coin Address
+   **/
+  public function getCoinAddress($userID) {
+    return $this->getSingle($userID, 'coin_address', 'id');
+  }
+
+  /**
+   * Fetch users donation value 
+   * @param userID int UserID
+   * @return data string Coin Address
+   **/
+  public function getDonatePercent($userID) {
+    $dPercent = $this->getSingle($userID, 'donate_percent', 'id');
+    if ($dPercent > 100) $dPercent = 100;
+    if ($dPercent < 0) $dPercent = 0;
+    return $dPercent;
+  }
+
+  /**
+   * Update a single row in a table
+   * @param userID int Account ID
+   * @param field string Field to update
+   * @return bool
+   **/
+  private function updateSingle($userID, $field) {
+    $stmt = $this->mysqli->prepare("UPDATE $this->table SET " . $field['name'] . " = ? WHERE userId = ? LIMIT 1");
     if ($this->checkStmt($stmt)) {
       $stmt->bind_param($field['type'].'i', $field['value'], $userID);
       $stmt->execute();
