@@ -32,7 +32,13 @@ class Worker {
     }
     return true;
   }
-  // Worker code, could possibly be moved to it's own class someday
+
+  /**
+   * Update worker list for a user
+   * @param account_id int User ID
+   * @param data array All workers and their settings
+   * @return bool
+   **/
   public function updateWorkers($account_id, $data) {
     $username = $this->user->getUserName($account_id);
     foreach ($data as $key => $value) {
@@ -47,23 +53,32 @@ class Worker {
     }
     return true;
   }
+
+  /**
+   * Fetch all workers for an account
+   * @param account_id int User ID
+   * @return mixed array Workers and their settings or false
+   **/
   public function getWorkers($account_id) {
     $stmt = $this->mysqli->prepare("
-      SELECT $this->table.username, $this->table.password,
-      ( SELECT SIGN(count(id)) FROM " . $this->share->getTableName() . " WHERE username = $this->table.username AND time > DATE_SUB(now(), INTERVAL 10 MINUTE)) AS active,
+      SELECT id, username, password,
+      ( SELECT SIGN(COUNT(id)) FROM " . $this->share->getTableName() . " WHERE username = $this->table.username AND time > DATE_SUB(now(), INTERVAL 10 MINUTE)) AS active,
       ( SELECT ROUND(COUNT(id) * POW(2,21)/600/1000) FROM " . $this->share->getTableName() . " WHERE username = $this->table.username AND time > DATE_SUB(now(), INTERVAL 10 MINUTE)) AS hashrate
       FROM $this->table
       WHERE account_id = ?");
-    if ($this->checkStmt($stmt)) {
-      if (!$stmt->bind_param('i', $account_id)) return false;
-      if (!$stmt->execute()) return false;
-      $result = $stmt->get_result();
-      $stmt->close();
+    if ($this->checkStmt($stmt) && $stmt->bind_param('i', $account_id) && $stmt->execute() && $result = $stmt->get_result())
       return $result->fetch_all(MYSQLI_ASSOC);
-    }
+    // Catchall
+    $this->setErrorMessage('Failed to fetch workers for your account');
+    $this->debug->append('Fetching workers failed: ' . $this->mysqli->error);
     return false;
   }
 
+  /**
+   * Get all currently active workers in the past 10 minutes
+   * @param none
+   * @return data mixed int count if any workers are active, false otherwise
+   **/
   public function getCountAllActiveWorkers() {
     $stmt = $this->mysqli->prepare("SELECT COUNT(DISTINCT username) AS total FROM "  . $this->share->getTableName() . " WHERE time > DATE_SUB(now(), INTERVAL 10 MINUTE)");
     if ($this->checkStmt($stmt)) {
@@ -77,6 +92,15 @@ class Worker {
     return false;
   }
 
+  /**
+   * Add new worker to an existing web account
+   * The webuser name is prefixed to the worker name
+   * Passwords are plain text for pushpoold
+   * @param account_id int User ID
+   * @param workerName string Worker name
+   * @param workerPassword string Worker password
+   * @return bool
+   **/
   public function addWorker($account_id, $workerName, $workerPassword) {
     $username = $this->user->getUserName($account_id);
     $workerName = "$username.$workerName";
@@ -92,6 +116,13 @@ class Worker {
     }
     return false;
   }
+
+  /**
+   * Delete existing worker from account
+   * @param account_id int User ID
+   * @param id int Worker ID
+   * @return bool
+   **/
   public function deleteWorker($account_id, $id) {
     $stmt = $this->mysqli->prepare("DELETE FROM $this->table WHERE account_id = ? AND id = ?");
     if ($this->checkStmt($stmt)) {
