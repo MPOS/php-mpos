@@ -25,6 +25,7 @@ $config = array(
     'name' => 'The Pool',
     'slogan' => 'Resistance is futile',
   ),
+  'fees' => 0,
   'difficulty' => '31',         // Target difficulty for this pool as set in pushpoold json
   'reward' => '50',             // Reward for finding blocks, fixed value but changes someday
   'confirmations' => '120',     // Confirmations per block needed to credit transactions
