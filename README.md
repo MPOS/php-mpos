@@ -26,7 +26,7 @@ in the appropriate forums.
 
 * Apache2
  * libapache2-mod-php5
-* PHP 5.4+ (5.3 might work too)
+* PHP 5.4+
  * php5-mysqlnd
  * php5-memcached
 * MySQL Server
