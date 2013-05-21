@@ -89,13 +89,14 @@ foreach ($aAllBlocks as $iIndex => $aBlock) {
       // Add new credit transaction
       if (!$transaction->addTransaction($aData['id'], $aData['payout'], 'Credit', $aBlock['id']))
         $strStatus = "Transaction Failed";
+      // Add new fee debit for this block
+      if ($aData['fee'] > 0 && $config['fees'] > 0)
+        if (!$transaction->addTransaction($aData['id'], $aData['fee'], 'Fee', $aBlock['id']))
+          $strStatus = "Fee Failed";
       // Add new donation debit
       if ($aData['donation'] > 0)
         if (!$transaction->addTransaction($aData['id'], $aData['donation'], 'Donation', $aBlock['id']))
           $strStatus = "Donation Failed";
-      if ($aData['fee'] > 0 && $config['fees'] > 0)
-        if (!$transaction->addTransaction($aData['id'], $aData['fee'], 'Fee', $aBlock['id']))
-          $strStatus = "Fee Failed";
       verbose("\t$strStatus\n");
     }
     verbose("------------------------------------------------------------------------\n\n");
