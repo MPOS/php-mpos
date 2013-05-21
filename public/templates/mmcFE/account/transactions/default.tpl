@@ -17,6 +17,7 @@
         {if (
           ($TRANSACTIONS[transaction].type == 'Credit' and $TRANSACTIONS[transaction].confirmations >= $GLOBAL.confirmations)
           or ($TRANSACTIONS[transaction].type == 'Donation' and $TRANSACTIONS[transaction].confirmations >= $GLOBAL.confirmations)
+          or ($TRANSACTIONS[transaction].type == 'Fee' and $TRANSACTIONS[transaction].confirmations >= $GLOBAL.confirmations)
           or $TRANSACTIONS[transaction].type == 'Debit_AP'
           or $TRANSACTIONS[transaction].type == 'Debit_MP'
         )}
@@ -57,6 +58,7 @@
         {if (
           $TRANSACTIONS[transaction].type == 'Credit' && $TRANSACTIONS[transaction].confirmations < $GLOBAL.confirmations
           or ($TRANSACTIONS[transaction].type == 'Donation' and $TRANSACTIONS[transaction].confirmations < $GLOBAL.confirmations)
+          or ($TRANSACTIONS[transaction].type == 'Fee' and $TRANSACTIONS[transaction].confirmations < $GLOBAL.confirmations)
         )}
         <tr class="{cycle values="odd,even"}">
           <td>{$TRANSACTIONS[transaction].id}</td>

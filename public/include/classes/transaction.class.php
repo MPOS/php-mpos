@@ -25,10 +25,10 @@ class Transaction {
     return $this->sError;
   }
 
-  public function addTransaction($account_id, $amount, $type='Credit', $block_id=NULL, $coin_address=NULL, $fee=0) {
-    $stmt = $this->mysqli->prepare("INSERT INTO $this->table (account_id, amount, block_id, type, coin_address, fee_amount) VALUES (?, ?, ?, ?, ?, ?)");
+  public function addTransaction($account_id, $amount, $type='Credit', $block_id=NULL, $coin_address=NULL) {
+    $stmt = $this->mysqli->prepare("INSERT INTO $this->table (account_id, amount, block_id, type, coin_address) VALUES (?, ?, ?, ?, ?)");
     if ($this->checkStmt($stmt)) {
-      $stmt->bind_param("idissd", $account_id, $amount, $block_id, $type, $coin_address, $fee);
+      $stmt->bind_param("idiss", $account_id, $amount, $block_id, $type, $coin_address);
       if ($stmt->execute()) {
         $this->setErrorMessage("Failed to store transaction");
         $stmt->close();
@@ -96,7 +96,7 @@ class Transaction {
         SELECT sum(t.amount) AS other
         FROM $this->table AS t
         LEFT JOIN " . $this->block->getTableName() . " AS b ON t.block_id = b.id
-        WHERE t.type IN ('Donation')
+        WHERE t.type IN ('Donation','Fee')
         AND b.confirmations >= ?
         AND t.account_id = ?
       ) AS t3
