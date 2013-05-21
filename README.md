@@ -3,7 +3,7 @@ Description
 
 mmcFE-ng is a web frontend for Pooled LTC Mining.
 
-This is based on mmcFE, the original work by Greedi:
+The web frontend layout is based on mmcFE, the original work by Greedi:
 https://github.com/Greedi/mmcFE
 
 After working a few days trying to learn to run my own pool and the
@@ -11,6 +11,10 @@ systems behind it I figured I'd look a bit deeper in the code to
 understand how it works. While doing so I also migrated the existing
 code over to my own framework so maintenance would be easier in the
 future.
+
+**NOTE**: This project is still under development and commits are happening on a daily basis.
+I do not recommend using this for a live setup as of yet. Wait for the later Release Candidate
+if you wish to run your pool with it. Testing pools are much appreciated though!
 
 Requirements
 ============
@@ -30,6 +34,24 @@ in the appropriate forums.
 * memcached
 * pushpoold
 * litecoind
+
+Features
+========
+
+The following feature have been implemented so far:
+
+* Use of memcache for statistics instead of a cronjob
+* Web User accounts
+* Worker accounts
+ * Worker activity (live, past 10 minutes)
+ * Worker hashrates (live, past 10 minutes)
+* Pool statistics
+* Minimal Block statistics
+* Pool donations
+* Pool fees
+* Manual payout with 0.1 LTC fee
+* Auto payout with 0.1 LTC fee
+* Transaction list (confirmed and unconfirmed)
 
 Installation
 ============
@@ -124,8 +146,9 @@ me know by creating an [Issue][1] marked as `Feature Request`.
 Disclaimer
 ==========
 
-This is a *WIP Project*. Most functionality is now added, the core
-features are available and the backend cronjobs are working. If you
-encounter any problems related to the code please create a new [Issue][1]
+This is a **WIP Project**. Most functionality is now added, the core
+features are available and the backend cronjobs are working. I would not recommend
+running this on a live pool yet. You can play around and test basic functionality but
+wait for any live deployment for at least a stable Release Candidate.
 
   [1]: https://github.com/TheSerapher/php-mmcfe-ng/issues "Issue"
