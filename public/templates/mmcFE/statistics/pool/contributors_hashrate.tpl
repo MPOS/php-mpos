@@ -17,7 +17,7 @@
         <td>{$rank++}</td>
         <td>{$CONTRIBHASHES[contrib].account}</td>
         <td>{$CONTRIBHASHES[contrib].hashrate|number_format}</td>
-        <td>{math equation="round(reward / ( diff * pow(2,32) / ( hashrate * 1000 ) / 3600 / 24) * (0.2 / 100) ,3)" diff=$DIFFICULTY reward=$REWARD hashrate=$CONTRIBHASHES[contrib].hashrate}</td>
+        <td>{math equation="round(reward / ( diff * pow(2,32) / ( hashrate * 1000 ) / 3600 / 24), 3)" diff=$DIFFICULTY reward=$REWARD hashrate=$CONTRIBHASHES[contrib].hashrate}</td>
       </tr>
 {/section}
 {if $listed != 1}
@@ -25,7 +25,7 @@
         <td>n/a</td>
         <td>{$GLOBAL.userdata.username}</td>
         <td>{$GLOBAL.userdata.hashrate}</td>
-        <td>{math equation="round(reward / ( diff * pow(2,32) / ( hashrate * 1000 ) / 3600 / 24) * (0.2 / 100) ,3)" diff=$DIFFICULTY reward=$REWARD hashrate=$GLOBAL.userdata.hashrate}</td>
+        <td>{math equation="round(reward / ( diff * pow(2,32) / ( hashrate * 1000 ) / 3600 / 24), 3)" diff=$DIFFICULTY reward=$REWARD hashrate=$GLOBAL.userdata.hashrate}</td>
       </tr>
 {/if}
     </tbody>
