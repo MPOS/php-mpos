@@ -8,11 +8,12 @@ class Worker {
   private $sError = '';
   private $table = 'workers';
 
-  public function __construct($debug, $mysqli, $user, $share) {
+  public function __construct($debug, $mysqli, $user, $share, $config) {
     $this->debug = $debug;
     $this->mysqli = $mysqli;
     $this->user = $user;
     $this->share = $share;
+    $this->config = $config;
     $this->debug->append("Instantiated Worker class", 2);
   }
 
@@ -63,7 +64,7 @@ class Worker {
     $stmt = $this->mysqli->prepare("
       SELECT id, username, password,
       ( SELECT SIGN(COUNT(id)) FROM " . $this->share->getTableName() . " WHERE username = $this->table.username AND time > DATE_SUB(now(), INTERVAL 10 MINUTE)) AS active,
-      ( SELECT ROUND(COUNT(id) * POW(2,21)/600/1000) FROM " . $this->share->getTableName() . " WHERE username = $this->table.username AND time > DATE_SUB(now(), INTERVAL 10 MINUTE)) AS hashrate
+      ( SELECT ROUND(COUNT(id) * POW(2, " . $this->config['difficulty'] . ")/600/1000) FROM " . $this->share->getTableName() . " WHERE username = $this->table.username AND time > DATE_SUB(now(), INTERVAL 10 MINUTE)) AS hashrate
       FROM $this->table
       WHERE account_id = ?");
     if ($this->checkStmt($stmt) && $stmt->bind_param('i', $account_id) && $stmt->execute() && $result = $stmt->get_result())
@@ -138,4 +139,4 @@ class Worker {
   }
 }
 
-$worker = new Worker($debug, $mysqli, $user, $share);
+$worker = new Worker($debug, $mysqli, $user, $share, $config);

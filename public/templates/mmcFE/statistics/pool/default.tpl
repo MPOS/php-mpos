@@ -15,7 +15,7 @@
   </tr>
   <tr>
     <td class="leftheader">Current Difficulty</td>
-    <td><a href="http://allchains.info/" target="_new">{$CURRENTDIFFICULTY}</a></td>
+    <td><a href="http://allchains.info/" target="_new">{$DIFFICULTY}</a></td>
   </tr>
   </tbody>
 </table>
