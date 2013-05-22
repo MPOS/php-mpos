@@ -16,6 +16,13 @@ future.
 I do not recommend using this for a live setup as of yet. Wait for the later Release Candidate
 if you wish to run your pool with it. Testing pools are much appreciated though!
 
+Donations
+=========
+
+I was hoping to keep this out of the README but apparently people remove or change the LTC address
+at the bottom of the page. For those of you finding my project and are willing to appreciate the work
+with some hard earned LTC feel free to donate to my LTC address: `Lge95QR2frp9y1wJufjUPCycVsg5gLJPW8`
+
 Requirements
 ============
 
