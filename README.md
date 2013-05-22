@@ -159,3 +159,21 @@ running this on a live pool yet. You can play around and test basic functionalit
 wait for any live deployment for at least a stable Release Candidate.
 
   [1]: https://github.com/TheSerapher/php-mmcfe-ng/issues "Issue"
+
+License and Author
+==================
+
+Copyright 2012, Sebastian Grewe
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+
