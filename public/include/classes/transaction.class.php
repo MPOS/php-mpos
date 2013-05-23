@@ -38,10 +38,8 @@ class Transaction {
     return false;
   }
 
-  public function addDebit($account_id, $amount, $type='AP') {
-  }
-
   public function getTransactions($account_id, $start=0) {
+    $this->debug->append("STA " . __METHOD__, 4);
     $stmt = $this->mysqli->prepare("
       SELECT
         t.id AS id,
@@ -75,6 +73,7 @@ class Transaction {
   }
 
   public function getBalance($account_id) {
+    $this->debug->append("STA " . __METHOD__, 4);
     $stmt = $this->mysqli->prepare("
       SELECT ROUND(IFNULL(t1.credit, 0) - IFNULL(t2.debit, 0) - IFNULL(t3.other, 0), 8) AS balance
       FROM

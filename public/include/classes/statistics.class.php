@@ -62,6 +62,7 @@ class Statistics {
    * @return array
    **/
   public function getBlocksFound($limit=10) {
+    $this->debug->append("STA " . __METHOD__, 4);
     if ($data = $this->memcache->get(__FUNCTION__ . $limit)) return $data;
     $stmt = $this->mysqli->prepare("
       SELECT b.*, a.username as finder
@@ -84,6 +85,7 @@ class Statistics {
    * @return bool
    **/
   public function updateShareStatistics($aStats, $iBlockId) {
+    $this->debug->append("STA " . __METHOD__, 4);
     $stmt = $this->mysqli->prepare("INSERT INTO $this->table (account_id, valid, invalid, block_id) VALUES (?, ?, ?, ?)");
     if ($this->checkStmt($stmt) && $stmt->bind_param('iiii', $aStats['id'], $aStats['valid'], $aStats['invalid'], $iBlockId) && $stmt->execute()) return true;
     // Catchall
@@ -98,6 +100,7 @@ class Statistics {
    * @return data object Return our hashrateas an object
    **/
   public function getCurrentHashrate() {
+    $this->debug->append("STA " . __METHOD__, 4);
     if ($data = $this->memcache->get(__FUNCTION__)) return $data;
     $stmt = $this->mysqli->prepare("
       SELECT SUM(hashrate) AS hashrate FROM
@@ -118,6 +121,7 @@ class Statistics {
    * @return data object Our share rate in shares per second
    **/
   public function getCurrentShareRate() {
+    $this->debug->append("STA " . __METHOD__, 4);
     if ($data = $this->memcache->get(__FUNCTION__)) return $data;
     $stmt = $this->mysqli->prepare("
       SELECT ROUND(SUM(sharerate) / 600, 2) AS sharerate FROM
@@ -138,6 +142,7 @@ class Statistics {
    * @return data array invalid and valid shares
    **/
   public function getRoundShares() {
+    $this->debug->append("STA " . __METHOD__, 4);
     if ($data = $this->memcache->get(__FUNCTION__)) return $data;
     $stmt = $this->mysqli->prepare("
       SELECT
@@ -162,6 +167,7 @@ class Statistics {
    * @return data array invalid and valid share counts
    **/
   public function getUserShares($account_id) {
+    $this->debug->append("STA " . __METHOD__, 4);
     if ($data = $this->memcache->get(__FUNCTION__ . $account_id)) return $data;
     $stmt = $this->mysqli->prepare("
       SELECT
@@ -217,6 +223,7 @@ class Statistics {
    * @return data int Current hashrate in khash/s
    **/
   public function getWorkerHashrate($worker_id) {
+    $this->debug->append("STA " . __METHOD__, 4);
     if ($data = $this->memcache->get(__FUNCTION__ . $worker_id)) return $data;
     $stmt = $this->mysqli->prepare("
       SELECT ROUND(COUNT(s.id) * POW(2,21)/600/1000) AS hashrate
@@ -239,6 +246,7 @@ class Statistics {
    * @return data array Users with shares, account or hashrate, account
    **/
   public function getTopContributors($type='shares', $limit=15) {
+    $this->debug->append("STA " . __METHOD__, 4);
     if ($data = $this->memcache->get(__FUNCTION__ . $type . $limit)) return $data;
     switch ($type) {
     case 'shares':
@@ -280,6 +288,7 @@ class Statistics {
    * @return data array NOT FINISHED YET
    **/
   public function getHourlyHashrateByAccount($account_id) {
+    $this->debug->append("STA " . __METHOD__, 4);
     if ($data = $this->memcache->get(__FUNCTION__ . $account_id)) return $data;
     $stmt = $this->mysqli->prepare("
       SELECT

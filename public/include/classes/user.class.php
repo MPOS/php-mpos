@@ -41,6 +41,7 @@ class User {
    * @return bool
    **/
   public function checkLogin($username, $password) {
+    $this->debug->append("STA " . __METHOD__, 4);
     $this->debug->append("Checking login for $username with password $password", 2);
     if ( $this->checkUserPassword($username, $password) ) {
       $this->createSession($username);
@@ -56,6 +57,7 @@ class User {
    * @return bool
    **/
   public function checkPin($userId, $pin=false) {
+    $this->debug->append("STA " . __METHOD__, 4);
     $this->debug->append("Confirming PIN for $userId and pin $pin", 2);
     $stmt = $this->mysqli->prepare("SELECT pin FROM $this->table WHERE id=? AND pin=? LIMIT 1");
     $pin_hash = hash('sha256', $pin.$this->salt);
@@ -76,6 +78,7 @@ class User {
    * @return array Return result
    **/
   private function getSingle($value, $search='id', $field='id', $type="i") {
+    $this->debug->append("STA " . __METHOD__, 4);
     $stmt = $this->mysqli->prepare("SELECT $search FROM $this->table WHERE $field = ? LIMIT 1");
     if ($this->checkStmt($stmt)) {
       $stmt->bind_param($type, $value);
@@ -94,6 +97,7 @@ class User {
    * @return data array All users with payout setup
    **/
   public function getAllAutoPayout() {
+    $this->debug->append("STA " . __METHOD__, 4);
     $stmt = $this->mysqli->prepare("
       SELECT
         id, username, coin_address, ap_threshold
@@ -115,6 +119,7 @@ class User {
    * @return data string Coin Address
    **/
   public function getCoinAddress($userID) {
+    $this->debug->append("STA " . __METHOD__, 4);
     return $this->getSingle($userID, 'coin_address', 'id');
   }
 
@@ -124,6 +129,7 @@ class User {
    * @return data string Coin Address
    **/
   public function getDonatePercent($userID) {
+    $this->debug->append("STA " . __METHOD__, 4);
     $dPercent = $this->getSingle($userID, 'donate_percent', 'id');
     if ($dPercent > 100) $dPercent = 100;
     if ($dPercent < 0) $dPercent = 0;
@@ -137,6 +143,7 @@ class User {
    * @return bool
    **/
   private function updateSingle($userID, $field) {
+    $this->debug->append("STA " . __METHOD__, 4);
     $stmt = $this->mysqli->prepare("UPDATE $this->table SET " . $field['name'] . " = ? WHERE userId = ? LIMIT 1");
     if ($this->checkStmt($stmt)) {
       $stmt->bind_param($field['type'].'i', $field['value'], $userID);
@@ -148,6 +155,7 @@ class User {
   }
 
   private function checkStmt($bState) {
+    $this->debug->append("STA " . __METHOD__, 4);
     if ($bState ===! true) {
       $this->debug->append("Failed to prepare statement: " . $this->mysqli->error);
       $this->setErrorMessage('Internal application Error');
@@ -157,6 +165,7 @@ class User {
   }
 
   public function updatePassword($userID, $current, $new1, $new2) {
+    $this->debug->append("STA " . __METHOD__, 4);
     if ($new1 !== $new2) {
       $this->setErrorMessage( 'New passwords do not match' );
       return false;
@@ -181,6 +190,7 @@ class User {
   }
 
   public function updateAccount($userID, $address, $threshold, $donate) {
+    $this->debug->append("STA " . __METHOD__, 4);
     $bUser = false;
     $threshold = min(250, max(0, floatval($threshold)));
     if ($threshold < 1) $threshold = 0.0;
@@ -197,6 +207,7 @@ class User {
   }
 
   private function checkUserPassword($username, $password) {
+    $this->debug->append("STA " . __METHOD__, 4);
     $user = array();
     $stmt = $this->mysqli->prepare("SELECT username, id FROM $this->table WHERE username=? AND pass=? LIMIT 1");
     if ($this->checkStmt($stmt)) {
@@ -213,6 +224,7 @@ class User {
   }
 
   private function createSession($username) {
+    $this->debug->append("STA " . __METHOD__, 4);
     $this->debug->append("Log in user to _SESSION", 2);
     session_regenerate_id(true);
     $_SESSION['AUTHENTICATED'] = '1';
@@ -221,16 +233,19 @@ class User {
   }
 
   public function logoutUser() {
+    $this->debug->append("STA " . __METHOD__, 4);
     session_destroy();
     session_regenerate_id(true);
     return true;
   }
 
   public function getTableName() {
+    $this->debug->append("STA " . __METHOD__, 4);
     return $this->table;
   }
 
   public function getUserData($userID) {
+    $this->debug->append("STA " . __METHOD__, 4);
     $this->debug->append("Fetching user information for user id: $userID");
     $stmt = $this->mysqli->prepare("
       SELECT
@@ -238,7 +253,6 @@ class User {
       IFNULL(donate_percent, '0') as donate_percent, coin_address, ap_threshold
       FROM $this->table
       WHERE id = ? LIMIT 0,1");
-    echo $this->mysqli->error;
     if ($this->checkStmt($stmt)) {
       $stmt->bind_param('i', $userID);
       if (!$stmt->execute()) {
@@ -254,6 +268,7 @@ class User {
   }
 
   public function register($username, $password1, $password2, $pin, $email1='', $email2='') {
+    $this->debug->append("STA " . __METHOD__, 4);
     if (strlen($password1) < 8) { 
       $this->setErrorMessage( 'Password is too short, minimum of 8 characters required' );
       return false;
