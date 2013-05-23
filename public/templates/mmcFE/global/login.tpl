@@ -4,5 +4,5 @@
           <p><input type="password" name="password" value="" id="passForm" maxlength="20"></p>
           <center><p><input type="submit" class="submit small" value="Login"></p></center>
         </form>
-        <center><p><a href="/lostPass"><font size="1">Forgot your password?</font></a></p></center>
+        <center><p><a href="{$smarty.server.PHP_SELF}?page=password"><font size="1">Forgot your password?</font></a></p></center>
 {include file="global/block_footer.tpl"}

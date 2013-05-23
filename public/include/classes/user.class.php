@@ -11,10 +11,11 @@ class User {
   private $user = array();
   private $tableAccountBalance = 'accountBalance';
 
-  public function __construct($debug, $mysqli, $salt) {
+  public function __construct($debug, $mysqli, $salt, $config) {
     $this->debug = $debug;
     $this->mysqli = $mysqli;
     $this->salt = $salt;
+    $this->config = $config;
     $this->debug->append("Instantiated User class", 2);
   }
 
@@ -32,6 +33,23 @@ class User {
 
   public function getUserId($username) {
     return $this->getSingle($username, 'id', 'username', 's');
+  }
+
+  public function getUserEmail($username) {
+    return $this->getSingle($username, 'email', 'username', 's');
+  }
+
+  public function getUserToken($id) {
+    return $this->getSingle($id, 'token', 'id');
+  }
+
+  public function setUserToken($id) {
+    $field = array(
+      'name' => 'token',
+      'type' => 's',
+      'value' => hash('sha256', $id.time().$this->salt)
+    );
+    return $this->updateSingle($id, $field);
   }
 
   /**
@@ -142,15 +160,12 @@ class User {
    * @param field string Field to update
    * @return bool
    **/
-  private function updateSingle($userID, $field) {
+  private function updateSingle($id, $field) {
     $this->debug->append("STA " . __METHOD__, 4);
-    $stmt = $this->mysqli->prepare("UPDATE $this->table SET " . $field['name'] . " = ? WHERE userId = ? LIMIT 1");
-    if ($this->checkStmt($stmt)) {
-      $stmt->bind_param($field['type'].'i', $field['value'], $userID);
-      $stmt->execute();
-      $stmt->close();
+    $stmt = $this->mysqli->prepare("UPDATE $this->table SET " . $field['name'] . " = ? WHERE id = ? LIMIT 1");
+    if ($this->checkStmt($stmt) && $stmt->bind_param($field['type'].'i', $field['value'], $id) && $stmt->execute())
       return true;
-    }
+    $this->debug->append("Unable to update " . $field['name'] . " with " . $field['value'] . " for ID $id");
     return false;
   }
 
@@ -306,6 +321,34 @@ class User {
     }
     return false;
   }
+
+  public function resetPassword($username) {
+    $this->debug->append("STA " . __METHOD__, 4);
+    // Fetch the users mail address
+    if (!$email = $this->getUserEmail($username)) {
+      $this->setErrorMessage("Unable to find a mail address for user $username");
+      return false;
+    }
+    if (!$this->setUserToken($this->getUserId($username))) {
+      $this->setErrorMessage("Unable to setup token for password reset");
+      return false;
+    }
+    // Send password reset link
+    if (!$token = $this->getUserToken($this->getUserId($username))) {
+      $this->setErrorMessage("Unable fetch token for password reset");
+      return false;
+    }
+    $subject = "[" . $this->config['website']['name'] . "] Password Reset Request";
+    $header = "From: " . $this->config['website']['email'];
+    $message = "Please follow the link to reset your password\n\n" . $this->config['website']['url']['password_reset'] . "/index.php?page=password&action=change&token=$token";
+    if (mail($email, 'Password Reset Request', $message)) {
+      return true;
+    } else {
+      $this->setErrorMessage("Unable to send mail to your address");
+      return false;
+    }
+    return false;
+  }
 }
 
-$user = new User($debug, $mysqli, SALT);
+$user = new User($debug, $mysqli, SALT, $config);
