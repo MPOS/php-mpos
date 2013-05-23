@@ -49,7 +49,7 @@ Start your miner using the following parameters:
 	If you use a command-line miner, type:
 <pre>	./minerd --url http://pool.grewe.ca:8337/ --userpass <em>Weblogin</em>.<em>Worker</em>:<em>Worker password</em>
 </pre>
-	If you want, you can create additional slaves with usernames and passwords of your choice <a href="accountworkers">Here<br></a><br>
+	If you want, you can create additional workers with usernames and passwords of your choice <a href="index.php?page=account&action=workers">Here<br></a><br>
 </li>
 <li><strong>Create a Litecoin address to recieve payments.</strong>
 	<ul>
