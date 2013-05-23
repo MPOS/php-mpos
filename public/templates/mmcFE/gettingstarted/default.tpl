@@ -11,8 +11,8 @@
 <li><strong>Create account.</strong>
 <br>
 <ul>
-	<li>Register <a href="/register">here</a>, or login if you already have account</li>
-	<li>Create a <a href="/accountworkers">worker</a> that will be used by the miner to login</li>
+	<li>Register <a href="index.php?page=register">here</a>, or login if you already have account</li>
+	<li>Create a <a href="index.php?page=account&action=workers">worker</a> that will be used by the miner to login</li>
 </ul>
 
 </li><li><strong>Download a miner.</strong>
