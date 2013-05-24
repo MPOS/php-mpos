@@ -11,8 +11,8 @@
 <li><strong>Create account.</strong>
 <br>
 <ul>
-	<li>Register <a href="index.php?page=register">here</a>, or login if you already have account</li>
-	<li>Create a <a href="index.php?page=account&action=workers">worker</a> that will be used by the miner to login</li>
+	<li>Register <a href="{$smarty.server.PHP_SELF}?page=register">here</a>, or login if you already have account</li>
+	<li>Create a <a href="{$smarty.server.PHP_SELF}?page=account&action=workers">worker</a> that will be used by the miner to login</li>
 </ul>
 
 </li><li><strong>Download a miner.</strong>
@@ -49,7 +49,7 @@ Start your miner using the following parameters:
 	If you use a command-line miner, type:
 <pre>	./minerd --url http://pool.grewe.ca:8337/ --userpass <em>Weblogin</em>.<em>Worker</em>:<em>Worker password</em>
 </pre>
-	If you want, you can create additional workers with usernames and passwords of your choice <a href="index.php?page=account&action=workers">Here<br></a><br>
+	If you want, you can create additional workers with usernames and passwords of your choice <a href="{$smarty.server.PHP_SELF}?page=account&action=workers">Here<br></a><br>
 </li>
 <li><strong>Create a Litecoin address to recieve payments.</strong>
 	<ul>
