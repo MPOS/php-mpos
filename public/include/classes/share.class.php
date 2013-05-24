@@ -125,7 +125,7 @@ class Share {
       SUBSTRING_INDEX( `username` , '.', 1 ) AS account, id
       FROM $this->table
       WHERE upstream_result = 'Y'
-      AND UNIX_TIMESTAMP(time) BETWEEN ? AND (? + 1)
+      AND UNIX_TIMESTAMP(time) BETWEEN ? AND (? + 5)
       ORDER BY id ASC LIMIT 1");
     if ($this->checkStmt($stmt)) {
       $stmt->bind_param('ii', $time, $time);
