@@ -15,7 +15,7 @@
 {assign var=rank value=1}
 {section block $BLOCKSFOUND}
       <tr class="{cycle values="odd,even"}">
-        <td>{$BLOCKSFOUND[block].height}</td>
+        <td><a href="{$GLOBAL.blockexplorer}{$BLOCKSFOUND[block].height}" target="_blank">{$BLOCKSFOUND[block].height}</a></td>
         <td>{if $BLOCKSFOUND[block].confirmations >= $GLOBAL.confirmations}<font color="green">Confirmed</font>{else}{$GLOBAL.confirmations - $BLOCKSFOUND[block].confirmations} left{/if}</td>
         <td>{$BLOCKSFOUND[block].finder|default:"unknown"}</td>
         <td>{$BLOCKSFOUND[block].time|date_format:"%d/%m/%Y %H:%M:%S"}</td>

@@ -22,7 +22,9 @@ $aGlobal = array(
   'roundshares' => $aRoundShares,
   'fees' => $config['fees'],
   'confirmations' => $config['confirmations'],
-  'reward' => $config['reward']
+  'reward' => $config['reward'],
+  'blockexplorer' => 'http://explorer.litecoin.net/search?q=',
+  'chaininfo' => 'http://allchains.info'
 );
 
 // We don't want these session infos cached
