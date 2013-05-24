@@ -27,7 +27,8 @@ $aContributorsShares = $statistics->getTopContributors('shares', 15);
   $aContributorsHashes = $statistics->getTopContributors('hashes', 15);
 
 // Grab the last 10 blocks found
-$aBlocksFoundData = $statistics->getBlocksFound(10);
+$iLimit = 10;
+$aBlocksFoundData = $statistics->getBlocksFound($iLimit);
 $aBlockData = $aBlocksFoundData[0];
 
 // Estimated time to find the next block
@@ -47,6 +48,7 @@ if (!empty($aBlockData)) {
 $smarty->assign("ESTTIME", $iEstTime);
 $smarty->assign("TIMESINCELAST", $dTimeSinceLast);
 $smarty->assign("BLOCKSFOUND", $aBlocksFoundData);
+$smarty->assign("BLOCKLIMIT", $iLimit);
 $smarty->assign("CONTRIBSHARES", $aContributorsShares);
 $smarty->assign("CONTRIBHASHES", $aContributorsHashes);
 $smarty->assign("CURRENTBLOCK", $iBlock);

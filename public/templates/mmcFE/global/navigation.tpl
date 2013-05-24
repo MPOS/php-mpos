@@ -14,7 +14,7 @@
             <li><a href="{$smarty.server.PHP_SELF}?page=statistics">Statistics</a>
               <ul>
                 <li><a href="{$smarty.server.PHP_SELF}?page=statistics&action=pool">Pool Stats</a></li>
-                {if $smarty.session.AUTHENTICATED}<li><a href="{$smarty.server.PHP_SELF}?page=statistics&action=block">Block Stats</a></li>{/if}
+                {if $smarty.session.AUTHENTICATED}<li><a href="{$smarty.server.PHP_SELF}?page=statistics&action=blocks">Block Stats</a></li>{/if}
               </ul>
             </li>
             <li><a href="{$smarty.server.PHP_SELF}?page=gettingstarted">Getting Started</a></li>
