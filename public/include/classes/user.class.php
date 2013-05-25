@@ -11,10 +11,11 @@ class User {
   private $user = array();
   private $tableAccountBalance = 'accountBalance';
 
-  public function __construct($debug, $mysqli, $salt) {
+  public function __construct($debug, $mysqli, $salt, $config) {
     $this->debug = $debug;
     $this->mysqli = $mysqli;
     $this->salt = $salt;
+    $this->config = $config;
     $this->debug->append("Instantiated User class", 2);
   }
 
@@ -32,6 +33,27 @@ class User {
 
   public function getUserId($username) {
     return $this->getSingle($username, 'id', 'username', 's');
+  }
+
+  public function getUserEmail($username) {
+    return $this->getSingle($username, 'email', 'username', 's');
+  }
+
+  public function getUserToken($id) {
+    return $this->getSingle($id, 'token', 'id');
+  }
+
+  public function getIdFromToken($token) {
+    return $this->getSingle($token, 'id', 'token', 's');
+  }
+
+  public function setUserToken($id) {
+    $field = array(
+      'name' => 'token',
+      'type' => 's',
+      'value' => hash('sha256', $id.time().$this->salt)
+    );
+    return $this->updateSingle($id, $field);
   }
 
   /**
@@ -142,15 +164,12 @@ class User {
    * @param field string Field to update
    * @return bool
    **/
-  private function updateSingle($userID, $field) {
+  private function updateSingle($id, $field) {
     $this->debug->append("STA " . __METHOD__, 4);
-    $stmt = $this->mysqli->prepare("UPDATE $this->table SET " . $field['name'] . " = ? WHERE userId = ? LIMIT 1");
-    if ($this->checkStmt($stmt)) {
-      $stmt->bind_param($field['type'].'i', $field['value'], $userID);
-      $stmt->execute();
-      $stmt->close();
+    $stmt = $this->mysqli->prepare("UPDATE $this->table SET " . $field['name'] . " = ? WHERE id = ? LIMIT 1");
+    if ($this->checkStmt($stmt) && $stmt->bind_param($field['type'].'i', $field['value'], $id) && $stmt->execute())
       return true;
-    }
+    $this->debug->append("Unable to update " . $field['name'] . " with " . $field['value'] . " for ID $id");
     return false;
   }
 
@@ -306,6 +325,63 @@ class User {
     }
     return false;
   }
+
+  public function useToken($token, $new1, $new2) {
+    $this->debug->append("STA " . __METHOD__, 4);
+    if ($id = $this->getIdFromToken($token)) {
+      if ($new1 !== $new2) {
+        $this->setErrorMessage( 'New passwords do not match' );
+        return false;
+      }
+      if ( strlen($new1) < 8 ) { 
+        $this->setErrorMessage( 'New password is too short, please use more than 8 chars' );
+        return false;
+      }
+      $new = hash('sha256', $new1.$this->salt);
+      $stmt = $this->mysqli->prepare("UPDATE $this->table SET pass = ?, token = NULL WHERE id = ? AND token = ?");
+      if ($this->checkStmt($stmt) && $stmt->bind_param('sis', $new, $id, $token) && $stmt->execute() && $stmt->affected_rows === 1) {
+        return true;
+      }
+    } else {
+      $this->setErrorMessage("Unable find user for your token");
+      return false;
+    }
+    return false;
+  }
+
+  public function resetPassword($username, $smarty) {
+    $this->debug->append("STA " . __METHOD__, 4);
+    // Fetch the users mail address
+    if (!$email = $this->getUserEmail($username)) {
+      $this->setErrorMessage("Unable to find a mail address for user $username");
+      return false;
+    }
+    if (!$this->setUserToken($this->getUserId($username))) {
+      $this->setErrorMessage("Unable to setup token for password reset");
+      return false;
+    }
+    // Send password reset link
+    if (!$token = $this->getUserToken($this->getUserId($username))) {
+      $this->setErrorMessage("Unable fetch token for password reset");
+      return false;
+    }
+    $smarty->assign('TOKEN', $token);
+    $smarty->assign('USERNAME', $username);
+    $smarty->assign('WEBSITENAME', $this->config['website']['name']);
+    $headers = 'From: Website Administration <' . $this->config['website']['email'] . ">\n";
+    $headers .= "MIME-Version: 1.0\n";
+    $headers .= "Content-Type: text/html; charset=ISO-8859-1\r\n";
+    if (mail($email,
+             $smarty->fetch('templates/mail/subject.tpl'),
+             $smarty->fetch('templates/mail/body.tpl'),
+             $headers)) {
+      return true;
+    } else {
+      $this->setErrorMessage("Unable to send mail to your address");
+      return false;
+    }
+    return false;
+  }
 }
 
-$user = new User($debug, $mysqli, SALT);
+$user = new User($debug, $mysqli, SALT, $config);
