@@ -24,6 +24,7 @@ $config = array(
   'website' => array(
     'name' => 'The Pool',
     'slogan' => 'Resistance is futile',
+    'email' => 'test@example.com',  // Mail address used for notifications
   ),
   'fees' => 0,
   'difficulty' => '31',         // Target difficulty for this pool as set in pushpoold json
