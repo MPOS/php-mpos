@@ -43,6 +43,10 @@ class User {
     return $this->getSingle($id, 'token', 'id');
   }
 
+  public function getIdFromToken($token) {
+    return $this->getSingle($token, 'id', 'token', 's');
+  }
+
   public function setUserToken($id) {
     $field = array(
       'name' => 'token',
@@ -322,7 +326,30 @@ class User {
     return false;
   }
 
-  public function resetPassword($username) {
+  public function useToken($token, $new1, $new2) {
+    $this->debug->append("STA " . __METHOD__, 4);
+    if ($id = $this->getIdFromToken($token)) {
+      if ($new1 !== $new2) {
+        $this->setErrorMessage( 'New passwords do not match' );
+        return false;
+      }
+      if ( strlen($new1) < 8 ) { 
+        $this->setErrorMessage( 'New password is too short, please use more than 8 chars' );
+        return false;
+      }
+      $new = hash('sha256', $new1.$this->salt);
+      $stmt = $this->mysqli->prepare("UPDATE $this->table SET pass = ?, token = NULL WHERE id = ? AND token = ?");
+      if ($this->checkStmt($stmt) && $stmt->bind_param('sis', $new, $id, $token) && $stmt->execute() && $stmt->affected_rows === 1) {
+        return true;
+      }
+    } else {
+      $this->setErrorMessage("Unable find user for your token");
+      return false;
+    }
+    return false;
+  }
+
+  public function resetPassword($username, $smarty) {
     $this->debug->append("STA " . __METHOD__, 4);
     // Fetch the users mail address
     if (!$email = $this->getUserEmail($username)) {
@@ -338,10 +365,10 @@ class User {
       $this->setErrorMessage("Unable fetch token for password reset");
       return false;
     }
-    $subject = "[" . $this->config['website']['name'] . "] Password Reset Request";
-    $header = "From: " . $this->config['website']['email'];
-    $message = "Please follow the link to reset your password\n\n" . $this->config['website']['url']['password_reset'] . "/index.php?page=password&action=change&token=$token";
-    if (mail($email, 'Password Reset Request', $message)) {
+    $smarty->assign('TOKEN', $token);
+    $smarty->assign('USERNAME', $username);
+    $smarty->assign('WEBSITENAME', $this->config['website']['name']);
+    if (mail($email, $smarty->fetch('templates/mail/subject.tpl'), $smarty->fetch('templates/mail/body.tpl'))) {
       return true;
     } else {
       $this->setErrorMessage("Unable to send mail to your address");
