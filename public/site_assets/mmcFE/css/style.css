@@ -1,4 +1,3 @@
-
 * { padding:0; margin:0; }
 
 body {
@@ -854,7 +853,7 @@ a:hover {
 /* Block sidebar */
 
 .block.withsidebar .bendl {
-  /*	width: 171px;	*/
+  width: 191px;	
   background: url(../images/bendsb.gif) bottom left no-repeat;
 }
 
@@ -865,7 +864,7 @@ a:hover {
 }
 
 .block.withsidebar .block_content .sidebar {
-  width: 190px;
+  width: 210px;
   float: left;
   font-size: 11px;
 }
