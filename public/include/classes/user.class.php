@@ -368,7 +368,13 @@ class User {
     $smarty->assign('TOKEN', $token);
     $smarty->assign('USERNAME', $username);
     $smarty->assign('WEBSITENAME', $this->config['website']['name']);
-    if (mail($email, $smarty->fetch('templates/mail/subject.tpl'), $smarty->fetch('templates/mail/body.tpl'))) {
+    $headers = 'From: Website Administration <' . $this->config['website']['email'] . ">\n";
+    $headers .= "MIME-Version: 1.0\n";
+    $headers .= "Content-Type: text/html; charset=ISO-8859-1\r\n";
+    if (mail($email,
+             $smarty->fetch('templates/mail/subject.tpl'),
+             $smarty->fetch('templates/mail/body.tpl'),
+             $headers)) {
       return true;
     } else {
       $this->setErrorMessage("Unable to send mail to your address");
