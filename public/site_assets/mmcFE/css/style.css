@@ -459,6 +459,14 @@ a:hover {
   font-size: 11px;
 }
 
+.block table tr td.right{
+  text-align: right;
+}
+.block table tr th.right{
+  text-align: right;
+}
+
+
 .block table tr td.delete a { color: #666; }
 .block table tr td.delete a:hover { color: #dd0000; }
 
