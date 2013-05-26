@@ -21,7 +21,6 @@
             <li><a href="{$smarty.server.PHP_SELF}?page=support">Support</a></li>
             <li><a href="{$smarty.server.PHP_SELF}?page=about&action=pplns">About</a>
               <ul>
-                <li><a href="{$smarty.server.PHP_SELF}?page=about&action=pplns">PPLNS Payout</a></li>
                 <li><a href="{$smarty.server.PHP_SELF}?page=about&action=pool">This Pool</a></li>
               </ul>
             </li>
