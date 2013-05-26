@@ -7,8 +7,8 @@
         <th scope="col" align="left">Validity</th>
         <th scope="col" align="left">Finder</th>
         <th scope="col" align="left">Date / Time</th>
-        <th scope="col" align="left">Difficulty</th>
-        <th scope="col" align="left">Shares</th>
+        <th class="right" scope="col">Difficulty</th>
+        <th class="right" scope="col">Shares</th>
       </tr>
     </thead>
     <tbody>
@@ -19,8 +19,8 @@
         <td>{if $BLOCKSFOUND[block].confirmations >= $GLOBAL.confirmations}<font color="green">Confirmed</font>{else}{$GLOBAL.confirmations - $BLOCKSFOUND[block].confirmations} left{/if}</td>
         <td>{$BLOCKSFOUND[block].finder|default:"unknown"}</td>
         <td>{$BLOCKSFOUND[block].time|date_format:"%d/%m/%Y %H:%M:%S"}</td>
-        <td>{$BLOCKSFOUND[block].difficulty|number_format:"8"}</td>
-        <td>{$BLOCKSFOUND[block].shares|number_format}</td>
+        <td class="right">{$BLOCKSFOUND[block].difficulty|number_format:"8"}</td>
+        <td class="right">{$BLOCKSFOUND[block].shares|number_format}</td>
       </tr>
 {/section}
     </tbody>
