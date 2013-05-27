@@ -16,7 +16,12 @@
 {section block $BLOCKSFOUND}
       <tr class="{cycle values="odd,even"}">
         <td><a href="{$GLOBAL.blockexplorer}{$BLOCKSFOUND[block].height}" target="_blank">{$BLOCKSFOUND[block].height}</a></td>
-        <td>{if $BLOCKSFOUND[block].confirmations >= $GLOBAL.confirmations}<font color="green">Confirmed</font>{else}{$GLOBAL.confirmations - $BLOCKSFOUND[block].confirmations} left{/if}</td>
+        <td>
+        {if $BLOCKSFOUND[block].confirmations >= $GLOBAL.confirmations}
+          <font color="green">Confirmed</font>
+        {else if $BLOCKSFOUND[block].confirmations == -1}
+          <font color="red">Orphan</font>
+        {else}{$GLOBAL.confirmations - $BLOCKSFOUND[block].confirmations} left{/if}</td>
         <td>{$BLOCKSFOUND[block].finder|default:"unknown"}</td>
         <td>{$BLOCKSFOUND[block].time|date_format:"%d/%m/%Y %H:%M:%S"}</td>
         <td class="right">{$BLOCKSFOUND[block].difficulty|number_format:"8"}</td>
