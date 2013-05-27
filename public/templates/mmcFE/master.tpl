@@ -51,7 +51,7 @@
           {include file="global/login.tpl"}
           {/if}
         </div>
-        <div class="sidebar_content" id="sb1">
+        <div class="sidebar_content" id="sb1" style="margin-left: 13px">
           {if is_array($smarty.session.POPUP)}
             {section popup $smarty.session.POPUP}
               <div class="message {$smarty.session.POPUP[popup].TYPE|default:"success"}"><p>{$smarty.session.POPUP[popup].CONTENT}</p></div>
