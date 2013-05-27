@@ -107,6 +107,43 @@ class Transaction {
     return true;
   }
 
+  /**
+   * Get total balance for all users locked in wallet
+   * @param none
+   * @return data double Amount locked for users
+   **/
+  public function getLockedBalance() {
+    $this->debug->append("STA " . __METHOD__, 4);
+    $stmt = $this->mysqli->prepare("
+      SELECT ROUND(IFNULL(t1.credit, 0) - IFNULL(t2.debit, 0) - IFNULL(t3.other, 0), 8) AS balance
+      FROM
+      (
+        SELECT sum(t.amount) AS credit
+        FROM $this->table AS t
+        LEFT JOIN " . $this->block->getTableName() . " AS b ON t.block_id = b.id
+        WHERE t.type = 'Credit'
+        AND b.confirmations >= ?
+      ) AS t1,
+      (
+        SELECT sum(t.amount) AS debit
+        FROM $this->table AS t
+        WHERE t.type IN ('Debit_MP', 'Debit_AP')
+      ) AS t2,
+      (
+        SELECT sum(t.amount) AS other
+        FROM transactions AS t
+        LEFT JOIN " . $this->block->getTableName() . " AS b ON t.block_id = b.id
+        WHERE t.type IN ('Donation','Fee')
+        AND b.confirmations >= ?
+      ) AS t3");
+    if ($this->checkStmt($stmt) && $stmt->bind_param('ii', $this->config['confirmations'], $this->config['confirmations']) && $stmt->execute() && $stmt->bind_result($dBalance) && $stmt->fetch())
+      return $dBalance;
+    // Catchall
+    $this->setErrorMessage('Unable to find locked credits for all users');
+    $this->debug->append('MySQL query failed : ' . $this->mysqli->error);
+    return false;
+  }
+
   public function getBalance($account_id) {
     $this->debug->append("STA " . __METHOD__, 4);
     $stmt = $this->mysqli->prepare("
