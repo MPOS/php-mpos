@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: May 20, 2013 at 07:35 PM
+-- Generation Time: May 27, 2013 at 02:39 PM
 -- Server version: 5.5.31-0ubuntu0.13.04.1
 -- PHP Version: 5.4.9-4ubuntu2
 
@@ -36,6 +36,7 @@ CREATE TABLE IF NOT EXISTS `accounts` (
   `sessionTimeoutStamp` int(255) DEFAULT NULL,
   `pin` varchar(255) NOT NULL COMMENT 'four digit pin to allow account changes',
   `api_key` varchar(255) DEFAULT NULL,
+  `token` varchar(65) DEFAULT NULL,
   `donate_percent` float DEFAULT '0',
   `ap_threshold` float DEFAULT '0',
   `coin_address` varchar(255) DEFAULT NULL,
@@ -53,7 +54,7 @@ CREATE TABLE IF NOT EXISTS `blocks` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `height` int(10) unsigned NOT NULL,
   `blockhash` char(65) NOT NULL,
-  `confirmations` int(10) unsigned NOT NULL,
+  `confirmations` int(10) NOT NULL,
   `amount` double NOT NULL,
   `difficulty` double NOT NULL,
   `time` int(11) NOT NULL,
@@ -112,9 +113,10 @@ CREATE TABLE IF NOT EXISTS `shares_archive` (
   `our_result` enum('Y','N') DEFAULT NULL,
   `upstream_result` enum('Y','N') DEFAULT NULL,
   `block_id` int(10) unsigned NOT NULL,
-  `time` datetime DEFAULT NULL,
+  `time` datetime NOT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `share_id` (`share_id`)
+  UNIQUE KEY `share_id` (`share_id`),
+  KEY `time` (`time`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='Archive shares for potential later debugging purposes';
 
 -- --------------------------------------------------------
@@ -143,7 +145,7 @@ CREATE TABLE IF NOT EXISTS `statistics_shares` (
 CREATE TABLE IF NOT EXISTS `transactions` (
   `id` int(255) NOT NULL AUTO_INCREMENT,
   `account_id` int(255) unsigned NOT NULL,
-  `type` enum('Credit','Debit_MP','Debit_AP','Fee','Donation') DEFAULT NULL,
+  `type` enum('Credit','Debit_MP','Debit_AP','Donation','Fee','Orphan_Credit','Orphan_Fee','Orphan_Donation') DEFAULT NULL,
   `coin_address` varchar(255) DEFAULT NULL,
   `amount` double DEFAULT '0',
   `block_id` int(255) DEFAULT NULL,
