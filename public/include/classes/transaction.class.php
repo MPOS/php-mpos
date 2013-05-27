@@ -38,6 +38,41 @@ class Transaction {
     return false;
   }
 
+  public function setOrphan($block_id) {
+    $this->debug->append("STA " . __METHOD__, 4);
+    $stmt = $this->mysqli->prepare("
+      UPDATE $this->table
+      SET type = 'Orphan_Credit'
+      WHERE type = 'Credit'
+      AND block_id = ?
+      ");
+    if (!($this->checkStmt($stmt) && $stmt->bind_param('i', $block_id) && $stmt->execute())) {
+      $this->debug->append("Failed to set orphan credit transactions for $block_id");
+      return false;
+    }
+    $stmt = $this->mysqli->prepare("
+      UPDATE $this->table
+      SET type = 'Orphan_Fee'
+      WHERE type = 'Fee'
+      AND block_id = ?
+      ");
+    if (!($this->checkStmt($stmt) && $stmt->bind_param('i', $block_id) && $stmt->execute())) {
+      $this->debug->append("Failed to set orphan fee transactions for $block_id");
+      return false;
+    }
+    $stmt = $this->mysqli->prepare("
+      UPDATE $this->table
+      SET type = 'Orphan_Donation'
+      WHERE type = 'Donation'
+      AND block_id = ?
+      ");
+    if (!($this->checkStmt($stmt) && $stmt->bind_param('i', $block_id) && $stmt->execute())) {
+      $this->debug->append("Failed to set orphan donation transactions for $block_id");
+      return false;
+    }
+    return true;
+  }
+
   public function getTransactions($account_id, $start=0) {
     $this->debug->append("STA " . __METHOD__, 4);
     $stmt = $this->mysqli->prepare("

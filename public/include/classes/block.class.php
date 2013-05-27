@@ -50,7 +50,7 @@ class Block {
   }
 
   public function getAllUnconfirmed($confirmations='120') {
-    $stmt = $this->mysqli->prepare("SELECT id, blockhash, confirmations FROM $this->table WHERE confirmations < ?");
+    $stmt = $this->mysqli->prepare("SELECT id, blockhash, confirmations FROM $this->table WHERE confirmations < ? AND confirmations > -1");
     if ($this->checkStmt($stmt)) {
       $stmt->bind_param("i", $confirmations);
       $stmt->execute();
