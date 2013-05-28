@@ -225,6 +225,19 @@ class User {
     return false;
   }
 
+  /**
+   * Check API key for authentication
+   * @param key string API key hash
+   * @return bool
+   **/
+  public function checkApiKey($key) {
+    $this->debug->append("STA " . __METHOD__, 4);
+    $stmt = $this->mysqli->prepare("SELECT api_key FROM $this->table WHERE api_key = ?");
+    if ($this->checkStmt($stmt) && $stmt->bind_param("s", $key) && $stmt->execute() && $stmt->bind_result($api_key) && $stmt->fetch())
+      return $key === $api_key;
+    return false;
+  }
+
   private function checkUserPassword($username, $password) {
     $this->debug->append("STA " . __METHOD__, 4);
     $user = array();
