@@ -44,19 +44,6 @@ class Statistics {
   }
 
   /**
-   * Another wrapper, we want to store data in memcache and return the actual data
-   * for further processing
-   * @param key string Our memcache key
-   * @param data mixed Our data to store in Memcache
-   * @param expiration time Our expiration time, see Memcached documentation
-   * @return data mixed Return our stored data unchanged
-   **/
-  public function setCache($key, $data, $expiration=NULL) {
-    if ($this->config['memcache']['enabled']) $this->memcache->set($key, $data, $expiration);
-    return $data;
-  }
-
-  /**
    * Get our last $limit blocks found
    * @param limit int Last limit blocks
    * @return array
@@ -71,7 +58,7 @@ class Statistics {
       ON b.account_id = a.id
       ORDER BY height DESC LIMIT ?");
     if ($this->checkStmt($stmt) && $stmt->bind_param("i", $limit) && $stmt->execute() && $result = $stmt->get_result())
-      return $this->setCache(__FUNCTION__ . $limit, $result->fetch_all(MYSQLI_ASSOC), 5);
+      return $this->memcache->setCache(__FUNCTION__ . $limit, $result->fetch_all(MYSQLI_ASSOC), 5);
     // Catchall
     $this->debug->append("Failed to find blocks:" . $this->mysqli->error);
     return false;
@@ -110,7 +97,7 @@ class Statistics {
         SELECT ROUND(COUNT(id) * POW(2, " . $this->config['difficulty'] . ")/600/1000) AS hashrate FROM " . $this->share->getArchiveTableName() . " WHERE time > DATE_SUB(now(), INTERVAL 10 MINUTE)
       ) AS sum");
     // Catchall
-    if ($this->checkStmt($stmt) && $stmt->execute() && $result = $stmt->get_result() ) return $this->setCache(__FUNCTION__, $result->fetch_object()->hashrate);
+    if ($this->checkStmt($stmt) && $stmt->execute() && $result = $stmt->get_result() ) return $this->memcache->setCache(__FUNCTION__, $result->fetch_object()->hashrate);
     $this->debug->append("Failed to get hashrate: " . $this->mysqli->error);
     return false;
   }
@@ -130,7 +117,7 @@ class Statistics {
         UNION ALL
         SELECT COUNT(id) AS sharerate FROM " . $this->share->getArchiveTableName() . " WHERE time > DATE_SUB(now(), INTERVAL 10 MINUTE)
       ) AS sum");
-    if ($this->checkStmt($stmt) && $stmt->execute() && $result = $stmt->get_result() ) return $this->setCache(__FUNCTION__, $result->fetch_object()->sharerate);
+    if ($this->checkStmt($stmt) && $stmt->execute() && $result = $stmt->get_result() ) return $this->memcache->setCache(__FUNCTION__, $result->fetch_object()->sharerate);
     // Catchall
     $this->debug->append("Failed to fetch share rate: " . $this->mysqli->error);
     return false;
@@ -155,7 +142,7 @@ class Statistics {
       WHERE UNIX_TIMESTAMP(time) >IFNULL((SELECT MAX(time) FROM blocks),0)
         AND our_result = 'N' ) as invalid");
     if ( $this->checkStmt($stmt) && $stmt->execute() && $result = $stmt->get_result() )
-      return $this->setCache(__FUNCTION__, $result->fetch_assoc());
+      return $this->memcache->setCache(__FUNCTION__, $result->fetch_assoc());
     // Catchall
     $this->debug->append("Failed to fetch round shares: " . $this->mysqli->error);
     return false;
@@ -190,7 +177,7 @@ class Statistics {
           AND u.id = ?
       ) AS invalid"); 
     if ($stmt && $stmt->bind_param("ii", $account_id, $account_id) && $stmt->execute() && $result = $stmt->get_result())
-      return $this->setCache(__FUNCTION__ . $account_id, $result->fetch_assoc());
+      return $this->memcache->setCache(__FUNCTION__ . $account_id, $result->fetch_assoc());
     // Catchall
     $this->debug->append("Unable to fetch user round shares: " . $this->mysqli->error);
     return false;
@@ -211,7 +198,7 @@ class Statistics {
         AND s.time > DATE_SUB(now(), INTERVAL 10 MINUTE)
         AND u.id = ?");
     if ($this->checkStmt($stmt) && $stmt->bind_param("i", $account_id) && $stmt->execute() && $result = $stmt->get_result() )
-      return $this->setCache(__FUNCTION__ . $account_id, $result->fetch_object()->hashrate);
+      return $this->memcache->setCache(__FUNCTION__ . $account_id, $result->fetch_object()->hashrate);
     // Catchall
     $this->debug->append("Failed to fetch hashrate: " . $this->mysqli->error);
     return false;
@@ -233,7 +220,7 @@ class Statistics {
         AND s.time > DATE_SUB(now(), INTERVAL 10 MINUTE)
         AND u.id = ?");
     if ($this->checkStmt($stmt) && $stmt->bind_param("i", $account_id) && $stmt->execute() && $result = $stmt->get_result() )
-      return $this->setCache(__FUNCTION__ . $worker_id, $result->fetch_object()->hashrate);
+      return $this->memcache->setCache(__FUNCTION__ . $worker_id, $result->fetch_object()->hashrate);
     // Catchall
     $this->debug->append("Failed to fetch hashrate: " . $this->mysqli->error);
     return false;
@@ -259,7 +246,7 @@ class Statistics {
         ORDER BY shares DESC
         LIMIT ?");
       if ($this->checkStmt($stmt) && $stmt->bind_param("i", $limit) && $stmt->execute() && $result = $stmt->get_result())
-        return $this->setCache(__FUNCTION__ . $type . $limit, $result->fetch_all(MYSQLI_ASSOC));
+        return $this->memcache->setCache(__FUNCTION__ . $type . $limit, $result->fetch_all(MYSQLI_ASSOC));
       $this->debug->append("Fetching shares failed: ");
       return false;
       break;
@@ -274,7 +261,7 @@ class Statistics {
         GROUP BY account
         ORDER BY hashrate DESC LIMIT ?");
       if ($this->checkStmt($stmt) && $stmt->bind_param("i", $limit) && $stmt->execute() && $result = $stmt->get_result())
-        return $this->setCache(__FUNCTION__ . $type . $limit, $result->fetch_all(MYSQLI_ASSOC));
+        return $this->memcache->setCache(__FUNCTION__ . $type . $limit, $result->fetch_all(MYSQLI_ASSOC));
       $this->debug->append("Fetching shares failed: ");
       return false;
       break;
@@ -309,7 +296,7 @@ class Statistics {
           AND a.id = ?
           GROUP BY HOUR(time)");
     if ($this->checkStmt($stmt) && $stmt->bind_param("ii", $account_id, $account_id) && $stmt->execute() && $result = $stmt->get_result())
-      return $this->setCache(__FUNCTION__ . $account_id, $result->fetch_all(MYSQLI_ASSOC), 3600);
+      return $this->memcache->setCache(__FUNCTION__ . $account_id, $result->fetch_all(MYSQLI_ASSOC), 3600);
     // Catchall
     $this->debug->append("Failed to fetch hourly hashrate: " . $this->mysqli->error);
     return false;
