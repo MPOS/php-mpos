@@ -37,9 +37,6 @@
     </tr>
   </tbody>
 </table>
-<ul>
-  <li><font color="orange">Server stats are also available in JSON format <a href="/api" target="_api">HERE</a></font></li>
-</ul>
 {include file="global/block_footer.tpl"}
 
 
