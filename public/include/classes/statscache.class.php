@@ -43,6 +43,19 @@ class StatsCache extends Memcached {
       $this->debug->append("Key not found", 3);
     }
   }
+  /**
+   * Another wrapper, we want to store data in memcache and return the actual data
+   * for further processing
+   * @param key string Our memcache key
+   * @param data mixed Our data to store in Memcache
+   * @param expiration time Our expiration time, see Memcached documentation
+   * @return data mixed Return our stored data unchanged
+   **/
+  public function setCache($key, $data, $expiration=NULL) {
+    if ($this->config['memcache']['enabled']) $this->set($key, $data, $expiration);
+    return $data;
+  }
+
 }
 
 $memcache = new StatsCache($config, $debug);
