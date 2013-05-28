@@ -75,11 +75,15 @@ You can contribute to this project in different ways:
 * Suggest feature enhancements also via [Issues][1]
 * Fork the project, create a branch and file a pull request to improve the code itself
 
+Contact
+=======
+
+You can find me on Freenode.net, #mmcfe-ng.
 
 License and Author
 ==================
 
-Copyright 2012, Sebastian Grewe
+Copyright 2012, Sebastian Grewe
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
