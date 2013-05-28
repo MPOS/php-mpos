@@ -61,6 +61,7 @@ if ( ! $user->checkPin($_SESSION['USERDATA']['id'], $_POST['authPin']) && $_POST
     break;
   }
 }
+
 // Tempalte specifics
 $smarty->assign("CONTENT", "default.tpl");
 ?>

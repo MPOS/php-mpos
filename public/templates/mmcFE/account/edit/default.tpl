@@ -6,6 +6,7 @@
       <table>
         <tbody><tr><td>Username: </td><td>{$GLOBAL.userdata.username}</td></tr>
         <tr><td>User Id: </td><td>{$GLOBAL.userdata.id}</td></tr>
+        <tr><td>API Key: </td><td>{$GLOBAL.userdata.api_key}</td></tr>
         <tr><td>Payment Address: </td><td><input type="text" name="paymentAddress" value="{$smarty.request.paymentAddress|default:$GLOBAL.userdata.coin_address|escape}" size="40"></td></tr>
         <tr><td>Donation %: </td><td><input type="text" name="donatePercent" value="{$smarty.request.donatePercent|default:$GLOBAL.userdata.donate_percent|escape}" size="4"><font size="1"> [donation amount in percent (example: 0.5)]</font></td></tr>
         <tr><td>Automatic Payout Threshold: </td><td valign="top"><input type="text" name="payoutThreshold" value="{$smarty.request.payoutThreshold|default:$GLOBAL.userdata.ap_threshold|escape}" size="5" maxlength="5"> <font size="1">[1-250 LTC. Set to '0' for no auto payout]</font></td></tr>
