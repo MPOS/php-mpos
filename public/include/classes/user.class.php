@@ -322,15 +322,23 @@ class User {
       return false;
     }
     $apikey = hash("sha256",$username.$salt);
-    $stmt = $this->mysqli->prepare("
-      INSERT INTO $this->table (username, pass, email, pin, api_key)
-      VALUES (?, ?, ?, ?, ?)
+    if ($this->mysqli->query("SELECT id FROM $this->table LIMIT 1")->num_rows > 0) {
+      $stmt = $this->mysqli->prepare("
+        INSERT INTO $this->table (username, pass, email, pin, api_key)
+        VALUES (?, ?, ?, ?, ?)
       ");
+    } else {
+      $stmt = $this->mysqli->prepare("
+        INSERT INTO $this->table (username, pass, email, pin, api_key, admin)
+        VALUES (?, ?, ?, ?, ?, 1)
+      ");
+    }
     if ($this->checkStmt($stmt)) {
       $stmt->bind_param('sssss', $username, hash("sha256", $password1.$this->salt), $email1, hash("sha256", $pin.$this->salt), $apikey);
       if (!$stmt->execute()) {
         $this->setErrorMessage( 'Unable to register' );
         if ($stmt->sqlstate == '23000') $this->setErrorMessage( 'Username already exists' );
+        echo $this->mysqli->error;
         return false;
       }
       $stmt->close();
