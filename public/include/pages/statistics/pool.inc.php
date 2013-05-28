@@ -6,14 +6,8 @@ if (!defined('SECURITY'))
 
 // Fetch data from litecoind
 if ($bitcoin->can_connect() === true){
-  if (!$dDifficulty = $memcache->get('dDifficulty')) {
-    $dDifficulty = $bitcoin->query('getdifficulty');
-    $memcache->set('dDifficulty', $dDifficulty);
-  }
-  if (!$iBlock = $memcache->get('iBlock')) {
-    $iBlock = $bitcoin->query('getblockcount');
-    $memcache->set('iBlock', $iBlock);
-  }
+  $dDifficulty = $bitcoin->getdifficulty();
+  $iBlock = $bitcoin->getblockcount();
 } else {
   $iDifficulty = 1;
   $iBlock = 0;
@@ -24,7 +18,7 @@ if ($bitcoin->can_connect() === true){
 $aContributorsShares = $statistics->getTopContributors('shares', 15);
 
 // Top hash contributors
-  $aContributorsHashes = $statistics->getTopContributors('hashes', 15);
+$aContributorsHashes = $statistics->getTopContributors('hashes', 15);
 
 // Grab the last 10 blocks found
 $iLimit = 10;
