@@ -26,25 +26,27 @@ class User {
   public function getError() {
     return $this->sError;
   }
-
   public function getUserName($id) {
     return $this->getSingle($id, 'username', 'id');
   }
-
   public function getUserId($username) {
     return $this->getSingle($username, 'id', 'username', 's');
   }
-
   public function getUserEmail($username) {
     return $this->getSingle($username, 'email', 'username', 's');
   }
-
+  public function getUserAdmin($id) {
+    return $this->getSingle($id, 'admin', 'id');
+  }
   public function getUserToken($id) {
     return $this->getSingle($id, 'token', 'id');
   }
-
   public function getIdFromToken($token) {
     return $this->getSingle($token, 'id', 'token', 's');
+  }
+  public function isAdmin($id) {
+    if ($this->getUserAdmin($id) == 1) return true;
+    return false;
   }
 
   public function setUserToken($id) {
@@ -266,15 +268,15 @@ class User {
   private function checkUserPassword($username, $password) {
     $this->debug->append("STA " . __METHOD__, 4);
     $user = array();
-    $stmt = $this->mysqli->prepare("SELECT username, id FROM $this->table WHERE username=? AND pass=? LIMIT 1");
+    $stmt = $this->mysqli->prepare("SELECT username, id, admin FROM $this->table WHERE username=? AND pass=? LIMIT 1");
     if ($this->checkStmt($stmt)) {
       $stmt->bind_param('ss', $username, hash('sha256', $password.$this->salt));
       $stmt->execute();
-      $stmt->bind_result($row_username, $row_id);
+      $stmt->bind_result($row_username, $row_id, $row_admin);
       $stmt->fetch();
       $stmt->close();
       // Store the basic login information
-      $this->user = array('username' => $row_username, 'id' => $row_id);
+      $this->user = array('username' => $row_username, 'id' => $row_id, 'admin' => $row_admin);
       return $username === $row_username;
     }
     return false;
