@@ -36,6 +36,7 @@ in the appropriate forums.
 * PHP 5.4+
  * php5-mysqlnd
  * php5-memcached
+ * php5-curl
 * MySQL Server
  * mysql-server
 * memcached

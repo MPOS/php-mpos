@@ -27,7 +27,7 @@ require_once(BASEPATH . CLASS_DIR . '/tools.class.php');
 
 verbose("Running ticket updates\n");
 if ($aData = $tools->getApi($config['price']['url'], $config['price']['target'])) {
-  if (!$setting->setValue('price', $aData['ticker']['avg']))
+  if (!$setting->setValue('price', $aData['ticker']['last']))
     verbose("ERR Table update failed");
 } else {
   verbose("ERR Failed download JSON data from " . $config['price']['url'].$config['price']['target'] . "\n");
