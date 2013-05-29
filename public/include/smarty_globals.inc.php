@@ -23,8 +23,9 @@ $aGlobal = array(
   'fees' => $config['fees'],
   'confirmations' => $config['confirmations'],
   'reward' => $config['reward'],
-  'blockexplorer' => 'http://explorer.litecoin.net/search?q=',
-  'chaininfo' => 'http://allchains.info'
+  'price' => $setting->getValue('price'),
+  'blockexplorer' => $config['blockexplorer'],
+  'chaininfo' => $config['chaininfo']
 );
 
 // We don't want these session infos cached
