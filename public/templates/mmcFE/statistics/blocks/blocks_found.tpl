@@ -1,4 +1,4 @@
-{include file="global/block_header.tpl" BLOCK_HEADER="Last $BLOCKLIMIT Blocks Found" BLOCK_STYLE="clear:none;" BUTTONS=array(More)}
+{include file="global/block_header.tpl" BLOCK_HEADER="Last $BLOCKLIMIT Blocks Found" BLOCK_STYLE="clear:none;"}
 <center>
   <table class="stats_lastblocks" width="100%" style="font-size:13px;">
     <thead>
