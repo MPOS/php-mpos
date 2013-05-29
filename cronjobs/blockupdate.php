@@ -34,7 +34,7 @@ verbose("ID\tBlockhash\tConfirmations\t\n");
 foreach ($aAllBlocks as $iIndex => $aBlock) {
   $aBlockInfo = $bitcoin->query('getblock', $aBlock['blockhash']);
   // Fetch this blocks transaction details to find orphan blocks
-  $aTxDetails = $bitcoin->query('gettransaction', $aBlockInfo['merkleroot']);
+  $aTxDetails = $bitcoin->query('gettransaction', $aBlockInfo['tx'][0]);
   verbose($aBlock['id'] . "\t" . $aBlock['blockhash'] . "\t" . $aBlock['confirmations'] . " -> " . $aBlockInfo['confirmations'] . "\t");
   if ($aTxDetails['details'][0]['category'] == 'orphan') {
     // We have an orphaned block, we need to invalidate all transactions for this one
