@@ -5,7 +5,7 @@ if (!defined('SECURITY'))
 die('Hacking attempt');
 
 // Check user token
-$user->checkApiKey($_REQUEST['api_key']);
+$id = $user->checkApiKey($_REQUEST['api_key']);
 
 // Output JSON format
 echo json_encode(array('getpoolhashrate' => $statistics->getCurrentHashrate()));

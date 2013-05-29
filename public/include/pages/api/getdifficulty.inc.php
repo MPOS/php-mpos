@@ -5,7 +5,7 @@ if (!defined('SECURITY'))
 die('Hacking attempt');
 
 // Check user token
-$user->checkApiKey($_REQUEST['api_key']);
+$id = $user->checkApiKey($_REQUEST['api_key']);
 
 // Fetch data from litecoind
 if ($bitcoin->can_connect() === true){

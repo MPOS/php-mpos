@@ -5,7 +5,7 @@ if (!defined('SECURITY'))
 die('Hacking attempt');
 
 // Check user token
-$user->checkApiKey($_REQUEST['api_key']);
+$id = $user->checkApiKey($_REQUEST['api_key']);
 
 // Estimated time to find the next block
 $iCurrentPoolHashrate = $statistics->getCurrentHashrate() * 1000;
