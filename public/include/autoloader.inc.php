@@ -13,4 +13,4 @@ require_once(CLASS_DIR . '/share.class.php');
 require_once(CLASS_DIR . '/worker.class.php');
 require_once(CLASS_DIR . '/statistics.class.php');
 require_once(CLASS_DIR . '/transaction.class.php');
-require_once(CLASS_DIR . '/settings.class.php');
+require_once(CLASS_DIR . '/setting.class.php');
