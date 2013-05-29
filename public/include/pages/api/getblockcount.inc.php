@@ -5,7 +5,7 @@ if (!defined('SECURITY'))
 die('Hacking attempt');
 
 // Check user token
-$user->checkApiKey($_REQUEST['api_key']);
+$id = $user->checkApiKey($_REQUEST['api_key']);
 
 if ($bitcoin->can_connect() === true){
   if (!$iBlock = $memcache->get('iBlock')) {

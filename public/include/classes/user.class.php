@@ -232,10 +232,13 @@ class User {
    **/
   public function checkApiKey($key) {
     $this->debug->append("STA " . __METHOD__, 4);
-    $stmt = $this->mysqli->prepare("SELECT api_key FROM $this->table WHERE api_key = ?");
-    if ($this->checkStmt($stmt) && $stmt->bind_param("s", $key) && $stmt->execute() && $stmt->bind_result($api_key) && $stmt->fetch())
-      return $key === $api_key;
-    return false;
+    $stmt = $this->mysqli->prepare("SELECT api_key, id FROM $this->table WHERE api_key = ? LIMIT 1");
+    if ($this->checkStmt($stmt) && $stmt->bind_param("s", $key) && $stmt->execute() && $stmt->bind_result($api_key, $id) && $stmt->fetch()) {
+      if ($api_key === $key)
+        return $id;
+    }
+    header("HTTP/1.1 401 Unauthorized");
+    die('Access denied');
   }
 
   private function checkUserPassword($username, $password) {
@@ -326,12 +329,12 @@ class User {
       $stmt = $this->mysqli->prepare("
         INSERT INTO $this->table (username, pass, email, pin, api_key)
         VALUES (?, ?, ?, ?, ?)
-      ");
+        ");
     } else {
       $stmt = $this->mysqli->prepare("
         INSERT INTO $this->table (username, pass, email, pin, api_key, admin)
         VALUES (?, ?, ?, ?, ?, 1)
-      ");
+        ");
     }
     if ($this->checkStmt($stmt)) {
       $stmt->bind_param('sssss', $username, hash("sha256", $password1.$this->salt), $email1, hash("sha256", $pin.$this->salt), $apikey);
@@ -393,14 +396,14 @@ class User {
     $headers .= "MIME-Version: 1.0\n";
     $headers .= "Content-Type: text/html; charset=ISO-8859-1\r\n";
     if (mail($email,
-             $smarty->fetch('templates/mail/subject.tpl'),
-             $smarty->fetch('templates/mail/body.tpl'),
-             $headers)) {
-      return true;
-    } else {
-      $this->setErrorMessage("Unable to send mail to your address");
-      return false;
-    }
+      $smarty->fetch('templates/mail/subject.tpl'),
+      $smarty->fetch('templates/mail/body.tpl'),
+      $headers)) {
+        return true;
+      } else {
+        $this->setErrorMessage("Unable to send mail to your address");
+        return false;
+      }
     return false;
   }
 }
