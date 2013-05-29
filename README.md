@@ -47,6 +47,10 @@ Features
 
 The following feature have been implemented so far:
 
+* Reward Systems
+ * Propotional
+ * (Planned) PPS
+ * (Planned) PPLNS
 * Use of memcache for statistics instead of a cronjob
 * Web User accounts
 * Worker accounts
