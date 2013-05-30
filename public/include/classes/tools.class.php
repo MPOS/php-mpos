@@ -4,6 +4,11 @@
 if (!defined('SECURITY'))
   die('Hacking attempt');
 
+/**
+ * Helper class for our cronjobs
+ * Implements some common cron tasks outside
+ * the scope of our web application
+ **/
 class Tools {
   public function __construct($debug) {
     $this->debug = $debug;

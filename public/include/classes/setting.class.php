@@ -12,6 +12,11 @@ class Setting {
     $this->table = 'settings';
   }
 
+  /**
+   * Fetch a value from our table
+   * @param name string Setting name
+   * @return value string Value
+   **/
   public function getValue($name) {
     $query = $this->mysqli->prepare("SELECT value FROM $this->table WHERE name=? LIMIT 1");
     if ($query) {
@@ -27,6 +32,12 @@ class Setting {
     return $value;
   }
 
+  /**
+   * Insert or update a setting
+   * @param name string Name of the variable
+   * @param value string Variable value
+   * @return bool
+   **/
   public function setValue($name, $value) {
     $stmt = $this->mysqli->prepare("
       INSERT INTO $this->table (name, value)
