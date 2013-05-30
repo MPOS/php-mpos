@@ -183,6 +183,14 @@ class User {
     return true;
   }
 
+  /**
+   * Update the accounts password
+   * @param userID int User ID
+   * @param current string Current password
+   * @param new1 string New password
+   * @param new2 string New password confirmation
+   * @return bool
+   **/
   public function updatePassword($userID, $current, $new1, $new2) {
     $this->debug->append("STA " . __METHOD__, 4);
     if ($new1 !== $new2) {
@@ -208,6 +216,14 @@ class User {
     return false;
   }
 
+  /**
+   * Update account information from the edit account page
+   * @param userID int User ID
+   * @param address string new coin address
+   * @param threshold float auto payout threshold
+   * @param donat float donation % of income
+   * @return bool
+   **/
   public function updateAccount($userID, $address, $threshold, $donate) {
     $this->debug->append("STA " . __METHOD__, 4);
     $bUser = false;
@@ -241,6 +257,12 @@ class User {
     die('Access denied');
   }
 
+  /**
+   * Check a password for a user
+   * @param username string Username
+   * @param password string Password
+   * @return bool
+   **/
   private function checkUserPassword($username, $password) {
     $this->debug->append("STA " . __METHOD__, 4);
     $user = array();
@@ -258,6 +280,11 @@ class User {
     return false;
   }
 
+  /**
+   * Create a PHP session for a user
+   * @param username string Username to create session for
+   * @return none
+   **/
   private function createSession($username) {
     $this->debug->append("STA " . __METHOD__, 4);
     $this->debug->append("Log in user to _SESSION", 2);
@@ -267,6 +294,11 @@ class User {
     $_SESSION['USERDATA'] = $this->user;
   }
 
+  /**
+   * Log out current user, destroy the session
+   * @param none
+   * @return true
+   **/
   public function logoutUser() {
     $this->debug->append("STA " . __METHOD__, 4);
     session_destroy();
@@ -274,11 +306,20 @@ class User {
     return true;
   }
 
+  /**
+   * Fetch this classes table name
+   * @return table string This classes table name
+   **/
   public function getTableName() {
     $this->debug->append("STA " . __METHOD__, 4);
     return $this->table;
   }
 
+  /**
+   * Fetch some basic user information to store for later user
+   * @param userID int User ID
+   * return data array Database fields as used in SELECT
+   **/
   public function getUserData($userID) {
     $this->debug->append("STA " . __METHOD__, 4);
     $this->debug->append("Fetching user information for user id: $userID");
@@ -302,6 +343,16 @@ class User {
     return false;
   }
 
+  /**
+   * Register a new user in the system
+   * @param username string Username
+   * @param password1 string Password
+   * @param password2 string Password verification
+   * @param pin int 4 digit PIN code
+   * @param email1 string Email address
+   * @param email2 string Email confirmation
+   * @return bool
+   **/
   public function register($username, $password1, $password2, $pin, $email1='', $email2='') {
     $this->debug->append("STA " . __METHOD__, 4);
     if (strlen($password1) < 8) { 
@@ -350,6 +401,13 @@ class User {
     return false;
   }
 
+  /**
+   * User a one time token to reset a password
+   * @param token string one time token
+   * @param new1 string New password
+   * @param new2 string New password verification
+   * @return bool
+   **/
   public function useToken($token, $new1, $new2) {
     $this->debug->append("STA " . __METHOD__, 4);
     if ($id = $this->getIdFromToken($token)) {
@@ -373,6 +431,12 @@ class User {
     return false;
   }
 
+  /**
+   * Reset a password by sending a password reset mail
+   * @param username string Username to reset password for
+   * @param smarty object Smarty object for mail templating
+   * @return bool
+   **/
   public function resetPassword($username, $smarty) {
     $this->debug->append("STA " . __METHOD__, 4);
     // Fetch the users mail address
@@ -408,4 +472,5 @@ class User {
   }
 }
 
+// Make our class available automatically
 $user = new User($debug, $mysqli, SALT, $config);

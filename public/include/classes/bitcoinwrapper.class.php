@@ -4,6 +4,10 @@
 if (!defined('SECURITY'))
   die('Hacking attempt');
 
+/**
+ * We use a wrapper class around BitcoinClient to add
+ * some basic caching functionality and some debugging
+ **/
 class BitcoinWrapper extends BitcoinClient {
   public function __construct($type, $username, $password, $host, $debug, $memcache) {
     $this->type = $type;
