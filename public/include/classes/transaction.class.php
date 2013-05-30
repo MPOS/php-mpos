@@ -25,6 +25,15 @@ class Transaction {
     return $this->sError;
   }
 
+  /**
+   * Add a new transaction to our class table
+   * @param account_id int Account ID to book transaction for
+   * @param amount float Coin amount
+   * @param type string Transaction type [Credit, Debit_AP, Debit_MP, Fee, Donation, Orphan_Credit, Orphan_Fee, Orphan_Donation]
+   * @param block_id int Block ID to link transaction to [optional]
+   * @param coin_address string Coin address for this transaction [optional]
+   * @return bool
+   **/
   public function addTransaction($account_id, $amount, $type='Credit', $block_id=NULL, $coin_address=NULL) {
     $stmt = $this->mysqli->prepare("INSERT INTO $this->table (account_id, amount, block_id, type, coin_address) VALUES (?, ?, ?, ?, ?)");
     if ($this->checkStmt($stmt)) {
@@ -38,6 +47,12 @@ class Transaction {
     return false;
   }
 
+  /**
+   * Sometimes transactions become orphans when a block associated to them is orphaned
+   * Updates the transaction types to Orphan_<type>
+   * @param block_id int Orphaned block ID
+   * @return bool
+   **/
   public function setOrphan($block_id) {
     $this->debug->append("STA " . __METHOD__, 4);
     $stmt = $this->mysqli->prepare("
@@ -73,6 +88,12 @@ class Transaction {
     return true;
   }
 
+  /**
+   * Get all transactions from start for account_id
+   * @param account_id int Account ID
+   * @param start int Starting point, id of transaction
+   * @return data array Database fields as defined in SELECT
+   **/
   public function getTransactions($account_id, $start=0) {
     $this->debug->append("STA " . __METHOD__, 4);
     $stmt = $this->mysqli->prepare("
@@ -144,6 +165,11 @@ class Transaction {
     return false;
   }
 
+  /**
+   * Get an accounts total balance
+   * @param account_id int Account ID
+   * @return data float Credit - Debit - Fees - Donation
+   **/
   public function getBalance($account_id) {
     $this->debug->append("STA " . __METHOD__, 4);
     $stmt = $this->mysqli->prepare("
