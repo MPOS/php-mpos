@@ -40,28 +40,63 @@ if ( $bitcoin->can_connect() === true ){
 // Nothing to do so bail out
 if (empty($aTransactions['transactions'])) {
   verbose("No new transactions since last block\n");
-  exit(0);
-}
+} else {
 
-// Table header
-verbose("Blockhash\t\tHeight\tAmount\tConfirmations\tDiff\t\tTime\t\t\tStatus\n");
+  // Table header
+  verbose("Blockhash\t\tHeight\tAmount\tConfirmations\tDiff\t\tTime\t\t\tStatus\n");
 
-foreach ($aTransactions['transactions'] as $iIndex => $aData) {
-  if ( $aData['category'] == 'generate' || $aData['category'] == 'immature' ) {
-    $aBlockInfo = $bitcoin->query('getblock', $aData['blockhash']);
-    $aData['height'] = $aBlockInfo['height'];
-    $aData['difficulty'] = $aBlockInfo['difficulty'];
-    verbose(substr($aData['blockhash'], 0, 15) . "...\t" .
-         $aData['height'] . "\t" .
-         $aData['amount'] . "\t" .
-         $aData['confirmations'] . "\t\t" .
-         $aData['difficulty'] . "\t" .
-         strftime("%Y-%m-%d %H:%M:%S", $aData['time']) . "\t");
-    if ( $block->addBlock($aData) ) {
-      verbose("Added\n");
-    } else {
-      verbose("Failed" . "\n");
+  // Let us add those blocks as unaccounted
+  foreach ($aTransactions['transactions'] as $iIndex => $aData) {
+    if ( $aData['category'] == 'generate' || $aData['category'] == 'immature' ) {
+      $aBlockInfo = $bitcoin->query('getblock', $aData['blockhash']);
+      $aData['height'] = $aBlockInfo['height'];
+      $aData['difficulty'] = $aBlockInfo['difficulty'];
+      verbose(substr($aData['blockhash'], 0, 15) . "...\t" .
+        $aData['height'] . "\t" .
+        $aData['amount'] . "\t" .
+        $aData['confirmations'] . "\t\t" .
+        $aData['difficulty'] . "\t" .
+        strftime("%Y-%m-%d %H:%M:%S", $aData['time']) . "\t");
+      if ( $block->addBlock($aData) ) {
+        verbose("Added\n");
+      } else {
+        verbose("Failed" . "\n");
+      }
     }
   }
 }
+
+// Now with our blocks added we can scan for their upstream shares
+$aAllBlocks = $block->getAllUnaccounted('ASC');
+
+// Loop through our unaccounted blocks
+verbose("Block ID\tBlock Height\tShare ID\tFinder\t\t\tStatus\n");
+foreach ($aAllBlocks as $iIndex => $aBlock) {
+  if (empty($aBlock['share_id'])) {
+    // Fetch this blocks upstream ID
+    if ($share->setUpstream($block->getLastUpstreamId())) {
+      $iCurrentUpstreamId = $share->getUpstreamId();
+      $iAccountId = $user->getUserId($share->getUpstreamFinder());
+    } else {
+      verbose("Unable to fetch blocks upstream share\n");
+      verbose($share->getError() . "\n");
+      continue;
+    }
+    // Store new information
+    $strStatus = "OK";
+    if (!$block->setShareId($aBlock['id'], $iCurrentUpstreamId))
+      $strStatus = "Share ID Failed";
+    if (!$block->setFinder($aBlock['id'], $iAccountId))
+      $strStatus = "Finder Failed";
+    verbose(
+      $aBlock['id'] . "\t\t"
+      . $aBlock['height'] . "\t\t"
+      . $iCurrentUpstreamId . "\t\t"
+      . "[$iAccountId] " . $user->getUserName($iAccountId) . "\t\t"
+      . $strStatus
+      . "\n"
+    );
+  }
+}
 ?>
+
