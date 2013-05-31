@@ -77,7 +77,7 @@
 {/section}
         <tr>
           <td colspan="5"><b>Unconfirmed Totals:</b></td>
-          <td><b>{$credits - $debits}</b></td>
+          <td><b>{$credits|default - $debits|default}</b></td>
         </tr>
       </tbody>
     </table>
@@ -121,7 +121,7 @@
 {/section}
         <tr>
           <td colspan="5"><b>Orphaned Totals:</b></td>
-          <td><b>{$orphan_credits - $orphan_debits}</b></td>
+          <td><b>{$orphan_credits|default - $orphan_debits|default}</b></td>
         </tr>
       </tbody>
     </table>
