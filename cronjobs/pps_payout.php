@@ -32,11 +32,7 @@ if (empty($aAllBlocks)) {
 $count = 0;
 foreach ($aAllBlocks as $iIndex => $aBlock) {
   if (!$aBlock['accounted']) {
-    if ($share->setUpstream(@$aAllBlocks[$iIndex - 1]['time'])) {
-      $share->setLastUpstreamId();
-    }
-
-    if ($share->setUpstream($aBlock['time'])) {
+    if ($share->setUpstream($share->getLastUpstreamId())) {
       $iCurrentUpstreamId = $share->getUpstreamId();
     } else {
       verbose("Unable to fetch blocks upstream share\n");
@@ -98,11 +94,22 @@ foreach ($aAllBlocks as $iIndex => $aBlock) {
         if (!$transaction->addTransaction($aData['id'], $aData['donation'], 'Donation', $aBlock['id']))
           $strStatus = "Donation Failed";
       verbose("\t$strStatus\n");
+      // Set this blocks share ID as the last found upstream ID
     }
-    verbose("------------------------------------------------------------------------\n\n");
 
     // Move counted shares to archive before this blockhash upstream share
-    $share->moveArchive($share->getLastUpstreamId(), $iCurrentUpstreamId, $aBlock['id']);
-    $block->setAccounted($aBlock['id']);
+    if ($config['archive_shares']) $share->moveArchive($iCurrentUpstreamId, $aBlock['id'], $share->getLastUpstreamId());
+    // Delete all accounted shares
+    if (!$share->deleteAccountedShares($iCurrentUpstreamId, $share->getLastUpstreamId())) {
+      verbose("\nERROR : Failed to delete accounted shares from " . $share->getLastUpstreamId() . " to $iCurrentUpstreamId, aborting!\n");
+      exit(1);
+    }
+    // Mark this block as accounted for
+    if (!$block->setAccounted($aBlock['id'])) {
+      verbose("\nERROR : Failed to mark block as accounted! Aborting!\n");
+    }
+
+    verbose("------------------------------------------------------------------------\n\n");
+    $share->setLastUpstreamId();
   }
 }

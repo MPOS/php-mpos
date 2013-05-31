@@ -23,7 +23,8 @@ limitations under the License.
 require_once('shared.inc.php');
 
 // Fetch our last block found from the DB as a starting point
-$strLastBlockHash = @$block->getLast()->blockhash;
+$aLastBlock = @$block->getLast();
+$strLastBlockHash = $aLastBlock['blockhash'];
 if (!$strLastBlockHash) { 
   $strLastBlockHash = '';
 }
