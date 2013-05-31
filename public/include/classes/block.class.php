@@ -130,6 +130,16 @@ class Block {
     return false;
   }
 
+  public function getLastUpstreamId() {
+    $stmt = $this->mysqli->prepare("
+      SELECT MAX(share_id) AS share_id FROM $this->table
+      ");
+    if ($this->checkStmt($stmt) && $stmt->execute() && $stmt->bind_result($share_id) && $stmt->fetch())
+      return $share_id ? $share_id : 0;
+    // Catchall
+    return false;
+  }
+
   /**
    * Update a single column within a single row
    * @param block_id int Block ID to update
@@ -160,6 +170,16 @@ class Block {
    **/
   public function setFinder($block_id, $account_id=NULL) {
     return $this->updateSingle($block_id, 'account_id', $account_id);
+  }
+
+  /**
+   * Set finding share for a block
+   * @param block_id int Block ID
+   * @param share_id int Upstream valid share ID
+   * @return bool
+   **/
+  public function setShareId($block_id, $share_id) {
+    return $this->updateSingle($block_id, 'share_id', $share_id);
   }
 
   /**
