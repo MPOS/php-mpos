@@ -32,29 +32,30 @@ if (empty($aAllBlocks)) {
 $count = 0;
 foreach ($aAllBlocks as $iIndex => $aBlock) {
   if (!$aBlock['accounted']) {
-    if ($share->setUpstream($share->getLastUpstreamId())) {
-      $iCurrentUpstreamId = $share->getUpstreamId();
-    } else {
-      verbose("Unable to fetch blocks upstream share\n");
-      verbose($share->getError() . "\n");
-      continue;
-    }
-    $aAccountShares = $share->getSharesForAccounts($share->getLastUpstreamId(), $iCurrentUpstreamId);
-    $iRoundShares = $share->getRoundShares($share->getLastUpstreamId(), $iCurrentUpstreamId);
+    $iPreviousShareId = $aAllBlocks[$iIndex - 1]['share_id'] ? $aAllBlocks[$iIndex - 1]['share_id'] : 0;
+    $iCurrentUpstreamId = $aBlock['share_id'];
+    $aAccountShares = $share->getSharesForAccounts($iPreviousShareId, $aBlock['share_id']);
+    $iRoundShares = $share->getRoundShares($iPreviousShareId, $aBlock['share_id']);
+
+    // Table header for block details
     verbose("ID\tHeight\tTime\t\tShares\tFinder\t\tShare ID\tPrev Share\t\tStatus\n");
-    verbose($aBlock['id'] . "\t" . $aBlock['height'] . "\t" . $aBlock['time'] . "\t" . $iRoundShares . "\t" . $share->getUpstreamFinder() . "\t" . $share->getUpstreamId() . "\t\t" . $share->getLastUpstreamId());
+    verbose($aBlock['id'] . "\t" . $aBlock['height'] . "\t" . $aBlock['time'] . "\t" . $iRoundShares . "\t" . $user->getUserName($aBlock['account_id']) . "\t" . $iCurrentUpstreamId . "\t\t" . $iPreviousShareId);
+
     if (empty($aAccountShares)) {
       verbose("\nNo shares found for this block\n\n");
       sleep(2);
       continue;
     }
     $strStatus = "OK";
-    if (!$block->setFinder($aBlock['id'], $user->getUserId($share->getUpstreamFinder())))
-      $strStatus = "Finder Failed";
+    // Store share information for this block
     if (!$block->setShares($aBlock['id'], $iRoundShares))
       $strStatus = "Shares Failed";
     verbose("\t\t$strStatus\n\n");
+
+    // Table header for account shares
     verbose("ID\tUsername\tValid\tInvalid\tPercentage\tPayout\t\tDonation\tFee\t\tStatus\n");
+
+    // Loop through all accounts that have found shares for this round
     foreach ($aAccountShares as $key => $aData) {
       // Payout based on shares, PPS system
       $aData['percentage'] = number_format(round(( 100 / $iRoundShares ) * $aData['valid'], 8), 8);
@@ -94,14 +95,13 @@ foreach ($aAllBlocks as $iIndex => $aBlock) {
         if (!$transaction->addTransaction($aData['id'], $aData['donation'], 'Donation', $aBlock['id']))
           $strStatus = "Donation Failed";
       verbose("\t$strStatus\n");
-      // Set this blocks share ID as the last found upstream ID
     }
 
     // Move counted shares to archive before this blockhash upstream share
-    if ($config['archive_shares']) $share->moveArchive($iCurrentUpstreamId, $aBlock['id'], $share->getLastUpstreamId());
+    if ($config['archive_shares']) $share->moveArchive($iCurrentUpstreamId, $aBlock['id'], $iPreviousShareId);
     // Delete all accounted shares
-    if (!$share->deleteAccountedShares($iCurrentUpstreamId, $share->getLastUpstreamId())) {
-      verbose("\nERROR : Failed to delete accounted shares from " . $share->getLastUpstreamId() . " to $iCurrentUpstreamId, aborting!\n");
+    if (!$share->deleteAccountedShares($iCurrentUpstreamId, $iPreviousShareId)) {
+      verbose("\nERROR : Failed to delete accounted shares from $iPreviousShareId to $iCurrentUpstreamId, aborting!\n");
       exit(1);
     }
     // Mark this block as accounted for
@@ -110,6 +110,5 @@ foreach ($aAllBlocks as $iIndex => $aBlock) {
     }
 
     verbose("------------------------------------------------------------------------\n\n");
-    $share->setLastUpstreamId();
   }
 }
