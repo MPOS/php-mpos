@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: May 29, 2013 at 11:00 AM
+-- Generation Time: May 31, 2013 at 02:31 PM
 -- Server version: 5.5.31-0ubuntu0.13.04.1
 -- PHP Version: 5.4.9-4ubuntu2
 
@@ -61,6 +61,7 @@ CREATE TABLE IF NOT EXISTS `blocks` (
   `accounted` tinyint(1) NOT NULL DEFAULT '0',
   `account_id` int(255) unsigned DEFAULT NULL,
   `shares` int(255) unsigned DEFAULT NULL,
+  `share_id` int(255) DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `height` (`height`,`blockhash`),
   KEY `time` (`time`)
