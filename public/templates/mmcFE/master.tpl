@@ -4,7 +4,7 @@
     <title>ThePool</title>
     <meta http-equiv="X-UA-Compatible" content="IE=7" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico">
+    <link rel="shortcut icon" href="#" />
     <link rel="stylesheet" href="{$PATH}/css/mainstyle.css" type="text/css" />
     <script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
     <script src="{$PATH}/js/jquery.browser.js"></script>
@@ -45,14 +45,14 @@
       </div>
       <div class="block_content">
         <div class="sidebar">
-          {if $smarty.session.AUTHENTICATED}
+          {if $smarty.session.AUTHENTICATED|default}
           {include file="global/sidebar.tpl"}
           {else}
           {include file="global/login.tpl"}
           {/if}
         </div>
         <div class="sidebar_content" id="sb1" style="margin-left: 13px">
-          {if is_array($smarty.session.POPUP)}
+          {if is_array($smarty.session.POPUP|default)}
             {section popup $smarty.session.POPUP}
               <div class="message {$smarty.session.POPUP[popup].TYPE|default:"success"}"><p>{$smarty.session.POPUP[popup].CONTENT}</p></div>
             {/section}

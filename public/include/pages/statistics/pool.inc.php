@@ -9,7 +9,7 @@ if ($bitcoin->can_connect() === true){
   $dDifficulty = $bitcoin->getdifficulty();
   $iBlock = $bitcoin->getblockcount();
 } else {
-  $iDifficulty = 1;
+  $dDifficulty = 1;
   $iBlock = 0;
   $_SESSION['POPUP'][] = array('CONTENT' => 'Unable to connect to litecoind RPC service: ' . $bitcoin->can_connect(), 'TYPE' => 'errormsg');
 }
