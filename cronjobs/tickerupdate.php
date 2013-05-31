@@ -25,7 +25,7 @@ require_once('shared.inc.php');
 // Include additional file not set in autoloader
 require_once(BASEPATH . CLASS_DIR . '/tools.class.php');
 
-verbose("Running ticket updates\n");
+verbose("Running updates\n");
 if ($aData = $tools->getApi($config['price']['url'], $config['price']['target'])) {
   if (!$setting->setValue('price', $aData['ticker']['last']))
     verbose("ERR Table update failed");
