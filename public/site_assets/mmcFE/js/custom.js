@@ -148,5 +148,8 @@ $(function () {
             $(this).removeClass('iehover');
         });
     }
+    
+    // IE6 PNG fix
+    $(document).pngFix();
 
 });
