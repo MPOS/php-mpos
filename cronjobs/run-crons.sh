@@ -69,3 +69,6 @@ for cron in $CRONS; do
   [[ $VERBOSE == 1 ]] && echo "Running $cron, see output below for details"
   $PHP_BIN $cron $CRONARGS
 done
+
+# Remove pidfile
+rm -f $PIDFILE
