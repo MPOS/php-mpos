@@ -30,6 +30,7 @@ $config = array(
     'slogan' => 'Resistance is futile',
     'email' => 'test@example.com',  // Mail address used for notifications
   ),
+  'archive_shares' => true,         // Store accounted shares in archive table?
   'blockexplorer' => 'http://explorer.litecoin.net/search?q=',        // URL for block searches, prefixed to each block number
   'chaininfo' => 'http://allchains.info',                             // Link to Allchains for Difficulty information
   'fees' => 0,
