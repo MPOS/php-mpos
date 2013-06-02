@@ -23,6 +23,13 @@ I was hoping to keep this out of the README but apparently people remove or chan
 at the bottom of the page. For those of you finding my project and are willing to appreciate the work
 with some hard earned LTC feel free to donate to my LTC address: `Lge95QR2frp9y1wJufjUPCycVsg5gLJPW8`
 
+Donors
+======
+
+These people have supported this project with a donation:
+
+* [obigal](https://github.com/obigal)
+
 Requirements
 ============
 
