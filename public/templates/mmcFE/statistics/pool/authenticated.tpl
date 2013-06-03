@@ -32,6 +32,10 @@
       <td>{$ESTTIME|seconds_to_words}</td>
     </tr>
     <tr>
+      <td class="leftheader">Est. Avg. Shares per Round</td>
+      <td>{($ESTTIME * $GLOBAL.sharerate)|number_format:"0"}</td>
+    </tr>
+    <tr>
       <td class="leftheader">Time Since Last Block</td>
       <td>{$TIMESINCELAST|seconds_to_words}</td>
     </tr>
