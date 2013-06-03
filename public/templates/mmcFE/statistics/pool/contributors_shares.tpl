@@ -4,8 +4,8 @@
     <thead>
       <tr style="background-color:#B6DAFF;">
         <th align="left">Rank</th>
-        <th align="left" scope="col">User Name</th>
-        <th align="left" scope="col">Shares</th>
+        <th scope="col">User Name</th>
+        <th class="right" scope="col">Shares</th>
       </tr>
     </thead>
     <tbody>
@@ -15,14 +15,14 @@
       <tr{if $GLOBAL.userdata.username == $CONTRIBSHARES[hashrate].account}{assign var=listed value=1} style="background-color:#99EB99;"{else} class="{cycle values="odd,even"}"{/if}>
         <td>{$rank++}</td>
         <td>{$CONTRIBSHARES[hashrate].account}</td>
-        <td>{$CONTRIBSHARES[hashrate].shares|number_format}</td>
+        <td class="right">{$CONTRIBSHARES[hashrate].shares|number_format}</td>
       </tr>
 {/section}
 {if $listed != 1}
       <tr style="background-color:#99EB99;">
         <td>n/a</td>
         <td>{$GLOBAL.userdata.username}</td>
-        <td>{$GLOBAL.userdata.shares.valid}</td>
+        <td class="right">{$GLOBAL.userdata.shares.valid}</td>
       </tr>
 {/if}
     </tbody>

@@ -27,17 +27,27 @@ class Block {
     return $this->table;
   }
 
+  /**
+   * Specific method to fetch the latest block found
+   * @param none
+   * @return data array Array with database fields as keys
+   **/
   public function getLast() {
     $stmt = $this->mysqli->prepare("SELECT * FROM $this->table ORDER BY height DESC LIMIT 1");
     if ($this->checkStmt($stmt)) {
       $stmt->execute();
       $result = $stmt->get_result();
       $stmt->close();
-      return $result->fetch_object();
+      return $result->fetch_assoc();
     }
     return false;
   }
 
+  /**
+   * Fetch all unaccounted blocks
+   * @param order string Sort order, default ASC
+   * @return data array Array with database fields as keys
+   **/
   public function getAllUnaccounted($order='ASC') {
     $stmt = $this->mysqli->prepare("SELECT * FROM $this->table WHERE accounted = 0 ORDER BY height $order");
     if ($this->checkStmt($stmt)) {
@@ -49,8 +59,13 @@ class Block {
     return false;
   }
 
+  /**
+   * Fetch all unconfirmed blocks from table
+   * @param confirmations int Required confirmations to consider block confirmed
+   * @return data array Array with database fields as keys
+   **/
   public function getAllUnconfirmed($confirmations='120') {
-    $stmt = $this->mysqli->prepare("SELECT id, blockhash, confirmations FROM $this->table WHERE confirmations < ?");
+    $stmt = $this->mysqli->prepare("SELECT id, blockhash, confirmations FROM $this->table WHERE confirmations < ? AND confirmations > -1");
     if ($this->checkStmt($stmt)) {
       $stmt->bind_param("i", $confirmations);
       $stmt->execute();
@@ -61,6 +76,12 @@ class Block {
     return false;
   }
 
+  /**
+   * Update confirmations for an existing block
+   * @param block_id int Block ID to update
+   * @param confirmations int New confirmations value
+   * @return bool
+   **/
   public function setConfirmations($block_id, $confirmations) {
     $stmt = $this->mysqli->prepare("UPDATE $this->table SET confirmations = ? WHERE id = ?");
     if ($this->checkStmt($stmt)) {
@@ -72,6 +93,11 @@ class Block {
     return false;
   }
 
+  /**
+   * Fetch all blocks ordered by DESC height
+   * @param order string ASC or DESC ordering
+   * @return data array Array with database fields as keys
+   **/
   public function getAll($order='DESC') {
     $stmt = $this->mysqli->prepare("SELECT * FROM $this->table ORDER BY height $order");
     if ($this->checkStmt($stmt)) {
@@ -83,6 +109,11 @@ class Block {
     return false;
   }
 
+  /**
+   * Add new new block to the database
+   * @param block array Block data as an array, see bind_param
+   * @return bool
+   **/
   public function addBlock($block) {
     $stmt = $this->mysqli->prepare("INSERT INTO $this->table (height, blockhash, confirmations, amount, difficulty, time) VALUES (?, ?, ?, ?, ?, ?)");
     if ($this->checkStmt($stmt)) {
@@ -99,6 +130,23 @@ class Block {
     return false;
   }
 
+  public function getLastUpstreamId() {
+    $stmt = $this->mysqli->prepare("
+      SELECT MAX(share_id) AS share_id FROM $this->table
+      ");
+    if ($this->checkStmt($stmt) && $stmt->execute() && $stmt->bind_result($share_id) && $stmt->fetch())
+      return $share_id ? $share_id : 0;
+    // Catchall
+    return false;
+  }
+
+  /**
+   * Update a single column within a single row
+   * @param block_id int Block ID to update
+   * @param field string Column name to update
+   * @param value string Value to insert
+   * @return bool
+   **/
   private function updateSingle($block_id, $field, $value) {
     $stmt = $this->mysqli->prepare("UPDATE $this->table SET $field = ? WHERE id = ?");
     if ($this->checkStmt($stmt)) {
@@ -114,19 +162,49 @@ class Block {
     return false;
   }
 
+  /**
+   * Set finder of a block
+   * @param block_id int Block ID
+   * @param account_id int Account ID of finder
+   * @return bool
+   **/
   public function setFinder($block_id, $account_id=NULL) {
     return $this->updateSingle($block_id, 'account_id', $account_id);
   }
 
+  /**
+   * Set finding share for a block
+   * @param block_id int Block ID
+   * @param share_id int Upstream valid share ID
+   * @return bool
+   **/
+  public function setShareId($block_id, $share_id) {
+    return $this->updateSingle($block_id, 'share_id', $share_id);
+  }
+
+  /**
+   * Set counted shares for a block
+   * @param block_id int Block ID
+   * @param shares int Share count
+   * @return bool
+   **/
   public function setShares($block_id, $shares=NULL) {
     return $this->updateSingle($block_id, 'shares', $shares);
   }
 
+  /**
+   * Set block to be accounted for
+   * @param block_id int Block ID
+   * @return bool
+   **/
   public function setAccounted($block_id=NULL) {
     if (empty($block_id)) return false;
     return $this->updateSingle($block_id, 'accounted', 1);
   }
 
+  /**
+   * Helper function
+   **/
   private function checkStmt($bState) {
     if ($bState ===! true) {
       $this->debug->append("Failed to prepare statement: " . $this->mysqli->error);
@@ -137,4 +215,5 @@ class Block {
   }
 }
 
+// Automatically load our class for furhter usage
 $block = new Block($debug, $mysqli, SALT);

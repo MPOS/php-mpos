@@ -6,7 +6,7 @@ if (!defined('SECURITY'))
 
 class Worker {
   private $sError = '';
-  private $table = 'workers';
+  private $table = 'pool_worker';
 
   public function __construct($debug, $mysqli, $user, $share, $config) {
     $this->debug = $debug;
@@ -41,6 +41,7 @@ class Worker {
    * @return bool
    **/
   public function updateWorkers($account_id, $data) {
+    $this->debug->append("STA " . __METHOD__, 4);
     $username = $this->user->getUserName($account_id);
     foreach ($data as $key => $value) {
       // Prefix the WebUser to Worker name
@@ -61,6 +62,7 @@ class Worker {
    * @return mixed array Workers and their settings or false
    **/
   public function getWorkers($account_id) {
+    $this->debug->append("STA " . __METHOD__, 4);
     $stmt = $this->mysqli->prepare("
       SELECT id, username, password,
       ( SELECT SIGN(COUNT(id)) FROM " . $this->share->getTableName() . " WHERE username = $this->table.username AND time > DATE_SUB(now(), INTERVAL 10 MINUTE)) AS active,
@@ -81,6 +83,7 @@ class Worker {
    * @return data mixed int count if any workers are active, false otherwise
    **/
   public function getCountAllActiveWorkers() {
+    $this->debug->append("STA " . __METHOD__, 4);
     $stmt = $this->mysqli->prepare("SELECT COUNT(DISTINCT username) AS total FROM "  . $this->share->getTableName() . " WHERE time > DATE_SUB(now(), INTERVAL 10 MINUTE)");
     if ($this->checkStmt($stmt)) {
       if (!$stmt->execute()) {
@@ -103,6 +106,7 @@ class Worker {
    * @return bool
    **/
   public function addWorker($account_id, $workerName, $workerPassword) {
+    $this->debug->append("STA " . __METHOD__, 4);
     $username = $this->user->getUserName($account_id);
     $workerName = "$username.$workerName";
     $stmt = $this->mysqli->prepare("INSERT INTO $this->table (account_id, username, password) VALUES(?, ?, ?)");
@@ -125,6 +129,7 @@ class Worker {
    * @return bool
    **/
   public function deleteWorker($account_id, $id) {
+    $this->debug->append("STA " . __METHOD__, 4);
     $stmt = $this->mysqli->prepare("DELETE FROM $this->table WHERE account_id = ? AND id = ?");
     if ($this->checkStmt($stmt)) {
       $stmt->bind_param('ii', $account_id, $id);

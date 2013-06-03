@@ -22,22 +22,27 @@ $aGlobal = array(
   'roundshares' => $aRoundShares,
   'fees' => $config['fees'],
   'confirmations' => $config['confirmations'],
-  'reward' => $config['reward']
+  'reward' => $config['reward'],
+  'price' => $setting->getValue('price'),
+  'blockexplorer' => $config['blockexplorer'],
+  'chaininfo' => $config['chaininfo']
 );
 
 // We don't want these session infos cached
-$aGlobal['userdata'] = $_SESSION['USERDATA']['id'] ? $user->getUserData($_SESSION['USERDATA']['id']) : array();
-$aGlobal['userdata']['balance'] = $transaction->getBalance($_SESSION['USERDATA']['id']);
+if (@$_SESSION['USERDATA']['id']) {
+  $aGlobal['userdata'] = $_SESSION['USERDATA']['id'] ? $user->getUserData($_SESSION['USERDATA']['id']) : array();
+  $aGlobal['userdata']['balance'] = $transaction->getBalance($_SESSION['USERDATA']['id']);
 
-// Other userdata that we can cache savely
-$aGlobal['userdata']['shares'] = $statistics->getUserShares($_SESSION['USERDATA']['id']);
-$aGlobal['userdata']['hashrate'] = $statistics->getUserHashrate($_SESSION['USERDATA']['id']);
+  // Other userdata that we can cache savely
+  $aGlobal['userdata']['shares'] = $statistics->getUserShares($_SESSION['USERDATA']['id']);
+  $aGlobal['userdata']['hashrate'] = $statistics->getUserHashrate($_SESSION['USERDATA']['id']);
 
-// Some estimations
-$aGlobal['userdata']['est_block'] = round(( (int)$aGlobal['userdata']['shares']['valid'] / (int)$aRoundShares['valid'] ) * (int)$config['reward'], 3);
-$aGlobal['userdata']['est_fee'] = round(($config['fees'] / 100) * $aGlobal['userdata']['est_block'], 3);
-$aGlobal['userdata']['est_donation'] = round((( $aGlobal['userdata']['donate_percent'] / 100) * ($aGlobal['userdata']['est_block'] - $aGlobal['userdata']['est_fee'])), 3);
-$aGlobal['userdata']['est_payout'] = round($aGlobal['userdata']['est_block'] - $aGlobal['userdata']['est_donation'] - $aGlobal['userdata']['est_fee'], 3);
+  // Some estimations
+  $aGlobal['userdata']['est_block'] = round(( (int)$aGlobal['userdata']['shares']['valid'] / (int)$aRoundShares['valid'] ) * (int)$config['reward'], 3);
+  $aGlobal['userdata']['est_fee'] = round(($config['fees'] / 100) * $aGlobal['userdata']['est_block'], 3);
+  $aGlobal['userdata']['est_donation'] = round((( $aGlobal['userdata']['donate_percent'] / 100) * ($aGlobal['userdata']['est_block'] - $aGlobal['userdata']['est_fee'])), 3);
+  $aGlobal['userdata']['est_payout'] = round($aGlobal['userdata']['est_block'] - $aGlobal['userdata']['est_donation'] - $aGlobal['userdata']['est_fee'], 3);
+}
 
 // Make it available in Smarty
 $smarty->assign('PATH', 'site_assets/' . THEME);

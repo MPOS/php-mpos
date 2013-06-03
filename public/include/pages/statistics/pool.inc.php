@@ -6,28 +6,23 @@ if (!defined('SECURITY'))
 
 // Fetch data from litecoind
 if ($bitcoin->can_connect() === true){
-  if (!$dDifficulty = $memcache->get('dDifficulty')) {
-    $dDifficulty = $bitcoin->query('getdifficulty');
-    $memcache->set('dDifficulty', $dDifficulty);
-  }
-  if (!$iBlock = $memcache->get('iBlock')) {
-    $iBlock = $bitcoin->query('getblockcount');
-    $memcache->set('iBlock', $iBlock);
-  }
+  $dDifficulty = $bitcoin->getdifficulty();
+  $iBlock = $bitcoin->getblockcount();
 } else {
-  $iDifficulty = 1;
+  $dDifficulty = 1;
   $iBlock = 0;
-  $_SESSION['POPUP'][] = array('CONTENT' => 'Unable to connect to pushpool service: ' . $bitcoin->can_connect(), 'TYPE' => 'errormsg');
+  $_SESSION['POPUP'][] = array('CONTENT' => 'Unable to connect to litecoind RPC service: ' . $bitcoin->can_connect(), 'TYPE' => 'errormsg');
 }
 
 // Top share contributors
 $aContributorsShares = $statistics->getTopContributors('shares', 15);
 
 // Top hash contributors
-  $aContributorsHashes = $statistics->getTopContributors('hashes', 15);
+$aContributorsHashes = $statistics->getTopContributors('hashes', 15);
 
 // Grab the last 10 blocks found
-$aBlocksFoundData = $statistics->getBlocksFound(10);
+$iLimit = 10;
+$aBlocksFoundData = $statistics->getBlocksFound($iLimit);
 $aBlockData = $aBlocksFoundData[0];
 
 // Estimated time to find the next block
@@ -47,6 +42,7 @@ if (!empty($aBlockData)) {
 $smarty->assign("ESTTIME", $iEstTime);
 $smarty->assign("TIMESINCELAST", $dTimeSinceLast);
 $smarty->assign("BLOCKSFOUND", $aBlocksFoundData);
+$smarty->assign("BLOCKLIMIT", $iLimit);
 $smarty->assign("CONTRIBSHARES", $aContributorsShares);
 $smarty->assign("CONTRIBHASHES", $aContributorsHashes);
 $smarty->assign("CURRENTBLOCK", $iBlock);

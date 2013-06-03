@@ -898,6 +898,3 @@ class BitcoinClient extends jsonrpc_client {
     return $this->query("getaddressesbyaccount", $account);
   }
 }
-
-// Auto-load this class
-$bitcoin = new BitcoinClient($config['wallet']['type'], $config['wallet']['username'], $config['wallet']['password'], $config['wallet']['host']);
