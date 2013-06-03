@@ -1,9 +1,4 @@
 {include file="global/block_header.tpl" BLOCK_HEADER="My Workers"}
-<ul><li><font color="red">
-    CAUTION! </font>Deletion of a worker could cause all associated shares for that worker to be lost.
-  Do not delete Workers unless you are certain all of their shares have been counted or that you have never used that worker account.
-</li></ul>
-
 <center>
   <form action="{$smarty.server.PHP_SELF}" method="post">
     <input type="hidden" name="page" value="{$smarty.request.page}">
