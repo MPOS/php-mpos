@@ -34,7 +34,7 @@ $config = array(
   'blockexplorer' => 'http://explorer.litecoin.net/search?q=',        // URL for block searches, prefixed to each block number
   'chaininfo' => 'http://allchains.info',                             // Link to Allchains for Difficulty information
   'fees' => 0,
-  'difficulty' => '31',         // Target difficulty for this pool as set in pushpoold json
+  'difficulty' => '20',         // Target difficulty for this pool as set in pushpoold json
   'reward' => '50',             // Reward for finding blocks, fixed value but changes someday
   'confirmations' => '120',     // Confirmations per block needed to credit transactions
   'memcache' => array(
