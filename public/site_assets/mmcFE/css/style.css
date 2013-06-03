@@ -1,4 +1,3 @@
-
 * { padding:0; margin:0; }
 
 body {
@@ -460,6 +459,14 @@ a:hover {
   font-size: 11px;
 }
 
+.block table tr td.right{
+  text-align: right;
+}
+.block table tr th.right{
+  text-align: right;
+}
+
+
 .block table tr td.delete a { color: #666; }
 .block table tr td.delete a:hover { color: #dd0000; }
 
@@ -854,7 +861,7 @@ a:hover {
 /* Block sidebar */
 
 .block.withsidebar .bendl {
-  /*	width: 171px;	*/
+  width: 191px;	
   background: url(../images/bendsb.gif) bottom left no-repeat;
 }
 
@@ -865,7 +872,7 @@ a:hover {
 }
 
 .block.withsidebar .block_content .sidebar {
-  width: 190px;
+  width: 210px;
   float: left;
   font-size: 11px;
 }

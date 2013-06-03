@@ -6,18 +6,12 @@ if (!defined('SECURITY'))
 
 // Fetch data from litecoind
 if ($bitcoin->can_connect() === true){
-  if (!$dDifficulty = $memcache->get('dDifficulty')) {
-    $dDifficulty = $bitcoin->query('getdifficulty');
-    $memcache->set('dDifficulty', $dDifficulty);
-  }
-  if (!$iBlock = $memcache->get('iBlock')) {
-    $iBlock = $bitcoin->query('getblockcount');
-    $memcache->set('iBlock', $iBlock);
-  }
+  $dDifficulty = $bitcoin->getdifficulty();
+  $iBlock = $bitcoin->getblockcount();
 } else {
   $iDifficulty = 1;
   $iBlock = 0;
-  $_SESSION['POPUP'][] = array('CONTENT' => 'Unable to connect to pushpool service: ' . $bitcoin->can_connect(), 'TYPE' => 'errormsg');
+  $_SESSION['POPUP'][] = array('CONTENT' => 'Unable to connect to litecoind RPC service: ' . $bitcoin->can_connect(), 'TYPE' => 'errormsg');
 }
 
 $aHourlyHashRates = $statistics->getHourlyHashrateByAccount($_SESSION['USERDATA']['id']);

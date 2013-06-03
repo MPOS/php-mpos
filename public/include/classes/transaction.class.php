@@ -25,6 +25,15 @@ class Transaction {
     return $this->sError;
   }
 
+  /**
+   * Add a new transaction to our class table
+   * @param account_id int Account ID to book transaction for
+   * @param amount float Coin amount
+   * @param type string Transaction type [Credit, Debit_AP, Debit_MP, Fee, Donation, Orphan_Credit, Orphan_Fee, Orphan_Donation]
+   * @param block_id int Block ID to link transaction to [optional]
+   * @param coin_address string Coin address for this transaction [optional]
+   * @return bool
+   **/
   public function addTransaction($account_id, $amount, $type='Credit', $block_id=NULL, $coin_address=NULL) {
     $stmt = $this->mysqli->prepare("INSERT INTO $this->table (account_id, amount, block_id, type, coin_address) VALUES (?, ?, ?, ?, ?)");
     if ($this->checkStmt($stmt)) {
@@ -38,10 +47,55 @@ class Transaction {
     return false;
   }
 
-  public function addDebit($account_id, $amount, $type='AP') {
+  /**
+   * Sometimes transactions become orphans when a block associated to them is orphaned
+   * Updates the transaction types to Orphan_<type>
+   * @param block_id int Orphaned block ID
+   * @return bool
+   **/
+  public function setOrphan($block_id) {
+    $this->debug->append("STA " . __METHOD__, 4);
+    $stmt = $this->mysqli->prepare("
+      UPDATE $this->table
+      SET type = 'Orphan_Credit'
+      WHERE type = 'Credit'
+      AND block_id = ?
+      ");
+    if (!($this->checkStmt($stmt) && $stmt->bind_param('i', $block_id) && $stmt->execute())) {
+      $this->debug->append("Failed to set orphan credit transactions for $block_id");
+      return false;
+    }
+    $stmt = $this->mysqli->prepare("
+      UPDATE $this->table
+      SET type = 'Orphan_Fee'
+      WHERE type = 'Fee'
+      AND block_id = ?
+      ");
+    if (!($this->checkStmt($stmt) && $stmt->bind_param('i', $block_id) && $stmt->execute())) {
+      $this->debug->append("Failed to set orphan fee transactions for $block_id");
+      return false;
+    }
+    $stmt = $this->mysqli->prepare("
+      UPDATE $this->table
+      SET type = 'Orphan_Donation'
+      WHERE type = 'Donation'
+      AND block_id = ?
+      ");
+    if (!($this->checkStmt($stmt) && $stmt->bind_param('i', $block_id) && $stmt->execute())) {
+      $this->debug->append("Failed to set orphan donation transactions for $block_id");
+      return false;
+    }
+    return true;
   }
 
+  /**
+   * Get all transactions from start for account_id
+   * @param account_id int Account ID
+   * @param start int Starting point, id of transaction
+   * @return data array Database fields as defined in SELECT
+   **/
   public function getTransactions($account_id, $start=0) {
+    $this->debug->append("STA " . __METHOD__, 4);
     $stmt = $this->mysqli->prepare("
       SELECT
         t.id AS id,
@@ -74,7 +128,50 @@ class Transaction {
     return true;
   }
 
+  /**
+   * Get total balance for all users locked in wallet
+   * @param none
+   * @return data double Amount locked for users
+   **/
+  public function getLockedBalance() {
+    $this->debug->append("STA " . __METHOD__, 4);
+    $stmt = $this->mysqli->prepare("
+      SELECT ROUND(IFNULL(t1.credit, 0) - IFNULL(t2.debit, 0) - IFNULL(t3.other, 0), 8) AS balance
+      FROM
+      (
+        SELECT sum(t.amount) AS credit
+        FROM $this->table AS t
+        LEFT JOIN " . $this->block->getTableName() . " AS b ON t.block_id = b.id
+        WHERE t.type = 'Credit'
+        AND b.confirmations >= ?
+      ) AS t1,
+      (
+        SELECT sum(t.amount) AS debit
+        FROM $this->table AS t
+        WHERE t.type IN ('Debit_MP', 'Debit_AP')
+      ) AS t2,
+      (
+        SELECT sum(t.amount) AS other
+        FROM transactions AS t
+        LEFT JOIN " . $this->block->getTableName() . " AS b ON t.block_id = b.id
+        WHERE t.type IN ('Donation','Fee')
+        AND b.confirmations >= ?
+      ) AS t3");
+    if ($this->checkStmt($stmt) && $stmt->bind_param('ii', $this->config['confirmations'], $this->config['confirmations']) && $stmt->execute() && $stmt->bind_result($dBalance) && $stmt->fetch())
+      return $dBalance;
+    // Catchall
+    $this->setErrorMessage('Unable to find locked credits for all users');
+    $this->debug->append('MySQL query failed : ' . $this->mysqli->error);
+    return false;
+  }
+
+  /**
+   * Get an accounts total balance
+   * @param account_id int Account ID
+   * @return data float Credit - Debit - Fees - Donation
+   **/
   public function getBalance($account_id) {
+    $this->debug->append("STA " . __METHOD__, 4);
     $stmt = $this->mysqli->prepare("
       SELECT ROUND(IFNULL(t1.credit, 0) - IFNULL(t2.debit, 0) - IFNULL(t3.other, 0), 8) AS balance
       FROM

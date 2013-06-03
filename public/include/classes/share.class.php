@@ -27,13 +27,29 @@ class Share {
     return $this->sError;
   }
 
+  /**
+   * Fetch archive tables name for this class
+   * @param none
+   * @return data string Table name
+   **/
   public function getArchiveTableName() {
     return $this->tableArchive;
   }
+  /**
+   * Fetch normal table name for this class
+   * @param none
+   * @return data string Table name
+   **/
   public function getTableName() {
     return $this->table;
   }
 
+  /**
+   * Get all valid shares for this round
+   * @param previous_upstream int Previous found share accepted by upstream to limit results
+   * @param current_upstream int Current upstream accepted share
+   * @return data int Total amount of counted shares
+   **/
   public function getRoundShares($previous_upstream=0, $current_upstream) {
     $stmt = $this->mysqli->prepare("SELECT
       count(id) as total
@@ -51,6 +67,12 @@ class Share {
     return false;
   }
 
+  /**
+   * Fetch all shares grouped by accounts to count share per account
+   * @param previous_upstream int Previous found share accepted by upstream to limit results
+   * @param current_upstream int Current upstream accepted share
+   * @return data array username, valid and invalid shares from account
+   **/
   public function getSharesForAccounts($previous_upstream=0, $current_upstream) {
     $stmt = $this->mysqli->prepare("SELECT
       a.id,
@@ -90,29 +112,41 @@ class Share {
     return false;
   }
 
-  public function moveArchive($previous_upstream=0, $current_upstream,$block_id) {
+  /**
+   * Move accounted shares to archive table, this step is optional
+   * @param previous_upstream int Previous found share accepted by upstream to limit results
+   * @param current_upstream int Current upstream accepted share
+   * @param block_id int Block ID to assign shares to a specific block
+   * @return bool
+   **/
+  public function moveArchive($current_upstream, $block_id, $previous_upstream=0) {
     $archive_stmt = $this->mysqli->prepare("INSERT INTO $this->tableArchive (share_id, username, our_result, upstream_result, block_id, time)
       SELECT id, username, our_result, upstream_result, ?, time
       FROM $this->table
       WHERE id BETWEEN ? AND ?");
-    $delete_stmt = $this->mysqli->prepare("DELETE FROM $this->table WHERE id BETWEEN ? AND ?");
-    if ($this->checkStmt($archive_stmt) && $this->checkStmt($delete_stmt)) {
-      $archive_stmt->bind_param('iii', $block_id, $previous_upstream, $current_upstream);
-      $archive_stmt->execute();
-      $delete_stmt->bind_param('ii', $previous_upstream, $current_upstream);
-      $delete_stmt->execute();
-      $delete_stmt->close();
+    if ($this->checkStmt($archive_stmt) && $archive_stmt->bind_param('iii', $block_id, $previous_upstream, $current_upstream) && $archive_stmt->execute()) {
       $archive_stmt->close();
       return true;
     }
+    // Catchall
     return false;
   }
 
+  public function deleteAccountedShares($current_upstream, $previous_upstream=0) {
+    $stmt = $this->mysqli->prepare("DELETE FROM $this->table WHERE id BETWEEN ? AND ?");
+    if ($this->checkStmt($stmt) && $stmt->bind_param('ii', $previous_upstream, $current_upstream) && $stmt->execute())
+      return true;
+    // Catchall
+    return false;
+  }
+  /**
+   * Set/get last found share accepted by upstream: id and accounts
+   **/
   public function setLastUpstreamId() {
     $this->iLastUpstreamId = @$this->oUpstream->id ? $this->oUpstream->id : 0;
   }
   public function getLastUpstreamId() {
-    return @$this->iLastUpstreamId;
+    return @$this->iLastUpstreamId ? @$this->iLastUpstreamId : 0;
   }
   public function getUpstreamFinder() {
     return @$this->oUpstream->account;
@@ -120,27 +154,33 @@ class Share {
   public function getUpstreamId() {
     return @$this->oUpstream->id;
   }
-  public function setUpstream($time='') {
-    $stmt = $this->mysqli->prepare("SELECT
+  /**
+   * Find upstream accepted share that should be valid for a specific block
+   * Assumptions:
+   *  * Shares are matching blocks in ASC order
+   *  * We can skip all upstream shares of previously found ones used in a block
+   * @param last int Skips all shares up to last to find new share
+   * @return bool
+   **/
+  public function setUpstream($last=0) {
+    $stmt = $this->mysqli->prepare("
+      SELECT
       SUBSTRING_INDEX( `username` , '.', 1 ) AS account, id
       FROM $this->table
       WHERE upstream_result = 'Y'
-      AND UNIX_TIMESTAMP(time) BETWEEN ? AND (? + 1)
+      AND id > ?
       ORDER BY id ASC LIMIT 1");
-    if ($this->checkStmt($stmt)) {
-      $stmt->bind_param('ii', $time, $time);
-      $stmt->execute();
-      if (! $result = $stmt->get_result()) {
-        $this->setErrorMessage("No result returned from query");
-        $stmt->close();
-      }
-      $stmt->close();
+    if ($this->checkStmt($stmt) && $stmt->bind_param('i', $last) && $stmt->execute() && $result = $stmt->get_result()) {
       $this->oUpstream = $result->fetch_object();
       return true;
     }
+    // Catchall
     return false;
   }
 
+  /**
+   * Helper function
+   **/
   private function checkStmt($bState) {
     if ($bState ===! true) {
       $this->debug->append("Failed to prepare statement: " . $this->mysqli->error);

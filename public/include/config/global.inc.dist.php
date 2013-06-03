@@ -21,12 +21,20 @@ define('DEBUG', 0);
 define('SALT', 'PLEASEMAKEMESOMETHINGRANDOM');
 
 $config = array(
+  'price' => array(
+    'url' =>     'https://btc-e.com/api/2',
+    'target' =>  '/ltc_usd/ticker'
+  ),
   'website' => array(
     'name' => 'The Pool',
     'slogan' => 'Resistance is futile',
+    'email' => 'test@example.com',  // Mail address used for notifications
   ),
+  'archive_shares' => true,         // Store accounted shares in archive table?
+  'blockexplorer' => 'http://explorer.litecoin.net/search?q=',        // URL for block searches, prefixed to each block number
+  'chaininfo' => 'http://allchains.info',                             // Link to Allchains for Difficulty information
   'fees' => 0,
-  'difficulty' => '31',         // Target difficulty for this pool as set in pushpoold json
+  'difficulty' => '20',         // Target difficulty for this pool as set in pushpoold json
   'reward' => '50',             // Reward for finding blocks, fixed value but changes someday
   'confirmations' => '120',     // Confirmations per block needed to credit transactions
   'memcache' => array(

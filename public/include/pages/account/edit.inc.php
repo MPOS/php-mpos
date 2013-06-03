@@ -37,7 +37,7 @@ if ( ! $user->checkPin($_SESSION['USERDATA']['id'], $_POST['authPin']) && $_POST
         if ($continue == true && $transaction->addTransaction($_SESSION['USERDATA']['id'], $dBalance, 'Debit_MP', NULL, $sCoinAddress))
           $_SESSION['POPUP'][] = array('CONTENT' => 'Transaction completed', 'TYPE' => 'success');
       } else {
-        $_SESSION['POPUP'][] = array('CONTENT' => 'Unable to connect to pushpool service', 'TYPE' => 'errormsg');
+        $_SESSION['POPUP'][] = array('CONTENT' => 'Unable to connect to litecoind RPC service', 'TYPE' => 'errormsg');
       }
     } else {
       $_SESSION['POPUP'][] = array('CONTENT' => 'Insufficient funds, you need more than 0.1 LTC to cover transaction fees', 'TYPE' => 'errormsg');
@@ -61,6 +61,7 @@ if ( ! $user->checkPin($_SESSION['USERDATA']['id'], $_POST['authPin']) && $_POST
     break;
   }
 }
+
 // Tempalte specifics
 $smarty->assign("CONTENT", "default.tpl");
 ?>
