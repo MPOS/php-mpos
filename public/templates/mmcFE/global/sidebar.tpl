@@ -5,11 +5,11 @@
                 <h1>Dashboard</h1>
               </div>
               <div class="block_content" style="padding-top:10px;">
-                <table class="sidebar">
-                    <tr><td colspan="2"><b>Your Current Hashrate</b></td></tr>
+                <table class="sidebar" style="width: 196px">
+                    <tr><td colspan="2"><b>Your Hashrate</b></td></tr>
                     <tr><td colspan="2" class="right">{$GLOBAL.userdata.hashrate|number_format} KH/s</td></tr>
                     <tr>
-                      <td colspan="2"><b><u>Unpaid Shares</u></b> <span id='tt'><img src='{$PATH}/images/questionmark.png' height='15px' width='15px' title='Submitted shares between the last 120 confirms block until now.'></span><td>
+                      <td colspan="2"><b><u>Unpaid Shares</u></b> <span id='tt'><img src='{$PATH}/images/questionmark.png' height='15px' width='15px' title='Submitted shares between the last 120 confirms block until now.'></span></td>
                     </tr>
                     <tr>
                       <td><b>Your Valid<b></td>
