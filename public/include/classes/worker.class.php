@@ -6,7 +6,7 @@ if (!defined('SECURITY'))
 
 class Worker {
   private $sError = '';
-  private $table = 'workers';
+  private $table = 'pool_worker';
 
   public function __construct($debug, $mysqli, $user, $share, $config) {
     $this->debug = $debug;

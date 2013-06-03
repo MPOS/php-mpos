@@ -161,10 +161,10 @@ CREATE TABLE IF NOT EXISTS `transactions` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `workers`
+-- Table structure for table `pool_worker`
 --
 
-CREATE TABLE IF NOT EXISTS `workers` (
+CREATE TABLE IF NOT EXISTS `pool_worker` (
   `id` int(255) NOT NULL AUTO_INCREMENT,
   `account_id` int(255) NOT NULL,
   `username` char(50) DEFAULT NULL,
