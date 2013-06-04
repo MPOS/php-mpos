@@ -58,12 +58,12 @@
       <td class="center">{$USERS[user].id}</td>
       <td>{$USERS[user].username}</td>
       <td>{$USERS[user].email}</td>
-      <td class="right">{$USERS[user].hashrate}</td>
-      <td class="right">{$USERS[user].shares.valid}</td>
-      <td class="right">{$USERS[user].shares.invalid}</td>
-      <td class="right">{$USERS[user].balance}</td>
-      <td class="right">{$USERS[user].payout.est_donation}</td>
-      <td class="right">{$USERS[user].payout.est_payout}</td>
+      <td class="right">{$USERS[user].hashrate|number_format}</td>
+      <td class="right">{$USERS[user].shares.valid|number_format}</td>
+      <td class="right">{$USERS[user].shares.invalid|number_format}</td>
+      <td class="right">{$USERS[user].balance|number_format:"8"}</td>
+      <td class="right">{$USERS[user].payout.est_donation|number_format:"8"}</td>
+      <td class="right">{$USERS[user].payout.est_payout|number_format:"8"}</td>
       <td class="center">
         <img src="{$PATH}/images/{if $USERS[user].admin}success{else}error{/if}.gif" />
       </td>
