@@ -16,6 +16,7 @@ if ( ! $user->checkPin($_SESSION['USERDATA']['id'], $_POST['authPin']) && $_POST
     $continue = true;
     $dBalance = $transaction->getBalance($_SESSION['USERDATA']['id']);
     $sCoinAddress = $user->getCoinAddress($_SESSION['USERDATA']['id']);
+    // Ensure we can cover the potential transaction fee of 0.1 LTC with the balance
     if ($dBalance > 0.1) {
       if ($bitcoin->can_connect() === true) {
         try {
@@ -25,9 +26,9 @@ if ( ! $user->checkPin($_SESSION['USERDATA']['id'], $_POST['authPin']) && $_POST
           $continue = false;
         }
         if ($continue == true) {
-          // Remove the transfer fee and send to address
+          // Send balance to address, mind 0.1 fee for transaction!
           try {
-            $bitcoin->sendtoaddress($sCoinAddress, $dBalance - 0.1);
+            $bitcoin->sendtoaddress($sCoinAddress, $dBalance);
           } catch (BitcoinClientException $e) {
             $_SESSION['POPUP'][] = array('CONTENT' => 'Failed to send LTC, please contact site support immidiately', 'TYPE' => 'errormsg');
             $continue = false;
