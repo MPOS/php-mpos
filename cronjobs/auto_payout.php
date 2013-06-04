@@ -38,7 +38,7 @@ if (! empty($users)) {
     $dBalance = $transaction->getBalance($aUserData['id']);
     verbose($aUserData['id'] . "\t" . $aUserData['username'] . "\t" . $dBalance . "\t" . $aUserData['ap_threshold'] . "\t\t" . $aUserData['coin_address'] . "\t");
 
-    // Only run if balance meets threshold and can pay the transaction fee
+    // Only run if balance meets threshold and can pay the potential transaction fee
     if ($dBalance > $aUserData['ap_threshold'] && $dBalance > 0.1) {
       // Validate address against RPC
       try {
@@ -48,9 +48,9 @@ if (! empty($users)) {
         continue;
       }
 
-      // Send balance - 0.1 Fee to address
+      // Send balance, fees are reduced later
       try {
-        $bitcoin->sendtoaddress($aUserData['coin_address'], $dBalance - 0.1);
+        $bitcoin->sendtoaddress($aUserData['coin_address'], $dBalance);
       } catch (BitcoinClientException $e) {
         verbose("SEND FAILED\n");
         continue;
