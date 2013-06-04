@@ -27,6 +27,7 @@
 </center>
 <table width="100%" class="pagesort">
   <colgroup>
+    <col style="width: 25px">
     <col style="width: 120px">
     <col style="width: 120px">
     <col style="width: 60px">
@@ -39,6 +40,7 @@
   </colgroup>
   <thead>
     <tr>
+      <th class="center">ID</th>
       <th>Username</th>
       <th>E-Mail</th>
       <th class="right">Hashrate</th>
@@ -53,6 +55,7 @@
   <tbody>
 {section name=user loop=$USERS|default}
     <tr>
+      <td class="center">{$USERS[user].id}</td>
       <td>{$USERS[user].username}</td>
       <td>{$USERS[user].email}</td>
       <td class="right">{$USERS[user].hashrate}</td>
@@ -69,6 +72,7 @@
   </tbody>
   <tfoot>
     <tr>
+      <th class="center">ID</th>
       <th>Username</th>
       <th>E-Mail</th>
       <th class="right">Hashrate</th>
