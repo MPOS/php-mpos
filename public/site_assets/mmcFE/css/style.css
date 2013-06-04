@@ -465,6 +465,12 @@ a:hover {
 .block table tr th.right{
   text-align: right;
 }
+.block table tr td.center{
+  text-align: center;
+}
+.block table tr th.center{
+  text-align: center;
+}
 
 
 .block table tr td.delete a { color: #666; }

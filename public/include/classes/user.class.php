@@ -59,6 +59,18 @@ class User {
   }
 
   /**
+   * Fetch all users for administrative tasks
+   * @param none
+   * @return data array All users with db columns as array fields
+   **/
+  public function getUsers($filter='%') {
+    $stmt = $this->mysqli->prepare("SELECT * FROM " . $this->getTableName() . " WHERE username LIKE ?");
+    if ($this->checkStmt($stmt) && $stmt->bind_param('s', $filter) && $stmt->execute() && $result = $stmt->get_result()) {
+      return $result->fetch_all(MYSQLI_ASSOC);
+    }
+  }
+
+  /**
    * Check user login
    * @param username string Username
    * @param password string Password

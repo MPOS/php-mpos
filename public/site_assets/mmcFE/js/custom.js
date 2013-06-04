@@ -66,6 +66,10 @@ $(function () {
         widgets: ['zebra']
     });
 
+    $("table.pagesort")
+      .tablesorter({ widgets: ['zebra'] })
+      .tablesorterPager({ positionFixed: false, container: $("#pager") });
+
     $('.block table tr th.header').css('cursor', 'pointer');
 
     // Check / uncheck all checkboxes

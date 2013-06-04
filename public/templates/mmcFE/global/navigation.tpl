@@ -10,7 +10,7 @@
               </ul>
             </li>
             {/if}
-            {if $smarty.session.AUTHENTICATED|default:"0" == 1 && $GLOBAL.userdata.admin == 1}<li><a href="#">Admin Panel</a></li>{/if}
+            {if $smarty.session.AUTHENTICATED|default:"0" == 1 && $GLOBAL.userdata.admin == 1}
             <li><a href="{$smarty.server.PHP_SELF}?page=admin">Admin Panel</a>
               <ul>
                 <li><a href="{$smarty.server.PHP_SELF}?page=admin&action=user">User Info</a></li>
