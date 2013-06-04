@@ -32,7 +32,7 @@ if (empty($aAllBlocks)) {
 $count = 0;
 foreach ($aAllBlocks as $iIndex => $aBlock) {
   if (!$aBlock['accounted']) {
-    $iPreviousShareId = $aAllBlocks[$iIndex - 1]['share_id'] ? $aAllBlocks[$iIndex - 1]['share_id'] : 0;
+    $iPreviousShareId = @$aAllBlocks[$iIndex - 1]['share_id'] ? $aAllBlocks[$iIndex - 1]['share_id'] : 0;
     $iCurrentUpstreamId = $aBlock['share_id'];
     $aAccountShares = $share->getSharesForAccounts($iPreviousShareId, $aBlock['share_id']);
     $iRoundShares = $share->getRoundShares($iPreviousShareId, $aBlock['share_id']);
