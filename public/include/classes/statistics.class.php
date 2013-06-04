@@ -54,7 +54,7 @@ class Statistics {
     $stmt = $this->mysqli->prepare("
       SELECT b.*, a.username as finder
       FROM " . $this->block->getTableName() . " AS b
-      LEFT JOIN accounts AS a
+      LEFT JOIN " . $this->user->getTableName() . " AS a
       ON b.account_id = a.id
       ORDER BY height DESC LIMIT ?");
     if ($this->checkStmt($stmt) && $stmt->bind_param("i", $limit) && $stmt->execute() && $result = $stmt->get_result())
@@ -173,6 +173,34 @@ class Statistics {
     // Catchall
     $this->debug->append("Unable to fetch user round shares: " . $this->mysqli->error);
     return false;
+  }
+
+  /**
+   * Admin panel specific query
+   * @return data array invlid and valid shares for all accounts
+   **/
+  public function getAllUserStats($filter='%') {
+    $this->debug->append("STA " . __METHOD__, 4);
+    if ($data = $this->memcache->get(__FUNCTION__ . $filter)) return $data;
+    $stmt = $this->mysqli->prepare("
+      SELECT
+        a.id AS id,
+        a.username AS username,
+        a.donate_percent AS donate_percent,
+        a.email AS email,
+        COUNT(s.id) AS shares,
+        ROUND(COUNT(s.id) * POW(2," . $this->config['difficulty'] . ") / 600 / 1000,2) AS hashrate
+      FROM " . $this->user->getTableName() . " AS a
+      LEFT JOIN " . $this->share->getTableName() . " AS s
+      ON a.username = SUBSTRING_INDEX( s.username, '.', 1 )
+      WHERE
+      a.username LIKE ?
+      GROUP BY username
+      ORDER BY username
+        ");
+    if ($this->checkStmt($stmt) && $stmt->bind_param('s', $filter) && $stmt->execute() && $result = $stmt->get_result()) {
+      return $this->memcache->setCache(__FUNCTION__ . $filter, $result->fetch_all(MYSQLI_ASSOC));
+    }
   }
 
   /**

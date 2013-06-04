@@ -26,29 +26,16 @@
   </div>
 </center>
 <table width="100%" class="pagesort">
-  <colgroup>
-    <col style="width: 25px">
-    <col style="width: 120px">
-    <col style="width: 120px">
-    <col style="width: 60px">
-    <col style="width: 60px">
-    <col style="width: 60px">
-    <col style="width: 60px">
-    <col style="width: 60px">
-    <col style="width: 60px">
-    <col style="width: 60px">
-  </colgroup>
   <thead>
     <tr>
       <th class="center">ID</th>
       <th>Username</th>
       <th>E-Mail</th>
       <th class="right">Hashrate&nbsp;&nbsp;</th>
-      <th class="right">Valid&nbsp;&nbsp;</th>
-      <th class="right">Invalid&nbsp;&nbsp;</th>
-      <th class="right">Balance&nbsp;&nbsp;&nbsp;</th>
+      <th class="right">Shares&nbsp;&nbsp;</th>
       <th class="right">Est. Donation&nbsp;&nbsp;</th>
       <th class="right">Est. Payout&nbsp;&nbsp;&nbsp;</th>
+      <th class="right">Balance&nbsp;&nbsp;&nbsp;</th>
       <th class="center">Admin</th>
     </tr>
   </thead>
@@ -59,18 +46,17 @@
       <td>{$USERS[user].username}</td>
       <td>{$USERS[user].email}</td>
       <td class="right">{$USERS[user].hashrate|number_format}</td>
-      <td class="right">{$USERS[user].shares.valid|number_format}</td>
-      <td class="right">{$USERS[user].shares.invalid|number_format}</td>
-      <td class="right">{$USERS[user].balance|number_format:"8"}</td>
+      <td class="right">{$USERS[user].shares|number_format}</td>
       <td class="right">{$USERS[user].payout.est_donation|number_format:"8"}</td>
       <td class="right">{$USERS[user].payout.est_payout|number_format:"8"}</td>
+      <td class="right">{$USERS[user].balance|number_format:"8"}</td>
       <td class="center">
         <img src="{$PATH}/images/{if $USERS[user].admin}success{else}error{/if}.gif" />
       </td>
     </tr>
 {sectionelse}
   <tr>
-    <td colspan="10"></td>
+    <td colspan="9"></td>
   </tr>
 {/section}
   </tbody>
@@ -80,10 +66,10 @@
       <th>Username</th>
       <th>E-Mail</th>
       <th class="right">Hashrate</th>
-      <th colspan="2" class="center">Shares</th>
-      <th class="right">Balance</th>
+      <th class="center">Shares</th>
       <th class="right">Est. Donation</th>
       <th class="right">Est. Payout</th>
+      <th class="right">Balance</th>
       <th class="center">Admin</th>
     </tr>
   </tfoot>
