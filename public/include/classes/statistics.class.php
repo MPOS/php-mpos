@@ -185,6 +185,7 @@ class Statistics {
     $stmt = $this->mysqli->prepare("
       SELECT
         a.id AS id,
+        a.admin as admin,
         a.username AS username,
         a.donate_percent AS donate_percent,
         a.email AS email,
