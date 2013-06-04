@@ -71,6 +71,11 @@ The following feature have been implemented so far:
 * Manual payout with 0.1 LTC fee
 * Auto payout with 0.1 LTC fee
 * Transaction list (confirmed and unconfirmed)
+* Admin Panel
+ * User Listing including statistics
+ * Wallet information
+ * (Planned) News Posts
+ * (Planned) Pool Donations
 
 Installation
 ============
