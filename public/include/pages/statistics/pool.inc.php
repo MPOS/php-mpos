@@ -53,6 +53,6 @@ $smarty->assign("REWARD", $config['reward']);
 if ($_SESSION['AUTHENTICATED']) {
   $smarty->assign("CONTENT", "authenticated.tpl");
 } else {
-  $smarty->assign("CONTENT", "default.tpl");
+  $smarty->assign("CONTENT", "../default.tpl");
 }
 ?>
