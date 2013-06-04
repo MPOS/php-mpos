@@ -45,8 +45,8 @@
       <td class="center">{$USERS[user].id}</td>
       <td>{$USERS[user].username}</td>
       <td>{$USERS[user].email}</td>
-      <td class="right">{$USERS[user].hashrate|number_format}</td>
-      <td class="right">{$USERS[user].shares|number_format}</td>
+      <td class="right">{$USERS[user].hashrate / 1024}</td>
+      <td class="right">{$USERS[user].shares}</td>
       <td class="right">{$USERS[user].payout.est_donation|number_format:"8"}</td>
       <td class="right">{$USERS[user].payout.est_payout|number_format:"8"}</td>
       <td class="right">{$USERS[user].balance|number_format:"8"}</td>
