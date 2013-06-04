@@ -43,12 +43,12 @@
       <th class="center">ID</th>
       <th>Username</th>
       <th>E-Mail</th>
-      <th class="right">Hashrate</th>
-      <th class="right">Valid</th>
-      <th class="right">Invalid</th>
-      <th class="right">Balance</th>
-      <th class="right">Est. Donation</th>
-      <th class="right">Est. Payout</th>
+      <th class="right">Hashrate&nbsp;&nbsp;</th>
+      <th class="right">Valid&nbsp;&nbsp;</th>
+      <th class="right">Invalid&nbsp;&nbsp;</th>
+      <th class="right">Balance&nbsp;&nbsp;&nbsp;</th>
+      <th class="right">Est. Donation&nbsp;&nbsp;</th>
+      <th class="right">Est. Payout&nbsp;&nbsp;&nbsp;</th>
       <th class="center">Admin</th>
     </tr>
   </thead>
