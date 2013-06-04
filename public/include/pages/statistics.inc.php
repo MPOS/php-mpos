@@ -5,14 +5,14 @@ if (!defined('SECURITY'))
     die('Hacking attempt');
 
 if ($bitcoin->can_connect() === true){
-  $iDifficulty = $bitcoin->query('getdifficulty');
+  $dDifficulty = $bitcoin->query('getdifficulty');
   $iBlock = $bitcoin->query('getblockcount');
 } else {
-  $iDifficulty = 1;
+  $dDifficulty = 1;
   $iBlock = 0;
   $_SESSION['POPUP'][] = array('CONTENT' => 'Unable to connect to litecoind RPC service: ' . $bitcoin->can_connect(), 'TYPE' => 'errormsg');
 }
 
 $smarty->assign("CURRENTBLOCK", $iBlock);
-$smarty->assign("CURRENTDIFFICULTY", $iDifficulty);
-$smarty->assign("CONTENT", "pool/default.tpl");
+$smarty->assign("DIFFICULTY", $dDifficulty);
+$smarty->assign("CONTENT", "default.tpl");
