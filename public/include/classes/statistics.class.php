@@ -263,6 +263,7 @@ class Statistics {
             COUNT(id) AS shares,
             SUBSTRING_INDEX( username, '.', 1 ) AS account
         FROM " . $this->share->getTableName() . "
+        WHERE our_result = 'Y'
         GROUP BY account
         ORDER BY shares DESC
         LIMIT ?");
@@ -279,6 +280,7 @@ class Statistics {
           SUBSTRING_INDEX( username, '.', 1 ) AS account
         FROM " . $this->share->getTableName() . "
         WHERE time > DATE_SUB(now(), INTERVAL 10 MINUTE)
+        AND our_result = 'Y'
         GROUP BY account
         ORDER BY hashrate DESC LIMIT ?");
       if ($this->checkStmt($stmt) && $stmt->bind_param("i", $limit) && $stmt->execute() && $result = $stmt->get_result())
