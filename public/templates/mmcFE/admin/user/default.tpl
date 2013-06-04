@@ -68,6 +68,10 @@
         <img src="{$PATH}/images/{if $USERS[user].admin}success{else}error{/if}.gif" />
       </td>
     </tr>
+{sectionelse}
+  <tr>
+    <td colspan="10"></td>
+  </tr>
 {/section}
   </tbody>
   <tfoot>
