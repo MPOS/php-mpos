@@ -130,6 +130,7 @@ class Transaction {
 
   /**
    * Get total balance for all users locked in wallet
+   * This includes any outstanding unconfirmed transactions!
    * @param none
    * @return data double Amount locked for users
    **/
@@ -141,9 +142,7 @@ class Transaction {
       (
         SELECT sum(t.amount) AS credit
         FROM $this->table AS t
-        LEFT JOIN " . $this->block->getTableName() . " AS b ON t.block_id = b.id
         WHERE t.type = 'Credit'
-        AND b.confirmations >= ?
       ) AS t1,
       (
         SELECT sum(t.amount) AS debit
@@ -152,12 +151,10 @@ class Transaction {
       ) AS t2,
       (
         SELECT sum(t.amount) AS other
-        FROM transactions AS t
-        LEFT JOIN " . $this->block->getTableName() . " AS b ON t.block_id = b.id
+        FROM " . $this->table . " AS t
         WHERE t.type IN ('Donation','Fee')
-        AND b.confirmations >= ?
       ) AS t3");
-    if ($this->checkStmt($stmt) && $stmt->bind_param('ii', $this->config['confirmations'], $this->config['confirmations']) && $stmt->execute() && $stmt->bind_result($dBalance) && $stmt->fetch())
+    if ($this->checkStmt($stmt) && $stmt->execute() && $stmt->bind_result($dBalance) && $stmt->fetch())
       return $dBalance;
     // Catchall
     $this->setErrorMessage('Unable to find locked credits for all users');
