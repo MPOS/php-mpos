@@ -241,10 +241,27 @@ class User {
   public function updateAccount($userID, $address, $threshold, $donate) {
     $this->debug->append("STA " . __METHOD__, 4);
     $bUser = false;
-    $threshold = min(250, max(0, floatval($threshold)));
-    if ($threshold < 1) $threshold = 0.0;
+
+    // number validation checks
+    if ($threshold < $this->config['ap_threshold']['min'] && $threshold != 0) {
+      $this->setErrorMessage('Threshold below configured minimum of ' . $this->config['ap_threshold']['min']);
+      return false;
+    } else if ($threshold > $this->config['ap_threshold']['max']) {
+      $this->setErrorMessage('Threshold above configured maximum of ' . $this->config['ap_threshold']['max']);
+      return false;
+    }
+    if ($donate < 0) {
+      $this->setErrorMessage('Donation below allowed 0% limit');
+      return false;
+    } else if ($donate > 100) {
+      $this->setErrorMessage('Donation above allowed 100% limit');
+      return false;
+    }
+    // Number sanitizer, just in case we fall through above
+    $threshold = min($this->config['ap_threshold']['max'], max(0, floatval($threshold)));
     $donate = min(100, max(0, floatval($donate)));
 
+    // We passed all validation checks so update the account
     $stmt = $this->mysqli->prepare("UPDATE $this->table SET coin_address = ?, ap_threshold = ?, donate_percent = ? WHERE id = ?");
     $stmt->bind_param('sddi', $address, $threshold, $donate, $userID);
     $stmt->execute();
