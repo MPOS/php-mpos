@@ -25,7 +25,13 @@ $aGlobal = array(
   'reward' => $config['reward'],
   'price' => $setting->getValue('price'),
   'blockexplorer' => $config['blockexplorer'],
-  'chaininfo' => $config['chaininfo']
+  'chaininfo' => $config['chaininfo'],
+  'config' => array(
+    'ap_threshold' => array(
+      'min' => $config['ap_threshold']['min'],
+      'max' => $config['ap_threshold']['max']
+    )
+  )
 );
 
 // We don't want these session infos cached
