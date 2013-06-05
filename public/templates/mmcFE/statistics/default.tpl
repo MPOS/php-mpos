@@ -19,4 +19,5 @@
   </tr>
   </tbody>
 </table>
+<li>These stats are also available in JSON format <a href="{$smarty.server.PHP_SELF}?page=api&action=public" target="_api">HERE</a></li>
 {include file="global/block_footer.tpl"}
