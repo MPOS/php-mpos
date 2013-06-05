@@ -25,6 +25,10 @@ $config = array(
     'url' =>     'https://btc-e.com/api/2',
     'target' =>  '/ltc_usd/ticker'
   ),
+  'ap_threshold' => array(
+    'min' => 1,
+    'max' => 250
+  ),
   'website' => array(
     'name' => 'The Pool',
     'slogan' => 'Resistance is futile',
