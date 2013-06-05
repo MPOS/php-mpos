@@ -302,22 +302,22 @@ class Statistics {
     if ($data = $this->memcache->get(__FUNCTION__ . $account_id)) return $data;
     $stmt = $this->mysqli->prepare("
       SELECT
-      ROUND(COUNT(s.id) * POW(2, 12)/600/1000) AS hashrate,
+      	ROUND(COUNT(s.id) * POW(2, " . $this->config['difficulty'] . ")/3600/1000) AS hashrate,
         HOUR(s.time) AS hour
-        FROM " . $this->share->getTableName() . " AS s, accounts AS a
+      FROM " . $this->share->getTableName() . " AS s, accounts AS a
         WHERE time < NOW() - INTERVAL 1 HOUR AND time > NOW() - INTERVAL 25 HOUR
         AND a.username = SUBSTRING_INDEX( s.username, '.', 1 )
         AND a.id = ?
-        GROUP BY HOUR(time)
-        UNION ALL
-        SELECT
-        ROUND(COUNT(s.id) * POW(2, 12)/600/1000) AS hashrate,
-          HOUR(s.time) AS hour
-          FROM " . $this->share->getArchiveTableName() . " AS s, accounts AS a
-          WHERE time < NOW() - INTERVAL 1 HOUR AND time > NOW() - INTERVAL 25 HOUR
-          AND a.username = SUBSTRING_INDEX( s.username, '.', 1 )
-          AND a.id = ?
-          GROUP BY HOUR(time)");
+      GROUP BY HOUR(time)
+      UNION ALL
+      SELECT
+        ROUND(COUNT(s.id) * POW(2, " . $this->config['difficulty'] . ")/3600/1000) AS hashrate,
+        HOUR(s.time) AS hour
+      FROM " . $this->share->getArchiveTableName() . " AS s, accounts AS a
+      WHERE time < NOW() - INTERVAL 1 HOUR AND time > NOW() - INTERVAL 25 HOUR
+      AND a.username = SUBSTRING_INDEX( s.username, '.', 1 )
+      AND a.id = ?
+      GROUP BY HOUR(time)");
     if ($this->checkStmt($stmt) && $stmt->bind_param("ii", $account_id, $account_id) && $stmt->execute() && $result = $stmt->get_result())
       return $this->memcache->setCache(__FUNCTION__ . $account_id, $result->fetch_all(MYSQLI_ASSOC), 3600);
     // Catchall

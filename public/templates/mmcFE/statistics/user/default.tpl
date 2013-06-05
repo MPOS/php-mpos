@@ -14,7 +14,7 @@
       <tr>
         <th scope="row">{$GLOBAL.USERDATA.username}</th>
 {section hashrate $YOURHASHRATES}
-        <td>{$YOURHASHRATES[hashrate].hashrate|number_format}</td>
+        <td>{$YOURHASHRATES[hashrate].hashrate}</td>
 {/section}
       </tr>
     </tbody>
