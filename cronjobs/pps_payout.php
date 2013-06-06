@@ -44,7 +44,7 @@ verbose("ID\tUsername\tInvalid\tValid\t\tPPS Value\t\t\tPayout\t\tDonation\tFee\
 
 foreach ($aAccountShares as $aData) {
   // Take our valid shares and multiply by per share value
-  $aData['payout'] = $aData['valid'] * $pps_value;
+  $aData['payout'] = number_format(round($aData['valid'] * $pps_value, 8));
 
   // Defaults
   $aData['fee' ] = 0;
