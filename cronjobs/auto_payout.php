@@ -27,6 +27,9 @@ if ($bitcoin->can_connect() !== true) {
   exit(1);
 }
 
+// Mark this job as active
+$setting->setValue('auto_payout_active', 1);
+
 // Fetch all users with setup AP
 $users = $user->getAllAutoPayout();
 
@@ -69,3 +72,8 @@ if (! empty($users)) {
 } else {
   verbose("No user has configured their AP > 0\n");
 }
+
+// Mark this job as inactive
+$setting->setValue('auto_payout_active', 0);
+
+?>

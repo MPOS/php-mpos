@@ -28,7 +28,12 @@ if ( ! $user->checkPin($_SESSION['USERDATA']['id'], $_POST['authPin']) && $_POST
         if ($continue == true) {
           // Send balance to address, mind 0.1 fee for transaction!
           try {
-            $bitcoin->sendtoaddress($sCoinAddress, $dBalance);
+            if ($setting->getValue('auto_payout_active') == 0) {
+              $bitcoin->sendtoaddress($sCoinAddress, $dBalance);
+            } else {
+              $_SESSION['POPUP'][] = array('CONTENT' => 'Auto-payout active, please contact site support immidiately to revoke invalid transactions.', 'TYPE' => 'errormsg');
+              $continue = false;
+            }
           } catch (BitcoinClientException $e) {
             $_SESSION['POPUP'][] = array('CONTENT' => 'Failed to send LTC, please contact site support immidiately', 'TYPE' => 'errormsg');
             $continue = false;
