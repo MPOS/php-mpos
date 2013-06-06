@@ -1,23 +1,33 @@
 {include file="global/block_header.tpl" BLOCK_HEADER="Your Average Hourly Hash Rate" BUTTONS=array(mine,pool,both)}
+{if is_array($YOURHASHRATES)}
 <div class="block_content tab_content" id="mine" style="padding-left:30px;">
   <table class="stats" rel="area" cellpadding="0">
     <caption>Your Hashrate&nbsp;</caption>
     <thead>
       <tr>
         <td></td>
-{section hashrate $YOURHASHRATES}
-        <th scope="col">{$YOURHASHRATES[hashrate].hour}</th>
-{/section}
+{for $i=date('G', time() + 60 * 60) to 23}
+        <th scope="col">{$i}</th>
+{/for}
+{for $i=0 to date('G')}
+        <th scope="col">{$i}</th>
+{/for}
       </tr>
     </thead>
     <tbody>
       <tr>
         <th scope="row">{$GLOBAL.USERDATA.username}</th>
-{section hashrate $YOURHASHRATES}
-        <td>{$YOURHASHRATES[hashrate].hashrate}</td>
-{/section}
+{for $i=date('G', time() + 60 * 60) to 23}
+        <td>{$YOURHASHRATES.$i|default:"0"}</td>
+{/for}
+{for $i=0 to date('G')}
+        <td>{$YOURHASHRATES.$i|default:"0"}</td>
+{/for}
       </tr>
     </tbody>
   </table>
 </div>
+{else}
+<p><li>No shares available to start calculations</li></p>
+{/if}
 {include file="global/block_footer.tpl"}

@@ -8,7 +8,6 @@ $aHourlyHashRates = $statistics->getHourlyHashrateByAccount($_SESSION['USERDATA'
 
 // Propagate content our template
 $smarty->assign("YOURHASHRATES", $aHourlyHashRates);
-$smarty->assign("DIFFICULTY", $dDifficulty);
 
 if ($_SESSION['AUTHENTICATED']) {
   $smarty->assign("CONTENT", "default.tpl");

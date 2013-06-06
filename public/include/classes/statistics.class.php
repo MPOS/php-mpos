@@ -311,8 +311,12 @@ class Statistics {
         AND a.id = ?
       GROUP BY HOUR(time)
     ");
-    if ($this->checkStmt($stmt) && $stmt->bind_param("i", $account_id) && $stmt->execute() && $result = $stmt->get_result())
-      return $this->memcache->setCache(__FUNCTION__ . $account_id, $result->fetch_all(MYSQLI_ASSOC), 3600);
+    if ($this->checkStmt($stmt) && $stmt->bind_param("i", $account_id) && $stmt->execute() && $result = $stmt->get_result()) {
+      while ($row = $result->fetch_assoc()) {
+        $aData[$row['hour']] = $row['hashrate'];
+      }
+      return $this->memcache->setCache(__FUNCTION__ . $account_id, $aData, 3600);
+    }
     // Catchall
     $this->debug->append("Failed to fetch hourly hashrate: " . $this->mysqli->error);
     return false;
