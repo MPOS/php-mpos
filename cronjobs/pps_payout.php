@@ -40,7 +40,7 @@ $iLastShareId = $share->getLastInsertedShareId();
 // Check for all new shares, we start one higher as our last accounted share to avoid duplicates
 $aAccountShares = $share->getSharesForAccounts($iPreviousShareId + 1, $iLastShareId);
 
-verbose("ID\tUsername\tInvalid\tValid\t\tPPS Value\t\t\tPayout\t\tDonation\tFee\t\tStatus\n");
+verbose("ID\tUsername\tInvalid\tValid\t\tPPS Value\t\tPayout\t\tDonation\tFee\t\tStatus\n");
 
 foreach ($aAccountShares as $aData) {
   // Take our valid shares and multiply by per share value
