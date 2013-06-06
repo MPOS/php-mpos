@@ -66,11 +66,15 @@ if (empty($aTransactions['transactions'])) {
   }
 }
 
+verbose("\n\n");
 // Now with our blocks added we can scan for their upstream shares
 $aAllBlocks = $block->getAllUnaccounted('ASC');
+if (empty($aAllBlocks)) {
+    verbose("No new unaccounted blocks found\n");
+}
 
 // Loop through our unaccounted blocks
-verbose("Block ID\tBlock Height\tShare ID\tFinder\t\t\tStatus\n");
+verbose("Block ID\tBlock Height\tShare ID\tShares\tFinder\t\t\tStatus\n");
 foreach ($aAllBlocks as $iIndex => $aBlock) {
   if (empty($aBlock['share_id'])) {
     // Fetch this blocks upstream ID
@@ -82,16 +86,24 @@ foreach ($aAllBlocks as $iIndex => $aBlock) {
       verbose($share->getError() . "\n");
       continue;
     }
+    // Fetch share information
+    $iPreviousShareId = @$aAllBlocks[$iIndex - 1]['share_id'] ? $aAllBlocks[$iIndex - 1]['share_id'] : 0;
+    $iRoundShares = $share->getRoundShares($iPreviousShareId, $iCurrentUpstreamId);
+
     // Store new information
     $strStatus = "OK";
     if (!$block->setShareId($aBlock['id'], $iCurrentUpstreamId))
       $strStatus = "Share ID Failed";
     if (!$block->setFinder($aBlock['id'], $iAccountId))
       $strStatus = "Finder Failed";
+    if (!$block->setShares($aBlock['id'], $iRoundShares))
+      $strStatus = "Shares Failed";
+
     verbose(
       $aBlock['id'] . "\t\t"
       . $aBlock['height'] . "\t\t"
       . $iCurrentUpstreamId . "\t\t"
+      . $iRoundShares . "\t"
       . "[$iAccountId] " . $user->getUserName($iAccountId) . "\t\t"
       . $strStatus
       . "\n"
