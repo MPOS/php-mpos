@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost
--- Generation Time: May 31, 2013 at 02:31 PM
+-- Generation Time: Jun 06, 2013 at 09:01 PM
 -- Server version: 5.5.31-0ubuntu0.13.04.1
 -- PHP Version: 5.4.9-4ubuntu2
 
@@ -65,7 +65,24 @@ CREATE TABLE IF NOT EXISTS `blocks` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `height` (`height`,`blockhash`),
   KEY `time` (`time`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Discovered blocks persisted from Litecoin Service';
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='Discovered blocks persisted from Litecoin Service';
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `pool_worker`
+--
+
+CREATE TABLE IF NOT EXISTS `pool_worker` (
+  `id` int(255) NOT NULL AUTO_INCREMENT,
+  `account_id` int(255) NOT NULL,
+  `username` char(50) DEFAULT NULL,
+  `password` char(255) DEFAULT NULL,
+  `monitor` tinyint(1) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `username` (`username`),
+  KEY `account_id` (`account_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -100,7 +117,7 @@ CREATE TABLE IF NOT EXISTS `shares` (
   KEY `upstream_result` (`upstream_result`),
   KEY `our_result` (`our_result`),
   KEY `username` (`username`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -147,7 +164,7 @@ CREATE TABLE IF NOT EXISTS `statistics_shares` (
 CREATE TABLE IF NOT EXISTS `transactions` (
   `id` int(255) NOT NULL AUTO_INCREMENT,
   `account_id` int(255) unsigned NOT NULL,
-  `type` enum('Credit','Debit_MP','Debit_AP','Donation','Fee','Orphan_Credit','Orphan_Fee','Orphan_Donation') DEFAULT NULL,
+  `type` enum('Credit','Debit_MP','Debit_AP','Donation','Fee','Orphan_Credit','Orphan_Fee','Orphan_Donation','Credit_PPS','Fee_PPS','Donation_PPS') DEFAULT NULL,
   `coin_address` varchar(255) DEFAULT NULL,
   `amount` double DEFAULT '0',
   `block_id` int(255) DEFAULT NULL,
@@ -156,24 +173,7 @@ CREATE TABLE IF NOT EXISTS `transactions` (
   KEY `block_id` (`block_id`),
   KEY `account_id` (`account_id`),
   KEY `type` (`type`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `pool_worker`
---
-
-CREATE TABLE IF NOT EXISTS `pool_worker` (
-  `id` int(255) NOT NULL AUTO_INCREMENT,
-  `account_id` int(255) NOT NULL,
-  `username` char(50) DEFAULT NULL,
-  `password` char(255) DEFAULT NULL,
-  `hashrate` int(11) DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `username` (`username`),
-  KEY `account_id` (`account_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
