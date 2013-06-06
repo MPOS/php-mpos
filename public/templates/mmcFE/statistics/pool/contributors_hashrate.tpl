@@ -13,11 +13,12 @@
 {assign var=rank value=1}
 {assign var=listed value=0}
 {section contrib $CONTRIBHASHES}
+      {math assign="estday" equation="round(reward / ( diff * pow(2,32) / ( hashrate * 1000 ) / 3600 / 24), 3)" diff=$DIFFICULTY reward=$REWARD hashrate=$CONTRIBHASHES[contrib].hashrate}
       <tr{if $GLOBAL.userdata.username == $CONTRIBHASHES[contrib].account}{assign var=listed value=1} style="background-color:#99EB99;"{else} class="{cycle values="odd,even"}"{/if}>
         <td>{$rank++}</td>
         <td>{$CONTRIBHASHES[contrib].account}</td>
         <td class="right">{$CONTRIBHASHES[contrib].hashrate|number_format}</td>
-        <td class="right">{math equation="round(reward / ( diff * pow(2,32) / ( hashrate * 1000 ) / 3600 / 24), 3)" diff=$DIFFICULTY reward=$REWARD hashrate=$CONTRIBHASHES[contrib].hashrate}</td>
+        <td class="right">{$estday|number_format:"3"}</td>
       </tr>
 {/section}
 {if $listed != 1}
@@ -25,7 +26,7 @@
         <td>n/a</td>
         <td>{$GLOBAL.userdata.username}</td>
         <td class="right">{$GLOBAL.userdata.hashrate}</td>
-        <td class="right">{math equation="round(reward / ( diff * pow(2,32) / ( hashrate * 1000 ) / 3600 / 24), 3)" diff=$DIFFICULTY reward=$REWARD hashrate=$GLOBAL.userdata.hashrate}</td>
+        <td class="right">{$estday|number_format:"3"}</td>
       </tr>
 {/if}
     </tbody>
