@@ -37,20 +37,11 @@ foreach ($aAllBlocks as $iIndex => $aBlock) {
     $aAccountShares = $share->getSharesForAccounts($iPreviousShareId, $aBlock['share_id']);
     $iRoundShares = $share->getRoundShares($iPreviousShareId, $aBlock['share_id']);
 
-    // Table header for block details
-    verbose("ID\tHeight\tTime\t\tShares\tFinder\t\tShare ID\tPrev Share\t\tStatus\n");
-    verbose($aBlock['id'] . "\t" . $aBlock['height'] . "\t" . $aBlock['time'] . "\t" . $iRoundShares . "\t" . $user->getUserName($aBlock['account_id']) . "\t" . $iCurrentUpstreamId . "\t\t" . $iPreviousShareId);
-
     if (empty($aAccountShares)) {
       verbose("\nNo shares found for this block\n\n");
       sleep(2);
       continue;
     }
-    $strStatus = "OK";
-    // Store share information for this block
-    if (!$block->setShares($aBlock['id'], $iRoundShares))
-      $strStatus = "Shares Failed";
-    verbose("\t\t$strStatus\n\n");
 
     // Table header for account shares
     verbose("ID\tUsername\tValid\tInvalid\tPercentage\tPayout\t\tDonation\tFee\t\tStatus\n");
