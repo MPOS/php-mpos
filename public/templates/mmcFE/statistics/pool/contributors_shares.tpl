@@ -22,7 +22,7 @@
       <tr style="background-color:#99EB99;">
         <td>n/a</td>
         <td>{$GLOBAL.userdata.username}</td>
-        <td class="right">{$GLOBAL.userdata.shares.valid}</td>
+        <td class="right">{$GLOBAL.userdata.shares.valid|number_format}</td>
       </tr>
 {/if}
     </tbody>
