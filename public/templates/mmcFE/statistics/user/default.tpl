@@ -6,10 +6,10 @@
     <thead>
       <tr>
         <td></td>
-{for $i=date('G') to 23}
+{for $i=date('G', time() - 60 * 60) to 23}
         <th scope="col">{$i}:00</th>
 {/for}
-{for $i=0 to date('G', time () - 60 * 60)}
+{for $i=0 to date('G', time () - 2 * 60 * 60)}
         <th scope="col">{$i}:00</th>
 {/for}
       </tr>
@@ -17,10 +17,10 @@
     <tbody>
       <tr>
         <th scope="row">{$smarty.session.USERDATA.username}</th>
-{for $i=date('G') to 23}
+{for $i=date('G', time() - 60 * 60) to 23}
         <td>{$YOURHASHRATES.$i|default:"0"}</td>
 {/for}
-{for $i=0 to date('G', time() - 60 * 60)}
+{for $i=0 to date('G', time() - 2 * 60 * 60)}
         <td>{$YOURHASHRATES.$i|default:"0"}</td>
 {/for}
       </tr>
