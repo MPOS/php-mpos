@@ -9,18 +9,18 @@
       <tr>
         <td>Worker Name</td>
         <td>Password</td>
-        <td>Active</td>
-        <td>Khash/s</td>
+        <td class="center">Active</td>
+        <td class="right">Khash/s</td>
         <td>&nbsp;</td>
         <td>&nbsp;</td>
       </tr>
       {section worker $WORKERS}
       {assign var="username" value="."|escape|explode:$WORKERS[worker].username:2} 
       <tr>
-        <td{if $WORKERS[worker].active == 1} style="color: orange"{/if}>{$username.0|escape}.<input name="data[{$WORKERS[worker].id}][username]" value="{$username.1|escape}" size="10" /></td>
+        <td{if $WORKERS[worker].active} style="color: orange"{/if}>{$username.0|escape}.<input name="data[{$WORKERS[worker].id}][username]" value="{$username.1|escape}" size="10" /></td>
         <td><input type="text" name="data[{$WORKERS[worker].id}][password]" value="{$WORKERS[worker].password|escape}" size="10"></td>
-        <td>{if $WORKERS[worker].active == 1}Y{else}N{/if}</td>
-        <td>{$WORKERS[worker].hashrate}</td>
+        <td class="center"><img src="{$PATH}/images/{if $WORKERS[worker].active}success{else}error{/if}.gif" /></td>
+        <td class="right">{$WORKERS[worker].hashrate|number_format}</td>
         <td align="right"><a href="{$smarty.server.PHP_SELF}?page={$smarty.request.page|escape}&action={$smarty.request.action|escape}&do=delete&id={$WORKERS[worker].id|escape}"><button style="padding:5px" type="button">Delete</button></a></td>
       </tr>
       {/section}
