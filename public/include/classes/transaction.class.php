@@ -142,7 +142,7 @@ class Transaction {
       (
         SELECT sum(t.amount) AS credit
         FROM $this->table AS t
-        WHERE t.type = 'Credit'
+        WHERE t.type IN ('Credit', 'Credit_PPS')
       ) AS t1,
       (
         SELECT sum(t.amount) AS debit
@@ -152,7 +152,7 @@ class Transaction {
       (
         SELECT sum(t.amount) AS other
         FROM " . $this->table . " AS t
-        WHERE t.type IN ('Donation','Fee')
+        WHERE t.type IN ('Donation','Fee','Donation_PPS','Fee_PPS')
       ) AS t3");
     if ($this->checkStmt($stmt) && $stmt->execute() && $stmt->bind_result($dBalance) && $stmt->fetch())
       return $dBalance;
@@ -176,8 +176,11 @@ class Transaction {
         SELECT sum(t.amount) AS credit
         FROM $this->table AS t
         LEFT JOIN " . $this->block->getTableName() . " AS b ON t.block_id = b.id
-        WHERE t.type = 'Credit'
-        AND b.confirmations >= ?
+        WHERE
+        (
+          ( t.type = 'Credit' AND b.confirmations >= ? ) OR
+          ( t.type = 'Credit_PPS' )
+        )
         AND t.account_id = ?
       ) AS t1,
       (
@@ -190,8 +193,11 @@ class Transaction {
         SELECT sum(t.amount) AS other
         FROM $this->table AS t
         LEFT JOIN " . $this->block->getTableName() . " AS b ON t.block_id = b.id
-        WHERE t.type IN ('Donation','Fee')
-        AND b.confirmations >= ?
+        WHERE
+        (
+          ( t.type IN ('Donation','Fee') AND b.confirmations >= ? ) OR
+          ( t.type IN ('Donation_PPS', 'Fee_PPS') )
+        )
         AND t.account_id = ?
       ) AS t3
       ");
