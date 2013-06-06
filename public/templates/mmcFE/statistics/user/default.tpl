@@ -6,21 +6,21 @@
     <thead>
       <tr>
         <td></td>
-{for $i=date('G', time() + 60 * 60) to 23}
-        <th scope="col">{$i}</th>
+{for $i=date('G') to 23}
+        <th scope="col">{$i}:00</th>
 {/for}
-{for $i=0 to date('G')}
-        <th scope="col">{$i}</th>
+{for $i=0 to date('G', time () - 60 * 60)}
+        <th scope="col">{$i}:00</th>
 {/for}
       </tr>
     </thead>
     <tbody>
       <tr>
         <th scope="row">{$GLOBAL.USERDATA.username}</th>
-{for $i=date('G', time() + 60 * 60) to 23}
+{for $i=date('G') to 23}
         <td>{$YOURHASHRATES.$i|default:"0"}</td>
 {/for}
-{for $i=0 to date('G')}
+{for $i=0 to date('G', time() - 60 * 60)}
         <td>{$YOURHASHRATES.$i|default:"0"}</td>
 {/for}
       </tr>
