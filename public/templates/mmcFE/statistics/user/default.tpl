@@ -16,7 +16,7 @@
     </thead>
     <tbody>
       <tr>
-        <th scope="row">{$GLOBAL.USERDATA.username}</th>
+        <th scope="row">{$smarty.session.USERDATA.username}</th>
 {for $i=date('G') to 23}
         <td>{$YOURHASHRATES.$i|default:"0"}</td>
 {/for}
