@@ -31,7 +31,7 @@ if ( $bitcoin->can_connect() === true ){
 }
 
 // Value per share calculation
-$pps_value = 50 / (pow(2,32) * $dDifficulty) * pow(2, $config['difficulty']);
+$pps_value = number_format(round(50 / (pow(2,32) * $dDifficulty) * pow(2, $config['difficulty']), 12) ,12);
 
 // Find our last share accounted and last inserted share for PPS calculations
 $iPreviousShareId = $setting->getValue('pps_last_share_id');
