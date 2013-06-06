@@ -18,6 +18,9 @@
           ($TRANSACTIONS[transaction].type == 'Credit' and $TRANSACTIONS[transaction].confirmations >= $GLOBAL.confirmations)
           or ($TRANSACTIONS[transaction].type == 'Donation' and $TRANSACTIONS[transaction].confirmations >= $GLOBAL.confirmations)
           or ($TRANSACTIONS[transaction].type == 'Fee' and $TRANSACTIONS[transaction].confirmations >= $GLOBAL.confirmations)
+          or $TRANSACTIONS[transaction].type == 'Credit_PPS'
+          or $TRANSACTIONS[transaction].type == 'Fee_PPS'
+          or $TRANSACTIONS[transaction].type == 'Donation_PPS'
           or $TRANSACTIONS[transaction].type == 'Debit_AP'
           or $TRANSACTIONS[transaction].type == 'Debit_MP'
         )}
@@ -27,7 +30,7 @@
           <td>{$TRANSACTIONS[transaction].type}</td>
           <td>{$TRANSACTIONS[transaction].coin_address}</td>
           <td>{if $TRANSACTIONS[transaction].height == 0}n/a{else}{$TRANSACTIONS[transaction].height}{/if}</td>
-          <td><font color="{if $TRANSACTIONS[transaction].type == Credit}green{else}red{/if}">{$TRANSACTIONS[transaction].amount}</td>
+          <td><font color="{if $TRANSACTIONS[transaction].type == Credit or $TRANSACTIONS[transaction].type == Credit_PPS}green{else}red{/if}">{$TRANSACTIONS[transaction].amount}</td>
         </tr>
         {/if}
 {/section}
