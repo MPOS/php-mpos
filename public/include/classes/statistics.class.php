@@ -315,7 +315,7 @@ class Statistics {
       while ($row = $result->fetch_assoc()) {
         $aData[$row['hour']] = $row['hashrate'];
       }
-      return $this->memcache->setCache(__FUNCTION__ . $account_id, $aData, 3600);
+      return $this->memcache->setCache(__FUNCTION__ . $account_id, $aData);
     }
     // Catchall
     $this->debug->append("Failed to fetch hourly hashrate: " . $this->mysqli->error);
