@@ -87,7 +87,11 @@ foreach ($aAllBlocks as $iIndex => $aBlock) {
       continue;
     }
     // Fetch share information
-    $iPreviousShareId = @$aAllBlocks[$iIndex - 1]['share_id'] ? $aAllBlocks[$iIndex - 1]['share_id'] : 0;
+    if (!$iPreviousShareId = $block->getLastShareId()) {
+      $iPreviousShareId = 0;
+      verbose("\nUnable to find highest share ID found so far\n");
+      verbose("If this is your first block, this is normal\n\n");
+    }
     $iRoundShares = $share->getRoundShares($iPreviousShareId, $iCurrentUpstreamId);
 
     // Store new information
