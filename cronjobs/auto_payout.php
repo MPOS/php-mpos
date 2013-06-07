@@ -38,7 +38,8 @@ if (! empty($users)) {
   verbose("UserID\tUsername\tBalance\tThreshold\tAddress\t\t\t\t\tStatus\n\n");
 
   foreach ($users as $aUserData) {
-    $dBalance = $transaction->getBalance($aUserData['id']);
+    $aBalance = $transaction->getBalance($aUserData['id']);
+    $dBalance = $aBalance['confirmed'];
     verbose($aUserData['id'] . "\t" . $aUserData['username'] . "\t" . $dBalance . "\t" . $aUserData['ap_threshold'] . "\t\t" . $aUserData['coin_address'] . "\t");
 
     // Only run if balance meets threshold and can pay the potential transaction fee

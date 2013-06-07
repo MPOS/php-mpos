@@ -166,7 +166,9 @@ class Transaction {
   public function getBalance($account_id) {
     $this->debug->append("STA " . __METHOD__, 4);
     $stmt = $this->mysqli->prepare("
-      SELECT ROUND(IFNULL(t1.credit, 0) - IFNULL(t2.debit, 0) - IFNULL(t3.other, 0), 8) AS balance
+      SELECT
+        ROUND(IFNULL(t1.credit, 0) - IFNULL(t2.debit, 0) - IFNULL(t3.other, 0), 8) AS confirmed,
+        ROUND(IFNULL(t4.credit, 0) - IFNULL(t5.other, 0), 8) AS unconfirmed
       FROM
       (
         SELECT sum(t.amount) AS credit
@@ -195,17 +197,39 @@ class Transaction {
           ( t.type IN ('Donation_PPS', 'Fee_PPS') )
         )
         AND t.account_id = ?
-      ) AS t3
+      ) AS t3,
+      (
+        SELECT sum(t.amount) AS credit
+        FROM $this->table AS t
+        LEFT JOIN " . $this->block->getTableName() . " AS b ON t.block_id = b.id
+        WHERE
+        (
+          ( t.type = 'Credit' AND b.confirmations < ? ) OR
+          ( t.type = 'Credit_PPS' )
+        )
+        AND t.account_id = ?
+      ) AS t4,
+      (
+        SELECT sum(t.amount) AS other
+        FROM $this->table AS t
+        LEFT JOIN " . $this->block->getTableName() . " AS b ON t.block_id = b.id
+        WHERE
+        (
+          ( t.type IN ('Donation','Fee') AND b.confirmations < ? ) OR
+          ( t.type IN ('Donation_PPS', 'Fee_PPS') )
+        )
+        AND t.account_id = ?
+      ) AS t5
       ");
     if ($this->checkStmt($stmt)) {
-      $stmt->bind_param("iiiii", $this->config['confirmations'], $account_id, $account_id, $this->config['confirmations'], $account_id);
+      $stmt->bind_param("iiiiiiiii", $this->config['confirmations'], $account_id, $account_id, $this->config['confirmations'], $account_id, $this->config['confirmations'], $account_id, $this->config['confirmations'], $account_id);
       if (!$stmt->execute()) {
         $this->debug->append("Unable to execute statement: " . $stmt->error);
         $this->setErrorMessage("Fetching balance failed");
       }
       $result = $stmt->get_result();
       $stmt->close();
-      return $result->fetch_object()->balance;
+      return $result->fetch_assoc();
     }
     return false;
   }
