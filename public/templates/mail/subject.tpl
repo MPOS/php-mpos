@@ -1,1 +1,1 @@
-[ {$WEBSITENAME} ] Password Reset Request
+[ {$WEBSITENAME} ] {$SUBJECT}
