@@ -16,10 +16,10 @@ $smarty = new Smarty;
 
 // Assign our local paths
 $debug->append('Define Smarty Paths', 3);
-$smarty->template_dir = 'templates/' . THEME . '/';
-$smarty->compile_dir = 'templates/compile/';
+$smarty->template_dir = BASEPATH . 'templates/' . THEME . '/';
+$smarty->compile_dir = BASEPATH . 'templates/compile/';
 
 // Optional smarty caching, check Smarty documentation for details
 $smarty->caching = $config['cache'];
-$smarty->cache_dir = "templates/cache";
+$smarty->cache_dir = BASEPATH . "templates/cache";
 ?>
