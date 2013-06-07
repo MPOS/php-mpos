@@ -79,6 +79,27 @@ class Worker {
   }
 
   /**
+   * Fetch a specific worker and its status
+   * @param id int Worker ID
+   * @return mixed array Worker details
+   **/
+  public function getWorker($id) {
+    $this->debug->append("STA " . __METHOD__, 4);
+    $stmt = $this->mysqli->prepare("
+       SELECT id, username, password, monitor,
+       ( SELECT SIGN(COUNT(id)) FROM " . $this->share->getTableName() . " WHERE username = $this->table.username AND time > DATE_SUB(now(), INTERVAL 10 MINUTE)) AS active,
+       ( SELECT ROUND(COUNT(id) * POW(2, " . $this->config['difficulty'] . ")/600/1000) FROM " . $this->share->getTableName() . " WHERE username = $this->table.username AND time > DATE_SUB(now(), INTERVAL 10 MINUTE)) AS hashrate
+       FROM $this->table
+       WHERE id = ?
+       ");
+    if ($this->checkStmt($stmt) && $stmt->bind_param('i', $id) && $stmt->execute() && $result = $stmt->get_result())
+      return $result->fetch_assoc();
+    // Catchall
+    echo $this->mysqli->error;
+    return false;
+  }
+
+  /**
    * Fetch all workers for an account
    * @param account_id int User ID
    * @return mixed array Workers and their settings or false

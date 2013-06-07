@@ -20,7 +20,7 @@ class Mail {
     $this->config = $config;
   }
 
-  private function checkStmt($bState) {
+  function checkStmt($bState) {
     $this->debug->append("STA " . __METHOD__, 4);
     if ($bState ===! true) {
       $this->debug->append("Failed to prepare statement: " . $this->mysqli->error);
