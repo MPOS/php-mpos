@@ -14,3 +14,5 @@ require_once(CLASS_DIR . '/worker.class.php');
 require_once(CLASS_DIR . '/statistics.class.php');
 require_once(CLASS_DIR . '/transaction.class.php');
 require_once(CLASS_DIR . '/setting.class.php');
+require_once(CLASS_DIR . '/mail.class.php');
+require_once(CLASS_DIR . '/notification.class.php');
