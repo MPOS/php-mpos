@@ -46,16 +46,17 @@ if (empty($aWorkers)) {
 
 // We notified, lets check which recovered
 $aNotifications = $notification->getAllActive();
-foreach ($aNotifications as $aNotification) {
-  $aData = json_decode($aNotification['data'], true);
-  $aWorker = $worker->getWorker($aData['id']);
-  if ($aWorker['active'] == 1) {
-    if ($notification->setInactive($aNotification['id'])) {
-      verbose("Marked notification " . $aNotification['id'] . " as inactive\n");
-    } else {
-      verbose("Failed to set notification inactive for " . $aWorker['username'] . "\n");
+if (!empty($aNotifications)) {
+  foreach ($aNotifications as $aNotification) {
+    $aData = json_decode($aNotification['data'], true);
+    $aWorker = $worker->getWorker($aData['id']);
+    if ($aWorker['active'] == 1) {
+      if ($notification->setInactive($aNotification['id'])) {
+        verbose("Marked notification " . $aNotification['id'] . " as inactive\n");
+      } else {
+        verbose("Failed to set notification inactive for " . $aWorker['username'] . "\n");
+      }
     }
   }
 }
-
 ?>
