@@ -21,6 +21,7 @@ if ($_POST['query']) {
   // Query against the stats table? Currently cached though.
   foreach ($aUsers as $iKey => $aUser) {
     $aUser['balance'] = $transaction->getBalance($aUser['id']);
+    $aUser['hashrate'] = $statistics->getUserHashrate($aUser['id']);
     $aUser['payout']['est_block'] = round(( (int)$aUser['shares'] / (int)$aRoundShares['valid'] ) * (int)$config['reward'], 3);
     $aUser['payout']['est_fee'] = round(($config['fees'] / 100) * $aUser['payout']['est_block'], 3);
     $aUser['payout']['est_donation'] = round((( $aUser['donate_percent'] / 100) * ($aUser['payout']['est_block'] - $aUser['payout']['est_fee'])), 3);
