@@ -17,6 +17,7 @@
       <th class="center">ID</th>
       <th>Username</th>
       <th>E-Mail</th>
+      <th class="right">Shares&nbsp;&nbsp;</th>
       <th class="right">Hashrate&nbsp;&nbsp;</th>
       <th class="right">Est. Donation&nbsp;&nbsp;</th>
       <th class="right">Est. Payout&nbsp;&nbsp;&nbsp;</th>
@@ -30,6 +31,7 @@
       <td class="center">{$USERS[user].id}</td>
       <td>{$USERS[user].username}</td>
       <td>{$USERS[user].email}</td>
+      <td class="right">{$USERS[user].shares}</td>
       <td class="right">{$USERS[user].hashrate}</td>
       <td class="right">{$USERS[user].payout.est_donation|number_format:"8"}</td>
       <td class="right">{$USERS[user].payout.est_payout|number_format:"8"}</td>
@@ -49,6 +51,7 @@
       <th class="center">ID</th>
       <th>Username</th>
       <th>E-Mail</th>
+      <th class="right">Shares&nbsp;&nbsp;</th>
       <th class="right">Hashrate</th>
       <th class="right">Est. Donation</th>
       <th class="right">Est. Payout</th>
