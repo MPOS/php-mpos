@@ -22,21 +22,31 @@ limitations under the License.
 // Include all settings and classes
 require_once('shared.inc.php');
 
+// Find all IDLE workers
 $aWorkers = $worker->getAllIdleWorkers();
 if (empty($aWorkers)) {
   verbose("No idle workers found\n");
-  exit;
-}
-
-foreach ($aWorkers as $aWorker) {
-  $aData = $aWorker;
-  $aData['username'] = $user->getUserName($aWorker['account_id']);
-  $aData['email'] = $user->getUserEmail($aData['username']);
-  if (!$notification->isNotified($aData)) {
-    if (!$notification->addNotification('idle_worker', $aData) && $notification->sendMail('sebastian@grewe.ca', 'idle_worker', $aData))
-      verbose("Unable to send notification: " . $notification->getError() . "\n");
-  } else {
-    verbose("Already notified for this worker\n");
+} else {
+  foreach ($aWorkers as $aWorker) {
+    $aData = $aWorker;
+    $aData['username'] = $user->getUserName($aWorker['account_id']);
+    $aData['email'] = $user->getUserEmail($aData['username']);
+    if (!$notification->isNotified($aData)) {
+      if (!$notification->addNotification('idle_worker', $aData) && $notification->sendMail('sebastian@grewe.ca', 'idle_worker', $aData))
+        verbose("Unable to send notification: " . $notification->getError() . "\n");
+    } else {
+      verbose("Already notified for this worker\n");
+    }
   }
 }
+// We notified, lets check which recovered
+$aNotifications = $notification->getAllActive();
+foreach ($aNotifications as $aNotification) {
+  $aData = json_decode($aNotification['data'], true);
+  $aWorker = $worker->getWorker($aData['id']);
+  if ($aWorker['active'] == 1)
+    if (!$notification->setInactive($aNotification['id']))
+      verbose("Failed to set notification inactive for " . $aWorker['username'] . "\n");
+}
+
 ?>
