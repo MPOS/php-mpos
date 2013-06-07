@@ -59,6 +59,26 @@ class Worker {
   }
 
   /**
+   * Fetch all IDLE workers that have monitoring enabled
+   * @param none
+   * @return data array Workers in IDLE state and monitoring enabled
+   **/
+  public function getAllIdleWorkers() {
+    $this->debug->append("STA " . __METHOD__, 4);
+    $stmt = $this->mysqli->prepare("
+      SELECT account_id, id, username
+      FROM " . $this->table . "
+      WHERE monitor = 1 AND ( SELECT SIGN(COUNT(id)) FROM " . $this->share->getTableName() . " WHERE username = $this->table.username AND time > DATE_SUB(now(), INTERVAL 10 MINUTE)) = 0");
+
+    if ($this->checkStmt($stmt) && $stmt->execute() && $result = $stmt->get_result())
+      return $result->fetch_all(MYSQLI_ASSOC);
+    // Catchall
+    $this->setErrorMessage("Unable to fetch IDLE, monitored workers");
+    echo $this->mysqli->error;
+    return false;
+  }
+
+  /**
    * Fetch all workers for an account
    * @param account_id int User ID
    * @return mixed array Workers and their settings or false
