@@ -41,6 +41,7 @@ class Notification extends Mail {
       return true;
     // Catchall
     // Does not seem to have a notification set
+    $this->setErrorMessage("Unable to run query: " . $this->mysqli->error);
     return false;
   }
 

@@ -486,6 +486,7 @@ class User {
     }
     $smarty->assign('TOKEN', $token);
     $smarty->assign('USERNAME', $username);
+    $smarty->assign('SUBJECT', 'Password Reset Request');
     $smarty->assign('WEBSITENAME', $this->config['website']['name']);
     $headers = 'From: Website Administration <' . $this->config['website']['email'] . ">\n";
     $headers .= "MIME-Version: 1.0\n";

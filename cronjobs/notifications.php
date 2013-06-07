@@ -30,23 +30,32 @@ if (empty($aWorkers)) {
   foreach ($aWorkers as $aWorker) {
     $aData = $aWorker;
     $aData['username'] = $user->getUserName($aWorker['account_id']);
+    $aData['subject'] = 'IDLE Worker : ' . $aWorker['username'];
     $aData['email'] = $user->getUserEmail($aData['username']);
-    if (!$notification->isNotified($aData)) {
-      if (!$notification->addNotification('idle_worker', $aData) && $notification->sendMail('sebastian@grewe.ca', 'idle_worker', $aData))
-        verbose("Unable to send notification: " . $notification->getError() . "\n");
-    } else {
-      verbose("Already notified for this worker\n");
+    if ( $notification->isNotified($aData) ) {
+      verbose("Worker already notified\n");
+      continue;
     }
+    if ($notification->addNotification('idle_worker', $aData) && $notification->sendMail($aData['email'], 'idle_worker', $aData)) {
+        verbose ("Notified " . $aData['email'] . " for IDLE worker " . $aWorker['username'] . "\n");
+      } else {
+        verbose("Unable to send notification: " . $notification->getError() . "\n");
+      }
   }
 }
+
 // We notified, lets check which recovered
 $aNotifications = $notification->getAllActive();
 foreach ($aNotifications as $aNotification) {
   $aData = json_decode($aNotification['data'], true);
   $aWorker = $worker->getWorker($aData['id']);
-  if ($aWorker['active'] == 1)
-    if (!$notification->setInactive($aNotification['id']))
+  if ($aWorker['active'] == 1) {
+    if ($notification->setInactive($aNotification['id'])) {
+      verbose("Marked notification " . $aNotification['id'] . " as inactive\n");
+    } else {
       verbose("Failed to set notification inactive for " . $aWorker['username'] . "\n");
+    }
+  }
 }
 
 ?>
