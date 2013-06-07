@@ -9,21 +9,7 @@
 
 {include file="global/block_header.tpl" BLOCK_HEADER="User Information"}
 <center>
-  <div id="pager">
-  <form>
-    <img src="{$PATH}/images/first.png" class="first"/>
-    <img src="{$PATH}/images/prev.png" class="prev"/>
-    <input type="text" class="pagedisplay"/>
-    <img src="{$PATH}/images/next.png" class="next"/>
-    <img src="{$PATH}/images/last.png" class="last"/>
-    <select class="pagesize">
-      <option selected="selected"  value="10">10</option>
-      <option value="20">20</option>
-      <option value="30">30</option>
-      <option  value="40">40</option>
-    </select>
-  </form>
-  </div>
+{include file="global/pagination.tpl"}
 </center>
 <table width="100%" class="pagesort">
   <thead>
@@ -32,7 +18,6 @@
       <th>Username</th>
       <th>E-Mail</th>
       <th class="right">Hashrate&nbsp;&nbsp;</th>
-      <th class="right">Shares&nbsp;&nbsp;</th>
       <th class="right">Est. Donation&nbsp;&nbsp;</th>
       <th class="right">Est. Payout&nbsp;&nbsp;&nbsp;</th>
       <th class="right">Balance&nbsp;&nbsp;&nbsp;</th>
@@ -45,8 +30,7 @@
       <td class="center">{$USERS[user].id}</td>
       <td>{$USERS[user].username}</td>
       <td>{$USERS[user].email}</td>
-      <td class="right">{$USERS[user].hashrate / 1024}</td>
-      <td class="right">{$USERS[user].shares}</td>
+      <td class="right">{$USERS[user].hashrate}</td>
       <td class="right">{$USERS[user].payout.est_donation|number_format:"8"}</td>
       <td class="right">{$USERS[user].payout.est_payout|number_format:"8"}</td>
       <td class="right">{$USERS[user].balance|number_format:"8"}</td>
@@ -66,7 +50,6 @@
       <th>Username</th>
       <th>E-Mail</th>
       <th class="right">Hashrate</th>
-      <th class="center">Shares</th>
       <th class="right">Est. Donation</th>
       <th class="right">Est. Payout</th>
       <th class="right">Balance</th>
