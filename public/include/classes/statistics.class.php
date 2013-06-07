@@ -189,7 +189,8 @@ class Statistics {
         a.username AS username,
         a.donate_percent AS donate_percent,
         a.email AS email,
-        ROUND(COUNT(s.id) * POW(2," . $this->config['difficulty'] . ") / 600 / 1000,2) AS hashrate
+        ROUND(COUNT(s.id) * POW(2," . $this->config['difficulty'] . ") / 600 / 1000,2) AS hashrate,
+        ( SELECT COUNT(id) FROM " . $this->share->getTableName() . " WHERE a.username = SUBSTRING_INDEX( s.username, '.', 1 ) ) AS shares
       FROM " . $this->user->getTableName() . " AS a
       LEFT JOIN " . $this->share->getTableName() . " AS s
       ON a.username = SUBSTRING_INDEX( s.username, '.', 1 )
