@@ -142,7 +142,9 @@ class Transaction {
       (
         SELECT sum(t.amount) AS credit
         FROM $this->table AS t
+        LEFT JOIN " . $this->block->getTableName() . " AS b ON t.block_id = b.id
         WHERE t.type = 'Credit'
+        AND b.confirmations >= " . $this->config['confirmations'] . "
       ) AS t1,
       (
         SELECT sum(t.amount) AS debit
@@ -152,7 +154,9 @@ class Transaction {
       (
         SELECT sum(t.amount) AS other
         FROM " . $this->table . " AS t
+        LEFT JOIN " . $this->block->getTableName() . " AS b ON t.block_id = b.id
         WHERE t.type IN ('Donation','Fee')
+        AND b.confirmations >= " . $this->config['confirmations'] . "
       ) AS t3");
     if ($this->checkStmt($stmt) && $stmt->execute() && $stmt->bind_result($dBalance) && $stmt->fetch())
       return $dBalance;
