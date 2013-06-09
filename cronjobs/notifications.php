@@ -36,7 +36,7 @@ if (empty($aWorkers)) {
       verbose("Worker already notified\n");
       continue;
     }
-    if ($notification->addNotification('idle_worker', $aData) && $notification->sendMail($aData['email'], 'idle_worker', $aData)) {
+    if ($notification->addNotification($aWorker['account_id'], 'idle_worker', $aData) && $notification->sendMail($aData['email'], 'idle_worker', $aData)) {
         verbose ("Notified " . $aData['email'] . " for IDLE worker " . $aWorker['username'] . "\n");
       } else {
         verbose("Unable to send notification: " . $notification->getError() . "\n");

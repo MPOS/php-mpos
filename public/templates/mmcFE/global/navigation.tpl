@@ -7,6 +7,7 @@
                 <li><a href="{$smarty.server.PHP_SELF}?page=account&action=workers">My Workers</a></li>
                 <li><a href="{$smarty.server.PHP_SELF}?page=statistics&action=user">My Graphs</a></li>
                 <li><a href="{$smarty.server.PHP_SELF}?page=account&action=transactions">Transactions</a></li>
+                <li><a href="{$smarty.server.PHP_SELF}?page=account&action=notifications">Notifications</a></li>
               </ul>
             </li>
             {/if}
