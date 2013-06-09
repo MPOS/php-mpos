@@ -30,6 +30,13 @@
     </td>
   </tr>
   <tr>
+    <td class="left">Manual Payout</td>
+    <td class="center">
+      <input type="hidden" name="data[manual_payout]" value="0" />
+      <input type="checkbox" name="data[manual_payout]" value="1"{if $SETTINGS['manual_payout']}checked{/if} />
+    </td>
+  </tr>
+  <tr>
     <td colspan="2" class="center">
       <input type="submit" class="submit small" value="Update">
     </td>
@@ -55,7 +62,13 @@
         <tr class="{cycle values="odd,even"}">
           <td class="center">{$NOTIFICATIONS[notification].id}</td>
           <td class="center">{$NOTIFICATIONS[notification].time}</td>
-          <td class="center">{$NOTIFICATIONS[notification].type}</td>
+          <td class="center">
+            {if $NOTIFICATIONS[notification].type == new_block}New Block
+            {else if $NOTIFICATIONS[notification].type == auto_payout}Auto Payout
+            {else if $NOTIFICATIONS[notification].type == idle_worker}IDLE Worker
+            {else if $NOTIFICATIONS[notification].type == manual_payout}Manual Payout
+            {/if}
+          </td>
           <td class="center">
             <img src="{$PATH}/images/{if $NOTIFICATIONS[notification].active}success{else}error{/if}.gif" />
           </td>
