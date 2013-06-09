@@ -9,6 +9,13 @@
     <th class="center">Active</th>
   </tr>
   <tr>
+    <td class="left">IDLE Worker</td>
+    <td class="center">
+      <input type="hidden" name="data[idle_worker]" value="0" />
+      <input type="checkbox" name="data[idle_worker]" value="1"{if $SETTINGS['idle_worker']}checked{/if} />
+    </td>
+  </tr>
+  <tr>
     <td class="left">New Blocks</td>
     <td class="center">
       <input type="hidden" name="data[new_block]" value="0" />

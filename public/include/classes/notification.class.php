@@ -44,7 +44,6 @@ class Notification extends Mail {
       return true;
     // Catchall
     // Does not seem to have a notification set
-    $this->setErrorMessage("Unable to run query: " . $this->mysqli->error);
     return false;
   }
 
@@ -73,7 +72,7 @@ class Notification extends Mail {
     if ($stmt && $stmt->bind_param('iss', $account_id, $type, $data) && $stmt->execute())
       return true;
     $this->debug->append("Failed to add notification for $type with $data: " . $this->mysqli->error);
-    $this->setErrorMessage("Unable to add new notification");
+    $this->setErrorMessage("Unable to add new notification " . $this->mysqli->error);
     return false;
   }
 
@@ -104,6 +103,21 @@ class Notification extends Mail {
         $aData[$row['type']] = $row['active'];
       }
       return $aData;
+    }
+    // Catchall
+    return false;
+  }
+
+  /**
+   * Get all accounts that wish to receive a specific notification
+   * @param strType string Notification type
+   * @return data array User Accounts
+   **/
+  public function getNotificationAccountIdByType($strType) {
+    $this->debug->append("STA " . __METHOD__, 4);
+    $stmt = $this->mysqli->prepare("SELECT account_id FROM $this->tableSettings WHERE type = ? AND active = 1");
+    if ($stmt && $stmt->bind_param('s', $strType) && $stmt->execute() && $result = $stmt->get_result()) {
+      return $result->fetch_all(MYSQLI_ASSOC);
     }
     // Catchall
     return false;
@@ -144,6 +158,28 @@ class Notification extends Mail {
     }
     return true;
   }
+
+  /**
+   * Send a specific notification setup in notification_settings
+   * @param type string Notification type
+   * @return bool
+   **/
+  public function sendNotification($account_id, $strType, $aMailData) {
+    // Check if we notified for this event already
+    if ( $this->isNotified($aMailData) ) {
+      $this->setErrorMessage('A notification for this event has been sent already');
+      return false;
+    }
+    // Check if this user wants strType notifications
+    $stmt = $this->mysqli->prepare("SELECT account_id FROM $this->tableSettings WHERE type = ? AND active = 1 AND account_id = ?");
+    if ($stmt && $stmt->bind_param('si', $strType, $account_id) && $stmt->execute() && $stmt->bind_result($id) && $stmt->fetch()) {
+      if ($stmt->close() && $this->sendMail('notifications/' . $strType, $aMailData) && $this->addNotification($account_id, $strType, $aMailData))
+        return true;
+    } else {
+      $this->setErrorMessage('User disabled ' . $strType . ' notifications');
+    }
+    return false;
+  }
 }
 
 $notification = new Notification();
@@ -151,3 +187,5 @@ $notification->setDebug($debug);
 $notification->setMysql($mysqli);
 $notification->setSmarty($smarty);
 $notification->setConfig($config);
+
+?>

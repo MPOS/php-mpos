@@ -16,6 +16,9 @@ class Mail {
   public function setSmarty($smarty) {
     $this->smarty = $smarty;
   }
+  public function setUser($user) {
+    $this->user = $user;
+  }
   public function setConfig($config) {
     $this->config = $config;
   }
@@ -35,14 +38,14 @@ class Mail {
     return true;
   }
 
-  public function sendMail($email, $template, $aData) {
+  public function sendMail($template, $aData) {
     $this->smarty->assign('WEBSITENAME', $this->config['website']['name']);
     $this->smarty->assign('SUBJECT', $aData['subject']);
     $this->smarty->assign('DATA', $aData);
     $headers = 'From: Website Administration <' . $this->config['website']['email'] . ">\n";
     $headers .= "MIME-Version: 1.0\n";
     $headers .= "Content-Type: text/html; charset=ISO-8859-1\r\n";
-    if (mail($email,
+    if (mail($aData['email'],
       $this->smarty->fetch(BASEPATH . 'templates/mail/subject.tpl'),
       $this->smarty->fetch(BASEPATH . 'templates/mail/' . $template  . '.tpl'),
       $headers)) {
@@ -61,5 +64,4 @@ $mail->setDebug($debug);
 $mail->setMysql($mysqli);
 $mail->setSmarty($smarty);
 $mail->setConfig($config);
-
 ?>
