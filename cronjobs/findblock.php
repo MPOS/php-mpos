@@ -114,9 +114,9 @@ foreach ($aAllBlocks as $iIndex => $aBlock) {
     );
 
     // Notify users
-    $aAccounts = $notification->getNotificationByType('new_block');
+    $aAccounts = $notification->getNotificationAccountIdByType('new_block');
     foreach ($aAccounts as $account_id) {
-      $aMailData = $aBlock;
+      $aMailData['height'] = $aBlock['height'];
       $aMailData['subject'] = 'New Block';
       $aMailData['email'] = $user->getUserEmail($user->getUserName($account_id));
       $aMailData['shares'] = $iRoundShares;
