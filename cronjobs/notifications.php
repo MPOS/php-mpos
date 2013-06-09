@@ -38,7 +38,7 @@ if (empty($aWorkers)) {
 }
 
 // We notified, lets check which recovered
-$aNotifications = $notification->getAllActive();
+$aNotifications = $notification->getAllActive('idle_worker');
 if (!empty($aNotifications)) {
   foreach ($aNotifications as $aNotification) {
     $aData = json_decode($aNotification['data'], true);

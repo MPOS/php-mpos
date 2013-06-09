@@ -50,10 +50,10 @@ class Notification extends Mail {
   /**
    * Get all active notifications
    **/
-  public function getAllActive() {
+  public function getAllActive($strType) {
     $this->debug->append("STA " . __METHOD__, 4);
-    $stmt =$this->mysqli->prepare("SELECT id, data FROM $this->table WHERE active = 1 LIMIT 1");
-    if ($stmt && $stmt->execute() && $result = $stmt->get_result())
+    $stmt =$this->mysqli->prepare("SELECT id, data FROM $this->table WHERE active = 1 AND type = ?");
+    if ($stmt && $stmt->bind_param('s', $strType) && $stmt->execute() && $result = $stmt->get_result())
       return $result->fetch_all(MYSQLI_ASSOC);
     // Catchall
     return false;
