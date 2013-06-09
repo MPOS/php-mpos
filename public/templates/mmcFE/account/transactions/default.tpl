@@ -1,7 +1,8 @@
 {include file="global/block_header.tpl" BLOCK_HEADER="Transaction Log" BUTTONS=array(Confirmed,Unconfirmed,Orphan)}
 <div class="block_content tab_content" id="Confirmed" style="clear:;">
   <center>
-    <table cellpadding="1" cellspacing="1" width="98%" class="sortable">
+    {include file="global/pagination.tpl"}
+    <table cellpadding="1" cellspacing="1" width="98%" class="pagesort">
       <thead style="font-size:13px;">
         <tr>
           <th class="header" style="cursor: pointer;">TX #</th>
@@ -42,7 +43,8 @@
 </div>
 <div class="block_content tab_content" id="Unconfirmed" style="">
   <center>
-    <table cellpadding="1" cellspacing="1" width="98%" class="sortable">
+    {include file="global/pagination.tpl" ID=2}
+    <table cellpadding="1" cellspacing="1" width="98%" class="pagesort2">
       <thead style="font-size:13px;">
         <tr>
           <th class="header" style="cursor: pointer;">TX #</th>
@@ -86,7 +88,8 @@
 </div>
 <div class="block_content tab_content" id="Orphan" style="">
   <center>
-    <table cellpadding="1" cellspacing="1" width="98%" class="sortable">
+    {include file="global/pagination.tpl"}
+    <table cellpadding="1" cellspacing="1" width="98%" class="pagesort3">
       <thead style="font-size:13px;">
         <tr>
           <th class="header" style="cursor: pointer;">TX #</th>

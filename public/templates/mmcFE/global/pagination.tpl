@@ -1,4 +1,4 @@
-  <div id="pager">
+  <div id="pager{$ID|default:""}">
   <form>
     <img src="{$PATH}/images/first.png" class="first"/>
     <img src="{$PATH}/images/prev.png" class="prev"/>

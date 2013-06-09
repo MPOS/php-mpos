@@ -69,6 +69,12 @@ $(function () {
     $("table.pagesort")
       .tablesorter({ widgets: ['zebra'] })
       .tablesorterPager({ positionFixed: false, container: $("#pager") });
+    $("table.pagesort2")
+      .tablesorter({ widgets: ['zebra'] })
+      .tablesorterPager({ positionFixed: false, container: $("#pager2") });
+    $("table.pagesort4")
+      .tablesorter({ widgets: ['zebra'] })
+      .tablesorterPager({ positionFixed: false, container: $("#pager3") });
 
     $('.block table tr th.header').css('cursor', 'pointer');
 
