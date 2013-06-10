@@ -143,8 +143,11 @@ class Transaction {
         SELECT sum(t.amount) AS credit
         FROM $this->table AS t
         LEFT JOIN " . $this->block->getTableName() . " AS b ON t.block_id = b.id
-        WHERE t.type IN ('Credit', 'Credit_PPS')
-        AND b.confirmations >= " . $this->config['confirmations'] . "
+        WHERE
+        (
+          ( t.type = 'Credit' AND b.confirmations >= ? ) OR
+          ( t.type = 'Credit_PPS' )
+        )
       ) AS t1,
       (
         SELECT sum(t.amount) AS debit
@@ -155,10 +158,13 @@ class Transaction {
         SELECT sum(t.amount) AS other
         FROM " . $this->table . " AS t
         LEFT JOIN " . $this->block->getTableName() . " AS b ON t.block_id = b.id
-        WHERE t.type IN ('Donation','Fee','Donation_PPS','Fee_PPS')
-        AND b.confirmations >= " . $this->config['confirmations'] . "
+        WHERE
+        (
+          ( t.type IN ('Donation','Fee') AND b.confirmations >= ? ) OR
+          ( t.type IN ('Donation_PPS', 'Fee_PPS') )
+        )
       ) AS t3");
-    if ($this->checkStmt($stmt) && $stmt->execute() && $stmt->bind_result($dBalance) && $stmt->fetch())
+    if ($this->checkStmt($stmt) && $stmt->bind_param('ii', $this->config['confirmations'], $this->config['confirmations']) && $stmt->execute() && $stmt->bind_result($dBalance) && $stmt->fetch())
       return $dBalance;
     // Catchall
     $this->setErrorMessage('Unable to find locked credits for all users');
