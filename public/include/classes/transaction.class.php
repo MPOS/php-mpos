@@ -55,35 +55,23 @@ class Transaction {
    **/
   public function setOrphan($block_id) {
     $this->debug->append("STA " . __METHOD__, 4);
-    $stmt = $this->mysqli->prepare("
-      UPDATE $this->table
-      SET type = 'Orphan_Credit'
-      WHERE type = 'Credit'
-      AND block_id = ?
-      ");
-    if (!($this->checkStmt($stmt) && $stmt->bind_param('i', $block_id) && $stmt->execute())) {
-      $this->debug->append("Failed to set orphan credit transactions for $block_id");
-      return false;
-    }
-    $stmt = $this->mysqli->prepare("
-      UPDATE $this->table
-      SET type = 'Orphan_Fee'
-      WHERE type = 'Fee'
-      AND block_id = ?
-      ");
-    if (!($this->checkStmt($stmt) && $stmt->bind_param('i', $block_id) && $stmt->execute())) {
-      $this->debug->append("Failed to set orphan fee transactions for $block_id");
-      return false;
-    }
-    $stmt = $this->mysqli->prepare("
-      UPDATE $this->table
-      SET type = 'Orphan_Donation'
-      WHERE type = 'Donation'
-      AND block_id = ?
-      ");
-    if (!($this->checkStmt($stmt) && $stmt->bind_param('i', $block_id) && $stmt->execute())) {
-      $this->debug->append("Failed to set orphan donation transactions for $block_id");
-      return false;
+    $aOrphans = array(
+      'Credit' => 'Orphan_Credit',
+      'Fee' => 'Orphan_Fee',
+      'Donation' => 'Orphan_Donation',
+      'Bonus' => 'Orphan_Bonus'
+    );
+    foreach ($aOrphans as $from => $to) {
+      $stmt = $this->mysqli->prepare("
+        UPDATE $this->table
+        SET type = '$to'
+        WHERE type = '$from'
+        AND block_id = ?
+        ");
+      if (!($this->checkStmt($stmt) && $stmt->bind_param('i', $block_id) && $stmt->execute())) {
+        $this->debug->append("Failed to set orphan $from => $to transactions for $block_id");
+        return false;
+      }
     }
     return true;
   }
@@ -143,7 +131,7 @@ class Transaction {
         SELECT sum(t.amount) AS credit
         FROM $this->table AS t
         LEFT JOIN " . $this->block->getTableName() . " AS b ON t.block_id = b.id
-        WHERE t.type = 'Credit'
+        WHERE t.type IN ('Credit','Bonus')
         AND b.confirmations >= " . $this->config['confirmations'] . "
       ) AS t1,
       (
@@ -180,7 +168,7 @@ class Transaction {
         SELECT sum(t.amount) AS credit
         FROM $this->table AS t
         LEFT JOIN " . $this->block->getTableName() . " AS b ON t.block_id = b.id
-        WHERE t.type = 'Credit'
+        WHERE t.type IN ('Credit','Bonus')
         AND b.confirmations >= ?
         AND t.account_id = ?
       ) AS t1,
