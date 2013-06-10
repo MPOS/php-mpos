@@ -133,7 +133,7 @@ class Transaction {
         LEFT JOIN " . $this->block->getTableName() . " AS b ON t.block_id = b.id
         WHERE (
           ( t.type IN ('Credit','Bonus') AND b.confirmations >= ? ) OR
-          t.type = 'Credit_PPS'
+          ( t.type = 'Credit_PPS' )
         )
       ) AS t1,
       (
