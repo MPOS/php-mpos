@@ -35,6 +35,7 @@ $config = array(
     'email' => 'test@example.com',  // Mail address used for notifications
   ),
   'block_bonus' => 0,
+  'payout_system' => 'pps',         // Set your payout here so template changes are activated
   'archive_shares' => true,         // Store accounted shares in archive table?
   'blockexplorer' => 'http://explorer.litecoin.net/search?q=',        // URL for block searches, prefixed to each block number
   'chaininfo' => 'http://allchains.info',                             // Link to Allchains for Difficulty information
