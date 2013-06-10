@@ -5,7 +5,6 @@ if (!defined('SECURITY')) die('Hacking attempt');
 if (!$_SESSION['AUTHENTICATED']) header('Location: index.php?page=home');
 
 if ($_REQUEST['do'] == 'save') {
-  var_dump($_REQUEST['data']);
   if ($notification->updateSettings($_SESSION['USERDATA']['id'], $_REQUEST['data'])) {
     $_SESSION['POPUP'][] = array('CONTENT' => 'Updated notification settings');
   } else {
