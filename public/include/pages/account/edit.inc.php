@@ -36,12 +36,17 @@ if ( ! $user->checkPin($_SESSION['USERDATA']['id'], $_POST['authPin']) && $_POST
             }
           } catch (BitcoinClientException $e) {
             $_SESSION['POPUP'][] = array('CONTENT' => 'Failed to send LTC, please contact site support immidiately', 'TYPE' => 'errormsg');
-            $continue = false;
+//            $continue = false;
           }
         }
         // Set balance to 0, add to paid out, insert to ledger
-        if ($continue == true && $transaction->addTransaction($_SESSION['USERDATA']['id'], $dBalance, 'Debit_MP', NULL, $sCoinAddress))
+        if ($continue == true && $transaction->addTransaction($_SESSION['USERDATA']['id'], $dBalance, 'Debit_MP', NULL, $sCoinAddress)) {
           $_SESSION['POPUP'][] = array('CONTENT' => 'Transaction completed', 'TYPE' => 'success');
+          $aMailData['email'] = $user->getUserEmail($user->getUserName($_SESSION['USERDATA']['id']));
+          $aMailData['amount'] = $dBalance;
+          $aMailData['subject'] = 'Manual Payout Completed';
+          $notification->sendNotification($_SESSION['USERDATA']['id'], 'manual_payout', $aMailData);
+      }
       } else {
         $_SESSION['POPUP'][] = array('CONTENT' => 'Unable to connect to litecoind RPC service', 'TYPE' => 'errormsg');
       }
