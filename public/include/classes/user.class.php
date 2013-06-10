@@ -238,7 +238,7 @@ class User {
    * @param donat float donation % of income
    * @return bool
    **/
-  public function updateAccount($userID, $address, $threshold, $donate) {
+  public function updateAccount($userID, $address, $threshold, $donate, $email) {
     $this->debug->append("STA " . __METHOD__, 4);
     $bUser = false;
 
@@ -257,18 +257,21 @@ class User {
       $this->setErrorMessage('Donation above allowed 100% limit');
       return false;
     }
+    if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+      $this->setErrorMessage('Invalid email address');
+      return false;
+    }
     // Number sanitizer, just in case we fall through above
     $threshold = min($this->config['ap_threshold']['max'], max(0, floatval($threshold)));
     $donate = min(100, max(0, floatval($donate)));
 
     // We passed all validation checks so update the account
-    $stmt = $this->mysqli->prepare("UPDATE $this->table SET coin_address = ?, ap_threshold = ?, donate_percent = ? WHERE id = ?");
-    $stmt->bind_param('sddi', $address, $threshold, $donate, $userID);
-    $stmt->execute();
-    if ( $stmt->errno == 0 ) {
-      $stmt->close();
+    $stmt = $this->mysqli->prepare("UPDATE $this->table SET coin_address = ?, ap_threshold = ?, donate_percent = ?, email = ? WHERE id = ?");
+    if ($this->checkStmt($stmt) && $stmt->bind_param('sddsi', $address, $threshold, $donate, $email, $userID) && $stmt->execute())
       return true;
-    }
+    // Catchall
+    $this->setErrorMessage('Failed to update your account');
+    $this->debug->append('Account update failed: ' . $this->mysqli->error);
     return false;
   }
 
@@ -356,7 +359,7 @@ class User {
     $this->debug->append("Fetching user information for user id: $userID");
     $stmt = $this->mysqli->prepare("
       SELECT
-      id, username, pin, api_key, admin,
+      id, username, pin, api_key, admin, email,
       IFNULL(donate_percent, '0') as donate_percent, coin_address, ap_threshold
       FROM $this->table
       WHERE id = ? LIMIT 0,1");
@@ -394,7 +397,7 @@ class User {
       $this->setErrorMessage( 'Password do not match' );
       return false;
     }
-    if (!empty($email1) && !filter_var($email1, FILTER_VALIDATE_EMAIL)) {
+    if (empty($email1) || !filter_var($email1, FILTER_VALIDATE_EMAIL)) {
       $this->setErrorMessage( 'Invalid e-mail address' );
       return false;
     }
