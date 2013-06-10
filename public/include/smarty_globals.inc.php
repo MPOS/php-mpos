@@ -33,6 +33,7 @@ $aGlobal = array(
   'blockexplorer' => $config['blockexplorer'],
   'chaininfo' => $config['chaininfo'],
   'config' => array(
+    'payout_system' => $config['payout_system'],
     'ap_threshold' => array(
       'min' => $config['ap_threshold']['min'],
       'max' => $config['ap_threshold']['max']
