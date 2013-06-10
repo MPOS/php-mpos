@@ -21,7 +21,10 @@
         <td{if $WORKERS[worker].active} style="color: orange"{/if}>{$username.0|escape}.<input name="data[{$WORKERS[worker].id}][username]" value="{$username.1|escape}" size="10" /></td>
         <td><input type="text" name="data[{$WORKERS[worker].id}][password]" value="{$WORKERS[worker].password|escape}" size="10"></td>
         <td class="center"><img src="{$PATH}/images/{if $WORKERS[worker].active}success{else}error{/if}.gif" /></td>
-        <td class="center"><input type="checkbox" name="data[{$WORKERS[worker].id}][monitor]" value="1" {if $WORKERS[worker].monitor}checked{/if} /></td>
+        <td class="center">
+          <input type="checkbox" name="data[{$WORKERS[worker].id}][monitor]" value="1" id="data[{$WORKERS[worker].id}][monitor]" {if $WORKERS[worker].monitor}checked{/if} />
+          <label for="data[{$WORKERS[worker].id}][monitor]"></label>
+        </td>
         <td class="right">{$WORKERS[worker].hashrate|number_format}</td>
         <td align="right"><a href="{$smarty.server.PHP_SELF}?page={$smarty.request.page|escape}&action={$smarty.request.action|escape}&do=delete&id={$WORKERS[worker].id|escape}"><button style="padding:5px" type="button">Delete</button></a></td>
       </tr>

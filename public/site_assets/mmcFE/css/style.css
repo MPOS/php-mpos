@@ -1038,3 +1038,25 @@ a:hover {
   padding-left:5px;
 }
 
+/* Custom checkboxes */
+input[type=checkbox] {
+  display:none;
+}
+
+input[type=checkbox] + label
+{
+  background: url('../images/error.gif');
+  height: 16px;
+  width: 16px;
+  display:inline-block;
+  padding: 0 0 0 0px;
+}
+
+input[type=checkbox]:checked + label
+{
+  background: url('../images/success.gif');
+  height: 16px;
+  width: 16px;
+  display:inline-block;
+  padding: 0 0 0 0px;
+}
