@@ -36,7 +36,7 @@ if ( ! $user->checkPin($_SESSION['USERDATA']['id'], $_POST['authPin']) && $_POST
             }
           } catch (BitcoinClientException $e) {
             $_SESSION['POPUP'][] = array('CONTENT' => 'Failed to send LTC, please contact site support immidiately', 'TYPE' => 'errormsg');
-//            $continue = false;
+            $continue = false;
           }
         }
         // Set balance to 0, add to paid out, insert to ledger
