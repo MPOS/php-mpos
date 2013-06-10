@@ -12,12 +12,18 @@ $aRoundShares = $statistics->getRoundShares();
 $iCurrentActiveWorkers = $worker->getCountAllActiveWorkers();
 $iCurrentPoolHashrate =  $statistics->getCurrentHashrate();
 $iCurrentPoolShareRate = $statistics->getCurrentShareRate();
+if ($bitcoin->can_connect() === true){
+    $dDifficulty = $bitcoin->query('getdifficulty');
+} else {
+    $dDifficulty = 1;
+}
 
 $aGlobal = array(
   'slogan' => $config['website']['slogan'],
   'websitename' => $config['website']['name'],
   'hashrate' => $iCurrentPoolHashrate,
   'sharerate' => $iCurrentPoolShareRate,
+  'ppsvalue' => number_format(round(50 / (pow(2,32) * $dDifficulty) * pow(2, $config['difficulty']), 12) ,12),
   'workers' => $iCurrentActiveWorkers,
   'roundshares' => $aRoundShares,
   'fees' => $config['fees'],
@@ -27,6 +33,7 @@ $aGlobal = array(
   'blockexplorer' => $config['blockexplorer'],
   'chaininfo' => $config['chaininfo'],
   'config' => array(
+    'payout_system' => $config['payout_system'],
     'ap_threshold' => array(
       'min' => $config['ap_threshold']['min'],
       'max' => $config['ap_threshold']['max']
