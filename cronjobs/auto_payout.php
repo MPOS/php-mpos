@@ -52,13 +52,13 @@ if (! empty($users)) {
       }
 
       // Send balance, fees are reduced later
-/*      try {
+      try {
         $bitcoin->sendtoaddress($aUserData['coin_address'], $dBalance);
       } catch (BitcoinClientException $e) {
         verbose("SEND FAILED\n");
         continue;
       }
- */
+
       // Create transaction record
       if ($transaction->addTransaction($aUserData['id'], $dBalance, 'Debit_AP', NULL, $aUserData['coin_address'], 0.1)) {
         // Notify user via  mail
