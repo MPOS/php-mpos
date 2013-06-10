@@ -61,10 +61,19 @@ if (! empty($users)) {
 
       // Create transaction record
       if ($transaction->addTransaction($aUserData['id'], $dBalance, 'Debit_AP', NULL, $aUserData['coin_address'], 0.1)) {
-        verbose("OK\n");
+        // Notify user via  mail
+        $aMailData['email'] = $user->getUserEmail($user->getUserName($aUserData['id']));
+        $aMailData['subject'] = 'Auto Payout Completed';
+        $aMailData['amount'] = $dBalance;
+        if (!$notification->sendNotification($aUserData['id'], 'auto_payout', $aMailData)) {
+          verbose("NOTIFY FAILED\n");
+        } else {
+          verbose("OK\n");
+        }
       } else {
         verbose("FAILED\n");
       }
+
     } else {
       verbose("SKIPPED\n");
     }

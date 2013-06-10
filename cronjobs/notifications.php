@@ -32,20 +32,13 @@ if (empty($aWorkers)) {
     $aData['username'] = $user->getUserName($aWorker['account_id']);
     $aData['subject'] = 'IDLE Worker : ' . $aWorker['username'];
     $aData['email'] = $user->getUserEmail($aData['username']);
-    if ( $notification->isNotified($aData) ) {
-      verbose("Worker already notified\n");
-      continue;
-    }
-    if ($notification->addNotification('idle_worker', $aData) && $notification->sendMail($aData['email'], 'idle_worker', $aData)) {
-        verbose ("Notified " . $aData['email'] . " for IDLE worker " . $aWorker['username'] . "\n");
-      } else {
-        verbose("Unable to send notification: " . $notification->getError() . "\n");
-      }
+    if (!$notification->sendNotification($aWorker['account_id'], 'idle_worker', $aData))
+      verbose($notification->getError() . "\n");
   }
 }
 
 // We notified, lets check which recovered
-$aNotifications = $notification->getAllActive();
+$aNotifications = $notification->getAllActive('idle_worker');
 if (!empty($aNotifications)) {
   foreach ($aNotifications as $aNotification) {
     $aData = json_decode($aNotification['data'], true);
