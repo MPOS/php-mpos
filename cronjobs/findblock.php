@@ -127,7 +127,6 @@ foreach ($aAllBlocks as $iIndex => $aBlock) {
         $notification->sendNotification($account_id, 'new_block', $aMailData);
       }
     }
-    break;
   }
 }
 ?>
