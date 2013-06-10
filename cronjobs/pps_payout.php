@@ -84,4 +84,22 @@ foreach ($aAccountShares as $aData) {
 $setting->setValue('pps_last_share_id', $iLastShareId);
 
 verbose("\n\n------------------------------------------------------------------------------------\n\n");
+
+// Fetch all unaccounted blocks
+$aAllBlocks = $block->getAllUnaccounted('ASC');
+if (empty($aAllBlocks)) {
+  verbose("No new unaccounted blocks found\n");
+}
+
+// Go through blocks and archive/delete shares that have been accounted for
+foreach ($aAllBlocks as $iIndex => $aBlock) {
+  $dummy = $iIndex - 1;
+  if ($config['archive_shares'] && $aBlock['share_id'] < $iLastShareId) {
+    $share->moveArchive($aBlock['share_id'], $aBlock['id'], @$aAllBlocks[$dummy]['share_id']);
+  }
+  if ($aBlock['share_id'] < $iLastShareId && !$share->deleteAccountedShares($aBlock['share_id'], @$aAllBlocks[$dummy]['share_id'])) {
+    verbose("\nERROR : Failed to delete accounted shares from " . $aBlock['share_id'] . " to " . @$aAllBlocks[$dummy]['share_id'] . ", aborting!\n");
+    exit(1);
+  }
+}
 ?>
