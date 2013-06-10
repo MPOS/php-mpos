@@ -394,7 +394,7 @@ class User {
       $this->setErrorMessage( 'Password do not match' );
       return false;
     }
-    if (!empty($email1) && !filter_var($email1, FILTER_VALIDATE_EMAIL)) {
+    if (empty($email1) || !filter_var($email1, FILTER_VALIDATE_EMAIL)) {
       $this->setErrorMessage( 'Invalid e-mail address' );
       return false;
     }
