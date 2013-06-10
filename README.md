@@ -57,7 +57,7 @@ The following feature have been implemented so far:
 
 * Reward Systems
  * Propotional
- * (Planned) PPS
+ * PPS **NEW**
  * (Planned) PPLNS
 * Use of memcache for statistics instead of a cronjob
 * Web User accounts
@@ -76,6 +76,11 @@ The following feature have been implemented so far:
  * Wallet information
  * (Planned) News Posts
  * (Planned) Pool Donations
+* Notification system
+ * IDLE Workers
+ * New blocks found in pool
+ * Auto Payout
+ * Manual Payou
 
 Installation
 ============
