@@ -102,6 +102,9 @@ foreach ($aAllBlocks as $iIndex => $aBlock) {
       $strStatus = "Finder Failed";
     if (!$block->setShares($aBlock['id'], $iRoundShares))
       $strStatus = "Shares Failed";
+    if ($config['block_bonus'] > 0 && !$transaction->addTransaction($iAccountId, $config['block_bonus'], 'Bonus', $aBlock['id'])) {
+      $strStatus = "Bonus Failed";
+    }
 
     verbose(
       $aBlock['id'] . "\t\t"
@@ -115,13 +118,16 @@ foreach ($aAllBlocks as $iIndex => $aBlock) {
 
     // Notify users
     $aAccounts = $notification->getNotificationAccountIdByType('new_block');
-    foreach ($aAccounts as $account_id) {
-      $aMailData['height'] = $aBlock['height'];
-      $aMailData['subject'] = 'New Block';
-      $aMailData['email'] = $user->getUserEmail($user->getUserName($account_id));
-      $aMailData['shares'] = $iRoundShares;
-      $notification->sendNotification($account_id, 'new_block', $aMailData);
+    if (is_array($aAccounts)) {
+      foreach ($aAccounts as $account_id) {
+        $aMailData['height'] = $aBlock['height'];
+        $aMailData['subject'] = 'New Block';
+        $aMailData['email'] = $user->getUserEmail($user->getUserName($account_id));
+        $aMailData['shares'] = $iRoundShares;
+        $notification->sendNotification($account_id, 'new_block', $aMailData);
+      }
     }
+    break;
   }
 }
 ?>

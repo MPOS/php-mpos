@@ -16,7 +16,7 @@
       <tbody style="font-size:12px;">
 {section transaction $TRANSACTIONS}
         {if (
-          ($TRANSACTIONS[transaction].type == 'Credit' and $TRANSACTIONS[transaction].confirmations >= $GLOBAL.confirmations)
+          (($TRANSACTIONS[transaction].type == 'Credit' or $TRANSACTIONS[transaction].type == 'Bonus')and $TRANSACTIONS[transaction].confirmations >= $GLOBAL.confirmations)
           or ($TRANSACTIONS[transaction].type == 'Donation' and $TRANSACTIONS[transaction].confirmations >= $GLOBAL.confirmations)
           or ($TRANSACTIONS[transaction].type == 'Fee' and $TRANSACTIONS[transaction].confirmations >= $GLOBAL.confirmations)
           or $TRANSACTIONS[transaction].type == 'Debit_AP'
@@ -28,7 +28,7 @@
           <td>{$TRANSACTIONS[transaction].type}</td>
           <td>{$TRANSACTIONS[transaction].coin_address}</td>
           <td>{if $TRANSACTIONS[transaction].height == 0}n/a{else}{$TRANSACTIONS[transaction].height}{/if}</td>
-          <td><font color="{if $TRANSACTIONS[transaction].type == Credit}green{else}red{/if}">{$TRANSACTIONS[transaction].amount}</td>
+          <td><font color="{if $TRANSACTIONS[transaction].type == 'Credit' or $TRANSACTIONS[transaction].type == 'Bonus'}green{else}red{/if}">{$TRANSACTIONS[transaction].amount}</td>
         </tr>
         {/if}
 {/section}
@@ -58,7 +58,7 @@
       <tbody style="font-size:12px;">
 {section transaction $TRANSACTIONS}
         {if (
-          $TRANSACTIONS[transaction].type == 'Credit' && $TRANSACTIONS[transaction].confirmations < $GLOBAL.confirmations
+          ($TRANSACTIONS[transaction].type == 'Credit' or $TRANSACTIONS[transaction].type == 'Bonus') and $TRANSACTIONS[transaction].confirmations < $GLOBAL.confirmations
           or ($TRANSACTIONS[transaction].type == 'Donation' and $TRANSACTIONS[transaction].confirmations < $GLOBAL.confirmations)
           or ($TRANSACTIONS[transaction].type == 'Fee' and $TRANSACTIONS[transaction].confirmations < $GLOBAL.confirmations)
         )}
@@ -68,9 +68,9 @@
           <td>{$TRANSACTIONS[transaction].type}</td>
           <td>{$TRANSACTIONS[transaction].coin_address}</td>
           <td>{if $TRANSACTIONS[transaction].height == 0}n/a{else}{$TRANSACTIONS[transaction].height}{/if}</td>
-          <td><font color="{if $TRANSACTIONS[transaction].type == Credit}green{else}red{/if}">{$TRANSACTIONS[transaction].amount}</td>
+          <td><font color="{if $TRANSACTIONS[transaction].type == 'Credit' or $TRANSACTIONS[transaction].type == 'Bonus'}green{else}red{/if}">{$TRANSACTIONS[transaction].amount}</td>
         </tr>
-          {if $TRANSACTIONS[transaction].type == Credit}
+          {if $TRANSACTIONS[transaction].type == 'Credit' or $TRANSACTIONS[transaction].type == 'Bonus'}
             {assign var="credits" value="`$credits+$TRANSACTIONS[transaction].amount`"}
           {else}
             {assign var="debits" value="`$debits+$TRANSACTIONS[transaction].amount`"}
@@ -106,6 +106,7 @@
           $TRANSACTIONS[transaction].type == 'Orphan_Credit'
           or $TRANSACTIONS[transaction].type == 'Orphan_Donation'
           or $TRANSACTIONS[transaction].type == 'Orphan_Fee'
+          or $TRANSACTIONS[transaction].type == 'Orphan_Bonus'
         )}
         <tr class="{cycle values="odd,even"}">
           <td>{$TRANSACTIONS[transaction].id}</td>
@@ -113,9 +114,9 @@
           <td>{$TRANSACTIONS[transaction].type}</td>
           <td>{$TRANSACTIONS[transaction].coin_address}</td>
           <td>{if $TRANSACTIONS[transaction].height == 0}n/a{else}{$TRANSACTIONS[transaction].height}{/if}</td>
-          <td><font color="{if $TRANSACTIONS[transaction].type == Orphan_Credit}green{else}red{/if}">{$TRANSACTIONS[transaction].amount}</td>
+          <td><font color="{if $TRANSACTIONS[transaction].type == 'Orphan_Credit' or $TRANSACTIONS[transaction].type == 'Orphan_Bonus'}green{else}red{/if}">{$TRANSACTIONS[transaction].amount}</td>
         </tr>
-          {if $TRANSACTIONS[transaction].type == Orphan_Credit}
+          {if $TRANSACTIONS[transaction].type == 'Orphan_Credit' or $TRANSACTIONS[transaction].type == 'Orphan_Bonus'}
             {assign var="orphan_credits" value="`$orphan_credits+$TRANSACTIONS[transaction].amount`"}
           {else}
             {assign var="orphan_debits" value="`$orphan_debits+$TRANSACTIONS[transaction].amount`"}
