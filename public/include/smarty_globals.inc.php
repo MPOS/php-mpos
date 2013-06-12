@@ -35,6 +35,7 @@ $aGlobal = array(
   'chaininfo' => $config['chaininfo'],
   'config' => array(
     'currency' => $config['currency'],
+    'txfee' => $config['txfee'],
     'payout_system' => $config['payout_system'],
     'ap_threshold' => array(
       'min' => $config['ap_threshold']['min'],

@@ -17,7 +17,7 @@
 {include file="global/block_footer.tpl"}
 
 {include file="global/block_header.tpl" BLOCK_HEADER="Cash Out"}
-    <ul><li><font color="">Please note: a 0.1 {$GLOBAL.config.currency} transaction will apply when processing "On-Demand" manual payments</font></li></ul>
+    <ul><li><font color="">Please note: a {$GLOBAL.config.txfee} {$GLOBAL.config.currency} transaction will apply when processing "On-Demand" manual payments</font></li></ul>
     <form action="{$smarty.server.PHP_SELF}" method="post">
       <input type="hidden" name="page" value="{$smarty.request.page|escape}">
       <input type="hidden" name="action" value="{$smarty.request.action|escape}">
