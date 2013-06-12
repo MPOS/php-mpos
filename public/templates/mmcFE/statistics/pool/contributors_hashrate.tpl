@@ -6,8 +6,8 @@
         <th align="left">Rank</th>
         <th align="left" scope="col">User Name</th>
         <th class="right" scope="col">KH/s</th>
-        <th class="right">Ł/Day<font size="1"> (est)</font></th>
-        <th class="right">Usd/Day<font size="1"> (est)</font></th>
+        <th class="right">{$GLOBAL.config.currency}/Day</th>
+        <th class="right">Usd/Day</th>
       </tr>
     </thead>
     <tbody>
