@@ -36,7 +36,10 @@ class User {
     return $this->getSingle($username, 'email', 'username', 's');
   }
   public function getUserAdmin($id) {
-    return $this->getSingle($id, 'admin', 'id');
+    return $this->getSingle($id, 'is_admin', 'id');
+  }
+  public function getUserLocked($id) {
+    return $this->getSingle($id, 'is_locked', 'id');
   }
   public function getUserToken($id) {
     return $this->getSingle($id, 'token', 'id');
@@ -44,9 +47,11 @@ class User {
   public function getIdFromToken($token) {
     return $this->getSingle($token, 'id', 'token', 's');
   }
+  public function isLocked($id) {
+    return $this->getUserLocked($id);
+  }
   public function isAdmin($id) {
-    if ($this->getUserAdmin($id) == 1) return true;
-    return false;
+    return $this->getUserAdmin($id);
   }
 
   public function setUserToken($id) {
@@ -79,10 +84,15 @@ class User {
   public function checkLogin($username, $password) {
     $this->debug->append("STA " . __METHOD__, 4);
     $this->debug->append("Checking login for $username with password $password", 2);
-    if ( $this->checkUserPassword($username, $password) ) {
+    if ($this->isLocked($this->getUserId($username))) {
+      $this->setErrorMessage("Account is locked. Please contact site support.");
+      return false;
+    }
+    if ( $this->checkUserPassword($username, $password)) {
       $this->createSession($username);
       return true;
     }
+    $this->setErrorMessage("Invalid username or password");
     return false;
   }
 
@@ -300,7 +310,7 @@ class User {
   private function checkUserPassword($username, $password) {
     $this->debug->append("STA " . __METHOD__, 4);
     $user = array();
-    $stmt = $this->mysqli->prepare("SELECT username, id, admin FROM $this->table WHERE username=? AND pass=? LIMIT 1");
+    $stmt = $this->mysqli->prepare("SELECT username, id, is_admin FROM $this->table WHERE username=? AND pass=? LIMIT 1");
     if ($this->checkStmt($stmt)) {
       $stmt->bind_param('ss', $username, hash('sha256', $password.$this->salt));
       $stmt->execute();
@@ -308,7 +318,7 @@ class User {
       $stmt->fetch();
       $stmt->close();
       // Store the basic login information
-      $this->user = array('username' => $row_username, 'id' => $row_id, 'admin' => $row_admin);
+      $this->user = array('username' => $row_username, 'id' => $row_id, 'is_admin' => $row_admin);
       return $username === $row_username;
     }
     return false;
@@ -337,7 +347,8 @@ class User {
     $this->debug->append("STA " . __METHOD__, 4);
     session_destroy();
     session_regenerate_id(true);
-    return true;
+    // Enforce a page reload
+    header("Location: index.php");
   }
 
   /**
@@ -359,7 +370,7 @@ class User {
     $this->debug->append("Fetching user information for user id: $userID");
     $stmt = $this->mysqli->prepare("
       SELECT
-      id, username, pin, api_key, admin, email,
+      id, username, pin, api_key, is_admin, email,
       IFNULL(donate_percent, '0') as donate_percent, coin_address, ap_threshold
       FROM $this->table
       WHERE id = ? LIMIT 0,1");
@@ -417,7 +428,7 @@ class User {
         ");
     } else {
       $stmt = $this->mysqli->prepare("
-        INSERT INTO $this->table (username, pass, email, pin, api_key, admin)
+        INSERT INTO $this->table (username, pass, email, pin, api_key, is_admin)
         VALUES (?, ?, ?, ?, ?, 1)
         ");
     }
@@ -503,6 +514,22 @@ class User {
         $this->setErrorMessage("Unable to send mail to your address");
         return false;
       }
+    return false;
+  }
+
+  /**
+   * Check if a user is authenticated and allowed to login
+   * Checks the $_SESSION for existing data
+   * Destroys the session if account is now locked
+   * @param none
+   * @return bool
+   **/
+  public function isAuthenticated() {
+    $this->debug->append("STA " . __METHOD__, 4);
+    if ($_SESSION['AUTHENTICATED'] == true && ! $this->isLocked($_SESSION['USERDATA']['id']))
+      return true;
+    // Catchall
+    $this->logoutUser();
     return false;
   }
 }

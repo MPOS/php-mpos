@@ -23,6 +23,7 @@
       <th class="right">Est. Payout&nbsp;&nbsp;&nbsp;</th>
       <th class="right">Balance&nbsp;&nbsp;&nbsp;</th>
       <th class="center">Admin</th>
+      <th class="center">Locked</th>
     </tr>
   </thead>
   <tbody>
@@ -37,7 +38,10 @@
       <td class="right">{$USERS[user].payout.est_payout|number_format:"8"}</td>
       <td class="right">{$USERS[user].balance|number_format:"8"}</td>
       <td class="center">
-        <img src="{$PATH}/images/{if $USERS[user].admin}success{else}error{/if}.gif" />
+        <img src="{$PATH}/images/{if $USERS[user].is_admin}success{else}error{/if}.gif" />
+      </td>
+      <td class="center">
+        <img src="{$PATH}/images/{if $USERS[user].is_locked}success{else}error{/if}.gif" />
       </td>
     </tr>
 {sectionelse}

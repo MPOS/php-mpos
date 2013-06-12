@@ -50,7 +50,7 @@ $smarty->assign("LASTBLOCK", $aBlockData['height']);
 $smarty->assign("DIFFICULTY", $dDifficulty);
 $smarty->assign("REWARD", $config['reward']);
 
-if ($_SESSION['AUTHENTICATED']) {
+if ($user->isAuthenticated()) {
   $smarty->assign("CONTENT", "authenticated.tpl");
 } else {
   $smarty->assign("CONTENT", "../default.tpl");

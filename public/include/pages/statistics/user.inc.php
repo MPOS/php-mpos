@@ -4,12 +4,10 @@
 if (!defined('SECURITY'))
     die('Hacking attempt');
 
-$aHourlyHashRates = $statistics->getHourlyHashrateByAccount($_SESSION['USERDATA']['id']);
-
-// Propagate content our template
-$smarty->assign("YOURHASHRATES", $aHourlyHashRates);
-
-if ($_SESSION['AUTHENTICATED']) {
+if ($user->isAuthenticated()) {
+  $aHourlyHashRates = $statistics->getHourlyHashrateByAccount($_SESSION['USERDATA']['id']);
+  // Propagate content our template
+  $smarty->assign("YOURHASHRATES", $aHourlyHashRates);
   $smarty->assign("CONTENT", "default.tpl");
 }
 ?>
