@@ -19,7 +19,7 @@
               </ul>
             </li>
             {/if}
-            <li><a href="{$smarty.server.PHP_SELF}?page=statistics">Statistics</a>
+            <li><a href="{$smarty.server.PHP_SELF}?page=statistics&action=pool">Statistics</a>
               <ul>
                 <li><a href="{$smarty.server.PHP_SELF}?page=statistics&action=pool">Pool Stats</a></li>
                 {if $smarty.session.AUTHENTICATED|default}<li><a href="{$smarty.server.PHP_SELF}?page=statistics&action=blocks">Block Stats</a></li>{/if}
