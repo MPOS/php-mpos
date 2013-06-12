@@ -23,7 +23,7 @@
       <input type="hidden" name="action" value="{$smarty.request.action|escape}">
       <input type="hidden" name="do" value="cashOut">
       <table>
-        <tbody><tr><td>Account Balance: &nbsp;&nbsp;&nbsp;</td><td>{$GLOBAL.userdata.balance|escape} LTC</td></tr>
+        <tbody><tr><td>Account Balance: &nbsp;&nbsp;&nbsp;</td><td>{$GLOBAL.userdata.balance.confirmed|escape} LTC</td></tr>
         <tr><td>Payout to: </td><td><h6>{$GLOBAL.userdata.coin_address|escape}</h6></td></tr>
         <tr><td>4 digit PIN: </td><td><input type="password" name="authPin" size="4" maxlength="4"></td></tr>
       </tbody></table>

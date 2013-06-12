@@ -20,7 +20,8 @@ if ($_POST['query']) {
   // This is not optimized yet, best is a proper SQL
   // Query against the stats table? Currently cached though.
   foreach ($aUsers as $iKey => $aUser) {
-    $aUser['balance'] = $transaction->getBalance($aUser['id']);
+    $aBalance = $transaction->getBalance($aUser['id']);
+    $aUser['balance'] = $aBalance['confirmed'];
     $aUser['hashrate'] = $statistics->getUserHashrate($aUser['id']);
     $aUser['payout']['est_block'] = round(( (int)$aUser['shares'] / (int)$aRoundShares['valid'] ) * (int)$config['reward'], 3);
     $aUser['payout']['est_fee'] = round(($config['fees'] / 100) * $aUser['payout']['est_block'], 3);
