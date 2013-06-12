@@ -21,7 +21,7 @@ $aContributorsShares = $statistics->getTopContributors('shares', 15);
 $aContributorsHashes = $statistics->getTopContributors('hashes', 15);
 
 // Grab the last 10 blocks found
-$iLimit = 10;
+$iLimit = 5;
 $aBlocksFoundData = $statistics->getBlocksFound($iLimit);
 $aBlockData = $aBlocksFoundData[0];
 
