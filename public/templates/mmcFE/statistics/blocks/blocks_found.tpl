@@ -23,8 +23,8 @@
           <font color="red">Orphan</font>
         {else}{$GLOBAL.confirmations - $BLOCKSFOUND[block].confirmations} left{/if}</td>
         <td>{$BLOCKSFOUND[block].finder|default:"unknown"}</td>
-        <td class="center">{$BLOCKSFOUND[block].time|date_format:"%d/%m/%Y %H:%M:%S"}</td>
-        <td class="right">{$BLOCKSFOUND[block].difficulty|number_format:"8"}</td>
+        <td class="center">{$BLOCKSFOUND[block].time|date_format:"%d/%m %H:%M:%S"}</td>
+        <td class="right">{$BLOCKSFOUND[block].difficulty|number_format:"2"}</td>
         <td class="right">{$BLOCKSFOUND[block].shares|number_format}</td>
       </tr>
 {/section}
