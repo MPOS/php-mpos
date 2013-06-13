@@ -44,6 +44,9 @@ class User {
   public function getUserToken($id) {
     return $this->getSingle($id, 'token', 'id');
   }
+  public function getUserIp($id) {
+    return $this->getSingle($id, 'loggedIp', 'id');
+  }
   public function getIdFromToken($token) {
     return $this->getSingle($token, 'id', 'token', 's');
   }
@@ -546,7 +549,7 @@ class User {
    **/
   public function isAuthenticated() {
     $this->debug->append("STA " . __METHOD__, 4);
-    if ($_SESSION['AUTHENTICATED'] == true && ! $this->isLocked($_SESSION['USERDATA']['id']))
+    if ($_SESSION['AUTHENTICATED'] == true && ! $this->isLocked($_SESSION['USERDATA']['id']) && $this->getUserIp($_SESSION['USERDATA']['id']) == $_SERVER['REMOTE_ADDR'])
       return true;
     // Catchall
     $this->logoutUser();
