@@ -35,6 +35,12 @@ $config = array(
     'slogan' => 'Resistance is futile',
     'email' => 'test@example.com',  // Mail address used for notifications
   ),
+  // See: http://www.google.com/recaptcha
+  'recaptcha' => array(
+    'enabled' => false,            // Enable re-captcha during registraion
+    'public_key' => 'YOUR_PUBLIC_RECAPTCHA_KEY',
+    'private_key' => 'YOUR_PRIVATE_RECAPTCHA_KEY'
+  ),
   'currency' => 'LTC',              // Currency name to be used on website
   'txfee' => 0.1,                   // Default tx fee added by RPC server
   'block_bonus' => 0,
