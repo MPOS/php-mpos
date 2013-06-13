@@ -1,5 +1,6 @@
-{include file="global/block_header.tpl" BLOCK_HEADER="Block Luck" BLOCK_STYLE="clear:none;"}
-<table class="stats" rel="line" style="">
+{include file="global/block_header.tpl" BLOCK_HEADER="Block Shares" BLOCK_STYLE="clear:none;"}
+<table width="70%" class="stats" rel="line">
+  <caption>Block Shares</caption> 
   <thead>
     <tr>
 {section block $BLOCKSFOUND step=-1}
@@ -9,13 +10,13 @@
   </thead>
   <tbody>
     <tr>
-      <th scope="row">Expected Shares</th>
+      <th scope="row">Expected</th>
 {section block $BLOCKSFOUND step=-1}
       <td>{round(pow(2,32 - $GLOBAL.config.targetdiff) * $BLOCKSFOUND[block].difficulty)}</td>
 {/section}
     </tr>
     <tr>
-      <th scope="row">Actual Shares</th>
+      <th scope="row">Actual</th>
 {section block $BLOCKSFOUND step=-1}
       <td>{$BLOCKSFOUND[block].shares}</td>
 {/section}

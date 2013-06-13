@@ -1,8 +1,8 @@
 {include file="global/block_header.tpl" BLOCK_HEADER="Your Average Hourly Hash Rate" BUTTONS=array(mine,pool,both)}
 {if is_array($YOURHASHRATES)}
 <div class="block_content tab_content" id="mine" style="padding-left:30px;">
-  <table class="stats" rel="area" cellpadding="0">
-    <caption>Your Hashrate&nbsp;</caption>
+  <table width="60%" class="stats" rel="area">
+    <caption>Your Hashrate</caption>
     <thead>
       <tr>
         <td></td>
