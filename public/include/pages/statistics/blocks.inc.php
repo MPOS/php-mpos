@@ -13,5 +13,5 @@ $aBlockData = $aBlocksFoundData[0];
 $smarty->assign("BLOCKSFOUND", $aBlocksFoundData);
 $smarty->assign("BLOCKLIMIT", $iLimit);
 
-$smarty->assign("CONTENT", "blocks_found.tpl");
+$smarty->assign("CONTENT", "default.tpl");
 ?>

@@ -44,6 +44,6 @@
 {include file="global/block_footer.tpl"}
 
 
-{include file="statistics/blocks/blocks_found.tpl" ALIGN="right"}
+{include file="statistics/blocks/small_table.tpl" ALIGN="right" SHORT=true}
 
 {include file="global/block_footer.tpl"}
