@@ -47,6 +47,9 @@ class User {
   public function getUserIp($id) {
     return $this->getSingle($id, 'loggedIp', 'id');
   }
+  public function getUserFailed($id) {
+   return $this->getSingle($id, 'failed_logins', 'id');
+  }
   public function getIdFromToken($token) {
     return $this->getSingle($token, 'id', 'token', 's');
   }
@@ -57,27 +60,23 @@ class User {
     return $this->getUserAdmin($id);
   }
   public function changeLocked($id) {
-    $field = array(
-      'name' => 'is_locked',
-      'type' => 'i',
-      'value' => !$this->isLocked($id)
-    );
+    $field = array('name' => 'is_locked', 'type' => 'i', 'value' => !$this->isLocked($id));
     return $this->updateSingle($id, $field);
   }
   public function changeAdmin($id) {
-    $field = array(
-      'name' => 'is_admin',
-      'type' => 'i',
-      'value' => !$this->isAdmin($id)
-    );
+    $field = array('name' => 'is_admin', 'type' => 'i', 'value' => !$this->isAdmin($id));
     return $this->updateSingle($id, $field);
   }
   public function setUserToken($id) {
-    $field = array(
-      'name' => 'token',
-      'type' => 's',
-      'value' => hash('sha256', $id.time().$this->salt)
-    );
+    $field = array('name' => 'token', 'type' => 's', 'value' => hash('sha256', $id.time().$this->salt));
+    return $this->updateSingle($id, $field);
+  }
+  private function setUserFailed($id, $value) {
+    $field = array( 'name' => 'failed_logins', 'type' => 'i', 'value' => $value);
+    return $this->updateSingle($id, $field);
+  }
+  private function incUserFailed($id) {
+    $field = array( 'name' => 'failed_logins', 'type' => 'i', 'value' => $this->getUserFailed($id) + 1);
     return $this->updateSingle($id, $field);
   }
   private function setUserIp($id, $ip) {
@@ -112,10 +111,14 @@ class User {
     }
     if ( $this->checkUserPassword($username, $password)) {
       $this->createSession($username);
+      $this->setUserFailed($this->getUserId($username), 0);
       $this->setUserIp($this->getUserId($username), $_SERVER['REMOTE_ADDR']);
       return true;
     }
     $this->setErrorMessage("Invalid username or password");
+    if ($id = $this->getUserId($username))
+      $this->incUserFailed($id);
+
     return false;
   }
 
@@ -213,7 +216,7 @@ class User {
    **/
   private function updateSingle($id, $field) {
     $this->debug->append("STA " . __METHOD__, 4);
-    $stmt = $this->mysqli->prepare("UPDATE $this->table SET " . $field['name'] . " = ? WHERE id = ? LIMIT 1");
+    $stmt = $this->mysqli->prepare("UPDATE $this->table SET `" . $field['name'] . "` = ? WHERE id = ? LIMIT 1");
     if ($this->checkStmt($stmt) && $stmt->bind_param($field['type'].'i', $field['value'], $id) && $stmt->execute())
       return true;
     $this->debug->append("Unable to update " . $field['name'] . " with " . $field['value'] . " for ID $id");
