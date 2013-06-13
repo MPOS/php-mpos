@@ -2,7 +2,7 @@
 <table class="stats" style="">
   <thead>
     <tr>
-{section block $BLOCKSFOUND}
+{section block $BLOCKSFOUND step=-1}
       <th scope="col">{$BLOCKSFOUND[block].height}</th>
 {/section}
     </th>
@@ -10,13 +10,13 @@
   <tbody>
     <tr>
       <th scope="row">Expected Shares</th>
-{section block $BLOCKSFOUND}
+{section block $BLOCKSFOUND step=-1}
       <td>{(pow(2,32 - $GLOBAL.config.targetdiff) * $BLOCKSFOUND[block].difficulty)}</td>
 {/section}
     </tr>
     <tr>
       <th scope="row">Actual Shares</th>
-{section block $BLOCKSFOUND}
+{section block $BLOCKSFOUND step=-1}
       <td>{$BLOCKSFOUND[block].shares}</td>
 {/section}
    </tr>
