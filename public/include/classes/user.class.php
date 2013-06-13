@@ -53,6 +53,22 @@ class User {
   public function isAdmin($id) {
     return $this->getUserAdmin($id);
   }
+  public function changeLocked($id) {
+    $field = array(
+      'name' => 'is_locked',
+      'type' => 'i',
+      'value' => !$this->isLocked($id)
+    );
+    return $this->updateSingle($id, $field);
+  }
+  public function changeAdmin($id) {
+    $field = array(
+      'name' => 'is_admin',
+      'type' => 'i',
+      'value' => !$this->isAdmin($id)
+    );
+    return $this->updateSingle($id, $field);
+  }
 
   public function setUserToken($id) {
     $field = array(

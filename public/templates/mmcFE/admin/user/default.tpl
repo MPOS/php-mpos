@@ -1,5 +1,22 @@
+<script language="javascript">
+    function storeLock(id) {
+      $.ajax({
+       type: "POST",
+       url: "{$smarty.server.PHP_SELF}",
+       data: "page={$smarty.request.page}&action={$smarty.request.action}&do=lock&account_id=" + id,
+     });
+    }
+    function storeAdmin(id) {
+      $.ajax({
+       type: "POST",
+       url: "{$smarty.server.PHP_SELF}",
+       data: "page={$smarty.request.page}&action={$smarty.request.action}&do=admin&account_id=" + id,
+     });
+    }
+</script>
+
 {include file="global/block_header.tpl" BLOCK_HEADER="Query User Database"}
-<form action="{$smarty.server.PHP_SELF}" method="POST">
+<form action="{$smarty.server.PHP_SELF}" method="POST" id='query'>
   <input type="hidden" name="page" value="{$smarty.request.page}">
   <input type="hidden" name="action" value="{$smarty.request.action}">
   <input type="text" class="pin" name="query" value="{$smarty.request.query|default:"%"}">
@@ -38,10 +55,14 @@
       <td class="right">{$USERS[user].payout.est_payout|number_format:"8"}</td>
       <td class="right">{$USERS[user].balance|number_format:"8"}</td>
       <td class="center">
-        <img src="{$PATH}/images/{if $USERS[user].is_admin}success{else}error{/if}.gif" />
+        <input type="hidden" name="admin[{$USERS[user].id}]" value="0"/>
+        <input type="checkbox" onclick="storeAdmin({$USERS[user].id})" name="admin[{$USERS[user].id}]" value="1" id="admin[{$USERS[user].id}]" {if $USERS[user].is_admin}checked{/if} />
+        <label for="admin[{$USERS[user].id}]"></label>
       </td>
       <td class="center">
-        <img src="{$PATH}/images/{if $USERS[user].is_locked}success{else}error{/if}.gif" />
+        <input type="hidden" name="locked[{$USERS[user].id}]" value="0"/>
+        <input type="checkbox" onclick="storeLock({$USERS[user].id})" name="locked[{$USERS[user].id}]" value="1" id="locked[{$USERS[user].id}]" {if $USERS[user].is_locked}checked{/if} />
+        <label for="locked[{$USERS[user].id}]"></label>
       </td>
     </tr>
 {sectionelse}

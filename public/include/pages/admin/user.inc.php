@@ -11,6 +11,18 @@ if (!$user->isAuthenticated() || !$user->isAdmin($_SESSION['USERDATA']['id'])) {
 
 $aRoundShares = $statistics->getRoundShares();
 
+// Change account lock
+if ($_POST['do'] == 'lock') {
+  $supress_master = 1;
+  $user->changeLocked($_POST['account_id']);
+}
+
+// Change account admin
+if ($_POST['do'] == 'admin') {
+  $supress_master = 1;
+  $user->changeAdmin($_POST['account_id']);
+}
+
 if ($_POST['query']) {
   // Fetch requested users
   $aUsers = $statistics->getAllUserStats($_POST['query']);
