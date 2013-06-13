@@ -7,16 +7,19 @@ if (!defined('SECURITY'))
 // Globally available variables
 $debug->append('Global smarty variables', 3);
 
+// Only run these if the user is logged in
+if ($_SESSION['AUTHENTICATED']) {
+  $aRoundShares = $statistics->getRoundShares();
+  if ($bitcoin->can_connect() === true){
+    $dDifficulty = $bitcoin->query('getdifficulty');
+  } else {
+    $dDifficulty = 1;
+  }
+}
 // Fetch some data
-$aRoundShares = $statistics->getRoundShares();
 $iCurrentActiveWorkers = $worker->getCountAllActiveWorkers();
 $iCurrentPoolHashrate =  $statistics->getCurrentHashrate();
 $iCurrentPoolShareRate = $statistics->getCurrentShareRate();
-if ($bitcoin->can_connect() === true){
-    $dDifficulty = $bitcoin->query('getdifficulty');
-} else {
-    $dDifficulty = 1;
-}
 
 // Global data for Smarty
 $aGlobal = array(
