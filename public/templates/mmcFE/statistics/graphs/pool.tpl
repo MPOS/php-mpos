@@ -1,8 +1,7 @@
-{include file="global/block_header.tpl" BLOCK_HEADER="Your Average Hourly Hash Rate" BUTTONS=array(mine,pool,both)}
-{if is_array($YOURHASHRATES)}
-<div class="block_content tab_content" id="mine" style="padding-left:30px;">
+{if is_array($POOLHASHRATES)}
+<div class="block_content tab_content" id="pool" style="padding-left:30px;">
   <table width="60%" class="stats" rel="area">
-    <caption>Your Hashrate</caption>
+    <caption>Pool Hashrate</caption>
     <thead>
       <tr>
         <td></td>
@@ -16,12 +15,12 @@
     </thead>
     <tbody>
       <tr>
-        <th scope="row">{$smarty.session.USERDATA.username}</th>
+        <th scope="row">Pool</th>
 {for $i=date('G') to 23}
-        <td>{$YOURHASHRATES.$i|default:"0"}</td>
+        <td>{$POOLHASHRATES.$i|default:"0"}</td>
 {/for}
 {for $i=0 to date('G', time() - 60 * 60)}
-        <td>{$YOURHASHRATES.$i|default:"0"}</td>
+        <td>{$POOLHASHRATES.$i|default:"0"}</td>
 {/for}
       </tr>
     </tbody>
@@ -30,4 +29,3 @@
 {else}
 <p><li>No shares available to start calculations</li></p>
 {/if}
-{include file="global/block_footer.tpl"}
