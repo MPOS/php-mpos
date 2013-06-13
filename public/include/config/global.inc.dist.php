@@ -34,6 +34,8 @@ $config = array(
     'slogan' => 'Resistance is futile',
     'email' => 'test@example.com',  // Mail address used for notifications
   ),
+  'currency' => 'LTC',              // Currency name to be used on website
+  'txfee' => 0.1,                   // Default tx fee added by RPC server
   'block_bonus' => 0,
   'payout_system' => 'prop',         // Set your payout here so template changes are activated
   'archive_shares' => true,         // Store accounted shares in archive table?

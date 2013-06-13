@@ -49,7 +49,7 @@
                     </tr>
 {if $GLOBAL.config.payout_system != 'pps'}
                     <tr>
-                      <td colspan="2"><b><u>LTC Round Estimate</u></b></td>
+                      <td colspan="2"><b><u>{$GLOBAL.config.currency} Round Estimate</u></b></td>
                     </tr>
                     <tr>
                       <td><b>Block</b></td>
@@ -69,9 +69,9 @@
                     </tr>
 {/if}
                     <tr><td colspan="2">&nbsp;</td></tr>
-                    <tr><td colspan="2"><b><u>Account Balance</u></b></td></tr>
-                    <tr><td>Confirmed</td><td class="right"><b>{$GLOBAL.userdata.balance.confirmed|default:"0"} LTC</td></tr>
-                    <tr><td>Unconfirmed</td><td class="right"><b>{$GLOBAL.userdata.balance.unconfirmed|default:"0"} LTC</td></tr>
+                    <tr><td colspan="2"><b><u>{$GLOBAL.config.currency} Account Balance</u></b></td></tr>
+                    <tr><td>Confirmed</td><td class="right"><b>{$GLOBAL.userdata.balance.confirmed|default:"0"}</td></tr>
+                    <tr><td>Unconfirmed</td><td class="right"><b>{$GLOBAL.userdata.balance.unconfirmed|default:"0"}</td></tr>
                   </table>
                 </div>
               <div class="bendl"></div>

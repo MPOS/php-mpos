@@ -21,8 +21,8 @@ if ( ! $user->checkPin($_SESSION['USERDATA']['id'], $_POST['authPin']) && $_POST
       $aBalance = $transaction->getBalance($_SESSION['USERDATA']['id']);
       $dBalance = $aBalance['confirmed'];
       $sCoinAddress = $user->getCoinAddress($_SESSION['USERDATA']['id']);
-      // Ensure we can cover the potential transaction fee of 0.1 LTC with the balance
-      if ($dBalance > 0.1) {
+      // Ensure we can cover the potential transaction fee
+      if ($dBalance > $config['txfee']) {
         if ($bitcoin->can_connect() === true) {
           try {
             $bitcoin->validateaddress($sCoinAddress);
@@ -31,7 +31,7 @@ if ( ! $user->checkPin($_SESSION['USERDATA']['id'], $_POST['authPin']) && $_POST
             $continue = false;
           }
           if ($continue == true) {
-            // Send balance to address, mind 0.1 fee for transaction!
+            // Send balance to address, mind fee for transaction!
             try {
               if ($setting->getValue('auto_payout_active') == 0) {
                 $bitcoin->sendtoaddress($sCoinAddress, $dBalance);
@@ -40,7 +40,7 @@ if ( ! $user->checkPin($_SESSION['USERDATA']['id'], $_POST['authPin']) && $_POST
                 $continue = false;
               }
             } catch (BitcoinClientException $e) {
-              $_SESSION['POPUP'][] = array('CONTENT' => 'Failed to send LTC, please contact site support immidiately', 'TYPE' => 'errormsg');
+              $_SESSION['POPUP'][] = array('CONTENT' => 'Failed to send ' . $config['currency'] . ', please contact site support immidiately', 'TYPE' => 'errormsg');
               $continue = false;
             }
           }
@@ -56,7 +56,7 @@ if ( ! $user->checkPin($_SESSION['USERDATA']['id'], $_POST['authPin']) && $_POST
           $_SESSION['POPUP'][] = array('CONTENT' => 'Unable to connect to litecoind RPC service', 'TYPE' => 'errormsg');
         }
       } else {
-        $_SESSION['POPUP'][] = array('CONTENT' => 'Insufficient funds, you need more than 0.1 LTC to cover transaction fees', 'TYPE' => 'errormsg');
+        $_SESSION['POPUP'][] = array('CONTENT' => 'Insufficient funds, you need more than ' . $config['txfee'] . ' ' . $conifg['currency'] . ' to cover transaction fees', 'TYPE' => 'errormsg');
       }
       $setting->setValue('manual_payout_active', 0);
     }
