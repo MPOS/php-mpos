@@ -30,6 +30,7 @@ $config = array(
     'max' => 250
   ),
   'website' => array(
+    'registration' => true,         // Allow new users to register
     'name' => 'The Pool',
     'slogan' => 'Resistance is futile',
     'email' => 'test@example.com',  // Mail address used for notifications
