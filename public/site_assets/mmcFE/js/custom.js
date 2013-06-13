@@ -19,7 +19,7 @@ $(function () {
 	      // calculate width of graph so it doesnt overflow its parent div
         //var chart_width = ($(this).parent('div').width()) - 60;
 	      // hack to statically set width as something is broken with div width calculation - anni
-        var chart_width = $(document).width() - 340;
+        var chart_width = $(document).width() - 400;
 
         if (statsType == 'line' || statsType == 'pie') {
             $(this).hide().visualize({
