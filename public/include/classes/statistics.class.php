@@ -293,7 +293,6 @@ class Statistics {
 
   /**
    * get Hourly hashrate for a user
-   * Not working yet since I was not able to solve this via SQL queries
    * @param account_id int User ID
    * @return data array NOT FINISHED YET
    **/
@@ -316,6 +315,34 @@ class Statistics {
         $aData[$row['hour']] = $row['hashrate'];
       }
       return $this->memcache->setCache(__FUNCTION__ . $account_id, $aData);
+    }
+    // Catchall
+    $this->debug->append("Failed to fetch hourly hashrate: " . $this->mysqli->error);
+    return false;
+  }
+  
+  /**
+   * get Hourly hashrate for the pool 
+   * @param none
+   * @return data array NOT FINISHED YET
+   **/
+  public function getHourlyHashrateByPool() {
+    $this->debug->append("STA " . __METHOD__, 4);
+    if ($data = $this->memcache->get(__FUNCTION__)) return $data;
+    $stmt = $this->mysqli->prepare("
+      SELECT
+      	ROUND(COUNT(s.id) * POW(2, " . $this->config['difficulty'] . ") / 3600 / 1000) AS hashrate,
+        HOUR(s.time) AS hour
+      FROM " . $this->share->getTableName() . " AS s
+      WHERE time < NOW() - INTERVAL 1 HOUR
+        AND time > NOW() - INTERVAL 25 HOUR
+      GROUP BY HOUR(time)
+    ");
+    if ($this->checkStmt($stmt) && $stmt->execute() && $result = $stmt->get_result()) {
+      while ($row = $result->fetch_assoc()) {
+        $aData[$row['hour']] = $row['hashrate'];
+      }
+      return $this->memcache->setCache(__FUNCTION__, $aData);
     }
     // Catchall
     $this->debug->append("Failed to fetch hourly hashrate: " . $this->mysqli->error);
