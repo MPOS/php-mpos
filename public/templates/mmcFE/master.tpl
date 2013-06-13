@@ -11,6 +11,7 @@
     <script src="{$PATH}/js/jquery.tablesorter.min.js"></script>
     <script src="{$PATH}/js/jquery.tablesorter.pager.js"></script>
     <script src="{$PATH}/js/jquery.visualize.js"></script>
+    <script src="{$PATH}/js/jquery.tooltip.visualize.js"></script>
     <script src="{$PATH}/js/custom.js"></script>
     <script src="{$PATH}/js/tools.js"></script>
     <!--[if IE]><script type="text/javascript" src="{$PATH}/js/excanvas.js"></script><![endif]-->
