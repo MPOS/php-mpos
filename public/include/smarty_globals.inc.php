@@ -34,6 +34,7 @@ $aGlobal = array(
   'blockexplorer' => $config['blockexplorer'],
   'chaininfo' => $config['chaininfo'],
   'config' => array(
+    'targetdiff' => $config['difficulty'],
     'currency' => $config['currency'],
     'txfee' => $config['txfee'],
     'payout_system' => $config['payout_system'],

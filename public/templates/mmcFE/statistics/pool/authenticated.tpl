@@ -33,7 +33,7 @@
     </tr>
     <tr>
       <td class="leftheader">Est. Avg. Shares per Round</td>
-      <td>{($ESTTIME * $GLOBAL.sharerate)|number_format:"0"}</td>
+      <td>{(pow(2, 32 - $GLOBAL.config.targetdiff) * $DIFFICULTY)|number_format:"0"}</td>
     </tr>
     <tr>
       <td class="leftheader">Time Since Last Block</td>
