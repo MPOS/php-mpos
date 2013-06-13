@@ -1,5 +1,5 @@
 {include file="global/block_header.tpl" BLOCK_HEADER="Block Luck" BLOCK_STYLE="clear:none;"}
-<table class="stats" style="">
+<table class="stats" rel="line" style="">
   <thead>
     <tr>
 {section block $BLOCKSFOUND step=-1}
