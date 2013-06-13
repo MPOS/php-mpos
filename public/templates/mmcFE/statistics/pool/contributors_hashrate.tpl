@@ -7,7 +7,7 @@
         <th align="left" scope="col">User Name</th>
         <th class="right" scope="col">KH/s</th>
         <th class="right">{$GLOBAL.config.currency}/Day</th>
-        <th class="right">Usd/Day</th>
+        <th class="right">USD/Day</th>
       </tr>
     </thead>
     <tbody>
@@ -20,7 +20,7 @@
         <td>{$CONTRIBHASHES[contrib].account}</td>
         <td class="right">{$CONTRIBHASHES[contrib].hashrate|number_format}</td>
         <td class="right">{$estday|number_format:"3"}</td>
-        <td class="right">{$estday|number_format:"3"*$GLOBAL.price|default:"n/a"|number_format:"4"}</td>
+        <td class="right">{($estday * $GLOBAL.price)|default:"n/a"|number_format:"2"}</td>
       </tr>
 {/section}
 {if $listed != 1}
@@ -29,7 +29,7 @@
         <td>{$GLOBAL.userdata.username}</td>
         <td class="right">{$GLOBAL.userdata.hashrate}</td>
         <td class="right">{$estday|number_format:"3"}</td>
-        <td class="right">{$estday|number_format:"3"*$GLOBAL.price|default:"n/a"|number_format:"4"}</td>
+        <td class="right">{($estday * $GLOBAL.price)|default:"n/a"|number_format:"2"}</td>
       </tr>
 {/if}
     </tbody>
