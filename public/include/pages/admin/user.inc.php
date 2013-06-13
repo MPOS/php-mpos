@@ -1,16 +1,27 @@
 <?php
 
 // Make sure we are called from index.php
-if (!defined('SECURITY'))
-    die('Hacking attempt');
+if (!defined('SECURITY')) die('Hacking attempt');
 
 // Check user to ensure they are admin
-if (!$user->isAdmin($_SESSION['USERDATA']['id'])) {
+if (!$user->isAuthenticated() || !$user->isAdmin($_SESSION['USERDATA']['id'])) {
   header("HTTP/1.1 404 Page not found");
-  die();
+  die("404 Page not found");
 }
 
 $aRoundShares = $statistics->getRoundShares();
+
+// Change account lock
+if ($_POST['do'] == 'lock') {
+  $supress_master = 1;
+  $user->changeLocked($_POST['account_id']);
+}
+
+// Change account admin
+if ($_POST['do'] == 'admin') {
+  $supress_master = 1;
+  $user->changeAdmin($_POST['account_id']);
+}
 
 if ($_POST['query']) {
   // Fetch requested users
