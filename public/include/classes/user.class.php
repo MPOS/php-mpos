@@ -69,13 +69,16 @@ class User {
     );
     return $this->updateSingle($id, $field);
   }
-
   public function setUserToken($id) {
     $field = array(
       'name' => 'token',
       'type' => 's',
       'value' => hash('sha256', $id.time().$this->salt)
     );
+    return $this->updateSingle($id, $field);
+  }
+  private function setUserIp($id, $ip) {
+    $field = array( 'name' => 'loggedIp', 'type' => 's', 'value' => $ip );
     return $this->updateSingle($id, $field);
   }
 
@@ -106,6 +109,7 @@ class User {
     }
     if ( $this->checkUserPassword($username, $password)) {
       $this->createSession($username);
+      $this->setUserIp($this->getUserId($username), $_SERVER['REMOTE_ADDR']);
       return true;
     }
     $this->setErrorMessage("Invalid username or password");
