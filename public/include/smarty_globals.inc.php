@@ -18,6 +18,7 @@ if ($bitcoin->can_connect() === true){
     $dDifficulty = 1;
 }
 
+// Global data for Smarty
 $aGlobal = array(
   'slogan' => $config['website']['slogan'],
   'websitename' => $config['website']['name'],
@@ -33,6 +34,8 @@ $aGlobal = array(
   'blockexplorer' => $config['blockexplorer'],
   'chaininfo' => $config['chaininfo'],
   'config' => array(
+    'currency' => $config['currency'],
+    'txfee' => $config['txfee'],
     'payout_system' => $config['payout_system'],
     'ap_threshold' => array(
       'min' => $config['ap_threshold']['min'],

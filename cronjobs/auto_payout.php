@@ -43,7 +43,7 @@ if (! empty($users)) {
     verbose($aUserData['id'] . "\t" . $aUserData['username'] . "\t" . $dBalance . "\t" . $aUserData['ap_threshold'] . "\t\t" . $aUserData['coin_address'] . "\t");
 
     // Only run if balance meets threshold and can pay the potential transaction fee
-    if ($dBalance > $aUserData['ap_threshold'] && $dBalance > 0.1) {
+    if ($dBalance > $aUserData['ap_threshold'] && $dBalance > $config['txfee']) {
       // Validate address against RPC
       try {
         $bitcoin->validateaddress($aUserData['coin_address']);
@@ -52,7 +52,7 @@ if (! empty($users)) {
         continue;
       }
 
-      // Send balance, fees are reduced later
+      // Send balance, fees are reduced later by RPC Server
       try {
         $bitcoin->sendtoaddress($aUserData['coin_address'], $dBalance);
       } catch (BitcoinClientException $e) {
@@ -61,7 +61,7 @@ if (! empty($users)) {
       }
 
       // Create transaction record
-      if ($transaction->addTransaction($aUserData['id'], $dBalance, 'Debit_AP', NULL, $aUserData['coin_address'], 0.1)) {
+      if ($transaction->addTransaction($aUserData['id'], $dBalance, 'Debit_AP', NULL, $aUserData['coin_address'])) {
         // Notify user via  mail
         $aMailData['email'] = $user->getUserEmail($user->getUserName($aUserData['id']));
         $aMailData['subject'] = 'Auto Payout Completed';
@@ -76,7 +76,7 @@ if (! empty($users)) {
       }
 
     } else {
-      verbose("SKIPPED\n");
+      verbose("INSUFF_TXFEE\n");
     }
   }
 } else {
