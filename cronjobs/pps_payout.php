@@ -93,12 +93,27 @@ if (empty($aAllBlocks)) {
 
 // Go through blocks and archive/delete shares that have been accounted for
 foreach ($aAllBlocks as $iIndex => $aBlock) {
-  $dummy = $iIndex - 1;
-  if ($config['archive_shares'] && $aBlock['share_id'] < $iLastShareId) {
-    $share->moveArchive($aBlock['share_id'], $aBlock['id'], @$aAllBlocks[$dummy]['share_id']);
+  // If we are running through more than one block, check for previous share ID
+  $iLastBlockShare = @$aAllBlocks[$iIndex - 1]['share_id'] ? @$aAllBlocks[$iIndex - 1]['share_id'] : 0;
+  // Per account statistics
+  $aAccountShares = $share->getSharesForAccounts(@$iLastBlockShare, $aBlock['share_id']);
+  foreach ($aAccountShares as $key => $aData) {
+    if (!$statistics->updateShareStatistics($aData, $aBlock['id']))
+      verbose("Failed to update stats for this block on : " . $aData['username'] . "\n");
   }
-  if ($aBlock['share_id'] < $iLastShareId && !$share->deleteAccountedShares($aBlock['share_id'], @$aAllBlocks[$dummy]['share_id'])) {
-    verbose("\nERROR : Failed to delete accounted shares from " . $aBlock['share_id'] . " to " . @$aAllBlocks[$dummy]['share_id'] . ", aborting!\n");
+  // Move shares to archive
+  if ($config['archive_shares'] && $aBlock['share_id'] < $iLastShareId) {
+    if (!$share->moveArchive($aBlock['share_id'], $aBlock['id'], @$iLastBlockShare))
+      verbose("Archving failed\n");
+  }
+  // Delete shares
+  if ($aBlock['share_id'] < $iLastShareId && !$share->deleteAccountedShares($aBlock['share_id'], $iLastBlockShare)) {
+    verbose("\nERROR : Failed to delete accounted shares from " . $aBlock['share_id'] . " to " . $iLastBlockShare . ", aborting!\n");
+    exit(1);
+  }
+  // Mark this block as accounted for
+  if (!$block->setAccounted($aBlock['id'])) {
+    verbose("\nERROR : Failed to mark block as accounted! Aborting!\n");
     exit(1);
   }
 }
