@@ -31,6 +31,7 @@ if (empty($aWorkers)) {
     $aData = $aWorker;
     $aData['username'] = $user->getUserName($aWorker['account_id']);
     $aData['subject'] = 'IDLE Worker : ' . $aWorker['username'];
+    $aData['worker'] = $aWorker['username'];
     $aData['email'] = $user->getUserEmail($aData['username']);
     if (!$notification->sendNotification($aWorker['account_id'], 'idle_worker', $aData))
       verbose($notification->getError() . "\n");
