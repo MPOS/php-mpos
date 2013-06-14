@@ -5,10 +5,10 @@ if (!defined('SECURITY'))
   die('Hacking attempt');
 
 if ($user->isAuthenticated()) {
-  if ( ! $user->checkPin($_SESSION['USERDATA']['id'], $_POST['authPin']) && $_POST['do']) {
+  if ( ! $user->checkPin($_SESSION['USERDATA']['id'], @$_POST['authPin']) && @$_POST['do']) {
     $_SESSION['POPUP'][] = array('CONTENT' => 'Invalid PIN','TYPE' => 'errormsg');
   } else {
-    switch ($_POST['do']) {
+    switch (@$_POST['do']) {
     case 'cashOut':
       if ($setting->getValue('manual_payout_active') == 1) {
         $_SESSION['POPUP'][] = array('CONTENT' => 'A manual payout is in progress. Please try again later.', 'TYPE' => 'errormsg');

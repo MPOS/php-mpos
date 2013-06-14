@@ -12,18 +12,18 @@ if (!$user->isAuthenticated() || !$user->isAdmin($_SESSION['USERDATA']['id'])) {
 $aRoundShares = $statistics->getRoundShares();
 
 // Change account lock
-if ($_POST['do'] == 'lock') {
+if (@$_POST['do'] == 'lock') {
   $supress_master = 1;
   $user->changeLocked($_POST['account_id']);
 }
 
 // Change account admin
-if ($_POST['do'] == 'admin') {
+if (@$_POST['do'] == 'admin') {
   $supress_master = 1;
   $user->changeAdmin($_POST['account_id']);
 }
 
-if ($_POST['query']) {
+if (@$_POST['query']) {
   // Fetch requested users
   $aUsers = $statistics->getAllUserStats($_POST['query']);
 
@@ -40,10 +40,10 @@ if ($_POST['query']) {
     $aUser['payout']['est_payout'] = round($aUser['payout']['est_block'] - $aUser['payout']['est_donation'] - $aUser['payout']['est_fee'], 3);
     $aUsers[$iKey] = $aUser;
   }
+  // Assign our variables
+  $smarty->assign("USERS", $aUsers);
 }
 
-// Assign our variables
-$smarty->assign("USERS", $aUsers);
 
 // Tempalte specifics
 $smarty->assign("CONTENT", "default.tpl");

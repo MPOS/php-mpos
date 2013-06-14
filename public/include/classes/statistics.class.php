@@ -311,6 +311,7 @@ class Statistics {
       GROUP BY HOUR(time)
     ");
     if ($this->checkStmt($stmt) && $stmt->bind_param("i", $account_id) && $stmt->execute() && $result = $stmt->get_result()) {
+      $aData = array();
       while ($row = $result->fetch_assoc()) {
         $aData[$row['hour']] = $row['hashrate'];
       }

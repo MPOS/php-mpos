@@ -28,7 +28,7 @@
         <td>n/a</td>
         <td>{$GLOBAL.userdata.username}</td>
         <td class="right">{$GLOBAL.userdata.hashrate}</td>
-        <td class="right">{$estday|number_format:"3"}</td>
+        <td class="right">{$estday|number_format:"3"|default:"n/a"}</td>
         <td class="right">{($estday * $GLOBAL.price)|default:"n/a"|number_format:"2"}</td>
       </tr>
 {/if}

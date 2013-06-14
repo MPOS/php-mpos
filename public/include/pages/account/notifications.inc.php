@@ -3,7 +3,7 @@
 // Make sure we are called from index.php
 if (!defined('SECURITY')) die('Hacking attempt');
 if ($user->isAuthenticated()) {
-  if ($_REQUEST['do'] == 'save') {
+  if (@$_REQUEST['do'] == 'save') {
     if ($notification->updateSettings($_SESSION['USERDATA']['id'], $_REQUEST['data'])) {
       $_SESSION['POPUP'][] = array('CONTENT' => 'Updated notification settings');
     } else {

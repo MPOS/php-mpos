@@ -7,9 +7,10 @@ if (!defined('SECURITY'))
 if ($user->isAuthenticated()) {
   $aHourlyHashRates = $statistics->getHourlyHashrateByAccount($_SESSION['USERDATA']['id']);
   $aPoolHourlyHashRates = $statistics->getHourlyHashrateByPool();
-  // Propagate content our template
-  $smarty->assign("YOURHASHRATES", $aHourlyHashRates);
-  $smarty->assign("POOLHASHRATES", $aPoolHourlyHashRates);
-  $smarty->assign("CONTENT", "default.tpl");
 }
+
+// Propagate content our template
+$smarty->assign("YOURHASHRATES", @$aHourlyHashRates);
+$smarty->assign("POOLHASHRATES", @$aPoolHourlyHashRates);
+$smarty->assign("CONTENT", "default.tpl");
 ?>

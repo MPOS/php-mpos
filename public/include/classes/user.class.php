@@ -552,7 +552,7 @@ class User {
    **/
   public function isAuthenticated() {
     $this->debug->append("STA " . __METHOD__, 4);
-    if ($_SESSION['AUTHENTICATED'] == true && ! $this->isLocked($_SESSION['USERDATA']['id']) && $this->getUserIp($_SESSION['USERDATA']['id']) == $_SERVER['REMOTE_ADDR'])
+    if (@$_SESSION['AUTHENTICATED'] == true && ! $this->isLocked($_SESSION['USERDATA']['id']) && $this->getUserIp($_SESSION['USERDATA']['id']) == $_SERVER['REMOTE_ADDR'])
       return true;
     // Catchall
     $this->logoutUser();

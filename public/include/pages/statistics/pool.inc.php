@@ -27,6 +27,8 @@ $aBlockData = $aBlocksFoundData[0];
 
 // Estimated time to find the next block
 $iCurrentPoolHashrate =  $statistics->getCurrentHashrate();
+$iCurrentPoolHashrate == 0 ? $iCurrentPoolHashrate = 1 : true;
+
 // Time in seconds, not hours, using modifier in smarty to translate
 $iEstTime = $dDifficulty * pow(2,32) / ($iCurrentPoolHashrate * 1000);
 

@@ -9,9 +9,10 @@ $debug->append('Global smarty variables', 3);
 
 // Defaults to get rid of PHP Notice warnings
 $dDifficulty = 1;
+$aRoundShares = 1;
 
 // Only run these if the user is logged in
-if ($_SESSION['AUTHENTICATED']) {
+if (@$_SESSION['AUTHENTICATED']) {
   $aRoundShares = $statistics->getRoundShares();
   if ($bitcoin->can_connect() === true)
     $dDifficulty = $bitcoin->query('getdifficulty');
