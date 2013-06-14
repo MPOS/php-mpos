@@ -12,7 +12,11 @@
       <td>{($GLOBAL.hashrate / 1000)|number_format:"3"} Mhash/s</td>
     </tr>
     <tr>
-      <td class="leftheader">Current Workers Mining</td>
+      <td class="leftheader">Pool Efficiency</td>
+      <td>{100 - (100 / $GLOBAL.roundshares.valid * $GLOBAL.roundshares.invalid)|number_format:"2"} %</td>
+    </tr>
+    <tr>
+      <td class="leftheader">Current Active Workers</td>
       <td>{$GLOBAL.workers}</td>
     </tr>
     <tr>
@@ -32,8 +36,8 @@
       <td>{$ESTTIME|seconds_to_words}</td>
     </tr>
     <tr>
-      <td class="leftheader">Est. Avg. Shares per Round</td>
-      <td>{(pow(2, 32 - $GLOBAL.config.targetdiff) * $DIFFICULTY)|number_format:"0"}</td>
+      <td class="leftheader">Est. Shares this Round</td>
+      <td>{(pow(2, 32 - $GLOBAL.config.targetdiff) * $DIFFICULTY)|number_format:"0"} <font size="1">(done: {(100 / (pow(2, 32 - $GLOBAL.config.targetdiff) * $DIFFICULTY) * $GLOBAL.roundshares.valid)|number_format:"2"} %)</td>
     </tr>
     <tr>
       <td class="leftheader">Time Since Last Block</td>
