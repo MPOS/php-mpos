@@ -15,8 +15,16 @@
                     </tr>
 {if $GLOBAL.config.payout_system == 'pps'}
                     <tr>
+                      <td><b>Share Rate</b></td>
+                      <td class="right">{$GLOBAL.userdata.sharerate|number_format:"2"} S/s</td>
+                    </tr>
+                    <tr>
                       <td><b>PPS Value</b></td>
-                      <td>{$GLOBAL.ppsvalue}</td>
+                      <td class="right">{$GLOBAL.ppsvalue}</td>
+                    </tr>
+                    <tr>
+                      <td><b>{$GLOBAL.config.currency} in 24h</b></td>
+                      <td class="right">{($GLOBAL.userdata.sharerate * 24 * 60 * 60 * $GLOBAL.ppsvalue)|number_format:"8"}</td>
                     </tr>
 {/if}
 {if $GLOBAL.config.payout_system != 'pps'}
