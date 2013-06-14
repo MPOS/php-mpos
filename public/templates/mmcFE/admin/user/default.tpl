@@ -67,7 +67,7 @@
     </tr>
 {sectionelse}
   <tr>
-    <td colspan="9"></td>
+    <td colspan="10"></td>
   </tr>
 {/section}
   </tbody>
@@ -77,11 +77,12 @@
       <th>Username</th>
       <th>E-Mail</th>
       <th class="right">Shares&nbsp;&nbsp;</th>
-      <th class="right">Hashrate</th>
-      <th class="right">Est. Donation</th>
-      <th class="right">Est. Payout</th>
-      <th class="right">Balance</th>
+      <th class="right">Hashrate&nbsp;&nbsp;</th>
+      <th class="right">Est. Donation&nbsp;&nbsp;</th>
+      <th class="right">Est. Payout&nbsp;&nbsp;&nbsp;</th>
+      <th class="right">Balance&nbsp;&nbsp;&nbsp;</th>
       <th class="center">Admin</th>
+      <th class="center">Locked</th>
     </tr>
   </tfoot>
 </table>
