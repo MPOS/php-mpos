@@ -82,9 +82,9 @@ foreach ($aAllBlocks as $iIndex => $aBlock) {
       $iCurrentUpstreamId = $share->getUpstreamId();
       $iAccountId = $user->getUserId($share->getUpstreamFinder());
     } else {
-      verbose("Unable to fetch blocks upstream share\n");
+      verbose("Unable to fetch blocks upstream share. Aborting!\n");
       verbose($share->getError() . "\n");
-      continue;
+      exit;
     }
     // Fetch share information
     if (!$iPreviousShareId = $block->getLastShareId()) {
