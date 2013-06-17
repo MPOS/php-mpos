@@ -203,10 +203,7 @@ class Transaction {
         FROM $this->table AS t
         LEFT JOIN " . $this->block->getTableName() . " AS b ON t.block_id = b.id
         WHERE
-        (
-          ( t.type IN ('Credit','Bonus') AND b.confirmations < ? ) OR
-          ( t.type = 'Credit_PPS' )
-        )
+          t.type IN ('Credit','Bonus') AND b.confirmations < ?
         AND t.account_id = ?
       ) AS t4,
       (
@@ -215,8 +212,7 @@ class Transaction {
         LEFT JOIN " . $this->block->getTableName() . " AS b ON t.block_id = b.id
         WHERE
         (
-          ( t.type IN ('Donation','Fee') AND b.confirmations < ? ) OR
-          ( t.type IN ('Donation_PPS', 'Fee_PPS', 'TXFee') )
+          t.type IN ('Donation','Fee') AND b.confirmations < ?
         )
         AND t.account_id = ?
       ) AS t5
