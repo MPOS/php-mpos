@@ -38,4 +38,12 @@ if (!$statistics->getCurrentHashrate())
 if (!$statistics->getAllUserStats('%'))
   verbose("Unable to fetch and store admin panel full user list\n");
 
+// Per user share statistics based on all shares submitted
+$stmt = $mysqli->prepare("SELECT DISTINCT SUBSTRING_INDEX( `username` , '.', 1 ) AS username FROM " . $share->getTableName());
+if ($stmt && $stmt->execute() && $result = $stmt->get_result()) {
+  while ($row = $result->fetch_assoc()) {
+    if (!$statistics->getUserShares($user->getUserId($row['username'])))
+      verbose("Failed to fetch and store user stats for " . $row['username'] . "\n");
+  }
+}
 ?>
