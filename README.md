@@ -84,6 +84,10 @@ The following feature have been implemented so far:
  * New blocks found in pool
  * Auto Payout
  * Manual Payout
+* Support for various Scrypt based coins via config
+ * MNC
+ * LTC
+ * ...
 
 Installation
 ============
