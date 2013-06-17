@@ -7,7 +7,7 @@
         <th align="left" scope="col">User Name</th>
         <th class="right" scope="col">KH/s</th>
         <th class="right">{$GLOBAL.config.currency}/Day</th>
-        <th class="right">USD/Day</th>
+        <th class="right">{$GLOBAL.config.price.currency}/Day</th>
       </tr>
     </thead>
     <tbody>

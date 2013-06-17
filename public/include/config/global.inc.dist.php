@@ -23,7 +23,8 @@ define('SALT', 'PLEASEMAKEMESOMETHINGRANDOM');
 $config = array(
   'price' => array(
     'url' =>     'https://btc-e.com/api/2',
-    'target' =>  '/ltc_usd/ticker'
+    'target' =>  '/ltc_usd/ticker',
+    'currency' => 'USD'             // Used in ministats template
   ),
   'ap_threshold' => array(
     'min' => 1,
