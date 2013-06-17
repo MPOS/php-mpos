@@ -29,7 +29,7 @@ if ($user->isAuthenticated()) {
             }
             if ($continue == true) {
               // Send balance to address, mind fee for transaction!
-              try {
+                try {
                 if ($setting->getValue('auto_payout_active') == 0) {
                   $bitcoin->sendtoaddress($sCoinAddress, $dBalance);
                 } else {
@@ -42,7 +42,7 @@ if ($user->isAuthenticated()) {
               }
             }
             // Set balance to 0, add to paid out, insert to ledger
-            if ($continue == true && $transaction->addTransaction($_SESSION['USERDATA']['id'], $dBalance, 'Debit_MP', NULL, $sCoinAddress)) {
+            if ($continue == true && $transaction->addTransaction($_SESSION['USERDATA']['id'], $dBalance - $config['txfee'], 'Debit_MP', NULL, $sCoinAddress) && $transaction->addTransaction($_SESSION['USERDATA']['id'], $config['txfee'], 'TXFee', NULL, $sCoinAddress) ) {
               $_SESSION['POPUP'][] = array('CONTENT' => 'Transaction completed', 'TYPE' => 'success');
               $aMailData['email'] = $user->getUserEmail($user->getUserName($_SESSION['USERDATA']['id']));
               $aMailData['amount'] = $dBalance;

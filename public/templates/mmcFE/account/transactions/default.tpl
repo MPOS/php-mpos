@@ -24,6 +24,7 @@
           or $TRANSACTIONS[transaction].type == 'Donation_PPS'
           or $TRANSACTIONS[transaction].type == 'Debit_AP'
           or $TRANSACTIONS[transaction].type == 'Debit_MP'
+          or $TRANSACTIONS[transaction].type == 'TXFee'
         )}
         <tr class="{cycle values="odd,even"}">
           <td>{$TRANSACTIONS[transaction].id}</td>

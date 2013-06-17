@@ -61,7 +61,7 @@ if (! empty($users)) {
       }
 
       // Create transaction record
-      if ($transaction->addTransaction($aUserData['id'], $dBalance, 'Debit_AP', NULL, $aUserData['coin_address'])) {
+      if ($transaction->addTransaction($aUserData['id'], $dBalance - $config['txfee'], 'Debit_AP', NULL, $aUserData['coin_address']) && $transaction->addTransaction($aUserData['id'], $config['txfee'], 'TXFee', NULL, $aUserData['coin_address'])) {
         // Notify user via  mail
         $aMailData['email'] = $user->getUserEmail($user->getUserName($aUserData['id']));
         $aMailData['subject'] = 'Auto Payout Completed';
