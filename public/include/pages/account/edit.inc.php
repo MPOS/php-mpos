@@ -29,7 +29,7 @@ if ($user->isAuthenticated()) {
             }
             if ($continue == true) {
               // Send balance to address, mind fee for transaction!
-                try {
+              try {
                 if ($setting->getValue('auto_payout_active') == 0) {
                   $bitcoin->sendtoaddress($sCoinAddress, $dBalance);
                 } else {
