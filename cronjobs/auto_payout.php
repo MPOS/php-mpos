@@ -76,7 +76,7 @@ if (! empty($users)) {
       }
 
     } else {
-      verbose("INSUFF_TXFEE\n");
+      verbose("SKIPPED\n");
     }
   }
 } else {
