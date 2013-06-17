@@ -147,7 +147,7 @@ class Transaction {
         LEFT JOIN " . $this->block->getTableName() . " AS b ON t.block_id = b.id
         WHERE (
           ( t.type IN ('Donation','Fee') AND b.confirmations >= ? ) OR
-          t.type IN ('Donation_PPS','Fee_PPS')
+          t.type IN ('Donation_PPS','Fee_PPS','TXFee')
         )
       ) AS t3");
     if ($this->checkStmt($stmt) && $stmt->bind_param('ii', $this->config['confirmations'], $this->config['confirmations']) && $stmt->execute() && $stmt->bind_result($dBalance) && $stmt->fetch())
@@ -194,7 +194,7 @@ class Transaction {
         WHERE
         (
           ( t.type IN ('Donation','Fee') AND b.confirmations >= ? ) OR
-          ( t.type IN ('Donation_PPS', 'Fee_PPS') )
+          ( t.type IN ('Donation_PPS', 'Fee_PPS', 'TXFee') )
         )
         AND t.account_id = ?
       ) AS t3,
@@ -216,7 +216,7 @@ class Transaction {
         WHERE
         (
           ( t.type IN ('Donation','Fee') AND b.confirmations < ? ) OR
-          ( t.type IN ('Donation_PPS', 'Fee_PPS') )
+          ( t.type IN ('Donation_PPS', 'Fee_PPS', 'TXFee') )
         )
         AND t.account_id = ?
       ) AS t5
