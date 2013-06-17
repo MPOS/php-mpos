@@ -16,7 +16,7 @@ PIDFILE='/tmp/mmcfe-ng-cron.pid'
 CRONHOME='.'
 
 # List of cruns to execute
-CRONS="findblock.php proportional_payout.php blockupdate.php auto_payout.php tickerupdate.php notifications.php"
+CRONS="findblock.php proportional_payout.php blockupdate.php auto_payout.php tickerupdate.php notifications.php statistics.php"
 
 # Additional arguments to pass to cronjobs
 CRONARGS="-v"
