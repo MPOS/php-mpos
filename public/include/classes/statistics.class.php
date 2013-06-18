@@ -199,7 +199,7 @@ class Statistics {
         a.username AS username,
         a.donate_percent AS donate_percent,
         a.email AS email,
-	COUNT(s.id) AS shares
+      	COUNT(s.id) AS shares
       FROM " . $this->user->getTableName() . " AS a
       LEFT JOIN " . $this->share->getTableName() . " AS s
       ON a.username = SUBSTRING_INDEX( s.username, '.', 1 )
@@ -219,6 +219,7 @@ class Statistics {
    * @return data integer Current Hashrate in khash/s
    **/
   public function getUserHashrate($account_id) {
+    $this->debug->append("STA " . __METHOD__, 4);
     if ($data = $this->memcache->get(__FUNCTION__ . $account_id)) return $data;
     $stmt = $this->mysqli->prepare("
       SELECT ROUND(COUNT(s.id) * POW(2, " . $this->config['difficulty'] . ")/600/1000) AS hashrate
@@ -231,6 +232,28 @@ class Statistics {
       return $this->memcache->setCache(__FUNCTION__ . $account_id, $result->fetch_object()->hashrate);
     // Catchall
     $this->debug->append("Failed to fetch hashrate: " . $this->mysqli->error);
+    return false;
+  }
+
+  /**
+   * Same as getUserHashrate for Sharerate
+   * @param account_id integer User ID
+   * @return data integer Current Sharerate in shares/s
+   **/
+  public function getUserSharerate($account_id) {
+    $this->debug->append("STA " . __METHOD__, 4);
+    if ($data = $this->memcache->get(__FUNCTION__ . $account_id)) return $data;
+    $stmt = $this->mysqli->prepare("
+      SELECT COUNT(s.id)/600 AS sharerate
+      FROM " . $this->share->getTableName() . " AS s,
+           " . $this->user->getTableName() . " AS u
+      WHERE u.username = SUBSTRING_INDEX( s.username, '.', 1 )
+        AND s.time > DATE_SUB(now(), INTERVAL 10 MINUTE)
+        AND u.id = ?");
+    if ($this->checkStmt($stmt) && $stmt->bind_param("i", $account_id) && $stmt->execute() && $result = $stmt->get_result() )
+      return $this->memcache->setCache(__FUNCTION__ . $account_id, $result->fetch_object()->sharerate);
+    // Catchall
+    $this->debug->append("Failed to fetch sharerate: " . $this->mysqli->error);
     return false;
   }
 
