@@ -187,7 +187,8 @@ class Share {
       ORDER BY id ASC LIMIT 1");
     if ($this->checkStmt($stmt) && $stmt->bind_param('i', $last) && $stmt->execute() && $result = $stmt->get_result()) {
       $this->oUpstream = $result->fetch_object();
-      return true;
+      if (!empty($this->oUpstream->account) && is_int($this->oUpstream->id))
+        return true;
     }
     // Catchall
     return false;
