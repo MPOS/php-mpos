@@ -61,11 +61,17 @@ if (@$_SESSION['USERDATA']['id']) {
   $aGlobal['userdata']['hashrate'] = $statistics->getUserHashrate($_SESSION['USERDATA']['id']);
   $aGlobal['userdata']['sharerate'] = $statistics->getUserSharerate($_SESSION['USERDATA']['id']);
 
-  // Some estimations
-  $aGlobal['userdata']['est_block'] = round(( (int)$aGlobal['userdata']['shares']['valid'] / (int)$aRoundShares['valid'] ) * (int)$config['reward'], 3);
-  $aGlobal['userdata']['est_fee'] = round(($config['fees'] / 100) * $aGlobal['userdata']['est_block'], 3);
-  $aGlobal['userdata']['est_donation'] = round((( $aGlobal['userdata']['donate_percent'] / 100) * ($aGlobal['userdata']['est_block'] - $aGlobal['userdata']['est_fee'])), 3);
-  $aGlobal['userdata']['est_payout'] = round($aGlobal['userdata']['est_block'] - $aGlobal['userdata']['est_donation'] - $aGlobal['userdata']['est_fee'], 3);
+  switch ($config['payout_system']) {
+  case 'pps':
+    break;
+  default:
+    // Some estimations
+    $aGlobal['userdata']['est_block'] = round(( (int)$aGlobal['userdata']['shares']['valid'] / (int)$aRoundShares['valid'] ) * (int)$config['reward'], 3);
+    $aGlobal['userdata']['est_fee'] = round(($config['fees'] / 100) * $aGlobal['userdata']['est_block'], 3);
+    $aGlobal['userdata']['est_donation'] = round((( $aGlobal['userdata']['donate_percent'] / 100) * ($aGlobal['userdata']['est_block'] - $aGlobal['userdata']['est_fee'])), 3);
+    $aGlobal['userdata']['est_payout'] = round($aGlobal['userdata']['est_block'] - $aGlobal['userdata']['est_donation'] - $aGlobal['userdata']['est_fee'], 3);
+    break;
+  }
 }
 
 // Make it available in Smarty
