@@ -13,6 +13,7 @@ CREATE TABLE IF NOT EXISTS `accounts` (
   `pass` varchar(255) NOT NULL,
   `email` varchar(255) DEFAULT NULL COMMENT 'Assocaited email: used for validating users, and re-setting passwords',
   `is_locked` tinyint(1) NOT NULL DEFAULT '0',
+  `failed_logins` int(5) unsigned DEFAULT '0',
   `loggedIp` varchar(255) DEFAULT NULL,
   `sessionTimeoutStamp` int(255) DEFAULT NULL,
   `pin` varchar(255) NOT NULL COMMENT 'four digit pin to allow account changes',
@@ -40,7 +41,7 @@ CREATE TABLE IF NOT EXISTS `blocks` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `height` (`height`,`blockhash`),
   KEY `time` (`time`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Discovered blocks persisted from Litecoin Service';
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='Discovered blocks persisted from Litecoin Service';
 
 CREATE TABLE IF NOT EXISTS `notifications` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
@@ -93,7 +94,7 @@ CREATE TABLE IF NOT EXISTS `shares` (
   KEY `upstream_result` (`upstream_result`),
   KEY `our_result` (`our_result`),
   KEY `username` (`username`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
 CREATE TABLE IF NOT EXISTS `shares_archive` (
   `id` int(255) unsigned NOT NULL AUTO_INCREMENT,
@@ -106,7 +107,7 @@ CREATE TABLE IF NOT EXISTS `shares_archive` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `share_id` (`share_id`),
   KEY `time` (`time`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Archive shares for potential later debugging purposes';
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='Archive shares for potential later debugging purposes';
 
 CREATE TABLE IF NOT EXISTS `statistics_shares` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
@@ -117,12 +118,12 @@ CREATE TABLE IF NOT EXISTS `statistics_shares` (
   PRIMARY KEY (`id`),
   KEY `account_id` (`account_id`),
   KEY `block_id` (`block_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
 CREATE TABLE IF NOT EXISTS `transactions` (
   `id` int(255) NOT NULL AUTO_INCREMENT,
   `account_id` int(255) unsigned NOT NULL,
-  `type` enum('Credit','Debit_MP','Debit_AP','Donation','Fee','Orphan_Credit','Orphan_Fee','Orphan_Donation','Credit_PPS','Fee_PPS','Donation_PPS') DEFAULT NULL,
+  `type` enum('Credit','Debit_MP','Debit_AP','Donation','Fee','Orphan_Credit','Orphan_Fee','Orphan_Donation','Credit_PPS','Fee_PPS','Donation_PPS','TXFee') DEFAULT NULL,
   `coin_address` varchar(255) DEFAULT NULL,
   `amount` double DEFAULT '0',
   `block_id` int(255) DEFAULT NULL,
@@ -131,7 +132,7 @@ CREATE TABLE IF NOT EXISTS `transactions` (
   KEY `block_id` (`block_id`),
   KEY `account_id` (`account_id`),
   KEY `type` (`type`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
