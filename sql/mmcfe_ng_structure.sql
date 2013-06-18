@@ -6,6 +6,9 @@ SET time_zone = "+00:00";
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
 /*!40101 SET NAMES utf8 */;
 
+CREATE DATABASE IF NOT EXISTS `mmcfe_ng` DEFAULT CHARACTER SET latin1 COLLATE latin1_swedish_ci;
+USE `mmcfe_ng`;
+
 CREATE TABLE IF NOT EXISTS `accounts` (
   `id` int(255) NOT NULL AUTO_INCREMENT,
   `is_admin` tinyint(1) NOT NULL DEFAULT '0',
@@ -54,13 +57,15 @@ CREATE TABLE IF NOT EXISTS `notifications` (
   KEY `active` (`active`),
   KEY `data` (`data`),
   KEY `account_id` (`account_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
 CREATE TABLE IF NOT EXISTS `notification_settings` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `type` varchar(15) NOT NULL,
   `account_id` int(11) NOT NULL,
-  `active` tinyint(1) NOT NULL DEFAULT '0'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  `active` tinyint(1) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
 CREATE TABLE IF NOT EXISTS `pool_worker` (
   `id` int(255) NOT NULL AUTO_INCREMENT,
