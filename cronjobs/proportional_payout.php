@@ -22,6 +22,12 @@ limitations under the License.
 // Include all settings and classes
 require_once('shared.inc.php');
 
+// Check if we are set as the payout system
+if ($config['payout_system'] != 'prop') {
+  verbose("Please activate this cron in configuration via payout_system = prop\n");
+  exit(0);
+}
+
 // Fetch all unaccounted blocks
 $aAllBlocks = $block->getAllUnaccounted('ASC');
 if (empty($aAllBlocks)) {

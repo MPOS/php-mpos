@@ -22,6 +22,13 @@ limitations under the License.
 // Include all settings and classes
 require_once('shared.inc.php');
 
+
+// Check if we are set as the payout system
+if ($config['payout_system'] != 'pps') {
+  verbose("Please activate this cron in configuration via payout_system = pps\n");
+  exit(0);
+}
+
 // Fetch all transactions since our last block
 if ( $bitcoin->can_connect() === true ){
   $dDifficulty = $bitcoin->getdifficulty();
