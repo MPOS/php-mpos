@@ -117,12 +117,12 @@ if (empty($aAllBlocks)) {
       // Notify users
       $aAccounts = $notification->getNotificationAccountIdByType('new_block');
       if (is_array($aAccounts)) {
-        foreach ($aAccounts as $account_id) {
+        foreach ($aAccounts as $aData) {
           $aMailData['height'] = $aBlock['height'];
           $aMailData['subject'] = 'New Block';
-          $aMailData['email'] = $user->getUserEmail($user->getUserName($account_id));
+          $aMailData['email'] = $user->getUserEmail($user->getUserName($aData['account_id']));
           $aMailData['shares'] = $iRoundShares;
-          $notification->sendNotification($account_id, 'new_block', $aMailData);
+          $notification->sendNotification($aData['account_id'], 'new_block', $aMailData);
         }
       }
     }
