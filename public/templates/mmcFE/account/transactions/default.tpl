@@ -1,7 +1,8 @@
 {include file="global/block_header.tpl" BLOCK_HEADER="Transaction Log" BUTTONS=array(Confirmed,Unconfirmed,Orphan)}
 <div class="block_content tab_content" id="Confirmed" style="clear:;">
   <center>
-    <table cellpadding="1" cellspacing="1" width="98%" class="sortable">
+    {include file="global/pagination.tpl"}
+    <table cellpadding="1" cellspacing="1" width="98%" class="pagesort">
       <thead style="font-size:13px;">
         <tr>
           <th class="header" style="cursor: pointer;">TX #</th>
@@ -15,11 +16,15 @@
       <tbody style="font-size:12px;">
 {section transaction $TRANSACTIONS}
         {if (
-          ($TRANSACTIONS[transaction].type == 'Credit' and $TRANSACTIONS[transaction].confirmations >= $GLOBAL.confirmations)
+          (($TRANSACTIONS[transaction].type == 'Credit' or $TRANSACTIONS[transaction].type == 'Bonus')and $TRANSACTIONS[transaction].confirmations >= $GLOBAL.confirmations)
           or ($TRANSACTIONS[transaction].type == 'Donation' and $TRANSACTIONS[transaction].confirmations >= $GLOBAL.confirmations)
           or ($TRANSACTIONS[transaction].type == 'Fee' and $TRANSACTIONS[transaction].confirmations >= $GLOBAL.confirmations)
+          or $TRANSACTIONS[transaction].type == 'Credit_PPS'
+          or $TRANSACTIONS[transaction].type == 'Fee_PPS'
+          or $TRANSACTIONS[transaction].type == 'Donation_PPS'
           or $TRANSACTIONS[transaction].type == 'Debit_AP'
           or $TRANSACTIONS[transaction].type == 'Debit_MP'
+          or $TRANSACTIONS[transaction].type == 'TXFee'
         )}
         <tr class="{cycle values="odd,even"}">
           <td>{$TRANSACTIONS[transaction].id}</td>
@@ -27,7 +32,7 @@
           <td>{$TRANSACTIONS[transaction].type}</td>
           <td>{$TRANSACTIONS[transaction].coin_address}</td>
           <td>{if $TRANSACTIONS[transaction].height == 0}n/a{else}{$TRANSACTIONS[transaction].height}{/if}</td>
-          <td><font color="{if $TRANSACTIONS[transaction].type == Credit}green{else}red{/if}">{$TRANSACTIONS[transaction].amount}</td>
+          <td><font color="{if $TRANSACTIONS[transaction].type == 'Credit' or $TRANSACTIONS[transaction].type == 'Credit_PPS' or $TRANSACTIONS[transaction].type == 'Bonus'}green{else}red{/if}">{$TRANSACTIONS[transaction].amount}</td>
         </tr>
         {/if}
 {/section}
@@ -42,7 +47,8 @@
 </div>
 <div class="block_content tab_content" id="Unconfirmed" style="">
   <center>
-    <table cellpadding="1" cellspacing="1" width="98%" class="sortable">
+    {include file="global/pagination.tpl" ID=2}
+    <table cellpadding="1" cellspacing="1" width="98%" class="pagesort2">
       <thead style="font-size:13px;">
         <tr>
           <th class="header" style="cursor: pointer;">TX #</th>
@@ -56,7 +62,7 @@
       <tbody style="font-size:12px;">
 {section transaction $TRANSACTIONS}
         {if (
-          $TRANSACTIONS[transaction].type == 'Credit' && $TRANSACTIONS[transaction].confirmations < $GLOBAL.confirmations
+          ($TRANSACTIONS[transaction].type == 'Credit' or $TRANSACTIONS[transaction].type == 'Bonus') and $TRANSACTIONS[transaction].confirmations < $GLOBAL.confirmations
           or ($TRANSACTIONS[transaction].type == 'Donation' and $TRANSACTIONS[transaction].confirmations < $GLOBAL.confirmations)
           or ($TRANSACTIONS[transaction].type == 'Fee' and $TRANSACTIONS[transaction].confirmations < $GLOBAL.confirmations)
         )}
@@ -66,9 +72,9 @@
           <td>{$TRANSACTIONS[transaction].type}</td>
           <td>{$TRANSACTIONS[transaction].coin_address}</td>
           <td>{if $TRANSACTIONS[transaction].height == 0}n/a{else}{$TRANSACTIONS[transaction].height}{/if}</td>
-          <td><font color="{if $TRANSACTIONS[transaction].type == Credit}green{else}red{/if}">{$TRANSACTIONS[transaction].amount}</td>
+          <td><font color="{if $TRANSACTIONS[transaction].type == 'Credit' or $TRANSACTIONS[transaction].type == 'Bonus'}green{else}red{/if}">{$TRANSACTIONS[transaction].amount}</td>
         </tr>
-          {if $TRANSACTIONS[transaction].type == Credit}
+          {if $TRANSACTIONS[transaction].type == 'Credit' or $TRANSACTIONS[transaction].type == 'Bonus'}
             {assign var="credits" value="`$credits+$TRANSACTIONS[transaction].amount`"}
           {else}
             {assign var="debits" value="`$debits+$TRANSACTIONS[transaction].amount`"}
@@ -86,7 +92,8 @@
 </div>
 <div class="block_content tab_content" id="Orphan" style="">
   <center>
-    <table cellpadding="1" cellspacing="1" width="98%" class="sortable">
+    {include file="global/pagination.tpl"}
+    <table cellpadding="1" cellspacing="1" width="98%" class="pagesort3">
       <thead style="font-size:13px;">
         <tr>
           <th class="header" style="cursor: pointer;">TX #</th>
@@ -103,6 +110,7 @@
           $TRANSACTIONS[transaction].type == 'Orphan_Credit'
           or $TRANSACTIONS[transaction].type == 'Orphan_Donation'
           or $TRANSACTIONS[transaction].type == 'Orphan_Fee'
+          or $TRANSACTIONS[transaction].type == 'Orphan_Bonus'
         )}
         <tr class="{cycle values="odd,even"}">
           <td>{$TRANSACTIONS[transaction].id}</td>
@@ -110,9 +118,9 @@
           <td>{$TRANSACTIONS[transaction].type}</td>
           <td>{$TRANSACTIONS[transaction].coin_address}</td>
           <td>{if $TRANSACTIONS[transaction].height == 0}n/a{else}{$TRANSACTIONS[transaction].height}{/if}</td>
-          <td><font color="{if $TRANSACTIONS[transaction].type == Orphan_Credit}green{else}red{/if}">{$TRANSACTIONS[transaction].amount}</td>
+          <td><font color="{if $TRANSACTIONS[transaction].type == 'Orphan_Credit' or $TRANSACTIONS[transaction].type == 'Orphan_Bonus'}green{else}red{/if}">{$TRANSACTIONS[transaction].amount}</td>
         </tr>
-          {if $TRANSACTIONS[transaction].type == Orphan_Credit}
+          {if $TRANSACTIONS[transaction].type == 'Orphan_Credit' or $TRANSACTIONS[transaction].type == 'Orphan_Bonus'}
             {assign var="orphan_credits" value="`$orphan_credits+$TRANSACTIONS[transaction].amount`"}
           {else}
             {assign var="orphan_debits" value="`$orphan_debits+$TRANSACTIONS[transaction].amount`"}

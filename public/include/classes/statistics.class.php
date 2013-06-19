@@ -13,6 +13,7 @@ if (!defined('SECURITY'))
 class Statistics {
   private $sError = '';
   private $table = 'statistics_shares';
+  private $getcache = true;
 
   public function __construct($debug, $mysqli, $config, $share, $user, $block, $memcache) {
     $this->debug = $debug;
@@ -32,6 +33,14 @@ class Statistics {
   }
   public function getError() {
     return $this->sError;
+  }
+
+  // Disable fetching values from cache
+  public function setGetCache($set=false) {
+    $this->getcache = $set;
+  }
+  public function getGetCache() {
+    return $this->getcache;
   }
 
   private function checkStmt($bState) {
@@ -54,7 +63,7 @@ class Statistics {
     $stmt = $this->mysqli->prepare("
       SELECT b.*, a.username as finder
       FROM " . $this->block->getTableName() . " AS b
-      LEFT JOIN accounts AS a
+      LEFT JOIN " . $this->user->getTableName() . " AS a
       ON b.account_id = a.id
       ORDER BY height DESC LIMIT ?");
     if ($this->checkStmt($stmt) && $stmt->bind_param("i", $limit) && $stmt->execute() && $result = $stmt->get_result())
@@ -88,14 +97,10 @@ class Statistics {
    **/
   public function getCurrentHashrate() {
     $this->debug->append("STA " . __METHOD__, 4);
-    if ($data = $this->memcache->get(__FUNCTION__)) return $data;
+    if ($this->getGetCache() && $data = $this->memcache->get(__FUNCTION__)) return $data;
     $stmt = $this->mysqli->prepare("
-      SELECT SUM(hashrate) AS hashrate FROM
-      (
-        SELECT ROUND(COUNT(id) * POW(2, " . $this->config['difficulty'] . ")/600/1000) AS hashrate FROM " . $this->share->getTableName() . " WHERE time > DATE_SUB(now(), INTERVAL 10 MINUTE)
-        UNION
-        SELECT ROUND(COUNT(id) * POW(2, " . $this->config['difficulty'] . ")/600/1000) AS hashrate FROM " . $this->share->getArchiveTableName() . " WHERE time > DATE_SUB(now(), INTERVAL 10 MINUTE)
-      ) AS sum");
+      SELECT ROUND(COUNT(id) * POW(2, " . $this->config['difficulty'] . ")/600/1000) AS hashrate FROM " . $this->share->getTableName() . " WHERE time > DATE_SUB(now(), INTERVAL 10 MINUTE)
+    ");
     // Catchall
     if ($this->checkStmt($stmt) && $stmt->execute() && $result = $stmt->get_result() ) return $this->memcache->setCache(__FUNCTION__, $result->fetch_object()->hashrate);
     $this->debug->append("Failed to get hashrate: " . $this->mysqli->error);
@@ -111,12 +116,8 @@ class Statistics {
     $this->debug->append("STA " . __METHOD__, 4);
     if ($data = $this->memcache->get(__FUNCTION__)) return $data;
     $stmt = $this->mysqli->prepare("
-      SELECT ROUND(SUM(sharerate) / 600, 2) AS sharerate FROM
-      (
-        SELECT COUNT(id) AS sharerate FROM " . $this->share->getTableName() . " WHERE time > DATE_SUB(now(), INTERVAL 10 MINUTE)
-        UNION ALL
-        SELECT COUNT(id) AS sharerate FROM " . $this->share->getArchiveTableName() . " WHERE time > DATE_SUB(now(), INTERVAL 10 MINUTE)
-      ) AS sum");
+      SELECT ROUND(COUNT(id) / 600, 2) AS sharerate FROM " . $this->share->getTableName() . " WHERE time > DATE_SUB(now(), INTERVAL 10 MINUTE)
+    ");
     if ($this->checkStmt($stmt) && $stmt->execute() && $result = $stmt->get_result() ) return $this->memcache->setCache(__FUNCTION__, $result->fetch_object()->sharerate);
     // Catchall
     $this->debug->append("Failed to fetch share rate: " . $this->mysqli->error);
@@ -130,7 +131,7 @@ class Statistics {
    **/
   public function getRoundShares() {
     $this->debug->append("STA " . __METHOD__, 4);
-    if ($data = $this->memcache->get(__FUNCTION__)) return $data;
+    if ($this->getGetCache() && $data = $this->memcache->get(__FUNCTION__)) return $data;
     $stmt = $this->mysqli->prepare("
       SELECT
       ( SELECT IFNULL(count(id), 0)
@@ -155,7 +156,7 @@ class Statistics {
    **/
   public function getUserShares($account_id) {
     $this->debug->append("STA " . __METHOD__, 4);
-    if ($data = $this->memcache->get(__FUNCTION__ . $account_id)) return $data;
+    if ($this->getGetCache() && $data = $this->memcache->get(__FUNCTION__ . $account_id)) return $data;
     $stmt = $this->mysqli->prepare("
       SELECT
       (
@@ -184,11 +185,41 @@ class Statistics {
   }
 
   /**
+   * Admin panel specific query
+   * @return data array invlid and valid shares for all accounts
+   **/
+  public function getAllUserStats($filter='%') {
+    $this->debug->append("STA " . __METHOD__, 4);
+    if ($this->getGetCache() && $data = $this->memcache->get(__FUNCTION__ . $filter)) return $data;
+    $stmt = $this->mysqli->prepare("
+      SELECT
+        a.id AS id,
+        a.is_admin as is_admin,
+        a.is_locked as is_locked,
+        a.username AS username,
+        a.donate_percent AS donate_percent,
+        a.email AS email,
+      	COUNT(s.id) AS shares
+      FROM " . $this->user->getTableName() . " AS a
+      LEFT JOIN " . $this->share->getTableName() . " AS s
+      ON a.username = SUBSTRING_INDEX( s.username, '.', 1 )
+      WHERE
+      	a.username LIKE ?
+      GROUP BY username
+      ORDER BY username
+        ");
+    if ($this->checkStmt($stmt) && $stmt->bind_param('s', $filter) && $stmt->execute() && $result = $stmt->get_result()) {
+      return $this->memcache->setCache(__FUNCTION__ . $filter, $result->fetch_all(MYSQLI_ASSOC));
+    }
+  }
+
+  /**
    * Same as getUserShares for Hashrate
    * @param account_id integer User ID
    * @return data integer Current Hashrate in khash/s
    **/
   public function getUserHashrate($account_id) {
+    $this->debug->append("STA " . __METHOD__, 4);
     if ($data = $this->memcache->get(__FUNCTION__ . $account_id)) return $data;
     $stmt = $this->mysqli->prepare("
       SELECT ROUND(COUNT(s.id) * POW(2, " . $this->config['difficulty'] . ")/600/1000) AS hashrate
@@ -201,6 +232,28 @@ class Statistics {
       return $this->memcache->setCache(__FUNCTION__ . $account_id, $result->fetch_object()->hashrate);
     // Catchall
     $this->debug->append("Failed to fetch hashrate: " . $this->mysqli->error);
+    return false;
+  }
+
+  /**
+   * Same as getUserHashrate for Sharerate
+   * @param account_id integer User ID
+   * @return data integer Current Sharerate in shares/s
+   **/
+  public function getUserSharerate($account_id) {
+    $this->debug->append("STA " . __METHOD__, 4);
+    if ($data = $this->memcache->get(__FUNCTION__ . $account_id)) return $data;
+    $stmt = $this->mysqli->prepare("
+      SELECT COUNT(s.id)/600 AS sharerate
+      FROM " . $this->share->getTableName() . " AS s,
+           " . $this->user->getTableName() . " AS u
+      WHERE u.username = SUBSTRING_INDEX( s.username, '.', 1 )
+        AND s.time > DATE_SUB(now(), INTERVAL 10 MINUTE)
+        AND u.id = ?");
+    if ($this->checkStmt($stmt) && $stmt->bind_param("i", $account_id) && $stmt->execute() && $result = $stmt->get_result() )
+      return $this->memcache->setCache(__FUNCTION__ . $account_id, $result->fetch_object()->sharerate);
+    // Catchall
+    $this->debug->append("Failed to fetch sharerate: " . $this->mysqli->error);
     return false;
   }
 
@@ -234,7 +287,7 @@ class Statistics {
    **/
   public function getTopContributors($type='shares', $limit=15) {
     $this->debug->append("STA " . __METHOD__, 4);
-    if ($data = $this->memcache->get(__FUNCTION__ . $type . $limit)) return $data;
+    if ($this->getGetCache() && $data = $this->memcache->get(__FUNCTION__ . $type . $limit)) return $data;
     switch ($type) {
     case 'shares':
       $stmt = $this->mysqli->prepare("
@@ -242,6 +295,7 @@ class Statistics {
             COUNT(id) AS shares,
             SUBSTRING_INDEX( username, '.', 1 ) AS account
         FROM " . $this->share->getTableName() . "
+        WHERE our_result = 'Y'
         GROUP BY account
         ORDER BY shares DESC
         LIMIT ?");
@@ -258,6 +312,7 @@ class Statistics {
           SUBSTRING_INDEX( username, '.', 1 ) AS account
         FROM " . $this->share->getTableName() . "
         WHERE time > DATE_SUB(now(), INTERVAL 10 MINUTE)
+        AND our_result = 'Y'
         GROUP BY account
         ORDER BY hashrate DESC LIMIT ?");
       if ($this->checkStmt($stmt) && $stmt->bind_param("i", $limit) && $stmt->execute() && $result = $stmt->get_result())
@@ -270,7 +325,6 @@ class Statistics {
 
   /**
    * get Hourly hashrate for a user
-   * Not working yet since I was not able to solve this via SQL queries
    * @param account_id int User ID
    * @return data array NOT FINISHED YET
    **/
@@ -279,24 +333,50 @@ class Statistics {
     if ($data = $this->memcache->get(__FUNCTION__ . $account_id)) return $data;
     $stmt = $this->mysqli->prepare("
       SELECT
-      ROUND(COUNT(s.id) * POW(2, 12)/600/1000) AS hashrate,
+      	ROUND(COUNT(s.id) * POW(2, " . $this->config['difficulty'] . ") / 3600 / 1000) AS hashrate,
         HOUR(s.time) AS hour
-        FROM " . $this->share->getTableName() . " AS s, accounts AS a
-        WHERE time < NOW() - INTERVAL 1 HOUR AND time > NOW() - INTERVAL 25 HOUR
+      FROM " . $this->share->getTableName() . " AS s, accounts AS a
+      WHERE time < NOW() - INTERVAL 1 HOUR
+        AND time > NOW() - INTERVAL 25 HOUR
         AND a.username = SUBSTRING_INDEX( s.username, '.', 1 )
         AND a.id = ?
-        GROUP BY HOUR(time)
-        UNION ALL
-        SELECT
-        ROUND(COUNT(s.id) * POW(2, 12)/600/1000) AS hashrate,
-          HOUR(s.time) AS hour
-          FROM " . $this->share->getArchiveTableName() . " AS s, accounts AS a
-          WHERE time < NOW() - INTERVAL 1 HOUR AND time > NOW() - INTERVAL 25 HOUR
-          AND a.username = SUBSTRING_INDEX( s.username, '.', 1 )
-          AND a.id = ?
-          GROUP BY HOUR(time)");
-    if ($this->checkStmt($stmt) && $stmt->bind_param("ii", $account_id, $account_id) && $stmt->execute() && $result = $stmt->get_result())
-      return $this->memcache->setCache(__FUNCTION__ . $account_id, $result->fetch_all(MYSQLI_ASSOC), 3600);
+      GROUP BY HOUR(time)
+    ");
+    if ($this->checkStmt($stmt) && $stmt->bind_param("i", $account_id) && $stmt->execute() && $result = $stmt->get_result()) {
+      $aData = array();
+      while ($row = $result->fetch_assoc()) {
+        $aData[$row['hour']] = $row['hashrate'];
+      }
+      return $this->memcache->setCache(__FUNCTION__ . $account_id, $aData);
+    }
+    // Catchall
+    $this->debug->append("Failed to fetch hourly hashrate: " . $this->mysqli->error);
+    return false;
+  }
+  
+  /**
+   * get Hourly hashrate for the pool 
+   * @param none
+   * @return data array NOT FINISHED YET
+   **/
+  public function getHourlyHashrateByPool() {
+    $this->debug->append("STA " . __METHOD__, 4);
+    if ($this->getGetCache() && $data = $this->memcache->get(__FUNCTION__)) return $data;
+    $stmt = $this->mysqli->prepare("
+      SELECT
+      	ROUND(COUNT(s.id) * POW(2, " . $this->config['difficulty'] . ") / 3600 / 1000) AS hashrate,
+        HOUR(s.time) AS hour
+      FROM " . $this->share->getTableName() . " AS s
+      WHERE time < NOW() - INTERVAL 1 HOUR
+        AND time > NOW() - INTERVAL 25 HOUR
+      GROUP BY HOUR(time)
+    ");
+    if ($this->checkStmt($stmt) && $stmt->execute() && $result = $stmt->get_result()) {
+      while ($row = $result->fetch_assoc()) {
+        $aData[$row['hour']] = $row['hashrate'];
+      }
+      return $this->memcache->setCache(__FUNCTION__, @$aData);
+    }
     // Catchall
     $this->debug->append("Failed to fetch hourly hashrate: " . $this->mysqli->error);
     return false;

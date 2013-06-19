@@ -4,15 +4,19 @@
 
 {include file="statistics/pool/contributors_hashrate.tpl"}
 
-{include file="global/block_header.tpl" BLOCK_HEADER="Server Stats" BLOCK_STYLE="clear:all;" STYLE="padding-left:5px;padding-right:5px;"}
+{include file="global/block_header.tpl" ALIGN="left" BLOCK_HEADER="Server Stats" BLOCK_STYLE="clear:all;" STYLE="padding-left:5px;padding-right:5px;"}
 <table class="" width="100%" style="font-size:13px;">
   <tbody>
     <tr>
       <td class="leftheader">Pool Hash Rate</td>
-      <td>{$GLOBAL.hashrate / 1000} Mhash/s</td>
+      <td>{($GLOBAL.hashrate / 1000)|number_format:"3"} Mhash/s</td>
     </tr>
     <tr>
-      <td class="leftheader">Current Workers Mining</td>
+      <td class="leftheader">Pool Efficiency</td>
+      <td>{(100 - (100 / $GLOBAL.roundshares.valid * $GLOBAL.roundshares.invalid))|number_format:"2"} %</td>
+    </tr>
+    <tr>
+      <td class="leftheader">Current Active Workers</td>
       <td>{$GLOBAL.workers}</td>
     </tr>
     <tr>
@@ -32,8 +36,8 @@
       <td>{$ESTTIME|seconds_to_words}</td>
     </tr>
     <tr>
-      <td class="leftheader">Est. Avg. Shares per Round</td>
-      <td>{($ESTTIME * $GLOBAL.sharerate)|number_format:"0"}</td>
+      <td class="leftheader">Est. Shares this Round</td>
+      <td>{(pow(2, 32 - $GLOBAL.config.targetdiff) * $DIFFICULTY)|number_format:"0"} <font size="1">(done: {(100 / (pow(2, 32 - $GLOBAL.config.targetdiff) * $DIFFICULTY) * $GLOBAL.roundshares.valid)|number_format:"2"} %)</td>
     </tr>
     <tr>
       <td class="leftheader">Time Since Last Block</td>
@@ -44,6 +48,6 @@
 {include file="global/block_footer.tpl"}
 
 
-{include file="statistics/blocks/blocks_found.tpl"}
+{include file="statistics/blocks/small_table.tpl" ALIGN="right" SHORT=true}
 
 {include file="global/block_footer.tpl"}

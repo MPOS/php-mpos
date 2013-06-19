@@ -39,9 +39,8 @@ if ( $bitcoin->can_connect() === true ){
 
 // Nothing to do so bail out
 if (empty($aTransactions['transactions'])) {
-  verbose("No new transactions since last block\n");
+  verbose("No new RPC transactions since last block\n");
 } else {
-
   // Table header
   verbose("Blockhash\t\tHeight\tAmount\tConfirmations\tDiff\t\tTime\t\t\tStatus\n");
 
@@ -66,36 +65,67 @@ if (empty($aTransactions['transactions'])) {
   }
 }
 
+verbose("\n");
 // Now with our blocks added we can scan for their upstream shares
 $aAllBlocks = $block->getAllUnaccounted('ASC');
+if (empty($aAllBlocks)) {
+    verbose("No new unaccounted blocks found\n");
+} else {
+  // Loop through our unaccounted blocks
+  verbose("\nBlock ID\tBlock Height\tShare ID\tShares\tFinder\t\t\tStatus\n");
+  foreach ($aAllBlocks as $iIndex => $aBlock) {
+    if (empty($aBlock['share_id'])) {
+      // Fetch this blocks upstream ID
+      if ($share->setUpstream($block->getLastUpstreamId())) {
+        $iCurrentUpstreamId = $share->getUpstreamId();
+        $iAccountId = $user->getUserId($share->getUpstreamFinder());
+      } else {
+        verbose("\nUnable to fetch blocks upstream share. Aborting!\n");
+        verbose($share->getError() . "\n");
+        exit;
+      }
+      // Fetch share information
+      if (!$iPreviousShareId = $block->getLastShareId()) {
+        $iPreviousShareId = 0;
+        verbose("\nUnable to find highest share ID found so far\n");
+        verbose("If this is your first block, this is normal\n\n");
+      }
+      $iRoundShares = $share->getRoundShares($iPreviousShareId, $iCurrentUpstreamId);
 
-// Loop through our unaccounted blocks
-verbose("Block ID\tBlock Height\tShare ID\tFinder\t\t\tStatus\n");
-foreach ($aAllBlocks as $iIndex => $aBlock) {
-  if (empty($aBlock['share_id'])) {
-    // Fetch this blocks upstream ID
-    if ($share->setUpstream($block->getLastUpstreamId())) {
-      $iCurrentUpstreamId = $share->getUpstreamId();
-      $iAccountId = $user->getUserId($share->getUpstreamFinder());
-    } else {
-      verbose("Unable to fetch blocks upstream share\n");
-      verbose($share->getError() . "\n");
-      continue;
+      // Store new information
+      $strStatus = "OK";
+      if (!$block->setShareId($aBlock['id'], $iCurrentUpstreamId))
+        $strStatus = "Share ID Failed";
+      if (!$block->setFinder($aBlock['id'], $iAccountId))
+        $strStatus = "Finder Failed";
+      if (!$block->setShares($aBlock['id'], $iRoundShares))
+        $strStatus = "Shares Failed";
+      if ($config['block_bonus'] > 0 && !$transaction->addTransaction($iAccountId, $config['block_bonus'], 'Bonus', $aBlock['id'])) {
+        $strStatus = "Bonus Failed";
+      }
+
+      verbose(
+        $aBlock['id'] . "\t\t"
+        . $aBlock['height'] . "\t\t"
+        . $iCurrentUpstreamId . "\t\t"
+        . $iRoundShares . "\t"
+        . "[$iAccountId] " . $user->getUserName($iAccountId) . "\t\t"
+        . $strStatus
+        . "\n"
+      );
+
+      // Notify users
+      $aAccounts = $notification->getNotificationAccountIdByType('new_block');
+      if (is_array($aAccounts)) {
+        foreach ($aAccounts as $aData) {
+          $aMailData['height'] = $aBlock['height'];
+          $aMailData['subject'] = 'New Block';
+          $aMailData['email'] = $user->getUserEmail($user->getUserName($aData['account_id']));
+          $aMailData['shares'] = $iRoundShares;
+          $notification->sendNotification($aData['account_id'], 'new_block', $aMailData);
+        }
+      }
     }
-    // Store new information
-    $strStatus = "OK";
-    if (!$block->setShareId($aBlock['id'], $iCurrentUpstreamId))
-      $strStatus = "Share ID Failed";
-    if (!$block->setFinder($aBlock['id'], $iAccountId))
-      $strStatus = "Finder Failed";
-    verbose(
-      $aBlock['id'] . "\t\t"
-      . $aBlock['height'] . "\t\t"
-      . $iCurrentUpstreamId . "\t\t"
-      . "[$iAccountId] " . $user->getUserName($iAccountId) . "\t\t"
-      . $strStatus
-      . "\n"
-    );
   }
 }
 ?>

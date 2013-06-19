@@ -43,17 +43,60 @@ class Worker {
   public function updateWorkers($account_id, $data) {
     $this->debug->append("STA " . __METHOD__, 4);
     $username = $this->user->getUserName($account_id);
+    $iFailed = 0;
     foreach ($data as $key => $value) {
       // Prefix the WebUser to Worker name
       $value['username'] = "$username." . $value['username'];
-      $stmt = $this->mysqli->prepare("UPDATE $this->table SET password = ?, username = ? WHERE account_id = ? AND id = ?");
-      if ($this->checkStmt($stmt)) {
-        if (!$stmt->bind_param('ssii', $value['password'], $value['username'], $account_id, $key)) return false;
-        if (!$stmt->execute()) return false;
-        $stmt->close();
-      }
+      $stmt = $this->mysqli->prepare("UPDATE $this->table SET password = ?, username = ?, monitor = ? WHERE account_id = ? AND id = ?");
+      if ( ! ( $this->checkStmt($stmt) && $stmt->bind_param('ssiii', $value['password'], $value['username'], $value['monitor'], $account_id, $key) && $stmt->execute()) )
+        $iFailed++;
     }
-    return true;
+    if ($iFailed == 0)
+      return true;
+    // Catchall
+    $this->setErrorMessage('Failed to update ' . $iFailed . ' worker.');
+    return false;
+  }
+
+  /**
+   * Fetch all IDLE workers that have monitoring enabled
+   * @param none
+   * @return data array Workers in IDLE state and monitoring enabled
+   **/
+  public function getAllIdleWorkers() {
+    $this->debug->append("STA " . __METHOD__, 4);
+    $stmt = $this->mysqli->prepare("
+      SELECT account_id, id, username
+      FROM " . $this->table . "
+      WHERE monitor = 1 AND ( SELECT SIGN(COUNT(id)) FROM " . $this->share->getTableName() . " WHERE username = $this->table.username AND time > DATE_SUB(now(), INTERVAL 10 MINUTE)) = 0");
+
+    if ($this->checkStmt($stmt) && $stmt->execute() && $result = $stmt->get_result())
+      return $result->fetch_all(MYSQLI_ASSOC);
+    // Catchall
+    $this->setErrorMessage("Unable to fetch IDLE, monitored workers");
+    echo $this->mysqli->error;
+    return false;
+  }
+
+  /**
+   * Fetch a specific worker and its status
+   * @param id int Worker ID
+   * @return mixed array Worker details
+   **/
+  public function getWorker($id) {
+    $this->debug->append("STA " . __METHOD__, 4);
+    $stmt = $this->mysqli->prepare("
+       SELECT id, username, password, monitor,
+       ( SELECT SIGN(COUNT(id)) FROM " . $this->share->getTableName() . " WHERE username = $this->table.username AND time > DATE_SUB(now(), INTERVAL 10 MINUTE)) AS active,
+       ( SELECT ROUND(COUNT(id) * POW(2, " . $this->config['difficulty'] . ")/600/1000) FROM " . $this->share->getTableName() . " WHERE username = $this->table.username AND time > DATE_SUB(now(), INTERVAL 10 MINUTE)) AS hashrate
+       FROM $this->table
+       WHERE id = ?
+       ");
+    if ($this->checkStmt($stmt) && $stmt->bind_param('i', $id) && $stmt->execute() && $result = $stmt->get_result())
+      return $result->fetch_assoc();
+    // Catchall
+    echo $this->mysqli->error;
+    return false;
   }
 
   /**
@@ -64,7 +107,7 @@ class Worker {
   public function getWorkers($account_id) {
     $this->debug->append("STA " . __METHOD__, 4);
     $stmt = $this->mysqli->prepare("
-      SELECT id, username, password,
+      SELECT id, username, password, monitor,
       ( SELECT SIGN(COUNT(id)) FROM " . $this->share->getTableName() . " WHERE username = $this->table.username AND time > DATE_SUB(now(), INTERVAL 10 MINUTE)) AS active,
       ( SELECT ROUND(COUNT(id) * POW(2, " . $this->config['difficulty'] . ")/600/1000) FROM " . $this->share->getTableName() . " WHERE username = $this->table.username AND time > DATE_SUB(now(), INTERVAL 10 MINUTE)) AS hashrate
       FROM $this->table

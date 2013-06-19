@@ -1,9 +1,8 @@
 <?php
 
 // Make sure we are called from index.php
-if (!defined('SECURITY'))
-    die('Hacking attempt');
-
+if (!defined('SECURITY')) die('Hacking attempt');
+if (!$user->isAuthenticated()) header("Location: index.php?page=home");
 
 // Grab the last blocks found
 $iLimit = 30;
@@ -14,9 +13,5 @@ $aBlockData = $aBlocksFoundData[0];
 $smarty->assign("BLOCKSFOUND", $aBlocksFoundData);
 $smarty->assign("BLOCKLIMIT", $iLimit);
 
-if ($_SESSION['AUTHENTICATED']) {
-  $smarty->assign("CONTENT", "blocks_found.tpl");
-} else {
-  $smarty->assign("CONTENT", "default.tpl");
-}
+$smarty->assign("CONTENT", "default.tpl");
 ?>

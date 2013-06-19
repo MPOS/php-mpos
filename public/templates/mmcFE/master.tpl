@@ -11,6 +11,7 @@
     <script src="{$PATH}/js/jquery.tablesorter.min.js"></script>
     <script src="{$PATH}/js/jquery.tablesorter.pager.js"></script>
     <script src="{$PATH}/js/jquery.visualize.js"></script>
+    <script src="{$PATH}/js/jquery.tooltip.visualize.js"></script>
     <script src="{$PATH}/js/custom.js"></script>
     <script src="{$PATH}/js/tools.js"></script>
     <!--[if IE]><script type="text/javascript" src="{$PATH}/js/excanvas.js"></script><![endif]-->
@@ -46,7 +47,11 @@
       <div class="block_content">
         <div class="sidebar">
           {if $smarty.session.AUTHENTICATED|default}
-          {include file="global/sidebar.tpl"}
+            {if $GLOBAL.config.payout_system == 'pps'}
+              {include file="global/sidebar_pps.tpl"}
+            {else}
+              {include file="global/sidebar.tpl"}
+            {/if}
           {else}
           {include file="global/login.tpl"}
           {/if}

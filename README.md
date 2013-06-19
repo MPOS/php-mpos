@@ -29,6 +29,8 @@ Donors
 These people have supported this project with a donation:
 
 * [obigal](https://github.com/obigal)
+* [vias](https://github.com/vias79)
+* [WKNiGHT](https://github.com/WKNiGHT-)
 
 Requirements
 ============
@@ -57,10 +59,11 @@ The following feature have been implemented so far:
 
 * Reward Systems
  * Propotional
- * (Planned) PPS
+ * PPS
  * (Planned) PPLNS
 * Use of memcache for statistics instead of a cronjob
 * Web User accounts
+ * Re-Captcha protected registration form
 * Worker accounts
  * Worker activity (live, past 10 minutes)
  * Worker hashrates (live, past 10 minutes)
@@ -68,9 +71,23 @@ The following feature have been implemented so far:
 * Minimal Block statistics
 * Pool donations
 * Pool fees
-* Manual payout with 0.1 LTC fee
-* Auto payout with 0.1 LTC fee
+* Manual payout
+* Auto payout
 * Transaction list (confirmed and unconfirmed)
+* Admin Panel
+ * User Listing including statistics
+ * Wallet information
+ * (Planned) News Posts
+ * (Planned) Pool Donations
+* Notification system
+ * IDLE Workers
+ * New blocks found in pool
+ * Auto Payout
+ * Manual Payout
+* Support for various Scrypt based coins via config
+ * MNC
+ * LTC
+ * ...
 
 Installation
 ============

@@ -23,13 +23,29 @@ define('SALT', 'PLEASEMAKEMESOMETHINGRANDOM');
 $config = array(
   'price' => array(
     'url' =>     'https://btc-e.com/api/2',
-    'target' =>  '/ltc_usd/ticker'
+    'target' =>  '/ltc_usd/ticker',
+    'currency' => 'USD'             // Used in ministats template
+  ),
+  'ap_threshold' => array(
+    'min' => 1,
+    'max' => 250
   ),
   'website' => array(
+    'registration' => true,         // Allow new users to register
     'name' => 'The Pool',
     'slogan' => 'Resistance is futile',
     'email' => 'test@example.com',  // Mail address used for notifications
   ),
+  // See: http://www.google.com/recaptcha
+  'recaptcha' => array(
+    'enabled' => false,            // Enable re-captcha during registraion
+    'public_key' => 'YOUR_PUBLIC_RECAPTCHA_KEY',
+    'private_key' => 'YOUR_PRIVATE_RECAPTCHA_KEY'
+  ),
+  'currency' => 'LTC',              // Currency name to be used on website
+  'txfee' => 0.1,                   // Default tx fee added by RPC server
+  'block_bonus' => 0,
+  'payout_system' => 'prop',         // Set your payout here so template changes are activated
   'archive_shares' => true,         // Store accounted shares in archive table?
   'blockexplorer' => 'http://explorer.litecoin.net/search?q=',        // URL for block searches, prefixed to each block number
   'chaininfo' => 'http://allchains.info',                             // Link to Allchains for Difficulty information

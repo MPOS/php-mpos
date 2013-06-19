@@ -1,37 +1,22 @@
--- phpMyAdmin SQL Dump
--- version 3.5.8.1deb1
--- http://www.phpmyadmin.net
---
--- Host: localhost
--- Generation Time: May 31, 2013 at 02:31 PM
--- Server version: 5.5.31-0ubuntu0.13.04.1
--- PHP Version: 5.4.9-4ubuntu2
-
-SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
+SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
-
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
 /*!40101 SET NAMES utf8 */;
 
---
--- Database: `mmcfe_ng`
---
-
--- --------------------------------------------------------
-
---
--- Table structure for table `accounts`
---
+CREATE DATABASE IF NOT EXISTS `mmcfe_ng` DEFAULT CHARACTER SET latin1 COLLATE latin1_swedish_ci;
+USE `mmcfe_ng`;
 
 CREATE TABLE IF NOT EXISTS `accounts` (
   `id` int(255) NOT NULL AUTO_INCREMENT,
-  `admin` int(1) NOT NULL DEFAULT '0',
+  `is_admin` tinyint(1) NOT NULL DEFAULT '0',
   `username` varchar(40) NOT NULL,
   `pass` varchar(255) NOT NULL,
   `email` varchar(255) DEFAULT NULL COMMENT 'Assocaited email: used for validating users, and re-setting passwords',
+  `is_locked` tinyint(1) NOT NULL DEFAULT '0',
+  `failed_logins` int(5) unsigned DEFAULT '0',
   `loggedIp` varchar(255) DEFAULT NULL,
   `sessionTimeoutStamp` int(255) DEFAULT NULL,
   `pin` varchar(255) NOT NULL COMMENT 'four digit pin to allow account changes',
@@ -43,12 +28,6 @@ CREATE TABLE IF NOT EXISTS `accounts` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `username` (`username`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `blocks`
---
 
 CREATE TABLE IF NOT EXISTS `blocks` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
@@ -65,13 +44,39 @@ CREATE TABLE IF NOT EXISTS `blocks` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `height` (`height`,`blockhash`),
   KEY `time` (`time`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Discovered blocks persisted from Litecoin Service';
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='Discovered blocks persisted from Litecoin Service';
 
--- --------------------------------------------------------
+CREATE TABLE IF NOT EXISTS `notifications` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `type` varchar(25) NOT NULL,
+  `data` varchar(255) NOT NULL,
+  `active` tinyint(1) NOT NULL DEFAULT '1',
+  `time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `account_id` int(10) unsigned DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `active` (`active`),
+  KEY `data` (`data`),
+  KEY `account_id` (`account_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
---
--- Table structure for table `settings`
---
+CREATE TABLE IF NOT EXISTS `notification_settings` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `type` varchar(15) NOT NULL,
+  `account_id` int(11) NOT NULL,
+  `active` tinyint(1) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
+
+CREATE TABLE IF NOT EXISTS `pool_worker` (
+  `id` int(255) NOT NULL AUTO_INCREMENT,
+  `account_id` int(255) NOT NULL,
+  `username` char(50) DEFAULT NULL,
+  `password` char(255) DEFAULT NULL,
+  `monitor` tinyint(1) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `username` (`username`),
+  KEY `account_id` (`account_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
 CREATE TABLE IF NOT EXISTS `settings` (
   `name` varchar(255) NOT NULL,
@@ -79,12 +84,6 @@ CREATE TABLE IF NOT EXISTS `settings` (
   PRIMARY KEY (`name`),
   UNIQUE KEY `setting` (`name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `shares`
---
 
 CREATE TABLE IF NOT EXISTS `shares` (
   `id` bigint(30) NOT NULL AUTO_INCREMENT,
@@ -100,13 +99,7 @@ CREATE TABLE IF NOT EXISTS `shares` (
   KEY `upstream_result` (`upstream_result`),
   KEY `our_result` (`our_result`),
   KEY `username` (`username`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `shares_archive`
---
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
 CREATE TABLE IF NOT EXISTS `shares_archive` (
   `id` int(255) unsigned NOT NULL AUTO_INCREMENT,
@@ -119,13 +112,7 @@ CREATE TABLE IF NOT EXISTS `shares_archive` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `share_id` (`share_id`),
   KEY `time` (`time`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Archive shares for potential later debugging purposes';
-
--- --------------------------------------------------------
-
---
--- Table structure for table `statistics_shares`
---
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='Archive shares for potential later debugging purposes';
 
 CREATE TABLE IF NOT EXISTS `statistics_shares` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
@@ -136,18 +123,12 @@ CREATE TABLE IF NOT EXISTS `statistics_shares` (
   PRIMARY KEY (`id`),
   KEY `account_id` (`account_id`),
   KEY `block_id` (`block_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `transactions`
---
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
 CREATE TABLE IF NOT EXISTS `transactions` (
   `id` int(255) NOT NULL AUTO_INCREMENT,
   `account_id` int(255) unsigned NOT NULL,
-  `type` enum('Credit','Debit_MP','Debit_AP','Donation','Fee','Orphan_Credit','Orphan_Fee','Orphan_Donation') DEFAULT NULL,
+  `type` enum('Credit','Debit_MP','Debit_AP','Donation','Fee','Orphan_Credit','Orphan_Fee','Orphan_Donation','Credit_PPS','Fee_PPS','Donation_PPS','TXFee') DEFAULT NULL,
   `coin_address` varchar(255) DEFAULT NULL,
   `amount` double DEFAULT '0',
   `block_id` int(255) DEFAULT NULL,
@@ -156,24 +137,7 @@ CREATE TABLE IF NOT EXISTS `transactions` (
   KEY `block_id` (`block_id`),
   KEY `account_id` (`account_id`),
   KEY `type` (`type`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `pool_worker`
---
-
-CREATE TABLE IF NOT EXISTS `pool_worker` (
-  `id` int(255) NOT NULL AUTO_INCREMENT,
-  `account_id` int(255) NOT NULL,
-  `username` char(50) DEFAULT NULL,
-  `password` char(255) DEFAULT NULL,
-  `hashrate` int(11) DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `username` (`username`),
-  KEY `account_id` (`account_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;

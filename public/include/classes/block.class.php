@@ -44,6 +44,18 @@ class Block {
   }
 
   /**
+   * Get our last, highest share ID inserted for a block
+   * @param none
+   * @return int data Share ID
+   **/
+  public function getLastShareId() {
+    $stmt = $this->mysqli->prepare("SELECT MAX(share_id) AS share_id FROM $this->table LIMIT 1");
+    if ($this->checkStmt($stmt) && $stmt->execute() && $result = $stmt->get_result())
+      return $result->fetch_object()->share_id;
+    return false;
+  }
+
+  /**
    * Fetch all unaccounted blocks
    * @param order string Sort order, default ASC
    * @return data array Array with database fields as keys
