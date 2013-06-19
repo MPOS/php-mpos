@@ -26,10 +26,10 @@ define("BASEPATH", "../public/");
 define("SECURITY", 1);
 
 // Include our configuration (holding defines for the requires)
-require_once(BASEPATH . '/include/config/global.inc.php');
+require_once(BASEPATH . 'include/config/global.inc.php');
 
 // We include all needed files here, even though our templates could load them themself
-require_once(BASEPATH . INCLUDE_DIR . '/autoloader.inc.php');
+require_once(INCLUDE_DIR . '/autoloader.inc.php');
 
 // Parse command line
 $options = getopt("v");

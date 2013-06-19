@@ -246,8 +246,8 @@ class BitcoinClientException extends ErrorException {
   }
 }
 
-require_once(BASEPATH . INCLUDE_DIR . "/xmlrpc.inc.php");
-require_once(BASEPATH . INCLUDE_DIR . "/jsonrpc.inc.php");
+require_once(INCLUDE_DIR . "/xmlrpc.inc.php");
+require_once(INCLUDE_DIR . "/jsonrpc.inc.php");
 
 /**
  * Bitcoin client class for access to a Bitcoin server via JSON-RPC-HTTP[S]
