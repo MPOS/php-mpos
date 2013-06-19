@@ -5,7 +5,7 @@ if (!defined('SECURITY'))
     die('Hacking attempt');
 
 $debug->append('Loading Smarty libraries', 2);
-define('SMARTY_DIR', BASEPATH . INCLUDE_DIR . '/smarty/libs/');
+define('SMARTY_DIR', INCLUDE_DIR . '/smarty/libs/');
 
 // Include the actual smarty class file
 include(SMARTY_DIR . 'Smarty.class.php');
