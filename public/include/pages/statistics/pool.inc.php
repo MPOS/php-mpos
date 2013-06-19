@@ -21,12 +21,14 @@ $aContributorsShares = $statistics->getTopContributors('shares', 15);
 $aContributorsHashes = $statistics->getTopContributors('hashes', 15);
 
 // Grab the last 10 blocks found
-$iLimit = 10;
+$iLimit = 5;
 $aBlocksFoundData = $statistics->getBlocksFound($iLimit);
 $aBlockData = $aBlocksFoundData[0];
 
 // Estimated time to find the next block
 $iCurrentPoolHashrate =  $statistics->getCurrentHashrate();
+$iCurrentPoolHashrate == 0 ? $iCurrentPoolHashrate = 1 : true;
+
 // Time in seconds, not hours, using modifier in smarty to translate
 $iEstTime = $dDifficulty * pow(2,32) / ($iCurrentPoolHashrate * 1000);
 
@@ -50,9 +52,9 @@ $smarty->assign("LASTBLOCK", $aBlockData['height']);
 $smarty->assign("DIFFICULTY", $dDifficulty);
 $smarty->assign("REWARD", $config['reward']);
 
-if ($_SESSION['AUTHENTICATED']) {
+if ($user->isAuthenticated()) {
   $smarty->assign("CONTENT", "authenticated.tpl");
 } else {
-  $smarty->assign("CONTENT", "default.tpl");
+  $smarty->assign("CONTENT", "../default.tpl");
 }
 ?>

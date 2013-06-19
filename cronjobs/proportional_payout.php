@@ -22,6 +22,12 @@ limitations under the License.
 // Include all settings and classes
 require_once('shared.inc.php');
 
+// Check if we are set as the payout system
+if ($config['payout_system'] != 'prop') {
+  verbose("Please activate this cron in configuration via payout_system = prop\n");
+  exit(0);
+}
+
 // Fetch all unaccounted blocks
 $aAllBlocks = $block->getAllUnaccounted('ASC');
 if (empty($aAllBlocks)) {
@@ -32,25 +38,16 @@ if (empty($aAllBlocks)) {
 $count = 0;
 foreach ($aAllBlocks as $iIndex => $aBlock) {
   if (!$aBlock['accounted']) {
-    $iPreviousShareId = $aAllBlocks[$iIndex - 1]['share_id'] ? $aAllBlocks[$iIndex - 1]['share_id'] : 0;
+    $iPreviousShareId = @$aAllBlocks[$iIndex - 1]['share_id'] ? $aAllBlocks[$iIndex - 1]['share_id'] : 0;
     $iCurrentUpstreamId = $aBlock['share_id'];
     $aAccountShares = $share->getSharesForAccounts($iPreviousShareId, $aBlock['share_id']);
     $iRoundShares = $share->getRoundShares($iPreviousShareId, $aBlock['share_id']);
-
-    // Table header for block details
-    verbose("ID\tHeight\tTime\t\tShares\tFinder\t\tShare ID\tPrev Share\t\tStatus\n");
-    verbose($aBlock['id'] . "\t" . $aBlock['height'] . "\t" . $aBlock['time'] . "\t" . $iRoundShares . "\t" . $user->getUserName($aBlock['account_id']) . "\t" . $iCurrentUpstreamId . "\t\t" . $iPreviousShareId);
 
     if (empty($aAccountShares)) {
       verbose("\nNo shares found for this block\n\n");
       sleep(2);
       continue;
     }
-    $strStatus = "OK";
-    // Store share information for this block
-    if (!$block->setShares($aBlock['id'], $iRoundShares))
-      $strStatus = "Shares Failed";
-    verbose("\t\t$strStatus\n\n");
 
     // Table header for account shares
     verbose("ID\tUsername\tValid\tInvalid\tPercentage\tPayout\t\tDonation\tFee\t\tStatus\n");

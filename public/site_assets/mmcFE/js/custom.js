@@ -16,19 +16,12 @@ $(function () {
             var statsType = 'area';
         }
 
-	      // calculate width of graph so it doesnt overflow its parent div
-        //var chart_width = ($(this).parent('div').width()) - 60;
-	      // hack to statically set width as something is broken with div width calculation - anni
-        var chart_width = $(document).width() - 340;
-
         if (statsType == 'line' || statsType == 'pie') {
             $(this).hide().visualize({
                 type: statsType,
                 // 'bar', 'area', 'pie', 'line'
-                width: chart_width,
                 height: '240px',
                 colors: ['#6fb9e8', '#ec8526', '#9dc453', '#ddd74c'],
-
                 lineDots: 'double',
                 interaction: true,
                 multiHover: 5,
@@ -43,9 +36,8 @@ $(function () {
             });
         } else {
             $(this).hide().visualize({
-                type: statsType,
                 // 'bar', 'area', 'pie', 'line'
-                width: chart_width,
+                type: statsType,
                 height: '240px',
                 colors: ['#6fb9e8', '#ec8526', '#9dc453', '#ddd74c']
             });
@@ -65,6 +57,16 @@ $(function () {
         // Disabled on the 1st and 6th columns
         widgets: ['zebra']
     });
+
+    $("table.pagesort")
+      .tablesorter({ widgets: ['zebra'] })
+      .tablesorterPager({ positionFixed: false, container: $("#pager") });
+    $("table.pagesort2")
+      .tablesorter({ widgets: ['zebra'] })
+      .tablesorterPager({ positionFixed: false, container: $("#pager2") });
+    $("table.pagesort4")
+      .tablesorter({ widgets: ['zebra'] })
+      .tablesorterPager({ positionFixed: false, container: $("#pager3") });
 
     $('.block table tr th.header').css('cursor', 'pointer');
 

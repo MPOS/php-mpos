@@ -1,9 +1,4 @@
 {include file="global/block_header.tpl" BLOCK_HEADER="My Workers"}
-<ul><li><font color="red">
-    CAUTION! </font>Deletion of a worker could cause all associated shares for that worker to be lost.
-  Do not delete Workers unless you are certain all of their shares have been counted or that you have never used that worker account.
-</li></ul>
-
 <center>
   <form action="{$smarty.server.PHP_SELF}" method="post">
     <input type="hidden" name="page" value="{$smarty.request.page}">
@@ -14,18 +9,23 @@
       <tr>
         <td>Worker Name</td>
         <td>Password</td>
-        <td>Active</td>
-        <td>Khash/s</td>
+        <td class="center">Active</td>
+        <td class="center">Monitor</td>
+        <td class="right">Khash/s</td>
         <td>&nbsp;</td>
         <td>&nbsp;</td>
       </tr>
       {section worker $WORKERS}
       {assign var="username" value="."|escape|explode:$WORKERS[worker].username:2} 
       <tr>
-        <td{if $WORKERS[worker].active == 1} style="color: orange"{/if}>{$username.0|escape}.<input name="data[{$WORKERS[worker].id}][username]" value="{$username.1|escape}" size="10" /></td>
+        <td{if $WORKERS[worker].active} style="color: orange"{/if}>{$username.0|escape}.<input name="data[{$WORKERS[worker].id}][username]" value="{$username.1|escape}" size="10" /></td>
         <td><input type="text" name="data[{$WORKERS[worker].id}][password]" value="{$WORKERS[worker].password|escape}" size="10"></td>
-        <td>{if $WORKERS[worker].active == 1}Y{else}N{/if}</td>
-        <td>{$WORKERS[worker].hashrate}</td>
+        <td class="center"><img src="{$PATH}/images/{if $WORKERS[worker].active}success{else}error{/if}.gif" /></td>
+        <td class="center">
+          <input type="checkbox" name="data[{$WORKERS[worker].id}][monitor]" value="1" id="data[{$WORKERS[worker].id}][monitor]" {if $WORKERS[worker].monitor}checked{/if} />
+          <label for="data[{$WORKERS[worker].id}][monitor]"></label>
+        </td>
+        <td class="right">{$WORKERS[worker].hashrate|number_format}</td>
         <td align="right"><a href="{$smarty.server.PHP_SELF}?page={$smarty.request.page|escape}&action={$smarty.request.action|escape}&do=delete&id={$WORKERS[worker].id|escape}"><button style="padding:5px" type="button">Delete</button></a></td>
       </tr>
       {/section}

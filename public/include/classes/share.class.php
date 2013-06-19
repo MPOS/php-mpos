@@ -45,6 +45,21 @@ class Share {
   }
 
   /**
+   * Get last inserted Share ID from Database
+   * Used for PPS calculations without moving to archive
+   **/
+  public function getLastInsertedShareId() {
+    $stmt = $this->mysqli->prepare("
+      SELECT MAX(id) AS id FROM $this->table
+      ");
+    if ($this->checkStmt($stmt) && $stmt->execute() && $result = $stmt->get_result())
+      return $result->fetch_object()->id;
+    // Catchall
+    $this->setErrorMessage('Failed to fetch last inserted share ID');
+    return false;
+  }
+
+  /**
    * Get all valid shares for this round
    * @param previous_upstream int Previous found share accepted by upstream to limit results
    * @param current_upstream int Current upstream accepted share
@@ -172,7 +187,8 @@ class Share {
       ORDER BY id ASC LIMIT 1");
     if ($this->checkStmt($stmt) && $stmt->bind_param('i', $last) && $stmt->execute() && $result = $stmt->get_result()) {
       $this->oUpstream = $result->fetch_object();
-      return true;
+      if (!empty($this->oUpstream->account) && is_int($this->oUpstream->id))
+        return true;
     }
     // Catchall
     return false;

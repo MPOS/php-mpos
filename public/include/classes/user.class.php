@@ -26,34 +26,74 @@ class User {
   public function getError() {
     return $this->sError;
   }
-
   public function getUserName($id) {
     return $this->getSingle($id, 'username', 'id');
   }
-
   public function getUserId($username) {
     return $this->getSingle($username, 'id', 'username', 's');
   }
-
   public function getUserEmail($username) {
     return $this->getSingle($username, 'email', 'username', 's');
   }
-
+  public function getUserAdmin($id) {
+    return $this->getSingle($id, 'is_admin', 'id');
+  }
+  public function getUserLocked($id) {
+    return $this->getSingle($id, 'is_locked', 'id');
+  }
   public function getUserToken($id) {
     return $this->getSingle($id, 'token', 'id');
   }
-
+  public function getUserIp($id) {
+    return $this->getSingle($id, 'loggedIp', 'id');
+  }
+  public function getUserFailed($id) {
+   return $this->getSingle($id, 'failed_logins', 'id');
+  }
   public function getIdFromToken($token) {
     return $this->getSingle($token, 'id', 'token', 's');
   }
-
-  public function setUserToken($id) {
-    $field = array(
-      'name' => 'token',
-      'type' => 's',
-      'value' => hash('sha256', $id.time().$this->salt)
-    );
+  public function isLocked($id) {
+    return $this->getUserLocked($id);
+  }
+  public function isAdmin($id) {
+    return $this->getUserAdmin($id);
+  }
+  public function changeLocked($id) {
+    $field = array('name' => 'is_locked', 'type' => 'i', 'value' => !$this->isLocked($id));
     return $this->updateSingle($id, $field);
+  }
+  public function changeAdmin($id) {
+    $field = array('name' => 'is_admin', 'type' => 'i', 'value' => !$this->isAdmin($id));
+    return $this->updateSingle($id, $field);
+  }
+  public function setUserToken($id) {
+    $field = array('name' => 'token', 'type' => 's', 'value' => hash('sha256', $id.time().$this->salt));
+    return $this->updateSingle($id, $field);
+  }
+  private function setUserFailed($id, $value) {
+    $field = array( 'name' => 'failed_logins', 'type' => 'i', 'value' => $value);
+    return $this->updateSingle($id, $field);
+  }
+  private function incUserFailed($id) {
+    $field = array( 'name' => 'failed_logins', 'type' => 'i', 'value' => $this->getUserFailed($id) + 1);
+    return $this->updateSingle($id, $field);
+  }
+  private function setUserIp($id, $ip) {
+    $field = array( 'name' => 'loggedIp', 'type' => 's', 'value' => $ip );
+    return $this->updateSingle($id, $field);
+  }
+
+  /**
+   * Fetch all users for administrative tasks
+   * @param none
+   * @return data array All users with db columns as array fields
+   **/
+  public function getUsers($filter='%') {
+    $stmt = $this->mysqli->prepare("SELECT * FROM " . $this->getTableName() . " WHERE username LIKE ?");
+    if ($this->checkStmt($stmt) && $stmt->bind_param('s', $filter) && $stmt->execute() && $result = $stmt->get_result()) {
+      return $result->fetch_all(MYSQLI_ASSOC);
+    }
   }
 
   /**
@@ -65,10 +105,20 @@ class User {
   public function checkLogin($username, $password) {
     $this->debug->append("STA " . __METHOD__, 4);
     $this->debug->append("Checking login for $username with password $password", 2);
-    if ( $this->checkUserPassword($username, $password) ) {
+    if ($this->isLocked($this->getUserId($username))) {
+      $this->setErrorMessage("Account is locked. Please contact site support.");
+      return false;
+    }
+    if ( $this->checkUserPassword($username, $password)) {
       $this->createSession($username);
+      $this->setUserFailed($this->getUserId($username), 0);
+      $this->setUserIp($this->getUserId($username), $_SERVER['REMOTE_ADDR']);
       return true;
     }
+    $this->setErrorMessage("Invalid username or password");
+    if ($id = $this->getUserId($username))
+      $this->incUserFailed($id);
+
     return false;
   }
 
@@ -166,7 +216,7 @@ class User {
    **/
   private function updateSingle($id, $field) {
     $this->debug->append("STA " . __METHOD__, 4);
-    $stmt = $this->mysqli->prepare("UPDATE $this->table SET " . $field['name'] . " = ? WHERE id = ? LIMIT 1");
+    $stmt = $this->mysqli->prepare("UPDATE $this->table SET `" . $field['name'] . "` = ? WHERE id = ? LIMIT 1");
     if ($this->checkStmt($stmt) && $stmt->bind_param($field['type'].'i', $field['value'], $id) && $stmt->execute())
       return true;
     $this->debug->append("Unable to update " . $field['name'] . " with " . $field['value'] . " for ID $id");
@@ -224,20 +274,40 @@ class User {
    * @param donat float donation % of income
    * @return bool
    **/
-  public function updateAccount($userID, $address, $threshold, $donate) {
+  public function updateAccount($userID, $address, $threshold, $donate, $email) {
     $this->debug->append("STA " . __METHOD__, 4);
     $bUser = false;
-    $threshold = min(250, max(0, floatval($threshold)));
-    if ($threshold < 1) $threshold = 0.0;
+
+    // number validation checks
+    if ($threshold < $this->config['ap_threshold']['min'] && $threshold != 0) {
+      $this->setErrorMessage('Threshold below configured minimum of ' . $this->config['ap_threshold']['min']);
+      return false;
+    } else if ($threshold > $this->config['ap_threshold']['max']) {
+      $this->setErrorMessage('Threshold above configured maximum of ' . $this->config['ap_threshold']['max']);
+      return false;
+    }
+    if ($donate < 0) {
+      $this->setErrorMessage('Donation below allowed 0% limit');
+      return false;
+    } else if ($donate > 100) {
+      $this->setErrorMessage('Donation above allowed 100% limit');
+      return false;
+    }
+    if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+      $this->setErrorMessage('Invalid email address');
+      return false;
+    }
+    // Number sanitizer, just in case we fall through above
+    $threshold = min($this->config['ap_threshold']['max'], max(0, floatval($threshold)));
     $donate = min(100, max(0, floatval($donate)));
 
-    $stmt = $this->mysqli->prepare("UPDATE $this->table SET coin_address = ?, ap_threshold = ?, donate_percent = ? WHERE id = ?");
-    $stmt->bind_param('sddi', $address, $threshold, $donate, $userID);
-    $stmt->execute();
-    if ( $stmt->errno == 0 ) {
-      $stmt->close();
+    // We passed all validation checks so update the account
+    $stmt = $this->mysqli->prepare("UPDATE $this->table SET coin_address = ?, ap_threshold = ?, donate_percent = ?, email = ? WHERE id = ?");
+    if ($this->checkStmt($stmt) && $stmt->bind_param('sddsi', $address, $threshold, $donate, $email, $userID) && $stmt->execute())
       return true;
-    }
+    // Catchall
+    $this->setErrorMessage('Failed to update your account');
+    $this->debug->append('Account update failed: ' . $this->mysqli->error);
     return false;
   }
 
@@ -266,15 +336,15 @@ class User {
   private function checkUserPassword($username, $password) {
     $this->debug->append("STA " . __METHOD__, 4);
     $user = array();
-    $stmt = $this->mysqli->prepare("SELECT username, id FROM $this->table WHERE username=? AND pass=? LIMIT 1");
+    $stmt = $this->mysqli->prepare("SELECT username, id, is_admin FROM $this->table WHERE username=? AND pass=? LIMIT 1");
     if ($this->checkStmt($stmt)) {
       $stmt->bind_param('ss', $username, hash('sha256', $password.$this->salt));
       $stmt->execute();
-      $stmt->bind_result($row_username, $row_id);
+      $stmt->bind_result($row_username, $row_id, $row_admin);
       $stmt->fetch();
       $stmt->close();
       // Store the basic login information
-      $this->user = array('username' => $row_username, 'id' => $row_id);
+      $this->user = array('username' => $row_username, 'id' => $row_id, 'is_admin' => $row_admin);
       return $username === $row_username;
     }
     return false;
@@ -303,7 +373,8 @@ class User {
     $this->debug->append("STA " . __METHOD__, 4);
     session_destroy();
     session_regenerate_id(true);
-    return true;
+    // Enforce a page reload
+    header("Location: index.php");
   }
 
   /**
@@ -325,7 +396,7 @@ class User {
     $this->debug->append("Fetching user information for user id: $userID");
     $stmt = $this->mysqli->prepare("
       SELECT
-      id, username, pin, api_key, admin,
+      id, username, pin, api_key, is_admin, email,
       IFNULL(donate_percent, '0') as donate_percent, coin_address, ap_threshold
       FROM $this->table
       WHERE id = ? LIMIT 0,1");
@@ -363,7 +434,7 @@ class User {
       $this->setErrorMessage( 'Password do not match' );
       return false;
     }
-    if (!empty($email1) && !filter_var($email1, FILTER_VALIDATE_EMAIL)) {
+    if (empty($email1) || !filter_var($email1, FILTER_VALIDATE_EMAIL)) {
       $this->setErrorMessage( 'Invalid e-mail address' );
       return false;
     }
@@ -383,7 +454,7 @@ class User {
         ");
     } else {
       $stmt = $this->mysqli->prepare("
-        INSERT INTO $this->table (username, pass, email, pin, api_key, admin)
+        INSERT INTO $this->table (username, pass, email, pin, api_key, is_admin)
         VALUES (?, ?, ?, ?, ?, 1)
         ");
     }
@@ -455,6 +526,7 @@ class User {
     }
     $smarty->assign('TOKEN', $token);
     $smarty->assign('USERNAME', $username);
+    $smarty->assign('SUBJECT', 'Password Reset Request');
     $smarty->assign('WEBSITENAME', $this->config['website']['name']);
     $headers = 'From: Website Administration <' . $this->config['website']['email'] . ">\n";
     $headers .= "MIME-Version: 1.0\n";
@@ -468,6 +540,22 @@ class User {
         $this->setErrorMessage("Unable to send mail to your address");
         return false;
       }
+    return false;
+  }
+
+  /**
+   * Check if a user is authenticated and allowed to login
+   * Checks the $_SESSION for existing data
+   * Destroys the session if account is now locked
+   * @param none
+   * @return bool
+   **/
+  public function isAuthenticated() {
+    $this->debug->append("STA " . __METHOD__, 4);
+    if (@$_SESSION['AUTHENTICATED'] == true && ! $this->isLocked($_SESSION['USERDATA']['id']) && $this->getUserIp($_SESSION['USERDATA']['id']) == $_SERVER['REMOTE_ADDR'])
+      return true;
+    // Catchall
+    $this->logoutUser();
     return false;
   }
 }

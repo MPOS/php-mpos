@@ -1,13 +1,10 @@
 <?php
 
 // Make sure we are called from index.php
-if (!defined('SECURITY'))
-    die('Hacking attempt');
+if (!defined('SECURITY')) die('Hacking attempt');
 
-if (!$_SESSION['AUTHENTICATED']) {
-  header('Location: index.php?page=home');
+if ($user->isAuthenticated()) {
+  // Tempalte specifics
+  $smarty->assign("CONTENT", "default.tpl");
 }
-
-// Tempalte specifics
-$smarty->assign("CONTENT", "default.tpl");
 ?>

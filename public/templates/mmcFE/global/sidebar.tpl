@@ -6,8 +6,13 @@
               </div>
               <div class="block_content" style="padding-top:10px;">
                 <table class="sidebar" style="width: 196px">
-                    <tr><td colspan="2"><b>Your Hashrate</b></td></tr>
-                    <tr><td colspan="2" class="right">{$GLOBAL.userdata.hashrate|number_format} KH/s</td></tr>
+                    <tr>
+                      <td colspan="2"><b><u>Your Stats</u></b></td>
+                    </tr>
+                    <tr>
+                      <td><b>Hashrate</b></td>
+                      <td class="right">{$GLOBAL.userdata.hashrate|number_format} KH/s</td>
+                    </tr>
                     <tr>
                       <td colspan="2"><b><u>Unpaid Shares</u></b> <span id='tt'><img src='{$PATH}/images/questionmark.png' height='15px' width='15px' title='Submitted shares between the last 120 confirms block until now.'></span></td>
                     </tr>
@@ -35,7 +40,7 @@
                       <td class="right"><i>{$GLOBAL.userdata.shares.invalid|number_format}</i><font size='1px'></font></td>
                     </tr>
                     <tr>
-                      <td colspan="2"><b><u>LTC Round Estimate</u></b></td>
+                      <td colspan="2"><b><u>{$GLOBAL.config.currency} Round Estimate</u></b></td>
                     </tr>
                     <tr>
                       <td><b>Block</b></td>
@@ -54,8 +59,9 @@
                       <td class="right">{$GLOBAL.userdata.est_payout|number_format:"3"}</td>
                     </tr>
                     <tr><td colspan="2">&nbsp;</td></tr>
-                    <tr><td colspan="2"><b><u>Account Balance</u></b></td></tr>
-                    <tr><td colspan="2" class="right"><b>{$GLOBAL.userdata.balance|default:"0"} LTC</td></tr>
+                    <tr><td colspan="2"><b><u>{$GLOBAL.config.currency} Account Balance</u></b></td></tr>
+                    <tr><td>Confirmed</td><td class="right"><b>{$GLOBAL.userdata.balance.confirmed|default:"0"}</td></tr>
+                    <tr><td>Unconfirmed</td><td class="right"><b>{$GLOBAL.userdata.balance.unconfirmed|default:"0"}</td></tr>
                   </table>
                 </div>
               <div class="bendl"></div>
