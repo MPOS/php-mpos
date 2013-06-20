@@ -31,6 +31,7 @@ These people have supported this project with a donation:
 * [obigal](https://github.com/obigal)
 * [vias](https://github.com/vias79)
 * [WKNiGHT](https://github.com/WKNiGHT-)
+* [ZC](https://github.com/zccopwrx)
 
 Requirements
 ============
