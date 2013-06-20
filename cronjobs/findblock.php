@@ -72,7 +72,7 @@ if (empty($aAllBlocks)) {
     verbose("No new unaccounted blocks found\n");
 } else {
   // Loop through our unaccounted blocks
-  verbose("\nBlock ID\tBlock Height\tShare ID\tShares\tFinder\t\t\tStatus\n");
+  verbose("\nBlock ID\tBlock Height\tAmount\tShare ID\tShares\tFinder\t\t\tStatus\n");
   foreach ($aAllBlocks as $iIndex => $aBlock) {
     if (empty($aBlock['share_id'])) {
       // Fetch this blocks upstream ID
@@ -107,6 +107,7 @@ if (empty($aAllBlocks)) {
       verbose(
         $aBlock['id'] . "\t\t"
         . $aBlock['height'] . "\t\t"
+        . $aBlock['amount'] . "\t"
         . $iCurrentUpstreamId . "\t\t"
         . $iRoundShares . "\t"
         . "[$iAccountId] " . $user->getUserName($iAccountId) . "\t\t"
