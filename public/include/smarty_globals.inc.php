@@ -72,6 +72,10 @@ if (@$_SESSION['USERDATA']['id']) {
     $aGlobal['userdata']['est_payout'] = round($aGlobal['userdata']['est_block'] - $aGlobal['userdata']['est_donation'] - $aGlobal['userdata']['est_fee'], 3);
     break;
   }
+
+  // Site-wide notifications, based on user events
+  if ($aGlobal['userdata']['balance']['confirmed'] >= $config['ap_threshold']['max'])
+    $_SESSION['POPUP'][] = array('CONTENT' => 'You have exceeded your accounts balance. Please transfer some ' . $config['currency'] . "!", 'TYPE' => 'errormsg');
 }
 
 // Make it available in Smarty
