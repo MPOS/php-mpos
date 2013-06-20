@@ -112,7 +112,7 @@ CREATE TABLE IF NOT EXISTS `shares_archive` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `share_id` (`share_id`),
   KEY `time` (`time`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='Archive shares for potential later debugging purposes';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Archive shares for potential later debugging purposes';
 
 CREATE TABLE IF NOT EXISTS `statistics_shares` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
@@ -123,12 +123,12 @@ CREATE TABLE IF NOT EXISTS `statistics_shares` (
   PRIMARY KEY (`id`),
   KEY `account_id` (`account_id`),
   KEY `block_id` (`block_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE IF NOT EXISTS `transactions` (
   `id` int(255) NOT NULL AUTO_INCREMENT,
   `account_id` int(255) unsigned NOT NULL,
-  `type` enum('Credit','Debit_MP','Debit_AP','Donation','Fee','Orphan_Credit','Orphan_Fee','Orphan_Donation','Credit_PPS','Fee_PPS','Donation_PPS','TXFee') DEFAULT NULL,
+  `type` enum('Credit','Debit_MP','Debit_AP','Donation','Fee','Orphan_Credit','Orphan_Fee','Orphan_Donation','Credit_PPS','Fee_PPS','Donation_PPS','TXFee','Bonus') DEFAULT NULL,
   `coin_address` varchar(255) DEFAULT NULL,
   `amount` double DEFAULT '0',
   `block_id` int(255) DEFAULT NULL,
