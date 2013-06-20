@@ -23,7 +23,7 @@ limitations under the License.
 require_once('shared.inc.php');
 
 // Include additional file not set in autoloader
-require_once(BASEPATH . CLASS_DIR . '/tools.class.php');
+require_once(CLASS_DIR . '/tools.class.php');
 
 verbose("Running updates\n");
 if ($aData = $tools->getApi($config['price']['url'], $config['price']['target'])) {
