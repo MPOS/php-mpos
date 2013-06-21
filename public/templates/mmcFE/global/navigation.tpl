@@ -15,6 +15,7 @@
               <ul>
                 <li><a href="{$smarty.server.PHP_SELF}?page=admin&action=user">User Info</a></li>
                 <li><a href="{$smarty.server.PHP_SELF}?page=admin&action=wallet">Wallet Info</a></li>
+                <li><a href="{$smarty.server.PHP_SELF}?page=admin&action=news">News</a></li>
               </ul>
             </li>
             {/if}
@@ -32,6 +33,5 @@
                 <li><a href="{$smarty.server.PHP_SELF}?page=about&action=pool">This Pool</a></li>
               </ul>
             </li>
-            <li><a href="{$smarty.server.PHP_SELF}?page=news">News</a></li>
             {if $smarty.session.AUTHENTICATED|default == 1}<li><a href="{$smarty.server.PHP_SELF}?page=logout">Logout</a></li>{else}<li><a href="{$smarty.server.PHP_SELF}?page=register">Register</a></li>{/if}
           </ul>
