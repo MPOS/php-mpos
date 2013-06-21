@@ -23,7 +23,7 @@ class News extends Base {
    **/
   public function getAllActive() {
     $this->debug->append("STA " . __METHOD__, 4);
-    $stmt = $this->mysqli->prepare("SELECT * FROM $this->table WHERE active = 1");
+    $stmt = $this->mysqli->prepare("SELECT n.*, a.username AS author FROM $this->table AS n LEFT JOIN " . $this->user->getTableName() . " AS a ON a.id = n.account_id WHERE active = 1");
     if ($stmt && $stmt->execute() && $result = $stmt->get_result())
       return $result->fetch_all(MYSQLI_ASSOC);
     // Catchall
@@ -35,7 +35,7 @@ class News extends Base {
    **/
   public function getAll() {
     $this->debug->append("STA " . __METHOD__, 4);
-    $stmt = $this->mysqli->prepare("SELECT * FROM $this->table");
+    $stmt = $this->mysqli->prepare("SELECT n.*, a.username AS author FROM $this->table AS n LEFT JOIN " . $this->user->getTableName() . " AS a ON a.id = n.account_id");
     if ($stmt && $stmt->execute() && $result = $stmt->get_result())
       return $result->fetch_all(MYSQLI_ASSOC);
     // Catchall
@@ -98,5 +98,5 @@ class News extends Base {
 $news = new News();
 $news->setDebug($debug);
 $news->setMysql($mysqli);
-
+$news->setUser($user);
 ?>
