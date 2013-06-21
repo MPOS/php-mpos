@@ -4,7 +4,7 @@ if (!defined('SECURITY')) die('Hacking attempt');
 
 if ($config['recaptcha']['enabled']) {
   // Load re-captcha specific data
-  require_once(INCLUDE_DIR . '/recaptchalib.php');
+  require_once(INCLUDE_DIR . '/lib/recaptchalib.php');
   $rsp = recaptcha_check_answer (
     $config['recaptcha']['private_key'],
     $_SERVER["REMOTE_ADDR"],

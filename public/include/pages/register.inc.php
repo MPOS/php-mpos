@@ -8,7 +8,7 @@ if (!$config['website']['registration']) {
   $smarty->assign("CONTENT", "disabled.tpl");
 } else {
   if ($config['recaptcha']['enabled']) {
-    require_once(INCLUDE_DIR . '/recaptchalib.php');
+    require_once(INCLUDE_DIR . '/lib/recaptchalib.php');
     $smarty->assign("RECAPTCHA", recaptcha_get_html($config['recaptcha']['public_key']));
   }
   // Tempalte specifics
