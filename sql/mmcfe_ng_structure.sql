@@ -51,6 +51,7 @@ CREATE TABLE IF NOT EXISTS `news` (
   `account_id` int(10) unsigned NOT NULL,
   `header` varchar(255) NOT NULL,
   `content` text NOT NULL,
+  `time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `active` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;

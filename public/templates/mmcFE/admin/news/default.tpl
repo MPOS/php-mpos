@@ -20,7 +20,7 @@
 {section name=news loop=$NEWS}
 {include
   file="global/block_header.tpl"
-  BLOCK_HEADER="{$NEWS[news].header}"
+  BLOCK_HEADER="{$NEWS[news].header} posted {$NEWS[news].time} by {$NEWS[news].author}"
   BUTTONS="
     <a href='{$smarty.server.PHP_SELF}?page={$smarty.request.page}&action=news_edit&id={$NEWS[news].id}'>Edit</a>&nbsp;
     <a href='{$smarty.server.PHP_SELF}?page={$smarty.request.page}&action={$smarty.request.action}&do=delete&id={$NEWS[news].id}'>Delete</a>
