@@ -78,8 +78,7 @@ The following feature have been implemented so far:
 * Admin Panel
  * User Listing including statistics
  * Wallet information
- * (Planned) News Posts
- * (Planned) Pool Donations
+ * News Posts **NEW**
 * Notification system
  * IDLE Workers
  * New blocks found in pool
