@@ -9,11 +9,12 @@ class Transaction {
   private $table = 'transactions';
   private $tableBlocks = 'blocks';
 
-  public function __construct($debug, $mysqli, $config, $block) {
+  public function __construct($debug, $mysqli, $config, $block, $user) {
     $this->debug = $debug;
     $this->mysqli = $mysqli;
     $this->config = $config;
     $this->block = $block;
+    $this->user = $user;
     $this->debug->append("Instantiated Transaction class", 2);
   }
 
@@ -114,6 +115,36 @@ class Transaction {
       return false;
     }
     return true;
+  }
+
+  /**
+   * Get all donation transactions
+   * Used on donors page
+   * return data array Donors and amounts
+   **/
+  public function getDonations() {
+    $this->debug->append("STA " . __METHOD__, 4);
+    $stmt = $this->mysqli->prepare("
+      SELECT
+        SUM(t.amount) AS donation,
+        a.username AS username,
+        a.donate_percent AS donate_percent
+      FROM $this->table AS t
+      LEFT JOIN " . $this->user->getTableName() . " AS a
+      ON t.account_id = a.id
+      LEFT JOIN blocks AS b
+      ON t.block_id = b.id
+      WHERE
+      (
+        ( t.type = 'Donation' AND b.confirmations >= " . $this->config['confirmations'] . " ) OR
+        t.type = 'Donation_PPS'
+      )
+      GROUP BY a.username
+      ");
+    if ($this->checkStmt($stmt) && $stmt->execute() && $result = $stmt->get_result())
+      return $result->fetch_all(MYSQLI_ASSOC);
+    $this->debug->append("Failed to fetch website donors: " . $this->mysqli->error);
+    return false;
   }
 
   /**
@@ -231,4 +262,4 @@ class Transaction {
   }
 }
 
-$transaction = new Transaction($debug, $mysqli, $config, $block);
+$transaction = new Transaction($debug, $mysqli, $config, $block, $user);
