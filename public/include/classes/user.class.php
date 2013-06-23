@@ -71,7 +71,7 @@ class User {
     $field = array('name' => 'token', 'type' => 's', 'value' => hash('sha256', $id.time().$this->salt));
     return $this->updateSingle($id, $field);
   }
-  private function setUserFailed($id, $value) {
+  public function setUserFailed($id, $value) {
     $field = array( 'name' => 'failed_logins', 'type' => 'i', 'value' => $value);
     return $this->updateSingle($id, $field);
   }
@@ -111,7 +111,6 @@ class User {
     }
     if ( $this->checkUserPassword($username, $password)) {
       $this->createSession($username);
-      $this->setUserFailed($this->getUserId($username), 0);
       $this->setUserIp($this->getUserId($username), $_SERVER['REMOTE_ADDR']);
       return true;
     }
