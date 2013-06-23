@@ -1,7 +1,6 @@
 <?php
 // Make sure we are called from index.php
-if (!defined('SECURITY'))
-  die('Hacking attempt');
+if (!defined('SECURITY')) die('Hacking attempt');
 
 // What is our overall theme
 define('THEME', 'mmcFE');
@@ -18,6 +17,7 @@ define('PAGES_DIR', INCLUDE_DIR . '/pages');
 // Set debugging level for our debug class
 define('DEBUG', 0);
 
+// SALT used to hash passwords
 define('SALT', 'PLEASEMAKEMESOMETHINGRANDOM');
 
 $config = array(
@@ -26,6 +26,14 @@ $config = array(
     'target' =>  '/ltc_usd/ticker',
     'currency' => 'USD'             // Used in ministats template
   ),
+/**
+ * Another Example for API
+  'price' => array(
+    'url' =>     'http://www.coinchoose.com',
+    'target' =>  '/api.php',
+    'currency' => 'BTC'
+  ),
+ **/
   'ap_threshold' => array(
     'min' => 1,
     'max' => 250

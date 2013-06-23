@@ -26,11 +26,13 @@ require_once('shared.inc.php');
 require_once(CLASS_DIR . '/tools.class.php');
 
 verbose("Running updates\n");
-if ($aData = $tools->getApi($config['price']['url'], $config['price']['target'])) {
-  if (!$setting->setValue('price', $aData['ticker']['last']))
-    verbose("ERR Table update failed");
+verbose("  Price API Call ... ");
+if ($price = $tools->getPrice()) {
+  verbose("found $price as price\n");
+  if (!$setting->setValue('price', $price))
+    verbose("unable to update value in settings table\n");
 } else {
-  verbose("ERR Failed download JSON data from " . $config['price']['url'].$config['price']['target'] . "\n");
+  verbose("failed to fetch API data: " . $tools->getError() . "\n");
 }
 
 ?>
