@@ -76,6 +76,8 @@ if (@$_SESSION['USERDATA']['id']) {
   // Site-wide notifications, based on user events
   if ($aGlobal['userdata']['balance']['confirmed'] >= $config['ap_threshold']['max'])
     $_SESSION['POPUP'][] = array('CONTENT' => 'You have exceeded your accounts balance. Please transfer some ' . $config['currency'] . "!", 'TYPE' => 'errormsg');
+  if ($user->getUserFailed($_SESSION['USERDATA']['id']) > 0)
+    $_SESSION['POPUP'][] = array('CONTENT' => 'You have ' . $user->getUserFailed($_SESSION['USERDATA']['id']) . ' failed login attempts! <a href="?page=account&action=reset_failed">Reset Counter</a>', 'TYPE' => 'errormsg');
 }
 
 // Make it available in Smarty
