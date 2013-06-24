@@ -25,7 +25,7 @@ require_once('shared.inc.php');
 // Include additional file not set in autoloader
 require_once(CLASS_DIR . '/tools.class.php');
 
-verbose("Running updates\n");
+verbose("Running scheduled updates\n");
 verbose("  Price API Call ... ");
 if ($price = $tools->getPrice()) {
   verbose("found $price as price\n");

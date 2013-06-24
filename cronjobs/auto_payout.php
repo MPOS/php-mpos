@@ -22,8 +22,10 @@ limitations under the License.
 // Include all settings and classes
 require_once('shared.inc.php');
 
+verbose("Running auto-payouts ...");
+
 if ($bitcoin->can_connect() !== true) {
-  verbose("Unable to connect to RPC server, exiting");
+  verbose(" unable to connect to RPC server, exiting\n");
   exit(1);
 }
 
@@ -33,14 +35,17 @@ $setting->setValue('auto_payout_active', 1);
 // Fetch all users with setup AP
 $users = $user->getAllAutoPayout();
 
+// Quick summary
+verbose(" found " . count($users) . " queued payout(s)\n");
+
 // Go through users and run transactions
 if (! empty($users)) {
-  verbose("UserID\tUsername\tBalance\tThreshold\tAddress\t\t\t\t\tStatus\n\n");
+  verbose("\tUserID\tUsername\tBalance\tThreshold\tAddress\t\t\t\t\tStatus\n\n");
 
   foreach ($users as $aUserData) {
     $aBalance = $transaction->getBalance($aUserData['id']);
     $dBalance = $aBalance['confirmed'];
-    verbose($aUserData['id'] . "\t" . $aUserData['username'] . "\t" . $dBalance . "\t" . $aUserData['ap_threshold'] . "\t\t" . $aUserData['coin_address'] . "\t");
+    verbose("\t" . $aUserData['id'] . "\t" . $aUserData['username'] . "\t" . $dBalance . "\t" . $aUserData['ap_threshold'] . "\t\t" . $aUserData['coin_address'] . "\t");
 
     // Only run if balance meets threshold and can pay the potential transaction fee
     if ($dBalance > $aUserData['ap_threshold'] && $dBalance > $config['txfee']) {
@@ -80,7 +85,7 @@ if (! empty($users)) {
     }
   }
 } else {
-  verbose("No user has configured their AP > 0\n");
+  verbose("  no user has configured their AP > 0\n");
 }
 
 // Mark this job as inactive

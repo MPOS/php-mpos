@@ -22,35 +22,51 @@ limitations under the License.
 // Include all settings and classes
 require_once('shared.inc.php');
 
+verbose("Running system notifications\n");
+
+verbose("  IDLE Worker Notifications ...");
 // Find all IDLE workers
 $aWorkers = $worker->getAllIdleWorkers();
 if (empty($aWorkers)) {
-  verbose("No idle workers found\n");
+  verbose(" no idle workers found\n");
 } else {
+  verbose(" found " . count($aWorkers) . " IDLE workers\n");
   foreach ($aWorkers as $aWorker) {
     $aData = $aWorker;
     $aData['username'] = $user->getUserName($aWorker['account_id']);
     $aData['subject'] = 'IDLE Worker : ' . $aWorker['username'];
     $aData['worker'] = $aWorker['username'];
     $aData['email'] = $user->getUserEmail($aData['username']);
-    if (!$notification->sendNotification($aWorker['account_id'], 'idle_worker', $aData))
-      verbose($notification->getError() . "\n");
+    verbose("    " . $aWorker['username'] . "...");
+    if (!$notification->sendNotification($aWorker['account_id'], 'idle_worker', $aData)) {
+      verbose(" " . $notification->getError() . "\n");
+    } else {
+      verbose(" sent\n");
+    }
   }
 }
 
+
+verbose("  Reset IDLE Worker Notifications ...");
 // We notified, lets check which recovered
 $aNotifications = $notification->getAllActive('idle_worker');
 if (!empty($aNotifications)) {
+  verbose(" found " . count($aNotifications) . " active notification(s)\n");
   foreach ($aNotifications as $aNotification) {
     $aData = json_decode($aNotification['data'], true);
     $aWorker = $worker->getWorker($aData['id']);
+    verbose("    " . $aWorker['username'] . " ...");
     if ($aWorker['active'] == 1) {
       if ($notification->setInactive($aNotification['id'])) {
-        verbose("Marked notification " . $aNotification['id'] . " as inactive\n");
+        verbose(" updated #" . $aNotification['id'] . " for " . $aWorker['username'] . " as inactive\n");
       } else {
-        verbose("Failed to set notification inactive for " . $aWorker['username'] . "\n");
+        verbose(" failed to update #" . $aNotification['id'] . " for " . $aWorker['username'] . "\n");
       }
+    } else {
+      verbose(" still inactive\n");
     }
   }
+} else {
+  verbose(" no active IDLE worker notifications\n");
 }
 ?>
