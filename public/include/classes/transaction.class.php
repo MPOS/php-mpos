@@ -95,7 +95,7 @@ class Transaction {
         b.height AS height,
         b.confirmations AS confirmations
       FROM transactions AS t
-      LEFT JOIN blocks AS b ON t.block_id = b.id
+      LEFT JOIN " . $this->block->getTableName() . " AS b ON t.block_id = b.id
       WHERE t.account_id = ?
       ORDER BY id DESC");
     if ($this->checkStmt($stmt)) {
@@ -118,6 +118,7 @@ class Transaction {
     $stmt = $this->mysqli->prepare("
       SELECT
         t.id AS id,
+        a.username as username,
         t.type AS type,
         t.amount AS amount,
         t.coin_address AS coin_address,
@@ -125,7 +126,8 @@ class Transaction {
         b.height AS height,
         b.confirmations AS confirmations
       FROM transactions AS t
-      LEFT JOIN blocks AS b ON t.block_id = b.id
+      LEFT JOIN " . $this->block->getTableName() . " AS b ON t.block_id = b.id
+      LEFT JOIN " . $this->user->getTableName() . " AS a ON t.account_id = a.id
       ORDER BY id DESC");
     if ($this->checkStmt($stmt) && $stmt->execute() && $result = $stmt->get_result())
       return $result->fetch_all(MYSQLI_ASSOC);

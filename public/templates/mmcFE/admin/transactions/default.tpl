@@ -6,6 +6,7 @@
       <thead style="font-size:13px;">
         <tr>
           <th class="header" style="cursor: pointer;">TX #</th>
+          <th class="header" style="cursor: pointer;">Account<th>
           <th class="header" style="cursor: pointer;">Date</th>
           <th class="header" style="cursor: pointer;">TX Type</th>
           <th class="header" style="cursor: pointer;">Payment Address</th>
@@ -28,6 +29,7 @@
         )}
         <tr class="{cycle values="odd,even"}">
           <td>{$TRANSACTIONS[transaction].id}</td>
+          <td>{$TRANSACTIONS[transaction].username}</td>
           <td>{$TRANSACTIONS[transaction].timestamp}</td>
           <td>{$TRANSACTIONS[transaction].type}</td>
           <td>{$TRANSACTIONS[transaction].coin_address}</td>
@@ -52,6 +54,7 @@
       <thead style="font-size:13px;">
         <tr>
           <th class="header" style="cursor: pointer;">TX #</th>
+          <th class="header" style="cursor: pointer;">Account<th>
           <th class="header" style="cursor: pointer;">Date</th>
           <th class="header" style="cursor: pointer;">TX Type</th>
           <th class="header" style="cursor: pointer;">Payment Address</th>
@@ -68,6 +71,7 @@
         )}
         <tr class="{cycle values="odd,even"}">
           <td>{$TRANSACTIONS[transaction].id}</td>
+          <td>{$TRANSACTIONS[transaction].username}</td>
           <td>{$TRANSACTIONS[transaction].timestamp}</td>
           <td>{$TRANSACTIONS[transaction].type}</td>
           <td>{$TRANSACTIONS[transaction].coin_address}</td>
@@ -97,6 +101,7 @@
       <thead style="font-size:13px;">
         <tr>
           <th class="header" style="cursor: pointer;">TX #</th>
+          <th class="header" style="cursor: pointer;">Account<th>
           <th class="header" style="cursor: pointer;">Date</th>
           <th class="header" style="cursor: pointer;">TX Type</th>
           <th class="header" style="cursor: pointer;">Payment Address</th>
@@ -114,6 +119,7 @@
         )}
         <tr class="{cycle values="odd,even"}">
           <td>{$TRANSACTIONS[transaction].id}</td>
+          <td>{$TRANSACTIONS[transaction].username}</td>
           <td>{$TRANSACTIONS[transaction].timestamp}</td>
           <td>{$TRANSACTIONS[transaction].type}</td>
           <td>{$TRANSACTIONS[transaction].coin_address}</td>
