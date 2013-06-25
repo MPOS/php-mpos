@@ -48,6 +48,7 @@ if (empty($aTransactions['transactions'])) {
   foreach ($aTransactions['transactions'] as $iIndex => $aData) {
     if ( $aData['category'] == 'generate' || $aData['category'] == 'immature' ) {
       $aBlockInfo = $bitcoin->query('getblock', $aData['blockhash']);
+      $config['reward_type'] == 'block' ? $aData['amount'] = $aData['amount'] : $aData['amount'] = $config['reward'];
       $aData['height'] = $aBlockInfo['height'];
       $aData['difficulty'] = $aBlockInfo['difficulty'];
       verbose(substr($aData['blockhash'], 0, 15) . "...\t" .
