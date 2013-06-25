@@ -42,6 +42,7 @@ foreach ($aAllBlocks as $iIndex => $aBlock) {
     $iCurrentUpstreamId = $aBlock['share_id'];
     $aAccountShares = $share->getSharesForAccounts($iPreviousShareId, $aBlock['share_id']);
     $iRoundShares = $share->getRoundShares($iPreviousShareId, $aBlock['share_id']);
+    $config['reward_type'] == 'block' ? $dReward = $aBlock['amount'] : $dReward = $config['reward'];
 
     if (empty($aAccountShares)) {
       verbose("\nNo shares found for this block\n\n");
@@ -56,7 +57,7 @@ foreach ($aAllBlocks as $iIndex => $aBlock) {
     foreach ($aAccountShares as $key => $aData) {
       // Payout based on shares, PPS system
       $aData['percentage'] = number_format(round(( 100 / $iRoundShares ) * $aData['valid'], 8), 8);
-      $aData['payout'] = number_format(round(( $aData['percentage'] / 100 ) * $config['reward'], 8), 8);
+      $aData['payout'] = number_format(round(( $aData['percentage'] / 100 ) * $dReward, 8), 8);
       // Defaults
       $aData['fee' ] = 0;
       $aData['donation'] = 0;

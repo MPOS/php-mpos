@@ -60,6 +60,7 @@ $config = array(
   'fees' => 0,
   'difficulty' => '20',         // Target difficulty for this pool as set in pushpoold json
   'reward' => '50',             // Reward for finding blocks, fixed value but changes someday
+  'reward_type' => 'fixed',     // Payout `fixed` reward as defined in reward or `block` amount
   'confirmations' => '120',     // Confirmations per block needed to credit transactions
   'memcache' => array(
     'enabled'   => true,
