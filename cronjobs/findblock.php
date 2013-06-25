@@ -48,6 +48,7 @@ if (empty($aTransactions['transactions'])) {
   foreach ($aTransactions['transactions'] as $iIndex => $aData) {
     if ( $aData['category'] == 'generate' || $aData['category'] == 'immature' ) {
       $aBlockInfo = $bitcoin->query('getblock', $aData['blockhash']);
+      $config['reward_type'] == 'block' ? $aData['amount'] = $aData['amount'] : $aData['amount'] = $config['reward'];
       $aData['height'] = $aBlockInfo['height'];
       $aData['difficulty'] = $aBlockInfo['difficulty'];
       verbose(substr($aData['blockhash'], 0, 15) . "...\t" .
@@ -72,7 +73,7 @@ if (empty($aAllBlocks)) {
     verbose("No new unaccounted blocks found\n");
 } else {
   // Loop through our unaccounted blocks
-  verbose("\nBlock ID\tBlock Height\tShare ID\tShares\tFinder\t\t\tStatus\n");
+  verbose("\nBlock ID\tBlock Height\tAmount\tShare ID\tShares\tFinder\t\t\tStatus\n");
   foreach ($aAllBlocks as $iIndex => $aBlock) {
     if (empty($aBlock['share_id'])) {
       // Fetch this blocks upstream ID
@@ -107,6 +108,7 @@ if (empty($aAllBlocks)) {
       verbose(
         $aBlock['id'] . "\t\t"
         . $aBlock['height'] . "\t\t"
+        . $aBlock['amount'] . "\t"
         . $iCurrentUpstreamId . "\t\t"
         . $iRoundShares . "\t"
         . "[$iAccountId] " . $user->getUserName($iAccountId) . "\t\t"
