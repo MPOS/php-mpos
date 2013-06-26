@@ -146,6 +146,34 @@ class Statistics {
   }
 
   /**
+   * Get amount of shares for a all users
+   * Used in statistics cron to refresh memcache data
+   * @param account_id int User ID
+   * @return data array invalid and valid share counts
+   **/
+  public function getAllUserShares() {
+    $this->debug->append("STA " . __METHOD__, 4);
+    if ($this->getGetCache() && $data = $this->memcache->get(__FUNCTION__)) return $data;
+    $stmt = $this->mysqli->prepare("
+      SELECT
+        SUM(IF(our_result='Y', 1, 0)) AS valid,
+          SUM(IF(our_result='N', 1, 0)) AS invalid,
+          u.id AS id,
+          u.username AS username
+      FROM " . $this->share->getTableName() . " AS s,
+             " . $this->user->getTableName() . " AS u
+      WHERE
+        u.username = SUBSTRING_INDEX( s.username, '.', 1 )
+        AND UNIX_TIMESTAMP(s.time) >IFNULL((SELECT MAX(b.time) FROM " . $this->block->getTableName() . " AS b),0)
+      GROUP BY u.id");
+    if ($stmt && $stmt->execute() && $result = $stmt->get_result())
+      return $this->memcache->setCache(__FUNCTION__, $result->fetch_all(MYSQLI_ASSOC));
+    // Catchall
+    $this->debug->append("Unable to fetch all users round shares: " . $this->mysqli->error);
+    return false;
+  }
+
+  /**
    * Get amount of shares for a specific user
    * @param account_id int User ID
    * @return data array invalid and valid share counts

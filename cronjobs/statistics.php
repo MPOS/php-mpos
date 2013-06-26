@@ -30,32 +30,39 @@ verbose("Running statistical cache updates\n");
 
 // Since fetching from cache is disabled, overwrite our stats
 verbose("  getRoundShares ...");
+$start = microtime(true);
 if (!$statistics->getRoundShares())
   verbose(" update failed");
-verbose("\n  getTopContributors shares ...");
+verbose(" " . number_format(microtime(true) - $start, 2) . " seconds\n");
+verbose("  getTopContributors shares ...");
+$start = microtime(true);
 if (!$statistics->getTopContributors('shares'))
   verbose(" update failed");
-verbose("\n  getTopContributors hashes ...");
+verbose(" " . number_format(microtime(true) - $start, 2) . " seconds\n");
+verbose("  getTopContributors hashes ...");
+$start = microtime(true);
 if (!$statistics->getTopContributors('hashes'))
   verbose(" update failed");
-verbose("\n  getCurrentHashrate ...");
+verbose(" " . number_format(microtime(true) - $start, 2) . " seconds\n");
+verbose("  getCurrentHashrate ...");
+$start = microtime(true);
 if (!$statistics->getCurrentHashrate())
   verbose(" update failed");
+verbose(" " . number_format(microtime(true) - $start, 2) . " seconds\n");
 // Admin specific statistics, we cache the global query due to slowness
-verbose("\n  getAllUserStats ...");
+verbose("  getAllUserStats ...");
+$start = microtime(true);
 if (!$statistics->getAllUserStats('%'))
   verbose(" update failed");
-verbose("\n");
+verbose(" " . number_format(microtime(true) - $start, 2) . " seconds\n");
 
 // Per user share statistics based on all shares submitted
-verbose("  getUserShares ...\n");
-$stmt = $mysqli->prepare("SELECT DISTINCT SUBSTRING_INDEX( `username` , '.', 1 ) AS username FROM " . $share->getTableName());
-if ($stmt && $stmt->execute() && $result = $stmt->get_result()) {
-  while ($row = $result->fetch_assoc()) {
-    verbose("    " . $row['username'] . " ...");
-    if (!$statistics->getUserShares($user->getUserId($row['username'])))
-      verbose(" update failed");
-    verbose("\n");
-  }
+verbose("  getAllUserShares ...");
+$start = microtime(true);
+$aUserShares = $statistics->getAllUserShares();
+verbose(" " . number_format(microtime(true) - $start, 2) . " seconds");
+foreach ($aUserShares as $aShares) {
+  $memcache->setCache('getUserShares'. $aShares['id'], $aShares);
 }
+verbose("\n");
 ?>
