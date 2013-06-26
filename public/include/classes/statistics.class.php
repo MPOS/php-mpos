@@ -134,14 +134,10 @@ class Statistics {
     if ($this->getGetCache() && $data = $this->memcache->get(__FUNCTION__)) return $data;
     $stmt = $this->mysqli->prepare("
       SELECT
-      ( SELECT IFNULL(count(id), 0)
+        SUM(IF(our_result='Y', 1, 0)) AS valid,
+        SUM(IF(our_result='N', 1, 0)) AS invalid
       FROM " . $this->share->getTableName() . "
-      WHERE UNIX_TIMESTAMP(time) >IFNULL((SELECT MAX(time) FROM blocks),0)
-        AND our_result = 'Y' ) as valid,
-      ( SELECT IFNULL(count(id), 0)
-      FROM " . $this->share->getTableName() . "
-      WHERE UNIX_TIMESTAMP(time) >IFNULL((SELECT MAX(time) FROM blocks),0)
-        AND our_result = 'N' ) as invalid");
+      WHERE UNIX_TIMESTAMP(time) >IFNULL((SELECT MAX(time) FROM " . $this->block->getTableName() . "),0)");
     if ( $this->checkStmt($stmt) && $stmt->execute() && $result = $stmt->get_result() )
       return $this->memcache->setCache(__FUNCTION__, $result->fetch_assoc());
     // Catchall
@@ -159,25 +155,15 @@ class Statistics {
     if ($this->getGetCache() && $data = $this->memcache->get(__FUNCTION__ . $account_id)) return $data;
     $stmt = $this->mysqli->prepare("
       SELECT
-      (
-        SELECT COUNT(s.id)
-        FROM " . $this->share->getTableName() . " AS s,
+        SUM(IF(our_result='Y', 1, 0)) AS valid,
+        SUM(IF(our_result='N', 1, 0))
+      FROM " . $this->share->getTableName() . " AS s,
              " . $this->user->getTableName() . " AS u
-        WHERE u.username = SUBSTRING_INDEX( s.username, '.', 1 )
-          AND UNIX_TIMESTAMP(s.time) >IFNULL((SELECT MAX(b.time) FROM " . $this->block->getTableName() . " AS b),0)
-          AND our_result = 'Y'
-          AND u.id = ?
-      ) AS valid,
-      (
-        SELECT COUNT(s.id)
-        FROM " . $this->share->getTableName() . " AS s,
-             " . $this->user->getTableName() . " AS u
-        WHERE u.username = SUBSTRING_INDEX( s.username, '.', 1 )
-          AND UNIX_TIMESTAMP(s.time) >IFNULL((SELECT MAX(b.time) FROM " . $this->block->getTableName() . " AS b),0)
-          AND our_result = 'N'
-          AND u.id = ?
-      ) AS invalid"); 
-    if ($stmt && $stmt->bind_param("ii", $account_id, $account_id) && $stmt->execute() && $result = $stmt->get_result())
+      WHERE
+        u.username = SUBSTRING_INDEX( s.username, '.', 1 )
+        AND UNIX_TIMESTAMP(s.time) >IFNULL((SELECT MAX(b.time) FROM " . $this->block->getTableName() . " AS b),0)
+        AND u.id = ?");
+    if ($stmt && $stmt->bind_param("i", $account_id) && $stmt->execute() && $result = $stmt->get_result())
       return $this->memcache->setCache(__FUNCTION__ . $account_id, $result->fetch_assoc());
     // Catchall
     $this->debug->append("Unable to fetch user round shares: " . $this->mysqli->error);
