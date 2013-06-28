@@ -184,7 +184,7 @@ class Statistics {
     $stmt = $this->mysqli->prepare("
       SELECT
         SUM(IF(our_result='Y', 1, 0)) AS valid,
-        SUM(IF(our_result='N', 1, 0)) AS invalid,
+        SUM(IF(our_result='N', 1, 0)) AS invalid
       FROM " . $this->share->getTableName() . " AS s,
              " . $this->user->getTableName() . " AS u
       WHERE
@@ -195,6 +195,7 @@ class Statistics {
       return $this->memcache->setCache(__FUNCTION__ . $account_id, $result->fetch_assoc());
     // Catchall
     $this->debug->append("Unable to fetch user round shares: " . $this->mysqli->error);
+    var_dump($this->debug);
     return false;
   }
 
