@@ -6,8 +6,9 @@ if (!defined('SECURITY'))
 
 if ( $user->checkLogin($_POST['username'],$_POST['password']) ) {
   header('Location: index.php?page=home');
-} else {
+} else if (@$_POST['username'] && @$_POST['password']) {
   $_SESSION['POPUP'][] = array('CONTENT' => 'Unable to login: '. $user->getError(), 'TYPE' => 'errormsg');
 }
+
 $smarty->assign('CONTENT', 'default.tpl');
 ?>

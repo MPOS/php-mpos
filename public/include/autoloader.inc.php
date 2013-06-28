@@ -1,5 +1,18 @@
 <?php
 
+// We need this one in here to properly set our theme
+require_once(INCLUDE_DIR . '/lib/Mobile_Detect.php');
+
+// Detect device
+if ($detect->isMobile() && $config['website']['mobile']) {
+  // Set to mobile theme
+  $config['website']['mobile_theme'] ? $theme = $config['website']['mobile_theme'] : $theme = 'mobile';
+} else {
+  // Use configured theme, fallback to default theme
+  $config['website']['theme'] ? $theme = $config['website']['theme'] : $theme = 'mmcFE';
+}
+define('THEME', $theme);
+
 require_once(CLASS_DIR . '/debug.class.php');
 require_once(CLASS_DIR . '/bitcoin.class.php');
 require_once(CLASS_DIR . '/statscache.class.php');
