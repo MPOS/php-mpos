@@ -184,7 +184,7 @@ class Statistics {
     $stmt = $this->mysqli->prepare("
       SELECT
         SUM(IF(our_result='Y', 1, 0)) AS valid,
-        SUM(IF(our_result='N', 1, 0))
+        SUM(IF(our_result='N', 1, 0)) AS invalid,
       FROM " . $this->share->getTableName() . " AS s,
              " . $this->user->getTableName() . " AS u
       WHERE
