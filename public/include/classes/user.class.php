@@ -105,14 +105,18 @@ class User {
   public function checkLogin($username, $password) {
     $this->debug->append("STA " . __METHOD__, 4);
     $this->debug->append("Checking login for $username with password $password", 2);
+    if (empty($username) || empty($password)) {
+      $this->setErrorMessage("Invalid username or password.");
+      return false;
+    }
     if ($this->isLocked($this->getUserId($username))) {
       $this->setErrorMessage("Account is locked. Please contact site support.");
       return false;
     }
-    if ( $this->checkUserPassword($username, $password)) {
+    if ($this->checkUserPassword($username, $password)) {
       $this->createSession($username);
-      $this->setUserIp($this->getUserId($username), $_SERVER['REMOTE_ADDR']);
-      return true;
+      if ($this->setUserIp($this->getUserId($username), $_SERVER['REMOTE_ADDR']))
+        return true;
     }
     $this->setErrorMessage("Invalid username or password");
     if ($id = $this->getUserId($username))
