@@ -2,9 +2,6 @@
 // Make sure we are called from index.php
 if (!defined('SECURITY')) die('Hacking attempt');
 
-// What is our overall theme
-define('THEME', 'mmcFE');
-
 // Our include directory for additional features
 define('INCLUDE_DIR', BASEPATH . 'include');
 
