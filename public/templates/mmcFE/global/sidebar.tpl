@@ -33,11 +33,11 @@
                     </tr>
                     <tr>
                       <td><b>Pool Invalid</b></td>
-                      <td class="right"><i>{$GLOBAL.roundshares.invalid|number_format}</i></td>
+                      <td class="right"><i>{$GLOBAL.roundshares.invalid|number_format}</i><font size='1px'> ({100 / $GLOBAL.roundshares.valid * $GLOBAL.roundshares.invalid}%)</font></td>
                     </tr>
                     <tr>
                       <td><b>Your Invalid</b></td>
-                      <td class="right"><i>{$GLOBAL.userdata.shares.invalid|number_format}</i><font size='1px'></font></td>
+                      <td class="right"><i>{$GLOBAL.userdata.shares.invalid|number_format}</i><font size='1px'> ({100 / $GLOBAL.roundshares.valid * $GLOBAL.userdata.shares.invalid}%)</font></td>
                     </tr>
                     <tr>
                       <td colspan="2"><b><u>{$GLOBAL.config.currency} Round Estimate</u></b></td>
