@@ -67,7 +67,9 @@ target and network difficulty and assuming a zero variance scenario.
     </tbody>
   </table>
 </center>
+{if $GLOBAL.config.payout_system != 'pps'}
 <ul>
   <li>Note: <font color="orange">Round Earnings are not credited until {$GLOBAL.confirmations} confirms.</font></li>
 </ul>
+{if}
 {include file="global/block_footer.tpl"}
