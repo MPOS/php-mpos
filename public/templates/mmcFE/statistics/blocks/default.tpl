@@ -3,7 +3,7 @@
   <caption>Block Shares</caption> 
   <thead>
     <tr>
-{section block $BLOCKSFOUND step=-1 max=20}
+{section block $BLOCKSFOUND step=-1}
       <th scope="col">{$BLOCKSFOUND[block].height}</th>
 {/section}
     </th>
@@ -11,13 +11,13 @@
   <tbody>
     <tr>
       <th scope="row">Expected</th>
-{section block $BLOCKSFOUND step=-1 max=20}
+{section block $BLOCKSFOUND step=-1}
       <td>{round(pow(2,32 - $GLOBAL.config.targetdiff) * $BLOCKSFOUND[block].difficulty)}</td>
 {/section}
     </tr>
     <tr>
       <th scope="row">Actual</th>
-{section block $BLOCKSFOUND step=-1 max=20}
+{section block $BLOCKSFOUND step=-1}
       <td>{$BLOCKSFOUND[block].shares}</td>
 {/section}
    </tr>
