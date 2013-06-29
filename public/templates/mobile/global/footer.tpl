@@ -1,1 +1,1 @@
-          <h1>Powered by mmcfe-ng</h1>
+          <h1>Powered by <a href="https://github.com/TheSerapher/php-mmcfe-ng" data-ajax="false">mmcfe-ng</a></h1>
