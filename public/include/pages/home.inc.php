@@ -13,17 +13,17 @@ foreach ($aNews as $key => $aData) {
   $aNews[$key]['content'] = Markdown::defaultTransform($aData['content']);
 }
 
-// Load news entries in case news is the homepage
+// Load news entries for Desktop site and unauthenticated users
 $smarty->assign("NEWS", $aNews);
 
 // Tempalte specifics
-if ($detect->isMobile()) {
+if ($detect->isMobile() && $_SESSION['AUTHENTICATED'] == true) {
   if ($config['payout_system'] == 'pps') {
     $smarty->assign("CONTENT", "pps.tpl");
   } else {
     $smarty->assign("CONTENT", "default.tpl");
   }
 } else {
-  $smarty->assign("CONTENT", "default.tpl");
+  $smarty->assign("CONTENT", "../news/default.tpl");
 }
 ?>
