@@ -58,6 +58,7 @@ Features
 
 The following feature have been implemented so far:
 
+* Mobile WebUI **NEW**
 * Reward Systems
  * Propotional
  * PPS
