@@ -878,9 +878,9 @@ a:hover {
 }
 
 .block.withsidebar .block_content .sidebar {
-  width: 210px;
+  width: 230px;
   float: left;
-  font-size: 11px;
+  font-size: 10px;
 }
 
 .block.withsidebar .block_content .sidebar p {
@@ -918,7 +918,7 @@ a:hover {
 }
 
 .block.withsidebar .block_content .sidebar_content {
-  padding: 15px 20px 15px 210px;
+  padding: 15px 20px 15px 230px;
 }
 
 /* Image list */
