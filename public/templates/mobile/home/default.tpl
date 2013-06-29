@@ -1,51 +1,8 @@
-                <table width="100%">
-                    <tr>
-                      <td colspan="2"><b><u>Your Stats</u></b></td>
-                    </tr>
-                    <tr>
-                      <td><b>Hashrate</b></td>
-                      <td align="right">{$GLOBAL.userdata.hashrate|number_format} KH/s</td>
-                    </tr>
-                    <tr>
-                      <td colspan="2"><b><u>Round Shares</u></b></td>
-                    </tr>
-                    <tr>
-                      <td><b>Pool Valid</b></td>
-                      <td align="right"><i>{$GLOBAL.roundshares.valid|number_format}</i></td>
-                    </tr>
-                    <tr>
-                      <td><b>Pool Invalid</b></td>
-                      <td align="right"><i>{$GLOBAL.roundshares.invalid|number_format}</i><font size='1px'> ({(100 / $GLOBAL.roundshares.valid * $GLOBAL.roundshares.invalid)|number_format:"2"}%)</font></td>
-                    </tr>
-                    <tr>
-                      <td><b>Your Valid<b></td>
-                      <td align="right"><i>{$GLOBAL.userdata.shares.valid|number_format}</i><font size='1px'></font></b></td>
-                    </tr>
-                    <tr>
-                      <td><b>Your Invalid</b></td>
-                      <td align="right"><i>{$GLOBAL.userdata.shares.invalid|number_format}</i><font size='1px'> ({(100 / $GLOBAL.roundshares.valid * $GLOBAL.userdata.shares.invalid)|number_format:"2"}%)</font></td>
-                    </tr>
-                    <tr>
-                      <td colspan="2"><b><u>{$GLOBAL.config.currency} Round Estimate</u></b></td>
-                    </tr>
-                    <tr>
-                      <td><b>Block</b></td>
-                      <td align="right">{$GLOBAL.userdata.est_block|number_format:"3"}</td>
-                    </tr>
-                    <tr>
-                      <td><b>Fees</b></td>
-                      <td align="right">{$GLOBAL.userdata.est_fee|number_format:"3"}</td>
-                    </tr>
-                    <tr>
-                      <td><b>Donation</b></td>
-                      <td align="right">{$GLOBAL.userdata.est_donation|number_format:"3"}</td>
-                    </tr>
-                    <tr>
-                      <td><b>Payout</b></td>
-                      <td align="right">{$GLOBAL.userdata.est_payout|number_format:"3"}</td>
-                    </tr>
-                    <tr><td colspan="2">&nbsp;</td></tr>
-                    <tr><td colspan="2"><b><u>{$GLOBAL.config.currency} Account Balance</u></b></td></tr>
-                    <tr><td>Confirmed</td><td align="right"><b>{$GLOBAL.userdata.balance.confirmed|default:"0"}</td></tr>
-                    <tr><td>Unconfirmed</td><td align="right"><b>{$GLOBAL.userdata.balance.unconfirmed|default:"0"}</td></tr>
-                  </table>
+{section name=news loop=$NEWS}
+<div data-role="collapsible-set">
+  <div data-role="collapsible" data-collapsed="true">
+    <h3>{$NEWS[news].header}</h3>
+    <p>{$NEWS[news].content}</p>
+  </div>
+</div>
+{/section}

@@ -47,11 +47,8 @@
       <div class="block_content">
         <div class="sidebar">
           {if $smarty.session.AUTHENTICATED|default}
-            {if $GLOBAL.config.payout_system == 'pps'}
-              {include file="global/sidebar_pps.tpl"}
-            {else}
-              {include file="global/sidebar.tpl"}
-            {/if}
+            {assign var=payout_system value=$GLOBAL.config.payout_system}
+            {include file="global/sidebar_$payout_system.tpl"}
           {else}
           {include file="global/login.tpl"}
           {/if}
