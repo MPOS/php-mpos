@@ -15,15 +15,5 @@ foreach ($aNews as $key => $aData) {
 
 // Load news entries for Desktop site and unauthenticated users
 $smarty->assign("NEWS", $aNews);
-
-// Tempalte specifics
-if ($detect->isMobile() && $_SESSION['AUTHENTICATED'] == true) {
-  if ($config['payout_system'] == 'pps') {
-    $smarty->assign("CONTENT", "pps.tpl");
-  } else {
-    $smarty->assign("CONTENT", "default.tpl");
-  }
-} else {
-  $smarty->assign("CONTENT", "../news/default.tpl");
-}
+$smarty->assign("CONTENT", "default.tpl");
 ?>
