@@ -6,6 +6,7 @@
           <ul>
             <li><a href="{$smarty.server.PHP_SELF}" data-icon="info" data-ajax="false">News</a></li>
             {if $smarty.session.AUTHENTICATED|default:"0" == 1}
+            <li><a href="{$smarty.server.PHP_SELF}?page=account&action=workers" data-icon="grid" data-ajax="false">Worker</a></li>
             <li><a href="{$smarty.server.PHP_SELF}?page=statistics&action=pool" data-icon="grid" data-ajax="false">Statistics</a></li>
             <li><a href="{$smarty.server.PHP_SELF}?page=logout" data-icon="gear" data-ajax="false">Logout</a></li>
             {else}
