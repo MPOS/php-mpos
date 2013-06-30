@@ -372,12 +372,12 @@ class User {
    * @param none
    * @return true
    **/
-  public function logoutUser() {
+  public function logoutUser($redirect="index.php") {
     $this->debug->append("STA " . __METHOD__, 4);
     session_destroy();
     session_regenerate_id(true);
     // Enforce a page reload
-    header("Location: index.php");
+    header("Location: $redirect");
   }
 
   /**
@@ -555,8 +555,10 @@ class User {
    **/
   public function isAuthenticated() {
     $this->debug->append("STA " . __METHOD__, 4);
-    if (@$_SESSION['AUTHENTICATED'] == true && ! $this->isLocked($_SESSION['USERDATA']['id']) && $this->getUserIp($_SESSION['USERDATA']['id']) == $_SERVER['REMOTE_ADDR'])
-      return true;
+    if (@$_SESSION['AUTHENTICATED'] == true &&
+        !$this->isLocked($_SESSION['USERDATA']['id']) &&
+        $this->getUserIp($_SESSION['USERDATA']['id']) == $_SERVER['REMOTE_ADDR']
+      ) return true;
     // Catchall
     $this->logoutUser();
     return false;
