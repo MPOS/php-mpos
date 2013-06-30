@@ -13,12 +13,22 @@
       <tr>
         <td class="left">Maintenance Mode</td>
         <td class="center"><span id='tt'><img src='{$PATH}/images/questionmark.png' height='15px' width='15px' title='Enable Maintenance Mode for mmcfe-ng. Only admins can login.'></span></td>
-        <td><select name="data[maintenance]"><option value="1">Yes</option><option value="0"{if !$MAINTENANCE} selected{/if}>No</option></select></td>
+        <td>
+          <select name="data[maintenance]">
+            <option value="1">Yes</option>
+            <option value="0"{if !$MAINTENANCE} selected{/if}>No</option>
+          </select>
+        </td>
       </tr>
       <tr>
-        <td class="left">User Registration</td>
+        <td class="left">Disable Registration</td>
         <td class="center"><span id='tt'><img src='{$PATH}/images/questionmark.png' height='15px' width='15px' title='Enable or disable new account registration. Can also be done via configuration option.'></span></td>
-        <td><select name="data[registration]"><option value="1">Yes</option><option value="0"{if !$REGISTRATION} selected{/if}>No</option></select></td>
+        <td>
+          <select name="data[lock_registration]">
+            <option value="1">Yes</option>
+            <option value="0"{if !$LOCKREGISTRATION} selected{/if}>No</option>
+          </select>
+        </td>
       </tr>
       <tr><td class="center" colspan="3"><input type="submit" value="Save" class="submit small" /></td></tr>
     </tbody>
