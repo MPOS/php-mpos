@@ -24,6 +24,7 @@
       </tr>
 {/section}
 {if $listed != 1}
+      {math assign="estday" equation="round(reward / ( diff * pow(2,32) / ( hashrate * 1000 ) / 3600 / 24), 3)" diff=$DIFFICULTY reward=$REWARD hashrate=$GLOBAL.userdata.hashrate}
       <tr style="background-color:#99EB99;">
         <td>n/a</td>
         <td>{$GLOBAL.userdata.username}</td>
