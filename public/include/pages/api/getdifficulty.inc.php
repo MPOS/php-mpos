@@ -11,7 +11,7 @@ $id = $user->checkApiKey($_REQUEST['api_key']);
 if ($bitcoin->can_connect() === true){
   if (!$dDifficulty = $memcache->get('dDifficulty')) {
     $dDifficulty = $bitcoin->query('getdifficulty');
-    if (strtolower($config['currency']) == 'pos')
+    if (is_array($dDifficulty) && array_key_exists('proof-of-work', $dDifficulty))
       $dDifficulty = $dDifficulty['proof-of-work'];
     $memcache->set('dDifficulty', $dDifficulty);
   }
