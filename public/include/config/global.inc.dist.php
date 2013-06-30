@@ -39,7 +39,6 @@ $config = array(
     'theme' => 'mmcFE',             // Overall default theme
     'mobile' => true,               // Allow overwriting theme for mobile devices
     'mobile_theme' => 'mobile',     // Set default or custom mobile theme
-    'registration' => true,         // Allow new users to register
     'name' => 'The Pool',
     'slogan' => 'Resistance is futile',
     'email' => 'test@example.com',  // Mail address used for notifications
