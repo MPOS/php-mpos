@@ -16,6 +16,7 @@
                 <li><a href="{$smarty.server.PHP_SELF}?page=admin&action=user">User Info</a></li>
                 <li><a href="{$smarty.server.PHP_SELF}?page=admin&action=wallet">Wallet Info</a></li>
                 <li><a href="{$smarty.server.PHP_SELF}?page=admin&action=transactions">Transactions</a></li>
+                <li><a href="{$smarty.server.PHP_SELF}?page=admin&action=settings">Settings</a></li>
                 <li><a href="{$smarty.server.PHP_SELF}?page=admin&action=news">News</a></li>
               </ul>
             </li>
