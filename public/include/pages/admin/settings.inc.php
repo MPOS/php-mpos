@@ -18,7 +18,6 @@ if ($_REQUEST['do'] == 'save' && !empty($_REQUEST['data'])) {
 
 // Fetch settings to propagate to template
 $smarty->assign("MAINTENANCE", $setting->getValue('maintenance'));
-var_dump($setting->getValue('lock_registration'));
 $smarty->assign("LOCKREGISTRATION", $setting->getValue('lock_registration'));
 
 // Tempalte specifics

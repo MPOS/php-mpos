@@ -195,7 +195,6 @@ class Statistics {
       return $this->memcache->setCache(__FUNCTION__ . $account_id, $result->fetch_assoc());
     // Catchall
     $this->debug->append("Unable to fetch user round shares: " . $this->mysqli->error);
-    var_dump($this->debug);
     return false;
   }
 
