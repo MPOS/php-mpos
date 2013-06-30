@@ -113,7 +113,7 @@ class Transaction {
    * @param none
    * @return mixed array or false
    **/
-  public function getAllTransactions() {
+  public function getAllTransactions($start=0) {
     $this->debug->append("STA " . __METHOD__, 4);
     $stmt = $this->mysqli->prepare("
       SELECT
@@ -128,8 +128,9 @@ class Transaction {
       FROM transactions AS t
       LEFT JOIN " . $this->block->getTableName() . " AS b ON t.block_id = b.id
       LEFT JOIN " . $this->user->getTableName() . " AS a ON t.account_id = a.id
-      ORDER BY id DESC");
-    if ($this->checkStmt($stmt) && $stmt->execute() && $result = $stmt->get_result())
+      ORDER BY id DESC
+      LIMIT ?,30");
+    if ($this->checkStmt($stmt) && $stmt->bind_param('i', $start) && $stmt->execute() && $result = $stmt->get_result())
       return $result->fetch_all(MYSQLI_ASSOC);
     $this->debug->append('Unable to fetch transactions');
     return false;
