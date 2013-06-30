@@ -14,8 +14,11 @@ $aRoundShares = 1;
 // Only run these if the user is logged in
 if (@$_SESSION['AUTHENTICATED']) {
   $aRoundShares = $statistics->getRoundShares();
-  if ($bitcoin->can_connect() === true)
+  if ($bitcoin->can_connect() === true) {
     $dDifficulty = $bitcoin->query('getdifficulty');
+    if (strtolower($config['currency']) == 'pos')
+      $dDifficulty = $dDifficulty['proof-of-work'];
+  }
 }
 
 // Fetch some data

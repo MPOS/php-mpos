@@ -6,6 +6,8 @@ if (!defined('SECURITY'))
 
 if ($bitcoin->can_connect() === true){
   $dDifficulty = $bitcoin->query('getdifficulty');
+  if (strtolower($config['currency']) == 'pos')
+    $dDifficulty = $dDifficulty['proof-of-work'];
   $iBlock = $bitcoin->query('getblockcount');
 } else {
   $dDifficulty = 1;

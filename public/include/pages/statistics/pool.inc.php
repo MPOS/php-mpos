@@ -7,6 +7,8 @@ if (!defined('SECURITY'))
 // Fetch data from litecoind
 if ($bitcoin->can_connect() === true){
   $dDifficulty = $bitcoin->getdifficulty();
+  if (strtolower($config['currency']) == 'pos')
+    $dDifficulty = $dDifficulty['proof-of-work'];
   $iBlock = $bitcoin->getblockcount();
 } else {
   $dDifficulty = 1;
