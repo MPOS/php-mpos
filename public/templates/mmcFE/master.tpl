@@ -4,7 +4,7 @@
     <title>ThePool</title>
     <meta http-equiv="X-UA-Compatible" content="IE=7" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <link rel="shortcut icon" href="#" />
+    <link rel="shortcut icon" href="favicon.ico" />
     <link rel="stylesheet" href="{$PATH}/css/mainstyle.css" type="text/css" />
     <script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
     <script src="{$PATH}/js/jquery.browser.js"></script>
