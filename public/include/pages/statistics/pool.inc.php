@@ -25,7 +25,7 @@ $aContributorsHashes = $statistics->getTopContributors('hashes', 15);
 // Grab the last 10 blocks found
 $iLimit = 5;
 $aBlocksFoundData = $statistics->getBlocksFound($iLimit);
-$aBlockData = $aBlocksFoundData[0];
+count($aBlocksFoundData) > 0 ? $aBlockData = $aBlocksFoundData[0] : $aBlockData = array();
 
 // Estimated time to find the next block
 $iCurrentPoolHashrate =  $statistics->getCurrentHashrate();
@@ -50,7 +50,7 @@ $smarty->assign("BLOCKLIMIT", $iLimit);
 $smarty->assign("CONTRIBSHARES", $aContributorsShares);
 $smarty->assign("CONTRIBHASHES", $aContributorsHashes);
 $smarty->assign("CURRENTBLOCK", $iBlock);
-$smarty->assign("LASTBLOCK", $aBlockData['height']);
+count($aBlockData) > 0 ? $smarty->assign("LASTBLOCK", $aBlockData['height']) : $smarty->assign("LASTBLOCK", 0);
 $smarty->assign("DIFFICULTY", $dDifficulty);
 $smarty->assign("REWARD", $config['reward']);
 

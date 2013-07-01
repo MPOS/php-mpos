@@ -13,7 +13,7 @@
     </tr>
     <tr>
       <td class="leftheader">Pool Efficiency</td>
-      <td>{(100 - (100 / $GLOBAL.roundshares.valid * $GLOBAL.roundshares.invalid))|number_format:"2"} %</td>
+      <td>{if $GLOBAL.roundshares.valid > 0}{(100 - (100 / $GLOBAL.roundshares.valid * $GLOBAL.roundshares.invalid))|number_format:"2"}{else}0{/if} %</td>
     </tr>
     <tr>
       <td class="leftheader">Current Active Workers</td>
