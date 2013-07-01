@@ -63,6 +63,7 @@ if (empty($aTransactions['transactions'])) {
         verbose("Failed" . "\n");
       }
     }
+    exit;
   }
 }
 
