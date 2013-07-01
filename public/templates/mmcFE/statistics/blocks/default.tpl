@@ -40,6 +40,7 @@ target and network difficulty and assuming a zero variance scenario.
         <th>Finder</th>
         <th class="center">Time</th>
         <th class="right">Difficulty</th>
+        <th class="right">Amount</th>
         <th class="right">Expected Shares</th>
         <th class="right">Actual Shares</th>
         <th class="right">Percentage</th>
@@ -59,6 +60,7 @@ target and network difficulty and assuming a zero variance scenario.
         <td>{$BLOCKSFOUND[block].finder|default:"unknown"}</td>
         <td class="center">{$BLOCKSFOUND[block].time|date_format:"%d/%m %H:%M:%S"}</td>
         <td class="right">{$BLOCKSFOUND[block].difficulty|number_format:"2"}</td>
+        <td class="right">{$BLOCKSFOUND[block].amount|number_format:"2"}</td>
         <td class="right">{(pow(2,32 - $GLOBAL.config.targetdiff) * $BLOCKSFOUND[block].difficulty)|number_format}</td>
         <td class="right">{$BLOCKSFOUND[block].shares|number_format}</td>
         <td class="right">{($BLOCKSFOUND[block].shares / (pow(2,32 - $GLOBAL.config.targetdiff) * $BLOCKSFOUND[block].difficulty) * 100)|number_format:"2"}</td>
