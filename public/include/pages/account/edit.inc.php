@@ -50,7 +50,7 @@ if ($user->isAuthenticated()) {
               $notification->sendNotification($_SESSION['USERDATA']['id'], 'manual_payout', $aMailData);
             }
           } else {
-            $_SESSION['POPUP'][] = array('CONTENT' => 'Unable to connect to litecoind RPC service', 'TYPE' => 'errormsg');
+            $_SESSION['POPUP'][] = array('CONTENT' => 'Unable to connect to wallet RPC service', 'TYPE' => 'errormsg');
           }
         } else {
           $_SESSION['POPUP'][] = array('CONTENT' => 'Insufficient funds, you need more than ' . $config['txfee'] . ' ' . $conifg['currency'] . ' to cover transaction fees', 'TYPE' => 'errormsg');

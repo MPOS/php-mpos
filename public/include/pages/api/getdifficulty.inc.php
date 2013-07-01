@@ -7,7 +7,7 @@ die('Hacking attempt');
 // Check user token
 $id = $user->checkApiKey($_REQUEST['api_key']);
 
-// Fetch data from litecoind
+// Fetch data from wallet
 if ($bitcoin->can_connect() === true){
   if (!$dDifficulty = $memcache->get('dDifficulty')) {
     $dDifficulty = $bitcoin->query('getdifficulty');

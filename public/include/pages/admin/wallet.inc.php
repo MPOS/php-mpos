@@ -13,7 +13,7 @@ if ($bitcoin->can_connect() === true){
   $dBalance = $bitcoin->query('getbalance');
 } else {
   $dBalance = 0;
-  $_SESSION['POPUP'][] = array('CONTENT' => 'Unable to connect to litecoind RPC service: ' . $bitcoin->can_connect(), 'TYPE' => 'errormsg');
+  $_SESSION['POPUP'][] = array('CONTENT' => 'Unable to connect to wallet RPC service: ' . $bitcoin->can_connect(), 'TYPE' => 'errormsg');
 }
 
 $smarty->assign("BALANCE", $dBalance);

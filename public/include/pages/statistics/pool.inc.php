@@ -4,7 +4,7 @@
 if (!defined('SECURITY'))
     die('Hacking attempt');
 
-// Fetch data from litecoind
+// Fetch data from wallet
 if ($bitcoin->can_connect() === true){
   $dDifficulty = $bitcoin->getdifficulty();
   if (is_array($dDifficulty) && array_key_exists('proof-of-work', $dDifficulty))
@@ -13,7 +13,7 @@ if ($bitcoin->can_connect() === true){
 } else {
   $dDifficulty = 1;
   $iBlock = 0;
-  $_SESSION['POPUP'][] = array('CONTENT' => 'Unable to connect to litecoind RPC service: ' . $bitcoin->can_connect(), 'TYPE' => 'errormsg');
+  $_SESSION['POPUP'][] = array('CONTENT' => 'Unable to connect to wallet RPC service: ' . $bitcoin->can_connect(), 'TYPE' => 'errormsg');
 }
 
 // Top share contributors
