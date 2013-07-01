@@ -18,6 +18,7 @@ if (@$_SESSION['AUTHENTICATED']) {
     $dDifficulty = $bitcoin->query('getdifficulty');
     if (is_array($dDifficulty) && array_key_exists('proof-of-work', $dDifficulty))
       $dDifficulty = $dDifficulty['proof-of-work'];
+    $dNetworkHashrate = $bitcoin->query('getnetworkhashps');
   }
 }
 
@@ -31,6 +32,7 @@ $aGlobal = array(
   'slogan' => $config['website']['slogan'],
   'websitename' => $config['website']['name'],
   'hashrate' => $iCurrentPoolHashrate,
+  'nethashrate' => $dNetworkHashrate,
   'sharerate' => $iCurrentPoolShareRate,
   'ppsvalue' => number_format(round(50 / (pow(2,32) * $dDifficulty) * pow(2, $config['difficulty']), 12) ,12),
   'workers' => $iCurrentActiveWorkers,
