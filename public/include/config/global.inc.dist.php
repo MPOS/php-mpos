@@ -61,7 +61,8 @@ $config['wallet']['password'] = 'testnet';
  * Explanation:
  *   mmcfe-ng will try to fetch the current exchange rates
  *   from this API URL/target. Currently btc-e and coinchoose
- *   are supported in mmcfe-ng.
+ *   are supported in mmcfe-ng. If you want to remove the trade
+ *   header just set currency to an empty string.
  *
  * Default (btc-e.com):
  *   url       =  `https://btc-e.com`

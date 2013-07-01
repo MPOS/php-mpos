@@ -9,7 +9,7 @@ if (!$user->isAuthenticated() || !$user->isAdmin($_SESSION['USERDATA']['id'])) {
   die("404 Page not found");
 }
 
-if ($_REQUEST['do'] == 'save' && !empty($_REQUEST['data'])) {
+if (@$_REQUEST['do'] == 'save' && !empty($_REQUEST['data'])) {
   foreach($_REQUEST['data'] as $var => $value) {
     $setting->setValue($var, $value);
   }
