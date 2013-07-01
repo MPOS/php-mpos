@@ -96,6 +96,7 @@ $config['ap_threshold']['max'] = 250;
  * Website specific configuration settings
  *
  * Explanation:
+ *   title         :  Website title used in master template
  *   name          :  The pool name, displayed in the header and mails
  *   slogan        :  A special slogan, also displayed in the header below name
  *   email         :  `From` addresses used in notifications
@@ -104,6 +105,7 @@ $config['ap_threshold']['max'] = 250;
  *   mobile_theme  :  Theme used for mobile browsers
  *
  * Defaults:
+ *   title         =  `The Pool - Mining Evolved`
  *   name          =  `The Pool`
  *   slogan        =  `Resistance is futile`
  *   email         =  `test@example.com`
@@ -111,6 +113,7 @@ $config['ap_threshold']['max'] = 250;
  *   mobile        =  true
  *   mobile_theme  =  `mobile`
  **/
+$config['website']['title'] = 'The Pool - Mining Evolved';
 $config['website']['name'] = 'The Pool';
 $config['website']['slogan'] = 'Resistance is futile';
 $config['website']['email'] = 'test@example.com';
