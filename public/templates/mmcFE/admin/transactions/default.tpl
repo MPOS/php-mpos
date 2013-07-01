@@ -1,7 +1,7 @@
 {include file="global/block_header.tpl" BLOCK_HEADER="Transaction Log" BUTTONS=array(Confirmed,Unconfirmed,Orphan)}
   <center>
-    <a href="{$smart.server.PHP_SELF}?page=admin&action=transactions&start={$smarty.request.start|default:"0" - 30}"><img src="{$PATH}/images/prev.png" /></a>
-    <a href="{$smart.server.PHP_SELF}?page=admin&action=transactions&start={$smarty.request.start|default:"0" + 30}"><img src="{$PATH}/images/next.png" /></a>
+    <a href="{$smarty.server.PHP_SELF}?page=admin&action=transactions&start={$smarty.request.start|default:"0" - 30}"><img src="{$PATH}/images/prev.png" /></a>
+    <a href="{$smarty.server.PHP_SELF}?page=admin&action=transactions&start={$smarty.request.start|default:"0" + 30}"><img src="{$PATH}/images/next.png" /></a>
   </center>
 <div class="block_content tab_content" id="Confirmed" style="clear:;">
   <center>
@@ -18,6 +18,7 @@
         </tr>
       </thead>
       <tbody style="font-size:12px;">
+      {assign var=confirmed value=0}
 {section transaction $TRANSACTIONS}
         {if (
           (($TRANSACTIONS[transaction].type == 'Credit' or $TRANSACTIONS[transaction].type == 'Bonus')and $TRANSACTIONS[transaction].confirmations >= $GLOBAL.confirmations)
@@ -71,6 +72,7 @@
         </tr>
       </thead>
       <tbody style="font-size:12px;">
+      {assign var=unconfirmed value=0}
 {section transaction $TRANSACTIONS}
         {if (
           ($TRANSACTIONS[transaction].type == 'Credit' or $TRANSACTIONS[transaction].type == 'Bonus') and $TRANSACTIONS[transaction].confirmations < $GLOBAL.confirmations
@@ -114,6 +116,7 @@
         </tr>
       </thead>
       <tbody style="font-size:12px;">
+      {assign var=orphaned value=0}
 {section transaction $TRANSACTIONS}
         {if (
           $TRANSACTIONS[transaction].type == 'Orphan_Credit'

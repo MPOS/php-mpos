@@ -5,9 +5,8 @@ if (!defined('SECURITY')) die('Hacking attempt');
 if (!$user->isAuthenticated()) header("Location: index.php?page=home");
 
 // Grab the last blocks found
-$iLimit = 20;
+empty($_REQUEST['limit']) ? $iLimit = 20 : $iLimit = $_REQUEST['limit'];
 $aBlocksFoundData = $statistics->getBlocksFound($iLimit);
-$aBlockData = $aBlocksFoundData[0];
 
 // Propagate content our template
 $smarty->assign("BLOCKSFOUND", $aBlocksFoundData);
