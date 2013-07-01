@@ -7,6 +7,8 @@ if (!defined('SECURITY'))
 // Fetch data from litecoind
 if ($bitcoin->can_connect() === true){
   $dDifficulty = $bitcoin->getdifficulty();
+  if (is_array($dDifficulty) && array_key_exists('proof-of-work', $dDifficulty))
+    $dDifficulty = $dDifficulty['proof-of-work'];
   $iBlock = $bitcoin->getblockcount();
 } else {
   $dDifficulty = 1;

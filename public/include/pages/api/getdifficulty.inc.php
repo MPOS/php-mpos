@@ -10,8 +10,10 @@ $id = $user->checkApiKey($_REQUEST['api_key']);
 // Fetch data from litecoind
 if ($bitcoin->can_connect() === true){
   if (!$dDifficulty = $memcache->get('dDifficulty')) {
-    $memcache->set('dDifficulty', $dDifficulty);
     $dDifficulty = $bitcoin->query('getdifficulty');
+    if (is_array($dDifficulty) && array_key_exists('proof-of-work', $dDifficulty))
+      $dDifficulty = $dDifficulty['proof-of-work'];
+    $memcache->set('dDifficulty', $dDifficulty);
   }
 } else {
   $iDifficulty = 1;

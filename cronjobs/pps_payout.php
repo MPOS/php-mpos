@@ -32,6 +32,8 @@ if ($config['payout_system'] != 'pps') {
 // Fetch all transactions since our last block
 if ( $bitcoin->can_connect() === true ){
   $dDifficulty = $bitcoin->getdifficulty();
+  if (is_array($dDifficulty) && array_key_exists('proof-of-work', $dDifficulty))
+    $dDifficulty = $dDifficulty['proof-of-work'];
 } else {
   verbose("Aborted: " . $bitcoin->can_connect() . "\n");
   exit(1);
