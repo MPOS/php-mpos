@@ -41,6 +41,11 @@ It should also work on any related distribution (RHEL, Debian).
 For support on how to get `litecoind` or `pushpoold` to work, please ask
 in the appropriate forums.
 
+Be aware that `mmcfe-ng` is **only** for pooled mining. Solo Mining is not
+supported. They will never match an upstream share, solo miners do not create
+any shares, only blocks. Expect weird behavior if trying to mix them. See #299
+for full information.
+
 * Apache2
  * libapache2-mod-php5
 * PHP 5.4+
