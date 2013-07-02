@@ -11,7 +11,7 @@ class Share {
   private $oUpstream;
   private $iLastUpstreamId;
   // This defines each share
-  public $rem_host, $username, $our_result, $upstream_result, $reason, $solution, $time;
+  public $rem_host, $username, $our_result, $upstream_result, $reason, $solution, $time, $difficulty;
 
   public function __construct($debug, $mysqli, $user, $block, $config) {
     $this->debug = $debug;
@@ -70,7 +70,7 @@ class Share {
    **/
   public function getRoundShares($previous_upstream=0, $current_upstream) {
     $stmt = $this->mysqli->prepare("SELECT
-      count(id) as total
+      SUM(difficulty) as total
       FROM $this->table
       WHERE our_result = 'Y'
       AND id > ? AND id <= ?
@@ -98,8 +98,8 @@ class Share {
         a.id,
         SUBSTRING_INDEX( s.username , '.', 1 ) as username,
         a.no_fees AS no_fees,
-        IFNULL(SUM(IF(our_result='Y', 1, 0)), 0) AS valid,
-        IFNULL(SUM(IF(our_result='N', 1, 0)), 0) AS invalid
+        IFNULL(SUM(IF(our_result='Y', difficulty, 0)), 0) AS valid,
+        IFNULL(SUM(IF(our_result='N', difficulty, 0)), 0) AS invalid
       FROM $this->table AS s
       LEFT JOIN " . $this->user->getTableName() . " AS a
       ON a.username = SUBSTRING_INDEX( s.username , '.', 1 )
@@ -188,7 +188,7 @@ class Share {
    **/
   public function moveArchive($current_upstream, $block_id, $previous_upstream=0) {
     $archive_stmt = $this->mysqli->prepare("
-      INSERT INTO $this->tableArchive (share_id, username, our_result, upstream_result, block_id, time)
+      INSERT INTO $this->tableArchive (share_id, username, our_result, upstream_result, block_id, time, difficulty)
         SELECT id, username, our_result, upstream_result, ?, time
         FROM $this->table
         WHERE id > ? AND id <= ?");
@@ -277,6 +277,7 @@ class Share {
       SUBSTRING_INDEX( `username` , '.', 1 ) AS account, id
       FROM $this->table
       WHERE upstream_result = 'Y'
+      AND UNIX_TIMESTAMP(time) BETWEEN (?) AND (? + 120)
       AND id > ?
       AND UNIX_TIMESTAMP(time) >= ?
       AND UNIX_TIMESTAMP(time) <= ( ? + 60 )
