@@ -18,9 +18,11 @@ if (@$_SESSION['AUTHENTICATED']) {
     $dDifficulty = $bitcoin->query('getdifficulty');
     if (is_array($dDifficulty) && array_key_exists('proof-of-work', $dDifficulty))
       $dDifficulty = $dDifficulty['proof-of-work'];
-    $dNetworkHashrate = $bitcoin->query('getnetworkhashps');
   }
 }
+// Always fetch this since we need for ministats header
+if ($bitcoin->can_connect() === true)
+  $dNetworkHashrate = $bitcoin->query('getnetworkhashps');
 
 // Fetch some data
 $iCurrentActiveWorkers = $worker->getCountAllActiveWorkers();
