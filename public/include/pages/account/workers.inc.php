@@ -1,4 +1,5 @@
 <?php
+error_reporting(E_ALL);
 
 // Make sure we are called from index.php
 if (!defined('SECURITY')) die('Hacking attempt');
@@ -20,7 +21,7 @@ if ($user->isAuthenticated()) {
     }
     break;
   case 'update':
-    if ($worker->updateWorkers($_SESSION['USERDATA']['id'], $_POST['data'])) {
+    if ($worker->updateWorkers($_SESSION['USERDATA']['id'], @$_POST['data'])) {
       $_SESSION['POPUP'][] = array('CONTENT' => 'Worker updated');
     } else {
       $_SESSION['POPUP'][] = array('CONTENT' => $worker->getError(), 'TYPE' => 'errormsg');
