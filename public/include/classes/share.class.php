@@ -277,6 +277,7 @@ class Share {
       SUBSTRING_INDEX( `username` , '.', 1 ) AS account, id
       FROM $this->table
       WHERE upstream_result = 'Y'
+      AND UNIX_TIMESTAMP(time) BETWEEN (?) AND (? + 120)
       AND id > ?
       AND UNIX_TIMESTAMP(time) >= ?
       AND UNIX_TIMESTAMP(time) <= ( ? + 60 )
