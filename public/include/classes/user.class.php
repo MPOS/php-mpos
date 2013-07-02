@@ -449,7 +449,7 @@ class User {
       $this->setErrorMessage( 'Invalid PIN' );
       return false;
     }
-    $apikey = hash("sha256",$username.$salt);
+    $apikey = hash("sha256",$username.$this->salt);
     if ($this->mysqli->query("SELECT id FROM $this->table LIMIT 1")->num_rows > 0) {
       $stmt = $this->mysqli->prepare("
         INSERT INTO $this->table (username, pass, email, pin, api_key)
