@@ -42,6 +42,10 @@ class Worker {
    **/
   public function updateWorkers($account_id, $data) {
     $this->debug->append("STA " . __METHOD__, 4);
+    if (!is_array($data)) {
+      $this->setErrorMessage('No workers to update');
+      return false;
+    }
     $username = $this->user->getUserName($account_id);
     $iFailed = 0;
     foreach ($data as $key => $value) {
