@@ -29,7 +29,11 @@
     </tr>
     <tr>
       <td class="leftheader">Current Difficulty</td>
+      {if $GLOBAL.chaininfo}
       <td><a href="{$GLOBAL.chaininfo}" target="_new"><font size="2">{$DIFFICULTY}</font></a></td>
+      {else}
+      <td><font size="2">{$DIFFICULTY}</font></td>
+      {/if}
     </tr>
     <tr>
       <td class="leftheader">Est. Avg. Time per Round</td>
