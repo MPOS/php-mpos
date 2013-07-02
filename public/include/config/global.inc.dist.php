@@ -341,7 +341,6 @@ $config['cookie']['path'] = '/';
 $config['cookie']['name'] = 'POOLERCOOKIE';
 $config['cookie']['domain'] = '';
 
-
 /**
  * Enable or disable the Smarty cache
  *
