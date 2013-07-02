@@ -77,7 +77,7 @@ if (empty($aAllBlocks)) {
   foreach ($aAllBlocks as $iIndex => $aBlock) {
     if (empty($aBlock['share_id'])) {
       // Fetch this blocks upstream ID
-      if ($share->setUpstream($block->getLastUpstreamId())) {
+      if ($share->setUpstream($block->getLastUpstreamId(), $aBlock['time'])) {
         $iCurrentUpstreamId = $share->getUpstreamId();
         $iAccountId = $user->getUserId($share->getUpstreamFinder());
       } else {
