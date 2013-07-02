@@ -353,13 +353,14 @@ class Statistics {
          SELECT
           a.donate_percent AS donate_percent,
           a.is_anonymous AS is_anonymous,
-          IFNULL(ROUND(SUM(t1.difficulty)  * 65536/600/1000, 2), 0) AS hashrate,
+          IFNULL(ROUND(COUNT(t1.id) * POW(2," . $this->config['difficulty'] . ")/600/1000, 2), 0) AS hashrate,
+          ROUND(SUM(t1.difficulty) * 65536/600/1000) AS hashrate,
           SUBSTRING_INDEX( t1.username, '.', 1 ) AS account
         FROM
         (
-          SELECT IFNULL(IF(difficulty=0, pow(2, (" . $this->config['difficulty'] . " - 16)), difficulty), 0) AS difficulty, username FROM " . $this->share->getTableName() . " WHERE time > DATE_SUB(now(), INTERVAL 10 MINUTE) AND our_result = 'Y'
-          UNION ALL
-          SELECT IFNULL(IF(difficulty=0, pow(2, (" . $this->config['difficulty'] . " - 16)), difficulty), 0) AS difficulty, username FROM " . $this->share->getArchiveTableName() ." WHERE time > DATE_SUB(now(), INTERVAL 10 MINUTE) AND our_result = 'Y'
+          SELECT id, username, difficulty FROM " . $this->share->getTableName() . " WHERE time > DATE_SUB(now(), INTERVAL 10 MINUTE) AND our_result = 'Y'
+          UNION
+          SELECT id, username, difficulty FROM " . $this->share->getArchiveTableName() ." WHERE time > DATE_SUB(now(), INTERVAL 10 MINUTE) AND our_result = 'Y'
         ) AS t1
         LEFT JOIN " . $this->user->getTableName() . " AS a
         ON SUBSTRING_INDEX( t1.username, '.', 1 ) = a.username
