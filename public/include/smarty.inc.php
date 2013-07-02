@@ -20,6 +20,7 @@ $smarty->template_dir = BASEPATH . 'templates/' . THEME . '/';
 $smarty->compile_dir = BASEPATH . 'templates/compile/';
 
 // Optional smarty caching, check Smarty documentation for details
-$smarty->caching = $config['cache'];
+$smarty->caching = $config['smarty']['cache'];
+$smarty->cache_lifetime = $config['smarty']['cache_lifetime'];
 $smarty->cache_dir = BASEPATH . "templates/cache";
 ?>

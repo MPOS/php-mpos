@@ -358,13 +358,20 @@ $config['cookie']['domain'] = '';
  *
  *   Ensure that the folder `templates/cache` is writable by the webserver!
  *
- *  Options:
- *    0  =  disabled
- *    1  =  enabled
+ *   cache           =  Enable/Disable the cache
+ *   cache_lifetime  =  Time to keep files in seconds before updating them
  *
- *  Default:
- *    0  =  disabled
+ *  Options:
+ *    cache:
+ *      0  =  disabled
+ *      1  =  enabled
+ *    cache_lifetime:
+ *      time in seconds
+ *
+ *  Defaults:
+ *    cache           =  0, disabled
+ *    cache_lifetime  =  30 seconds
  **/
-$config['cache'] = 0;
-
+$config['smarty']['cache'] = 1;
+$config['smarty']['cache_lifetime'] = 30;
 ?>
