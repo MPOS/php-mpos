@@ -33,6 +33,11 @@ These people have supported this project with a donation:
 * [WKNiGHT](https://github.com/WKNiGHT-)
 * [ZC](https://github.com/zccopwrx)
 
+Pools running mmcfe-ng
+======================
+
+You can find a list of active pools [here](POOLS.md).
+
 Requirements
 ============
 

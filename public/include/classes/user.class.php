@@ -449,7 +449,6 @@ class User {
       $this->setErrorMessage( 'Invalid PIN' );
       return false;
     }
-    $apikey = hash("sha256",$username.$salt);
     if ($this->mysqli->query("SELECT id FROM $this->table LIMIT 1")->num_rows > 0) {
       $stmt = $this->mysqli->prepare("
         INSERT INTO $this->table (username, pass, email, pin, api_key)
@@ -461,12 +460,16 @@ class User {
         VALUES (?, ?, ?, ?, ?, 1)
         ");
     }
-    if ($this->checkStmt($stmt)) {
-      $stmt->bind_param('sssss', $username, hash("sha256", $password1.$this->salt), $email1, hash("sha256", $pin.$this->salt), $apikey);
+
+    // Create hashed strings using original string and salt
+    $password_hash = hash('sha256', $password1.$this->salt);
+    $pin_hash = hash('sha256', $pin.$this->salt);
+    $apikey_hash = hash('sha256', $username.$this->salt);
+
+    if ($this->checkStmt($stmt) && $stmt->bind_param('sssss', $username, $password_hash, $email1, $pin_hash, $apikey_hash)) {
       if (!$stmt->execute()) {
         $this->setErrorMessage( 'Unable to register' );
         if ($stmt->sqlstate == '23000') $this->setErrorMessage( 'Username already exists' );
-        echo $this->mysqli->error;
         return false;
       }
       $stmt->close();
