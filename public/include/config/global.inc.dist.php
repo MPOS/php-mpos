@@ -213,7 +213,7 @@ $config['confirmations'] = 120;
  *   expiration  =  90
  *   splay       =  15
  **/
-$config['memcache']['enabled'] = false;
+$config['memcache']['enabled'] = true;
 $config['memcache']['host'] = 'localhost';
 $config['memcache']['port'] = 11211;
 $config['memcache']['keyprefix'] = 'mmcfe_ng_';
