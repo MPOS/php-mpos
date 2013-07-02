@@ -81,6 +81,7 @@ CREATE TABLE IF NOT EXISTS `pool_worker` (
   `username` char(50) DEFAULT NULL,
   `password` char(255) DEFAULT NULL,
   `monitor` tinyint(1) NOT NULL DEFAULT '0',
+  `difficulty` int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   UNIQUE KEY `username` (`username`),
   KEY `account_id` (`account_id`)
@@ -102,6 +103,7 @@ CREATE TABLE IF NOT EXISTS `shares` (
   `reason` varchar(50) DEFAULT NULL,
   `solution` varchar(257) NOT NULL,
   `time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `difficulty` int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   KEY `time` (`time`),
   KEY `upstream_result` (`upstream_result`),
@@ -117,6 +119,7 @@ CREATE TABLE IF NOT EXISTS `shares_archive` (
   `upstream_result` enum('Y','N') DEFAULT NULL,
   `block_id` int(10) unsigned NOT NULL,
   `time` datetime NOT NULL,
+  `difficulty` int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   UNIQUE KEY `share_id` (`share_id`),
   KEY `time` (`time`)
