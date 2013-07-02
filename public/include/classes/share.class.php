@@ -11,7 +11,7 @@ class Share {
   private $oUpstream;
   private $iLastUpstreamId;
   // This defines each share
-  public $rem_host, $username, $our_result, $upstream_result, $reason, $solution, $time;
+  public $rem_host, $username, $our_result, $upstream_result, $reason, $solution, $time, $difficulty;
 
   public function __construct($debug, $mysqli, $salt) {
     $this->debug = $debug;
@@ -67,7 +67,7 @@ class Share {
    **/
   public function getRoundShares($previous_upstream=0, $current_upstream) {
     $stmt = $this->mysqli->prepare("SELECT
-      count(id) as total
+      SUM(difficulty) as total
       FROM $this->table
       WHERE our_result = 'Y'
       AND id BETWEEN ? AND ?
@@ -92,13 +92,13 @@ class Share {
     $stmt = $this->mysqli->prepare("SELECT
       a.id,
       validT.account AS username,
-      sum(validT.valid) as valid,
-      IFNULL(sum(invalidT.invalid),0) as invalid
+      SUM(validT.valid) as valid,
+      IFNULL(SUM(invalidT.invalid),0) as invalid
       FROM
       (
         SELECT DISTINCT
         SUBSTRING_INDEX( `username` , '.', 1 ) as account,
-          COUNT(id) AS valid
+          SUM(difficulty) AS valid
           FROM $this->table
           WHERE id BETWEEN ? AND ?
           AND our_result = 'Y'
@@ -108,7 +108,7 @@ class Share {
         (
           SELECT DISTINCT
           SUBSTRING_INDEX( `username` , '.', 1 ) as account,
-            COUNT(id) AS invalid
+            SUM(difficulty) AS invalid
             FROM $this->table
             WHERE id BETWEEN ? AND ?
             AND our_result = 'N'
@@ -135,8 +135,8 @@ class Share {
    * @return bool
    **/
   public function moveArchive($current_upstream, $block_id, $previous_upstream=0) {
-    $archive_stmt = $this->mysqli->prepare("INSERT INTO $this->tableArchive (share_id, username, our_result, upstream_result, block_id, time)
-      SELECT id, username, our_result, upstream_result, ?, time
+    $archive_stmt = $this->mysqli->prepare("INSERT INTO $this->tableArchive (share_id, username, our_result, upstream_result, block_id, time, difficulty)
+      SELECT id, username, our_result, upstream_result, ?, time, difficulty
       FROM $this->table
       WHERE id BETWEEN ? AND ?");
     if ($this->checkStmt($archive_stmt) && $archive_stmt->bind_param('iii', $block_id, $previous_upstream, $current_upstream) && $archive_stmt->execute()) {
@@ -177,15 +177,16 @@ class Share {
    * @param last int Skips all shares up to last to find new share
    * @return bool
    **/
-  public function setUpstream($last=0) {
+  public function setUpstream($last=0, $time) {
     $stmt = $this->mysqli->prepare("
       SELECT
       SUBSTRING_INDEX( `username` , '.', 1 ) AS account, id
       FROM $this->table
       WHERE upstream_result = 'Y'
+      AND UNIX_TIMESTAMP(time) BETWEEN (?) AND (? + 120)
       AND id > ?
       ORDER BY id ASC LIMIT 1");
-    if ($this->checkStmt($stmt) && $stmt->bind_param('i', $last) && $stmt->execute() && $result = $stmt->get_result()) {
+    if ($this->checkStmt($stmt) && $stmt->bind_param('iii', $time, $time, $last) && $stmt->execute() && $result = $stmt->get_result()) {
       $this->oUpstream = $result->fetch_object();
       if (!empty($this->oUpstream->account) && is_int($this->oUpstream->id))
         return true;
@@ -193,7 +194,7 @@ class Share {
     // Catchall
     return false;
   }
-
+  
   /**
    * Helper function
    **/
