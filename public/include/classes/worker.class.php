@@ -154,6 +154,10 @@ class Worker {
    **/
   public function addWorker($account_id, $workerName, $workerPassword) {
     $this->debug->append("STA " . __METHOD__, 4);
+    if (empty($workerName) || empty($workerPassword)) {
+      $this->setErrorMessage('Worker and password may not be empty');
+      return false;
+    }
     $username = $this->user->getUserName($account_id);
     $workerName = "$username.$workerName";
     $stmt = $this->mysqli->prepare("INSERT INTO $this->table (account_id, username, password) VALUES(?, ?, ?)");
@@ -181,7 +185,6 @@ class Worker {
     if ($this->checkStmt($stmt)) {
       $stmt->bind_param('ii', $account_id, $id);
       if ($stmt->execute() && $stmt->affected_rows == 1) {
-        $stmt->close;
         return true;
       } else {
         $this->setErrorMessage( 'Unable to delete worker' );
