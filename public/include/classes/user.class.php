@@ -517,6 +517,10 @@ class User {
   public function resetPassword($username, $smarty) {
     $this->debug->append("STA " . __METHOD__, 4);
     // Fetch the users mail address
+    if (empty($username)) {
+      $this->serErrorMessage("Username must not be empty");
+      return false;
+    }
     if (!$email = $this->getUserEmail($username)) {
       $this->setErrorMessage("Unable to find a mail address for user $username");
       return false;
