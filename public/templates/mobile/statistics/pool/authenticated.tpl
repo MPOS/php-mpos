@@ -32,10 +32,12 @@
       <td class="leftheader">Last Block Found</td>
       <td><a href="{$GLOBAL.blockexplorer}{$LASTBLOCK}" target="_new">{$LASTBLOCK|default:"0"}</a></td>
     </tr>
+    {if $GLOBAL.chaininfo}
     <tr>
       <td class="leftheader">Current Difficulty</td>
       <td><a href="{$GLOBAL.chaininfo}" target="_new"><font size="2">{$DIFFICULTY}</font></a></td>
     </tr>
+    {/if}
     <tr>
       <td class="leftheader">Est. Avg. Time per Round</td>
       <td>{$ESTTIME|seconds_to_words}</td>
