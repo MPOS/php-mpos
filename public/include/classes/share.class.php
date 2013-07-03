@@ -70,7 +70,7 @@ class Share {
       count(id) as total
       FROM $this->table
       WHERE our_result = 'Y'
-      AND id BETWEEN ? AND ?
+      AND id > ? AND id <= ?
       ");
     if ($this->checkStmt($stmt)) {
       $stmt->bind_param('ii', $previous_upstream, $current_upstream);
