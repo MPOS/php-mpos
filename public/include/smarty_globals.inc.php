@@ -83,6 +83,13 @@ if (@$_SESSION['USERDATA']['id']) {
   $aGlobal['userdata']['sharerate'] = $statistics->getUserSharerate($_SESSION['USERDATA']['id']);
 
   switch ($config['payout_system']) {
+  case 'pplns':
+    if ($iAvgBlockShares = round($block->getAvgBlockShares($config['pplns']['type']['blockavg']['blockcount']))) {
+      $aGlobal['pplns']['target'] = $iAvgBlockShares;
+    } else {
+      $aGlobal['pplns']['target'] = $config['pplns']['shares']['default'];
+    }
+    break;
   case 'pps':
     break;
   default:

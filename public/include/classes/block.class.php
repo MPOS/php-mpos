@@ -80,6 +80,30 @@ class Block {
   }
 
   /**
+   * Get total amount of blocks in our table
+   * @param noone
+   * @return data int Count of rows
+   **/
+  public function getBlockCount() {
+    $stmt = $this->mysqli->prepare("SELECT COUNT(id) AS blocks FROM $this->table");
+    if ($this->checkStmt($stmt) && $stmt->execute() && $result = $stmt->get_result())
+      return (int)$result->fetch_object()->blocks;
+    return false;
+  }
+
+  /**
+   * Fetch our average share count for the past N blocks
+   * @param limit int Maximum blocks to check
+   * @return data float Float value of average shares
+   **/
+  public function getAvgBlockShares($limit=10) {
+    $stmt = $this->mysqli->prepare("SELECT AVG(shares) AS average FROM $this->table LIMIT ?");
+    if ($this->checkStmt($stmt) && $stmt->bind_param('i', $limit) && $stmt->execute() && $result = $stmt->get_result())
+      return (float)$result->fetch_object()->average;
+    return false;
+  }
+
+  /**
    * Fetch all unconfirmed blocks from table
    * @param confirmations int Required confirmations to consider block confirmed
    * @return data array Array with database fields as keys

@@ -13,9 +13,10 @@ class Share {
   // This defines each share
   public $rem_host, $username, $our_result, $upstream_result, $reason, $solution, $time;
 
-  public function __construct($debug, $mysqli, $salt) {
+  public function __construct($debug, $mysqli, $user) {
     $this->debug = $debug;
     $this->mysqli = $mysqli;
+    $this->user = $user;
     $this->debug->append("Instantiated Share class", 2);
   }
 
@@ -86,47 +87,67 @@ class Share {
    * Fetch all shares grouped by accounts to count share per account
    * @param previous_upstream int Previous found share accepted by upstream to limit results
    * @param current_upstream int Current upstream accepted share
+   * @param limit int Limit to this amount of shares for PPLNS
    * @return data array username, valid and invalid shares from account
    **/
   public function getSharesForAccounts($previous_upstream=0, $current_upstream) {
-    $stmt = $this->mysqli->prepare("SELECT
-      a.id,
-      validT.account AS username,
-      sum(validT.valid) as valid,
-      IFNULL(sum(invalidT.invalid),0) as invalid
-      FROM
-      (
-        SELECT DISTINCT
-        SUBSTRING_INDEX( `username` , '.', 1 ) as account,
-          COUNT(id) AS valid
-          FROM $this->table
-          WHERE id BETWEEN ? AND ?
-          AND our_result = 'Y'
-          GROUP BY account
-        ) validT
-        LEFT JOIN
-        (
-          SELECT DISTINCT
-          SUBSTRING_INDEX( `username` , '.', 1 ) as account,
-            COUNT(id) AS invalid
-            FROM $this->table
-            WHERE id BETWEEN ? AND ?
-            AND our_result = 'N'
-            GROUP BY account
-          ) invalidT
-          ON validT.account = invalidT.account
-          INNER JOIN accounts a ON a.username = validT.account
-          GROUP BY a.username DESC");
-    if ($this->checkStmt($stmt)) {
-      $stmt->bind_param('iiii', $previous_upstream, $current_upstream, $previous_upstream, $current_upstream);
-      $stmt->execute();
-      $result = $stmt->get_result();
-      $stmt->close();
+    $stmt = $this->mysqli->prepare("
+      SELECT
+        a.id,
+        SUBSTRING_INDEX( s.username , '.', 1 ) as username,
+        SUM(IF(our_result='Y', 1, 0)) AS valid,
+        SUM(IF(our_result='N', 1, 0)) AS invalid
+      FROM $this->table AS s
+      LEFT JOIN " . $this->user->getTableName() . " AS a
+      ON a.username = SUBSTRING_INDEX( s.username , '.', 1 )
+      WHERE s.id BETWEEN ? AND ?
+      GROUP BY username DESC
+      ");
+    if ($this->checkStmt($stmt) && $stmt->bind_param('ii', $previous_upstream, $current_upstream) && $stmt->execute() && $result = $stmt->get_result())
       return $result->fetch_all(MYSQLI_ASSOC);
-    }
     return false;
   }
 
+  /**
+   * Fetch the highest available share ID from archive
+   **/
+  function getMaxArchiveShareId() {
+    $stmt = $this->mysqli->prepare("
+      SELECT MAX(share_id) AS share_id FROM $this->tableArchive
+      ");
+    if ($this->checkStmt($stmt) && $stmt->execute() && $result = $stmt->get_result())
+      return $result->fetch_object()->share_id;
+    return false;
+  }
+
+  /**
+   * We need a certain amount of valid archived shares
+   * param left int Left/lowest share ID
+   * param right int Right/highest share ID
+   * return array data Returns an array with usernames as keys for easy access
+   **/
+  function getArchiveShares($left, $right) {
+    $stmt = $this->mysqli->prepare("
+      SELECT
+        a.id,
+        SUBSTRING_INDEX( s.username , '.', 1 ) as username,
+        SUM(IF(our_result='Y', 1, 0)) AS valid,
+        SUM(IF(our_result='N', 1, 0)) AS invalid
+      FROM $this->tableArchive AS s
+      LEFT JOIN " . $this->user->getTableName() . " AS a
+      ON a.username = SUBSTRING_INDEX( s.username , '.', 1 )
+      WHERE s.id BETWEEN ? AND ?
+      GROUP BY username DESC
+    ");
+    if ($this->checkStmt($stmt) && $stmt->bind_param("ii", $left, $right) && $stmt->execute() && $result = $stmt->get_result()) {
+      $aData = NULL;
+      while ($row = $result->fetch_assoc()) {
+        $aData[$row['username']] = $row;
+      }
+      if (is_array($aData)) return $aData;
+    }
+    return false;
+  }
   /**
    * Move accounted shares to archive table, this step is optional
    * @param previous_upstream int Previous found share accepted by upstream to limit results
@@ -135,10 +156,11 @@ class Share {
    * @return bool
    **/
   public function moveArchive($current_upstream, $block_id, $previous_upstream=0) {
-    $archive_stmt = $this->mysqli->prepare("INSERT INTO $this->tableArchive (share_id, username, our_result, upstream_result, block_id, time)
-      SELECT id, username, our_result, upstream_result, ?, time
-      FROM $this->table
-      WHERE id BETWEEN ? AND ?");
+    $archive_stmt = $this->mysqli->prepare("
+      INSERT INTO $this->tableArchive (share_id, username, our_result, upstream_result, block_id, time)
+        SELECT id, username, our_result, upstream_result, ?, time
+        FROM $this->table
+        WHERE id BETWEEN ? AND ?");
     if ($this->checkStmt($archive_stmt) && $archive_stmt->bind_param('iii', $block_id, $previous_upstream, $current_upstream) && $archive_stmt->execute()) {
       $archive_stmt->close();
       return true;
@@ -267,4 +289,4 @@ class Share {
   }
 }
 
-$share = new Share($debug, $mysqli, SALT);
+$share = new Share($debug, $mysqli, $user);

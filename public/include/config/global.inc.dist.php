@@ -183,6 +183,30 @@ $config['chaininfo'] = 'http://allchains.info';
 // Pool fees applied to users in percent, default: 0 (disabled)
 $config['fees'] = 0;
 
+/**
+  *  PPLNS requires some settings to run properly. First we need to define
+  *  a default shares count that is applied if we don't have a proper type set.
+  *  Different dynamic types can be applied, or you can run a fixed scheme.
+  *
+  *  Explanation
+  *   default     :  Default target shares for PPLNS
+  *   type        :  Payout type used in PPLNS
+  *   blockcount  :  Amount of blocks to check for avg shares
+  *
+  *  Available Options:
+  *   default     :  amount of shares, integeger
+  *   type        :  blockavg or fixed
+  *   blockcount  :  amount of blocks, any integer
+  *
+  *  Defaults:
+  *   default     =  4000000
+  *   type        =  `blockavg`
+  *   blockcount  =  10
+  **/
+$config['pplns']['shares']['default'] = 4000000;
+$config['pplns']['shares']['type'] = 'blockavg';
+$config['pplns']['blockavg']['blockcount'] = 10;
+
 // Pool target difficulty as set in pushpoold configuration file
 // Please also read this for stratum: https://github.com/TheSerapher/php-mmcfe-ng/wiki/FAQ
 $config['difficulty'] = 20;
