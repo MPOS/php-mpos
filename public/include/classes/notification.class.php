@@ -99,12 +99,16 @@ class Notification extends Mail {
     $this->debug->append("STA " . __METHOD__, 4);
     $stmt = $this->mysqli->prepare("SELECT * FROM $this->tableSettings WHERE account_id = ?");
     if ($stmt && $stmt->bind_param('i', $account_id) && $stmt->execute() && $result = $stmt->get_result()) {
-      while ($row = $result->fetch_assoc()) {
-        $aData[$row['type']] = $row['active'];
+      if ($result->num_rows > 0) {
+        while ($row = $result->fetch_assoc()) {
+          $aData[$row['type']] = $row['active'];
+        }
+        return $aData;
       }
-      return $aData;
     }
     // Catchall
+    $this->setErrorMessage('Unable to fetch notification settings');
+    $this->debug->append('Failed fetching notification settings for ' . $account_id . ': ' . $this->mysqli->error);
     return false;
   }
 
