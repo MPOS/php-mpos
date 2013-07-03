@@ -183,10 +183,10 @@ class Share {
       SUBSTRING_INDEX( `username` , '.', 1 ) AS account, id
       FROM $this->table
       WHERE upstream_result = 'Y'
-      AND UNIX_TIMESTAMP(time) BETWEEN (?) AND (? + 20)
+      AND UNIX_TIMESTAMP(time) >= ?
       AND id > ?
       ORDER BY id ASC LIMIT 1");
-    if ($this->checkStmt($stmt) && $stmt->bind_param('iii', $time, $time, $last) && $stmt->execute() && $result = $stmt->get_result()) {
+    if ($this->checkStmt($stmt) && $stmt->bind_param('ii', $time, $last) && $stmt->execute() && $result = $stmt->get_result()) {
       $this->oUpstream = $result->fetch_object();
       if (!empty($this->oUpstream->account) && is_int($this->oUpstream->id))
         return true;
