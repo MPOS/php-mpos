@@ -81,6 +81,7 @@ CREATE TABLE IF NOT EXISTS `pool_worker` (
   `username` char(50) DEFAULT NULL,
   `password` char(255) DEFAULT NULL,
   `monitor` tinyint(1) NOT NULL DEFAULT '0',
+  `hashrate` int(11) DEFAULT NULL,
   `difficulty` int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   UNIQUE KEY `username` (`username`),
