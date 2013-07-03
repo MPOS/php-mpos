@@ -43,6 +43,8 @@ if ( $bitcoin->can_connect() === true ){
 }
 
 // Value per share calculation
+// We need to use this instead when running VARDIFF
+// $pps_value = number_format(round(1/(65536 * $dDifficulty) * $config['reward']), 12) ,12);
 if ($config['reward_type'] != 'block') {
   $pps_value = number_format(round($config['reward'] / (pow(2,32) * $dDifficulty) * pow(2, $config['difficulty']), 12) ,12);
 } else {
