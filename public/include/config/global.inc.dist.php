@@ -164,6 +164,7 @@ $config['archive_shares'] = true;
 $config['blockexplorer'] = 'http://explorer.litecoin.net/search?q=';
 
 // Link to blockchain information, used for difficulty link, default: `http://allchains.info`
+// If empty, the difficulty link to the chain information will be removed
 $config['chaininfo'] = 'http://allchains.info';
 
 // Pool fees applied to users in percent, default: 0 (disabled)
