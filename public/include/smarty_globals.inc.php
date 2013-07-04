@@ -21,8 +21,7 @@ if (@$_SESSION['AUTHENTICATED']) {
   }
 }
 // Always fetch this since we need for ministats header
-if ($bitcoin->can_connect() === true)
-  $dNetworkHashrate = $bitcoin->query('getnetworkhashps');
+$bitcoin->can_connect() === true ? $dNetworkHashrate = $bitcoin->query('getnetworkhashps') : $dNetworkHashrate = 0;
 
 // Fetch some data
 $iCurrentActiveWorkers = $worker->getCountAllActiveWorkers();
