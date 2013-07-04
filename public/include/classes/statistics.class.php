@@ -203,7 +203,6 @@ class Statistics {
         AND UNIX_TIMESTAMP(s.time) >IFNULL((SELECT MAX(b.time) FROM " . $this->block->getTableName() . " AS b),0)
         AND u.id = ?");
     if ($stmt && $stmt->bind_param("i", $account_id) && $stmt->execute() && $result = $stmt->get_result())
-      var_dump($result->fetch_assoc());
       return $this->memcache->setCache(__FUNCTION__ . $account_id, $result->fetch_assoc());
     // Catchall
     $this->debug->append("Unable to fetch user round shares: " . $this->mysqli->error);
