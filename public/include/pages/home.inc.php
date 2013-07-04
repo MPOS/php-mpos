@@ -8,9 +8,11 @@ use \Michelf\Markdown;
 
 // Fetch active news to display
 $aNews = $news->getAllActive();
-foreach ($aNews as $key => $aData) {
-  // Transform Markdown content to HTML
-  $aNews[$key]['content'] = Markdown::defaultTransform($aData['content']);
+if (is_array($aNews)) {
+  foreach ($aNews as $key => $aData) {
+    // Transform Markdown content to HTML
+    $aNews[$key]['content'] = Markdown::defaultTransform($aData['content']);
+  }
 }
 
 // Load news entries for Desktop site and unauthenticated users
