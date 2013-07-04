@@ -44,19 +44,19 @@
                     </tr>
                     <tr>
                       <td><b>Block</b></td>
-                      <td class="right">{$GLOBAL.userdata.est_block|number_format:"3"}</td>
+                      <td class="right">{$GLOBAL.userdata.est_block|number_format:"8"}</td>
                     </tr>
                     <tr>
                       <td><b>Fees</b></td>
-                      <td class="right">{$GLOBAL.userdata.est_fee|number_format:"3"}</td>
+                      <td class="right">{$GLOBAL.userdata.est_fee|number_format:"8"}</td>
                     </tr>
                     <tr>
                       <td><b>Donation</b></td>
-                      <td class="right">{$GLOBAL.userdata.est_donation|number_format:"3"}</td>
+                      <td class="right">{$GLOBAL.userdata.est_donation|number_format:"8"}</td>
                     </tr>
                     <tr>
                       <td><b>Payout</b></td>
-                      <td class="right">{$GLOBAL.userdata.est_payout|number_format:"3"}</td>
+                      <td class="right">{$GLOBAL.userdata.est_payout|number_format:"8"}</td>
                     </tr>
                     <tr><td colspan="2">&nbsp;</td></tr>
                     <tr><td colspan="2"><b><u>{$GLOBAL.config.currency} Account Balance</u></b></td></tr>
