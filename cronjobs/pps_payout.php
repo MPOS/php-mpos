@@ -40,7 +40,16 @@ if ( $bitcoin->can_connect() === true ){
 }
 
 // Value per share calculation
-$pps_value = number_format(round(50 / (pow(2,32) * $dDifficulty) * pow(2, $config['difficulty']), 12) ,12);
+if ($config['reward_type'] != 'block') {
+$pps_value = number_format(round($config['reward'] / (pow(2,32) * $dDifficulty) * pow(2, $config['difficulty']), 12) ,12);
+} else {
+  // Try to find the last block value and use that for future payouts, revert to fixed reward if none found
+  if ($aLastBlock = $block->getLast()) {
+    $pps_value = number_format(round($aLastBlock['amount'] / (pow(2,32) * $dDifficulty) * pow(2, $config['difficulty']), 12) ,12);
+  } else {
+    $pps_value = number_format(round($config['reward'] / (pow(2,32) * $dDifficulty) * pow(2, $config['difficulty']), 12) ,12);
+  }
+}
 
 // Find our last share accounted and last inserted share for PPS calculations
 $iPreviousShareId = $setting->getValue('pps_last_share_id');
