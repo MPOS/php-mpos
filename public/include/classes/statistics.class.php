@@ -102,11 +102,11 @@ class Statistics {
       SELECT
       (
         (
-          SELECT ROUND(COUNT(id) * POW(2, " . $this->config['difficulty'] . ")/600/1000) AS hashrate
+          SELECT IFNULL(ROUND(COUNT(id) * POW(2, " . $this->config['difficulty'] . ")/600/1000), 0) AS hashrate
           FROM " . $this->share->getTableName() . "
           WHERE time > DATE_SUB(now(), INTERVAL 10 MINUTE)
         ) + (
-          SELECT ROUND(COUNT(id) * POW(2, " . $this->config['difficulty'] . ")/600/1000) AS hashrate
+          SELECT IFNULL(ROUND(COUNT(id) * POW(2, " . $this->config['difficulty'] . ")/600/1000), 0) AS hashrate
           FROM " . $this->share->getArchiveTableName() . "
           WHERE time > DATE_SUB(now(), INTERVAL 10 MINUTE)
         )
@@ -248,14 +248,14 @@ class Statistics {
     $stmt = $this->mysqli->prepare("
       SELECT
         (
-          SELECT ROUND(COUNT(s.id) * POW(2, " . $this->config['difficulty'] . ") / 600 / 1000) AS hashrate
+          SELECT IFNULL(ROUND(COUNT(s.id) * POW(2, " . $this->config['difficulty'] . ") / 600 / 1000), 0) AS hashrate
           FROM " . $this->share->getTableName() . " AS s,
                " . $this->user->getTableName() . " AS u
           WHERE u.username = SUBSTRING_INDEX( s.username, '.', 1 )
             AND s.time > DATE_SUB(now(), INTERVAL 10 MINUTE)
             AND u.id = ?
         ) + (
-          SELECT ROUND(COUNT(s.id) * POW(2, " . $this->config['difficulty'] . ") / 600 / 1000) AS hashrate
+          SELECT IFNULL(ROUND(COUNT(s.id) * POW(2, " . $this->config['difficulty'] . ") / 600 / 1000), 0) AS hashrate
           FROM " . $this->share->getArchiveTableName() . " AS s,
                " . $this->user->getTableName() . " AS u
           WHERE u.username = SUBSTRING_INDEX( s.username, '.', 1 )
@@ -301,7 +301,7 @@ class Statistics {
     $this->debug->append("STA " . __METHOD__, 4);
     if ($data = $this->memcache->get(__FUNCTION__ . $worker_id)) return $data;
     $stmt = $this->mysqli->prepare("
-      SELECT ROUND(COUNT(s.id) * POW(2,21)/600/1000) AS hashrate
+      SELECT IFNULL(ROUND(COUNT(s.id) * POW(2,21)/600/1000), 0) AS hashrate
       FROM " . $this->share->getTableName() . " AS s,
            " . $this->user->getTableName() . " AS u
       WHERE u.username = SUBSTRING_INDEX( s.username, '.', 1 )
@@ -343,7 +343,7 @@ class Statistics {
     case 'hashes':
       $stmt = $this->mysqli->prepare("
         SELECT
-          ROUND(COUNT(id) * POW(2," . $this->config['difficulty'] . ")/600/1000,2) AS hashrate,
+          IFNULL(ROUND(COUNT(id) * POW(2," . $this->config['difficulty'] . ")/600/1000, 2), 0) AS hashrate,
           SUBSTRING_INDEX( username, '.', 1 ) AS account
         FROM
         (
@@ -401,7 +401,7 @@ class Statistics {
     if ($this->getGetCache() && $data = $this->memcache->get(__FUNCTION__)) return $data;
     $stmt = $this->mysqli->prepare("
       SELECT
-        ROUND(COUNT(s.id) * POW(2, " . $this->config['difficulty'] . ") / 3600 / 1000) AS hashrate,
+        IFNULL(ROUND(COUNT(s.id) * POW(2, " . $this->config['difficulty'] . ") / 3600 / 1000), 0) AS hashrate,
         HOUR(s.time) AS hour
       FROM " . $this->share->getTableName() . " AS s
       WHERE time < NOW() - INTERVAL 1 HOUR

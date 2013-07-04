@@ -49,6 +49,7 @@
     </tr>
   </tbody>
 </table>
+<li>These stats are also available in JSON format <a href="{$smarty.server.PHP_SELF}?page=api&action=getpoolstatus&api_key={$GLOBAL.userdata.api_key}">HERE</a></li>
 {include file="global/block_footer.tpl"}
 
 
