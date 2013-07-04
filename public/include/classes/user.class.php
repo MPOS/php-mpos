@@ -282,14 +282,20 @@ class User {
     $bUser = false;
 
     // number validation checks
-    if ($threshold < $this->config['ap_threshold']['min'] && $threshold != 0) {
+    if (!is_numeric($threshold)) {
+      $this->setErrorMessage('Invalid input for auto-payout');
+      return false;
+    } else if ($threshold < $this->config['ap_threshold']['min'] && $threshold != 0) {
       $this->setErrorMessage('Threshold below configured minimum of ' . $this->config['ap_threshold']['min']);
       return false;
     } else if ($threshold > $this->config['ap_threshold']['max']) {
       $this->setErrorMessage('Threshold above configured maximum of ' . $this->config['ap_threshold']['max']);
       return false;
     }
-    if ($donate < 0) {
+    if (!is_numeric($donate)) {
+      $this->setErrorMessage('Invalid input for donation');
+      return false;
+    } else if ($donate < 0) {
       $this->setErrorMessage('Donation below allowed 0% limit');
       return false;
     } else if ($donate > 100) {
