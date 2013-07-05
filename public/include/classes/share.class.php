@@ -67,7 +67,7 @@ class Share {
    **/
   public function getRoundShares($previous_upstream=0, $current_upstream) {
     $stmt = $this->mysqli->prepare("SELECT
-      SUM(difficulty) as total
+      SUM(IF(difficulty=0, pow(2, (" . $this->config['difficulty'] . " - 16)) - 1, difficulty)) as total
       FROM $this->table
       WHERE our_result = 'Y'
       AND id BETWEEN ? AND ?
@@ -98,7 +98,7 @@ class Share {
       (
         SELECT DISTINCT
         SUBSTRING_INDEX( `username` , '.', 1 ) as account,
-          SUM(difficulty) AS valid
+          SUM(IF(difficulty=0, pow(2, (" . $this->config['difficulty'] . " - 16)) - 1, difficulty)) AS valid
           FROM $this->table
           WHERE id BETWEEN ? AND ?
           AND our_result = 'Y'
@@ -108,7 +108,7 @@ class Share {
         (
           SELECT DISTINCT
           SUBSTRING_INDEX( `username` , '.', 1 ) as account,
-            SUM(difficulty) AS invalid
+            SUM(IF(difficulty=0, pow(2, (" . $this->config['difficulty'] . " - 16)) - 1, difficulty)) AS invalid
             FROM $this->table
             WHERE id BETWEEN ? AND ?
             AND our_result = 'N'
