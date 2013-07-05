@@ -161,6 +161,7 @@ $config['payout_system'] = 'prop';
 $config['archive_shares'] = true;
 
 // URL prefix for block searches, used for block links, default: `http://explorer.litecoin.net/search?q=`
+// If empty, the block link to the block information page will be removed
 $config['blockexplorer'] = 'http://explorer.litecoin.net/search?q=';
 
 // Link to blockchain information, used for difficulty link, default: `http://allchains.info`
@@ -204,7 +205,7 @@ $config['difficulty'] = 20;
  * Default:
  *   reward_type  = `fixed`
  *   reward       = 50
- *   
+ *
  **/
 $config['reward_type'] = 'fixed';
 $config['reward'] = 50;
