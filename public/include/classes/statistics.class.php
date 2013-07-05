@@ -130,9 +130,12 @@ class Statistics {
     $this->debug->append("STA " . __METHOD__, 4);
     if ($data = $this->memcache->get(__FUNCTION__)) return $data;
     $stmt = $this->mysqli->prepare("
-      SELECT ROUND(SUM(IF(difficulty=0, pow(2, (" . $this->config['difficulty'] . " - 16)), difficulty)) / 600, 2) AS sharerate
-      FROM " . $this->share->getTableName() . "
-      WHERE time > DATE_SUB(now(), INTERVAL 10 MINUTE)");
+      SELECT ROUND(SUM(sharerate) / 600, 2) AS sharerate FROM
+      (
+        SELECT SUM(IF(difficulty=0, pow(2, (" . $this->config['difficulty'] . " - 16)) - 1, difficulty)) AS sharerate FROM " . $this->share->getTableName() . " WHERE time > DATE_SUB(now(), INTERVAL 10 MINUTE)
+        UNION ALL
+        SELECT SUM(IF(difficulty=0, pow(2, (" . $this->config['difficulty'] . " - 16)) - 1, difficulty)) AS sharerate FROM " . $this->share->getArchiveTableName() . " WHERE time > DATE_SUB(now(), INTERVAL 10 MINUTE)
+      ) AS sum");
     if ($this->checkStmt($stmt) && $stmt->execute() && $result = $stmt->get_result() ) return $this->memcache->setCache(__FUNCTION__, $result->fetch_object()->sharerate);
     // Catchall
     $this->debug->append("Failed to fetch share rate: " . $this->mysqli->error);
@@ -354,7 +357,7 @@ class Statistics {
           a.donate_percent AS donate_percent,
           a.is_anonymous AS is_anonymous,
           IFNULL(ROUND(COUNT(t1.id) * POW(2," . $this->config['difficulty'] . ")/600/1000, 2), 0) AS hashrate,
-          ROUND(SUM(t1.difficulty) * 65536/600/1000) AS hashrate,
+          ROUND(SUM(IF(t1.difficulty=0, pow(2, (" . $this->config['difficulty'] . " - 16)) - 1, t1.difficulty)) * 65536/600/1000) AS hashrate,
           SUBSTRING_INDEX( t1.username, '.', 1 ) AS account
         FROM
         (
