@@ -13,12 +13,19 @@ class Share {
   // This defines each share
   public $rem_host, $username, $our_result, $upstream_result, $reason, $solution, $time, $difficulty;
 
+<<<<<<< HEAD
   public function __construct($debug, $mysqli, $user, $block, $config) {
     $this->debug = $debug;
     $this->mysqli = $mysqli;
     $this->user = $user;
     $this->config = $config;
     $this->block = $block;
+=======
+  public function __construct($debug, $mysqli, $config, $salt) {
+    $this->debug = $debug;
+    $this->mysqli = $mysqli;
+    $this->config = $config;
+>>>>>>> Update share.class.php
     $this->debug->append("Instantiated Share class", 2);
   }
 
