@@ -13,9 +13,10 @@ class Share {
   // This defines each share
   public $rem_host, $username, $our_result, $upstream_result, $reason, $solution, $time, $difficulty;
 
-  public function __construct($debug, $mysqli, $salt) {
+  public function __construct($debug, $mysqli, $config, $salt) {
     $this->debug = $debug;
     $this->mysqli = $mysqli;
+    $this->config = $config;
     $this->debug->append("Instantiated Share class", 2);
   }
 
@@ -208,4 +209,4 @@ class Share {
   }
 }
 
-$share = new Share($debug, $mysqli, SALT);
+$share = new Share($debug, $mysqli, $config, SALT);
