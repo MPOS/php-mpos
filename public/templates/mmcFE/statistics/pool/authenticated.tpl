@@ -19,13 +19,20 @@
       <td class="leftheader">Current Active Workers</td>
       <td>{$GLOBAL.workers}</td>
     </tr>
+    {if $GLOBAL.blockexplorer}
     <tr>
       <td class="leftheader">Next Network Block</td>
       <td><a href="{$GLOBAL.blockexplorer}{$CURRENTBLOCK + 1}" target="_new">{$CURRENTBLOCK + 1}</a> &nbsp;&nbsp;<font size="1"> (Current: <a href="{$GLOBAL.blockexplorer}{$CURRENTBLOCK}" target="_new">{$CURRENTBLOCK})</a></font></td>
     </tr>
+    {else}
+    <tr>
+      <td class="leftheader">Next Network Block</td>
+      <td>{$CURRENTBLOCK + 1} &nbsp;&nbsp; (Current: {$CURRENTBLOCK})</td>
+    </tr>
+    {/if}
     <tr>
       <td class="leftheader">Last Block Found</td>
-      <td><a href="{$GLOBAL.blockexplorer}{$LASTBLOCK}" target="_new">{$LASTBLOCK|default:"0"}</a></td>
+      <td>{if $GLOBAL.blockexplorer}<a href="{$GLOBAL.blockexplorer}{$LASTBLOCK}" target="_new">{$LASTBLOCK|default:"0"}</a>{else}{$LASTBLOCK|default:"0"}{/if}</td>
     </tr>
     <tr>
       <td class="leftheader">Current Difficulty</td>
