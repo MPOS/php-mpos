@@ -18,7 +18,7 @@
     </tr>
 {sectionelse}
     <tr>
-      <td class="center" colspan="3">No donors yet! Be the first one to donate!</td>
+      <td class="center" colspan="3">No confirmed donations yet, please be patient!</td>
     </tr>
 {/section}
   </tbody>
