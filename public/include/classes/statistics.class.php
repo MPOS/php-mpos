@@ -105,9 +105,9 @@ class Statistics {
       SELECT
       (
         (
-          SELECT ROUND(SUM(difficulty) * 65536/600/1000) AS hashrate FROM " . $this->share->getTableName() . " WHERE time > DATE_SUB(now(), INTERVAL 10 MINUTE)
+          SELECT ROUND(SUM(IF(difficulty=0, pow(2, (" . $this->config['difficulty'] . " - 16)) - 1, difficulty)) * 65536/600/1000) AS hashrate FROM " . $this->share->getTableName() . " WHERE time > DATE_SUB(now(), INTERVAL 10 MINUTE)
         ) + (
-          SELECT ROUND(SUM(difficulty) * 65536/600/1000) AS hashrate FROM " . $this->share->getArchiveTableName() . " WHERE time > DATE_SUB(now(), INTERVAL 10 MINUTE)
+          SELECT ROUND(SUM(IF(difficulty=0, pow(2, (" . $this->config['difficulty'] . " - 16)) - 1, difficulty)) * 65536/600/1000) AS hashrate FROM " . $this->share->getArchiveTableName() . " WHERE time > DATE_SUB(now(), INTERVAL 10 MINUTE)
         )
       ) AS hashrate
       FROM DUAL");
@@ -128,9 +128,9 @@ class Statistics {
     $stmt = $this->mysqli->prepare("
       SELECT ROUND(SUM(sharerate) / 600, 2) AS sharerate FROM
       (
-        SELECT SUM(difficulty) AS sharerate FROM " . $this->share->getTableName() . " WHERE time > DATE_SUB(now(), INTERVAL 10 MINUTE)
+        SELECT SUM(IF(difficulty=0, pow(2, (" . $this->config['difficulty'] . " - 16)) - 1, difficulty)) AS sharerate FROM " . $this->share->getTableName() . " WHERE time > DATE_SUB(now(), INTERVAL 10 MINUTE)
         UNION ALL
-        SELECT SUM(difficulty) AS sharerate FROM " . $this->share->getArchiveTableName() . " WHERE time > DATE_SUB(now(), INTERVAL 10 MINUTE)
+        SELECT SUM(IF(difficulty=0, pow(2, (" . $this->config['difficulty'] . " - 16)) - 1, difficulty)) AS sharerate FROM " . $this->share->getArchiveTableName() . " WHERE time > DATE_SUB(now(), INTERVAL 10 MINUTE)
       ) AS sum");
     if ($this->checkStmt($stmt) && $stmt->execute() && $result = $stmt->get_result() ) return $this->memcache->setCache(__FUNCTION__, $result->fetch_object()->sharerate);
     // Catchall
@@ -148,8 +148,8 @@ class Statistics {
     if ($this->getGetCache() && $data = $this->memcache->get(__FUNCTION__)) return $data;
     $stmt = $this->mysqli->prepare("
       SELECT
-        SUM(IF(our_result='Y', difficulty, 0)) AS valid,
-        SUM(IF(our_result='N', difficulty, 0)) AS invalid
+        IFNULL(SUM(IF(our_result='Y', IF(difficulty=0, pow(2, (" . $this->config['difficulty'] . " - 16)) - 1, 0)), 0) AS valid,
+        IFNULL(SUM(IF(our_result='N', IF(difficulty=0, pow(2, (" . $this->config['difficulty'] . " - 16)) - 1, 0)), 0) AS invalid,
       FROM " . $this->share->getTableName() . "
       WHERE UNIX_TIMESTAMP(time) >IFNULL((SELECT MAX(time) FROM " . $this->block->getTableName() . "),0)");
     if ( $this->checkStmt($stmt) && $stmt->execute() && $result = $stmt->get_result() )
@@ -170,8 +170,8 @@ class Statistics {
     if ($this->getGetCache() && $data = $this->memcache->get(__FUNCTION__)) return $data;
     $stmt = $this->mysqli->prepare("
       SELECT
-        SUM(IF(our_result='Y', difficulty, 0)) AS valid,
-        SUM(IF(our_result='N', difficulty, 0)) AS invalid,
+        IFNULL(SUM(IF(our_result='Y', IF(difficulty=0, pow(2, (" . $this->config['difficulty'] . " - 16)) - 1, 0)), 0) AS valid,
+        IFNULL(SUM(IF(our_result='N', IF(difficulty=0, pow(2, (" . $this->config['difficulty'] . " - 16)) - 1, 0)), 0) AS invalid,
         u.id AS id,
         u.username AS username
       FROM " . $this->share->getTableName() . " AS s,
@@ -196,8 +196,8 @@ class Statistics {
     if ($this->getGetCache() && $data = $this->memcache->get(__FUNCTION__ . $account_id)) return $data;
     $stmt = $this->mysqli->prepare("
       SELECT
-        SUM(IF(our_result='Y', difficulty, 0)) AS valid,
-        SUM(IF(our_result='N', difficulty, 0)) AS invalid
+        IFNULL(SUM(IF(our_result='Y', IF(difficulty=0, pow(2, (" . $this->config['difficulty'] . " - 16)) - 1, 0)), 0) AS valid,
+        IFNULL(SUM(IF(our_result='N', IF(difficulty=0, pow(2, (" . $this->config['difficulty'] . " - 16)) - 1, 0)), 0) AS invalid
       FROM " . $this->share->getTableName() . " AS s,
            " . $this->user->getTableName() . " AS u
       WHERE
@@ -251,14 +251,14 @@ class Statistics {
     $stmt = $this->mysqli->prepare("
       SELECT
         (
-          SELECT ROUND(SUM(s.difficulty) * 65536/600/1000) AS hashrate
+          SELECT ROUND(SUM(IF(s.difficulty=0, pow(2, (" . $this->config['difficulty'] . " - 16)) - 1, s.difficulty)) * 65536/600/1000) AS hashrate
           FROM " . $this->share->getTableName() . " AS s,
                " . $this->user->getTableName() . " AS u
           WHERE u.username = SUBSTRING_INDEX( s.username, '.', 1 )
             AND s.time > DATE_SUB(now(), INTERVAL 10 MINUTE)
             AND u.id = ?
         ) + (
-          SELECT ROUND(SUM(s.difficulty) * 65536/600/1000) AS hashrate
+          SELECT ROUND(SUM(IF(s.difficulty=0, pow(2, (" . $this->config['difficulty'] . " - 16)) - 1, s.difficulty)) * 65536/600/1000) AS hashrate
           FROM " . $this->share->getArchiveTableName() . " AS s,
                " . $this->user->getTableName() . " AS u
           WHERE u.username = SUBSTRING_INDEX( s.username, '.', 1 )
@@ -282,7 +282,7 @@ class Statistics {
     $this->debug->append("STA " . __METHOD__, 4);
     if ($data = $this->memcache->get(__FUNCTION__ . $account_id)) return $data;
     $stmt = $this->mysqli->prepare("
-      SELECT SUM(s.difficulty)/600 AS sharerate
+      SELECT SUM(IF(s.difficulty=0, pow(2, (" . $this->config['difficulty'] . " - 16)) - 1, s.difficulty))/600 AS sharerate
       FROM " . $this->share->getTableName() . " AS s,
            " . $this->user->getTableName() . " AS u
       WHERE u.username = SUBSTRING_INDEX( s.username, '.', 1 )
@@ -304,7 +304,7 @@ class Statistics {
     $this->debug->append("STA " . __METHOD__, 4);
     if ($data = $this->memcache->get(__FUNCTION__ . $worker_id)) return $data;
     $stmt = $this->mysqli->prepare("
-      SELECT ROUND(SUM(s.difficulty) * 65536/600/1000) AS hashrate
+      SELECT ROUND(SUM(IF(s.difficulty=0, pow(2, (" . $this->config['difficulty'] . " - 16)) - 1, s.difficulty)) * 65536/600/1000) AS hashrate
       FROM " . $this->share->getTableName() . " AS s,
            " . $this->user->getTableName() . " AS u
       WHERE u.username = SUBSTRING_INDEX( s.username, '.', 1 )
@@ -332,7 +332,7 @@ class Statistics {
         SELECT
           a.donate_percent AS donate_percent,
           a.is_anonymous AS is_anonymous,
-          SUM(difficulty) AS shares,
+          SUM(IF(difficulty=0, pow(2, (" . $this->config['difficulty'] . " - 16)) - 1, difficulty)) AS shares,
           SUBSTRING_INDEX( s.username, '.', 1 ) AS account
         FROM " . $this->share->getTableName() . " AS s
         LEFT JOIN " . $this->user->getTableName() . " AS a
@@ -353,7 +353,7 @@ class Statistics {
           a.donate_percent AS donate_percent,
           a.is_anonymous AS is_anonymous,
           IFNULL(ROUND(COUNT(t1.id) * POW(2," . $this->config['difficulty'] . ")/600/1000, 2), 0) AS hashrate,
-          ROUND(SUM(t1.difficulty) * 65536/600/1000) AS hashrate,
+          ROUND(SUM(IF(t1.difficulty=0, pow(2, (" . $this->config['difficulty'] . " - 16)) - 1, t1.difficulty)) * 65536/600/1000) AS hashrate,
           SUBSTRING_INDEX( t1.username, '.', 1 ) AS account
         FROM
         (
@@ -383,7 +383,7 @@ class Statistics {
     if ($data = $this->memcache->get(__FUNCTION__ . $account_id)) return $data;
     $stmt = $this->mysqli->prepare("
       SELECT
-      	ROUND(SUM(s.difficulty) * 65536/3600/1000) AS hashrate,
+      	ROUND(SUM(IF(s.difficulty=0, pow(2, (" . $this->config['difficulty'] . " - 16)) - 1, s.difficulty)) * 65536/3600/1000) AS hashrate,
         HOUR(s.time) AS hour
       FROM " . $this->share->getArchiveTableName() . " AS s, accounts AS a
       WHERE time < NOW() - INTERVAL 1 HOUR
@@ -423,7 +423,7 @@ class Statistics {
     if ($this->getGetCache() && $data = $this->memcache->get(__FUNCTION__)) return $data;
     $stmt = $this->mysqli->prepare("
       SELECT
-      	ROUND(SUM(s.difficulty) * 65536/3600/1000) AS hashrate,
+      	ROUND(SUM(IF(s.difficulty=0, pow(2, (" . $this->config['difficulty'] . " - 16)) - 1, s.difficulty)) * 65536/3600/1000) AS hashrate,
         HOUR(s.time) AS hour
       FROM " . $this->share->getArchiveTableName() . " AS s
       WHERE time < NOW() - INTERVAL 1 HOUR
