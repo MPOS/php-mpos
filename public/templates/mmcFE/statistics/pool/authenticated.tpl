@@ -4,7 +4,7 @@
 
 {include file="statistics/pool/contributors_hashrate.tpl"}
 
-{include file="global/block_header.tpl" ALIGN="left" BLOCK_HEADER="Server Stats" BLOCK_STYLE="clear:all;" STYLE="padding-left:5px;padding-right:5px;"}
+{include file="global/block_header.tpl" ALIGN="left" BLOCK_HEADER="Server Stats" BLOCK_STYLE="clear:both;" STYLE="padding-left:5px;padding-right:5px;"}
 <table class="" width="100%" style="font-size:13px;">
   <tbody>
     <tr>
