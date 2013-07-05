@@ -28,6 +28,9 @@ $iCurrentActiveWorkers = $worker->getCountAllActiveWorkers();
 $iCurrentPoolHashrate =  $statistics->getCurrentHashrate();
 $iCurrentPoolShareRate = $statistics->getCurrentShareRate();
 
+// Avoid confusion, ensure our nethash isn't higher than poolhash
+if ($iCurrentPoolHashrate > $dNetworkHashrate) $dNetworkHashrate = $iCurrentPoolHashrate;
+
 // Global data for Smarty
 $aGlobal = array(
   'slogan' => $config['website']['slogan'],
