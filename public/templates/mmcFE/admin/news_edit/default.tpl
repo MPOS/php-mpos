@@ -10,7 +10,7 @@
         Active
       </th>
       <td>
-        <input type="checkbox" name="active" value="1" id="active" {if $NEWS.active}checked{/if} />
+        <input type="checkbox" name="active" value="1" id="active" {nocache}{if $NEWS.active}checked{/if}{/nocache} />
         <label for="active"></label>
       </td>
     </tr>
@@ -18,13 +18,13 @@
       <th>
         Header
       </th>
-      <td><input name="header" type="text" size="30" value="{$NEWS.header}" required /></td>
+      <td><input name="header" type="text" size="30" value="{nocache}{$NEWS.header}{/nocache}" required /></td>
     </tr>
     <tr>
       <th>
         Content
       </th>
-      <td><textarea name="content" rows="500" type="text" required>{$NEWS.content}</textarea></td>
+      <td><textarea name="content" rows="500" type="text" required>{nocache}{$NEWS.content}{/nocache}</textarea></td>
     </tr>
   </table>
   <input type="submit" value="Save" class="submit small" />

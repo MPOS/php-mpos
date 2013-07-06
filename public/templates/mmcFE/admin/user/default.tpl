@@ -44,6 +44,7 @@
     </tr>
   </thead>
   <tbody>
+{nocache}
 {section name=user loop=$USERS|default}
     <tr>
       <td class="center">{$USERS[user].id}</td>
@@ -70,6 +71,7 @@
     <td colspan="10"></td>
   </tr>
 {/section}
+{/nocache}
   </tbody>
   <tfoot>
     <tr>
