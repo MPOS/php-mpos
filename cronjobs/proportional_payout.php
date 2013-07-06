@@ -40,12 +40,13 @@ foreach ($aAllBlocks as $iIndex => $aBlock) {
   if (!$aBlock['accounted']) {
     $iPreviousShareId = @$aAllBlocks[$iIndex - 1]['share_id'] ? $aAllBlocks[$iIndex - 1]['share_id'] : 0;
     $iCurrentUpstreamId = $aBlock['share_id'];
+    if (!is_numeric($iCurrentUpstreamId)) die("Block " . $aBlock['height'] . " has no share_id associated with it, not going to continue\n");
     $aAccountShares = $share->getSharesForAccounts($iPreviousShareId, $aBlock['share_id']);
     $iRoundShares = $share->getRoundShares($iPreviousShareId, $aBlock['share_id']);
     $config['reward_type'] == 'block' ? $dReward = $aBlock['amount'] : $dReward = $config['reward'];
 
     if (empty($aAccountShares)) {
-      verbose("\nNo shares found for this block\n\n");
+      verbose("\nNo shares found for this block: " . $aBlock['height'] . " \n\n");
       sleep(2);
       continue;
     }
