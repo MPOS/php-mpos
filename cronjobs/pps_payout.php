@@ -113,6 +113,7 @@ if (empty($aAllBlocks)) {
 foreach ($aAllBlocks as $iIndex => $aBlock) {
   // If we are running through more than one block, check for previous share ID
   $iLastBlockShare = @$aAllBlocks[$iIndex - 1]['share_id'] ? @$aAllBlocks[$iIndex - 1]['share_id'] : 0;
+  if (!is_numeric($aBlock['share_id'])) die("Block " . $aBlock['height'] . " has no share_id associated with it, not going to continue\n");
   // Per account statistics
   $aAccountShares = $share->getSharesForAccounts(@$iLastBlockShare, $aBlock['share_id']);
   foreach ($aAccountShares as $key => $aData) {
