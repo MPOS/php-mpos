@@ -416,6 +416,14 @@ class Statistics {
       FROM " . $this->share->getTableName() . " AS s
       WHERE time < NOW() - INTERVAL 1 HOUR
         AND time > NOW() - INTERVAL 25 HOUR
+      GROUP BY HOUR(time)
+      UNION ALL
+      SELECT
+        IFNULL(ROUND(COUNT(s.id) * POW(2, " . $this->config['difficulty'] . ") / 3600 / 1000), 0) AS hashrate,
+        HOUR(s.time) AS hour
+      FROM " . $this->share->getTableName() . " AS s
+      WHERE time < NOW() - INTERVAL 1 HOUR
+        AND time > NOW() - INTERVAL 25 HOUR
       GROUP BY HOUR(time)");
     if ($this->checkStmt($stmt) && $stmt->execute() && $result = $stmt->get_result()) {
       while ($row = $result->fetch_assoc()) {
