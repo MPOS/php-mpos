@@ -389,7 +389,7 @@ class Statistics {
         AND a.username = SUBSTRING_INDEX( s.username, '.', 1 )
         AND a.id = ?
       GROUP BY HOUR(time)");
-    if ($this->checkStmt($stmt) && $stmt->bind_param("i", $account_id) && $stmt->execute() && $result = $stmt->get_result()) {
+    if ($this->checkStmt($stmt) && $stmt->bind_param('ii', $account_id, $account_id) && $stmt->execute() && $result = $stmt->get_result()) {
       $aData = array();
       while ($row = $result->fetch_assoc()) {
         $aData[$row['hour']] = $row['hashrate'];
