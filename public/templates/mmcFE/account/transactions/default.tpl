@@ -14,6 +14,7 @@
         </tr>
       </thead>
       <tbody style="font-size:12px;">
+{assign var=has_confirmed value=false}
 {section transaction $TRANSACTIONS}
         {if (
           (($TRANSACTIONS[transaction].type == 'Credit' or $TRANSACTIONS[transaction].type == 'Bonus')and $TRANSACTIONS[transaction].confirmations >= $GLOBAL.confirmations)
@@ -26,6 +27,7 @@
           or $TRANSACTIONS[transaction].type == 'Debit_MP'
           or $TRANSACTIONS[transaction].type == 'TXFee'
         )}
+        {assign var=has_credits value=true}
         <tr class="{cycle values="odd,even"}">
           <td>{$TRANSACTIONS[transaction].id}</td>
           <td>{$TRANSACTIONS[transaction].timestamp}</td>
@@ -36,6 +38,9 @@
         </tr>
         {/if}
 {/section}
+{if !$has_confirmed}
+        <tr><td class="center" colspan="6"><b><i>No data</i></b></td></tr>
+{/if}
       </tbody>
     </table>
     <p>
@@ -60,12 +65,14 @@
         </tr>
       </thead>
       <tbody style="font-size:12px;">
+{assign var=has_unconfirmed value=false}
 {section transaction $TRANSACTIONS}
         {if (
           ($TRANSACTIONS[transaction].type == 'Credit' or $TRANSACTIONS[transaction].type == 'Bonus') and $TRANSACTIONS[transaction].confirmations < $GLOBAL.confirmations
           or ($TRANSACTIONS[transaction].type == 'Donation' and $TRANSACTIONS[transaction].confirmations < $GLOBAL.confirmations)
           or ($TRANSACTIONS[transaction].type == 'Fee' and $TRANSACTIONS[transaction].confirmations < $GLOBAL.confirmations)
         )}
+        {assign var=has_unconfirmed value=true}
         <tr class="{cycle values="odd,even"}">
           <td>{$TRANSACTIONS[transaction].id}</td>
           <td>{$TRANSACTIONS[transaction].timestamp}</td>
@@ -75,12 +82,15 @@
           <td><font color="{if $TRANSACTIONS[transaction].type == 'Credit' or $TRANSACTIONS[transaction].type == 'Bonus'}green{else}red{/if}">{$TRANSACTIONS[transaction].amount|number_format:"8"}</td>
         </tr>
           {if $TRANSACTIONS[transaction].type == 'Credit' or $TRANSACTIONS[transaction].type == 'Bonus'}
-            {assign var="credits" value="`$credits+$TRANSACTIONS[transaction].amount`"}
+            {assign var="credits" value="`$credits|default:"0"+$TRANSACTIONS[transaction].amount`"}
           {else}
-            {assign var="debits" value="`$debits+$TRANSACTIONS[transaction].amount`"}
+            {assign var="debits" value="`$debits|default:"0"+$TRANSACTIONS[transaction].amount`"}
           {/if}
         {/if}
 {/section}
+{if !$has_unconfirmed}
+        <tr><td class="center" colspan="6"><b><i>No data</i></b></td></tr>
+{/if}
         <tr>
           <td colspan="5"><b>Unconfirmed Totals:</b></td>
           <td><b>{($credits|default - $debits|default)|number_format:"8"}</b></td>
@@ -105,6 +115,7 @@
         </tr>
       </thead>
       <tbody style="font-size:12px;">
+{assign var=has_orphaned value=false}
 {section transaction $TRANSACTIONS}
         {if (
           $TRANSACTIONS[transaction].type == 'Orphan_Credit'
@@ -121,12 +132,15 @@
           <td><font color="{if $TRANSACTIONS[transaction].type == 'Orphan_Credit' or $TRANSACTIONS[transaction].type == 'Orphan_Bonus'}green{else}red{/if}">{$TRANSACTIONS[transaction].amount|number_format:"8"}</td>
         </tr>
           {if $TRANSACTIONS[transaction].type == 'Orphan_Credit' or $TRANSACTIONS[transaction].type == 'Orphan_Bonus'}
-            {assign var="orphan_credits" value="`$orphan_credits+$TRANSACTIONS[transaction].amount`"}
+            {assign var="orphan_credits" value="`$orphan_credits|default:"0"+$TRANSACTIONS[transaction].amount`"}
           {else}
-            {assign var="orphan_debits" value="`$orphan_debits+$TRANSACTIONS[transaction].amount`"}
+            {assign var="orphan_debits" value="`$orphan_debits|default:"0"+$TRANSACTIONS[transaction].amount`"}
           {/if}
         {/if}
 {/section}
+{if !$has_orphaned}
+        <tr><td class="center" colspan="6"><b><i>No data</i></b></td></tr>
+{/if}
         <tr>
           <td colspan="5"><b>Orphaned Totals:</b></td>
           <td><b>{($orphan_credits|default - $orphan_debits|default)|number_format:"8"}</b></td>

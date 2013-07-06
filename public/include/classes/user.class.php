@@ -282,14 +282,20 @@ class User {
     $bUser = false;
 
     // number validation checks
-    if ($threshold < $this->config['ap_threshold']['min'] && $threshold != 0) {
+    if (!is_numeric($threshold)) {
+      $this->setErrorMessage('Invalid input for auto-payout');
+      return false;
+    } else if ($threshold < $this->config['ap_threshold']['min'] && $threshold != 0) {
       $this->setErrorMessage('Threshold below configured minimum of ' . $this->config['ap_threshold']['min']);
       return false;
     } else if ($threshold > $this->config['ap_threshold']['max']) {
       $this->setErrorMessage('Threshold above configured maximum of ' . $this->config['ap_threshold']['max']);
       return false;
     }
-    if ($donate < 0) {
+    if (!is_numeric($donate)) {
+      $this->setErrorMessage('Invalid input for donation');
+      return false;
+    } else if ($donate < 0) {
       $this->setErrorMessage('Donation below allowed 0% limit');
       return false;
     } else if ($donate > 100) {
@@ -449,7 +455,6 @@ class User {
       $this->setErrorMessage( 'Invalid PIN' );
       return false;
     }
-    $apikey = hash("sha256",$username.$salt);
     if ($this->mysqli->query("SELECT id FROM $this->table LIMIT 1")->num_rows > 0) {
       $stmt = $this->mysqli->prepare("
         INSERT INTO $this->table (username, pass, email, pin, api_key)
@@ -461,12 +466,16 @@ class User {
         VALUES (?, ?, ?, ?, ?, 1)
         ");
     }
-    if ($this->checkStmt($stmt)) {
-      $stmt->bind_param('sssss', $username, hash("sha256", $password1.$this->salt), $email1, hash("sha256", $pin.$this->salt), $apikey);
+
+    // Create hashed strings using original string and salt
+    $password_hash = hash('sha256', $password1.$this->salt);
+    $pin_hash = hash('sha256', $pin.$this->salt);
+    $apikey_hash = hash('sha256', $username.$this->salt);
+
+    if ($this->checkStmt($stmt) && $stmt->bind_param('sssss', $username, $password_hash, $email1, $pin_hash, $apikey_hash)) {
       if (!$stmt->execute()) {
         $this->setErrorMessage( 'Unable to register' );
         if ($stmt->sqlstate == '23000') $this->setErrorMessage( 'Username already exists' );
-        echo $this->mysqli->error;
         return false;
       }
       $stmt->close();
@@ -514,6 +523,10 @@ class User {
   public function resetPassword($username, $smarty) {
     $this->debug->append("STA " . __METHOD__, 4);
     // Fetch the users mail address
+    if (empty($username)) {
+      $this->serErrorMessage("Username must not be empty");
+      return false;
+    }
     if (!$email = $this->getUserEmail($username)) {
       $this->setErrorMessage("Unable to find a mail address for user $username");
       return false;

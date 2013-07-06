@@ -42,14 +42,22 @@ class Worker {
    **/
   public function updateWorkers($account_id, $data) {
     $this->debug->append("STA " . __METHOD__, 4);
+    if (!is_array($data)) {
+      $this->setErrorMessage('No workers to update');
+      return false;
+    }
     $username = $this->user->getUserName($account_id);
     $iFailed = 0;
     foreach ($data as $key => $value) {
-      // Prefix the WebUser to Worker name
-      $value['username'] = "$username." . $value['username'];
-      $stmt = $this->mysqli->prepare("UPDATE $this->table SET password = ?, username = ?, monitor = ? WHERE account_id = ? AND id = ?");
-      if ( ! ( $this->checkStmt($stmt) && $stmt->bind_param('ssiii', $value['password'], $value['username'], $value['monitor'], $account_id, $key) && $stmt->execute()) )
+      if ('' === $value['username'] || '' === $value['password']) {
         $iFailed++;
+      } else {
+        // Prefix the WebUser to Worker name
+        $value['username'] = "$username." . $value['username'];
+        $stmt = $this->mysqli->prepare("UPDATE $this->table SET password = ?, username = ?, monitor = ? WHERE account_id = ? AND id = ?");
+        if ( ! ( $this->checkStmt($stmt) && $stmt->bind_param('ssiii', $value['password'], $value['username'], $value['monitor'], $account_id, $key) && $stmt->execute()) )
+          $iFailed++;
+      }
     }
     if ($iFailed == 0)
       return true;
@@ -150,6 +158,10 @@ class Worker {
    **/
   public function addWorker($account_id, $workerName, $workerPassword) {
     $this->debug->append("STA " . __METHOD__, 4);
+    if ('' === $workerName || '' === $workerPassword) {
+      $this->setErrorMessage('Worker name and/or password may not be empty');
+      return false;
+    }
     $username = $this->user->getUserName($account_id);
     $workerName = "$username.$workerName";
     $stmt = $this->mysqli->prepare("INSERT INTO $this->table (account_id, username, password) VALUES(?, ?, ?)");
@@ -177,7 +189,6 @@ class Worker {
     if ($this->checkStmt($stmt)) {
       $stmt->bind_param('ii', $account_id, $id);
       if ($stmt->execute() && $stmt->affected_rows == 1) {
-        $stmt->close;
         return true;
       } else {
         $this->setErrorMessage( 'Unable to delete worker' );
