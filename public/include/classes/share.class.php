@@ -68,7 +68,7 @@ class Share {
    **/
   public function getRoundShares($previous_upstream=0, $current_upstream) {
     $stmt = $this->mysqli->prepare("SELECT
-      SUM(IF(difficulty=0, pow(2, (" . $this->config['difficulty'] . " - 16)) - 1, difficulty)) as total
+      IFNULL(SUM(IF(difficulty=0, pow(2, (" . $this->config['difficulty'] . " - 16)) - 1, difficulty)), 0) as total
       FROM $this->table
       WHERE our_result = 'Y'
       AND id BETWEEN ? AND ?
@@ -93,13 +93,13 @@ class Share {
     $stmt = $this->mysqli->prepare("SELECT
       a.id,
       validT.account AS username,
-      SUM(validT.valid) as valid,
-      IFNULL(SUM(invalidT.invalid),0) as invalid
+      IFNULL(SUM(validT.valid), 0) as valid,
+      IFNULL(SUM(invalidT.invalid), 0) as invalid
       FROM
       (
         SELECT DISTINCT
         SUBSTRING_INDEX( `username` , '.', 1 ) as account,
-          SUM(IF(difficulty=0, pow(2, (" . $this->config['difficulty'] . " - 16)) - 1, difficulty)) AS valid
+          IFNULL(SUM(IF(difficulty=0, pow(2, (" . $this->config['difficulty'] . " - 16)) - 1, difficulty)), 0) AS valid
           FROM $this->table
           WHERE id BETWEEN ? AND ?
           AND our_result = 'Y'
@@ -109,7 +109,7 @@ class Share {
         (
           SELECT DISTINCT
           SUBSTRING_INDEX( `username` , '.', 1 ) as account,
-            SUM(IF(difficulty=0, pow(2, (" . $this->config['difficulty'] . " - 16)) - 1, difficulty)) AS invalid
+            IFNULL(SUM(IF(difficulty=0, pow(2, (" . $this->config['difficulty'] . " - 16)) - 1, difficulty)), 0) AS invalid
             FROM $this->table
             WHERE id BETWEEN ? AND ?
             AND our_result = 'N'
@@ -184,7 +184,6 @@ class Share {
       SUBSTRING_INDEX( `username` , '.', 1 ) AS account, id
       FROM $this->table
       WHERE upstream_result = 'Y'
-      AND UNIX_TIMESTAMP(time) >= ?
       AND id > ?
       AND UNIX_TIMESTAMP(time) >= ?
       ORDER BY id ASC LIMIT 1");
