@@ -50,3 +50,21 @@ the most powerful pool!
 | Pool URL | Coin | Avg. Hashrate | Avg. Active Workers | Notes |
 | -------- | ---- | ------------- | ----------------- | ----- |
 | http://www.ejpool.info | Litecoin | 155 MHash | 120 | |
+
+### Obigal
+
+Small Time Miners are running various stratum only pools for different coins.
+
+| Pool URL | Coin | Avg. Hashrate | Avg. Active Workers | Notes |
+| -------- | ---- | ------------- | ------------------- | ----- |
+| http://meg.smalltimeminer.com | Megacoin | 5 - 10 MHash | n/a | |
+| http://flo.smalltimeminer.com | Florincoin | 5 - 6 MHash | n/a | |
+| http://alf.smalltimeminer.com | Alphacoin | 2 - 4 MHash | n/a | |
+| http://cgb.smalltimeminer.com | Cryptobullion | 2 - 4 MHash | n/a | PoS/PoW type coin 
+
+### Feeleep75
+
+| Pool URL | Coin | Avg. Hashrate | Avg. Active Workers | Notes |
+| -------- | ---- | ------------- | ------------------- | ----- |
+| http://bot.coinmine.pl | Bottlecaps | 3 - 50 MHash | n/a | PoS/PoW type coin |
+| http://yacp.coinmine.pl | YaCoin | 19 MHash | n/a | |

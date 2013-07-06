@@ -21,13 +21,15 @@ if (@$_SESSION['AUTHENTICATED']) {
   }
 }
 // Always fetch this since we need for ministats header
-if ($bitcoin->can_connect() === true)
-  $dNetworkHashrate = $bitcoin->query('getnetworkhashps');
+$bitcoin->can_connect() === true ? $dNetworkHashrate = $bitcoin->query('getnetworkhashps') : $dNetworkHashrate = 0;
 
 // Fetch some data
 $iCurrentActiveWorkers = $worker->getCountAllActiveWorkers();
 $iCurrentPoolHashrate =  $statistics->getCurrentHashrate();
 $iCurrentPoolShareRate = $statistics->getCurrentShareRate();
+
+// Avoid confusion, ensure our nethash isn't higher than poolhash
+if ($iCurrentPoolHashrate > $dNetworkHashrate) $dNetworkHashrate = $iCurrentPoolHashrate;
 
 // Global data for Smarty
 $aGlobal = array(
@@ -36,7 +38,6 @@ $aGlobal = array(
   'hashrate' => $iCurrentPoolHashrate,
   'nethashrate' => $dNetworkHashrate,
   'sharerate' => $iCurrentPoolShareRate,
-  'ppsvalue' => number_format(round((1/(65536 * $dDifficulty) * $config['reward']), 12) ,12),
   'workers' => $iCurrentActiveWorkers,
   'roundshares' => $aRoundShares,
   'fees' => $config['fees'],
@@ -59,6 +60,18 @@ $aGlobal = array(
   )
 );
 
+// Special calculations for PPS Values based on reward_type setting and/or available blocks
+if ($config['reward_type'] != 'block') {
+  $aGlobal['ppsvalue'] = number_format(round((1/(65536 * $dDifficulty) * $config['reward']), 12) ,12);
+} else {
+  // Try to find the last block value and use that for future payouts, revert to fixed reward if none found
+  if ($aLastBlock = $block->getLast()) {
+    $aGlobal['ppsvalue'] = number_format(round((1/(65536 * $dDifficulty) * $aLastBlock['amount']), 12) ,12);
+  } else {
+    $aGlobal['ppsvalue'] = number_format(round((1/(65536 * $dDifficulty) * $config['reward']), 12) ,12);
+  }
+}
+
 // We don't want these session infos cached
 if (@$_SESSION['USERDATA']['id']) {
   $aGlobal['userdata'] = $_SESSION['USERDATA']['id'] ? $user->getUserData($_SESSION['USERDATA']['id']) : array();
@@ -75,10 +88,10 @@ if (@$_SESSION['USERDATA']['id']) {
   default:
     // Some estimations
     if (@$aRoundShares['valid'] > 0) {
-      $aGlobal['userdata']['est_block'] = round(( (int)$aGlobal['userdata']['shares']['valid'] / (int)$aRoundShares['valid'] ) * (int)$config['reward'], 3);
-      $aGlobal['userdata']['est_fee'] = round(($config['fees'] / 100) * $aGlobal['userdata']['est_block'], 3);
-      $aGlobal['userdata']['est_donation'] = round((( $aGlobal['userdata']['donate_percent'] / 100) * ($aGlobal['userdata']['est_block'] - $aGlobal['userdata']['est_fee'])), 3);
-      $aGlobal['userdata']['est_payout'] = round($aGlobal['userdata']['est_block'] - $aGlobal['userdata']['est_donation'] - $aGlobal['userdata']['est_fee'], 3);
+      $aGlobal['userdata']['est_block'] = round(( (int)$aGlobal['userdata']['shares']['valid'] / (int)$aRoundShares['valid'] ) * (float)$config['reward'], 8);
+      $aGlobal['userdata']['est_fee'] = round(((float)$config['fees'] / 100) * (float)$aGlobal['userdata']['est_block'], 8);
+      $aGlobal['userdata']['est_donation'] = round((( (float)$aGlobal['userdata']['donate_percent'] / 100) * ((float)$aGlobal['userdata']['est_block'] - (float)$aGlobal['userdata']['est_fee'])), 8);
+      $aGlobal['userdata']['est_payout'] = round((float)$aGlobal['userdata']['est_block'] - (float)$aGlobal['userdata']['est_donation'] - (float)$aGlobal['userdata']['est_fee'], 8);
     } else {
       $aGlobal['userdata']['est_block'] = 0;
       $aGlobal['userdata']['est_fee'] = 0;

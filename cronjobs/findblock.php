@@ -85,6 +85,7 @@ if (empty($aAllBlocks)) {
         verbose($share->getError() . "\n");
         exit;
       }
+
       // Fetch share information
       if (!$iPreviousShareId = $block->getLastShareId()) {
         $iPreviousShareId = 0;

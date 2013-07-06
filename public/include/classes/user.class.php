@@ -26,6 +26,9 @@ class User {
   public function getError() {
     return $this->sError;
   }
+  private function getHash($string) {
+    return hash('sha256', $string.$this->salt);
+  }
   public function getUserName($id) {
     return $this->getSingle($id, 'username', 'id');
   }
@@ -68,7 +71,7 @@ class User {
     return $this->updateSingle($id, $field);
   }
   public function setUserToken($id) {
-    $field = array('name' => 'token', 'type' => 's', 'value' => hash('sha256', $id.time().$this->salt));
+    $field = array('name' => 'token', 'type' => 's', 'value' => setHash($id.time()));
     return $this->updateSingle($id, $field);
   }
   public function setUserFailed($id, $value) {
@@ -135,7 +138,7 @@ class User {
     $this->debug->append("STA " . __METHOD__, 4);
     $this->debug->append("Confirming PIN for $userId and pin $pin", 2);
     $stmt = $this->mysqli->prepare("SELECT pin FROM $this->table WHERE id=? AND pin=? LIMIT 1");
-    $pin_hash = hash('sha256', $pin.$this->salt);
+    $pin_hash = $this->getHash($pin);
     $stmt->bind_param('is', $userId, $pin_hash);
     $stmt->execute();
     $stmt->bind_result($row_pin);
@@ -254,8 +257,8 @@ class User {
       $this->setErrorMessage( 'New password is too short, please use more than 8 chars' );
       return false;
     }
-    $current = hash('sha256', $current.$this->salt);
-    $new = hash('sha256', $new1.$this->salt);
+    $current = $this->getHash($current);
+    $new = $this->getHash($new1);
     $stmt = $this->mysqli->prepare("UPDATE $this->table SET pass = ? WHERE ( id = ? AND pass = ? )");
     if ($this->checkStmt($stmt)) {
       $stmt->bind_param('sis', $new, $userID, $current);
@@ -282,14 +285,20 @@ class User {
     $bUser = false;
 
     // number validation checks
-    if ($threshold < $this->config['ap_threshold']['min'] && $threshold != 0) {
+    if (!is_numeric($threshold)) {
+      $this->setErrorMessage('Invalid input for auto-payout');
+      return false;
+    } else if ($threshold < $this->config['ap_threshold']['min'] && $threshold != 0) {
       $this->setErrorMessage('Threshold below configured minimum of ' . $this->config['ap_threshold']['min']);
       return false;
     } else if ($threshold > $this->config['ap_threshold']['max']) {
       $this->setErrorMessage('Threshold above configured maximum of ' . $this->config['ap_threshold']['max']);
       return false;
     }
-    if ($donate < 0) {
+    if (!is_numeric($donate)) {
+      $this->setErrorMessage('Invalid input for donation');
+      return false;
+    } else if ($donate < 0) {
       $this->setErrorMessage('Donation below allowed 0% limit');
       return false;
     } else if ($donate > 100) {
@@ -339,9 +348,10 @@ class User {
   private function checkUserPassword($username, $password) {
     $this->debug->append("STA " . __METHOD__, 4);
     $user = array();
+    $password_hash = $this->getHash($password);
     $stmt = $this->mysqli->prepare("SELECT username, id, is_admin FROM $this->table WHERE username=? AND pass=? LIMIT 1");
     if ($this->checkStmt($stmt)) {
-      $stmt->bind_param('ss', $username, hash('sha256', $password.$this->salt));
+      $stmt->bind_param('ss', $username, $password_hash);
       $stmt->execute();
       $stmt->bind_result($row_username, $row_id, $row_admin);
       $stmt->fetch();
@@ -462,9 +472,9 @@ class User {
     }
 
     // Create hashed strings using original string and salt
-    $password_hash = hash('sha256', $password1.$this->salt);
-    $pin_hash = hash('sha256', $pin.$this->salt);
-    $apikey_hash = hash('sha256', $username.$this->salt);
+    $password_hash = $this->getHash($password1);
+    $pin_hash = $this->getHash($pin);
+    $apikey_hash = $this->getHash($username);
 
     if ($this->checkStmt($stmt) && $stmt->bind_param('sssss', $username, $password_hash, $email1, $pin_hash, $apikey_hash)) {
       if (!$stmt->execute()) {
@@ -496,9 +506,9 @@ class User {
         $this->setErrorMessage( 'New password is too short, please use more than 8 chars' );
         return false;
       }
-      $new = hash('sha256', $new1.$this->salt);
+      $new_hash = $this->getHash($new1);
       $stmt = $this->mysqli->prepare("UPDATE $this->table SET pass = ?, token = NULL WHERE id = ? AND token = ?");
-      if ($this->checkStmt($stmt) && $stmt->bind_param('sis', $new, $id, $token) && $stmt->execute() && $stmt->affected_rows === 1) {
+      if ($this->checkStmt($stmt) && $stmt->bind_param('sis', $new_hash, $id, $token) && $stmt->execute() && $stmt->affected_rows === 1) {
         return true;
       }
     } else {
@@ -517,6 +527,10 @@ class User {
   public function resetPassword($username, $smarty) {
     $this->debug->append("STA " . __METHOD__, 4);
     // Fetch the users mail address
+    if (empty($username)) {
+      $this->serErrorMessage("Username must not be empty");
+      return false;
+    }
     if (!$email = $this->getUserEmail($username)) {
       $this->setErrorMessage("Unable to find a mail address for user $username");
       return false;

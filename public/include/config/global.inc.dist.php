@@ -161,9 +161,11 @@ $config['payout_system'] = 'prop';
 $config['archive_shares'] = true;
 
 // URL prefix for block searches, used for block links, default: `http://explorer.litecoin.net/search?q=`
+// If empty, the block link to the block information page will be removed
 $config['blockexplorer'] = 'http://explorer.litecoin.net/search?q=';
 
 // Link to blockchain information, used for difficulty link, default: `http://allchains.info`
+// If empty, the difficulty link to the chain information will be removed
 $config['chaininfo'] = 'http://allchains.info';
 
 // Pool fees applied to users in percent, default: 0 (disabled)
@@ -177,18 +179,39 @@ $config['difficulty'] = 20;
 /**
  * This defines how rewards are paid to users.
  *
+ * Explanation:
+ *
+ *  Proportional Payout System
+ *   When running a pool on fixed mode, each block will be paid
+ *   out as defined in `reward`. If you wish to pass transaction
+ *   fees inside discovered blocks on to user, set this to `block`.
+ *   This is really helpful for altcoins with dynamic block values!
+ *
+ *  PPS Payout System
+ *   If set to `fixed`, all PPS values are based on the `reward` setting.
+ *   If you set it to `block` you will calculate the current round based
+ *   on the previous block value. The idea is to pass the block of the
+ *   last round on to the users. If no previous block is found, PPS value
+ *   will fall back to the fixed value set in `reward`. Ensure you don't
+ *   overpay users in the first round!
+ *
  * Available options:
+ *  reward_type:
  *   fixed : Fixed value according to `reward` setting
  *   block : Dynamic value based on block amount
+ *  reward:
+ *   float value : Any value of your choice but should reflect base block values
  *
  * Default:
- *   fixed
+ *   reward_type  = `fixed`
+ *   reward       = 50
+ *
  **/
 $config['reward_type'] = 'fixed';
 $config['reward'] = 50;
 
 // Confirmations per block required to credit transactions, default: 120
-$config['confirmations'] = 5;
+$config['confirmations'] = 120;
 
 
 /**
@@ -213,7 +236,7 @@ $config['confirmations'] = 5;
  *   expiration  =  90
  *   splay       =  15
  **/
-$config['memcache']['enabled'] = false;
+$config['memcache']['enabled'] = true;
 $config['memcache']['host'] = 'localhost';
 $config['memcache']['port'] = 11211;
 $config['memcache']['keyprefix'] = 'mmcfe_ng_';

@@ -29,10 +29,9 @@ count($aBlocksFoundData) > 0 ? $aBlockData = $aBlocksFoundData[0] : $aBlockData 
 
 // Estimated time to find the next block
 $iCurrentPoolHashrate =  $statistics->getCurrentHashrate();
-$iCurrentPoolHashrate == 0 ? $iCurrentPoolHashrate = 1 : true;
 
 // Time in seconds, not hours, using modifier in smarty to translate
-$iEstTime = $dDifficulty * pow(2,32) / ($iCurrentPoolHashrate * 1000);
+$iCurrentPoolHashrate > 0 ? $iEstTime = $dDifficulty * pow(2,32) / ($iCurrentPoolHashrate * 1000) : $iEstTime = 0;
 
 // Time since last block
 $now = new DateTime( "now" );

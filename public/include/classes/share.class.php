@@ -178,7 +178,7 @@ class Share {
    * @param last int Skips all shares up to last to find new share
    * @return bool
    **/
-  public function setUpstream($last=0, $time) {
+  public function setUpstream($last=0, $time=0) {
     $stmt = $this->mysqli->prepare("
       SELECT
       SUBSTRING_INDEX( `username` , '.', 1 ) AS account, id
@@ -186,8 +186,9 @@ class Share {
       WHERE upstream_result = 'Y'
       AND UNIX_TIMESTAMP(time) >= ?
       AND id > ?
+      AND UNIX_TIMESTAMP(time) >= ?
       ORDER BY id ASC LIMIT 1");
-    if ($this->checkStmt($stmt) && $stmt->bind_param('ii', $time, $last) && $stmt->execute() && $result = $stmt->get_result()) {
+    if ($this->checkStmt($stmt) && $stmt->bind_param('ii', $last, $time) && $stmt->execute() && $result = $stmt->get_result()) {
       $this->oUpstream = $result->fetch_object();
       if (!empty($this->oUpstream->account) && is_int($this->oUpstream->id))
         return true;

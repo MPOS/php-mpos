@@ -1,7 +1,7 @@
           <ul id="nav">
             <li><a href="{$smarty.server.PHP_SELF}">Home</a></li>
             {if $smarty.session.AUTHENTICATED|default:"0" == 1}
-            <li><a href="">My Account</a>
+            <li><a href="{$smarty.server.PHP_SELF}?page=account&action=edit">My Account</a>
               <ul>
                 <li><a href="{$smarty.server.PHP_SELF}?page=account&action=edit">Edit Account</a></li>
                 <li><a href="{$smarty.server.PHP_SELF}?page=account&action=workers">My Workers</a></li>
