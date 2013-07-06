@@ -13,19 +13,12 @@ class Share {
   // This defines each share
   public $rem_host, $username, $our_result, $upstream_result, $reason, $solution, $time, $difficulty;
 
-<<<<<<< HEAD
   public function __construct($debug, $mysqli, $user, $block, $config) {
     $this->debug = $debug;
     $this->mysqli = $mysqli;
     $this->user = $user;
     $this->config = $config;
     $this->block = $block;
-=======
-  public function __construct($debug, $mysqli, $config, $salt) {
-    $this->debug = $debug;
-    $this->mysqli = $mysqli;
-    $this->config = $config;
->>>>>>> Update share.class.php
     $this->debug->append("Instantiated Share class", 2);
   }
 
@@ -77,7 +70,7 @@ class Share {
    **/
   public function getRoundShares($previous_upstream=0, $current_upstream) {
     $stmt = $this->mysqli->prepare("SELECT
-      IFNULL(ROUND(SUM(IF(difficulty=0, pow(2, (" . $this->config['difficulty'] . " - 16)), difficulty)), 8), 0) as total
+      IFNULL(SUM(IF(difficulty=0, pow(2, (" . $this->config['difficulty'] . " - 16)) - 1, difficulty)), 0) as total
       FROM $this->table
       WHERE our_result = 'Y'
       AND id > ? AND id <= ?
@@ -284,7 +277,6 @@ class Share {
       SUBSTRING_INDEX( `username` , '.', 1 ) AS account, id
       FROM $this->table
       WHERE upstream_result = 'Y'
-      AND UNIX_TIMESTAMP(time) >= ?
       AND id > ?
       AND UNIX_TIMESTAMP(time) >= ?
       AND UNIX_TIMESTAMP(time) <= ( ? + 60 )
