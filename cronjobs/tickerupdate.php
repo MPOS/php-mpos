@@ -25,14 +25,12 @@ require_once('shared.inc.php');
 // Include additional file not set in autoloader
 require_once(CLASS_DIR . '/tools.class.php');
 
-verbose("Running scheduled updates\n");
-verbose("  Price API Call ... ");
 if ($price = $tools->getPrice()) {
-  verbose("found $price as price\n");
+  $log->logInfo("Price update: found $price as price");
   if (!$setting->setValue('price', $price))
-    verbose("unable to update value in settings table\n");
+    $log->logError("unable to update value in settings table");
 } else {
-  verbose("failed to fetch API data: " . $tools->getError() . "\n");
+  $log->logFatal("failed to fetch API data: " . $tools->getError());
 }
 
 ?>
