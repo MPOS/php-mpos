@@ -50,6 +50,9 @@ class User {
   public function getUserIp($id) {
     return $this->getSingle($id, 'loggedIp', 'id');
   }
+  public function getEmail($email) {
+    return $this->getSingle($email, 'email', 'email', 's');
+  }
   public function getUserFailed($id) {
    return $this->getSingle($id, 'failed_logins', 'id');
   }
@@ -439,6 +442,10 @@ class User {
    **/
   public function register($username, $password1, $password2, $pin, $email1='', $email2='') {
     $this->debug->append("STA " . __METHOD__, 4);
+    if ($this->getEmail($email1)) {
+      $this->setErrorMessage( 'This e-mail address is already taken' );
+      return false;
+    }
     if (strlen($password1) < 8) { 
       $this->setErrorMessage( 'Password is too short, minimum of 8 characters required' );
       return false;
@@ -479,7 +486,7 @@ class User {
     if ($this->checkStmt($stmt) && $stmt->bind_param('sssss', $username, $password_hash, $email1, $pin_hash, $apikey_hash)) {
       if (!$stmt->execute()) {
         $this->setErrorMessage( 'Unable to register' );
-        if ($stmt->sqlstate == '23000') $this->setErrorMessage( 'Username already exists' );
+        if ($stmt->sqlstate == '23000') $this->setErrorMessage( 'Username or email already registered' );
         return false;
       }
       $stmt->close();
