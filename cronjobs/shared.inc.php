@@ -31,16 +31,7 @@ require_once(BASEPATH . 'include/config/global.inc.php');
 // We include all needed files here, even though our templates could load them themself
 require_once(INCLUDE_DIR . '/autoloader.inc.php');
 
-// Parse command line
-$options = getopt("v");
-if (array_key_exists('v', $options)) {
-  define("VERBOSE", true);
-} else {
-  define("VERBOSE", false);
-}
-
-// Command line cron functions only
-function verbose($msg) {
-  if (VERBOSE) echo $msg;
-}
-
+// Load 3rd party logging library for running crons
+$log = new KLogger ( 'logs/' . basename($_SERVER['PHP_SELF'], '.php') . '.txt' , KLogger::DEBUG );
+$log->LogDebug('Starting ' . basename($_SERVER['PHP_SELF'], '.php'));
+?>
