@@ -54,7 +54,7 @@ foreach ($aAllBlocks as $iIndex => $aBlock) {
     if (empty($aAccountShares)) {
       $log->logFatal('No shares found for this block, aborted: ' . $aBlock['height']);
       sleep(2);
-      continue;
+      exit(1);
     }
 
     // Loop through all accounts that have found shares for this round
