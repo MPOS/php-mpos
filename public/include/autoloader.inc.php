@@ -17,6 +17,7 @@ require_once(CLASS_DIR . '/debug.class.php');
 require_once(CLASS_DIR . '/bitcoin.class.php');
 require_once(CLASS_DIR . '/statscache.class.php');
 require_once(CLASS_DIR . '/bitcoinwrapper.class.php');
+require_once(INCLUDE_DIR . '/lib/KLogger.php');
 require_once(INCLUDE_DIR . '/database.inc.php');
 require_once(INCLUDE_DIR . '/smarty.inc.php');
 // Load classes that need the above as dependencies
