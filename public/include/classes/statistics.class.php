@@ -378,8 +378,18 @@ class Statistics {
         AND time > NOW() - INTERVAL 25 HOUR
         AND a.username = SUBSTRING_INDEX( s.username, '.', 1 )
         AND a.id = ?
+      GROUP BY HOUR(time)
+      UNION ALL
+      SELECT
+        ROUND(COUNT(s.id) * POW(2, " . $this->config['difficulty'] . ") / 3600 / 1000) AS hashrate,
+        HOUR(s.time) AS hour
+      FROM " . $this->share->getArchiveTableName() . " AS s, accounts AS a
+      WHERE time < NOW() - INTERVAL 1 HOUR
+        AND time > NOW() - INTERVAL 25 HOUR
+        AND a.username = SUBSTRING_INDEX( s.username, '.', 1 )
+        AND a.id = ?
       GROUP BY HOUR(time)");
-    if ($this->checkStmt($stmt) && $stmt->bind_param("i", $account_id) && $stmt->execute() && $result = $stmt->get_result()) {
+    if ($this->checkStmt($stmt) && $stmt->bind_param('ii', $account_id, $account_id) && $stmt->execute() && $result = $stmt->get_result()) {
       $aData = array();
       while ($row = $result->fetch_assoc()) {
         $aData[$row['hour']] = $row['hashrate'];
@@ -404,6 +414,14 @@ class Statistics {
         IFNULL(ROUND(COUNT(s.id) * POW(2, " . $this->config['difficulty'] . ") / 3600 / 1000), 0) AS hashrate,
         HOUR(s.time) AS hour
       FROM " . $this->share->getTableName() . " AS s
+      WHERE time < NOW() - INTERVAL 1 HOUR
+        AND time > NOW() - INTERVAL 25 HOUR
+      GROUP BY HOUR(time)
+      UNION ALL
+      SELECT
+        IFNULL(ROUND(COUNT(s.id) * POW(2, " . $this->config['difficulty'] . ") / 3600 / 1000), 0) AS hashrate,
+        HOUR(s.time) AS hour
+      FROM " . $this->share->getArchiveTableName() . " AS s
       WHERE time < NOW() - INTERVAL 1 HOUR
         AND time > NOW() - INTERVAL 25 HOUR
       GROUP BY HOUR(time)");
