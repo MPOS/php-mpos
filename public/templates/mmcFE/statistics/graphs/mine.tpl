@@ -26,6 +26,4 @@
     </tbody>
   </table>
 </div>
-{else}
-<p><li>No shares available to start calculations</li></p>
 {/if}
