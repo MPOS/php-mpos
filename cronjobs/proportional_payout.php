@@ -53,7 +53,6 @@ foreach ($aAllBlocks as $iIndex => $aBlock) {
 
     if (empty($aAccountShares)) {
       $log->logFatal('No shares found for this block, aborted: ' . $aBlock['height']);
-      sleep(2);
       exit(1);
     }
 

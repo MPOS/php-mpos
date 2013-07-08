@@ -131,7 +131,7 @@ foreach ($aAllBlocks as $iIndex => $aBlock) {
   }
   // Mark this block as accounted for
   if (!$block->setAccounted($aBlock['id'])) {
-    verbose("\nERROR : Failed to mark block as accounted! Aborting!\n");
+    $log->logFatal("Failed to mark block as accounted! Aborting!");
     exit(1);
   }
 }
