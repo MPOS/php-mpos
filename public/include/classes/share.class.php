@@ -13,10 +13,12 @@ class Share {
   // This defines each share
   public $rem_host, $username, $our_result, $upstream_result, $reason, $solution, $time;
 
-  public function __construct($debug, $mysqli, $user) {
+  public function __construct($debug, $mysqli, $user, $block, $config) {
     $this->debug = $debug;
     $this->mysqli = $mysqli;
     $this->user = $user;
+    $this->config = $config;
+    $this->block = $block;
     $this->debug->append("Instantiated Share class", 2);
   }
 
@@ -126,28 +128,55 @@ class Share {
    * param right int Right/highest share ID
    * return array data Returns an array with usernames as keys for easy access
    **/
-  function getArchiveShares($left, $right) {
+  function getArchiveShares($iCount) {
+    $iMinId = $this->getMaxArchiveShareId() - $iCount;
+    $iMaxId = $this->getMaxArchiveShareId();
     $stmt = $this->mysqli->prepare("
       SELECT
         a.id,
-        SUBSTRING_INDEX( s.username , '.', 1 ) as username,
-        SUM(IF(our_result='Y', 1, 0)) AS valid,
-        SUM(IF(our_result='N', 1, 0)) AS invalid
+        SUBSTRING_INDEX( s.username , '.', 1 ) as account,
+        IFNULL(SUM(IF(our_result='Y', 1, 0)), 0) AS valid,
+        IFNULL(SUM(IF(our_result='N', 1, 0)), 0) AS invalid
       FROM $this->tableArchive AS s
       LEFT JOIN " . $this->user->getTableName() . " AS a
       ON a.username = SUBSTRING_INDEX( s.username , '.', 1 )
-      WHERE s.id BETWEEN ? AND ?
-      GROUP BY username DESC
-    ");
-    if ($this->checkStmt($stmt) && $stmt->bind_param("ii", $left, $right) && $stmt->execute() && $result = $stmt->get_result()) {
+      WHERE s.share_id > ? AND s.share_id <= ?
+      GROUP BY account DESC");
+    if ($this->checkStmt($stmt) && $stmt->bind_param("ii", $iMinId, $iMaxId) && $stmt->execute() && $result = $stmt->get_result()) {
       $aData = NULL;
       while ($row = $result->fetch_assoc()) {
-        $aData[$row['username']] = $row;
+        $aData[$row['account']] = $row;
       }
       if (is_array($aData)) return $aData;
     }
     return false;
   }
+
+  /**
+   * We keep shares only up to a certain point
+   * This can be configured by the user.
+   * @return return bool true or false
+   **/
+  public function purgeArchive() {
+    if ($this->config['payout_system'] == 'pplns') {
+      // Fetch our last block so we can go back configured rounds
+      $aLastBlock = $this->block->getLast();
+      // Fetch the block we need to find the share_id
+      $aBlock = $this->block->getBlock($aLastBlock['height'] - $this->config['archive']['maxrounds']);
+      // Now that we know our block, remove those shares
+      $stmt = $this->mysqli->prepare("DELETE FROM $this->tableArchive WHERE block_id < ? AND time < DATE_SUB(now(), INTERVAL ? MINUTE)");
+      if ($this->checkStmt($stmt) && $stmt->bind_param('ii', $aBlock['id'], $config['archive']['maxage']) && $stmt->execute())
+        return true;
+    } else {
+      // We are not running pplns, so we just need to keep shares of the past <interval> minutes
+      $stmt = $this->mysqli->prepare("DELETE FROM $this->tableArchive WHERE time < DATE_SUB(now(), INTERVAL ? MINUTE)");
+      if ($this->checkStmt($stmt) && $stmt->bind_param('i', $config['archive']['maxage']) && $stmt->execute())
+      return true;
+    }
+    // Catchall
+    return false;
+  }
+
   /**
    * Move accounted shares to archive table, this step is optional
    * @param previous_upstream int Previous found share accepted by upstream to limit results
@@ -289,4 +318,4 @@ class Share {
   }
 }
 
-$share = new Share($debug, $mysqli, $user);
+$share = new Share($debug, $mysqli, $user, $block, $config);

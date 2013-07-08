@@ -97,7 +97,8 @@ foreach ($aAllBlocks as $iIndex => $aBlock) {
     }
 
     // Move counted shares to archive before this blockhash upstream share
-    if ($config['archive_shares']) $share->moveArchive($iCurrentUpstreamId, $aBlock['id'], $iPreviousShareId);
+    if (!$share->moveArchive($iCurrentUpstreamId, $aBlock['id'], $iPreviousShareId))
+      $log->logError('Failed to copy shares to archive');
     // Delete all accounted shares
     if (!$share->deleteAccountedShares($iCurrentUpstreamId, $iPreviousShareId)) {
       $log->logFatal('Failed to delete accounted shares from ' . $iPreviousShareId . ' to ' . $iCurrentUpstreamId . ', aborted');

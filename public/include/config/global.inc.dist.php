@@ -169,8 +169,35 @@ $config['block_bonus'] = 0;
 **/
 $config['payout_system'] = 'prop';
 
-// For debugging purposes you can archive shares in the archive_shares table, default: true
-$config['archive_shares'] = true;
+/**
+ * Archiving configuration for debugging
+ *
+ * Explanation:
+ *   By default, we don't need to archive for a long time. PPLNS and Hashrate
+ *   calculations rely on this archive, but all shares past a certain point can
+ *   safely be deleted.
+ *
+ *   To ensure we have enough shares on stack for PPLNS, this
+ *   is set to the past 10 rounds. Even with lucky ones in between those should
+ *   fit the PPLNS target. On top of that, even if we have more than 10 rounds,
+ *   we still keep the last maxage shares to ensure we can calculate hashrates.
+ *   Both conditions need to be met in order for shares to be purged from archive.
+ *
+ *   Proportional mode will only keep the past 24 hours. These are required for
+ *   hashrate calculations to work past a round, hence 24 hours was selected as
+ *   the default. You may want to increase the time for debugging, then add any
+ *   integer reflecting minutes of shares to keep.
+ *
+ * Availabe Options:
+ *   maxrounds  :  PPLNS, keep shares for maxrounds
+ *   maxage     :  PROP and PPLNS, delete shares older than maxage minutes
+ *
+ * Default:
+ *   maxrounds  =  10
+ *   maxage     =  60 * 60 * 24   (24h)
+ **/
+$config['archive']['maxrounds'] = 10; 
+$config['archive']['maxage'] = 60 * 60 * 24; 
 
 // URL prefix for block searches, used for block links, default: `http://explorer.litecoin.net/search?q=`
 // If empty, the block link to the block information page will be removed

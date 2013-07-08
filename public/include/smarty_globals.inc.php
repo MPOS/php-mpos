@@ -84,7 +84,7 @@ if (@$_SESSION['USERDATA']['id']) {
 
   switch ($config['payout_system']) {
   case 'pplns':
-    if ($iAvgBlockShares = round($block->getAvgBlockShares($config['pplns']['type']['blockavg']['blockcount']))) {
+    if ($iAvgBlockShares = round($block->getAvgBlockShares($config['pplns']['blockavg']['blockcount']))) {
       $aGlobal['pplns']['target'] = $iAvgBlockShares;
     } else {
       $aGlobal['pplns']['target'] = $config['pplns']['shares']['default'];
