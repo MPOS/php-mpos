@@ -288,6 +288,6 @@ $config['cookie']['domain'] = '';
  *    cache           =  0, disabled
  *    cache_lifetime  =  30 seconds
  **/
-$config['smarty']['cache'] = 1;
+$config['smarty']['cache'] = 0;
 $config['smarty']['cache_lifetime'] = 30;
 ?>
