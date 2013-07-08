@@ -25,44 +25,34 @@ require_once('shared.inc.php');
 // Fetch all cachable values but disable fetching from cache
 $statistics->setGetCache(false);
 
-// Verbose output
-verbose("Running statistical cache updates\n");
-
 // Since fetching from cache is disabled, overwrite our stats
-verbose("  getRoundShares ...");
 $start = microtime(true);
 if (!$statistics->getRoundShares())
-  verbose(" update failed");
-verbose(" " . number_format(microtime(true) - $start, 2) . " seconds\n");
-verbose("  getTopContributors shares ...");
+  $log->logError("getRoundShares update failed");
+$log->logInfo("getRoundShares update " . number_format(microtime(true) - $start, 2) . " seconds");
 $start = microtime(true);
 if (!$statistics->getTopContributors('shares'))
-  verbose(" update failed");
-verbose(" " . number_format(microtime(true) - $start, 2) . " seconds\n");
-verbose("  getTopContributors hashes ...");
+  $log->logError("getTopContributors shares update failed");
+$log->logInfo("getTopContributors shares " . number_format(microtime(true) - $start, 2) . " seconds");
 $start = microtime(true);
 if (!$statistics->getTopContributors('hashes'))
-  verbose(" update failed");
-verbose(" " . number_format(microtime(true) - $start, 2) . " seconds\n");
-verbose("  getCurrentHashrate ...");
+  $log->logError("getTopContributors hashes update failed");
+$log->logInfo("getTopContributors hashes " . number_format(microtime(true) - $start, 2) . " seconds");
 $start = microtime(true);
 if (!$statistics->getCurrentHashrate())
-  verbose(" update failed");
-verbose(" " . number_format(microtime(true) - $start, 2) . " seconds\n");
+  $log->logError("getCurrentHashrate update failed");
+$log->logInfo("getCurrentHashrate " . number_format(microtime(true) - $start, 2) . " seconds");
 // Admin specific statistics, we cache the global query due to slowness
-verbose("  getAllUserStats ...");
 $start = microtime(true);
 if (!$statistics->getAllUserStats('%'))
-  verbose(" update failed");
-verbose(" " . number_format(microtime(true) - $start, 2) . " seconds\n");
+  $log->logError("getAllUserStats update failed");
+$log->logInfo("getAllUserStats " . number_format(microtime(true) - $start, 2) . " seconds");
 
 // Per user share statistics based on all shares submitted
-verbose("  getAllUserShares ...");
 $start = microtime(true);
 $aUserShares = $statistics->getAllUserShares();
-verbose(" " . number_format(microtime(true) - $start, 2) . " seconds");
+$log->logInfo("getAllUserShares " . number_format(microtime(true) - $start, 2) . " seconds");
 foreach ($aUserShares as $aShares) {
   $memcache->setCache('getUserShares'. $aShares['id'], $aShares);
 }
-verbose("\n");
 ?>

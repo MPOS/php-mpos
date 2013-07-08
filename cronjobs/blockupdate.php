@@ -23,33 +23,31 @@ limitations under the License.
 require_once('shared.inc.php');
 
 if ( $bitcoin->can_connect() !== true ) {
-  verbose("Failed to connect to RPC server\n");
+  $log->logFatal("Failed to connect to RPC server\n");
   exit(1);
 }
 
 // Fetch all unconfirmed blocks
 $aAllBlocks = $block->getAllUnconfirmed($config['confirmations']);
 
-verbose("ID\tBlockhash\tConfirmations\t\n");
+$log->logInfo("ID\tBlockhash\tConfirmations");
 foreach ($aAllBlocks as $iIndex => $aBlock) {
   $aBlockInfo = $bitcoin->query('getblock', $aBlock['blockhash']);
   // Fetch this blocks transaction details to find orphan blocks
   $aTxDetails = $bitcoin->query('gettransaction', $aBlockInfo['tx'][0]);
-  verbose($aBlock['id'] . "\t" . $aBlock['blockhash'] . "\t" . $aBlock['confirmations'] . " -> " . $aBlockInfo['confirmations'] . "\t");
+  $log->logInfo($aBlock['id'] . "\t" . $aBlock['blockhash'] . "\t" . $aBlock['confirmations'] . " -> " . $aBlockInfo['confirmations']);
   if ($aTxDetails['details'][0]['category'] == 'orphan') {
     // We have an orphaned block, we need to invalidate all transactions for this one
     if ($transaction->setOrphan($aBlock['id']) && $block->setConfirmations($aBlock['id'], -1)) {
-      verbose("ORPHAN\n");
+      $log->logInfo("    Block marked as orphan");
     } else {
-      verbose("ORPHAN_ERR");
+      $log->logError("    Block became orphaned but unable to update database entries");
     }
     continue;
   }
   if ($aBlock['confirmations'] == $aBlockInfo['confirmations']) {
-    verbose("SKIPPED\n");
-  } else if ($block->setConfirmations($aBlock['id'], $aBlockInfo['confirmations'])) {
-    verbose("UPDATED\n");
-  } else {
-    verbose("ERROR\n");
+    $log->logDebug('    No update needed');
+  } else if (!$block->setConfirmations($aBlock['id'], $aBlockInfo['confirmations'])) {
+    $log->logError('    Failed to update block confirmations');
   }
 }
