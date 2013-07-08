@@ -1,2 +1,3 @@
 /public/include/config/global.inc.php
 /public/templates/compile/*.php
+/cronjobs/logs/*.txt

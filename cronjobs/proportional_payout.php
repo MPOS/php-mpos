@@ -24,34 +24,38 @@ require_once('shared.inc.php');
 
 // Check if we are set as the payout system
 if ($config['payout_system'] != 'prop') {
-  verbose("Please activate this cron in configuration via payout_system = prop\n");
+  $log->logInfo("Please activate this cron in configuration via payout_system = prop");
   exit(0);
 }
 
 // Fetch all unaccounted blocks
 $aAllBlocks = $block->getAllUnaccounted('ASC');
 if (empty($aAllBlocks)) {
-  verbose("No new unaccounted blocks found\n");
+  $log->logDebug('No new unaccounted blocks found in database');
   exit(0);
 }
 
 $count = 0;
+// Table header for account shares
+$log->logInfo("ID\tUsername\tValid\tInvalid\tPercentage\tPayout\t\tDonation\tFee");
 foreach ($aAllBlocks as $iIndex => $aBlock) {
   if (!$aBlock['accounted']) {
     $iPreviousShareId = @$aAllBlocks[$iIndex - 1]['share_id'] ? $aAllBlocks[$iIndex - 1]['share_id'] : 0;
     $iCurrentUpstreamId = $aBlock['share_id'];
+    if (!is_numeric($iCurrentUpstreamId)) {
+      $log->logFatal("Block " . $aBlock['height'] . " has no share_id associated with it, not going to continue.");
+      $log->logFatal("Please assign a valid share ID to this block to continue the payout process.");
+      exit(1);
+    }
     $aAccountShares = $share->getSharesForAccounts($iPreviousShareId, $aBlock['share_id']);
     $iRoundShares = $share->getRoundShares($iPreviousShareId, $aBlock['share_id']);
     $config['reward_type'] == 'block' ? $dReward = $aBlock['amount'] : $dReward = $config['reward'];
 
     if (empty($aAccountShares)) {
-      verbose("\nNo shares found for this block\n\n");
+      $log->logFatal('No shares found for this block, aborted: ' . $aBlock['height']);
       sleep(2);
       continue;
     }
-
-    // Table header for account shares
-    verbose("ID\tUsername\tValid\tInvalid\tPercentage\tPayout\t\tDonation\tFee\t\tStatus\n");
 
     // Loop through all accounts that have found shares for this round
     foreach ($aAccountShares as $key => $aData) {
@@ -68,45 +72,40 @@ foreach ($aAllBlocks as $iIndex => $aBlock) {
       $aData['donation'] = number_format(round($user->getDonatePercent($user->getUserId($aData['username'])) / 100 * ( $aData['payout'] - $aData['fee']), 8), 8);
 
       // Verbose output of this users calculations
-      verbose($aData['id'] . "\t" .
+      $log->logInfo($aData['id'] . "\t" .
            $aData['username'] . "\t" .
            $aData['valid'] . "\t" .
            $aData['invalid'] . "\t" .
            $aData['percentage'] . "\t" .
            $aData['payout'] . "\t" .
            $aData['donation'] . "\t" .
-           $aData['fee'] . "\t");
+           $aData['fee']);
 
-      $strStatus = "OK";
       // Update user share statistics
       if (!$statistics->updateShareStatistics($aData, $aBlock['id']))
-        $strStatus = "Stats Failed";
+        $log->logFatal('Failed to update share statistics for ' . $aData['username']);
       // Add new credit transaction
       if (!$transaction->addTransaction($aData['id'], $aData['payout'], 'Credit', $aBlock['id']))
-        $strStatus = "Transaction Failed";
+        $log->logFatal('Failed to insert new Credit transaction to database for ' . $aData['username']);
       // Add new fee debit for this block
       if ($aData['fee'] > 0 && $config['fees'] > 0)
         if (!$transaction->addTransaction($aData['id'], $aData['fee'], 'Fee', $aBlock['id']))
-          $strStatus = "Fee Failed";
+          $log->logFatal('Failed to insert new Fee transaction to database for ' . $aData['username']);
       // Add new donation debit
       if ($aData['donation'] > 0)
         if (!$transaction->addTransaction($aData['id'], $aData['donation'], 'Donation', $aBlock['id']))
-          $strStatus = "Donation Failed";
-      verbose("\t$strStatus\n");
+          $log->logFatal('Failed to insert new Donation transaction to database for ' . $aData['username']);
     }
 
     // Move counted shares to archive before this blockhash upstream share
     if ($config['archive_shares']) $share->moveArchive($iCurrentUpstreamId, $aBlock['id'], $iPreviousShareId);
     // Delete all accounted shares
     if (!$share->deleteAccountedShares($iCurrentUpstreamId, $iPreviousShareId)) {
-      verbose("\nERROR : Failed to delete accounted shares from $iPreviousShareId to $iCurrentUpstreamId, aborting!\n");
+      $log->logFatal('Failed to delete accounted shares from ' . $iPreviousShareId . ' to ' . $iCurrentUpstreamId . ', aborted');
       exit(1);
     }
     // Mark this block as accounted for
-    if (!$block->setAccounted($aBlock['id'])) {
-      verbose("\nERROR : Failed to mark block as accounted! Aborting!\n");
-    }
-
-    verbose("------------------------------------------------------------------------\n\n");
+    if (!$block->setAccounted($aBlock['id']))
+      $log->logFatal('Failed to mark block as accounted! Aborted.');
   }
 }

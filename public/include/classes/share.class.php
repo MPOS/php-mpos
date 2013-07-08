@@ -192,6 +192,20 @@ class Share {
       if (!empty($this->oUpstream->account) && is_int($this->oUpstream->id))
         return true;
     }
+    // First attempt failed, we do a fallback with any share available for now
+    $stmt = $this->mysqli->prepare("
+      SELECT
+      SUBSTRING_INDEX( `username` , '.', 1 ) AS account, id
+      FROM $this->table
+      WHERE our_result = 'Y'
+      AND id > ?
+      AND UNIX_TIMESTAMP(time) >= ?
+      ORDER BY id ASC LIMIT 1");
+    if ($this->checkStmt($stmt) && $stmt->bind_param('ii', $last, $time) && $stmt->execute() && $result = $stmt->get_result()) {
+      $this->oUpstream = $result->fetch_object();
+      if (!empty($this->oUpstream->account) && is_int($this->oUpstream->id))
+        return true;
+    }
     // Catchall
     return false;
   }

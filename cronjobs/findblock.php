@@ -25,24 +25,22 @@ require_once('shared.inc.php');
 // Fetch our last block found from the DB as a starting point
 $aLastBlock = @$block->getLast();
 $strLastBlockHash = $aLastBlock['blockhash'];
-if (!$strLastBlockHash) { 
-  $strLastBlockHash = '';
-}
+if (!$strLastBlockHash) $strLastBlockHash = '';
 
 // Fetch all transactions since our last block
 if ( $bitcoin->can_connect() === true ){
   $aTransactions = $bitcoin->query('listsinceblock', $strLastBlockHash);
 } else {
-  verbose("Aborted: " . $bitcoin->can_connect() . "\n");
+  $log->logFatal('Unable to conenct to RPC server backend');
   exit(1);
 }
 
 // Nothing to do so bail out
 if (empty($aTransactions['transactions'])) {
-  verbose("No new RPC transactions since last block\n");
+  $log->logDebug('No new RPC transactions since last block');
 } else {
   // Table header
-  verbose("Blockhash\t\tHeight\tAmount\tConfirmations\tDiff\t\tTime\t\t\tStatus\n");
+  $log->logInfo("Blockhash\t\tHeight\tAmount\tConfirmations\tDiff\t\tTime");
 
   // Let us add those blocks as unaccounted
   foreach ($aTransactions['transactions'] as $iIndex => $aData) {
@@ -51,29 +49,26 @@ if (empty($aTransactions['transactions'])) {
       $config['reward_type'] == 'block' ? $aData['amount'] = $aData['amount'] : $aData['amount'] = $config['reward'];
       $aData['height'] = $aBlockInfo['height'];
       $aData['difficulty'] = $aBlockInfo['difficulty'];
-      verbose(substr($aData['blockhash'], 0, 15) . "...\t" .
+      $log->logInfo(substr($aData['blockhash'], 0, 15) . "...\t" .
         $aData['height'] . "\t" .
         $aData['amount'] . "\t" .
         $aData['confirmations'] . "\t\t" .
         $aData['difficulty'] . "\t" .
-        strftime("%Y-%m-%d %H:%M:%S", $aData['time']) . "\t");
-      if ( $block->addBlock($aData) ) {
-        verbose("Added\n");
-      } else {
-        verbose("Failed" . "\n");
+        strftime("%Y-%m-%d %H:%M:%S", $aData['time']));
+      if (!$block->addBlock($aData) ) {
+        $log->logFatal('Unable to add this block to database: ' . $aData['height']);
       }
     }
   }
 }
 
-verbose("\n");
 // Now with our blocks added we can scan for their upstream shares
-$aAllBlocks = $block->getAllUnaccounted('ASC');
+$aAllBlocks = $block->getAllUnsetShareId('ASC');
 if (empty($aAllBlocks)) {
-    verbose("No new unaccounted blocks found\n");
+  $log->logDebug('No new blocks without share_id found in database');
 } else {
   // Loop through our unaccounted blocks
-  verbose("\nBlock ID\tBlock Height\tAmount\tShare ID\tShares\tFinder\t\t\tStatus\n");
+  $log->logInfo("Block ID\t\tHeight\tAmount\tShare ID\tShares\tFinder");
   foreach ($aAllBlocks as $iIndex => $aBlock) {
     if (empty($aBlock['share_id'])) {
       // Fetch this blocks upstream ID
@@ -81,40 +76,35 @@ if (empty($aAllBlocks)) {
         $iCurrentUpstreamId = $share->getUpstreamId();
         $iAccountId = $user->getUserId($share->getUpstreamFinder());
       } else {
-        verbose("\nUnable to fetch blocks upstream share. Aborting!\n");
-        verbose($share->getError() . "\n");
+        $log->logFatal('Unable to fetch blocks upstream share, aborted:' . $share->getError());
         exit;
       }
 
       // Fetch share information
       if (!$iPreviousShareId = $block->getLastShareId()) {
         $iPreviousShareId = 0;
-        verbose("\nUnable to find highest share ID found so far\n");
-        verbose("If this is your first block, this is normal\n\n");
+        $log->logInfo('Unable to find highest share ID found so far, if this is your first block, this is normal.');
       }
       $iRoundShares = $share->getRoundShares($iPreviousShareId, $iCurrentUpstreamId);
 
       // Store new information
-      $strStatus = "OK";
       if (!$block->setShareId($aBlock['id'], $iCurrentUpstreamId))
-        $strStatus = "Share ID Failed";
+        $log->logError('Failed to update share ID in database for block ' . $aBlock['height']);
       if (!$block->setFinder($aBlock['id'], $iAccountId))
-        $strStatus = "Finder Failed";
+        $log->logError('Failed to update finder account ID in database for block ' . $aBlock['height']);
       if (!$block->setShares($aBlock['id'], $iRoundShares))
-        $strStatus = "Shares Failed";
+        $log->logError('Failed to update share count in database for block ' . $aBlock['height']);
       if ($config['block_bonus'] > 0 && !$transaction->addTransaction($iAccountId, $config['block_bonus'], 'Bonus', $aBlock['id'])) {
-        $strStatus = "Bonus Failed";
+        $log->logError('Failed to create Bonus transaction in database for user ' . $user->getUserName($iAccountId) . ' for block ' . $aBlock['height']);
       }
 
-      verbose(
+      $log->logInfo(
         $aBlock['id'] . "\t\t"
         . $aBlock['height'] . "\t\t"
         . $aBlock['amount'] . "\t"
         . $iCurrentUpstreamId . "\t\t"
         . $iRoundShares . "\t"
-        . "[$iAccountId] " . $user->getUserName($iAccountId) . "\t\t"
-        . $strStatus
-        . "\n"
+        . "[$iAccountId] " . $user->getUserName($iAccountId)
       );
 
       // Notify users
@@ -125,7 +115,8 @@ if (empty($aAllBlocks)) {
           $aMailData['subject'] = 'New Block';
           $aMailData['email'] = $user->getUserEmail($user->getUserName($aData['account_id']));
           $aMailData['shares'] = $iRoundShares;
-          $notification->sendNotification($aData['account_id'], 'new_block', $aMailData);
+          if (!$notification->sendNotification($aData['account_id'], 'new_block', $aMailData))
+            $log->logError('Failed to notify user of new found block: ' . $user->getUserName($aData['account_id']));
         }
       }
     }

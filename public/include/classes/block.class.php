@@ -56,18 +56,26 @@ class Block {
   }
 
   /**
+   * Fetch all blocks without a share ID
+   * @param order string Sort order, default ASC
+   * @return data array Array with database fields as keys
+   **/
+  public function getAllUnsetShareId($order='ASC') {
+    $stmt = $this->mysqli->prepare("SELECT * FROM $this->table WHERE ISNULL(share_id) ORDER BY height $order");
+    if ($this->checkStmt($stmt) && $stmt->execute() && $result = $stmt->get_result())
+      return $result->fetch_all(MYSQLI_ASSOC);
+    return false;
+  }
+
+  /**
    * Fetch all unaccounted blocks
    * @param order string Sort order, default ASC
    * @return data array Array with database fields as keys
    **/
   public function getAllUnaccounted($order='ASC') {
     $stmt = $this->mysqli->prepare("SELECT * FROM $this->table WHERE accounted = 0 ORDER BY height $order");
-    if ($this->checkStmt($stmt)) {
-      $stmt->execute();
-      $result = $stmt->get_result();
-      $stmt->close();
+    if ($this->checkStmt($stmt) && $stmt->execute() && $result = $stmt->get_result())
       return $result->fetch_all(MYSQLI_ASSOC);
-    }
     return false;
   }
 
