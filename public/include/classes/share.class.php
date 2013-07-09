@@ -226,9 +226,9 @@ class Share {
       WHERE upstream_result = 'Y'
       AND id > ?
       AND UNIX_TIMESTAMP(time) >= ?
-      AND UNIX_TIMESTAMP(time) <= ? + 60
+      AND UNIX_TIMESTAMP(time) <= ( ? + 60 )
       ORDER BY id ASC LIMIT 1");
-    if ($this->checkStmt($stmt) && $stmt->bind_param('iii', $last, $aBlock['time'], $Block['time']) && $stmt->execute() && $result = $stmt->get_result()) {
+    if ($this->checkStmt($stmt) && $stmt->bind_param('iii', $last, $aBlock['time'], $aBlock['time']) && $stmt->execute() && $result = $stmt->get_result()) {
       $this->oUpstream = $result->fetch_object();
       $this->share_type = 'upstream_share';
       if (!empty($this->oUpstream->account) && is_int($this->oUpstream->id))
