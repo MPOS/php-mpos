@@ -296,11 +296,15 @@ $config['confirmations'] = 120;
 /**
  * Memcache configuration
  *
- * Please note that a memcache is greatly increasing performance
- * when combined with the `statistics.php` cronjob. Disabling this
- * is not recommended in a live environment!
+ * Even though you can disable the memcache for debugging purposes, the memcache
+ * library is still required for mmcfe-ng to work. You should not disable this in 
+ * a live environment since a lot of data is cached for the website to increase load
+ * times!
  *
  * Explanations
+ *   enabled     :   Disable (false) memcache for debugging or enable (true) it
+ *   host        :   Host IP or hostname
+ *   port        :   memcache port
  *   keyprefix   :   Must be changed for multiple mmcfe-ng instances on one host
  *   expiration  :   Default expiration time in seconds of all cached keys.
  *                   Increase if caches expire too fast.
