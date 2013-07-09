@@ -120,7 +120,7 @@ foreach ($aAllBlocks as $iIndex => $aBlock) {
       $log->logError("Failed to update stats for this block on : " . $aData['username']);
   }
   // Move shares to archive
-  if ($config['archive_shares'] && $aBlock['share_id'] < $iLastShareId) {
+  if ($aBlock['share_id'] < $iLastShareId) {
     if (!$share->moveArchive($aBlock['share_id'], $aBlock['id'], @$iLastBlockShare))
       $log->logError("Archving failed");
   }

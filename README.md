@@ -68,11 +68,11 @@ Features
 
 The following feature have been implemented so far:
 
-* Mobile WebUI **NEW**
+* Mobile WebUI
 * Reward Systems
  * Propotional
  * PPS
- * (Planned) PPLNS
+ * PPLNS **NEW**
 * Use of memcache for statistics instead of a cronjob
 * Web User accounts
  * Re-Captcha protected registration form
