@@ -193,8 +193,9 @@ class Share {
     $ppheader = sprintf('%08d', $aBlock['version']) . word_reverse($aBlock['previousblockhash']) . word_reverse($aBlock['merkleroot']) . dechex($aBlock['time']) . $aBlock['bits'] . dechex($aBlock['nonce']);
 
     $stmt = $this->mysqli->prepare("SELECT SUBSTRING_INDEX( `username` , '.', 1 ) AS account, id FROM $this->table WHERE solution = ? LIMIT 1");
-    if ($this->checkStmt($stmt) && $stmt->bind_param('s', $scrypt_hash) && $stmt->execute() && $result = $stmt->get_result()->num_rows > 0) {
+    if ($this->checkStmt($stmt) && $stmt->bind_param('s', $scrypt_hash) && $stmt->execute() && $result = $stmt->get_result()) {
       $this->oUpstream = $result->fetch_object();
+      $this->share_type = 'startum_solution';
       if (!empty($this->oUpstream->account) && is_int($this->oUpstream->id))
         return true;
     }
@@ -203,6 +204,7 @@ class Share {
     $stmt = $this->mysqli->prepare("SELECT SUBSTRING_INDEX( `username` , '.', 1 ) AS account, id FROM $this->table WHERE solution LIKE CONCAT(?, '%') LIMIT 1");
     if ($this->checkStmt($stmt) && $stmt->bind_param('s', $ppheader) && $stmt->execute() && $result = $stmt->get_result()) {
       $this->oUpstream = $result->fetch_object();
+      $this->share_type = 'pp_solution';
       if (!empty($this->oUpstream->account) && is_int($this->oUpstream->id))
         return true;
     }
@@ -219,6 +221,7 @@ class Share {
       ORDER BY id ASC LIMIT 1");
     if ($this->checkStmt($stmt) && $stmt->bind_param('iii', $last, $aBlock['time'], $Block['time']) && $stmt->execute() && $result = $stmt->get_result()) {
       $this->oUpstream = $result->fetch_object();
+      $this->share_type = 'upstream_share';
       if (!empty($this->oUpstream->account) && is_int($this->oUpstream->id))
         return true;
     }
@@ -234,6 +237,7 @@ class Share {
       ORDER BY id ASC LIMIT 1");
     if ($this->checkStmt($stmt) && $stmt->bind_param('ii', $last, $aBlock['time']) && $stmt->execute() && $result = $stmt->get_result()) {
       $this->oUpstream = $result->fetch_object();
+      $this->share_type = 'any_share';
       if (!empty($this->oUpstream->account) && is_int($this->oUpstream->id))
         return true;
     }
