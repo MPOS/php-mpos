@@ -83,16 +83,7 @@ if (@$_SESSION['USERDATA']['id']) {
   $aGlobal['userdata']['sharerate'] = $statistics->getUserSharerate($_SESSION['USERDATA']['id']);
 
   switch ($config['payout_system']) {
-  case 'pplns':
-    if ($iAvgBlockShares = round($block->getAvgBlockShares($config['pplns']['blockavg']['blockcount']))) {
-      $aGlobal['pplns']['target'] = $iAvgBlockShares;
-    } else {
-      $aGlobal['pplns']['target'] = $config['pplns']['shares']['default'];
-    }
-    break;
-  case 'pps':
-    break;
-  default:
+  case 'prop' || 'pplns':
     // Some estimations
     if (@$aRoundShares['valid'] > 0) {
       $aGlobal['userdata']['est_block'] = round(( (int)$aGlobal['userdata']['shares']['valid'] / (int)$aRoundShares['valid'] ) * (float)$config['reward'], 8);
@@ -105,6 +96,14 @@ if (@$_SESSION['USERDATA']['id']) {
       $aGlobal['userdata']['est_donation'] = 0;
       $aGlobal['userdata']['est_payout'] = 0;
     }
+  case 'pplns':
+    if ($iAvgBlockShares = round($block->getAvgBlockShares($config['pplns']['blockavg']['blockcount']))) {
+      $aGlobal['pplns']['target'] = $iAvgBlockShares;
+    } else {
+      $aGlobal['pplns']['target'] = $config['pplns']['shares']['default'];
+    }
+    break;
+  case 'pps':
     break;
   }
 
