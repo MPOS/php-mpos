@@ -73,7 +73,7 @@ class Share {
       count(id) as total
       FROM $this->table
       WHERE our_result = 'Y'
-      AND id BETWEEN ? AND ?
+      AND id > ? AND id <= ?
       ");
     if ($this->checkStmt($stmt)) {
       $stmt->bind_param('ii', $previous_upstream, $current_upstream);
@@ -102,7 +102,7 @@ class Share {
       FROM $this->table AS s
       LEFT JOIN " . $this->user->getTableName() . " AS a
       ON a.username = SUBSTRING_INDEX( s.username , '.', 1 )
-      WHERE s.id BETWEEN ? AND ?
+      WHERE s.id > ? AND s.id <= ?
       GROUP BY username DESC
       ");
     if ($this->checkStmt($stmt) && $stmt->bind_param('ii', $previous_upstream, $current_upstream) && $stmt->execute() && $result = $stmt->get_result())
@@ -189,7 +189,7 @@ class Share {
       INSERT INTO $this->tableArchive (share_id, username, our_result, upstream_result, block_id, time)
         SELECT id, username, our_result, upstream_result, ?, time
         FROM $this->table
-        WHERE id BETWEEN ? AND ?");
+        WHERE id > ? AND id <= ?");
     if ($this->checkStmt($archive_stmt) && $archive_stmt->bind_param('iii', $block_id, $previous_upstream, $current_upstream) && $archive_stmt->execute()) {
       $archive_stmt->close();
       return true;
@@ -199,7 +199,7 @@ class Share {
   }
 
   public function deleteAccountedShares($current_upstream, $previous_upstream=0) {
-    $stmt = $this->mysqli->prepare("DELETE FROM $this->table WHERE id BETWEEN ? AND ?");
+    $stmt = $this->mysqli->prepare("DELETE FROM $this->table WHERE id > ? AND id <= ?");
     if ($this->checkStmt($stmt) && $stmt->bind_param('ii', $previous_upstream, $current_upstream) && $stmt->execute())
       return true;
     // Catchall
