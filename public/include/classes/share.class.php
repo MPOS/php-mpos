@@ -97,8 +97,8 @@ class Share {
       SELECT
         a.id,
         SUBSTRING_INDEX( s.username , '.', 1 ) as username,
-        SUM(IF(our_result='Y', 1, 0)) AS valid,
-        SUM(IF(our_result='N', 1, 0)) AS invalid
+        IFNULL(SUM(IF(our_result='Y', 1, 0)), 0) AS valid,
+        IFNULL(SUM(IF(our_result='N', 1, 0)), 0) AS invalid
       FROM $this->table AS s
       LEFT JOIN " . $this->user->getTableName() . " AS a
       ON a.username = SUBSTRING_INDEX( s.username , '.', 1 )
