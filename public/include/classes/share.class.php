@@ -189,12 +189,8 @@ class Share {
     $header_hex = implode(unpack("H*", $header_bin));
     $scrypt_hash = swapEndian(bin2hex(Scrypt::calc($header_bin, $header_bin, 1024, 1, 1, 32)));
 
-
     // Fallback to pushpoold solution type
     $ppheader = sprintf('%08d', $aBlock['version']) . word_reverse($aBlock['previousblockhash']) . word_reverse($aBlock['merkleroot']) . dechex($aBlock['time']) . $aBlock['bits'] . dechex($aBlock['nonce']);
-    echo "ppheader    :  $ppheader \n";
-    echo "header      :  $header_hex \n";
-    echo "Scrypt hash :  $scrypt_hash \n";
 
     $stmt = $this->mysqli->prepare("SELECT SUBSTRING_INDEX( `username` , '.', 1 ) AS account, id FROM $this->table WHERE solution = ? LIMIT 1");
     if ($this->checkStmt($stmt) && $stmt->bind_param('s', $scrypt_hash) && $stmt->execute() && $result = $stmt->get_result()->num_rows > 0) {
