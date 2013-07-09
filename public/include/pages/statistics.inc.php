@@ -18,3 +18,4 @@ if ($bitcoin->can_connect() === true){
 $smarty->assign("CURRENTBLOCK", $iBlock);
 $smarty->assign("DIFFICULTY", $dDifficulty);
 $smarty->assign("CONTENT", "default.tpl");
+?>
