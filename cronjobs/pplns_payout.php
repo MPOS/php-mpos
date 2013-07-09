@@ -61,7 +61,7 @@ foreach ($aAllBlocks as $iIndex => $aBlock) {
       $log->logDebug("Matching or exceeding PPLNS target of $pplns_target with $iRoundShares");
       $aAccountShares = $share->getSharesForAccounts($aBlock['share_id'] - $pplns_target + 1, $aBlock['share_id']);
       if (empty($aAccountShares)) {
-        $log->logFatal("No shares found for this block, aborted!");
+        $log->logFatal("No shares found for this block, aborted! Block Height : " . $aBlock['height']);
         exit(1);
       }
     } else {
@@ -70,7 +70,7 @@ foreach ($aAllBlocks as $iIndex => $aBlock) {
       // Grab the full current round shares since we didn't match target
       $aAccountShares = $aRoundAccountShares;
       if (empty($aAccountShares)) {
-        $log->logFatal("No shares found for this block, aborted!");
+        $log->logFatal("No shares found for this block, aborted! Block height: " . $aBlock['height']);
         exit(1);
       }
 
