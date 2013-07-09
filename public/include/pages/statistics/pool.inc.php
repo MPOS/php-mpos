@@ -53,7 +53,9 @@ count($aBlockData) > 0 ? $smarty->assign("LASTBLOCK", $aBlockData['height']) : $
 $smarty->assign("DIFFICULTY", $dDifficulty);
 $smarty->assign("REWARD", $config['reward']);
 
-if ($user->isAuthenticated()) {
+if ($config['website']['acl']['statistics']['pool'] == 'public') {
+  $smarty->assign("CONTENT", "authenticated.tpl");
+} else if ($user->isAuthenticated() && $config['website']['acl']['statistics']['pool'] == 'private') {
   $smarty->assign("CONTENT", "authenticated.tpl");
 } else {
   $smarty->assign("CONTENT", "../default.tpl");

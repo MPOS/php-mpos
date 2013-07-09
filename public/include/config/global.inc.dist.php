@@ -121,6 +121,22 @@ $config['website']['theme'] = 'mmcFE';
 $config['website']['mobile'] = true;
 $config['website']['mobile_theme'] = 'mobile';
 
+/**
+ * Some basic access restrictions on some pages
+ *
+ * Explanation:
+ *   Some pools would like to run a few pages for public access instead
+ *   of enforcing a login. You can change visibility of some pages here.
+ *
+ * Options:
+ *   'public'   :  Allow guest access and authenticated user to view page
+ *   'private'  :  Only allow logged in users access to view page
+ *
+ * Defaults:
+ *   'private' for every page
+ **/
+$config['website']['acl']['statistics']['pool'] = 'private';
+$config['website']['acl']['statistics']['blocks'] = 'private';
 
 /**
  * Re-Captcha settings
