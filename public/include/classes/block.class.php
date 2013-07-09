@@ -44,6 +44,18 @@ class Block {
   }
 
   /**
+   * Get a specific block, by block height
+   * @param height int Block Height
+   * @return data array Block information from DB
+   **/
+  public function getBlock($height) {
+    $stmt = $this->mysqli->prepare("SELECT * FROM $this->table WHERE height = ? LIMIT 1");
+    if ($this->checkStmt($stmt) && $stmt->bind_param('i', $height) && $stmt->execute() && $result = $stmt->get_result())
+      return $result->fetch_assoc();
+    return false;
+  }
+
+  /**
    * Get our last, highest share ID inserted for a block
    * @param none
    * @return int data Share ID
@@ -76,6 +88,30 @@ class Block {
     $stmt = $this->mysqli->prepare("SELECT * FROM $this->table WHERE accounted = 0 ORDER BY height $order");
     if ($this->checkStmt($stmt) && $stmt->execute() && $result = $stmt->get_result())
       return $result->fetch_all(MYSQLI_ASSOC);
+    return false;
+  }
+
+  /**
+   * Get total amount of blocks in our table
+   * @param noone
+   * @return data int Count of rows
+   **/
+  public function getBlockCount() {
+    $stmt = $this->mysqli->prepare("SELECT COUNT(id) AS blocks FROM $this->table");
+    if ($this->checkStmt($stmt) && $stmt->execute() && $result = $stmt->get_result())
+      return (int)$result->fetch_object()->blocks;
+    return false;
+  }
+
+  /**
+   * Fetch our average share count for the past N blocks
+   * @param limit int Maximum blocks to check
+   * @return data float Float value of average shares
+   **/
+  public function getAvgBlockShares($limit=10) {
+    $stmt = $this->mysqli->prepare("SELECT AVG(shares) AS average FROM $this->table LIMIT ?");
+    if ($this->checkStmt($stmt) && $stmt->bind_param('i', $limit) && $stmt->execute() && $result = $stmt->get_result())
+      return (float)$result->fetch_object()->average;
     return false;
   }
 
