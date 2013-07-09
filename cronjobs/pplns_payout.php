@@ -160,10 +160,6 @@ foreach ($aAllBlocks as $iIndex => $aBlock) {
       $log->logFatal("Failed to delete accounted shares from $iPreviousShareId to $iCurrentUpstreamId, aborting!");
       exit(1);
     }
-    // If we don't keep archives, delete some now to release disk space
-    if (!$share->purgeArchive()) {
-      $log->logError("Failed to delete archived shares, not critical but should be checked!");
-    }
     // Mark this block as accounted for
     if (!$block->setAccounted($aBlock['id'])) {
       $log->logFatal("Failed to mark block as accounted! Aborting!");
