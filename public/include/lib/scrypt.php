@@ -523,4 +523,14 @@ $value = Scrypt::calc($i, $i, 1024, 1, 1, 32);
 	*/
 	
 
+// Function used for pushpoold solution checks
+function word_reverse($str) {
+  $ret = ''; 
+  while (strlen($str) > 0) {
+    $ret .= substr($str, -8, 8); 
+    $str = substr($str, 0, -8);
+  }
+  return $ret;
+}
+
 ?>
