@@ -32,6 +32,7 @@ These people have supported this project with a donation:
 * [vias](https://github.com/vias79)
 * [WKNiGHT](https://github.com/WKNiGHT-)
 * [ZC](https://github.com/zccopwrx)
+* Nutnut
 
 Pools running mmcfe-ng
 ======================
