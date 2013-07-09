@@ -177,7 +177,48 @@ class Share {
    * @param last int Skips all shares up to last to find new share
    * @return bool
    **/
-  public function setUpstream($last=0, $time=0) {
+  public function setUpstream($aBlock, $last=0) {
+    // Many use stratum, so we create our stratum check first
+    $version = pack("I*", sprintf('%08d', $aBlock['version']));
+    $previousblockhash = pack("H*", swapEndian($aBlock['previousblockhash']));
+    $merkleroot = pack("H*", swapEndian($aBlock['merkleroot']) );
+    $time = pack("I*", $aBlock['time']);
+    $bits = pack("H*", swapEndian($aBlock['bits']));
+    $nonce = pack("I*", $aBlock['nonce']);
+    $header_bin = $version .  $previousblockhash . $merkleroot . $time .  $bits . $nonce;
+    $header_hex = implode(unpack("H*", $header_bin));
+
+    // Stratum supported blockhash solution entry
+    $stmt = $this->mysqli->prepare("SELECT SUBSTRING_INDEX( `username` , '.', 1 ) AS account, id FROM $this->table WHERE solution = ? LIMIT 1");
+    if ($this->checkStmt($stmt) && $stmt->bind_param('s', $aBlock['hash']) && $stmt->execute() && $result = $stmt->get_result()) {
+      $this->oUpstream = $result->fetch_object();
+      $this->share_type = 'startum_blockhash';
+      if (!empty($this->oUpstream->account) && is_int($this->oUpstream->id))
+        return true;
+    }
+
+    // Stratum scrypt hash check
+    $scrypt_hash = swapEndian(bin2hex(Scrypt::calc($header_bin, $header_bin, 1024, 1, 1, 32)));
+    $stmt = $this->mysqli->prepare("SELECT SUBSTRING_INDEX( `username` , '.', 1 ) AS account, id FROM $this->table WHERE solution = ? LIMIT 1");
+    if ($this->checkStmt($stmt) && $stmt->bind_param('s', $scrypt_hash) && $stmt->execute() && $result = $stmt->get_result()) {
+      $this->oUpstream = $result->fetch_object();
+      $this->share_type = 'startum_solution';
+      if (!empty($this->oUpstream->account) && is_int($this->oUpstream->id))
+        return true;
+    }
+
+    // Failed to fetch via startum solution, try pushpoold
+    // Fallback to pushpoold solution type
+    $ppheader = sprintf('%08d', $aBlock['version']) . word_reverse($aBlock['previousblockhash']) . word_reverse($aBlock['merkleroot']) . dechex($aBlock['time']) . $aBlock['bits'] . dechex($aBlock['nonce']);
+    $stmt = $this->mysqli->prepare("SELECT SUBSTRING_INDEX( `username` , '.', 1 ) AS account, id FROM $this->table WHERE solution LIKE CONCAT(?, '%') LIMIT 1");
+    if ($this->checkStmt($stmt) && $stmt->bind_param('s', $ppheader) && $stmt->execute() && $result = $stmt->get_result()) {
+      $this->oUpstream = $result->fetch_object();
+      $this->share_type = 'pp_solution';
+      if (!empty($this->oUpstream->account) && is_int($this->oUpstream->id))
+        return true;
+    }
+
+    // Still no match, try upstream result with timerange
     $stmt = $this->mysqli->prepare("
       SELECT
       SUBSTRING_INDEX( `username` , '.', 1 ) AS account, id
@@ -185,13 +226,16 @@ class Share {
       WHERE upstream_result = 'Y'
       AND id > ?
       AND UNIX_TIMESTAMP(time) >= ?
+      AND UNIX_TIMESTAMP(time) <= ( ? + 60 )
       ORDER BY id ASC LIMIT 1");
-    if ($this->checkStmt($stmt) && $stmt->bind_param('ii', $last, $time) && $stmt->execute() && $result = $stmt->get_result()) {
+    if ($this->checkStmt($stmt) && $stmt->bind_param('iii', $last, $aBlock['time'], $aBlock['time']) && $stmt->execute() && $result = $stmt->get_result()) {
       $this->oUpstream = $result->fetch_object();
+      $this->share_type = 'upstream_share';
       if (!empty($this->oUpstream->account) && is_int($this->oUpstream->id))
         return true;
     }
-    // First attempt failed, we do a fallback with any share available for now
+
+    // We failed again, now we take ANY result matching the timestamp
     $stmt = $this->mysqli->prepare("
       SELECT
       SUBSTRING_INDEX( `username` , '.', 1 ) AS account, id
@@ -200,8 +244,9 @@ class Share {
       AND id > ?
       AND UNIX_TIMESTAMP(time) >= ?
       ORDER BY id ASC LIMIT 1");
-    if ($this->checkStmt($stmt) && $stmt->bind_param('ii', $last, $time) && $stmt->execute() && $result = $stmt->get_result()) {
+    if ($this->checkStmt($stmt) && $stmt->bind_param('ii', $last, $aBlock['time']) && $stmt->execute() && $result = $stmt->get_result()) {
       $this->oUpstream = $result->fetch_object();
+      $this->share_type = 'any_share';
       if (!empty($this->oUpstream->account) && is_int($this->oUpstream->id))
         return true;
     }
