@@ -16,11 +16,11 @@ if (!$smarty->isCached('master.tpl', md5(serialize($_REQUEST)))) {
       $aNews[$key]['content'] = Markdown::defaultTransform($aData['content']);
     }
   }
+  $smarty->assign("NEWS", $aNews);
 } else {
   $debug->append('Using cached page', 3);
 }
 
 // Load news entries for Desktop site and unauthenticated users
-$smarty->assign("NEWS", $aNews);
 $smarty->assign("CONTENT", "default.tpl");
 ?>
