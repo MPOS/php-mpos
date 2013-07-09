@@ -187,11 +187,18 @@ class Share {
     $nonce = pack("I*", $aBlock['nonce']);
     $header_bin = $version .  $previousblockhash . $merkleroot . $time .  $bits . $nonce;
     $header_hex = implode(unpack("H*", $header_bin));
+
+    // Stratum supported blockhash solution entry
+    $stmt = $this->mysqli->prepare("SELECT SUBSTRING_INDEX( `username` , '.', 1 ) AS account, id FROM $this->table WHERE solution = ? LIMIT 1");
+    if ($this->checkStmt($stmt) && $stmt->bind_param('s', $aBlock['hash']) && $stmt->execute() && $result = $stmt->get_result()) {
+      $this->oUpstream = $result->fetch_object();
+      $this->share_type = 'startum_blockhash';
+      if (!empty($this->oUpstream->account) && is_int($this->oUpstream->id))
+        return true;
+    }
+
+    // Stratum scrypt hash check
     $scrypt_hash = swapEndian(bin2hex(Scrypt::calc($header_bin, $header_bin, 1024, 1, 1, 32)));
-
-    // Fallback to pushpoold solution type
-    $ppheader = sprintf('%08d', $aBlock['version']) . word_reverse($aBlock['previousblockhash']) . word_reverse($aBlock['merkleroot']) . dechex($aBlock['time']) . $aBlock['bits'] . dechex($aBlock['nonce']);
-
     $stmt = $this->mysqli->prepare("SELECT SUBSTRING_INDEX( `username` , '.', 1 ) AS account, id FROM $this->table WHERE solution = ? LIMIT 1");
     if ($this->checkStmt($stmt) && $stmt->bind_param('s', $scrypt_hash) && $stmt->execute() && $result = $stmt->get_result()) {
       $this->oUpstream = $result->fetch_object();
@@ -201,6 +208,8 @@ class Share {
     }
 
     // Failed to fetch via startum solution, try pushpoold
+    // Fallback to pushpoold solution type
+    $ppheader = sprintf('%08d', $aBlock['version']) . word_reverse($aBlock['previousblockhash']) . word_reverse($aBlock['merkleroot']) . dechex($aBlock['time']) . $aBlock['bits'] . dechex($aBlock['nonce']);
     $stmt = $this->mysqli->prepare("SELECT SUBSTRING_INDEX( `username` , '.', 1 ) AS account, id FROM $this->table WHERE solution LIKE CONCAT(?, '%') LIMIT 1");
     if ($this->checkStmt($stmt) && $stmt->bind_param('s', $ppheader) && $stmt->execute() && $result = $stmt->get_result()) {
       $this->oUpstream = $result->fetch_object();
