@@ -32,6 +32,9 @@ if ( $bitcoin->can_connect() === true ){
   $aTransactions = $bitcoin->query('listsinceblock', $strLastBlockHash);
 } else {
   $log->logFatal('Unable to conenct to RPC server backend');
+  $monitoring->setStatus($cron_name . "_active", "yesno", 0); 
+  $monitoring->setStatus($cron_name . "_message", "message", "Unable to connect to RPC server");
+  $monitoring->setStatus($cron_name . "_status", "okerror", 1); 
   exit(1);
 }
 
@@ -78,6 +81,9 @@ if (empty($aAllBlocks)) {
         $iAccountId = $user->getUserId($share->getUpstreamFinder());
       } else {
         $log->logFatal('Unable to fetch blocks upstream share, aborted:' . $share->getError());
+        $monitoring->setStatus($cron_name . "_active", "yesno", 0); 
+        $monitoring->setStatus($cron_name . "_message", "message", "Unable to fetch blocks " . $aBlock['height'] . " upstream share: " . $share->getError());
+        $monitoring->setStatus($cron_name . "_status", "okerror", 1); 
         exit;
       }
 
@@ -124,5 +130,6 @@ if (empty($aAllBlocks)) {
     }
   }
 }
-?>
 
+require_once('cron_end.inc.php');
+?>

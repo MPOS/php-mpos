@@ -24,6 +24,9 @@ require_once('shared.inc.php');
 
 if ( $bitcoin->can_connect() !== true ) {
   $log->logFatal("Failed to connect to RPC server\n");
+  $monitoring->setStatus($cron_name . "_active", "yesno", 0); 
+  $monitoring->setStatus($cron_name . "_message", "message", "Unable to connect to RPC server");
+  $monitoring->setStatus($cron_name . "_status", "okerror", 1); 
   exit(1);
 }
 
@@ -51,3 +54,6 @@ foreach ($aAllBlocks as $iIndex => $aBlock) {
     $log->logError('    Failed to update block confirmations');
   }
 }
+
+require_once('cron_end.inc.php');
+?>

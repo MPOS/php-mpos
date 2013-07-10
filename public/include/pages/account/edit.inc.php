@@ -30,7 +30,8 @@ if ($user->isAuthenticated()) {
             if ($continue == true) {
               // Send balance to address, mind fee for transaction!
               try {
-                if ($setting->getValue('auto_payout_active') == 0) {
+                $auto_payout = $monitoring->getStatus('auto_payout_active');
+                if ($auto_payout['value'] == 0) {
                   $bitcoin->sendtoaddress($sCoinAddress, $dBalance);
                 } else {
                   $_SESSION['POPUP'][] = array('CONTENT' => 'Auto-payout active, please contact site support immidiately to revoke invalid transactions.', 'TYPE' => 'errormsg');
@@ -53,7 +54,7 @@ if ($user->isAuthenticated()) {
             $_SESSION['POPUP'][] = array('CONTENT' => 'Unable to connect to wallet RPC service', 'TYPE' => 'errormsg');
           }
         } else {
-          $_SESSION['POPUP'][] = array('CONTENT' => 'Insufficient funds, you need more than ' . $config['txfee'] . ' ' . $conifg['currency'] . ' to cover transaction fees', 'TYPE' => 'errormsg');
+          $_SESSION['POPUP'][] = array('CONTENT' => 'Insufficient funds, you need more than ' . $config['txfee'] . ' ' . $config['currency'] . ' to cover transaction fees', 'TYPE' => 'errormsg');
         }
         $setting->setValue('manual_payout_active', 0);
       }
