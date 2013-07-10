@@ -25,9 +25,9 @@
                 No
               {/if}
             {else if $event.STATUS.type == 'time'}
-              {$event.STATUS.value|number_format:"2"} seconds
+              {$event.STATUS.value|default:"0"|number_format:"2"} seconds
             {else}
-              {$event.STATUS.value}
+              {$event.STATUS.value|default:""}
             {/if}
           </td>
         </tr>
