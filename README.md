@@ -74,7 +74,7 @@ The following feature have been implemented so far:
  * Propotional
  * PPS
  * PPLNS **NEW**
-* Use of memcache for statistics instead of a cronjob
+* Statistics are cached in Memcache by Cronjob for quick data access
 * Web User accounts
  * Re-Captcha protected registration form
 * Worker accounts
@@ -88,9 +88,11 @@ The following feature have been implemented so far:
 * Auto payout
 * Transaction list (confirmed and unconfirmed)
 * Admin Panel
+ * Cron Monitoring Overview **NEW**
  * User Listing including statistics
  * Wallet information
- * News Posts **NEW**
+ * User Transactions **NEW**
+ * News Posts
 * Notification system
  * IDLE Workers
  * New blocks found in pool
