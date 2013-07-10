@@ -32,6 +32,9 @@ if ($config['payout_system'] != 'pplns') {
 $aAllBlocks = $block->getAllUnaccounted('ASC');
 if (empty($aAllBlocks)) {
   $log->logDebug("No new unaccounted blocks found");
+  $monitoring->setStatus($cron_name . "_active", "yesno", 0); 
+  $monitoring->setStatus($cron_name . "_message", "message", "No new unaccounted blocks");
+  $monitoring->setStatus($cron_name . "_status", "okerror", 0); 
   exit(0);
 }
 
@@ -50,6 +53,9 @@ foreach ($aAllBlocks as $iIndex => $aBlock) {
     $iCurrentUpstreamId = $aBlock['share_id'];
     if (!is_numeric($iCurrentUpstreamId)) {
       $log->logFatal("Block " . $aBlock['height'] . " has no share_id associated with it, not going to continue");
+      $monitoring->setStatus($cron_name . "_active", "yesno", 0);
+      $monitoring->setStatus($cron_name . "_message", "message", "Block " . $aBlock['height'] . " has no share_id associated with it");
+      $monitoring->setStatus($cron_name . "_status", "okerror", 1);
       exit(1);
     }
     $iRoundShares = $share->getRoundShares($iPreviousShareId, $aBlock['share_id']);
@@ -62,6 +68,9 @@ foreach ($aAllBlocks as $iIndex => $aBlock) {
       $aAccountShares = $share->getSharesForAccounts($aBlock['share_id'] - $pplns_target + 1, $aBlock['share_id']);
       if (empty($aAccountShares)) {
         $log->logFatal("No shares found for this block, aborted! Block Height : " . $aBlock['height']);
+        $monitoring->setStatus($cron_name . "_active", "yesno", 0); 
+        $monitoring->setStatus($cron_name . "_message", "message", "No shares found for this block: " . $aBlock['height']);
+        $monitoring->setStatus($cron_name . "_status", "okerror", 1); 
         exit(1);
       }
     } else {
@@ -71,6 +80,9 @@ foreach ($aAllBlocks as $iIndex => $aBlock) {
       $aAccountShares = $aRoundAccountShares;
       if (empty($aAccountShares)) {
         $log->logFatal("No shares found for this block, aborted! Block height: " . $aBlock['height']);
+        $monitoring->setStatus($cron_name . "_active", "yesno", 0);
+        $monitoring->setStatus($cron_name . "_message", "message", "No shares found for this block: " . $aBlock['height']);
+        $monitoring->setStatus($cron_name . "_status", "okerror", 1);
         exit(1);
       }
 
@@ -163,7 +175,13 @@ foreach ($aAllBlocks as $iIndex => $aBlock) {
     // Mark this block as accounted for
     if (!$block->setAccounted($aBlock['id'])) {
       $log->logFatal("Failed to mark block as accounted! Aborting!");
+      $monitoring->setStatus($cron_name . "_active", "yesno", 0); 
+      $monitoring->setStatus($cron_name . "_message", "message", "Failed to mark block " . $aBlock['height'] . " as accounted");
+      $monitoring->setStatus($cron_name . "_status", "okerror", 1); 
       exit(1);
     }
   }
 }
+
+require_once('cron_end.inc.php');
+?>

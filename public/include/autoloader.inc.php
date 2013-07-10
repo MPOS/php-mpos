@@ -24,6 +24,7 @@ require_once(INCLUDE_DIR . '/smarty.inc.php');
 require_once(CLASS_DIR . '/base.class.php');
 require_once(CLASS_DIR . '/block.class.php');
 require_once(CLASS_DIR . '/setting.class.php');
+require_once(CLASS_DIR . '/monitoring.class.php');
 require_once(CLASS_DIR . '/user.class.php');
 require_once(CLASS_DIR . '/share.class.php');
 require_once(CLASS_DIR . '/worker.class.php');

@@ -32,6 +32,9 @@ if ($config['payout_system'] != 'prop') {
 $aAllBlocks = $block->getAllUnaccounted('ASC');
 if (empty($aAllBlocks)) {
   $log->logDebug('No new unaccounted blocks found in database');
+  $monitoring->setStatus($cron_name . "_active", "yesno", 0);
+  $monitoring->setStatus($cron_name . "_message", "message", "No new unaccounted blocks");
+  $monitoring->setStatus($cron_name . "_status", "okerror", 0);
   exit(0);
 }
 
@@ -42,17 +45,15 @@ foreach ($aAllBlocks as $iIndex => $aBlock) {
   if (!$aBlock['accounted']) {
     $iPreviousShareId = @$aAllBlocks[$iIndex - 1]['share_id'] ? $aAllBlocks[$iIndex - 1]['share_id'] : 0;
     $iCurrentUpstreamId = $aBlock['share_id'];
-    if (!is_numeric($iCurrentUpstreamId)) {
-      $log->logFatal("Block " . $aBlock['height'] . " has no share_id associated with it, not going to continue.");
-      $log->logFatal("Please assign a valid share ID to this block to continue the payout process.");
-      exit(1);
-    }
     $aAccountShares = $share->getSharesForAccounts($iPreviousShareId, $aBlock['share_id']);
     $iRoundShares = $share->getRoundShares($iPreviousShareId, $aBlock['share_id']);
     $config['reward_type'] == 'block' ? $dReward = $aBlock['amount'] : $dReward = $config['reward'];
 
     if (empty($aAccountShares)) {
       $log->logFatal('No shares found for this block, aborted: ' . $aBlock['height']);
+      $monitoring->setStatus($cron_name . "_active", "yesno", 0); 
+      $monitoring->setStatus($cron_name . "_message", "message", "No shares found for this block, aborted: " . $aBlock['height']);
+      $monitoring->setStatus($cron_name . "_status", "okerror", 1); 
       exit(1);
     }
 
@@ -72,13 +73,13 @@ foreach ($aAllBlocks as $iIndex => $aBlock) {
 
       // Verbose output of this users calculations
       $log->logInfo($aData['id'] . "\t" .
-           $aData['username'] . "\t" .
-           $aData['valid'] . "\t" .
-           $aData['invalid'] . "\t" .
-           $aData['percentage'] . "\t" .
-           $aData['payout'] . "\t" .
-           $aData['donation'] . "\t" .
-           $aData['fee']);
+        $aData['username'] . "\t" .
+        $aData['valid'] . "\t" .
+        $aData['invalid'] . "\t" .
+        $aData['percentage'] . "\t" .
+        $aData['payout'] . "\t" .
+        $aData['donation'] . "\t" .
+        $aData['fee']);
 
       // Update user share statistics
       if (!$statistics->updateShareStatistics($aData, $aBlock['id']))
@@ -102,10 +103,21 @@ foreach ($aAllBlocks as $iIndex => $aBlock) {
     // Delete all accounted shares
     if (!$share->deleteAccountedShares($iCurrentUpstreamId, $iPreviousShareId)) {
       $log->logFatal('Failed to delete accounted shares from ' . $iPreviousShareId . ' to ' . $iCurrentUpstreamId . ', aborted');
+      $monitoring->setStatus($cron_name . "_active", "yesno", 0); 
+      $monitoring->setStatus($cron_name . "_message", "message", "Failed to delete accounted shares from " . $iPreviousShareId . " to " . $iCurrentUpstreamId);
+      $monitoring->setStatus($cron_name . "_status", "okerror", 1); 
       exit(1);
     }
     // Mark this block as accounted for
-    if (!$block->setAccounted($aBlock['id']))
+    if (!$block->setAccounted($aBlock['id'])) {
       $log->logFatal('Failed to mark block as accounted! Aborted.');
+      $monitoring->setStatus($cron_name . "_active", "yesno", 0); 
+      $monitoring->setStatus($cron_name . "_message", "message", "Failed to mark block " . $aBlock['height'] . " as accounted");
+      $monitoring->setStatus($cron_name . "_status", "okerror", 1); 
+      exit(1);
+    }
   }
 }
+
+require_once('cron_end.inc.php');
+?>
