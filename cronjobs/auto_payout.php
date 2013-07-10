@@ -24,11 +24,11 @@ require_once('shared.inc.php');
 
 if ($bitcoin->can_connect() !== true) {
   $log->logFatal(" unable to connect to RPC server, exiting\n");
+  $monitoring->setStatus($cron_name . "_active", "yesno", 0);
+  $monitoring->setStatus($cron_name . "_message", "message", "Unable to connect to RPC server");
+  $monitoring->setStatus($cron_name . "_status", "okerror", 1);
   exit(1);
 }
-
-// Mark this job as active
-$setting->setValue('auto_payout_active', 1);
 
 // Fetch all users with setup AP
 $users = $user->getAllAutoPayout();
@@ -80,7 +80,6 @@ if (! empty($users)) {
   $log->logDebug("  no user has configured their AP > 0\n");
 }
 
-// Mark this job as inactive
-$setting->setValue('auto_payout_active', 0);
-
+// Cron cleanup and monitoring
+require_once('cron_end.inc.php');
 ?>
