@@ -11,6 +11,12 @@ if (!$user->isAuthenticated() || !$user->isAdmin($_SESSION['USERDATA']['id'])) {
 
 // Fetch settings to propagate to template
 $aCronStatus = array(
+  'statistics' => array (
+    array( 'NAME' => 'Exit Code', 'STATUS' => $monitoring->getStatus('statistics_status') ),
+    array( 'NAME' => 'Last Message', 'STATUS' => $monitoring->getStatus('statistics_message') ),
+    array( 'NAME' => 'Active', 'STATUS' => $monitoring->getStatus('statistics_active') ),
+    array( 'NAME' => 'Runtime', 'STATUS' => $monitoring->getStatus('statistics_runtime') )
+  ),
   'auto_payout' => array (
     array( 'NAME' => 'Exit Code', 'STATUS' => $monitoring->getStatus('auto_payout_status') ),
     array( 'NAME' => 'Last Message', 'STATUS' => $monitoring->getStatus('auto_payout_message') ),
