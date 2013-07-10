@@ -1,14 +1,17 @@
-{foreach $CRONSTATUS as $k=>$v}
-  {include file="global/block_header.tpl" BLOCK_HEADER="$k"}
-    <table width="55%">
+{include file="global/block_header.tpl" BLOCK_HEADER="Monitoring"}
+    <table width="88%">
       <thead>
-        <th>Event Name</th>
-        <th>Status</th>
+        <th>Cronjob</th>
+        <th>Exit Code</th>
+        <th>Active</th>
+        <th>Runtime</th>
+        <th>Message</th>
       </thead>
       <tbody>
-        {foreach $v as $event}
+{foreach $CRONSTATUS as $cron=>$v}
         <tr>
-          <td>{$event.NAME}</td>
+          <td>{$cron}</td>
+  {foreach $v as $event}
           <td>
             {if $event.STATUS.type == 'okerror'}
               {if $event.STATUS.value == 0}
@@ -20,9 +23,9 @@
               <i>{$event.STATUS.value}</i>
             {else if $event.STATUS.type == 'yesno'}
               {if $event.STATUS.value == 1}
-                Yes
+                Yes 
               {else}
-                No
+                No  
               {/if}
             {else if $event.STATUS.type == 'time'}
               {$event.STATUS.value|default:"0"|number_format:"2"} seconds
@@ -30,10 +33,9 @@
               {$event.STATUS.value|default:""}
             {/if}
           </td>
+  {/foreach}
         </tr>
-        {/foreach}
+{/foreach}
       </tbody>
     </table>
-  </form>
-  {include file="global/block_footer.tpl"}
-{/foreach}
+{include file="global/block_footer.tpl"}
