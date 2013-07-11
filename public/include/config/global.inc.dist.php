@@ -357,7 +357,8 @@ $config['memcache']['splay'] = 15;
  * Explanation:
  * duration:
  *   the amount of time, in seconds, that a cookie should persist in the users browser.
- *   0 = until closed; 1440 = 24 minutes.
+ *   0 = until closed; 1440 = 24 minutes. Check your php.ini 'session.gc_maxlifetime' value
+ *   and ensure that it is at least the duration specified here.
  *
  * domain:
  *   the only domain name that may access this cookie in the browser
