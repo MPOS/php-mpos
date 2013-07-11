@@ -4,7 +4,7 @@
 if (!defined('SECURITY'))
     die('Hacking attempt');
 
-if (!$smarty->isCached('master.tpl', md5(serialize($_REQUEST)))) {
+if (!$smarty->isCached('master.tpl', $smarty_cache_key)) {
   $debug->append('No cached version available, fetching from backend', 3);
   if ($bitcoin->can_connect() === true){
     $dDifficulty = $bitcoin->query('getdifficulty');

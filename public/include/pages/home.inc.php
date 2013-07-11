@@ -6,7 +6,7 @@ if (!defined('SECURITY')) die('Hacking attempt');
 // Include markdown library
 use \Michelf\Markdown;
 
-if (!$smarty->isCached('master.tpl', md5(serialize($_REQUEST)))) {
+if (!$smarty->isCached('master.tpl', $smarty_cache_key)) {
   $debug->append('No cached version available, fetching from backend', 3);
   // Fetch active news to display
   $aNews = $news->getAllActive();
