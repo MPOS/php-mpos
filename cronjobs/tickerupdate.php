@@ -33,4 +33,5 @@ if ($price = $tools->getPrice()) {
   $log->logFatal("failed to fetch API data: " . $tools->getError());
 }
 
+require_once('cron_end.inc.php');
 ?>
