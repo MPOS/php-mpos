@@ -11,7 +11,7 @@ class Share {
   private $oUpstream;
   private $iLastUpstreamId;
   // This defines each share
-  public $rem_host, $username, $our_result, $upstream_result, $reason, $solution, $time;
+  public $rem_host, $username, $our_result, $upstream_result, $reason, $solution, $time, $difficulty;
 
   public function __construct($debug, $mysqli, $user, $block, $config) {
     $this->debug = $debug;
@@ -70,7 +70,7 @@ class Share {
    **/
   public function getRoundShares($previous_upstream=0, $current_upstream) {
     $stmt = $this->mysqli->prepare("SELECT
-      count(id) as total
+      IFNULL(SUM(IF(difficulty=0, pow(2, (" . $this->config['difficulty'] . " - 16)) - 1, difficulty)), 0) as total
       FROM $this->table
       WHERE our_result = 'Y'
       AND id > ? AND id <= ?
@@ -97,8 +97,8 @@ class Share {
       SELECT
         a.id,
         SUBSTRING_INDEX( s.username , '.', 1 ) as username,
-        IFNULL(SUM(IF(our_result='Y', 1, 0)), 0) AS valid,
-        IFNULL(SUM(IF(our_result='N', 1, 0)), 0) AS invalid
+        IFNULL(SUM(IF(our_result='Y', IF(difficulty=0, pow(2, (" . $this->config['difficulty'] . " - 16)) - 1, difficulty), 0)), 0) AS valid,
+        IFNULL(SUM(IF(our_result='N', IF(difficulty=0, pow(2, (" . $this->config['difficulty'] . " - 16)) - 1, difficulty), 0)), 0) AS invalid
       FROM $this->table AS s
       LEFT JOIN " . $this->user->getTableName() . " AS a
       ON a.username = SUBSTRING_INDEX( s.username , '.', 1 )
@@ -135,8 +135,8 @@ class Share {
       SELECT
         a.id,
         SUBSTRING_INDEX( s.username , '.', 1 ) as account,
-        IFNULL(SUM(IF(our_result='Y', 1, 0)), 0) AS valid,
-        IFNULL(SUM(IF(our_result='N', 1, 0)), 0) AS invalid
+        IFNULL(SUM(IF(our_result='Y', IF(difficulty=0, pow(2, (" . $this->config['difficulty'] . " - 16)) - 1, difficulty), 0)), 0) AS valid,
+        IFNULL(SUM(IF(our_result='N', IF(difficulty=0, pow(2, (" . $this->config['difficulty'] . " - 16)) - 1, difficulty), 0)), 0) AS invalid
       FROM $this->tableArchive AS s
       LEFT JOIN " . $this->user->getTableName() . " AS a
       ON a.username = SUBSTRING_INDEX( s.username , '.', 1 )
@@ -165,12 +165,12 @@ class Share {
       $aBlock = $this->block->getBlock($aLastBlock['height'] - $this->config['archive']['maxrounds']);
       // Now that we know our block, remove those shares
       $stmt = $this->mysqli->prepare("DELETE FROM $this->tableArchive WHERE block_id < ? AND time < DATE_SUB(now(), INTERVAL ? MINUTE)");
-      if ($this->checkStmt($stmt) && $stmt->bind_param('ii', $aBlock['id'], $config['archive']['maxage']) && $stmt->execute())
+      if ($this->checkStmt($stmt) && $stmt->bind_param('ii', $aBlock['id'], $this->config['archive']['maxage']) && $stmt->execute())
         return true;
     } else {
       // We are not running pplns, so we just need to keep shares of the past <interval> minutes
       $stmt = $this->mysqli->prepare("DELETE FROM $this->tableArchive WHERE time < DATE_SUB(now(), INTERVAL ? MINUTE)");
-      if ($this->checkStmt($stmt) && $stmt->bind_param('i', $config['archive']['maxage']) && $stmt->execute())
+      if ($this->checkStmt($stmt) && $stmt->bind_param('i', $this->config['archive']['maxage']) && $stmt->execute())
       return true;
     }
     // Catchall
@@ -186,8 +186,8 @@ class Share {
    **/
   public function moveArchive($current_upstream, $block_id, $previous_upstream=0) {
     $archive_stmt = $this->mysqli->prepare("
-      INSERT INTO $this->tableArchive (share_id, username, our_result, upstream_result, block_id, time)
-        SELECT id, username, our_result, upstream_result, ?, time
+      INSERT INTO $this->tableArchive (share_id, username, our_result, upstream_result, block_id, time, difficulty)
+        SELECT id, username, our_result, upstream_result, ?, time, difficulty
         FROM $this->table
         WHERE id > ? AND id <= ?");
     if ($this->checkStmt($archive_stmt) && $archive_stmt->bind_param('iii', $block_id, $previous_upstream, $current_upstream) && $archive_stmt->execute()) {
@@ -304,7 +304,7 @@ class Share {
     // Catchall
     return false;
   }
-
+  
   /**
    * Helper function
    **/

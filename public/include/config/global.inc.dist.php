@@ -210,10 +210,10 @@ $config['payout_system'] = 'prop';
  *
  * Default:
  *   maxrounds  =  10
- *   maxage     =  60 * 60 * 24   (24h)
+ *   maxage     =  60 * 24   (24h)
  **/
 $config['archive']['maxrounds'] = 10; 
-$config['archive']['maxage'] = 60 * 60 * 24; 
+$config['archive']['maxage'] = 60 * 24; 
 
 // URL prefix for block searches, used for block links, default: `http://explorer.litecoin.net/search?q=`
 // If empty, the block link to the block information page will be removed
