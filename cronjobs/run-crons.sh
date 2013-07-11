@@ -15,9 +15,6 @@ PIDFILE='/tmp/mmcfe-ng-cron.pid'
 # List of cruns to execute
 CRONS="findblock.php proportional_payout.php pplns_payout.php pps_payout.php blockupdate.php auto_payout.php tickerupdate.php notifications.php statistics.php archive_cleanup.php"
 
-# Additional arguments to pass to cronjobs
-CRONARGS="-v"
-
 # Output additional runtime information
 VERBOSE="0"
 
@@ -26,6 +23,20 @@ VERBOSE="0"
 # You probably don't need to change anything beyond this point #
 #                                                              #
 ################################################################
+
+# Overwrite some settings via command line arguments
+while getopts "hvp:" opt; do
+  case "$opt" in
+    h|\?)
+      echo "Usage: $0 [-v] [-p PHP_BINARY]";
+      exit 0
+      ;;
+    v)  VERBOSE=1
+      ;;
+    p)  PHP_BIN=$2; shift;
+      ;;
+  esac
+done
 
 # Find scripts path
 if [[ -L $0 ]]; then
@@ -70,8 +81,8 @@ fi
 echo $PID > $PIDFILE
 
 for cron in $CRONS; do
-  [[ $VERBOSE == 1 ]] && echo "Running $cron, see output below for details"
-  $PHP_BIN $cron $CRONARGS
+  [[ $VERBOSE == 1 ]] && echo "Running $cron, check logfile for details"
+  $PHP_BIN $cron
 done
 
 # Remove pidfile
