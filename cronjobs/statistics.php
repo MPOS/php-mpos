@@ -55,4 +55,6 @@ $log->logInfo("getAllUserShares " . number_format(microtime(true) - $start, 2) .
 foreach ($aUserShares as $aShares) {
   $memcache->setCache('getUserShares'. $aShares['id'], $aShares);
 }
+
+require_once('cron_end.inc.php');
 ?>

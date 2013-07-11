@@ -32,6 +32,9 @@ if ( $bitcoin->can_connect() === true ){
   $aTransactions = $bitcoin->query('listsinceblock', $strLastBlockHash);
 } else {
   $log->logFatal('Unable to conenct to RPC server backend');
+  $monitoring->setStatus($cron_name . "_active", "yesno", 0); 
+  $monitoring->setStatus($cron_name . "_message", "message", "Unable to connect to RPC server");
+  $monitoring->setStatus($cron_name . "_status", "okerror", 1); 
   exit(1);
 }
 
@@ -68,15 +71,19 @@ if (empty($aAllBlocks)) {
   $log->logDebug('No new blocks without share_id found in database');
 } else {
   // Loop through our unaccounted blocks
-  $log->logInfo("Block ID\t\tHeight\tAmount\tShare ID\tShares\tFinder");
+  $log->logInfo("Block ID\t\tHeight\tAmount\tShare ID\tShares\tFinder\tType");
   foreach ($aAllBlocks as $iIndex => $aBlock) {
     if (empty($aBlock['share_id'])) {
       // Fetch this blocks upstream ID
-      if ($share->setUpstream($block->getLastUpstreamId(), $aBlock['time'])) {
+      $aBlockInfo = $bitcoin->query('getblock', $aBlock['blockhash']);
+      if ($share->setUpstream($aBlockInfo, $block->getLastUpstreamId())) {
         $iCurrentUpstreamId = $share->getUpstreamId();
         $iAccountId = $user->getUserId($share->getUpstreamFinder());
       } else {
         $log->logFatal('Unable to fetch blocks upstream share, aborted:' . $share->getError());
+        $monitoring->setStatus($cron_name . "_active", "yesno", 0); 
+        $monitoring->setStatus($cron_name . "_message", "message", "Unable to fetch blocks " . $aBlock['height'] . " upstream share: " . $share->getError());
+        $monitoring->setStatus($cron_name . "_status", "okerror", 1); 
         exit;
       }
 
@@ -104,7 +111,8 @@ if (empty($aAllBlocks)) {
         . $aBlock['amount'] . "\t"
         . $iCurrentUpstreamId . "\t\t"
         . $iRoundShares . "\t"
-        . "[$iAccountId] " . $user->getUserName($iAccountId)
+        . "[$iAccountId] " . $user->getUserName($iAccountId) . "\t"
+        . $share->share_type
       );
 
       // Notify users
@@ -122,5 +130,6 @@ if (empty($aAllBlocks)) {
     }
   }
 }
-?>
 
+require_once('cron_end.inc.php');
+?>

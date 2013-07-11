@@ -59,16 +59,16 @@ target and network difficulty and assuming a zero variance scenario.
         {else}{$GLOBAL.confirmations - $BLOCKSFOUND[block].confirmations} left{/if}</td>
         <td>{$BLOCKSFOUND[block].finder|default:"unknown"}</td>
         <td class="center">{$BLOCKSFOUND[block].time|date_format:"%d/%m %H:%M:%S"}</td>
-        <td class="right">{$BLOCKSFOUND[block].difficulty|number_format:"2"}</td>
+        <td class="right">{$BLOCKSFOUND[block].difficulty|number_format:"8"}</td>
         <td class="right">{$BLOCKSFOUND[block].amount|number_format:"2"}</td>
         <td class="right">
           {math assign="estshares" equation="(65536 * blockdiff)" targetdiff=$GLOBAL.config.targetdiff blockdiff=$BLOCKSFOUND[block].difficulty}
-          {$estshares}
+          {$estshares|number_format}
         </td>
         <td class="right">{$BLOCKSFOUND[block].shares|number_format}</td>
         <td class="right">
           {math assign="percentage" equation="shares / estshares * 100" shares=$BLOCKSFOUND[block].shares estshares=$estshares}
-          <font color="{if ($percentage <= 100)}green{else}red{/if}">{$percentage|number_format:"3"}</font>
+          <font color="{if ($percentage <= 100)}green{else}red{/if}">{$percentage|number_format:"2"}</font>
         </td>
       </tr>
 {/section}
