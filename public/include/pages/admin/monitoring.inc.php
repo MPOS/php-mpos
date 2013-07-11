@@ -45,6 +45,13 @@ $aCronStatus = array(
     array( 'NAME' => 'Runtime', 'STATUS' => $monitoring->getStatus('findblock_runtime') ),
     array( 'NAME' => 'Last Run', 'STATUS' => $monitoring->getStatus('findblock_lastrun') ),
     array( 'NAME' => 'Last Message', 'STATUS' => $monitoring->getStatus('findblock_message') ),
+  ),
+  'tickerupdate' => array (
+    array( 'NAME' => 'Exit Code', 'STATUS' => $monitoring->getStatus('tickerupdate_status') ),
+    array( 'NAME' => 'Active', 'STATUS' => $monitoring->getStatus('tickerupdate_active') ),
+    array( 'NAME' => 'Runtime', 'STATUS' => $monitoring->getStatus('tickerupdate_runtime') ),
+    array( 'NAME' => 'Last Run', 'STATUS' => $monitoring->getStatus('tickerupdate_lastrun') ),
+    array( 'NAME' => 'Last Message', 'STATUS' => $monitoring->getStatus('tickerupdate_message') ),
   )
 );
 // Payout system specifics
