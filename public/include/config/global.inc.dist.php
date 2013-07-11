@@ -354,23 +354,28 @@ $config['memcache']['splay'] = 15;
  * For multiple installations of mmcfe-ng on the same domain you must change the cookie
  * path or change the cookie name to avoid conflicts.
  *
- * Description
- *   duration: the amount of time, in seconds, that a cookie should persist in the users
- *             browser. 0 = until closed; 1440 = 24 minutes.
+ * Explanation:
+ * duration:
+ *   the amount of time, in seconds, that a cookie should persist in the users browser.
+ *   0 = until closed; 1440 = 24 minutes.
  *
- *   domain:   the only domain name that may access this cookie in the browser
+ * domain:
+ *   the only domain name that may access this cookie in the browser
  *
- *   path:     the highest path on the domain that can access this cookie; i.e. if running
- *             two pools from a single domain you might set the path /ltc/ and /ftc/ to
- *             separate user session cookies between the two.
+ * path:
+ *   the highest path on the domain that can access this cookie; i.e. if running two pools
+ *   from a single domain you might set the path /ltc/ and /ftc/ to separate user session
+ *   cookies between the two.
  *
- *   httponly: marks the cookie as accessible only through the HTTP protocol. The cookie
- *             can't be accessed by scripting languages, such as JavaScript. This can
- *             help to reduce identity theft through XSS attacks in most browsers.
+ * httponly:
+ *   marks the cookie as accessible only through the HTTP protocol. The cookie can't be
+ *   accessed by scripting languages, such as JavaScript. This can help to reduce identity
+ *   theft through XSS attacks in most browsers.
  *
- *   secure:   marks the cookie as accessible only through the HTTPS protocol. If you're
- *             using SSL this will stop a user accidently accessing the site without SSL
- *             and exposing their session cookie.
+ * secure:
+ *   marks the cookie as accessible only through the HTTPS protocol. If you have a SSL
+ *   certificate installed on your domain name then this will stop a user accidently
+ *   accessing the site over a HTTP connection, without SSL, exposing their session cookie.
  *
  * Default:
  *   duration = '1440'
