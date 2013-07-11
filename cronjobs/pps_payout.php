@@ -36,12 +36,15 @@ if ( $bitcoin->can_connect() === true ){
     $dDifficulty = $dDifficulty['proof-of-work'];
 } else {
   $log->logFatal("Aborted: " . $bitcoin->can_connect() . "\n");
+  $monitoring->setStatus($cron_name . "_active", "yesno", 0); 
+  $monitoring->setStatus($cron_name . "_message", "message", "Unable to connect to RPC server");
+  $monitoring->setStatus($cron_name . "_status", "okerror", 1); 
   exit(1);
 }
 
 // Value per share calculation
 if ($config['reward_type'] != 'block') {
-$pps_value = number_format(round((1/(65536 * $dDifficulty) * $config['reward']), 12) ,12);
+  $pps_value = number_format(round((1/(65536 * $dDifficulty) * $config['reward']), 12) ,12);
 } else {
   // Try to find the last block value and use that for future payouts, revert to fixed reward if none found
   if ($aLastBlock = $block->getLast()) {
@@ -111,6 +114,9 @@ foreach ($aAllBlocks as $iIndex => $aBlock) {
   $iLastBlockShare = @$aAllBlocks[$iIndex - 1]['share_id'] ? @$aAllBlocks[$iIndex - 1]['share_id'] : 0;
   if (!is_numeric($aBlock['share_id'])) {
     $log->logFatal("Block " . $aBlock['height'] . " has no share_id associated with it, not going to continue");
+    $monitoring->setStatus($cron_name . "_active", "yesno", 0);
+    $monitoring->setStatus($cron_name . "_message", "message", "Block " . $aBlock['height'] . " has no share_id associated with it");
+    $monitoring->setStatus($cron_name . "_status", "okerror", 1);
     exit(1);
   }
   // Per account statistics
@@ -120,19 +126,27 @@ foreach ($aAllBlocks as $iIndex => $aBlock) {
       $log->logError("Failed to update stats for this block on : " . $aData['username']);
   }
   // Move shares to archive
-  if ($config['archive_shares'] && $aBlock['share_id'] < $iLastShareId) {
+  if ($aBlock['share_id'] < $iLastShareId) {
     if (!$share->moveArchive($aBlock['share_id'], $aBlock['id'], @$iLastBlockShare))
       $log->logError("Archving failed");
   }
   // Delete shares
   if ($aBlock['share_id'] < $iLastShareId && !$share->deleteAccountedShares($aBlock['share_id'], $iLastBlockShare)) {
     $log->logFatal("Failed to delete accounted shares from " . $aBlock['share_id'] . " to " . $iLastBlockShare . ", aborting!");
+    $monitoring->setStatus($cron_name . "_active", "yesno", 0);
+    $monitoring->setStatus($cron_name . "_message", "message", "Failed to delete accounted shares from " . $aBlock['share_id'] . " to " . $iLastBlockShare);
+    $monitoring->setStatus($cron_name . "_status", "okerror", 1);
     exit(1);
   }
   // Mark this block as accounted for
   if (!$block->setAccounted($aBlock['id'])) {
-    verbose("\nERROR : Failed to mark block as accounted! Aborting!\n");
+    $log->logFatal("Failed to mark block as accounted! Aborting!");
+    $monitoring->setStatus($cron_name . "_active", "yesno", 0);
+    $monitoring->setStatus($cron_name . "_message", "message", "Failed to mark block " . $aBlock['height'] . " as accounted");
+    $monitoring->setStatus($cron_name . "_status", "okerror", 1);
     exit(1);
   }
 }
+
+require_once('cron.inc.php');
 ?>

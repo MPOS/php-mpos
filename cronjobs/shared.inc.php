@@ -22,6 +22,13 @@ limitations under the License.
 // We need to find our include files so set this properly
 define("BASEPATH", "../public/");
 
+
+/*****************************************************
+ * No need to change beyond this point               *
+ *****************************************************/
+// Our cron name
+$cron_name = basename($_SERVER['PHP_SELF'], '.php');
+
 // Our security check
 define("SECURITY", 1);
 
@@ -32,6 +39,13 @@ require_once(BASEPATH . 'include/config/global.inc.php');
 require_once(INCLUDE_DIR . '/autoloader.inc.php');
 
 // Load 3rd party logging library for running crons
-$log = new KLogger ( 'logs/' . basename($_SERVER['PHP_SELF'], '.php') . '.txt' , KLogger::DEBUG );
-$log->LogDebug('Starting ' . basename($_SERVER['PHP_SELF'], '.php'));
+$log = new KLogger ( 'logs/' . $cron_name . '.txt' , KLogger::DEBUG );
+$log->LogDebug('Starting ' . $cron_name);
+
+// Load the start time for later runtime calculations for monitoring
+$cron_start[$cron_name] = microtime(true);
+
+// Mark cron as running for monitoring
+$log->logDebug('Marking cronjob as running for monitoring');
+$monitoring->setStatus($cron_name . '_active', 'yesno', 1);
 ?>

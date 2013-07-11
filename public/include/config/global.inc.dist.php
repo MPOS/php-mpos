@@ -121,6 +121,22 @@ $config['website']['theme'] = 'mmcFE';
 $config['website']['mobile'] = true;
 $config['website']['mobile_theme'] = 'mobile';
 
+/**
+ * Some basic access restrictions on some pages
+ *
+ * Explanation:
+ *   Some pools would like to run a few pages for public access instead
+ *   of enforcing a login. You can change visibility of some pages here.
+ *
+ * Options:
+ *   'public'   :  Allow guest access and authenticated user to view page
+ *   'private'  :  Only allow logged in users access to view page
+ *
+ * Defaults:
+ *   'private' for every page
+ **/
+$config['website']['acl']['statistics']['pool'] = 'private';
+$config['website']['acl']['statistics']['blocks'] = 'private';
 
 /**
  * Re-Captcha settings
@@ -133,7 +149,19 @@ $config['recaptcha']['private_key'] = 'YOUR_PRIVATE_RECAPTCHA_KEY';
 // Currency system used in this pool, default: `LTC`
 $config['currency'] = 'LTC';
 
-// Default transaction fee, added by RPC server, default: 0.1
+/**
+ * Default transaction fee to apply to user transactions
+ *
+ * Explanation
+ *   The coin daemon applies transcation fees to young coins.
+ *   Since we are unable to find out what the exact fee was we set
+ *   a default value here which is applied to both manual and auto payouts.
+ *   If this is not set, no fee is applied in the transactions history but
+ *   the user might still see them when the coins arrive.
+ *
+ * Default:
+ *   txfee   =  0.1
+ **/
 $config['txfee'] = 0.1;
 
 // Payout a block bonus to block finders, default: 0 (disabled)
@@ -157,8 +185,35 @@ $config['block_bonus'] = 0;
 **/
 $config['payout_system'] = 'prop';
 
-// For debugging purposes you can archive shares in the archive_shares table, default: true
-$config['archive_shares'] = true;
+/**
+ * Archiving configuration for debugging
+ *
+ * Explanation:
+ *   By default, we don't need to archive for a long time. PPLNS and Hashrate
+ *   calculations rely on this archive, but all shares past a certain point can
+ *   safely be deleted.
+ *
+ *   To ensure we have enough shares on stack for PPLNS, this
+ *   is set to the past 10 rounds. Even with lucky ones in between those should
+ *   fit the PPLNS target. On top of that, even if we have more than 10 rounds,
+ *   we still keep the last maxage shares to ensure we can calculate hashrates.
+ *   Both conditions need to be met in order for shares to be purged from archive.
+ *
+ *   Proportional mode will only keep the past 24 hours. These are required for
+ *   hashrate calculations to work past a round, hence 24 hours was selected as
+ *   the default. You may want to increase the time for debugging, then add any
+ *   integer reflecting minutes of shares to keep.
+ *
+ * Availabe Options:
+ *   maxrounds  :  PPLNS, keep shares for maxrounds
+ *   maxage     :  PROP and PPLNS, delete shares older than maxage minutes
+ *
+ * Default:
+ *   maxrounds  =  10
+ *   maxage     =  60 * 24   (24h)
+ **/
+$config['archive']['maxrounds'] = 10; 
+$config['archive']['maxage'] = 60 * 24; 
 
 // URL prefix for block searches, used for block links, default: `http://explorer.litecoin.net/search?q=`
 // If empty, the block link to the block information page will be removed
@@ -170,6 +225,30 @@ $config['chaininfo'] = 'http://allchains.info';
 
 // Pool fees applied to users in percent, default: 0 (disabled)
 $config['fees'] = 0;
+
+/**
+  *  PPLNS requires some settings to run properly. First we need to define
+  *  a default shares count that is applied if we don't have a proper type set.
+  *  Different dynamic types can be applied, or you can run a fixed scheme.
+  *
+  *  Explanation
+  *   default     :  Default target shares for PPLNS
+  *   type        :  Payout type used in PPLNS
+  *   blockcount  :  Amount of blocks to check for avg shares
+  *
+  *  Available Options:
+  *   default     :  amount of shares, integeger
+  *   type        :  blockavg or fixed
+  *   blockcount  :  amount of blocks, any integer
+  *
+  *  Defaults:
+  *   default     =  4000000
+  *   type        =  `blockavg`
+  *   blockcount  =  10
+  **/
+$config['pplns']['shares']['default'] = 4000000;
+$config['pplns']['shares']['type'] = 'blockavg';
+$config['pplns']['blockavg']['blockcount'] = 10;
 
 // Pool target difficulty as set in pushpoold configuration file
 // Please also read this for stratum: https://github.com/TheSerapher/php-mmcfe-ng/wiki/FAQ
@@ -217,11 +296,15 @@ $config['confirmations'] = 120;
 /**
  * Memcache configuration
  *
- * Please note that a memcache is greatly increasing performance
- * when combined with the `statistics.php` cronjob. Disabling this
- * is not recommended in a live environment!
+ * Even though you can disable the memcache for debugging purposes, the memcache
+ * library is still required for mmcfe-ng to work. You should not disable this in 
+ * a live environment since a lot of data is cached for the website to increase load
+ * times!
  *
  * Explanations
+ *   enabled     :   Disable (false) memcache for debugging or enable (true) it
+ *   host        :   Host IP or hostname
+ *   port        :   memcache port
  *   keyprefix   :   Must be changed for multiple mmcfe-ng instances on one host
  *   expiration  :   Default expiration time in seconds of all cached keys.
  *                   Increase if caches expire too fast.

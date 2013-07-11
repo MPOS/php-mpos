@@ -24,18 +24,21 @@ require_once('shared.inc.php');
 
 if ( $bitcoin->can_connect() !== true ) {
   $log->logFatal("Failed to connect to RPC server\n");
+  $monitoring->setStatus($cron_name . "_active", "yesno", 0); 
+  $monitoring->setStatus($cron_name . "_message", "message", "Unable to connect to RPC server");
+  $monitoring->setStatus($cron_name . "_status", "okerror", 1); 
   exit(1);
 }
 
 // Fetch all unconfirmed blocks
 $aAllBlocks = $block->getAllUnconfirmed($config['confirmations']);
 
-$log->logInfo("ID\tBlockhash\tConfirmations");
+$log->logInfo("ID\tHeight\tBlockhash\tConfirmations");
 foreach ($aAllBlocks as $iIndex => $aBlock) {
   $aBlockInfo = $bitcoin->query('getblock', $aBlock['blockhash']);
   // Fetch this blocks transaction details to find orphan blocks
   $aTxDetails = $bitcoin->query('gettransaction', $aBlockInfo['tx'][0]);
-  $log->logInfo($aBlock['id'] . "\t" . $aBlock['blockhash'] . "\t" . $aBlock['confirmations'] . " -> " . $aBlockInfo['confirmations']);
+  $log->logInfo($aBlock['id'] . "\t" . $aBlock['height'] .  "\t" . $aBlock['blockhash'] . "\t" . $aBlock['confirmations'] . " -> " . $aBlockInfo['confirmations']);
   if ($aTxDetails['details'][0]['category'] == 'orphan') {
     // We have an orphaned block, we need to invalidate all transactions for this one
     if ($transaction->setOrphan($aBlock['id']) && $block->setConfirmations($aBlock['id'], -1)) {
@@ -51,3 +54,6 @@ foreach ($aAllBlocks as $iIndex => $aBlock) {
     $log->logError('    Failed to update block confirmations');
   }
 }
+
+require_once('cron_end.inc.php');
+?>

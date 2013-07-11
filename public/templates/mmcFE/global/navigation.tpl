@@ -13,6 +13,7 @@
             {if $smarty.session.AUTHENTICATED|default:"0" == 1 && $GLOBAL.userdata.is_admin == 1}
             <li><a href="{$smarty.server.PHP_SELF}?page=admin">Admin Panel</a>
               <ul>
+                <li><a href="{$smarty.server.PHP_SELF}?page=admin&action=monitoring">Monitoring</a></li>
                 <li><a href="{$smarty.server.PHP_SELF}?page=admin&action=user">User Info</a></li>
                 <li><a href="{$smarty.server.PHP_SELF}?page=admin&action=wallet">Wallet Info</a></li>
                 <li><a href="{$smarty.server.PHP_SELF}?page=admin&action=transactions">Transactions</a></li>
@@ -31,6 +32,14 @@
             </li>
             {else}
             <li><a href="{$smarty.server.PHP_SELF}?page=statistics">Statistics</a>
+              <ul>
+            {if $GLOBAL.config.website.acl.statistics.pool == 'public'}
+                <li><a href="{$smarty.server.PHP_SELF}?page=statistics&action=pool">Pool Stats</a></li>
+            {/if}
+            {if $GLOBAL.config.website.acl.statistics.blocks == 'public'}
+                <li><a href="{$smarty.server.PHP_SELF}?page=statistics&action=blocks">Block Stats</a></li>
+            {/if}
+              </ul>
             {/if}
             <li><a href="{$smarty.server.PHP_SELF}?page=gettingstarted">Getting Started</a></li>
             <li><a href="{$smarty.server.PHP_SELF}?page=support">Support</a></li>

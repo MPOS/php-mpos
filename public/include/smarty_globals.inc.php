@@ -21,7 +21,7 @@ if (@$_SESSION['AUTHENTICATED']) {
   }
 }
 // Always fetch this since we need for ministats header
-//$bitcoin->can_connect() === true ? $dNetworkHashrate = $bitcoin->query('getnetworkhashps') : $dNetworkHashrate = 0;
+$bitcoin->can_connect() === true ? $dNetworkHashrate = $bitcoin->query('getnetworkhashps') : $dNetworkHashrate = 0;
 
 // Fetch some data
 $iCurrentActiveWorkers = $worker->getCountAllActiveWorkers();
@@ -47,7 +47,7 @@ $aGlobal = array(
   'blockexplorer' => $config['blockexplorer'],
   'chaininfo' => $config['chaininfo'],
   'config' => array(
-    'website' => array( 'title' => $config['website']['title'] ),
+    'website' => array( 'title' => $config['website']['title'], 'acl' => $config['website']['acl'] ),
     'price' => array( 'currency' => $config['price']['currency'] ),
     'targetdiff' => $config['difficulty'],
     'currency' => $config['currency'],
@@ -83,9 +83,7 @@ if (@$_SESSION['USERDATA']['id']) {
   $aGlobal['userdata']['sharerate'] = $statistics->getUserSharerate($_SESSION['USERDATA']['id']);
 
   switch ($config['payout_system']) {
-  case 'pps':
-    break;
-  default:
+  case 'prop' || 'pplns':
     // Some estimations
     if (@$aRoundShares['valid'] > 0) {
       $aGlobal['userdata']['est_block'] = round(( (int)$aGlobal['userdata']['shares']['valid'] / (int)$aRoundShares['valid'] ) * (float)$config['reward'], 8);
@@ -98,6 +96,14 @@ if (@$_SESSION['USERDATA']['id']) {
       $aGlobal['userdata']['est_donation'] = 0;
       $aGlobal['userdata']['est_payout'] = 0;
     }
+  case 'pplns':
+    if ($iAvgBlockShares = round($block->getAvgBlockShares($config['pplns']['blockavg']['blockcount']))) {
+      $aGlobal['pplns']['target'] = $iAvgBlockShares;
+    } else {
+      $aGlobal['pplns']['target'] = $config['pplns']['shares']['default'];
+    }
+    break;
+  case 'pps':
     break;
   }
 

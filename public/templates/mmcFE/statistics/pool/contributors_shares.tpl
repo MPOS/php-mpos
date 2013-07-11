@@ -18,7 +18,7 @@
         <td class="right">{$CONTRIBSHARES[hashrate].shares|number_format}</td>
       </tr>
 {/section}
-{if $listed != 1}
+{if $listed != 1 && $GLOBAL.userdata.username|default:""}
       <tr style="background-color:#99EB99;">
         <td>n/a</td>
         <td>{$GLOBAL.userdata.username}</td>
