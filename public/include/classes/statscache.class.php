@@ -9,12 +9,16 @@ if (!defined('SECURITY'))
  * Can be enabled or disabled through site configuration
  * Also sets a default time if no time is passed to it to enforce caching
  **/
-class StatsCache extends Memcached {
+class StatsCache {
+  private $cache;
+  
   public function __construct($config, $debug) {
     $this->config = $config;
     $this->debug = $debug;
-    if (! $config['memcache']['enabled'] ) $this->debug->append("Not storing any values in memcache");
-    return parent::__construct();
+    if (! $config['memcache']['enabled'] ) {
+      $this->debug->append("Not storing any values in memcache");
+    }
+    else { $this->cache = new Memcached(); }
   }
 
   /**
@@ -26,7 +30,7 @@ class StatsCache extends Memcached {
     if (empty($expiration))
       $expiration = $this->config['memcache']['expiration'] + rand( -$this->config['memcache']['splay'], $this->config['memcache']['splay']);
     $this->debug->append("Storing " . $this->config['memcache']['keyprefix'] . "$key with expiration $expiration", 3);
-    return parent::set($this->config['memcache']['keyprefix'] . $key, $value, $expiration);
+    return $this->cache->set($this->config['memcache']['keyprefix'] . $key, $value, $expiration);
   }
 
   /**
@@ -36,7 +40,7 @@ class StatsCache extends Memcached {
   public function get($key, $cache_cb = NULL, &$cas_token = NULL) {
     if (! $this->config['memcache']['enabled']) return false;
     $this->debug->append("Trying to fetch key " . $this->config['memcache']['keyprefix'] . "$key from cache", 3);
-    if ($data = parent::get($this->config['memcache']['keyprefix'].$key)) {
+    if ($data = $this->cache->get($this->config['memcache']['keyprefix'].$key)) {
       $this->debug->append("Found key in cache", 3);
       return $data;
     } else {
@@ -55,7 +59,15 @@ class StatsCache extends Memcached {
     if ($this->config['memcache']['enabled']) $this->set($key, $data, $expiration);
     return $data;
   }
-
+  
+  /**
+   * This method is invoked if the called method was not realised in this class
+   **/
+  public function __call($name, $arguments) {
+    if (! $this->config['memcache']['enabled']) return false;
+    //Invoke method $name of $this->cache class with array of $arguments
+    return call_user_func_array(array($this->cache, $name), $arguments);
+  }
 }
 
 $memcache = new StatsCache($config, $debug);
