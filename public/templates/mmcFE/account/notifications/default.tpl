@@ -12,7 +12,7 @@
     <td class="left">IDLE Worker</td>
     <td class="center">
       <input type="hidden" name="data[idle_worker]" value="0" />
-      <input type="checkbox" name="data[idle_worker]" id="data[idle_worker]" value="1"{if $SETTINGS['idle_worker']}checked{/if} />
+      <input type="checkbox" name="data[idle_worker]" id="data[idle_worker]" value="1"{nocache}{if $SETTINGS['idle_worker']}checked{/if}{/nocache} />
       <label for="data[idle_worker]"></label>
     </td>
   </tr>
@@ -20,7 +20,7 @@
     <td class="left">New Blocks</td>
     <td class="center">
       <input type="hidden" name="data[new_block]" value="0" />
-      <input type="checkbox" name="data[new_block]" id="data[new_block]" value="1"{if $SETTINGS['new_block']}checked{/if} />
+      <input type="checkbox" name="data[new_block]" id="data[new_block]" value="1"{nocache}{if $SETTINGS['new_block']}checked{/if}{/nocache} />
       <label for="data[new_block]"></label>
     </td>
   </tr>
@@ -28,7 +28,7 @@
     <td class="left">Auto Payout</td>
     <td class="center">
       <input type="hidden" name="data[auto_payout]" value="0" />
-      <input type="checkbox" name="data[auto_payout]" id="data[auto_payout]" value="1"{if $SETTINGS['auto_payout']}checked{/if} />
+      <input type="checkbox" name="data[auto_payout]" id="data[auto_payout]" value="1"{nocache}{if $SETTINGS['auto_payout']}checked{/if}{/nocache} />
       <label for="data[auto_payout]"></label>
     </td>
   </tr>
@@ -36,7 +36,7 @@
     <td class="left">Manual Payout</td>
     <td class="center">
       <input type="hidden" name="data[manual_payout]" value="0" />
-      <input type="checkbox" name="data[manual_payout]" id="data[manual_payout]" value="1"{if $SETTINGS['manual_payout']}checked{/if} />
+      <input type="checkbox" name="data[manual_payout]" id="data[manual_payout]" value="1"{nocache}{if $SETTINGS['manual_payout']}checked{/if}{/nocache} />
       <label for="data[manual_payout]"></label>
     </td>
   </tr>
