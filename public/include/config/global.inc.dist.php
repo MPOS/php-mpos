@@ -246,6 +246,11 @@ $config['fees'] = 0;
   *   when difficulty changes and more blocks are available. This keeps the
   *   target dynamic but still traceable.
   *
+  *   If you use the fixed type it will use $config['pplns']['shares']['default']
+  *   for target calculations, if you use blockavg type it will use 
+  *   $config['pplns']['blockavg']['blockcount'] blocks average for target
+  *   calculations.
+  *
   *   default     :  Default target shares for PPLNS
   *   type        :  Payout type used in PPLNS
   *   blockcount  :  Amount of blocks to check for avg shares
