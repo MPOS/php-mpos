@@ -4,7 +4,7 @@
       <input type="hidden" name="action" value="{$smarty.request.action|escape}">
       <input type="hidden" name="do" value="updateAccount">
       <table>
-        <tbody><tr><td>Username: </td><td>{$GLOBAL.userdata.username}</td></tr>
+        <tbody><tr><td>Username: </td><td>{$GLOBAL.userdata.username|escape}</td></tr>
         <tr><td>User Id: </td><td>{$GLOBAL.userdata.id}</td></tr>
         <tr><td>API Key: </td><td><a href="{$smarty.server.PHP_SELF}?page=api&action=getuserstatus&api_key={$GLOBAL.userdata.api_key}&id={$GLOBAL.userdata.id}">{$GLOBAL.userdata.api_key}</a></td></tr>
         <tr><td>E-Mail: </td><td><input type="text" name="email" value="{nocache}{$GLOBAL.userdata.email|escape}{/nocache}" size="20"></td></tr>
