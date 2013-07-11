@@ -135,15 +135,9 @@ class Worker {
    **/
   public function getCountAllActiveWorkers() {
     $this->debug->append("STA " . __METHOD__, 4);
-    $stmt = $this->mysqli->prepare("SELECT COUNT(DISTINCT username) AS total FROM "  . $this->share->getTableName() . " WHERE time > DATE_SUB(now(), INTERVAL 10 MINUTE)");
-    if ($this->checkStmt($stmt)) {
-      if (!$stmt->execute()) {
-        return false;
-      }
-      $result = $stmt->get_result();
-      $stmt->close();
+    $stmt = $this->mysqli->prepare("SELECT IFNULL(COUNT(DISTINCT username), 0) AS total FROM "  . $this->share->getTableName() . " WHERE time > DATE_SUB(now(), INTERVAL 10 MINUTE)");
+    if ($this->checkStmt($stmt) && $stmt->execute() && $result = $stmt->get_result())
       return $result->fetch_object()->total;
-    }
     return false;
   }
 
