@@ -28,7 +28,11 @@ VERBOSE="0"
 ################################################################
 
 # Find scripts path
-CRONHOME=$( dirname $0 )
+if [[ -L $0 ]]; then
+  CRONHOME=$( dirname $( readlink $0 ) )
+else 
+  CRONHOME=$( dirname $0 )
+fi
 
 # Change working director to CRONHOME
 if ! cd $CRONHOME 2>/dev/null; then
