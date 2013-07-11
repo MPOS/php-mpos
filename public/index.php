@@ -24,12 +24,12 @@ define("BASEPATH", "./");
 // Our security check
 define("SECURITY", 1);
 
+// Include our configuration (holding defines for the requires)
+if (!include_once(BASEPATH . 'include/config/global.inc.php')) die('Unable to load site configuration');
+
 // Start a session
 session_start();
 $session_id = session_id();
-
-// Include our configuration (holding defines for the requires)
-if (!include_once(BASEPATH . 'include/config/global.inc.php')) die('Unable to load site configuration');
 
 // Load Classes, they name defines the $ variable used
 // We include all needed files here, even though our templates could load them themself
