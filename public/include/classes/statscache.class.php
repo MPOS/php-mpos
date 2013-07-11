@@ -17,8 +17,9 @@ class StatsCache {
     $this->debug = $debug;
     if (! $config['memcache']['enabled'] ) {
       $this->debug->append("Not storing any values in memcache");
+    } else {
+      $this->cache = new Memcached();
     }
-    else { $this->cache = new Memcached(); }
   }
 
   /**
