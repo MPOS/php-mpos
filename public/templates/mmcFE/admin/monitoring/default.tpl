@@ -5,6 +5,7 @@
         <th>Exit Code</th>
         <th>Active</th>
         <th>Runtime</th>
+        <th>Last Run</th>
         <th>Message</th>
       </thead>
       <tbody>
@@ -29,6 +30,8 @@
               {/if}
             {else if $event.STATUS.type == 'time'}
               {$event.STATUS.value|default:"0"|number_format:"2"} seconds
+            {else if $event.STATUS.type == 'date'}
+              {$event.STATUS.value|date_format:"%m/%d %H:%M:%S"}
             {else}
               {$event.STATUS.value|default:""}
             {/if}
