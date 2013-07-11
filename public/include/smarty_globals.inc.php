@@ -1,8 +1,7 @@
 <?php
 
 // Make sure we are called from index.php
-if (!defined('SECURITY'))
-  die('Hacking attempt');
+if (!defined('SECURITY')) die('Hacking attempt');
 
 // Globally available variables
 $debug->append('Global smarty variables', 3);
