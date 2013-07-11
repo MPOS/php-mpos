@@ -30,6 +30,7 @@ if (!include_once(BASEPATH . 'include/config/global.inc.php')) die('Unable to lo
 // Start a session
 session_set_cookie_params(time()+$config['cookie']['duration'], $config['cookie']['path'], $config['cookie']['domain'], $config['cookie']['secure'], $config['cookie']['httponly']);
 session_start();
+setcookie(session_name(),session_id(),time()+$config['cookie']['duration'], $config['cookie']['path'], $config['cookie']['domain'], $config['cookie']['secure'], $config['cookie']['httponly']);
 $session_id = session_id();
 
 // Load Classes, they name defines the $ variable used
