@@ -14,14 +14,14 @@
 {section hashrate $CONTRIBSHARES}
       <tr{if $GLOBAL.userdata.username == $CONTRIBSHARES[hashrate].account}{assign var=listed value=1} style="background-color:#99EB99;"{else} class="{cycle values="odd,even"}"{/if}>
         <td>{$rank++}</td>
-        <td>{$CONTRIBSHARES[hashrate].account}</td>
+        <td>{$CONTRIBSHARES[hashrate].account|escape}</td>
         <td class="right">{$CONTRIBSHARES[hashrate].shares|number_format}</td>
       </tr>
 {/section}
 {if $listed != 1 && $GLOBAL.userdata.username|default:""}
       <tr style="background-color:#99EB99;">
         <td>n/a</td>
-        <td>{$GLOBAL.userdata.username}</td>
+        <td>{$GLOBAL.userdata.username|escape}</td>
         <td class="right">{$GLOBAL.userdata.shares.valid|number_format}</td>
       </tr>
 {/if}
