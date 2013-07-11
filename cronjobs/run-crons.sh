@@ -33,7 +33,7 @@ while getopts "hvp:" opt; do
       ;;
     v)  VERBOSE=1
       ;;
-    p)  PHP_BIN=$3; shift;
+    p)  PHP_BIN=$2; shift;
       ;;
   esac
 done
