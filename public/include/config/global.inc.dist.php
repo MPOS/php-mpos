@@ -315,10 +315,12 @@ $config['confirmations'] = 120;
 /**
  * Memcache configuration
  *
- * Even though you can disable the memcache for debugging purposes, the memcache
- * library is still required for mmcfe-ng to work. You should not disable this in 
- * a live environment since a lot of data is cached for the website to increase load
- * times!
+ * To disable memcache set option $config['memcache']['enabled'] = false
+ * After disable memcache installation of memcache is not required.
+ *
+ * Please note that a memcache is greatly increasing performance
+ * when combined with the `statistics.php` cronjob. Disabling this
+ * is not recommended in a live environment!
  *
  * Explanations
  *   enabled     :   Disable (false) memcache for debugging or enable (true) it
