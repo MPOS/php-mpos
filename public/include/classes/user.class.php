@@ -387,7 +387,16 @@ class User {
    **/
   public function logoutUser($redirect="index.php") {
     $this->debug->append("STA " . __METHOD__, 4);
+    // Unset all of the session variables
+    $_SESSION = array();
+    // As we're killing the sesison, also kill the cookie!
+    if (ini_get("session.use_cookies")) {
+        $params = session_get_cookie_params();
+        setcookie(session_name(), '', time() - 42000, $params["path"], $params["domain"], $params["secure"], $params["httponly"]);
+    }
+    // Destroy the session.
     session_destroy();
+    // Enforce generation of a new Session ID and delete the old
     session_regenerate_id(true);
     // Enforce a page reload
     header("Location: $redirect");
