@@ -7,6 +7,7 @@ if (!defined('SECURITY'))
 // Globally available variables
 $debug->append('Global smarty variables', 3);
 
+$debug->append('No cached page detected, loading smarty globals', 3);
 // Defaults to get rid of PHP Notice warnings
 $dDifficulty = 1;
 $aRoundShares = 1;

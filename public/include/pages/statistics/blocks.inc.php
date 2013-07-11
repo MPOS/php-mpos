@@ -13,7 +13,6 @@ if (!$smarty->isCached('master.tpl', md5(serialize($_REQUEST)))) {
   // Propagate content our template
   $smarty->assign("BLOCKSFOUND", $aBlocksFoundData);
   $smarty->assign("BLOCKLIMIT", $iLimit);
-
 } else {
   $debug->append('Using cached page', 3);
 }
