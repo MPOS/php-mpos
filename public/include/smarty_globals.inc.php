@@ -24,7 +24,7 @@ if (@$_SESSION['AUTHENTICATED']) {
 $bitcoin->can_connect() === true ? $dNetworkHashrate = $bitcoin->query('getnetworkhashps') : $dNetworkHashrate = 0;
 
 // Fetch some data
-$iCurrentActiveWorkers = $worker->getCountAllActiveWorkers();
+if (!$iCurrentActiveWorkers = $worker->getCountAllActiveWorkers()) $iCurrentActiveWorkers = 0;
 $iCurrentPoolHashrate =  $statistics->getCurrentHashrate();
 $iCurrentPoolShareRate = $statistics->getCurrentShareRate();
 
