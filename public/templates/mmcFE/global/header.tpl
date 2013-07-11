@@ -8,7 +8,7 @@
                 <td><li>Network Hashrate: {($GLOBAL.nethashrate / 1000 / 1000 )|default:"0"|number_format:"3"} MH/s&nbsp;&nbsp;&nbsp;&nbsp;</li></td>
                 <td><li>Pool Hashrate: {($GLOBAL.hashrate / 1000)|number_format:"3"} MH/s&nbsp;&nbsp;&nbsp;&nbsp;</li></td>
                 <td><li>Pool Sharerate: {$GLOBAL.sharerate|number_format:"2"} Shares/s&nbsp;&nbsp;&nbsp;&nbsp;</li></td>
-                <td><li>Pool Workers: {$GLOBAL.workers}&nbsp;&nbsp;&nbsp;&nbsp;</li></td>
+                <td><li>Pool Workers: {$GLOBAL.workers|default:"0"}&nbsp;&nbsp;&nbsp;&nbsp;</li></td>
               </tr>
             </table>
           </div>
