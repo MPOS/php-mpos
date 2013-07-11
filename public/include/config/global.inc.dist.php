@@ -179,6 +179,7 @@ $config['block_bonus'] = 0;
  * Available options:
  *   prop: Proportional payout system
  *   pps : Pay Per Share payout system
+ *   pplns : Pay Per Last N Shares payout system
  *
  * Default:
  *   prop
@@ -232,6 +233,19 @@ $config['fees'] = 0;
   *  Different dynamic types can be applied, or you can run a fixed scheme.
   *
   *  Explanation
+  *
+  *   PPLNS can run on two different payouts: fixed and blockavg. Each one
+  *   defines a different PPLNS target.
+  *
+  *   Fixed means we will be looking at the shares setup in the default
+  *   setting. There is no automatic adjustments to the PPLNS target,
+  *   all users will be paid out proportionally to that target.
+  *
+  *   Blockavg will look at the last blockcount blocks shares and take
+  *   the average as the PPLNS target. This will be automatically adjusted
+  *   when difficulty changes and more blocks are available. This keeps the
+  *   target dynamic but still traceable.
+  *
   *   default     :  Default target shares for PPLNS
   *   type        :  Payout type used in PPLNS
   *   blockcount  :  Amount of blocks to check for avg shares
@@ -260,7 +274,7 @@ $config['difficulty'] = 20;
  *
  * Explanation:
  *
- *  Proportional Payout System
+ *  Proportional + PPLNS Payout System
  *   When running a pool on fixed mode, each block will be paid
  *   out as defined in `reward`. If you wish to pass transaction
  *   fees inside discovered blocks on to user, set this to `block`.
