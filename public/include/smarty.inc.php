@@ -26,6 +26,6 @@ if ($config['smarty']['cache']) {
   $smarty->cache_lifetime = $config['smarty']['cache_lifetime'];
   $smarty->cache_dir = BASEPATH . "templates/cache";
   $smarty->use_sub_dirs = true;
-  $smarty_cache_key = md5(serialize($_REQUEST . @$_SESSION['USERDATA']['id']));
+  $smarty_cache_key = md5(serialize($_REQUEST) . serialize(@$_SESSION['USERDATA']['id']));
 }
 ?>
