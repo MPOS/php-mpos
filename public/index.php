@@ -82,7 +82,7 @@ $smarty->assign('DebuggerInfo', $debug->getDebugInfo());
 
 // Display our page
 if (!@$supress_master)
-  $smarty->display("master.tpl", md5(serialize($_REQUEST)));
+  $smarty->display("master.tpl", $smarty_cache_key);
 
 // Unset any temporary values here
 unset($_SESSION['POPUP']);

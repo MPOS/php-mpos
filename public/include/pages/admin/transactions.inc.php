@@ -9,7 +9,7 @@ if (!$user->isAuthenticated() || !$user->isAdmin($_SESSION['USERDATA']['id'])) {
   die("404 Page not found");
 }
 
-if (!$smarty->isCached('master.tpl', md5(serialize($_REQUEST)))) {
+if (!$smarty->isCached('master.tpl', $smarty_cache_key)) {
   $debug->append('No cached version available, fetching from backend', 3);
   $aTransactions = $transaction->getAllTransactions(@$_REQUEST['start']);
   if (!$aTransactions) $_SESSION['POPUP'][] = array('CONTENT' => 'Could not find any transaction', 'TYPE' => 'errormsg');
