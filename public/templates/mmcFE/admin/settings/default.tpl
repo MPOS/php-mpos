@@ -16,7 +16,7 @@
         <td>
           <select name="data[maintenance]">
             <option value="1">Yes</option>
-            <option value="0"{if !$MAINTENANCE} selected{/if}>No</option>
+            <option value="0"{nocache}{if !$MAINTENANCE} selected{/if}>{/nocache}No</option>
           </select>
         </td>
       </tr>
@@ -26,7 +26,7 @@
         <td>
           <select name="data[lock_registration]">
             <option value="1">Yes</option>
-            <option value="0"{if !$LOCKREGISTRATION} selected{/if}>No</option>
+            <option value="0"{nocache}{if !$LOCKREGISTRATION} selected{/if}{/nocache}>No</option>
           </select>
         </td>
       </tr>

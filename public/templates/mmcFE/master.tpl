@@ -69,7 +69,7 @@
     </div>
   </div>
   <div id="debug">
-    {include file="system/debugger.tpl"}
+    {nocache}{include file="system/debugger.tpl"}{/nocache}
   </div>
 </div>
 </body>
