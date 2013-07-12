@@ -61,7 +61,10 @@ class Statistics {
     $this->debug->append("STA " . __METHOD__, 4);
     if ($data = $this->memcache->get(__FUNCTION__ . $limit)) return $data;
     $stmt = $this->mysqli->prepare("
-      SELECT b.*, a.username as finder
+      SELECT
+        b.*,
+        a.username AS finder,
+        a.is_anonymous AS is_anonymous
       FROM " . $this->block->getTableName() . " AS b
       LEFT JOIN " . $this->user->getTableName() . " AS a
       ON b.account_id = a.id
@@ -327,9 +330,13 @@ class Statistics {
     case 'shares':
       $stmt = $this->mysqli->prepare("
         SELECT
-          COUNT(id) AS shares,
-          SUBSTRING_INDEX( username, '.', 1 ) AS account
-        FROM " . $this->share->getTableName() . "
+          a.donate_percent AS donate_percent,
+          a.is_anonymous AS is_anonymous,
+          COUNT(s.id) AS shares,
+          SUBSTRING_INDEX( s.username, '.', 1 ) AS account
+        FROM " . $this->share->getTableName() . " AS s
+        LEFT JOIN " . $this->user->getTableName() . " AS a
+        ON SUBSTRING_INDEX( s.username, '.', 1 ) = a.username
         WHERE our_result = 'Y'
         GROUP BY account
         ORDER BY shares DESC
@@ -343,14 +350,18 @@ class Statistics {
     case 'hashes':
       $stmt = $this->mysqli->prepare("
         SELECT
-          IFNULL(ROUND(COUNT(id) * POW(2," . $this->config['difficulty'] . ")/600/1000, 2), 0) AS hashrate,
-          SUBSTRING_INDEX( username, '.', 1 ) AS account
+          a.donate_percent AS donate_percent,
+          a.is_anonymous AS is_anonymous,
+          IFNULL(ROUND(COUNT(t1.id) * POW(2," . $this->config['difficulty'] . ")/600/1000, 2), 0) AS hashrate,
+          SUBSTRING_INDEX( t1.username, '.', 1 ) AS account
         FROM
         (
           SELECT id, username FROM " . $this->share->getTableName() . " WHERE time > DATE_SUB(now(), INTERVAL 10 MINUTE) AND our_result = 'Y'
           UNION
           SELECT id, username FROM " . $this->share->getArchiveTableName() ." WHERE time > DATE_SUB(now(), INTERVAL 10 MINUTE) AND our_result = 'Y'
         ) AS t1
+        LEFT JOIN " . $this->user->getTableName() . " AS a
+        ON SUBSTRING_INDEX( t1.username, '.', 1 ) = a.username
         GROUP BY account
         ORDER BY hashrate DESC LIMIT ?");
       if ($this->checkStmt($stmt) && $stmt->bind_param("i", $limit) && $stmt->execute() && $result = $stmt->get_result())

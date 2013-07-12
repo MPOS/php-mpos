@@ -14,7 +14,7 @@
 {section hashrate $CONTRIBSHARES}
       <tr{if $GLOBAL.userdata.username == $CONTRIBSHARES[hashrate].account}{assign var=listed value=1} style="background-color:#99EB99;"{else} class="{cycle values="odd,even"}"{/if}>
         <td>{$rank++}</td>
-        <td>{$CONTRIBSHARES[hashrate].account|escape}</td>
+        <td>{if $CONTRIBHASHES[hashrate].is_anonymous|default:"0" == 1}anonymous{else}{$CONTRIBSHARES[hashrate].account|escape}{/if}</td>
         <td class="right">{$CONTRIBSHARES[hashrate].shares|number_format}</td>
       </tr>
 {/section}

@@ -127,6 +127,7 @@ class Transaction {
       SELECT
         SUM(t.amount) AS donation,
         a.username AS username,
+        a.is_anonymous AS is_anonymous,
         a.donate_percent AS donate_percent
       FROM $this->table AS t
       LEFT JOIN " . $this->user->getTableName() . " AS a
