@@ -353,8 +353,7 @@ $config['memcache']['splay'] = 15;
  *
  * You can configure the cookie behaviour to secure your cookies more than the PHP defaults
  *
- * For multiple installations of mmcfe-ng on the same domain you must change the cookie
- * path or change the cookie name to avoid conflicts.
+ * For multiple installations of mmcfe-ng on the same domain you must change the cookie path.
  *
  * Explanation:
  * duration:
@@ -384,14 +383,12 @@ $config['memcache']['splay'] = 15;
  *   duration = '1440'
  *   domain   = ''
  *   path     = '/'
- *   name     =  'POOLERCOOKIE'
  *   httponly = true
  *   secure   = false
  **/
 $config['cookie']['duration'] = '1440';
 $config['cookie']['domain'] = '';
 $config['cookie']['path'] = '/';
-$config['cookie']['name'] = 'POOLERCOOKIE';
 $config['cookie']['httponly'] = true;
 $config['cookie']['secure'] = false;
 
