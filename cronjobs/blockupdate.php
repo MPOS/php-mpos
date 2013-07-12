@@ -41,7 +41,7 @@ foreach ($aAllBlocks as $iIndex => $aBlock) {
   $log->logInfo($aBlock['id'] . "\t" . $aBlock['height'] .  "\t" . $aBlock['blockhash'] . "\t" . $aBlock['confirmations'] . " -> " . $aBlockInfo['confirmations']);
   if ($aTxDetails['details'][0]['category'] == 'orphan') {
     // We have an orphaned block, we need to invalidate all transactions for this one
-    if ($transaction->setOrphan($aBlock['id']) && $block->setConfirmations($aBlock['id'], -1)) {
+    if ($block->setConfirmations($aBlock['id'], -1)) {
       $log->logInfo("    Block marked as orphan");
     } else {
       $log->logError("    Block became orphaned but unable to update database entries");
