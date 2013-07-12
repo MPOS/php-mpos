@@ -42,11 +42,13 @@ $start = microtime(true);
 if (!$statistics->getCurrentHashrate())
   $log->logError("getCurrentHashrate update failed");
 $log->logInfo("getCurrentHashrate " . number_format(microtime(true) - $start, 2) . " seconds");
+/*
 // Admin specific statistics, we cache the global query due to slowness
 $start = microtime(true);
 if (!$statistics->getAllUserStats('%'))
   $log->logError("getAllUserStats update failed");
 $log->logInfo("getAllUserStats " . number_format(microtime(true) - $start, 2) . " seconds");
+*/
 
 // Per user share statistics based on all shares submitted
 $start = microtime(true);
