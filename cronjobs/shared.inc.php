@@ -39,7 +39,7 @@ require_once(BASEPATH . 'include/config/global.inc.php');
 require_once(INCLUDE_DIR . '/autoloader.inc.php');
 
 // Load 3rd party logging library for running crons
-$log = new KLogger ( 'logs/' . $cron_name . '.txt' , KLogger::DEBUG );
+$log = new KLogger ( 'logs/' . $cron_name . '.txt' , KLogger::INFO );
 $log->LogDebug('Starting ' . $cron_name);
 
 // Load the start time for later runtime calculations for monitoring
