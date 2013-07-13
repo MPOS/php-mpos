@@ -455,6 +455,10 @@ class User {
       $this->setErrorMessage('Username exceeding character limit');
       return false;
     }
+    if (!preg_match('/[^a-zA-Z0-9_\-]/', $username)) {
+      $this->setErrorMessage('Username may only contain alphanumeric characters');
+      return false;
+    }
     if ($this->getEmail($email1)) {
       $this->setErrorMessage( 'This e-mail address is already taken' );
       return false;
