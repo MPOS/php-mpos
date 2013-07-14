@@ -455,7 +455,7 @@ class User {
       $this->setErrorMessage('Username exceeding character limit');
       return false;
     }
-    if (preg_match('/[^a-zA-Z0-9_\-]/', $username)) {
+    if (preg_match('/[^a-z_\-0-9]/i', $username)) {
       $this->setErrorMessage('Username may only contain alphanumeric characters');
       return false;
     }
