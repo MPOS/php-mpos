@@ -11,7 +11,7 @@ if ($_POST['do'] == 'resetPassword') {
     $_SESSION['POPUP'][] = array('CONTENT' => $user->getError(), 'TYPE' => 'errormsg');
   }
 }
-
 // Tempalte specifics
 $smarty->assign("CONTENT", "default.tpl");
+
 ?>

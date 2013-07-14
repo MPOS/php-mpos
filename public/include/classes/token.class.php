@@ -22,7 +22,7 @@ class Token Extends Base {
    * Insert a new token
    * @param name string Name of the variable
    * @param value string Variable value
-   * @return mixed Insert ID on success, false on failure
+   * @return mixed Token string on success, false on failure
    **/
   public function createToken($strType, $account_id=NULL) {
     $strToken = hash('sha256', $account_id.$strType.microtime());
@@ -35,7 +35,7 @@ class Token Extends Base {
       VALUES (?, ?, ?)
       ");
     if ($stmt && $stmt->bind_param('sii', $strToken, $iToken_id, $account_id) && $stmt->execute())
-      return $stmt->insert_id;
+      return $strToken;
     $this->setErrorMessage('Unable to create new token');
     $this->debug->append('Failed to create new token in database: ' . $this->mysqli->error);
     return false;
@@ -54,7 +54,7 @@ class Token Extends Base {
   }
 }
 
-$token = new Token();
-$token->setDebug($debug);
-$token->setMysql($mysqli);
-$token->setTokenType($tokentype);
+$oToken = new Token();
+$oToken->setDebug($debug);
+$oToken->setMysql($mysqli);
+$oToken->setTokenType($tokentype);

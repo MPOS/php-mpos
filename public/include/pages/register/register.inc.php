@@ -20,7 +20,7 @@ if($config['recaptcha']['enabled'] && $_POST["recaptcha_response_field"] && $_PO
     if ($setting->getValue('lock_registration')) {
       $_SESSION['POPUP'][] = array('CONTENT' => 'Account registration is currently disabled. Please try again later.', 'TYPE' => 'errormsg');
     } else if ($user->register($_POST['username'], $_POST['password1'], $_POST['password2'], $_POST['pin'], $_POST['email1'], $_POST['email2']) && !$setting->getValue('lock_registration')) {
-      $_SESSION['POPUP'][] = array('CONTENT' => 'Account created, please login');
+      $config['accounts']['confirm_email'] ? $_SESSION['POPUP'][] = array('CONTENT' => 'Please check your mailbox to activate this account') : $_SESSION['POPUP'][] = array('CONTENT' => 'Account created, please login');
     } else {
       $_SESSION['POPUP'][] = array('CONTENT' => 'Unable to create account: ' . $user->getError(), 'TYPE' => 'errormsg');
     }
@@ -37,7 +37,7 @@ if($config['recaptcha']['enabled'] && $_POST["recaptcha_response_field"] && $_PO
   if ($setting->getValue('lock_registration')) {
     $_SESSION['POPUP'][] = array('CONTENT' => 'Account registration is currently disabled. Please try again later.', 'TYPE' => 'errormsg');
   } else if ($user->register($_POST['username'], $_POST['password1'], $_POST['password2'], $_POST['pin'], $_POST['email1'], $_POST['email2']) && !$setting->getValue('lock_registration')) {
-    $_SESSION['POPUP'][] = array('CONTENT' => 'Account created, please login');
+    $config['accounts']['confirm_email'] ? $_SESSION['POPUP'][] = array('CONTENT' => 'Please check your mailbox to activate this account') : $_SESSION['POPUP'][] = array('CONTENT' => 'Account created, please login');
   } else {
     $_SESSION['POPUP'][] = array('CONTENT' => 'Unable to create account: ' . $user->getError(), 'TYPE' => 'errormsg');
   }

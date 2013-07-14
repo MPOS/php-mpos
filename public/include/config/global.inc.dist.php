@@ -122,6 +122,23 @@ $config['website']['mobile'] = true;
 $config['website']['mobile_theme'] = 'mobile';
 
 /**
+ * Account specific settings
+ *
+ * Explanation
+ *   You can change some defaults on how accounts are created or registered
+ *   By default, all newly created accounts will require an email verificaiton.
+ *   Only after acitivating an account the user will be able to login
+ *
+ *  Options:
+ *    confirm_email  :  Send confirmation mail to user after registration
+ *
+ *  Defaults:
+ *    confirm_email  :  true
+ *
+ **/
+$config['accounts']['confirm_email'] = true;
+
+/**
  * Some basic access restrictions on some pages
  *
  * Explanation:
