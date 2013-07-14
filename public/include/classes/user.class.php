@@ -9,11 +9,11 @@ class User {
   private $userID = false;
   private $table = 'accounts';
   private $user = array();
-  private $tableAccountBalance = 'accountBalance';
 
-  public function __construct($debug, $mysqli, $salt, $config) {
+  public function __construct($debug, $mysqli, $token, $salt, $config) {
     $this->debug = $debug;
     $this->mysqli = $mysqli;
+    $this->token = $token;
     $this->salt = $salt;
     $this->config = $config;
     $this->debug->append("Instantiated User class", 2);
@@ -485,13 +485,13 @@ class User {
     }
     if ($this->mysqli->query("SELECT id FROM $this->table LIMIT 1")->num_rows > 0) {
       $stmt = $this->mysqli->prepare("
-        INSERT INTO $this->table (username, pass, email, pin, api_key)
-        VALUES (?, ?, ?, ?, ?)
+        INSERT INTO $this->table (username, pass, email, pin, api_key, is_locked)
+        VALUES (?, ?, ?, ?, ?, ?)
         ");
     } else {
       $stmt = $this->mysqli->prepare("
-        INSERT INTO $this->table (username, pass, email, pin, api_key, is_admin)
-        VALUES (?, ?, ?, ?, ?, 1)
+        INSERT INTO $this->table (username, pass, email, pin, api_key, is_admin, is_locked)
+        VALUES (?, ?, ?, ?, ?, 1, 0)
         ");
     }
 
@@ -501,14 +501,19 @@ class User {
     $apikey_hash = $this->getHash($username);
     $username_clean = strip_tags($username);
 
-    if ($this->checkStmt($stmt) && $stmt->bind_param('sssss', $username_clean, $password_hash, $email1, $pin_hash, $apikey_hash)) {
-      if (!$stmt->execute()) {
-        $this->setErrorMessage( 'Unable to register' );
-        if ($stmt->sqlstate == '23000') $this->setErrorMessage( 'Username or email already registered' );
-        return false;
+    //
+    $this->config['confirm_email'] ? $is_locked = 1 : $is_locked = 0;
+
+    if ($this->checkStmt($stmt) && $stmt->bind_param('sssssi', $username_clean, $password_hash, $email1, $pin_hash, $apikey_hash, $is_locked) && $stmt->execute()) {
+      if ($this->config['confirm_email']) {
+        $this->token->createToken('confirm_email', $stmt->insert_id);
+      } else {
+        return true;
       }
-      $stmt->close();
-      return true;
+    } else {
+      $this->setErrorMessage( 'Unable to register' );
+      if ($stmt->sqlstate == '23000') $this->setErrorMessage( 'Username or email already registered' );
+      return false;
     }
     return false;
   }
@@ -520,9 +525,9 @@ class User {
    * @param new2 string New password verification
    * @return bool
    **/
-  public function useToken($token, $new1, $new2) {
+  public function resetPassword($token, $new1, $new2) {
     $this->debug->append("STA " . __METHOD__, 4);
-    if ($id = $this->getIdFromToken($token)) {
+    if ($token = $this->token->getToken($token)) {
       if ($new1 !== $new2) {
         $this->setErrorMessage( 'New passwords do not match' );
         return false;
@@ -532,14 +537,20 @@ class User {
         return false;
       }
       $new_hash = $this->getHash($new1);
-      $stmt = $this->mysqli->prepare("UPDATE $this->table SET pass = ?, token = NULL WHERE id = ? AND token = ?");
-      if ($this->checkStmt($stmt) && $stmt->bind_param('sis', $new_hash, $id, $token) && $stmt->execute() && $stmt->affected_rows === 1) {
-        return true;
+      $stmt = $this->mysqli->prepare("UPDATE $this->table SET pass = ? WHERE id = ?");
+      if ($this->checkStmt($stmt) && $stmt->bind_param('si', $new_hash, $token['account_id']) && $stmt->execute() && $stmt->affected_rows === 1) {
+        if ($this->token->deleteToken($token)) {
+          return true;
+        } else {
+          $this->setErrorMessage('Unable to invalidate used token');
+        }
+      } else {
+        $this->setErrorMessage('Unable to set new password');
       }
     } else {
-      $this->setErrorMessage("Unable find user for your token");
-      return false;
+      $this->setErrorMessage('Unable find user for your token');
     }
+    $this->debug->append('Failed to update password:' . $this->mysqli->error);
     return false;
   }
 
@@ -549,7 +560,7 @@ class User {
    * @param smarty object Smarty object for mail templating
    * @return bool
    **/
-  public function resetPassword($username, $smarty) {
+  public function initResetPassword($username, $smarty) {
     $this->debug->append("STA " . __METHOD__, 4);
     // Fetch the users mail address
     if (empty($username)) {
@@ -560,16 +571,11 @@ class User {
       $this->setErrorMessage("Unable to find a mail address for user $username");
       return false;
     }
-    if (!$this->setUserToken($this->getUserId($username))) {
+    if (!$token = $this->token->getToken($this->token->createToken('password_reset', $this->getUserId($username)))) {
       $this->setErrorMessage("Unable to setup token for password reset");
       return false;
     }
-    // Send password reset link
-    if (!$token = $this->getUserToken($this->getUserId($username))) {
-      $this->setErrorMessage("Unable fetch token for password reset");
-      return false;
-    }
-    $smarty->assign('TOKEN', $token);
+    $smarty->assign('TOKEN', $token['token']);
     $smarty->assign('USERNAME', $username);
     $smarty->assign('SUBJECT', 'Password Reset Request');
     $smarty->assign('WEBSITENAME', $this->config['website']['name']);
@@ -608,4 +614,4 @@ class User {
 }
 
 // Make our class available automatically
-$user = new User($debug, $mysqli, SALT, $config);
+$user = new User($debug, $mysqli, $token, SALT, $config);

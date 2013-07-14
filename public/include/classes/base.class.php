@@ -24,6 +24,9 @@ class Base {
   public function setConfig($config) {
     $this->config = $config;
   }
+  public function setTokenType($tokentype) {
+    $this->tokentype = $tokentype;
+  }
   public function setErrorMessage($msg) {
     $this->sError = $msg;
   }

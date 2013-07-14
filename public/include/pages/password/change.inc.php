@@ -4,8 +4,8 @@
 if (!defined('SECURITY'))
   die('Hacking attempt');
 
-if ($_POST['do'] == 'useToken') {
-  if ($user->useToken($_POST['token'], $_POST['newPassword'], $_POST['newPassword2'])) {
+if ($_POST['do'] == 'resetPassword') {
+  if ($user->resetPassword($_POST['token'], $_POST['newPassword'], $_POST['newPassword2'])) {
      $_SESSION['POPUP'][] = array('CONTENT' => 'Password reset complete! Please login.');
   } else {
     $_SESSION['POPUP'][] = array('CONTENT' => $user->getError(), 'TYPE' => 'errormsg');
