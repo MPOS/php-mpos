@@ -15,6 +15,8 @@ if ($config['recaptcha']['enabled']) {
 
 if ($setting->getValue('disable_invitations') && $setting->getValue('lock_registration')) {
   $_SESSION['POPUP'][] = array('CONTENT' => 'Account registration is currently disabled. Please try again later.', 'TYPE' => 'errormsg');
+} else if (!$setting->getValue('disable_invitations') && !isset($_POST['token'])) {
+  $_SESSION['POPUP'][] = array('CONTENT' => 'Only invited users are allowed to register.', 'TYPE' => 'errormsg');
 } else {
   // Check if recaptcha is enabled, process form data if valid
   if($config['recaptcha']['enabled'] && $_POST["recaptcha_response_field"] && $_POST["recaptcha_response_field"]!=''){
