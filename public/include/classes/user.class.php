@@ -478,7 +478,7 @@ class User {
       $this->setErrorMessage( 'Invalid PIN' );
       return false;
     }
-    if (isset($strToken)) {
+    if (isset($strToken) && !empty($strToken)) {
       $aToken = $this->token->getToken($strToken);
       // Circle dependency, so we create our own object here
       $invitation = new Invitation();

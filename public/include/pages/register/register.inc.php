@@ -22,7 +22,8 @@ if ($setting->getValue('disable_invitations') && $setting->getValue('lock_regist
   if($config['recaptcha']['enabled'] && $_POST["recaptcha_response_field"] && $_POST["recaptcha_response_field"]!=''){
     if ($rsp->is_valid) {
       $smarty->assign("RECAPTCHA", recaptcha_get_html($config['recaptcha']['public_key']));
-      if ($user->register($_POST['username'], $_POST['password1'], $_POST['password2'], $_POST['pin'], $_POST['email1'], $_POST['email2'], $_POST['token'])) {
+      isset($_POST['token']) ? $token = $_POST['token'] : $token = '';
+      if ($user->register($_POST['username'], $_POST['password1'], $_POST['password2'], $_POST['pin'], $_POST['email1'], $_POST['email2'], $token)) {
         $config['accounts']['confirm_email']['enabled'] ? $_SESSION['POPUP'][] = array('CONTENT' => 'Please check your mailbox to activate this account') : $_SESSION['POPUP'][] = array('CONTENT' => 'Account created, please login');
       } else {
         $_SESSION['POPUP'][] = array('CONTENT' => 'Unable to create account: ' . $user->getError(), 'TYPE' => 'errormsg');
@@ -37,7 +38,8 @@ if ($setting->getValue('disable_invitations') && $setting->getValue('lock_regist
     $_SESSION['POPUP'][] = array('CONTENT' => 'Empty Captcha, please try again.', 'TYPE' => 'errormsg');
     // Captcha disabled
   } else {
-    if ($user->register($_POST['username'], $_POST['password1'], $_POST['password2'], $_POST['pin'], $_POST['email1'], $_POST['email2'], $_POST['token'])) {
+    isset($_POST['token']) ? $token = $_POST['token'] : $token = '';
+    if ($user->register($_POST['username'], $_POST['password1'], $_POST['password2'], $_POST['pin'], $_POST['email1'], $_POST['email2'], $token)) {
       $config['accounts']['confirm_email']['enabled'] ? $_SESSION['POPUP'][] = array('CONTENT' => 'Please check your mailbox to activate this account') : $_SESSION['POPUP'][] = array('CONTENT' => 'Account created, please login');
     } else {
       $_SESSION['POPUP'][] = array('CONTENT' => 'Unable to create account: ' . $user->getError(), 'TYPE' => 'errormsg');
