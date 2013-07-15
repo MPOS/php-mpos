@@ -15,6 +15,9 @@ class Base {
   public function setMysql($mysqli) {
     $this->mysqli = $mysqli;
   }
+  public function setMail($mail) {
+    $this->mail = $mail;
+  }
   public function setSmarty($smarty) {
     $this->smarty = $smarty;
   }
@@ -23,6 +26,9 @@ class Base {
   }
   public function setConfig($config) {
     $this->config = $config;
+  }
+  public function setToken($token) {
+    $this->token = $token;
   }
   public function setTokenType($tokentype) {
     $this->tokentype = $tokentype;

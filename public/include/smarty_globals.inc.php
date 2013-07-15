@@ -48,6 +48,7 @@ $aGlobal = array(
   'chaininfo' => $config['chaininfo'],
   'config' => array(
     'website' => array( 'title' => $config['website']['title'], 'acl' => $config['website']['acl'] ),
+    'accounts' => $config['accounts'],
     'price' => array( 'currency' => $config['price']['currency'] ),
     'targetdiff' => $config['difficulty'],
     'currency' => $config['currency'],

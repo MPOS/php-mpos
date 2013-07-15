@@ -454,7 +454,7 @@ class User {
    * @param email2 string Email confirmation
    * @return bool
    **/
-  public function register($username, $password1, $password2, $pin, $email1='', $email2='') {
+  public function register($username, $password1, $password2, $pin, $email1='', $email2='', $strToken='') {
     $this->debug->append("STA " . __METHOD__, 4);
     if (strlen($username > 40)) {
       $this->setErrorMessage('Username exceeding character limit');
@@ -488,8 +488,25 @@ class User {
       $this->setErrorMessage( 'Invalid PIN' );
       return false;
     }
+    if (isset($strToken)) {
+      $aToken = $this->token->getToken($strToken);
+      // Circle dependency, so we create our own object here
+      $invitation = new Invitation();
+      $invitation->setMysql($this->mysqli);
+      $invitation->setDebug($this->debug);
+      $invitation->setUser($this);
+      $invitation->setConfig($this->config);
+      if (!$invitation->setActivated($aToken['id'])) {
+        $this->setErrorMessage('Unable to activate your invitation');
+        return false;
+      }
+      if (!$this->token->deleteToken($strToken)) {
+        $this->setErrorMessage('Unable to remove used token');
+        return false;
+      }
+    }
     if ($this->mysqli->query("SELECT id FROM $this->table LIMIT 1")->num_rows > 0) {
-      $this->config['accounts']['confirm_email'] ? $is_locked = 1 : $is_locked = 0;
+      $this->config['accounts']['confirm_email']['enabled'] ? $is_locked = 1 : $is_locked = 0;
       $stmt = $this->mysqli->prepare("
         INSERT INTO $this->table (username, pass, email, pin, api_key, is_locked)
         VALUES (?, ?, ?, ?, ?, ?)
@@ -508,7 +525,7 @@ class User {
     $username_clean = strip_tags($username);
 
     if ($this->checkStmt($stmt) && $stmt->bind_param('sssssi', $username_clean, $password_hash, $email1, $pin_hash, $apikey_hash, $is_locked) && $stmt->execute()) {
-      if ($this->config['accounts']['confirm_email']) {
+      if ($this->config['accounts']['confirm_email']['enabled']) {
         if ($token = $this->token->createToken('confirm_email', $stmt->insert_id)) {
           $aData['username'] = $username_clean;
           $aData['token'] = $token;
