@@ -421,7 +421,7 @@ class User {
    * @param userID int User ID
    * return data array Database fields as used in SELECT
    **/
-  public function getUserData($userID) {
+  public function getUserData($userID) e
     $this->debug->append("STA " . __METHOD__, 4);
     $this->debug->append("Fetching user information for user id: $userID");
     $stmt = $this->mysqli->prepare("
@@ -495,7 +495,6 @@ class User {
         VALUES (?, ?, ?, ?, ?, ?)
         ");
     } else {
-      $is_locked = 0;
       $stmt = $this->mysqli->prepare("
         INSERT INTO $this->table (username, pass, email, pin, api_key, is_admin, is_locked)
         VALUES (?, ?, ?, ?, ?, 1, ?)
