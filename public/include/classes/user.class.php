@@ -49,9 +49,6 @@ class User {
   public function getUserLocked($id) {
     return $this->getSingle($id, 'is_locked', 'id');
   }
-  public function getUserToken($id) {
-    return $this->getSingle($id, 'token', 'id');
-  }
   public function getUserIp($id) {
     return $this->getSingle($id, 'loggedIp', 'id');
   }
@@ -60,9 +57,6 @@ class User {
   }
   public function getUserFailed($id) {
    return $this->getSingle($id, 'failed_logins', 'id');
-  }
-  public function getIdFromToken($token) {
-    return $this->getSingle($token, 'id', 'token', 's');
   }
   public function isLocked($id) {
     return $this->getUserLocked($id);
@@ -76,10 +70,6 @@ class User {
   }
   public function changeAdmin($id) {
     $field = array('name' => 'is_admin', 'type' => 'i', 'value' => !$this->isAdmin($id));
-    return $this->updateSingle($id, $field);
-  }
-  public function setUserToken($id) {
-    $field = array('name' => 'token', 'type' => 's', 'value' => setHash($id.time()));
     return $this->updateSingle($id, $field);
   }
   public function setUserFailed($id, $value) {
