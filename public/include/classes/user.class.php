@@ -552,7 +552,7 @@ class User {
    **/
   public function resetPassword($token, $new1, $new2) {
     $this->debug->append("STA " . __METHOD__, 4);
-    if ($token = $this->token->getToken($token)) {
+    if ($aToken = $this->token->getToken($token)) {
       if ($new1 !== $new2) {
         $this->setErrorMessage( 'New passwords do not match' );
         return false;
@@ -563,8 +563,8 @@ class User {
       }
       $new_hash = $this->getHash($new1);
       $stmt = $this->mysqli->prepare("UPDATE $this->table SET pass = ? WHERE id = ?");
-      if ($this->checkStmt($stmt) && $stmt->bind_param('si', $new_hash, $token['account_id']) && $stmt->execute() && $stmt->affected_rows === 1) {
-        if ($this->token->deleteToken($token)) {
+      if ($this->checkStmt($stmt) && $stmt->bind_param('si', $new_hash, $aToken['account_id']) && $stmt->execute() && $stmt->affected_rows === 1) {
+        if ($this->token->deleteToken($aToken['token'])) {
           return true;
         } else {
           $this->setErrorMessage('Unable to invalidate used token');
