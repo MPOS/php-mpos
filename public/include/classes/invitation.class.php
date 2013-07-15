@@ -21,6 +21,11 @@ class Invitation extends Base {
     return false;
   }
 
+  /**
+   * Count invitations sent by an account_id
+   * @param account_id integer Account ID
+   * @return mixes Integer on success, boolean on failure
+   **/
   public function getCountInvitations($account_id) {
     $this->debug->append("STA " . __METHOD__, 4);
     $stmt = $this->mysqli->prepare("SELECT count(id) AS total FROM $this->table WHERE account_id = ?");
@@ -30,15 +35,34 @@ class Invitation extends Base {
     $this->debug->append('Failed to fetch invitations from database: ' . $this->mysqli->errro);
     return false;
   }
+
+  /**
+   * Get a specific invitation by email address
+   * Used to ensure no invitation was already sent
+   * @param strEmail string Email address to check for
+   * @return bool boolean true of ralse
+   **/
   public function getByEmail($strEmail) {
     $this->debug->append("STA " . __METHOD__, 4);
     return $this->getSingle($strEmail, 'id', 'email', 's');
   }
 
+  /**
+   * Get a specific token by token ID
+   * Used to match an invitation against a token
+   * @param token_id integer Token ID stored in invitation
+   * @return data mixed Invitation ID on success, false on error
+   **/
   public function getByTokenId($token_id) {
     $this->debug->append("STA " . __METHOD__, 4);
     return $this->getSingle($token_id, 'id', 'token_id');
   }
+
+  /**
+   * Set an invitation as activated by the invitee
+   * @param token_id integer Token to activate
+   * @return bool boolean true or false
+   **/
   public function setActivated($token_id) {
     if (!$iInvitationId = $this->getByTokenId($token_id)) {
       $this->setErrorMessage('Unable to convert token ID to invitation ID');
@@ -47,6 +71,14 @@ class Invitation extends Base {
     $field = array('name' => 'is_activated', 'type' => 'i', 'value' => 1);
     return $this->updateSingle($iInvitationId, $field);
   }
+
+  /**
+   * Insert a new invitation to the database
+   * @param account_id integer Account ID to bind the invitation to
+   * @param email string Email address the invite was sent to
+   * @param token_id integer Token ID used during invitation
+   * @return bool boolean True of false
+   **/
   public function createInvitation($account_id, $email, $token_id) {
     $this->debug->append("STA " . __METHOD__, 4);
     $stmt = $this->mysqli->prepare("INSERT INTO $this->table ( account_id, email, token_id ) VALUES ( ?, ?, ?)");
@@ -54,6 +86,13 @@ class Invitation extends Base {
       return true;
     return false;
   }
+  /**
+   * Send an invitation out to a user
+   * Uses the mail class to send mails
+   * @param account_id integer Sending account ID
+   * @param aData array Data array including mail information
+   * @return bool boolean True or false
+   **/
   public function sendInvitation($account_id, $aData) {
     $this->debug->append("STA " . __METHOD__, 4);
     // Check data input
@@ -95,6 +134,7 @@ class Invitation extends Base {
   }
 }
 
+// Instantiate class
 $invitation = new invitation();
 $invitation->setDebug($debug);
 $invitation->setMysql($mysqli);
