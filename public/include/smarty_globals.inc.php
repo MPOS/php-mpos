@@ -49,6 +49,7 @@ $aGlobal = array(
   'config' => array(
     'website' => array( 'title' => $config['website']['title'], 'acl' => $config['website']['acl'] ),
     'accounts' => $config['accounts'],
+    'disable_invitations' => $setting->getValue('disable_invitations'),
     'price' => array( 'currency' => $config['price']['currency'] ),
     'targetdiff' => $config['difficulty'],
     'currency' => $config['currency'],

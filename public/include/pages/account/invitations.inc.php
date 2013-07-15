@@ -4,7 +4,7 @@
 if (!defined('SECURITY')) die('Hacking attempt');
 
 if ($user->isAuthenticated()) {
-  if ($config['accounts']['invitations']['enabled']) {
+  if (!$setting->getValue('disable_invitations')) {
     if ($invitation->getCountInvitations($_SESSION['USERDATA']['id']) >= $config['accounts']['invitations']['count']) {
       $_SESSION['POPUP'][] = array('CONTENT' => 'You have exceeded the allowed invitations of ' . $config['accounts']['invitations']['count'], 'TYPE' => 'errormsg');
     } else if (isset($_POST['do']) && $_POST['do'] == 'sendInvitation') {
