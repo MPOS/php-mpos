@@ -18,6 +18,7 @@ $smarty = new Smarty;
 $debug->append('Define Smarty Paths', 3);
 $smarty->template_dir = BASEPATH . 'templates/' . THEME . '/';
 $smarty->compile_dir = BASEPATH . 'templates/compile/';
+$smarty_cache_key = md5(serialize($_REQUEST) . serialize(@$_SESSION['USERDATA']['id']));
 
 // Optional smarty caching, check Smarty documentation for details
 if ($config['smarty']['cache']) {
@@ -26,6 +27,5 @@ if ($config['smarty']['cache']) {
   $smarty->cache_lifetime = $config['smarty']['cache_lifetime'];
   $smarty->cache_dir = BASEPATH . "templates/cache";
   $smarty->use_sub_dirs = true;
-  $smarty_cache_key = md5(serialize($_REQUEST) . serialize(@$_SESSION['USERDATA']['id']));
 }
 ?>

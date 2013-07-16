@@ -122,6 +122,33 @@ $config['website']['mobile'] = true;
 $config['website']['mobile_theme'] = 'mobile';
 
 /**
+ * Account specific settings
+ *
+ * Explanation
+ *   You can change some defaults on how accounts are created or registered
+ *   By default, all newly created accounts will require an email verificaiton.
+ *   Only after acitivating an account the user will be able to login
+ *
+ *   Invitations will allow your users to invite new members to join the pool.
+ *   After sending a mail to the invited user, they can register using the token
+ *   created. Invitations can be enabled and disabled through the admin panel.
+ *   Sent invitations are listed on the account invitations page.
+ *
+ *   You can limit the number of registrations send per account via configuration
+ *   variable.
+ *
+ *  Options:
+ *    confirm_email  :  Send confirmation mail to user after registration
+ *    count          :  Maximum invitations a user is able to send
+ *
+ *  Defaults:
+ *    confirm_email  :  true
+ *    count          :  5
+ **/
+$config['accounts']['confirm_email']['enabled'] = true;
+$config['accounts']['invitations']['count'] = 5;
+
+/**
  * Some basic access restrictions on some pages
  *
  * Explanation:
