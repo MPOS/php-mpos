@@ -497,11 +497,14 @@ class User {
     }
     if ($this->mysqli->query("SELECT id FROM $this->table LIMIT 1")->num_rows > 0) {
       $this->config['accounts']['confirm_email']['enabled'] ? $is_locked = 1 : $is_locked = 0;
+      $is_admin = 0;
       $stmt = $this->mysqli->prepare("
         INSERT INTO $this->table (username, pass, email, pin, api_key, is_locked)
         VALUES (?, ?, ?, ?, ?, ?)
         ");
     } else {
+      $is_locked = 0;
+      $is_admin = 1;
       $stmt = $this->mysqli->prepare("
         INSERT INTO $this->table (username, pass, email, pin, api_key, is_admin, is_locked)
         VALUES (?, ?, ?, ?, ?, 1, ?)
@@ -515,7 +518,7 @@ class User {
     $username_clean = strip_tags($username);
 
     if ($this->checkStmt($stmt) && $stmt->bind_param('sssssi', $username_clean, $password_hash, $email1, $pin_hash, $apikey_hash, $is_locked) && $stmt->execute()) {
-      if ($this->config['accounts']['confirm_email']['enabled']) {
+      if ($this->config['accounts']['confirm_email']['enabled'] && $is_admin != 1) {
         if ($token = $this->token->createToken('confirm_email', $stmt->insert_id)) {
           $aData['username'] = $username_clean;
           $aData['token'] = $token;
