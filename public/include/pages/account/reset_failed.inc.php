@@ -8,5 +8,6 @@ if ($user->isAuthenticated()) {
   $user->setUserFailed($_SESSION['USERDATA']['id'], 0);
   header("Location: " . $_SERVER['HTTP_REFERER']);
 }
-
+// Somehow we still need to load this empty template
+$smarty->assign("CONTENT", "../../global/empty.tpl");
 ?>
