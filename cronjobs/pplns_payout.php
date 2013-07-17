@@ -130,7 +130,7 @@ foreach ($aAllBlocks as $iIndex => $aBlock) {
       $aData['fee' ] = 0;
       $aData['donation'] = 0;
 
-      if ($config['fees'] > 0)
+      if ($config['fees'] > 0 && $aData['no_fees'] == 0)
         $aData['fee'] = number_format(round($config['fees'] / 100 * $aData['payout'], 8), 8);
       // Calculate donation amount, fees not included
       $aData['donation'] = number_format(round($user->getDonatePercent($user->getUserId($aData['username'])) / 100 * ( $aData['payout'] - $aData['fee']), 8), 8);

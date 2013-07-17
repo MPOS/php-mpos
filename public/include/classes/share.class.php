@@ -97,6 +97,7 @@ class Share {
       SELECT
         a.id,
         SUBSTRING_INDEX( s.username , '.', 1 ) as username,
+        a.no_fees AS no_fees,
         IFNULL(SUM(IF(our_result='Y', 1, 0)), 0) AS valid,
         IFNULL(SUM(IF(our_result='N', 1, 0)), 0) AS invalid
       FROM $this->table AS s
@@ -135,6 +136,7 @@ class Share {
       SELECT
         a.id,
         SUBSTRING_INDEX( s.username , '.', 1 ) as account,
+        a.no_fees AS no_fees,
         IFNULL(SUM(IF(our_result='Y', 1, 0)), 0) AS valid,
         IFNULL(SUM(IF(our_result='N', 1, 0)), 0) AS invalid
       FROM $this->tableArchive AS s

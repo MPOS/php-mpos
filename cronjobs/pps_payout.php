@@ -72,7 +72,7 @@ foreach ($aAccountShares as $aData) {
   $aData['donation'] = 0;
 
   // Calculate block fees
-  if ($config['fees'] > 0)
+  if ($config['fees'] > 0 && $aData['no_fees'] == 0)
     $aData['fee'] = number_format(round($config['fees'] / 100 * $aData['payout'], 8), 8); 
   // Calculate donation amount
   $aData['donation'] = number_format(round($user->getDonatePercent($user->getUserId($aData['username'])) / 100 * ( $aData['payout'] - $aData['fee']), 8), 8); 
