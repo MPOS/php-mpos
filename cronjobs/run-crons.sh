@@ -31,10 +31,12 @@ while getopts "hvp:" opt; do
       echo "Usage: $0 [-v] [-p PHP_BINARY]";
       exit 0
       ;;
-    v)  VERBOSE=1
-      ;;
-    p)  PHP_BIN=$2; shift;
-      ;;
+    v) VERBOSE=1 ;;
+    p) PHP_BIN=$OPTARG ;;
+    :)
+      echo "Option -$OPTARG requires an argument." >&2
+      exit 1
+    ;;
   esac
 done
 
