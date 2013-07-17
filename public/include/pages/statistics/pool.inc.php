@@ -38,6 +38,7 @@ if (!$smarty->isCached('master.tpl', $smarty_cache_key)) {
   $now = new DateTime( "now" );
   if (!empty($aBlockData)) {
     $dTimeSinceLast = ($now->getTimestamp() - $aBlockData['time']);
+    if ($dTimeSinceLast < 0) $dTimeSinceLast = 0;
   } else {
     $dTimeSinceLast = 0;
   }
