@@ -11,6 +11,7 @@ if (!$smarty->isCached('master.tpl', $smarty_cache_key)) {
     if (is_array($dDifficulty) && array_key_exists('proof-of-work', $dDifficulty))
       $dDifficulty = $dDifficulty['proof-of-work'];
     $iBlock = $bitcoin->getblockcount();
+    $sBlockHash = $bitcoin->query('getblockhash', $iBlock);
   } else {
     $dDifficulty = 1;
     $iBlock = 0;
@@ -51,7 +52,13 @@ if (!$smarty->isCached('master.tpl', $smarty_cache_key)) {
   $smarty->assign("CONTRIBSHARES", $aContributorsShares);
   $smarty->assign("CONTRIBHASHES", $aContributorsHashes);
   $smarty->assign("CURRENTBLOCK", $iBlock);
-  count($aBlockData) > 0 ? $smarty->assign("LASTBLOCK", $aBlockData['height']) : $smarty->assign("LASTBLOCK", 0);
+  $smarty->assign("CURRENTBLOCKHASH", $sBlockHash);
+  if (count($aBlockData) > 0) {
+    $smarty->assign("LASTBLOCK", $aBlockData['height']);
+    $smarty->assign("LASTBLOCKHASH", $aBlockData['blockhash']);
+  } else {
+    $smarty->assign("LASTBLOCK", 0);
+  }
   $smarty->assign("DIFFICULTY", $dDifficulty);
   $smarty->assign("REWARD", $config['reward']);
 } else {

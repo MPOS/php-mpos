@@ -246,9 +246,10 @@ $config['payout_system'] = 'prop';
 $config['archive']['maxrounds'] = 10; 
 $config['archive']['maxage'] = 60 * 24; 
 
-// URL prefix for block searches, used for block links, default: `http://explorer.litecoin.net/search?q=`
-// If empty, the block link to the block information page will be removed
-$config['blockexplorer'] = 'http://explorer.litecoin.net/search?q=';
+// URL prefix for block searches, used for block links, default: `http://explorer.litecoin.net/block/`
+// The Blockhash is appended on the templates to this URL
+// If this config is empty, the block link to the block information page will be removed
+$config['blockexplorer'] = 'http://explorer.litecoin.net/block/';
 
 // Link to blockchain information, used for difficulty link, default: `http://allchains.info`
 // If empty, the difficulty link to the chain information will be removed
