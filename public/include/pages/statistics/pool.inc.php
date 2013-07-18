@@ -12,7 +12,6 @@ if (!$smarty->isCached('master.tpl', $smarty_cache_key)) {
       $dDifficulty = $dDifficulty['proof-of-work'];
     $iBlock = $bitcoin->getblockcount();
     $sBlockHash = $bitcoin->query('getblockhash', $iBlock);
-    var_dump($sBlockHash);
   } else {
     $dDifficulty = 1;
     $iBlock = 0;
