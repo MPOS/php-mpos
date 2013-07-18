@@ -65,4 +65,6 @@ if (!empty($aNotifications)) {
 } else {
   $log->logDebug(" no active IDLE worker notifications\n");
 }
+
+require_once('cron_end.inc.php');
 ?>
