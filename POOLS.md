@@ -27,7 +27,7 @@ They have succesfully mined blocks on each of those pools listed.
 All pools are running on Stratum only.
 
 | Pool URL | Coin | Avg. Hashrate | Avg. Active Workers | Notes |
-| -------- | ---- | ------------- | ----------------- | ----- |
+| -------- | ---- | ------------- | -----------------: | ----- |
 | http://wdc.nordicminers.eu | Worldcoin | n/a | n/a | |
 | http://lky.nordicminers.eu | Luckycoin | n/a | n/a | |
 | http://fst.nordicminers.eu | Fastcoin | n/a | n/a | |
@@ -48,7 +48,7 @@ running more or less without any issues (related to `mmcfe-ng` that is ;-)). He 
 the most powerful pool!
 
 | Pool URL | Coin | Avg. Hashrate | Avg. Active Workers | Notes |
-| -------- | ---- | ------------- | ----------------- | ----- |
+| -------- | ---- | ------------- | ------------------: | ----- |
 | http://www.ejpool.info | Litecoin | 155 MHash | 120 | |
 
 ### Obigal
@@ -65,6 +65,12 @@ Small Time Miners are running various stratum only pools for different coins.
 ### Feeleep75
 
 | Pool URL | Coin | Avg. Hashrate | Avg. Active Workers | Notes |
-| -------- | ---- | ------------- | ------------------- | ----- |
+| -------- | ---- | ------------- | ------------------: | ----- |
 | http://bot.coinmine.pl | Bottlecaps | 3 - 50 MHash | n/a | PoS/PoW type coin |
 | http://yacp.coinmine.pl | YaCoin | 19 MHash | n/a | |
+
+### LiteSaber
+
+| Pool URL | Coin | Avg. Hashrate | Avg. Active Workers | Notes |
+| -------- | ---- | ------------- | ------------------: | ----- |
+| http://coinhuntr.com | Litecoin | 200 MHash | 250 | Custom Frontend template |
