@@ -5,7 +5,8 @@
         <th>Exit Code</th>
         <th>Active</th>
         <th>Runtime</th>
-        <th>Last Run</th>
+        <th>Start Time</th>
+        <th>End Time</th>
         <th>Message</th>
       </thead>
       <tbody>
