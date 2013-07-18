@@ -43,6 +43,9 @@ class User {
   public function getUserEmail($username) {
     return $this->getSingle($username, 'email', 'username', 's');
   }
+  public function getUserNoFee($id) {
+    return $this->getSingle($id, 'no_fees', 'id');
+  }
   public function getUserAdmin($id) {
     return $this->getSingle($id, 'is_admin', 'id');
   }
@@ -58,11 +61,18 @@ class User {
   public function getUserFailed($id) {
    return $this->getSingle($id, 'failed_logins', 'id');
   }
+  public function isNoFee($id) {
+    return $this->getUserNoFee($id);
+  }
   public function isLocked($id) {
     return $this->getUserLocked($id);
   }
   public function isAdmin($id) {
     return $this->getUserAdmin($id);
+  }
+  public function changeNoFee($id) {
+    $field = array('name' => 'no_fees', 'type' => 'i', 'value' => !$this->isNoFee($id));
+    return $this->updateSingle($id, $field);
   }
   public function changeLocked($id) {
     $field = array('name' => 'is_locked', 'type' => 'i', 'value' => !$this->isLocked($id));
