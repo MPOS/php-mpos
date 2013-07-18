@@ -47,7 +47,7 @@ $aGlobal = array(
   'blockexplorer' => $config['blockexplorer'],
   'chaininfo' => $config['chaininfo'],
   'config' => array(
-    'website' => array( 'title' => $config['website']['title'], 'acl' => $config['website']['acl'] ),
+    'website' => $config['website'],
     'accounts' => $config['accounts'],
     'disable_invitations' => $setting->getValue('disable_invitations'),
     'price' => array( 'currency' => $config['price']['currency'] ),
