@@ -48,4 +48,5 @@ $cron_start[$cron_name] = microtime(true);
 // Mark cron as running for monitoring
 $log->logDebug('Marking cronjob as running for monitoring');
 $monitoring->setStatus($cron_name . '_active', 'yesno', 1);
+$monitoring->setStatus($cron_name . '_starttime', 'date', time());
 ?>
