@@ -27,6 +27,14 @@ $aCronStatus = array(
     array( 'NAME' => 'Last Run', 'STATUS' => $monitoring->getStatus('auto_payout_endtime') ),
     array( 'NAME' => 'Last Message', 'STATUS' => $monitoring->getStatus('auto_payout_message') ),
   ),
+  'manual_payout' => array (
+    array( 'NAME' => 'Exit Code', 'STATUS' => $monitoring->getStatus('manual_payout_status') ),
+    array( 'NAME' => 'Active', 'STATUS' => $monitoring->getStatus('manual_payout_active') ),
+    array( 'NAME' => 'Runtime', 'STATUS' => $monitoring->getStatus('manual_payout_runtime') ),
+    array( 'NAME' => 'Last Run', 'STATUS' => $monitoring->getStatus('manual_payout_starttime') ),
+    array( 'NAME' => 'Last Run', 'STATUS' => $monitoring->getStatus('manual_payout_endtime') ),
+    array( 'NAME' => 'Last Message', 'STATUS' => $monitoring->getStatus('manual_payout_message') ),
+  ),
   'archive_cleanup' => array (
     array( 'NAME' => 'Exit Code', 'STATUS' => $monitoring->getStatus('archive_cleanup_status') ),
     array( 'NAME' => 'Active', 'STATUS' => $monitoring->getStatus('archive_cleanup_active') ),

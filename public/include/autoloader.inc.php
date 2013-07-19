@@ -26,6 +26,7 @@ require_once(CLASS_DIR . '/api.class.php');
 require_once(CLASS_DIR . '/mail.class.php');
 require_once(CLASS_DIR . '/tokentype.class.php');
 require_once(CLASS_DIR . '/token.class.php');
+require_once(CLASS_DIR . '/payout.class.php');
 require_once(CLASS_DIR . '/block.class.php');
 require_once(CLASS_DIR . '/setting.class.php');
 require_once(CLASS_DIR . '/monitoring.class.php');
