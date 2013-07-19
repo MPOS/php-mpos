@@ -22,6 +22,14 @@ limitations under the License.
 // Include all settings and classes
 require_once('shared.inc.php');
 
+if ($setting->getValue('disable_ap') == 1) {
+  $log->logInfo(" auto payout disabled via admin panel");
+  $monitoring->setStatus($cron_name . "_active", "yesno", 0);
+  $monitoring->setStatus($cron_name . "_message", "message", "Auto-Payout disabled");
+  $monitoring->setStatus($cron_name . "_status", "okerror", 1);
+  exit(0);
+}
+
 if ($bitcoin->can_connect() !== true) {
   $log->logFatal(" unable to connect to RPC server, exiting");
   $monitoring->setStatus($cron_name . "_active", "yesno", 0);
@@ -34,7 +42,7 @@ if ($bitcoin->can_connect() !== true) {
 $users = $user->getAllAutoPayout();
 
 // Quick summary
-$log->logInfo(" found " . count($users) . " queued payout(s)");
+if (count($users) > 0) $log->logInfo(" found " . count($users) . " queued payout(s)");
 
 // Go through users and run transactions
 if (! empty($users)) {

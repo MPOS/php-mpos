@@ -46,6 +46,7 @@ $aGlobal = array(
   'price' => $setting->getValue('price'),
   'blockexplorer' => $config['blockexplorer'],
   'chaininfo' => $config['chaininfo'],
+  'disable_mp' => $setting->getValue('disable_mp'),
   'config' => array(
     'website' => $config['website'],
     'accounts' => $config['accounts'],

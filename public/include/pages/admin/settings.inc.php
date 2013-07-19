@@ -20,6 +20,8 @@ if (@$_REQUEST['do'] == 'save' && !empty($_REQUEST['data'])) {
 $smarty->assign("MAINTENANCE", $setting->getValue('maintenance'));
 $smarty->assign("LOCKREGISTRATION", $setting->getValue('lock_registration'));
 $smarty->assign("DISABLEINVITATIONS", $setting->getValue('disable_invitations'));
+$smarty->assign("DISABLEAP", $setting->getValue('disable_ap'));
+$smarty->assign("DISABLEMP", $setting->getValue('disable_mp'));
 
 // Tempalte specifics
 $smarty->assign("CONTENT", "default.tpl");
