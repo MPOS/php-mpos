@@ -108,8 +108,8 @@ class Block {
    * @param limit int Maximum blocks to check
    * @return data float Float value of average shares
    **/
-  public function getAvgBlockShares($limit=10) {
-    $stmt = $this->mysqli->prepare("SELECT AVG(shares) AS average FROM $this->table LIMIT ?");
+  public function getAvgBlockShares($limit=1) {
+    $stmt = $this->mysqli->prepare("SELECT AVG(x.shares) AS average FROM (SELECT shares FROM $this->table ORDER BY height DESC LIMIT ?) AS x");
     if ($this->checkStmt($stmt) && $stmt->bind_param('i', $limit) && $stmt->execute() && $result = $stmt->get_result())
       return (float)$result->fetch_object()->average;
     return false;
