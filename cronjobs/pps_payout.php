@@ -25,7 +25,7 @@ require_once('shared.inc.php');
 
 // Check if we are set as the payout system
 if ($config['payout_system'] != 'pps') {
-  verbose("Please activate this cron in configuration via payout_system = pps\n");
+  $log->logInfo("Please activate this cron in configuration via payout_system = pps\n");
   exit(0);
 }
 
@@ -35,13 +35,16 @@ if ( $bitcoin->can_connect() === true ){
   if (is_array($dDifficulty) && array_key_exists('proof-of-work', $dDifficulty))
     $dDifficulty = $dDifficulty['proof-of-work'];
 } else {
-  verbose("Aborted: " . $bitcoin->can_connect() . "\n");
+  $log->logFatal("Aborted: " . $bitcoin->can_connect() . "\n");
+  $monitoring->setStatus($cron_name . "_active", "yesno", 0); 
+  $monitoring->setStatus($cron_name . "_message", "message", "Unable to connect to RPC server");
+  $monitoring->setStatus($cron_name . "_status", "okerror", 1); 
   exit(1);
 }
 
 // Value per share calculation
 if ($config['reward_type'] != 'block') {
-$pps_value = number_format(round($config['reward'] / (pow(2,32) * $dDifficulty) * pow(2, $config['difficulty']), 12) ,12);
+  $pps_value = number_format(round($config['reward'] / (pow(2,32) * $dDifficulty) * pow(2, $config['difficulty']), 12) ,12);
 } else {
   // Try to find the last block value and use that for future payouts, revert to fixed reward if none found
   if ($aLastBlock = $block->getLast()) {
@@ -58,7 +61,7 @@ $iLastShareId = $share->getLastInsertedShareId();
 // Check for all new shares, we start one higher as our last accounted share to avoid duplicates
 $aAccountShares = $share->getSharesForAccounts($iPreviousShareId + 1, $iLastShareId);
 
-verbose("ID\tUsername\tInvalid\tValid\t\tPPS Value\t\tPayout\t\tDonation\tFee\t\tStatus\n");
+$log->logInfo("ID\tUsername\tInvalid\tValid\t\tPPS Value\t\tPayout\t\tDonation\tFee");
 
 foreach ($aAccountShares as $aData) {
   // Take our valid shares and multiply by per share value
@@ -74,65 +77,76 @@ foreach ($aAccountShares as $aData) {
   // Calculate donation amount
   $aData['donation'] = number_format(round($user->getDonatePercent($user->getUserId($aData['username'])) / 100 * ( $aData['payout'] - $aData['fee']), 8), 8); 
 
-  verbose($aData['id'] . "\t" .
+  $log->logInfo($aData['id'] . "\t" .
     $aData['username'] . "\t" .
     $aData['invalid'] . "\t" .
     $aData['valid'] . "\t*\t" .
     $pps_value . "\t=\t" .
     $aData['payout'] . "\t" .
     $aData['donation'] . "\t" .
-    $aData['fee'] . "\t");
+    $aData['fee']);
 
-  $strStatus = "OK";
   // Add new credit transaction
   if (!$transaction->addTransaction($aData['id'], $aData['payout'], 'Credit_PPS'))
-    $strStatus = "Transaction Failed";
+    $log->logError('Failed to add Credit_PPS transaction in database');
   // Add new fee debit for this block
   if ($aData['fee'] > 0 && $config['fees'] > 0)
     if (!$transaction->addTransaction($aData['id'], $aData['fee'], 'Fee_PPS'))
-      $strStatus = "Fee Failed";
+      $log->logError('Failed to add Fee_PPS transaction in database');
   // Add new donation debit
   if ($aData['donation'] > 0)
     if (!$transaction->addTransaction($aData['id'], $aData['donation'], 'Donation_PPS'))
-      $strStatus = "Donation Failed";
-  verbose($strStatus . "\n");
+      $log->logError('Failed to add Donation_PPS transaction in database');
 }
 
 // Store our last inserted ID for the next run
 $setting->setValue('pps_last_share_id', $iLastShareId);
 
-verbose("\n\n------------------------------------------------------------------------------------\n\n");
-
 // Fetch all unaccounted blocks
 $aAllBlocks = $block->getAllUnaccounted('ASC');
 if (empty($aAllBlocks)) {
-  verbose("No new unaccounted blocks found\n");
+  $log->logDebug("No new unaccounted blocks found");
 }
 
 // Go through blocks and archive/delete shares that have been accounted for
 foreach ($aAllBlocks as $iIndex => $aBlock) {
   // If we are running through more than one block, check for previous share ID
   $iLastBlockShare = @$aAllBlocks[$iIndex - 1]['share_id'] ? @$aAllBlocks[$iIndex - 1]['share_id'] : 0;
+  if (!is_numeric($aBlock['share_id'])) {
+    $log->logFatal("Block " . $aBlock['height'] . " has no share_id associated with it, not going to continue");
+    $monitoring->setStatus($cron_name . "_active", "yesno", 0);
+    $monitoring->setStatus($cron_name . "_message", "message", "Block " . $aBlock['height'] . " has no share_id associated with it");
+    $monitoring->setStatus($cron_name . "_status", "okerror", 1);
+    exit(1);
+  }
   // Per account statistics
   $aAccountShares = $share->getSharesForAccounts(@$iLastBlockShare, $aBlock['share_id']);
   foreach ($aAccountShares as $key => $aData) {
     if (!$statistics->updateShareStatistics($aData, $aBlock['id']))
-      verbose("Failed to update stats for this block on : " . $aData['username'] . "\n");
+      $log->logError("Failed to update stats for this block on : " . $aData['username']);
   }
   // Move shares to archive
-  if ($config['archive_shares'] && $aBlock['share_id'] < $iLastShareId) {
+  if ($aBlock['share_id'] < $iLastShareId) {
     if (!$share->moveArchive($aBlock['share_id'], $aBlock['id'], @$iLastBlockShare))
-      verbose("Archving failed\n");
+      $log->logError("Archving failed");
   }
   // Delete shares
   if ($aBlock['share_id'] < $iLastShareId && !$share->deleteAccountedShares($aBlock['share_id'], $iLastBlockShare)) {
-    verbose("\nERROR : Failed to delete accounted shares from " . $aBlock['share_id'] . " to " . $iLastBlockShare . ", aborting!\n");
+    $log->logFatal("Failed to delete accounted shares from " . $aBlock['share_id'] . " to " . $iLastBlockShare . ", aborting!");
+    $monitoring->setStatus($cron_name . "_active", "yesno", 0);
+    $monitoring->setStatus($cron_name . "_message", "message", "Failed to delete accounted shares from " . $aBlock['share_id'] . " to " . $iLastBlockShare);
+    $monitoring->setStatus($cron_name . "_status", "okerror", 1);
     exit(1);
   }
   // Mark this block as accounted for
   if (!$block->setAccounted($aBlock['id'])) {
-    verbose("\nERROR : Failed to mark block as accounted! Aborting!\n");
+    $log->logFatal("Failed to mark block as accounted! Aborting!");
+    $monitoring->setStatus($cron_name . "_active", "yesno", 0);
+    $monitoring->setStatus($cron_name . "_message", "message", "Failed to mark block " . $aBlock['height'] . " as accounted");
+    $monitoring->setStatus($cron_name . "_status", "okerror", 1);
     exit(1);
   }
 }
+
+require_once('cron_end.inc.php');
 ?>

@@ -1,6 +1,9 @@
 {include file="global/block_header.tpl" BLOCK_HEADER="Join our pool" BLOCK_STYLE="clear:none;"}
 <form action="{$smarty.server.PHP_SELF}" method="post">
   <input type="hidden" name="page" value="{$smarty.request.page|escape}">
+{if $smarty.request.token|default:""}
+  <input type="hidden" name="token" value="{$smarty.request.token|escape}" />
+{/if}
   <input type="hidden" name="action" value="register">
   <table width="90%" border="0">
     <tbody>

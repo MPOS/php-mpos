@@ -96,22 +96,24 @@ $config['ap_threshold']['max'] = 250;
  * Website specific configuration settings
  *
  * Explanation:
- *   title         :  Website title used in master template
- *   name          :  The pool name, displayed in the header and mails
- *   slogan        :  A special slogan, also displayed in the header below name
- *   email         :  `From` addresses used in notifications
- *   theme         :  Theme used for desktop browsers
- *   mobile        :  Enable/Disable mobile theme support
- *   mobile_theme  :  Theme used for mobile browsers
+ *   title          :  Website title used in master template
+ *   name           :  The pool name, displayed in the header and mails
+ *   slogan         :  A special slogan, also displayed in the header below name
+ *   email          :  `From` addresses used in notifications
+ *   theme          :  Theme used for desktop browsers
+ *   mobile         :  Enable/Disable mobile theme support
+ *   mobile_theme   :  Theme used for mobile browsers
+ *   api disabled   :  Disable the sites API functions
  *
  * Defaults:
- *   title         =  `The Pool - Mining Evolved`
- *   name          =  `The Pool`
- *   slogan        =  `Resistance is futile`
- *   email         =  `test@example.com`
- *   theme         =  `mmcFE`
- *   mobile        =  true
- *   mobile_theme  =  `mobile`
+ *   title          =  `The Pool - Mining Evolved`
+ *   name           =  `The Pool`
+ *   slogan         =  `Resistance is futile`
+ *   email          =  `test@example.com`
+ *   theme          =  `mmcFE`
+ *   mobile         =  true
+ *   mobile_theme   =  `mobile`
+ *   api disbabled  =  false
  **/
 $config['website']['title'] = 'The Pool - Mining Evolved';
 $config['website']['name'] = 'The Pool';
@@ -120,7 +122,51 @@ $config['website']['email'] = 'test@example.com';
 $config['website']['theme'] = 'mmcFE';
 $config['website']['mobile'] = true;
 $config['website']['mobile_theme'] = 'mobile';
+$config['website']['api']['disabled'] = false;
 
+/**
+ * Account specific settings
+ *
+ * Explanation
+ *   You can change some defaults on how accounts are created or registered
+ *   By default, all newly created accounts will require an email verificaiton.
+ *   Only after acitivating an account the user will be able to login
+ *
+ *   Invitations will allow your users to invite new members to join the pool.
+ *   After sending a mail to the invited user, they can register using the token
+ *   created. Invitations can be enabled and disabled through the admin panel.
+ *   Sent invitations are listed on the account invitations page.
+ *
+ *   You can limit the number of registrations send per account via configuration
+ *   variable.
+ *
+ *  Options:
+ *    confirm_email  :  Send confirmation mail to user after registration
+ *    count          :  Maximum invitations a user is able to send
+ *
+ *  Defaults:
+ *    confirm_email  :  true
+ *    count          :  5
+ **/
+$config['accounts']['confirm_email']['enabled'] = true;
+$config['accounts']['invitations']['count'] = 5;
+
+/**
+ * Some basic access restrictions on some pages
+ *
+ * Explanation:
+ *   Some pools would like to run a few pages for public access instead
+ *   of enforcing a login. You can change visibility of some pages here.
+ *
+ * Options:
+ *   'public'   :  Allow guest access and authenticated user to view page
+ *   'private'  :  Only allow logged in users access to view page
+ *
+ * Defaults:
+ *   'private' for every page
+ **/
+$config['website']['acl']['statistics']['pool'] = 'private';
+$config['website']['acl']['statistics']['blocks'] = 'private';
 
 /**
  * Re-Captcha settings
@@ -133,7 +179,19 @@ $config['recaptcha']['private_key'] = 'YOUR_PRIVATE_RECAPTCHA_KEY';
 // Currency system used in this pool, default: `LTC`
 $config['currency'] = 'LTC';
 
-// Default transaction fee, added by RPC server, default: 0.1
+/**
+ * Default transaction fee to apply to user transactions
+ *
+ * Explanation
+ *   The coin daemon applies transcation fees to young coins.
+ *   Since we are unable to find out what the exact fee was we set
+ *   a default value here which is applied to both manual and auto payouts.
+ *   If this is not set, no fee is applied in the transactions history but
+ *   the user might still see them when the coins arrive.
+ *
+ * Default:
+ *   txfee   =  0.1
+ **/
 $config['txfee'] = 0.1;
 
 // Payout a block bonus to block finders, default: 0 (disabled)
@@ -151,18 +209,47 @@ $config['block_bonus'] = 0;
  * Available options:
  *   prop: Proportional payout system
  *   pps : Pay Per Share payout system
+ *   pplns : Pay Per Last N Shares payout system
  *
  * Default:
  *   prop
 **/
 $config['payout_system'] = 'prop';
 
-// For debugging purposes you can archive shares in the archive_shares table, default: true
-$config['archive_shares'] = true;
+/**
+ * Archiving configuration for debugging
+ *
+ * Explanation:
+ *   By default, we don't need to archive for a long time. PPLNS and Hashrate
+ *   calculations rely on this archive, but all shares past a certain point can
+ *   safely be deleted.
+ *
+ *   To ensure we have enough shares on stack for PPLNS, this
+ *   is set to the past 10 rounds. Even with lucky ones in between those should
+ *   fit the PPLNS target. On top of that, even if we have more than 10 rounds,
+ *   we still keep the last maxage shares to ensure we can calculate hashrates.
+ *   Both conditions need to be met in order for shares to be purged from archive.
+ *
+ *   Proportional mode will only keep the past 24 hours. These are required for
+ *   hashrate calculations to work past a round, hence 24 hours was selected as
+ *   the default. You may want to increase the time for debugging, then add any
+ *   integer reflecting minutes of shares to keep.
+ *
+ * Availabe Options:
+ *   maxrounds  :  PPLNS, keep shares for maxrounds
+ *   maxage     :  PROP and PPLNS, delete shares older than maxage minutes
+ *
+ * Default:
+ *   maxrounds  =  10
+ *   maxage     =  60 * 24   (24h)
+ **/
+$config['archive']['maxrounds'] = 10; 
+$config['archive']['maxage'] = 60 * 24; 
 
-// URL prefix for block searches, used for block links, default: `http://explorer.litecoin.net/search?q=`
-// If empty, the block link to the block information page will be removed
-$config['blockexplorer'] = 'http://explorer.litecoin.net/search?q=';
+// URL prefix for block searches, used for block links, default: `http://explorer.litecoin.net/block/`
+// The Blockhash is appended on the templates to this URL
+// If this config is empty, the block link to the block information page will be removed
+$config['blockexplorer'] = 'http://explorer.litecoin.net/block/';
 
 // Link to blockchain information, used for difficulty link, default: `http://allchains.info`
 // If empty, the difficulty link to the chain information will be removed
@@ -170,6 +257,48 @@ $config['chaininfo'] = 'http://allchains.info';
 
 // Pool fees applied to users in percent, default: 0 (disabled)
 $config['fees'] = 0;
+
+/**
+  *  PPLNS requires some settings to run properly. First we need to define
+  *  a default shares count that is applied if we don't have a proper type set.
+  *  Different dynamic types can be applied, or you can run a fixed scheme.
+  *
+  *  Explanation
+  *
+  *   PPLNS can run on two different payouts: fixed and blockavg. Each one
+  *   defines a different PPLNS target.
+  *
+  *   Fixed means we will be looking at the shares setup in the default
+  *   setting. There is no automatic adjustments to the PPLNS target,
+  *   all users will be paid out proportionally to that target.
+  *
+  *   Blockavg will look at the last blockcount blocks shares and take
+  *   the average as the PPLNS target. This will be automatically adjusted
+  *   when difficulty changes and more blocks are available. This keeps the
+  *   target dynamic but still traceable.
+  *
+  *   If you use the fixed type it will use $config['pplns']['shares']['default']
+  *   for target calculations, if you use blockavg type it will use 
+  *   $config['pplns']['blockavg']['blockcount'] blocks average for target
+  *   calculations.
+  *
+  *   default     :  Default target shares for PPLNS
+  *   type        :  Payout type used in PPLNS
+  *   blockcount  :  Amount of blocks to check for avg shares
+  *
+  *  Available Options:
+  *   default     :  amount of shares, integeger
+  *   type        :  blockavg or fixed
+  *   blockcount  :  amount of blocks, any integer
+  *
+  *  Defaults:
+  *   default     =  4000000
+  *   type        =  `blockavg`
+  *   blockcount  =  10
+  **/
+$config['pplns']['shares']['default'] = 4000000;
+$config['pplns']['shares']['type'] = 'blockavg';
+$config['pplns']['blockavg']['blockcount'] = 10;
 
 // Pool target difficulty as set in pushpoold configuration file
 // Please also read this for stratum: https://github.com/TheSerapher/php-mmcfe-ng/wiki/FAQ
@@ -181,7 +310,7 @@ $config['difficulty'] = 20;
  *
  * Explanation:
  *
- *  Proportional Payout System
+ *  Proportional + PPLNS Payout System
  *   When running a pool on fixed mode, each block will be paid
  *   out as defined in `reward`. If you wish to pass transaction
  *   fees inside discovered blocks on to user, set this to `block`.
@@ -217,11 +346,17 @@ $config['confirmations'] = 120;
 /**
  * Memcache configuration
  *
+ * To disable memcache set option $config['memcache']['enabled'] = false
+ * After disable memcache installation of memcache is not required.
+ *
  * Please note that a memcache is greatly increasing performance
  * when combined with the `statistics.php` cronjob. Disabling this
  * is not recommended in a live environment!
  *
  * Explanations
+ *   enabled     :   Disable (false) memcache for debugging or enable (true) it
+ *   host        :   Host IP or hostname
+ *   port        :   memcache port
  *   keyprefix   :   Must be changed for multiple mmcfe-ng instances on one host
  *   expiration  :   Default expiration time in seconds of all cached keys.
  *                   Increase if caches expire too fast.
@@ -247,19 +382,77 @@ $config['memcache']['splay'] = 15;
 /**
  * Cookie configiration
  *
- * For multiple installations of this cookie change the cookie name
+ * You can configure the cookie behaviour to secure your cookies more than the PHP defaults
+ *
+ * For multiple installations of mmcfe-ng on the same domain you must change the cookie path.
+ *
+ * Explanation:
+ * duration:
+ *   the amount of time, in seconds, that a cookie should persist in the users browser.
+ *   0 = until closed; 1440 = 24 minutes. Check your php.ini 'session.gc_maxlifetime' value
+ *   and ensure that it is at least the duration specified here.
+ *
+ * domain:
+ *   the only domain name that may access this cookie in the browser
+ *
+ * path:
+ *   the highest path on the domain that can access this cookie; i.e. if running two pools
+ *   from a single domain you might set the path /ltc/ and /ftc/ to separate user session
+ *   cookies between the two.
+ *
+ * httponly:
+ *   marks the cookie as accessible only through the HTTP protocol. The cookie can't be
+ *   accessed by scripting languages, such as JavaScript. This can help to reduce identity
+ *   theft through XSS attacks in most browsers.
+ *
+ * secure:
+ *   marks the cookie as accessible only through the HTTPS protocol. If you have a SSL
+ *   certificate installed on your domain name then this will stop a user accidently
+ *   accessing the site over a HTTP connection, without SSL, exposing their session cookie.
  *
  * Default:
- *   path    =  '/'
- *   name    =  'POOLERCOOKIE'
- *   domain  = ''
+ *   duration = '1440'
+ *   domain   = ''
+ *   path     = '/'
+ *   httponly = true
+ *   secure   = false
  **/
-$config['cookie']['path'] = '/';
-$config['cookie']['name'] = 'POOLERCOOKIE';
+$config['cookie']['duration'] = '1440';
 $config['cookie']['domain'] = '';
+$config['cookie']['path'] = '/';
+$config['cookie']['httponly'] = true;
+$config['cookie']['secure'] = false;
 
-// Disable or enable smarty cache
-// This is usually not required, default: 0
-$config['cache'] = 0;
-
+/**
+ * Enable or disable the Smarty cache
+ *
+ * Explanation:
+ *   Smarty implements a file based cache for all HTML output generated
+ *   from dynamic scripts. It can be enabled to cache the HTML data on disk,
+ *   future request are served from those cache files.
+ *
+ *   This may or may not work as expected, in general Memcache is used to cache
+ *   all data so rendering the page should not take too long anyway.
+ *
+ *   You can test this out and enable (1) this setting but it's not guaranteed to
+ *   work with mmcfe-ng.
+ *
+ *   Ensure that the folder `templates/cache` is writable by the webserver!
+ *
+ *   cache           =  Enable/Disable the cache
+ *   cache_lifetime  =  Time to keep files in seconds before updating them
+ *
+ *  Options:
+ *    cache:
+ *      0  =  disabled
+ *      1  =  enabled
+ *    cache_lifetime:
+ *      time in seconds
+ *
+ *  Defaults:
+ *    cache           =  0, disabled
+ *    cache_lifetime  =  30 seconds
+ **/
+$config['smarty']['cache'] = 0;
+$config['smarty']['cache_lifetime'] = 30;
 ?>

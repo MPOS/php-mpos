@@ -2,15 +2,24 @@
 
 // Make sure we are called from index.php
 if (!defined('SECURITY')) die('Hacking attempt');
-if (!$user->isAuthenticated()) header("Location: index.php?page=home");
 
 // Grab the last blocks found
-empty($_REQUEST['limit']) ? $iLimit = 20 : $iLimit = $_REQUEST['limit'];
-$aBlocksFoundData = $statistics->getBlocksFound($iLimit);
+if (!$smarty->isCached('master.tpl', $smarty_cache_key)) {
+  $debug->append('No cached version available, fetching from backend', 3);
+  // Grab the last blocks found
+  $iLimit = 20;
+  $aBlocksFoundData = $statistics->getBlocksFound($iLimit);
 
-// Propagate content our template
-$smarty->assign("BLOCKSFOUND", $aBlocksFoundData);
-$smarty->assign("BLOCKLIMIT", $iLimit);
+  // Propagate content our template
+  $smarty->assign("BLOCKSFOUND", $aBlocksFoundData);
+  $smarty->assign("BLOCKLIMIT", $iLimit);
+} else {
+  $debug->append('Using cached page', 3);
+}
 
-$smarty->assign("CONTENT", "default.tpl");
+if ($config['website']['acl']['statistics']['blocks'] == 'public') {
+  $smarty->assign("CONTENT", "default.tpl");
+} else if ($user->isAuthenticated()) {
+  $smarty->assign("CONTENT", "default.tpl");
+}
 ?>

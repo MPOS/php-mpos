@@ -1,7 +1,6 @@
 {if is_array($YOURHASHRATES) && is_array($POOLHASHRATES)}
 <div class="block_content tab_content" id="both" style="padding-left:30px;">
-{foreach from=array('area','pie') item=chartType}
-  <table width="60%" class="stats" rel="{$chartType}">
+  <table width="60%" class="stats" rel="area">
     <caption>Your vs Pool Hashrate</caption>
     <thead>
       <tr>
@@ -30,14 +29,11 @@
         <td>{$POOLHASHRATES.$i|default:"0"}</td>
 {/for}
 {for $i=0 to date('G', time() - 60 * 60)}
-        <td>{$POOLHASHRATES.$i|default:"0"}</td>
+        <td>{$POOLHASHRATES.$i - $YOURHASHRATES.$i|default:"0"}</td>
 {/for}
       </tr>
     </tbody>
   </table>
   <br />
-{/foreach}
 </div>
-{else}
-<p><li>No shares available to start calculations</li></p>
 {/if}

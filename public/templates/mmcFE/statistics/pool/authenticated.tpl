@@ -22,7 +22,7 @@
     {if $GLOBAL.blockexplorer}
     <tr>
       <td class="leftheader">Next Network Block</td>
-      <td><a href="{$GLOBAL.blockexplorer}{$CURRENTBLOCK + 1}" target="_new">{$CURRENTBLOCK + 1}</a> &nbsp;&nbsp;<font size="1"> (Current: <a href="{$GLOBAL.blockexplorer}{$CURRENTBLOCK}" target="_new">{$CURRENTBLOCK})</a></font></td>
+      <td>{$CURRENTBLOCK + 1} &nbsp;&nbsp;<font size="1"> (Current: <a href="{$GLOBAL.blockexplorer}{$CURRENTBLOCKHASH}" target="_new">{$CURRENTBLOCK})</a></font></td>
     </tr>
     {else}
     <tr>
@@ -32,7 +32,7 @@
     {/if}
     <tr>
       <td class="leftheader">Last Block Found</td>
-      <td>{if $GLOBAL.blockexplorer}<a href="{$GLOBAL.blockexplorer}{$LASTBLOCK}" target="_new">{$LASTBLOCK|default:"0"}</a>{else}{$LASTBLOCK|default:"0"}{/if}</td>
+      <td>{if $GLOBAL.blockexplorer}<a href="{$GLOBAL.blockexplorer}{$LASTBLOCKHASH}" target="_new">{$LASTBLOCK|default:"0"}</a>{else}{$LASTBLOCK|default:"0"}{/if}</td>
     </tr>
     <tr>
       <td class="leftheader">Current Difficulty</td>
@@ -56,7 +56,7 @@
     </tr>
   </tbody>
 </table>
-<li>These stats are also available in JSON format <a href="{$smarty.server.PHP_SELF}?page=api&action=getpoolstatus&api_key={$GLOBAL.userdata.api_key}">HERE</a></li>
+{if !$GLOBAL.config.website.api.disabled}<li>These stats are also available in JSON format <a href="{$smarty.server.PHP_SELF}?page=api&action=getpoolstatus&api_key={$GLOBAL.userdata.api_key}">HERE</a></li>{/if}
 {include file="global/block_footer.tpl"}
 
 

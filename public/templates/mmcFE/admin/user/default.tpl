@@ -44,11 +44,12 @@
     </tr>
   </thead>
   <tbody>
+{nocache}
 {section name=user loop=$USERS|default}
     <tr>
       <td class="center">{$USERS[user].id}</td>
-      <td>{$USERS[user].username}</td>
-      <td>{$USERS[user].email}</td>
+      <td>{$USERS[user].username|escape}</td>
+      <td>{$USERS[user].email|escape}</td>
       <td class="right">{$USERS[user].shares}</td>
       <td class="right">{$USERS[user].hashrate}</td>
       <td class="right">{$USERS[user].payout.est_donation|number_format:"8"}</td>
@@ -70,6 +71,7 @@
     <td colspan="10"></td>
   </tr>
 {/section}
+{/nocache}
   </tbody>
   <tfoot>
     <tr>

@@ -1,10 +1,10 @@
 <?php
 
 // Make sure we are called from index.php
-if (!defined('SECURITY'))
-die('Hacking attempt');
+if (!defined('SECURITY')) die('Hacking attempt');
 
-// {"pool_name":"Pool-X.eu","hashrate":"511128.99","workers":"2104","shares_this_round":92450,"last_block":"365294","network_hashrate":17327056.06}
+// Check if the API is activated
+$api->isActive();
 
 // Fetch last block information
 $aLastBlock = $block->getLast();

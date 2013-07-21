@@ -1,12 +1,12 @@
 <?php
 
 // Make sure we are called from index.php
-if (!defined('SECURITY'))
-    die('Hacking attempt');
+if (!defined('SECURITY')) die('Hacking attempt');
 
 // Globally available variables
 $debug->append('Global smarty variables', 3);
 
+$debug->append('No cached page detected, loading smarty globals', 3);
 // Defaults to get rid of PHP Notice warnings
 $dDifficulty = 1;
 $aRoundShares = 1;
@@ -24,7 +24,7 @@ if (@$_SESSION['AUTHENTICATED']) {
 $bitcoin->can_connect() === true ? $dNetworkHashrate = $bitcoin->query('getnetworkhashps') : $dNetworkHashrate = 0;
 
 // Fetch some data
-$iCurrentActiveWorkers = $worker->getCountAllActiveWorkers();
+if (!$iCurrentActiveWorkers = $worker->getCountAllActiveWorkers()) $iCurrentActiveWorkers = 0;
 $iCurrentPoolHashrate =  $statistics->getCurrentHashrate();
 $iCurrentPoolShareRate = $statistics->getCurrentShareRate();
 
@@ -47,7 +47,9 @@ $aGlobal = array(
   'blockexplorer' => $config['blockexplorer'],
   'chaininfo' => $config['chaininfo'],
   'config' => array(
-    'website' => array( 'title' => $config['website']['title'] ),
+    'website' => $config['website'],
+    'accounts' => $config['accounts'],
+    'disable_invitations' => $setting->getValue('disable_invitations'),
     'price' => array( 'currency' => $config['price']['currency'] ),
     'targetdiff' => $config['difficulty'],
     'currency' => $config['currency'],
@@ -83,9 +85,7 @@ if (@$_SESSION['USERDATA']['id']) {
   $aGlobal['userdata']['sharerate'] = $statistics->getUserSharerate($_SESSION['USERDATA']['id']);
 
   switch ($config['payout_system']) {
-  case 'pps':
-    break;
-  default:
+  case 'prop' || 'pplns':
     // Some estimations
     if (@$aRoundShares['valid'] > 0) {
       $aGlobal['userdata']['est_block'] = round(( (int)$aGlobal['userdata']['shares']['valid'] / (int)$aRoundShares['valid'] ) * (float)$config['reward'], 8);
@@ -98,12 +98,20 @@ if (@$_SESSION['USERDATA']['id']) {
       $aGlobal['userdata']['est_donation'] = 0;
       $aGlobal['userdata']['est_payout'] = 0;
     }
+  case 'pplns':
+    if ($iAvgBlockShares = round($block->getAvgBlockShares($config['pplns']['blockavg']['blockcount']))) {
+      $aGlobal['pplns']['target'] = $iAvgBlockShares;
+    } else {
+      $aGlobal['pplns']['target'] = $config['pplns']['shares']['default'];
+    }
+    break;
+  case 'pps':
     break;
   }
 
   // Site-wide notifications, based on user events
   if ($aGlobal['userdata']['balance']['confirmed'] >= $config['ap_threshold']['max'])
-    $_SESSION['POPUP'][] = array('CONTENT' => 'You have exceeded your accounts balance. Please transfer some ' . $config['currency'] . "!", 'TYPE' => 'errormsg');
+    $_SESSION['POPUP'][] = array('CONTENT' => 'You have exceeded the pools configured ' . $config['currency'] . ' warning threshold. Please initiate a transfer!', 'TYPE' => 'errormsg');
   if ($user->getUserFailed($_SESSION['USERDATA']['id']) > 0)
     $_SESSION['POPUP'][] = array('CONTENT' => 'You have ' . $user->getUserFailed($_SESSION['USERDATA']['id']) . ' failed login attempts! <a href="?page=account&action=reset_failed">Reset Counter</a>', 'TYPE' => 'errormsg');
 }

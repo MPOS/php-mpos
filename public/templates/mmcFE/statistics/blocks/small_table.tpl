@@ -14,7 +14,7 @@
 {section block $BLOCKSFOUND}
       <tr class="{cycle values="odd,even"}">
         <td class="center"><a href="{$GLOBAL.blockexplorer}{$BLOCKSFOUND[block].height}" target="_blank">{$BLOCKSFOUND[block].height}</a></td>
-        <td>{$BLOCKSFOUND[block].finder|default:"unknown"}</td>
+        <td>{if $BLOCKSFOUND[block].is_anonymous|default:"0" == 1}anonymous{else}{$BLOCKSFOUND[block].finder|default:"unknown"|escape}{/if}</td>
         <td class="center">{$BLOCKSFOUND[block].time|date_format:"%d/%m %H:%M:%S"}</td>
         <td class="right">{$BLOCKSFOUND[block].shares|number_format}</td>
       </tr>

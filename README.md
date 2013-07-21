@@ -32,6 +32,7 @@ These people have supported this project with a donation:
 * [vias](https://github.com/vias79)
 * [WKNiGHT](https://github.com/WKNiGHT-)
 * [ZC](https://github.com/zccopwrx)
+* Nutnut
 
 Pools running mmcfe-ng
 ======================
@@ -68,12 +69,13 @@ Features
 
 The following feature have been implemented so far:
 
-* Mobile WebUI **NEW**
+* Fully re-written GUI with [Smarty][2] templates
+* Mobile WebUI
 * Reward Systems
  * Propotional
  * PPS
- * (Planned) PPLNS
-* Use of memcache for statistics instead of a cronjob
+ * PPLNS **NEW**
+* Statistics are cached in Memcache by Cronjob for quick data access
 * Web User accounts
  * Re-Captcha protected registration form
 * Worker accounts
@@ -87,9 +89,11 @@ The following feature have been implemented so far:
 * Auto payout
 * Transaction list (confirmed and unconfirmed)
 * Admin Panel
+ * Cron Monitoring Overview **NEW**
  * User Listing including statistics
  * Wallet information
- * News Posts **NEW**
+ * User Transactions **NEW**
+ * News Posts
 * Notification system
  * IDLE Workers
  * New blocks found in pool
@@ -139,3 +143,4 @@ limitations under the License.
 
 
   [1]: https://github.com/TheSerapher/php-mmcfe-ng/issues "Issue"
+  [2]: http://www.smarty.net/docs/en/ "Smarty"

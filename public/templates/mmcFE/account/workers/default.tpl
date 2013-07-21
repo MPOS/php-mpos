@@ -15,6 +15,7 @@
         <td>&nbsp;</td>
         <td>&nbsp;</td>
       </tr>
+      {nocache}
       {section worker $WORKERS}
       {assign var="username" value="."|escape|explode:$WORKERS[worker].username:2} 
       <tr>
@@ -29,6 +30,7 @@
         <td align="right"><a href="{$smarty.server.PHP_SELF}?page={$smarty.request.page|escape}&action={$smarty.request.action|escape}&do=delete&id={$WORKERS[worker].id|escape}"><button style="padding:5px" type="button">Delete</button></a></td>
       </tr>
       {/section}
+      {/nocache}
       </tbody>
     </table>
     <input type="submit" value="Update Workers" style="padding:5px">

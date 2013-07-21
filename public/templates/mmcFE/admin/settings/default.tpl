@@ -16,7 +16,7 @@
         <td>
           <select name="data[maintenance]">
             <option value="1">Yes</option>
-            <option value="0"{if !$MAINTENANCE} selected{/if}>No</option>
+            <option value="0"{nocache}{if !$MAINTENANCE} selected{/if}>{/nocache}No</option>
           </select>
         </td>
       </tr>
@@ -26,7 +26,17 @@
         <td>
           <select name="data[lock_registration]">
             <option value="1">Yes</option>
-            <option value="0"{if !$LOCKREGISTRATION} selected{/if}>No</option>
+            <option value="0"{nocache}{if !$LOCKREGISTRATION} selected{/if}{/nocache}>No</option>
+          </select>
+        </td>
+      </tr>
+      <tr>
+        <td class="left">Disable Invitations</td>
+        <td class="center"><span id='tt'><img src='{$PATH}/images/questionmark.png' height='15px' width='15px' title='Enable or disable users to invite others. Configuration file defines number of allowed invitations.'></span></td>
+        <td>
+          <select name="data[disable_invitations]">
+            <option value="1">Yes</option>
+            <option value="0"{nocache}{if !$DISABLEINVITATIONS} selected{/if}{/nocache}>No</option>
           </select>
         </td>
       </tr>

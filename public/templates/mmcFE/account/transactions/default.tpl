@@ -17,15 +17,9 @@
 {assign var=has_confirmed value=false}
 {section transaction $TRANSACTIONS}
         {if (
-          (($TRANSACTIONS[transaction].type == 'Credit' or $TRANSACTIONS[transaction].type == 'Bonus')and $TRANSACTIONS[transaction].confirmations >= $GLOBAL.confirmations)
-          or ($TRANSACTIONS[transaction].type == 'Donation' and $TRANSACTIONS[transaction].confirmations >= $GLOBAL.confirmations)
-          or ($TRANSACTIONS[transaction].type == 'Fee' and $TRANSACTIONS[transaction].confirmations >= $GLOBAL.confirmations)
-          or $TRANSACTIONS[transaction].type == 'Credit_PPS'
-          or $TRANSACTIONS[transaction].type == 'Fee_PPS'
-          or $TRANSACTIONS[transaction].type == 'Donation_PPS'
-          or $TRANSACTIONS[transaction].type == 'Debit_AP'
-          or $TRANSACTIONS[transaction].type == 'Debit_MP'
-          or $TRANSACTIONS[transaction].type == 'TXFee'
+          ( ( $TRANSACTIONS[transaction].type == 'Credit' or $TRANSACTIONS[transaction].type == 'Bonus' or $TRANSACTIONS[transaction].type == 'Donation' or $TRANSACTIONS[transaction].type == 'Fee' ) and $TRANSACTIONS[transaction].confirmations >= $GLOBAL.confirmations )
+          or $TRANSACTIONS[transaction].type == 'Credit_PPS' or $TRANSACTIONS[transaction].type == 'Fee_PPS' or $TRANSACTIONS[transaction].type == 'Donation_PPS'
+          or $TRANSACTIONS[transaction].type == 'Debit_AP' or $TRANSACTIONS[transaction].type == 'Debit_MP' or $TRANSACTIONS[transaction].type == 'TXFee'
         )}
         {assign var=has_credits value=true}
         <tr class="{cycle values="odd,even"}">
@@ -67,11 +61,9 @@
       <tbody style="font-size:12px;">
 {assign var=has_unconfirmed value=false}
 {section transaction $TRANSACTIONS}
-        {if (
-          ($TRANSACTIONS[transaction].type == 'Credit' or $TRANSACTIONS[transaction].type == 'Bonus') and $TRANSACTIONS[transaction].confirmations < $GLOBAL.confirmations
-          or ($TRANSACTIONS[transaction].type == 'Donation' and $TRANSACTIONS[transaction].confirmations < $GLOBAL.confirmations)
-          or ($TRANSACTIONS[transaction].type == 'Fee' and $TRANSACTIONS[transaction].confirmations < $GLOBAL.confirmations)
-        )}
+        {if
+          (($TRANSACTIONS[transaction].type == 'Credit' or $TRANSACTIONS[transaction].type == 'Bonus' or $TRANSACTIONS[transaction].type == 'Donation' or $TRANSACTIONS[transaction].type == 'Fee') and $TRANSACTIONS[transaction].confirmations < $GLOBAL.confirmations and $TRANSACTIONS[transaction].confirmations >= 0)
+        }
         {assign var=has_unconfirmed value=true}
         <tr class="{cycle values="odd,even"}">
           <td>{$TRANSACTIONS[transaction].id}</td>
@@ -117,21 +109,16 @@
       <tbody style="font-size:12px;">
 {assign var=has_orphaned value=false}
 {section transaction $TRANSACTIONS}
-        {if (
-          $TRANSACTIONS[transaction].type == 'Orphan_Credit'
-          or $TRANSACTIONS[transaction].type == 'Orphan_Donation'
-          or $TRANSACTIONS[transaction].type == 'Orphan_Fee'
-          or $TRANSACTIONS[transaction].type == 'Orphan_Bonus'
-        )}
+        {if ($TRANSACTIONS[transaction].type == 'Credit' or $TRANSACTIONS[transaction].type == 'Fee' or $TRANSACTIONS[transaction].type == 'Donation' or $TRANSACTIONS[transaction].type == 'Bonus') and $TRANSACTIONS[transaction].confirmations == -1}
         <tr class="{cycle values="odd,even"}">
           <td>{$TRANSACTIONS[transaction].id}</td>
           <td>{$TRANSACTIONS[transaction].timestamp}</td>
           <td>{$TRANSACTIONS[transaction].type}</td>
           <td>{$TRANSACTIONS[transaction].coin_address}</td>
           <td>{if $TRANSACTIONS[transaction].height == 0}n/a{else}{$TRANSACTIONS[transaction].height}{/if}</td>
-          <td><font color="{if $TRANSACTIONS[transaction].type == 'Orphan_Credit' or $TRANSACTIONS[transaction].type == 'Orphan_Bonus'}green{else}red{/if}">{$TRANSACTIONS[transaction].amount|number_format:"8"}</td>
+          <td><font color="{if $TRANSACTIONS[transaction].type == 'Credit' or $TRANSACTIONS[transaction].type == 'Bonus'}green{else}red{/if}">{$TRANSACTIONS[transaction].amount|number_format:"8"}</td>
         </tr>
-          {if $TRANSACTIONS[transaction].type == 'Orphan_Credit' or $TRANSACTIONS[transaction].type == 'Orphan_Bonus'}
+          {if $TRANSACTIONS[transaction].type == 'Credit' or $TRANSACTIONS[transaction].type == 'Bonus'}
             {assign var="orphan_credits" value="`$orphan_credits|default:"0"+$TRANSACTIONS[transaction].amount`"}
           {else}
             {assign var="orphan_debits" value="`$orphan_debits|default:"0"+$TRANSACTIONS[transaction].amount`"}

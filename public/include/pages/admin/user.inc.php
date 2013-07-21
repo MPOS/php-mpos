@@ -34,10 +34,17 @@ if (@$_POST['query']) {
     $aBalance = $transaction->getBalance($aUser['id']);
     $aUser['balance'] = $aBalance['confirmed'];
     $aUser['hashrate'] = $statistics->getUserHashrate($aUser['id']);
-    $aUser['payout']['est_block'] = round(( (int)$aUser['shares'] / (int)$aRoundShares['valid'] ) * (int)$config['reward'], 3);
-    $aUser['payout']['est_fee'] = round(($config['fees'] / 100) * $aUser['payout']['est_block'], 3);
-    $aUser['payout']['est_donation'] = round((( $aUser['donate_percent'] / 100) * ($aUser['payout']['est_block'] - $aUser['payout']['est_fee'])), 3);
-    $aUser['payout']['est_payout'] = round($aUser['payout']['est_block'] - $aUser['payout']['est_donation'] - $aUser['payout']['est_fee'], 3);
+    if ($aUser['shares'] > 0) {
+      $aUser['payout']['est_block'] = round(( (int)$aUser['shares'] / (int)$aRoundShares['valid'] ) * (int)$config['reward'], 3);
+      $aUser['payout']['est_fee'] = round(($config['fees'] / 100) * $aUser['payout']['est_block'], 3);
+      $aUser['payout']['est_donation'] = round((( $aUser['donate_percent'] / 100) * ($aUser['payout']['est_block'] - $aUser['payout']['est_fee'])), 3);
+      $aUser['payout']['est_payout'] = round($aUser['payout']['est_block'] - $aUser['payout']['est_donation'] - $aUser['payout']['est_fee'], 3);
+    } else {
+      $aUser['payout']['est_block'] = 0;
+      $aUser['payout']['est_fee'] = 0;
+      $aUser['payout']['est_donation'] = 0;
+      $aUser['payout']['est_payout'] = 0;
+    }
     $aUsers[$iKey] = $aUser;
   }
   // Assign our variables

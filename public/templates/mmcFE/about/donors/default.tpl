@@ -12,7 +12,7 @@
   <tbody>
 {section name=donor loop=$DONORS}
     <tr>
-      <td>{$DONORS[donor].username}</td>
+      <td>{if $DONORS[donor].is_anonymous|default:"0" == 1}anonymous{else}{$DONORS[donor].username}{/if}</td>
       <td class="center">{$DONORS[donor].donate_percent}</td>
       <td class="right">{$DONORS[donor].donation|number_format:"2"}</td>
     </tr>

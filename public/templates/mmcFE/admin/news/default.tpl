@@ -17,6 +17,7 @@
   </table>
 </form>
 {include file="global/block_footer.tpl"}
+{nocache}
 {section name=news loop=$NEWS}
 {include
   file="global/block_header.tpl"
@@ -35,4 +36,5 @@
 </form>
 {include file="global/block_footer.tpl"}
 {/section}
+{/nocache}
 {include file="global/block_footer.tpl"}

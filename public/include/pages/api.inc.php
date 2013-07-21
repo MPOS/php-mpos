@@ -1,8 +1,10 @@
 <?php
 
 // Make sure we are called from index.php
-if (!defined('SECURITY'))
-    die('Hacking attempt');
+if (!defined('SECURITY')) die('Hacking attempt');
+
+// Check if the API is activated
+$api->isActive();
 
 // Check for valid API key
 $id = $user->checkApiKey($_REQUEST['api_key']);
