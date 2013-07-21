@@ -68,7 +68,7 @@
       <tbody style="font-size:12px;">
       {assign var=unconfirmed value=0}
 {section transaction $TRANSACTIONS}
-        {if ($TRANSACTIONS[transaction].type == 'Credit' or $TRANSACTIONS[transaction].type == 'Bonus' or $TRANSACTIONS[transaction].type == 'Donation' or $TRANSACTIONS[transaction].type == 'Fee') and $TRANSACTIONS[transaction].confirmations < $GLOBAL.confirmations}
+        {if ($TRANSACTIONS[transaction].type == 'Credit' or $TRANSACTIONS[transaction].type == 'Bonus' or $TRANSACTIONS[transaction].type == 'Donation' or $TRANSACTIONS[transaction].type == 'Fee') and $TRANSACTIONS[transaction].confirmations < $GLOBAL.confirmations and $TRANSACTIONS[transaction].confirmations >= 0}
         {assign var=unconfirmed value=1}
         <tr class="{cycle values="odd,even"}">
           <td>{$TRANSACTIONS[transaction].id}</td>

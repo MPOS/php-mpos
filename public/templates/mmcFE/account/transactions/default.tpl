@@ -62,7 +62,7 @@
 {assign var=has_unconfirmed value=false}
 {section transaction $TRANSACTIONS}
         {if
-          (($TRANSACTIONS[transaction].type == 'Credit' or $TRANSACTIONS[transaction].type == 'Bonus' or $TRANSACTIONS[transaction].type == 'Donation' or $TRANSACTIONS[transaction].type == 'Fee') and $TRANSACTIONS[transaction].confirmations < $GLOBAL.confirmations)
+          (($TRANSACTIONS[transaction].type == 'Credit' or $TRANSACTIONS[transaction].type == 'Bonus' or $TRANSACTIONS[transaction].type == 'Donation' or $TRANSACTIONS[transaction].type == 'Fee') and $TRANSACTIONS[transaction].confirmations < $GLOBAL.confirmations and $TRANSACTIONS[transaction].confirmations >= 0)
         }
         {assign var=has_unconfirmed value=true}
         <tr class="{cycle values="odd,even"}">
