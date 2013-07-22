@@ -6,7 +6,7 @@
                 <li><a href="{$smarty.server.PHP_SELF}?page=account&action=edit">Edit Account</a></li>
                 <li><a href="{$smarty.server.PHP_SELF}?page=account&action=workers">My Workers</a></li>
                 <li><a href="{$smarty.server.PHP_SELF}?page=account&action=transactions">Transactions</a></li>
-                <li><a href="{$smarty.server.PHP_SELF}?page=account&action=notifications">Notifications</a></li>
+                {if !$GLOBAL.config.disable_notifications}<li><a href="{$smarty.server.PHP_SELF}?page=account&action=notifications">Notifications</a></li>{/if}
                 {if !$GLOBAL.config.disable_invitations}<li><a href="{$smarty.server.PHP_SELF}?page=account&action=invitations">Invitations</a></li>{/if}
               </ul>
             </li>

@@ -60,6 +60,16 @@
           </select>
         </td>
       </tr>
+      <tr>
+        <td class="left">Disable Notifications</td>
+        <td class="center"><span id='tt'><img src='{$PATH}/images/questionmark.png' height='15px' width='15px' title='Enable or disable the notification system.'></span></td>
+        <td>
+          <select name="data[disable_notifications]">
+            <option value="1">Yes</option>
+            <option value="0"{nocache}{if !$DISABLENOTIFICATIONS} selected{/if}{/nocache}>No</option>
+          </select>
+        </td>
+      </tr>
       <tr><td class="center" colspan="3"><input type="submit" value="Save" class="submit small" /></td></tr>
     </tbody>
   </table>
