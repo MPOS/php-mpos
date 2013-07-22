@@ -27,6 +27,7 @@ if ($setting->getValue('disable_ap') == 1) {
   $monitoring->setStatus($cron_name . "_active", "yesno", 0);
   $monitoring->setStatus($cron_name . "_message", "message", "Auto-Payout disabled");
   $monitoring->setStatus($cron_name . "_status", "okerror", 1);
+  $monitoring->setStatus($cron_name . "_endtime", "date", time());
   exit(0);
 }
 
