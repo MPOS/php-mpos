@@ -36,10 +36,10 @@
                 {$event.STATUS.value|default:"0"|number_format:"2"} seconds
               </font>
             {else if $event.STATUS.type == 'date'}
-              {if $event.STATUS.value < $smarty.now - 120}
-                <font color="orange">
-              {else if $event.STATUS.value < $smarty.now - 180}
+              {if ($smarty.now - 180) > $event.STATUS.value}
                 <font color="red">
+              {else if ($smarty.now - 120) > $event.STATUS.value}
+                <font color="orange">
               {else}
                 <font color="green">
               {/if}
