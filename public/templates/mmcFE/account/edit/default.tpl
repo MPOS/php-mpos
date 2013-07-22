@@ -20,6 +20,7 @@
       <input type="submit" class="submit long" value="Update Settings"></form>
 {include file="global/block_footer.tpl"}
 
+{if !$GLOBAL.disable_mp}
 {include file="global/block_header.tpl" BLOCK_HEADER="Cash Out"}
     <ul><li><font color="">Please note: a {$GLOBAL.config.txfee} {$GLOBAL.config.currency} transaction will apply when processing "On-Demand" manual payments</font></li></ul>
     <form action="{$smarty.server.PHP_SELF}" method="post">
@@ -33,6 +34,7 @@
       </tbody></table>
       <input type="submit" class="submit mid" value="Cash Out"></form>
 {include file="global/block_footer.tpl"}
+{/if}
 
 {include file="global/block_header.tpl" BLOCK_HEADER="Change Password"}
     <ul><li><font color="">Note: You will be redirected to login on successful completion of a password change</font></li></ul>

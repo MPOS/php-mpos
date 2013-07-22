@@ -12,6 +12,8 @@ if ($user->isAuthenticated()) {
     case 'cashOut':
       if ($setting->getValue('manual_payout_active') == 1) {
         $_SESSION['POPUP'][] = array('CONTENT' => 'A manual payout is in progress. Please try again later.', 'TYPE' => 'errormsg');
+      } else if ($setting->getValue('disable_mp') == 1) {
+        $_SESSION['POPUP'][] = array('CONTENT' => 'Manual payouts are disabled.', 'TYPE' => 'info');
       } else {
         $setting->setValue('manual_payout_active', 1);
         $continue = true;

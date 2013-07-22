@@ -40,6 +40,26 @@
           </select>
         </td>
       </tr>
+      <tr>
+        <td class="left">Disable Auto Payout</td>
+        <td class="center"><span id='tt'><img src='{$PATH}/images/questionmark.png' height='15px' width='15px' title='Enable or disable users to invite others. Configuration file defines number of allowed invitations.'></span></td>
+        <td>
+          <select name="data[disable_ap]">
+            <option value="1">Yes</option>
+            <option value="0"{nocache}{if !$DISABLEAP} selected{/if}{/nocache}>No</option>
+          </select>
+        </td>
+      </tr>
+      <tr>
+        <td class="left">Disable Manual Payout</td>
+        <td class="center"><span id='tt'><img src='{$PATH}/images/questionmark.png' height='15px' width='15px' title='Enable or disable users to invite others. Configuration file defines number of allowed invitations.'></span></td>
+        <td>
+          <select name="data[disable_mp]">
+            <option value="1">Yes</option>
+            <option value="0"{nocache}{if !$DISABLEMP} selected{/if}{/nocache}>No</option>
+          </select>
+        </td>
+      </tr>
       <tr><td class="center" colspan="3"><input type="submit" value="Save" class="submit small" /></td></tr>
     </tbody>
   </table>
