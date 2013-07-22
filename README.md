@@ -69,6 +69,7 @@ Features
 
 The following feature have been implemented so far:
 
+* Fully re-written GUI with [Smarty][2] templates
 * Mobile WebUI
 * Reward Systems
  * Propotional
@@ -142,3 +143,4 @@ limitations under the License.
 
 
   [1]: https://github.com/TheSerapher/php-mmcfe-ng/issues "Issue"
+  [2]: http://www.smarty.net/docs/en/ "Smarty"
