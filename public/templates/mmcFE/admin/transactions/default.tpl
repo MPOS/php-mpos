@@ -77,6 +77,7 @@
                 $TRANSACTIONS[transaction].type == 'Donation_PPS' OR
                 $TRANSACTIONS[transaction].type == 'Debit_MP' OR
                 $TRANSACTIONS[transaction].type == 'Debit_AP' OR
+                $TRANSACTIONS[transaction].type == 'TXFee' OR
                 $TRANSACTIONS[transaction].confirmations >= $GLOBAL.confirmations
             }<font color="green">Confirmed</font>
             {else if $TRANSACTIONS[transaction].confirmations == -1}<font color="red">Orphaned</font>

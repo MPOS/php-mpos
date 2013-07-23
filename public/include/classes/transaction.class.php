@@ -111,7 +111,7 @@ class Transaction {
           case 'status':
             switch ($value) {
             case 'Confirmed':
-              if (empty($filter['type']) || ($filter['type'] != 'Credit_PPS' && $filter['type'] != 'Fee_PPS' && $filter['type'] != 'Donation_PPS')) {
+              if (empty($filter['type']) || ($filter['type'] != 'TXFee' && $filter['type'] != 'Credit_PPS' && $filter['type'] != 'Fee_PPS' && $filter['type'] != 'Donation_PPS')) {
                 $aFilter[] = "b.confirmations >= " . $this->config['confirmations'];
               }
                 break;
