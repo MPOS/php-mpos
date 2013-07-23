@@ -4,8 +4,8 @@
       <tr>
         <td class="left">
 {if $COUNTTRANSACTIONS / $LIMIT > 1}
-  {if $smarty.request.start > 0}
-          <a href="{$smarty.server.PHP_SELF}?page=admin&action=transactions&start={$smarty.request.start|default:"0" - $LIMIT}"><img src="{$PATH}/images/prev.png" /></a>
+  {if $smarty.request.start|default:"0" > 0}
+          <a href="{$smarty.server.PHP_SELF}?page={$smarty.request.page}&action={$smarty.request.action}&start={$smarty.request.start|default:"0" - $LIMIT}{if $FILTERS}{$FILTERS}{/if}"><img src="{$PATH}/images/prev.png" /></a>
   {else}
           <img src="{$PATH}/images/prev.png" />
   {/if}
@@ -13,8 +13,8 @@
         </td>
         <td class="right">
 {if $COUNTTRANSACTIONS / $LIMIT > 1}
-  {if $COUNTTRANSACTIONS - $smarty.request.start - $LIMIT > 0}
-          <a href="{$smarty.server.PHP_SELF}?page=admin&action=transactions&start={$smarty.request.start|default:"0" + $LIMIT}"><img src="{$PATH}/images/next.png" /></a>
+  {if $COUNTTRANSACTIONS - $smarty.request.start|default:"0" - $LIMIT > 0}
+          <a href="{$smarty.server.PHP_SELF}?page={$smarty.request.page}&action={$smarty.request.action}&start={$smarty.request.start|default:"0" + $LIMIT}{if $FILTERS}{$FILTERS}{/if}"><img src="{$PATH}/images/next.png" /></a>
   {else}
           <img src="{$PATH}/images/next.png" />
   {/if}
@@ -25,20 +25,20 @@
         <input type="hidden" name="page" value="{$smarty.request.page}" />
         <input type="hidden" name="action" value="{$smarty.request.action}" />
         <tr>
-          <td class="left">Type</td>
-          <td class="right">{html_options name="filter[type]" options=$TRANSACTIONTYPES selected=$smarty.request.filter.type}</td>
+          <td class="left">TX Type</td>
+          <td class="right">{html_options name="filter[type]" options=$TRANSACTIONTYPES selected=$smarty.request.filter.type|default:""}</td>
         </tr>
         <tr>
-          <td class="left">Status</td>
-          <td class="right">{html_options name="filter[status]" options=$TXSTATUS selected=$smarty.request.filter.status}</td>
+          <td class="left">TX Status</td>
+          <td class="right">{html_options name="filter[status]" options=$TXSTATUS selected=$smarty.request.filter.status|default:""}</td>
         </tr>
         <tr>
           <td class="left">Account</td>
-          <td class="right"><input size="10" type="text" name="filter[account]" value="{$smarty.request.filter.account}" /></td>
+          <td class="right"><input size="20" type="text" name="filter[account]" value="{$smarty.request.filter.account|default:""}" /></td>
         </tr>
         <tr>
           <td class="left">Address</td>
-          <td class="right"><input size="10" type="text" name="filter[address]" value="{$smarty.request.filter.address}" /></td>
+          <td class="right"><input size="20" type="text" name="filter[address]" value="{$smarty.request.filter.address|default:""}" /></td>
         </tr>
         <tr>
           <td class="center" colspan="2"><input type="submit" class="submit small" value="Filter"></td>
@@ -77,7 +77,7 @@
                 $TRANSACTIONS[transaction].type == 'Donation_PPS' OR
                 $TRANSACTIONS[transaction].type == 'Debit_MP' OR
                 $TRANSACTIONS[transaction].type == 'Debit_AP' OR
-                $TRANSACTIONS[transaction].confirmations > $GLOBAL.confirmations
+                $TRANSACTIONS[transaction].confirmations >= $GLOBAL.confirmations
             }<font color="green">Confirmed</font>
             {else if $TRANSACTIONS[transaction].confirmations == -1}<font color="red">Orphaned</font>
             {else}<font color="orange">Unconfirmed</font>{/if}

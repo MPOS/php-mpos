@@ -25,5 +25,14 @@ if (!$smarty->isCached('master.tpl', $smarty_cache_key)) {
   $debug->append('Using cached page', 3);
 }
 
+// Gernerate the GET URL for filters
+if (isset($_REQUEST['filter'])) {
+  $strFilters = '';
+  foreach (@$_REQUEST['filter'] as $filter => $value) {
+    $filter = "filter[$filter]";
+    $strFilters .= "&$filter=$value";
+  }
+  $smarty->assign('FILTERS', $strFilters);
+}
 $smarty->assign('CONTENT', 'default.tpl');
 ?>

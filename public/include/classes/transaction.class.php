@@ -111,7 +111,9 @@ class Transaction {
           case 'status':
             switch ($value) {
             case 'Confirmed':
-              if ($filter['type'] != 'Credit_PPS' && $filter['type'] != 'Fee_PPS' && $filter['type'] != $filter['Donation_PPS']) $aFilter[] = "b.confirmations >= " . $this->config['confirmations'];
+              if (empty($filter['type']) || ($filter['type'] != 'Credit_PPS' && $filter['type'] != 'Fee_PPS' && $filter['type'] != 'Donation_PPS')) {
+                $aFilter[] = "b.confirmations >= " . $this->config['confirmations'];
+              }
                 break;
             case 'Unconfirmed':
               $aFilter[] = "b.confirmations < " . $this->config['confirmations'] . " AND b.confirmations >= 0";
