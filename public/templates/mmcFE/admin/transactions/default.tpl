@@ -73,6 +73,8 @@
           <td>{$TRANSACTIONS[transaction].type}</td>
           <td>
             {if $TRANSACTIONS[transaction].type == 'Credit_PPS' OR
+                $TRANSACTIONS[transaction].type == 'Fee_PPS' OR
+                $TRANSACTIONS[transaction].type == 'Donation_PPS' OR
                 $TRANSACTIONS[transaction].type == 'Debit_MP' OR
                 $TRANSACTIONS[transaction].type == 'Debit_AP' OR
                 $TRANSACTIONS[transaction].confirmations > $GLOBAL.confirmations
