@@ -5,7 +5,7 @@
         <td class="left">
 {if $COUNTTRANSACTIONS / $LIMIT > 1}
   {if $smarty.request.start > 0}
-          <a href="{$smarty.server.PHP_SELF}?page=admin&action=transactions&start={$smarty.request.start|default:"0" - 5}"><img src="{$PATH}/images/prev.png" /></a>
+          <a href="{$smarty.server.PHP_SELF}?page=admin&action=transactions&start={$smarty.request.start|default:"0" - $LIMIT}"><img src="{$PATH}/images/prev.png" /></a>
   {else}
           <img src="{$PATH}/images/prev.png" />
   {/if}
@@ -14,7 +14,7 @@
         <td class="right">
 {if $COUNTTRANSACTIONS / $LIMIT > 1}
   {if $COUNTTRANSACTIONS - $smarty.request.start - $LIMIT > 0}
-          <a href="{$smarty.server.PHP_SELF}?page=admin&action=transactions&start={$smarty.request.start|default:"0" + 5}"><img src="{$PATH}/images/next.png" /></a>
+          <a href="{$smarty.server.PHP_SELF}?page=admin&action=transactions&start={$smarty.request.start|default:"0" + $LIMIT}"><img src="{$PATH}/images/next.png" /></a>
   {else}
           <img src="{$PATH}/images/next.png" />
   {/if}
