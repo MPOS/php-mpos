@@ -83,7 +83,7 @@ Small Time Miners are running various stratum only pools for different coins.
 | http://dmd.minar.cc | Diamondcoin | 5 MHash  |  5 |  |
 | http://jpc.minar.cc | Jupitercoin | 1.8 MHash  |  3 |  |
 
-### IaianKay & Nushor
+### IainKay & Nushor
 
 | Pool URL | Coin | Avg. Hashrate | Avg. Active Workers | Notes |
 | -------- | ---- | ------------- | ------------------: | ----- |
