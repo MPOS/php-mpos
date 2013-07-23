@@ -178,12 +178,12 @@ class Notification extends Mail {
     $stmt = $this->mysqli->prepare("SELECT account_id FROM $this->tableSettings WHERE type = ? AND active = 1 AND account_id = ?");
     if ($stmt && $stmt->bind_param('si', $strType, $account_id) && $stmt->execute() && $stmt->bind_result($id) && $stmt->fetch()) {
       if ($stmt->close() && $this->sendMail('notifications/' . $strType, $aMailData) && $this->addNotification($account_id, $strType, $aMailData)) {
-        $this->setErrorMessage('Error sending mail notification');
         return true;
       }
     } else {
       $this->setErrorMessage('User disabled ' . $strType . ' notifications');
     }
+    $this->setErrorMessage('Error sending mail notification');
     return false;
   }
 }

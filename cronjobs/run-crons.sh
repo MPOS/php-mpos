@@ -13,7 +13,7 @@ PHP_BIN=$( which php )
 PIDFILE='/tmp/mmcfe-ng-cron.pid'
 
 # List of cruns to execute
-CRONS="findblock.php proportional_payout.php pplns_payout.php pps_payout.php blockupdate.php auto_payout.php tickerupdate.php notifications.php statistics.php archive_cleanup.php"
+CRONS="findblock.php proportional_payout.php pplns_payout.php pps_payout.php blockupdate.php manual_payout.php auto_payout.php tickerupdate.php notifications.php statistics.php archive_cleanup.php"
 
 # Output additional runtime information
 VERBOSE="0"
