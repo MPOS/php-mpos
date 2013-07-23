@@ -111,7 +111,7 @@ class Transaction {
           case 'status':
             switch ($value) {
             case 'Confirmed':
-              $aFilter[] = "b.confirmations >= " . $this->config['confirmations'];
+              if ($filter['type'] != 'Credit_PPS') $aFilter[] = "b.confirmations >= " . $this->config['confirmations'];
                 break;
             case 'Unconfirmed':
               $aFilter[] = "b.confirmations < " . $this->config['confirmations'] . " AND b.confirmations >= 0";
@@ -137,7 +137,7 @@ class Transaction {
     $sql .= "
       ORDER BY id DESC
       LIMIT ?,?
-    ";
+      ";
     $stmt = $this->mysqli->prepare($sql);
     if ($this->checkStmt($stmt) && $stmt->bind_param('ii', $start, $limit) && $stmt->execute() && $result = $stmt->get_result())
       return $result->fetch_all(MYSQLI_ASSOC);
