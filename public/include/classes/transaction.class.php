@@ -96,6 +96,7 @@ class Transaction {
         t.coin_address AS coin_address,
         t.timestamp AS timestamp,
         b.height AS height,
+        b.blockhash AS blockhash,
         b.confirmations AS confirmations
       FROM $this->table AS t
       LEFT JOIN " . $this->block->getTableName() . " AS b ON t.block_id = b.id
