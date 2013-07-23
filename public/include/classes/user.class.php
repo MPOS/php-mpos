@@ -23,7 +23,10 @@ class User {
     $this->mail = $mail;
   }
   public function setToken($token) {
-    $this->token= $token;
+    $this->token = $token;
+  }
+  public function setBitcoin($bitcoin) {
+    $this->bitcoin = $bitcoin;
   }
   private function setErrorMessage($msg) {
     $this->sError = $msg;
@@ -315,6 +318,21 @@ class User {
     }
     if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
       $this->setErrorMessage('Invalid email address');
+      return false;
+    }
+    if ($this->bitcoin->can_connect() === true && !empty($address)) {
+      try {
+        $aStatus = $this->bitcoin->validateaddress($address);
+        if (!$aStatus['isvalid']) {
+          $this->setErrorMessage('Invalid coin address');
+          return false;
+        }
+      } catch (BitcoinClientException $e) {
+        $this->setErrorMessage('Unable to verify coin address');
+        return false;
+      }
+    } else {
+      $this->setErrorMessage('Unable to connect to RPC server for coin address validation');
       return false;
     }
     // Number sanitizer, just in case we fall through above
@@ -646,3 +664,4 @@ class User {
 $user = new User($debug, $mysqli, SALT, $config);
 $user->setMail($mail);
 $user->setToken($oToken);
+$user->setBitcoin($bitcoin);
