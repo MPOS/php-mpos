@@ -79,8 +79,8 @@ Small Time Miners are running various stratum only pools for different coins.
 
 | Pool URL | Coin | Avg. Hashrate | Avg. Active Workers | Notes |
 | -------- | ---- | ------------- | ------------------: | ----- |
-| http://str.minar.cc | Starcoin | 27 MHash  |  31 |  |
-| http://dmd.minar.cc | Diamondcoin | 5 MHash  |  5 |  |
+| http://str.minar.cc | Starcoin | 27 MHash  |  31 | PoS/PoW type coin |
+| http://dmd.minar.cc | Diamondcoin | 5 MHash  |  5 | PoS/PoW type coin |
 | http://jpc.minar.cc | Jupitercoin | 1.8 MHash  |  3 |  |
 
 ### IainKay & Nushor
