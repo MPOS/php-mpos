@@ -13,6 +13,8 @@ if ($user->isAuthenticated()) {
       if ($setting->getValue('disable_mp') == 1) {
         $_SESSION['POPUP'][] = array('CONTENT' => 'Manual payouts are disabled.', 'TYPE' => 'info');
       } else {
+        $aBalance = $transaction->getBalance($_SESSION['USERDATA']['id']);
+        $dBalance = $aBalance['confirmed'];
         if ($dBalance > $config['txfee']) {
           if (!$oPayout->isPayoutActive($_SESSION['USERDATA']['id'])) {
             if ($iPayoutId = $oPayout->createPayout($_SESSION['USERDATA']['id'])) {
