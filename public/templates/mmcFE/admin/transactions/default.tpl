@@ -5,7 +5,7 @@
         <td class="left">
 {if $COUNTTRANSACTIONS / $LIMIT > 1}
   {if $smarty.request.start|default:"0" > 0}
-          <a href="{$smarty.server.PHP_SELF}?page={$smarty.request.page}&action={$smarty.request.action}&start={$smarty.request.start|default:"0" - $LIMIT}{if $FILTERS}{$FILTERS}{/if}"><img src="{$PATH}/images/prev.png" /></a>
+          <a href="{$smarty.server.PHP_SELF}?page={$smarty.request.page}&action={$smarty.request.action}&start={$smarty.request.start|default:"0" - $LIMIT}{if $FILTERS|default:""}{$FILTERS}{/if}"><img src="{$PATH}/images/prev.png" /></a>
   {else}
           <img src="{$PATH}/images/prev.png" />
   {/if}
@@ -14,7 +14,7 @@
         <td class="right">
 {if $COUNTTRANSACTIONS / $LIMIT > 1}
   {if $COUNTTRANSACTIONS - $smarty.request.start|default:"0" - $LIMIT > 0}
-          <a href="{$smarty.server.PHP_SELF}?page={$smarty.request.page}&action={$smarty.request.action}&start={$smarty.request.start|default:"0" + $LIMIT}{if $FILTERS}{$FILTERS}{/if}"><img src="{$PATH}/images/next.png" /></a>
+          <a href="{$smarty.server.PHP_SELF}?page={$smarty.request.page}&action={$smarty.request.action}&start={$smarty.request.start|default:"0" + $LIMIT}{if $FILTERS|default:""}{$FILTERS}{/if}"><img src="{$PATH}/images/next.png" /></a>
   {else}
           <img src="{$PATH}/images/next.png" />
   {/if}
