@@ -24,15 +24,27 @@
             {else if $event.STATUS.type == 'message'}
               <i>{$event.STATUS.value}</i>
             {else if $event.STATUS.type == 'yesno'}
-              {if $event.STATUS.value == 1}
-                Yes 
-              {else}
-                No  
-              {/if}
+              <img src="{$PATH}/images/{if $event.STATUS.value == 1}success{else}error{/if}.gif" />
             {else if $event.STATUS.type == 'time'}
-              {$event.STATUS.value|default:"0"|number_format:"2"} seconds
+              {if $event.STATUS.value > 60}
+                <font color="orange">
+              {else if $event.STATUS.value > 120}
+                <font color="red">
+              {else}
+                <font color="green">
+              {/if}
+                {$event.STATUS.value|default:"0"|number_format:"2"} seconds
+              </font>
             {else if $event.STATUS.type == 'date'}
-              {$event.STATUS.value|date_format:"%m/%d %H:%M:%S"}
+              {if ($smarty.now - 180) > $event.STATUS.value}
+                <font color="red">
+              {else if ($smarty.now - 120) > $event.STATUS.value}
+                <font color="orange">
+              {else}
+                <font color="green">
+              {/if}
+                {$event.STATUS.value|date_format:"%m/%d %H:%M:%S"}
+              </font>
             {else}
               {$event.STATUS.value|default:""}
             {/if}
