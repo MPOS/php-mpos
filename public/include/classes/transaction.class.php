@@ -81,12 +81,13 @@ class Transaction {
 
   /**
    * Fetch all transactions for all users
+   * Optionally apply a filter
    * @param none
    * @return mixed array or false
    **/
-  public function getAllTransactions($start=0) {
+  public function getAllTransactions($start=0,$filter=NULL,$limit=30) {
     $this->debug->append("STA " . __METHOD__, 4);
-    $stmt = $this->mysqli->prepare("
+    $sql = "
       SELECT
         t.id AS id,
         a.username as username,
@@ -95,15 +96,78 @@ class Transaction {
         t.coin_address AS coin_address,
         t.timestamp AS timestamp,
         b.height AS height,
+        b.blockhash AS blockhash,
         b.confirmations AS confirmations
-      FROM transactions AS t
+      FROM $this->table AS t
       LEFT JOIN " . $this->block->getTableName() . " AS b ON t.block_id = b.id
-      LEFT JOIN " . $this->user->getTableName() . " AS a ON t.account_id = a.id
+      LEFT JOIN " . $this->user->getTableName() . " AS a ON t.account_id = a.id";
+    if (is_array($filter)) {
+      $aFilter = array();
+      foreach ($filter as $key => $value) {
+        if (!empty($value)) {
+          switch ($key) {
+          case 'type':
+            $aFilter[] = "t.type = '$value'";
+            break;
+          case 'status':
+            switch ($value) {
+            case 'Confirmed':
+              if (empty($filter['type']) || ($filter['type'] != 'Debit_AP' && $filter['type'] != 'Debit_MP' && $filter['type'] != 'TXFee' && $filter['type'] != 'Credit_PPS' && $filter['type'] != 'Fee_PPS' && $filter['type'] != 'Donation_PPS')) {
+                $aFilter[] = "b.confirmations >= " . $this->config['confirmations'];
+              }
+                break;
+            case 'Unconfirmed':
+              $aFilter[] = "b.confirmations < " . $this->config['confirmations'] . " AND b.confirmations >= 0";
+                break;
+            case 'Orphan':
+              $aFilter[] = "b.confirmations = -1";
+                break;
+            }
+            break;
+            case 'account':
+              $aFilter[] = "LOWER(a.username) = LOWER('$value')";
+              break;
+            case 'address':
+              $aFilter[] = "t.coin_address = '$value'";
+              break;
+          }
+        }
+      }
+      if (!empty($aFilter)) {
+        $sql .= " WHERE " . implode(' AND ', $aFilter);
+      }
+    }
+    $sql .= "
       ORDER BY id DESC
-      LIMIT ?,30");
-    if ($this->checkStmt($stmt) && $stmt->bind_param('i', $start) && $stmt->execute() && $result = $stmt->get_result())
+      LIMIT ?,?
+      ";
+    $stmt = $this->mysqli->prepare($sql);
+    if ($this->checkStmt($stmt) && $stmt->bind_param('ii', $start, $limit) && $stmt->execute() && $result = $stmt->get_result())
       return $result->fetch_all(MYSQLI_ASSOC);
     $this->debug->append('Unable to fetch transactions');
+    return false;
+  }
+
+  /**
+   * Count the amount of transactions in the table
+   **/
+  public function getCountAllTransactions($filter=NULL) {
+    $stmt = $this->mysqli->prepare("SELECT COUNT(id) AS total FROM $this->table");
+    if ($this->checkStmt($stmt) && $stmt->execute() && $result = $stmt->get_result())
+      return $result->fetch_object()->total;
+    $this->debug->append('Failed to fetch transaction count: ' . $this->mysqli->error);
+    return false;
+  }
+  public function getTypes() {
+    $stmt = $this->mysqli->prepare("SELECT DISTINCT type FROM $this->table");
+    if ($this->checkStmt($stmt) && $stmt->execute() && $result = $stmt->get_result()) {
+      $aData = array('' => '');
+      while ($row = $result->fetch_assoc()) {
+        $aData[$row['type']] = $row['type'];
+      }
+      return $aData;
+    }
+    $this->debug->append('Failed to fetch transaction types: ' . $this->mysqli->error);
     return false;
   }
 
