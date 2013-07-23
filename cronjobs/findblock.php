@@ -115,16 +115,18 @@ if (empty($aAllBlocks)) {
         . $share->share_type
       );
 
-      // Notify users
-      $aAccounts = $notification->getNotificationAccountIdByType('new_block');
-      if (is_array($aAccounts)) {
-        foreach ($aAccounts as $aData) {
-          $aMailData['height'] = $aBlock['height'];
-          $aMailData['subject'] = 'New Block';
-          $aMailData['email'] = $user->getUserEmail($user->getUserName($aData['account_id']));
-          $aMailData['shares'] = $iRoundShares;
-          if (!$notification->sendNotification($aData['account_id'], 'new_block', $aMailData))
-            $log->logError('Failed to notify user of new found block: ' . $user->getUserName($aData['account_id']));
+      if ($setting->getValue('disable_notification') != 1) {
+        // Notify users
+        $aAccounts = $notification->getNotificationAccountIdByType('new_block');
+        if (is_array($aAccounts)) {
+          foreach ($aAccounts as $aData) {
+            $aMailData['height'] = $aBlock['height'];
+            $aMailData['subject'] = 'New Block';
+            $aMailData['email'] = $user->getUserEmail($user->getUserName($aData['account_id']));
+            $aMailData['shares'] = $iRoundShares;
+            if (!$notification->sendNotification($aData['account_id'], 'new_block', $aMailData))
+              $log->logError('Failed to notify user of new found block: ' . $user->getUserName($aData['account_id']));
+          }
         }
       }
     }
