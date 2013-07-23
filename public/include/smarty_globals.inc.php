@@ -51,6 +51,7 @@ $aGlobal = array(
     'website' => $config['website'],
     'accounts' => $config['accounts'],
     'disable_invitations' => $setting->getValue('disable_invitations'),
+    'disable_notifications' => $setting->getValue('disable_notifications'),
     'price' => array( 'currency' => $config['price']['currency'] ),
     'targetdiff' => $config['difficulty'],
     'currency' => $config['currency'],
