@@ -52,7 +52,11 @@ if (count($aPayouts) > 0) {
     if ($dBalance > $config['txfee']) {
       $log->logInfo("\t" . $aData['account_id'] . "\t\t" . $aData['username'] . "\t" . $dBalance . "\t\t" . $aData['coin_address']);
       try {
-        $bitcoin->validateaddress($aData['coin_address']);
+        $aStatus = $bitcoin->validateaddress($aData['coin_address']);
+        if (!$aStatus['isvalid']) {
+          $log->logError('Failed to verify this users coin address, skipping payout');
+          continue;
+        }
       } catch (BitcoinClientException $e) {
         $log->logError('Failed to verify this users coin address, skipping payout');
         continue;
