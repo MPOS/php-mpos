@@ -58,7 +58,11 @@ if (! empty($users)) {
     if ($dBalance > $aUserData['ap_threshold'] && $dBalance > $config['txfee']) {
       // Validate address against RPC
       try {
-        $bitcoin->validateaddress($aUserData['coin_address']);
+        $aStatus = $bitcoin->validateaddress($aUserData['coin_address']);
+        if (!$aStatus['isvalid']) {
+          $log->logError('Failed to verify this users coin address, skipping payout');
+          continue;
+        }
       } catch (BitcoinClientException $e) {
         $log->logError('Failed to verifu this users coin address, skipping payout');
         continue;
