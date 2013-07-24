@@ -47,7 +47,7 @@
       </div>
       {/if}
       <div data-role="content">
-{include file="$PAGE/$ACTION/$CONTENT"}
+{if file_exists($smarty.current_dir|cat:"/$PAGE/$ACTION/$CONTENT")}{include file="$PAGE/$ACTION/$CONTENT"}{else}Missing template for this page{/if}
       </div><!-- /content -->
       <div data-role="footer" data-position="fixed">
 {include file="global/footer.tpl"}
