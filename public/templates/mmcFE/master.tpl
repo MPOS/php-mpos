@@ -59,7 +59,7 @@
               <div class="message {$smarty.session.POPUP[popup].TYPE|default:"success"}"><p>{$smarty.session.POPUP[popup].CONTENT}</p></div>
             {/section}
           {/if}
-          {include file="$PAGE/$ACTION/$CONTENT"}
+          {if file_exists($smarty.current_dir|cat:"/$PAGE/$ACTION/$CONTENT")}{include file="$PAGE/$ACTION/$CONTENT"}{else}Missing template for this page{/if}
         </div>
         <div class"clear"></div>
         <div id="footer" style="font-size: 10px;">
