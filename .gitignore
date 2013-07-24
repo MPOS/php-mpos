@@ -1,4 +1,5 @@
 /public/include/config/global.inc.php
 /public/templates/compile/*.php
 /cronjobs/logs/*.txt
+/cronjobs/logs/*.txt.*.gz
 /public/templates/cache/*.php
