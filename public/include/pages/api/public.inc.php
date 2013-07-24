@@ -10,6 +10,9 @@ $api->isActive();
 $aLastBlock = $block->getLast();
 $aShares = $statistics->getRoundShares();
 
+// RPC Calls
+$bitcoin->can_connect() === true ? $dNetworkHashrate = $bitcoin->query('getnetworkhashps') : $dNetworkHashrate = 0;
+
 echo json_encode(
   array(
     'pool_name' => $config['website']['name'],
@@ -17,7 +20,7 @@ echo json_encode(
     'workers' => $worker->getCountAllActiveWorkers(),
     'shares_this_round' => $aShares['valid'],
     'last_block' => $aLastBlock['height'],
-    'network_hashrate' => '0'
+    'network_hashrate' => $dNetworkHashrate
   )
 );
 
