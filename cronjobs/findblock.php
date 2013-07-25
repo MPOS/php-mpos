@@ -115,7 +115,7 @@ if (empty($aAllBlocks)) {
         . $share->share_type
       );
 
-      if ($setting->getValue('disable_notification') != 1) {
+      if ($setting->getValue('disable_notifications') != 1) {
         // Notify users
         $aAccounts = $notification->getNotificationAccountIdByType('new_block');
         if (is_array($aAccounts)) {
