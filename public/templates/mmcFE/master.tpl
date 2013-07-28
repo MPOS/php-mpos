@@ -6,7 +6,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <link rel="shortcut icon" href="favicon.ico" />
     <link rel="stylesheet" href="{$PATH}/css/mainstyle.css" type="text/css" />
-    <script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
+    <script src="{$PATH}/js/jquery-1.9.1.min.js"></script>
     <script src="{$PATH}/js/jquery.browser.js"></script>
     <script src="{$PATH}/js/jquery.tablesorter.min.js"></script>
     <script src="{$PATH}/js/jquery.tablesorter.pager.js"></script>
