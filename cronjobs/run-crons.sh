@@ -16,8 +16,10 @@ CRONS="findblock.php proportional_payout.php pplns_payout.php pps_payout.php blo
 VERBOSE="0"
 
 # Prefix to add to PIDFILE name, so it will be unique in a multipool server.
-# Can be left empty or set Eg. PIDPREFIX="LTC" / PIDPREFIX="DMD"
-PIDPREFIX=""
+# Can be passed as an argument when calling the script "./run-crons.sh prefix"
+# Eg. "./run-crons.sh ltc" / "./run-crons.sh dmd"
+# or can be harcoded Eg. PIDPREFIX="LTC" / PIDPREFIX="DMD"
+PIDPREFIX="$1"
 
 ################################################################
 #                                                              #
