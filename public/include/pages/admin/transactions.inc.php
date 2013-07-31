@@ -10,7 +10,7 @@ if (!$user->isAuthenticated() || !$user->isAdmin($_SESSION['USERDATA']['id'])) {
 }
 
 if (!$smarty->isCached('master.tpl', $smarty_cache_key)) {
-  $iLimit = 4;
+  $iLimit = 30;
   $debug->append('No cached version available, fetching from backend', 3);
   $aTransactions = $transaction->getAllTransactions(@$_REQUEST['start'], @$_REQUEST['filter'], $iLimit);
   $iCountTransactions = $transaction->num_rows;
