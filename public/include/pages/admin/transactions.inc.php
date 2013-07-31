@@ -14,6 +14,7 @@ if (!$smarty->isCached('master.tpl', $smarty_cache_key)) {
   $debug->append('No cached version available, fetching from backend', 3);
   $aTransactions = $transaction->getAllTransactions(@$_REQUEST['start'], @$_REQUEST['filter'], $iLimit);
   $iCountTransactions = $transaction->num_rows;
+  $aTransactionTypes = $transaction->getTypes();
   if (!$aTransactions) $_SESSION['POPUP'][] = array('CONTENT' => 'Could not find any transaction', 'TYPE' => 'errormsg');
   $smarty->assign('LIMIT', $iLimit);
   $smarty->assign('TRANSACTIONS', $aTransactions);
