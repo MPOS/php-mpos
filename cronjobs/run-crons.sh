@@ -15,6 +15,10 @@ CRONS="findblock.php proportional_payout.php pplns_payout.php pps_payout.php blo
 # Output additional runtime information
 VERBOSE="0"
 
+# Prefix to add to PIDFILE name, so it will be unique in a multipool server.
+# Can be left empty or set Eg. PIDPREFIX="LTC" / PIDPREFIX="DMD"
+PIDPREFIX=""
+
 ################################################################
 #                                                              #
 # You probably don't need to change anything beyond this point #
@@ -25,7 +29,7 @@ VERBOSE="0"
 ME=$( basename $0 )
 
 # Path to PID file, needs to be writable by user running this
-PIDFILE="/tmp/$ME.pid"
+PIDFILE="/tmp/$PIDPREFIX$ME.pid"
 
 # Overwrite some settings via command line arguments
 while getopts "hvp:" opt; do
