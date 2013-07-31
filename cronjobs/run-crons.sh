@@ -16,10 +16,7 @@ CRONS="findblock.php proportional_payout.php pplns_payout.php pps_payout.php blo
 VERBOSE="0"
 
 # Prefix to add to PIDFILE name, so it will be unique in a multipool server.
-# Can be passed as an argument when calling the script "./run-crons.sh prefix"
-# Eg. "./run-crons.sh ltc" / "./run-crons.sh dmd"
-# or can be harcoded Eg. PIDPREFIX="LTC" / PIDPREFIX="DMD"
-PIDPREFIX="$1"
+PIDPREFIX=""
 
 ################################################################
 #                                                              #
@@ -30,14 +27,11 @@ PIDPREFIX="$1"
 # My own name
 ME=$( basename $0 )
 
-# Path to PID file, needs to be writable by user running this
-PIDFILE="/tmp/$PIDPREFIX$ME.pid"
-
 # Overwrite some settings via command line arguments
-while getopts "hvp:" opt; do
+while getopts "hvp:x:" opt; do
   case "$opt" in
     h|\?)
-      echo "Usage: $0 [-v] [-p PHP_BINARY]";
+      echo "Usage: $0 [-v] [-p PHP_BINARY] [-x PIDPREFIX]";
       exit 0
       ;;
     v) VERBOSE=1 ;;
@@ -46,8 +40,16 @@ while getopts "hvp:" opt; do
       echo "Option -$OPTARG requires an argument." >&2
       exit 1
     ;;
+    x) PIDPREFIX=$OPTARG ;;
+    :)
+      echo "Option -$OPTARG requires an argument." >&2
+      exit 1
+    ;;
   esac
 done
+
+# Path to PID file, needs to be writable by user running this
+PIDFILE="/tmp/$PIDPREFIX$ME.pid"
 
 # Find scripts path
 if [[ -L $0 ]]; then
