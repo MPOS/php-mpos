@@ -5,12 +5,12 @@ if (!defined('SECURITY'))
   die('Hacking attempt');
 
 class Transaction extends Base {
-  private $sError = '';
-  private $table = 'transactions';
-  public $num_rows = 0;
+  private $sError = '', $table = 'transactions';
+  public $num_rows = 0, $insert_id = 0;
 
   /**
    * Add a new transaction to our class table
+   * We also store the inserted ID in case the user needs it
    * @param account_id int Account ID to book transaction for
    * @param amount float Coin amount
    * @param type string Transaction type [Credit, Debit_AP, Debit_MP, Fee, Donation, Orphan_Credit, Orphan_Fee, Orphan_Donation]
@@ -20,14 +20,24 @@ class Transaction extends Base {
    **/
   public function addTransaction($account_id, $amount, $type='Credit', $block_id=NULL, $coin_address=NULL) {
     $stmt = $this->mysqli->prepare("INSERT INTO $this->table (account_id, amount, block_id, type, coin_address) VALUES (?, ?, ?, ?, ?)");
-    if ($this->checkStmt($stmt)) {
-      $stmt->bind_param("idiss", $account_id, $amount, $block_id, $type, $coin_address);
-      if ($stmt->execute()) {
-        $this->setErrorMessage("Failed to store transaction");
-        $stmt->close();
-        return true;
-      }
+    if ($this->checkStmt($stmt) && $stmt->bind_param("idiss", $account_id, $amount, $block_id, $type, $coin_address) && $stmt->execute()) {
+      $this->insert_id = $stmt->insert_id;
+      return true;
     }
+    $this->setErrorMessage("Failed to store transaction");
+    return false;
+  }
+
+  /*
+   * Mark transactions of a user as archived
+   * @param account_id int Account ID
+   * @param txid int Transaction ID to start from
+   * @param bool boolean True or False
+   **/
+  public function setArchived($account_id, $txid) {
+    $stmt = $this->mysqli->prepare("UPDATE $this->table SET archived = 1 WHERE account_id = ? AND id <= ?");
+    if ($this->checkStmt($stmt) && $stmt->bind_param('ii', $account_id, $txid) && $stmt->execute())
+      return true;
     return false;
   }
 
@@ -122,15 +132,9 @@ class Transaction extends Base {
   }
 
   /**
-   * Count the amount of transactions in the table
+   * Get all different transaction types
+   * @return mixed array/bool Return types on succes, false on failure
    **/
-  public function getCountAllTransactions($filter=NULL) {
-    $stmt = $this->mysqli->prepare("SELECT COUNT(id) AS total FROM $this->table");
-    if ($this->checkStmt($stmt) && $stmt->execute() && $result = $stmt->get_result())
-      return $result->fetch_object()->total;
-    $this->debug->append('Failed to fetch transaction count: ' . $this->mysqli->error);
-    return false;
-  }
   public function getTypes() {
     $stmt = $this->mysqli->prepare("SELECT DISTINCT type FROM $this->table");
     if ($this->checkStmt($stmt) && $stmt->execute() && $result = $stmt->get_result()) {
@@ -191,8 +195,9 @@ class Transaction extends Base {
           SUM( IF( ( t.type IN ('Donation','Fee') AND b.confirmations >= ? ) OR ( t.type IN ('Donation_PPS', 'Fee_PPS', 'TXFee') ), t.amount, 0 ) )
         ), 8) AS balance
       FROM $this->table AS t
-      LEFT JOIN blocks AS b
-      ON t.block_id = b.id");
+      LEFT JOIN " . $this->block->getTableName() . " AS b
+      ON t.block_id = b.id
+      WHERE archived = 0");
     if ($this->checkStmt($stmt) && $stmt->bind_param('ii', $this->config['confirmations'], $this->config['confirmations']) && $stmt->execute() && $stmt->bind_result($dBalance) && $stmt->fetch())
       return $dBalance;
     // Catchall
@@ -202,7 +207,7 @@ class Transaction extends Base {
   }
 
   /**
-   * Get an accounts total balance
+   * Get an accounts total balance, ignore archived entries
    * @param account_id int Account ID
    * @return data float Credit - Debit - Fees - Donation
    **/
@@ -223,10 +228,11 @@ class Transaction extends Base {
           SUM( IF( t.type IN ('Credit','Bonus') AND b.confirmations = -1, t.amount, 0) ) -
           SUM( IF( t.type IN ('Donation','Fee') AND b.confirmations = -1, t.amount, 0) )
         ), 8) AS orphaned
-      FROM transactions AS t
-      LEFT JOIN blocks AS b
+      FROM $this->table AS t
+      LEFT JOIN " . $this->block->getTableName() . " AS b
       ON t.block_id = b.id
       WHERE t.account_id = ?
+      AND archived = 0
       ");
     if ($this->checkStmt($stmt) && $stmt->bind_param("iiiii", $this->config['confirmations'], $this->config['confirmations'], $this->config['confirmations'], $this->config['confirmations'], $account_id) && $stmt->execute() && $result = $stmt->get_result())
       return $result->fetch_assoc();
