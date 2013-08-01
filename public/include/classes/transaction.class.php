@@ -79,7 +79,7 @@ class Transaction extends Base {
             switch ($value) {
             case 'Confirmed':
               if (empty($filter['type']) || ($filter['type'] != 'Debit_AP' && $filter['type'] != 'Debit_MP' && $filter['type'] != 'TXFee' && $filter['type'] != 'Credit_PPS' && $filter['type'] != 'Fee_PPS' && $filter['type'] != 'Donation_PPS')) {
-                $aFilter[] = "b.confirmations >= " . $this->config['confirmations'];
+                $aFilter[] = "b.confirmations >= " . $this->config['confirmations'] . " OR ISNULL(b.confirmations)";
               }
                 break;
             case 'Unconfirmed':
