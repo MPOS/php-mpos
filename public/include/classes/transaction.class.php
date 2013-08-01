@@ -269,7 +269,7 @@ class Transaction {
       FROM transactions AS t
       LEFT JOIN blocks AS b
       ON t.block_id = b.id
-      AND t.account_id = ?
+      WHERE t.account_id = ?
       ");
     if ($this->checkStmt($stmt) && $stmt->bind_param("iiiii", $this->config['confirmations'], $this->config['confirmations'], $this->config['confirmations'], $this->config['confirmations'], $account_id) && $stmt->execute() && $result = $stmt->get_result())
       return $result->fetch_assoc();
