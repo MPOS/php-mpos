@@ -1,4 +1,11 @@
 <script language="javascript">
+    function storeFee(id) {
+      $.ajax({
+       type: "POST",
+       url: "{$smarty.server.PHP_SELF}",
+       data: "page={$smarty.request.page}&action={$smarty.request.action}&do=fee&account_id=" + id,
+     });
+    }
     function storeLock(id) {
       $.ajax({
        type: "POST",
@@ -41,6 +48,7 @@
       <th class="right">Balance&nbsp;&nbsp;&nbsp;</th>
       <th class="center">Admin</th>
       <th class="center">Locked</th>
+      <th class="center">No Fees</th>
     </tr>
   </thead>
   <tbody>
@@ -65,6 +73,11 @@
         <input type="checkbox" onclick="storeLock({$USERS[user].id})" name="locked[{$USERS[user].id}]" value="1" id="locked[{$USERS[user].id}]" {if $USERS[user].is_locked}checked{/if} />
         <label for="locked[{$USERS[user].id}]"></label>
       </td>
+      <td class="center">
+        <input type="hidden" name="nofee[{$USERS[user].id}]" value="0"/>
+        <input type="checkbox" onclick="storeFee({$USERS[user].id})" name="nofee[{$USERS[user].id}]" value="1" id="nofee[{$USERS[user].id}]" {if $USERS[user].no_fees}checked{/if} />
+        <label for="nofee[{$USERS[user].id}]"></label>
+      </td>
     </tr>
 {sectionelse}
   <tr>
@@ -85,6 +98,7 @@
       <th class="right">Balance&nbsp;&nbsp;&nbsp;</th>
       <th class="center">Admin</th>
       <th class="center">Locked</th>
+      <th class="center">No Fees</th>
     </tr>
   </tfoot>
 </table>

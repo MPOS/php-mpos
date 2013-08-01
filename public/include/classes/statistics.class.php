@@ -224,6 +224,7 @@ class Statistics {
         a.id AS id,
         a.is_admin as is_admin,
         a.is_locked as is_locked,
+        a.no_fees as no_fees,
         a.username AS username,
         a.donate_percent AS donate_percent,
         a.email AS email,

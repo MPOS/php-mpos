@@ -48,6 +48,8 @@ class Tools extends Base {
       return 'coinchose';
     } else if (preg_match('/btc-e.com/', $url)) {
       return 'btce';
+    } else if (preg_match('/cryptsy.com/', $url)) {
+      return 'cryptsy';
     }
     $this->setErrorMessage("API URL unknown");
     return false;
@@ -72,6 +74,9 @@ class Tools extends Base {
       break;
     case 'btce':
       return $aData['ticker']['last'];
+      break;
+    case 'cryptsy':
+      return $aData['return']['markets'][$strCurrency]['lasttradeprice'];
       break;
     }
     // Catchall, we have no data extractor for this API url

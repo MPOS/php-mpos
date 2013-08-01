@@ -73,6 +73,11 @@ $config['wallet']['password'] = 'testnet';
  *   url       =  `http://www.coinchoose.com`
  *   target    =  `/api.php`
  *   currency  =  `BTC`
+ *
+ * Optional (cryptsy.com):
+ *   url       =  `https://www.cryptsy.com`
+ *   target    =  `/api.php?method=marketdata`
+ *   currency  =  `BTC`
  **/
 $config['price']['url'] = 'https://btc-e.com';
 $config['price']['target'] = '/api/2/ltc_usd/ticker';

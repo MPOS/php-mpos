@@ -6,7 +6,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <link rel="shortcut icon" href="favicon.ico" />
     <link rel="stylesheet" href="{$PATH}/css/mainstyle.css" type="text/css" />
-    <script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
+    <script src="{$PATH}/js/jquery-1.9.1.min.js"></script>
     <script src="{$PATH}/js/jquery.browser.js"></script>
     <script src="{$PATH}/js/jquery.tablesorter.min.js"></script>
     <script src="{$PATH}/js/jquery.tablesorter.pager.js"></script>
@@ -59,7 +59,7 @@
               <div class="message {$smarty.session.POPUP[popup].TYPE|default:"success"}"><p>{$smarty.session.POPUP[popup].CONTENT}</p></div>
             {/section}
           {/if}
-          {include file="$PAGE/$ACTION/$CONTENT"}
+          {if file_exists($smarty.current_dir|cat:"/$PAGE/$ACTION/$CONTENT")}{include file="$PAGE/$ACTION/$CONTENT"}{else}Missing template for this page{/if}
         </div>
         <div class"clear"></div>
         <div id="footer" style="font-size: 10px;">

@@ -124,13 +124,13 @@ foreach ($aAllBlocks as $iIndex => $aBlock) {
     // Loop through all accounts that have found shares for this round
     foreach ($aAccountShares as $key => $aData) {
       // Payout based on PPLNS target shares, proportional payout for all users
-      $aData['percentage'] = number_format(round(( 100 / $pplns_target) * $aData['valid'], 8), 8);
+      $aData['percentage'] = number_format(round(( 100 / $iRoundShares) * $aData['valid'], 8), 8);
       $aData['payout'] = number_format(round(( $aData['percentage'] / 100 ) * $dReward, 8), 8);
       // Defaults
       $aData['fee' ] = 0;
       $aData['donation'] = 0;
 
-      if ($config['fees'] > 0)
+      if ($config['fees'] > 0 && $aData['no_fees'] == 0)
         $aData['fee'] = number_format(round($config['fees'] / 100 * $aData['payout'], 8), 8);
       // Calculate donation amount, fees not included
       $aData['donation'] = number_format(round($user->getDonatePercent($user->getUserId($aData['username'])) / 100 * ( $aData['payout'] - $aData['fee']), 8), 8);

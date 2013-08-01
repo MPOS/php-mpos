@@ -23,7 +23,10 @@ class User {
     $this->mail = $mail;
   }
   public function setToken($token) {
-    $this->token= $token;
+    $this->token = $token;
+  }
+  public function setBitcoin($bitcoin) {
+    $this->bitcoin = $bitcoin;
   }
   private function setErrorMessage($msg) {
     $this->sError = $msg;
@@ -43,6 +46,9 @@ class User {
   public function getUserEmail($username) {
     return $this->getSingle($username, 'email', 'username', 's');
   }
+  public function getUserNoFee($id) {
+    return $this->getSingle($id, 'no_fees', 'id');
+  }
   public function getUserAdmin($id) {
     return $this->getSingle($id, 'is_admin', 'id');
   }
@@ -58,11 +64,18 @@ class User {
   public function getUserFailed($id) {
    return $this->getSingle($id, 'failed_logins', 'id');
   }
+  public function isNoFee($id) {
+    return $this->getUserNoFee($id);
+  }
   public function isLocked($id) {
     return $this->getUserLocked($id);
   }
   public function isAdmin($id) {
     return $this->getUserAdmin($id);
+  }
+  public function changeNoFee($id) {
+    $field = array('name' => 'no_fees', 'type' => 'i', 'value' => !$this->isNoFee($id));
+    return $this->updateSingle($id, $field);
   }
   public function changeLocked($id) {
     $field = array('name' => 'is_locked', 'type' => 'i', 'value' => !$this->isLocked($id));
@@ -307,6 +320,21 @@ class User {
       $this->setErrorMessage('Invalid email address');
       return false;
     }
+    if ($this->bitcoin->can_connect() === true && !empty($address)) {
+      try {
+        $aStatus = $this->bitcoin->validateaddress($address);
+        if (!$aStatus['isvalid']) {
+          $this->setErrorMessage('Invalid coin address');
+          return false;
+        }
+      } catch (BitcoinClientException $e) {
+        $this->setErrorMessage('Unable to verify coin address');
+        return false;
+      }
+    } else {
+      $this->setErrorMessage('Unable to connect to RPC server for coin address validation');
+      return false;
+    }
     // Number sanitizer, just in case we fall through above
     $threshold = min($this->config['ap_threshold']['max'], max(0, floatval($threshold)));
     $donate = min(100, max(0, floatval($donate)));
@@ -416,7 +444,7 @@ class User {
     $this->debug->append("Fetching user information for user id: $userID");
     $stmt = $this->mysqli->prepare("
       SELECT
-      id, username, pin, api_key, is_admin, is_anonymous, email,
+      id, username, pin, api_key, is_admin, is_anonymous, email, no_fees,
       IFNULL(donate_percent, '0') as donate_percent, coin_address, ap_threshold
       FROM $this->table
       WHERE id = ? LIMIT 0,1");
@@ -636,3 +664,4 @@ class User {
 $user = new User($debug, $mysqli, SALT, $config);
 $user->setMail($mail);
 $user->setToken($oToken);
+$user->setBitcoin($bitcoin);

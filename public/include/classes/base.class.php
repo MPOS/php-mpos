@@ -30,6 +30,9 @@ class Base {
   public function setToken($token) {
     $this->token = $token;
   }
+  public function setBitcoin($bitcoin) {
+    $this->bitcoin = $bitcoin;
+  }
   public function setTokenType($tokentype) {
     $this->tokentype = $tokentype;
   }

@@ -3,9 +3,9 @@
   <head>
     <title>{$GLOBAL.config.website.title}</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet"  href="http://code.jquery.com/mobile/1.3.0/jquery.mobile-1.3.0.min.css" />
-    <script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
-    <script src="http://code.jquery.com/mobile/1.3.0/jquery.mobile-1.3.0.min.js"></script>
+    <link rel="stylesheet"  href="{$PATH}/css/jquery.mobile-1.3.0.min.css" />
+    <script src="{$PATH}/js/jquery-1.9.1.min.js"></script>
+    <script src="{$PATH}/js/jquery.mobile-1.3.0.min.js"></script>
     {if $smarty.session.AUTHENTICATED|default:"0" == 1}
     <script>
 {literal}
@@ -47,7 +47,7 @@
       </div>
       {/if}
       <div data-role="content">
-{include file="$PAGE/$ACTION/$CONTENT"}
+{if file_exists($smarty.current_dir|cat:"/$PAGE/$ACTION/$CONTENT")}{include file="$PAGE/$ACTION/$CONTENT"}{else}Missing template for this page{/if}
       </div><!-- /content -->
       <div data-role="footer" data-position="fixed">
 {include file="global/footer.tpl"}

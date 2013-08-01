@@ -30,11 +30,11 @@
                     </tr>
                     <tr>
                       <td><b>Pool Invalid</b></td>
-                      <td class="right"><i>{$GLOBAL.roundshares.invalid|number_format}</i>{if $GLOBAL.roundshares.valid > 0}<font size='1px'> ({(100 / $GLOBAL.roundshares.valid * $GLOBAL.roundshares.invalid)|number_format:"2"}%)</font>{/if}</td>
+                      <td class="right"><i>{$GLOBAL.roundshares.invalid|number_format}</i>{if $GLOBAL.roundshares.valid > 0}<font size='1px'> ({($GLOBAL.roundshares.invalid / ($GLOBAL.roundshares.valid + $GLOBAL.roundshares.invalid) * 100)|number_format:"2"}%)</font>{/if}</td>
                     </tr>
                     <tr>
                       <td><b>Your Invalid</b></td>
-                      <td class="right"><i>{$GLOBAL.userdata.shares.invalid|number_format}</i>{if $GLOBAL.roundshares.valid > 0}<font size='1px'> ({(100 / $GLOBAL.roundshares.valid * $GLOBAL.userdata.shares.invalid)|number_format:"2"}%)</font>{/if}</td>
+                      <td class="right"><i>{$GLOBAL.userdata.shares.invalid|number_format}</i>{if $GLOBAL.roundshares.valid > 0}<font size='1px'> ({($GLOBAL.userdata.shares.invalid / ($GLOBAL.roundshares.valid + $GLOBAL.roundshares.invalid) * 100)|number_format:"2"}%)</font>{/if}</td>
                     </tr>
                     <tr><td colspan="2">&nbsp;</td></tr>
                     <tr><td colspan="2"><b><u>{$GLOBAL.config.currency} Estimates</u></b></td></tr>

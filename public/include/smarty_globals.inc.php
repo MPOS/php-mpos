@@ -46,10 +46,12 @@ $aGlobal = array(
   'price' => $setting->getValue('price'),
   'blockexplorer' => $config['blockexplorer'],
   'chaininfo' => $config['chaininfo'],
+  'disable_mp' => $setting->getValue('disable_mp'),
   'config' => array(
     'website' => $config['website'],
     'accounts' => $config['accounts'],
     'disable_invitations' => $setting->getValue('disable_invitations'),
+    'disable_notifications' => $setting->getValue('disable_notifications'),
     'price' => array( 'currency' => $config['price']['currency'] ),
     'targetdiff' => $config['difficulty'],
     'currency' => $config['currency'],
@@ -89,7 +91,7 @@ if (@$_SESSION['USERDATA']['id']) {
     // Some estimations
     if (@$aRoundShares['valid'] > 0) {
       $aGlobal['userdata']['est_block'] = round(( (int)$aGlobal['userdata']['shares']['valid'] / (int)$aRoundShares['valid'] ) * (float)$config['reward'], 8);
-      $aGlobal['userdata']['est_fee'] = round(((float)$config['fees'] / 100) * (float)$aGlobal['userdata']['est_block'], 8);
+      $aGlobal['userdata']['no_fees'] == 0 ? $aGlobal['userdata']['est_fee'] = round(((float)$config['fees'] / 100) * (float)$aGlobal['userdata']['est_block'], 8) : $aGlobal['userdata']['est_fee'] = 0;
       $aGlobal['userdata']['est_donation'] = round((( (float)$aGlobal['userdata']['donate_percent'] / 100) * ((float)$aGlobal['userdata']['est_block'] - (float)$aGlobal['userdata']['est_fee'])), 8);
       $aGlobal['userdata']['est_payout'] = round((float)$aGlobal['userdata']['est_block'] - (float)$aGlobal['userdata']['est_donation'] - (float)$aGlobal['userdata']['est_fee'], 8);
     } else {

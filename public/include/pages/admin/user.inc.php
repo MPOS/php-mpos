@@ -11,16 +11,19 @@ if (!$user->isAuthenticated() || !$user->isAdmin($_SESSION['USERDATA']['id'])) {
 
 $aRoundShares = $statistics->getRoundShares();
 
-// Change account lock
-if (@$_POST['do'] == 'lock') {
+switch (@$_POST['do']) {
+case 'lock':
   $supress_master = 1;
   $user->changeLocked($_POST['account_id']);
-}
-
-// Change account admin
-if (@$_POST['do'] == 'admin') {
+  break;
+case 'fee':
+  $supress_master = 1;
+  $user->changeNoFee($_POST['account_id']);
+  break;
+case 'admin':
   $supress_master = 1;
   $user->changeAdmin($_POST['account_id']);
+  break;
 }
 
 if (@$_POST['query']) {

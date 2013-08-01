@@ -74,3 +74,19 @@ Small Time Miners are running various stratum only pools for different coins.
 | Pool URL | Coin | Avg. Hashrate | Avg. Active Workers | Notes |
 | -------- | ---- | ------------- | ------------------: | ----- |
 | http://coinhuntr.com | Litecoin | 200 MHash | 250 | Custom Frontend template |
+
+### Sheinsha
+
+| Pool URL | Coin | Avg. Hashrate | Avg. Active Workers | Notes |
+| -------- | ---- | ------------- | ------------------: | ----- |
+| http://str.minar.cc | Starcoin | 35 MHash  |  35 | PoS/PoW type coin |
+| http://dmd.minar.cc | Diamondcoin | 90 MHash  |  65 | PoS/PoW type coin |
+| http://jpc.minar.cc | Jupitercoin | 1.8 MHash  |  3 |  |
+| http://phs.minar.cc | Philosopherstone Coin | 170 MHash | 130 | PoS/PoW type coin |
+
+### IainKay & Nushor
+
+| Pool URL | Coin | Avg. Hashrate | Avg. Active Workers | Notes |
+| -------- | ---- | ------------- | ------------------: | ----- |
+| http://ltc.nushor.net | Litecoin | 130 MHash | 300 | Succesfully migrated from `mmcfe` |
+
