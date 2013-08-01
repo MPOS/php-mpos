@@ -15,6 +15,14 @@ CRONS="findblock.php proportional_payout.php pplns_payout.php pps_payout.php blo
 # Output additional runtime information
 VERBOSE="0"
 
+# Base path for PIDFILE, (full path).
+BASEPATH="/tmp"
+
+# Subfolder for PIDFILE, so it's path will be unique in a multipool server.
+# Path relative to BASEPATH.
+# Eg. SUBFOLDER="LTC"
+SUBFOLDER=""
+
 ################################################################
 #                                                              #
 # You probably don't need to change anything beyond this point #
@@ -24,24 +32,33 @@ VERBOSE="0"
 # My own name
 ME=$( basename $0 )
 
-# Path to PID file, needs to be writable by user running this
-PIDFILE="/tmp/$ME.pid"
-
 # Overwrite some settings via command line arguments
-while getopts "hvp:" opt; do
+while getopts "hvp:d:" opt; do
   case "$opt" in
     h|\?)
-      echo "Usage: $0 [-v] [-p PHP_BINARY]";
+      echo "Usage: $0 [-v] [-p PHP_BINARY] [-d SUBFOLDER]";
       exit 0
       ;;
     v) VERBOSE=1 ;;
     p) PHP_BIN=$OPTARG ;;
+    d) SUBFOLDER=$OPTARG ;;
     :)
       echo "Option -$OPTARG requires an argument." >&2
       exit 1
     ;;
   esac
 done
+
+# Path to PID file, needs to be writable by user running this
+PIDFILE="${BASEPATH}/${SUBFOLDER}/${ME}.pid"
+# Clean PIDFILE path
+PIDFILE=$(readlink -m "$PIDFILE")
+
+# Create folders recursively if necessary
+if ! $(mkdir -p $( dirname $PIDFILE)); then
+  echo "Error creating PIDFILE path: $( dirname $PIDFILE )"
+  exit 1
+fi
 
 # Find scripts path
 if [[ -L $0 ]]; then
