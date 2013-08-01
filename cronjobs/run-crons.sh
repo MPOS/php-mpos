@@ -36,10 +36,6 @@ while getopts "hvp:x:" opt; do
       ;;
     v) VERBOSE=1 ;;
     p) PHP_BIN=$OPTARG ;;
-    :)
-      echo "Option -$OPTARG requires an argument." >&2
-      exit 1
-    ;;
     x) PIDPREFIX=$OPTARG ;;
     :)
       echo "Option -$OPTARG requires an argument." >&2
@@ -49,7 +45,7 @@ while getopts "hvp:x:" opt; do
 done
 
 # Path to PID file, needs to be writable by user running this
-PIDFILE="/tmp/$PIDPREFIX$ME.pid"
+PIDFILE="/tmp/${PIDPREFIX}${ME}.pid"
 
 # Find scripts path
 if [[ -L $0 ]]; then
