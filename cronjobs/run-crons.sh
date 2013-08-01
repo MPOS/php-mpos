@@ -55,10 +55,9 @@ PIDFILE="${BASEPATH}/${SUBFOLDER}/${ME}.pid"
 PIDFILE=$(readlink -m "$PIDFILE")
 
 # Create folders recursively if necessary
-if
-  !(mkdir -p $( dirname $PIDFILE) )
-then
+if ! $(mkdir -p $( dirname $PIDFILE)); then
   echo "Error creating PIDFILE path: $( dirname $PIDFILE )"
+  exit 1
 fi
 
 # Find scripts path
