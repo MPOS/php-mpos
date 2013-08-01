@@ -227,31 +227,15 @@ class Transaction {
   public function getLockedBalance() {
     $this->debug->append("STA " . __METHOD__, 4);
     $stmt = $this->mysqli->prepare("
-      SELECT ROUND(IFNULL(t1.credit, 0) - IFNULL(t2.debit, 0) - IFNULL(t3.other, 0), 8) AS balance
-      FROM
-      (
-        SELECT sum(t.amount) AS credit
-        FROM $this->table AS t
-        LEFT JOIN " . $this->block->getTableName() . " AS b ON t.block_id = b.id
-        WHERE (
-          ( t.type IN ('Credit','Bonus') AND b.confirmations >= ? ) OR
-          ( t.type = 'Credit_PPS' )
-        )
-      ) AS t1,
-      (
-        SELECT sum(t.amount) AS debit
-        FROM $this->table AS t
-        WHERE t.type IN ('Debit_MP', 'Debit_AP')
-      ) AS t2,
-      (
-        SELECT sum(t.amount) AS other
-        FROM " . $this->table . " AS t
-        LEFT JOIN " . $this->block->getTableName() . " AS b ON t.block_id = b.id
-        WHERE (
-          ( t.type IN ('Donation','Fee') AND b.confirmations >= ? ) OR
-          t.type IN ('Donation_PPS','Fee_PPS','TXFee')
-        )
-      ) AS t3");
+      SELECT
+        ROUND((
+          SUM( IF( ( t.type IN ('Credit','Bonus') OR t.type = 'Credit_PPS') AND b.confirmations >= ?, t.amount, 0 ) ) -
+          SUM( IF( t.type IN ('Debit_MP', 'Debit_AP'), t.amount, 0 ) ) -
+          SUM( IF( ( t.type IN ('Donation','Fee') AND b.confirmations >= ? ) OR ( t.type IN ('Donation_PPS', 'Fee_PPS', 'TXFee') ), t.amount, 0 ) )
+        ), 8) AS balance
+      FROM $this->table AS t
+      LEFT JOIN blocks AS b
+      ON t.block_id = b.id");
     if ($this->checkStmt($stmt) && $stmt->bind_param('ii', $this->config['confirmations'], $this->config['confirmations']) && $stmt->execute() && $stmt->bind_result($dBalance) && $stmt->fetch())
       return $dBalance;
     // Catchall
@@ -269,85 +253,27 @@ class Transaction {
     $this->debug->append("STA " . __METHOD__, 4);
     $stmt = $this->mysqli->prepare("
       SELECT
-        ROUND(IFNULL(t1.credit, 0) - IFNULL(t2.debit, 0) - IFNULL(t3.other, 0), 8) AS confirmed,
-        ROUND(IFNULL(t4.credit, 0) - IFNULL(t5.other, 0), 8) AS unconfirmed,
-        ROUND(IFNULL(t6.credit, 0) - IFNULL(t7.other, 0), 8) AS orphaned
-      FROM
-      (
-        SELECT sum(t.amount) AS credit
-        FROM $this->table AS t
-        LEFT JOIN " . $this->block->getTableName() . " AS b ON t.block_id = b.id
-        WHERE
-        (
-          ( t.type IN ('Credit','Bonus') AND b.confirmations >= ? ) OR
-          ( t.type = 'Credit_PPS' )
-        )
-        AND t.account_id = ?
-      ) AS t1,
-      (
-        SELECT sum(t.amount) AS debit
-        FROM $this->table AS t
-        WHERE t.type IN ('Debit_MP', 'Debit_AP')
-        AND t.account_id = ?
-      ) AS t2,
-      (
-        SELECT sum(t.amount) AS other
-        FROM $this->table AS t
-        LEFT JOIN " . $this->block->getTableName() . " AS b ON t.block_id = b.id
-        WHERE
-        (
-          ( t.type IN ('Donation','Fee') AND b.confirmations >= ? ) OR
-          ( t.type IN ('Donation_PPS', 'Fee_PPS', 'TXFee') )
-        )
-        AND t.account_id = ?
-      ) AS t3,
-      (
-        SELECT sum(t.amount) AS credit
-        FROM $this->table AS t
-        LEFT JOIN " . $this->block->getTableName() . " AS b ON t.block_id = b.id
-        WHERE
-          t.type IN ('Credit','Bonus') AND b.confirmations < ? AND b.confirmations >= 0
-        AND t.account_id = ?
-      ) AS t4,
-      (
-        SELECT sum(t.amount) AS other
-        FROM $this->table AS t
-        LEFT JOIN " . $this->block->getTableName() . " AS b ON t.block_id = b.id
-        WHERE
-        (
-          t.type IN ('Donation','Fee') AND b.confirmations < ? AND b.confirmations >= 0
-        )
-        AND t.account_id = ?
-      ) AS t5,
-      (
-        SELECT sum(t.amount) AS credit
-        FROM $this->table AS t
-        LEFT JOIN " . $this->block->getTableName() . " AS b ON t.block_id = b.id
-        WHERE
-          t.type IN ('Credit','Bonus') AND b.confirmations = -1
-        AND t.account_id = ?
-      ) AS t6,
-      (
-        SELECT sum(t.amount) AS other
-        FROM $this->table AS t
-        LEFT JOIN " . $this->block->getTableName() . " AS b ON t.block_id = b.id
-        WHERE
-        (
-          t.type IN ('Donation','Fee') AND b.confirmations = -1
-        )
-        AND t.account_id = ?
-      ) AS t7
+        ROUND((
+          SUM( IF( ( t.type IN ('Credit','Bonus') OR t.type = 'Credit_PPS') AND b.confirmations >= ?, t.amount, 0 ) ) -
+          SUM( IF( t.type IN ('Debit_MP', 'Debit_AP'), t.amount, 0 ) ) -
+          SUM( IF( ( t.type IN ('Donation','Fee') AND b.confirmations >= ? ) OR ( t.type IN ('Donation_PPS', 'Fee_PPS', 'TXFee') ), t.amount, 0 ) )
+        ), 8) AS confirmed,
+        ROUND((
+          SUM( IF( t.type IN ('Credit','Bonus') AND b.confirmations < ? AND b.confirmations >= 0, t.amount, 0 ) ) -
+          SUM( IF( t.type IN ('Donation','Fee') AND b.confirmations < ? AND b.confirmations >= 0, t.amount, 0 ) )
+        ), 8) AS unconfirmed,
+        ROUND((
+          SUM( IF( t.type IN ('Credit','Bonus') AND b.confirmations = -1, t.amount, 0) ) -
+          SUM( IF( t.type IN ('Donation','Fee') AND b.confirmations = -1, t.amount, 0) )
+        ), 8) AS orphaned
+      FROM transactions AS t
+      LEFT JOIN blocks AS b
+      ON t.block_id = b.id
+      AND t.account_id = ?
       ");
-    if ($this->checkStmt($stmt)) {
-      $stmt->bind_param("iiiiiiiiiii", $this->config['confirmations'], $account_id, $account_id, $this->config['confirmations'], $account_id, $this->config['confirmations'], $account_id, $this->config['confirmations'], $account_id, $account_id, $account_id);
-      if (!$stmt->execute()) {
-        $this->debug->append("Unable to execute statement: " . $stmt->error);
-        $this->setErrorMessage("Fetching balance failed");
-      }
-      $result = $stmt->get_result();
-      $stmt->close();
+    if ($this->checkStmt($stmt) && $stmt->bind_param("iiiii", $this->config['confirmations'], $this->config['confirmations'], $this->config['confirmations'], $this->config['confirmations'], $account_id) && $stmt->execute() && $result = $stmt->get_result())
       return $result->fetch_assoc();
-    }
+    $this->debug->append('Failed to fetch users balance: ' . $this->mysqli->error);
     return false;
   }
 }
