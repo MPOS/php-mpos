@@ -4,28 +4,10 @@
 if (!defined('SECURITY'))
   die('Hacking attempt');
 
-class Transaction {
+class Transaction extends Base {
   private $sError = '';
   private $table = 'transactions';
-  private $tableBlocks = 'blocks';
   public $num_rows = 0;
-
-  public function __construct($debug, $mysqli, $config, $block, $user) {
-    $this->debug = $debug;
-    $this->mysqli = $mysqli;
-    $this->config = $config;
-    $this->block = $block;
-    $this->user = $user;
-    $this->debug->append("Instantiated Transaction class", 2);
-  }
-
-  // get and set methods
-  private function setErrorMessage($msg) {
-    $this->sError = $msg;
-  }
-  public function getError() {
-    return $this->sError;
-  }
 
   /**
    * Add a new transaction to our class table
@@ -109,7 +91,8 @@ class Transaction {
         if (!empty($value)) {
           switch ($key) {
           case 'type':
-            $aFilter[] = "t.type = '$value'";
+            $aFilter[] = "t.type = ?";
+            $this->addParam('s', $value);
             break;
           case 'status':
             switch ($value) {
@@ -127,10 +110,12 @@ class Transaction {
             }
             break;
             case 'account':
-              $aFilter[] = "LOWER(a.username) = LOWER('$value')";
+              $aFilter[] = "LOWER(a.username) = LOWER(?)";
+              $this->addParam('s', $value);
               break;
             case 'address':
-              $aFilter[] = "t.coin_address = '$value'";
+              $aFilter[] = "t.coin_address = ?";
+              $this->addParam('s', $value);
               break;
           }
         }
@@ -143,12 +128,16 @@ class Transaction {
       ORDER BY id DESC
       LIMIT ?,?
       ";
+    // Add some other params to query
+    $this->addParam('i', $start);
+    $this->addParam('i', $limit);
     $stmt = $this->mysqli->prepare($sql);
     if ($this->checkStmt($stmt) && $stmt->bind_param('ii', $start, $limit) && $stmt->execute() && $result = $stmt->get_result()) {
       // Fetch matching row count
       $num_rows = $this->mysqli->prepare("SELECT FOUND_ROWS() AS num_rows");
       if ($num_rows->execute() && $row_count = $num_rows->get_result()->fetch_object()->num_rows)
         $this->num_rows = $row_count;
+    if ($this->checkStmt($stmt) && call_user_func_array( array($stmt, 'bind_param'), $this->getParam()) && $stmt->execute() && $result = $stmt->get_result())
       return $result->fetch_all(MYSQLI_ASSOC);
     }
     $this->debug->append('Unable to fetch transactions');
@@ -176,15 +165,6 @@ class Transaction {
     }
     $this->debug->append('Failed to fetch transaction types: ' . $this->mysqli->error);
     return false;
-  }
-
-  private function checkStmt($bState) {
-    if ($bState ===! true) {
-      $this->debug->append("Failed to prepare statement: " . $this->mysqli->error);
-      $this->setErrorMessage('Internal application Error');
-      return false;
-    }
-    return true;
   }
 
   /**
@@ -278,4 +258,9 @@ class Transaction {
   }
 }
 
-$transaction = new Transaction($debug, $mysqli, $config, $block, $user);
+$transaction = new Transaction();
+$transaction->setDebug($debug);
+$transaction->setMysql($mysqli);
+$transaction->setConfig($config);
+$transaction->setBlock($block);
+$transaction->setUser($user);
