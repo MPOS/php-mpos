@@ -33,42 +33,13 @@ class Transaction extends Base {
 
   /**
    * Get all transactions from start for account_id
-   * @param account_id int Account ID
    * @param start int Starting point, id of transaction
+   * @param filter array Filter to limit transactions
+   * @param limit int Only display this many transactions
+   * @param account_id int Account ID
    * @return data array Database fields as defined in SELECT
    **/
-  public function getTransactions($account_id, $start=0) {
-    $this->debug->append("STA " . __METHOD__, 4);
-    $stmt = $this->mysqli->prepare("
-      SELECT
-        t.id AS id,
-        t.type AS type,
-        t.amount AS amount,
-        t.coin_address AS coin_address,
-        t.timestamp AS timestamp,
-        b.height AS height,
-        b.confirmations AS confirmations
-      FROM transactions AS t
-      LEFT JOIN " . $this->block->getTableName() . " AS b ON t.block_id = b.id
-      WHERE t.account_id = ?
-      ORDER BY id DESC");
-    if ($this->checkStmt($stmt)) {
-      if(!$stmt->bind_param('i', $account_id)) return false;
-      $stmt->execute();
-      $result = $stmt->get_result();
-      return $result->fetch_all(MYSQLI_ASSOC);
-    }
-    $this->debug->append('Unable to fetch transactions');
-    return false;
-  }
-
-  /**
-   * Fetch all transactions for all users
-   * Optionally apply a filter
-   * @param none
-   * @return mixed array or false
-   **/
-  public function getAllTransactions($start=0,$filter=NULL,$limit=30) {
+  public function getTransactions($start=0, $filter=NULL, $limit=30, $account_id=NULL) {
     $this->debug->append("STA " . __METHOD__, 4);
     $sql = "
       SELECT
@@ -124,6 +95,13 @@ class Transaction extends Base {
         $sql .= " WHERE " . implode(' AND ', $aFilter);
       }
     }
+    if (is_int($account_id) && empty($aFilter)) {
+      $sql .= " WHERE a.id = ?";
+      $this->addParam('i', $account_id);
+    } else if (is_int($account_id)) {
+      $sql .= " AND a.id = ?";
+      $this->addParam('i', $account_id);
+    }
     $sql .= "
       ORDER BY id DESC
       LIMIT ?,?
@@ -132,15 +110,14 @@ class Transaction extends Base {
     $this->addParam('i', $start);
     $this->addParam('i', $limit);
     $stmt = $this->mysqli->prepare($sql);
-    if ($this->checkStmt($stmt) && $stmt->bind_param('ii', $start, $limit) && $stmt->execute() && $result = $stmt->get_result()) {
+    if ($this->checkStmt($stmt) && call_user_func_array( array($stmt, 'bind_param'), $this->getParam()) && $stmt->execute() && $result = $stmt->get_result()) {
       // Fetch matching row count
       $num_rows = $this->mysqli->prepare("SELECT FOUND_ROWS() AS num_rows");
       if ($num_rows->execute() && $row_count = $num_rows->get_result()->fetch_object()->num_rows)
         $this->num_rows = $row_count;
-    if ($this->checkStmt($stmt) && call_user_func_array( array($stmt, 'bind_param'), $this->getParam()) && $stmt->execute() && $result = $stmt->get_result())
       return $result->fetch_all(MYSQLI_ASSOC);
     }
-    $this->debug->append('Unable to fetch transactions');
+    $this->debug->append('Failed to fetch transactions: ' . $this->mysqli->error);
     return false;
   }
 

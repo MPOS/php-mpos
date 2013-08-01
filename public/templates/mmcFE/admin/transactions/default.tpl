@@ -1,4 +1,7 @@
 {include file="global/block_header.tpl" ALIGN="left" BLOCK_STYLE="width: 23%" BLOCK_HEADER="Transaction Filter"}
+<form action="{$smarty.server.PHP_SELF}">
+  <input type="hidden" name="page" value="{$smarty.request.page}" />
+  <input type="hidden" name="action" value="{$smarty.request.action}" />
   <table cellpadding="1" cellspacing="1" width="100%">
     <tbody>
       <tr>
@@ -21,9 +24,6 @@
 {/if}
         </td>
       </tr>
-      <form action="{$smarty.server.PHP_SELF}">
-        <input type="hidden" name="page" value="{$smarty.request.page}" />
-        <input type="hidden" name="action" value="{$smarty.request.action}" />
         <tr>
           <td class="left">TX Type</td>
           <td class="right">{html_options name="filter[type]" options=$TRANSACTIONTYPES selected=$smarty.request.filter.type|default:""}</td>
@@ -43,9 +43,9 @@
         <tr>
           <td class="center" colspan="2"><input type="submit" class="submit small" value="Filter"></td>
         </tr>
-      </form>
     </tbody>
   </table>
+</form>
 {include file="global/block_footer.tpl"}
 
 {include file="global/block_header.tpl" ALIGN="right" BLOCK_STYLE="width: 75%" BLOCK_HEADER="Transaction History"}
