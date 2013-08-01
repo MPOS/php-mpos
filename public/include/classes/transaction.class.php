@@ -8,6 +8,7 @@ class Transaction {
   private $sError = '';
   private $table = 'transactions';
   private $tableBlocks = 'blocks';
+  public $num_rows = 0;
 
   public function __construct($debug, $mysqli, $config, $block, $user) {
     $this->debug = $debug;
@@ -89,6 +90,7 @@ class Transaction {
     $this->debug->append("STA " . __METHOD__, 4);
     $sql = "
       SELECT
+        SQL_CALC_FOUND_ROWS
         t.id AS id,
         a.username as username,
         t.type AS type,
@@ -142,8 +144,13 @@ class Transaction {
       LIMIT ?,?
       ";
     $stmt = $this->mysqli->prepare($sql);
-    if ($this->checkStmt($stmt) && $stmt->bind_param('ii', $start, $limit) && $stmt->execute() && $result = $stmt->get_result())
+    if ($this->checkStmt($stmt) && $stmt->bind_param('ii', $start, $limit) && $stmt->execute() && $result = $stmt->get_result()) {
+      // Fetch matching row count
+      $num_rows = $this->mysqli->prepare("SELECT FOUND_ROWS() AS num_rows");
+      if ($num_rows->execute() && $row_count = $num_rows->get_result()->fetch_object()->num_rows)
+        $this->num_rows = $row_count;
       return $result->fetch_all(MYSQLI_ASSOC);
+    }
     $this->debug->append('Unable to fetch transactions');
     return false;
   }
