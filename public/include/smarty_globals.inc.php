@@ -120,6 +120,8 @@ if (@$_SESSION['USERDATA']['id']) {
 
 if ($setting->getValue('maintenance'))
   $_SESSION['POPUP'][] = array('CONTENT' => 'This pool is currently in maintenance mode.', 'TYPE' => 'warning');
+if ($motd = $setting->getValue('system_motd'))
+  $_SESSION['POPUP'][] = array('CONTENT' => $motd, 'TYPE' => 'info');
 
 // Make it available in Smarty
 $smarty->assign('PATH', 'site_assets/' . THEME);
