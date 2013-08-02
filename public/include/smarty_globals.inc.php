@@ -72,6 +72,7 @@ $aGlobal = array(
     'disable_notifications' => $setting->getValue('disable_notifications'),
     'monitoring_uptimerobot_api_keys' => $setting->getValue('monitoring_uptimerobot_api_keys'),
     'statistics_ajax_refresh_interval' => $statistics_ajax_refresh_interval,
+    'disable_teams' => $setting->getValue('disable_teams'),
     'price' => array( 'currency' => $config['price']['currency'] ),
     'targetdiff' => $config['difficulty'],
     'currency' => $config['currency'],
@@ -112,6 +113,10 @@ $aGlobal['acl']['uptime']['statistics'] = $setting->getValue('acl_uptime_statist
 if (@$_SESSION['USERDATA']['id']) {
   $aGlobal['userdata'] = $_SESSION['USERDATA']['id'] ? $user->getUserData($_SESSION['USERDATA']['id']) : array();
   $aGlobal['userdata']['balance'] = $transaction->getBalance($_SESSION['USERDATA']['id']);
+  if ($aGlobal['userdata']['team_id'] = $team->memberOf($_SESSION['USERDATA']['id'])) {
+    $aGlobal['userdata']['team_name'] = $team->getName($aGlobal['userdata']['team_id']);
+    $aGlobal['userdata']['team_owner'] = $team->getOwnerId($aGlobal['userdata']['team_id']);
+  }
 
   // Other userdata that we can cache savely
   $aGlobal['userdata']['shares'] = $statistics->getUserShares($_SESSION['USERDATA']['id']);

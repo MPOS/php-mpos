@@ -72,6 +72,8 @@ class Base {
   }
   public function setShare($share) {
     $this->share = $share;
+  public function setTeamsAccounts($teamsaccounts) {
+    $this->teamsaccounts = $teamsaccounts;
   }
   public function setErrorMessage($msg) {
     $this->sError = $msg;
@@ -147,7 +149,6 @@ class Base {
       $stmt->fetch();
       $stmt->close();
       return $retval;
-    }
     return false;
   }
 
@@ -186,10 +187,9 @@ class Base {
    * @param field string Field to update
    * @return bool
    **/
-  protected function updateSingle($id, $field, $table='') {
-    if (empty($table)) $table = $this->table;
-    $this->debug->append("STA " . __METHOD__, 4);
-    $stmt = $this->mysqli->prepare("UPDATE $table SET " . $field['name'] . " = ? WHERE id = ? LIMIT 1");
+  protected function updateSingle($id, $field) {
+    $this->debug->append("STA " . __METHOD__, 4); 
+    $stmt = $this->mysqli->prepare("UPDATE $this->table SET `" . $field['name'] . "` = ? WHERE id = ? LIMIT 1");
     if ($this->checkStmt($stmt) && $stmt->bind_param($field['type'].'i', $field['value'], $id) && $stmt->execute())
       return true;
     $this->debug->append("Unable to update " . $field['name'] . " with " . $field['value'] . " for ID $id");
@@ -216,6 +216,40 @@ class Base {
       return $refs;
     }
     return $array;
+  }
+
+  // Some basic getters that help in child classes
+  public function getName($id) {
+    $this->debug->append("STA " . __METHOD__, 4);
+    return $this->getSingle($id, 'name', 'id', 'i');
+  }
+  public function getRowCount() {
+    $stmt = $this->mysqli->prepare("SELECT COUNT(id) AS count FROM $this->table");
+    if ($this->checkStmt($stmt) && $stmt->execute() && $result = $stmt->get_result())
+      return $result->fetch_object()->count;
+    return false;
+  }
+  public function getMaxId() {
+    $stmt = $this->mysqli->prepare("SELECT MAX(id) id FROM $this->table");
+    if ($this->checkStmt($stmt) && $stmt->execute() && $result = $stmt->get_result())
+      return $result->fetch_object()->id;
+    return false;
+  }
+  public function getMinId() {
+    $stmt = $this->mysqli->prepare("SELECT MIN(id) id FROM $this->table");
+    if ($this->checkStmt($stmt) && $stmt->execute() && $result = $stmt->get_result())
+      return $result->fetch_object()->id;
+    return false;
+  }
+
+  function checkStmt($bState) {
+    $this->debug->append("STA " . __METHOD__, 4);
+    if ($bState ===! true) {
+      $this->debug->append("Failed to prepare statement: " . $this->mysqli->error);
+      $this->setErrorMessage('Internal application Error');
+      return false;
+    }
+    return true;
   }
 }
 ?>

@@ -22,6 +22,16 @@ require_once(INCLUDE_DIR . '/config/admin_settings.inc.php');
 // Load onto the template
 $smarty->assign("SETTINGS", $aSettings);
 
+/**
+ * Old settings
+ *
+  // Fetch settings to propagate to template
+  $smarty->assign("DISABLETEAMS", $setting->getValue('disable_teams'));
+  $smarty->assign("DISABLEAP", $setting->getValue('disable_ap'));
+  $smarty->assign("DISABLEMP", $setting->getValue('disable_mp'));
+  $smarty->assign("DISABLENOTIFICATIONS", $setting->getValue('disable_notifications'));
+ **/
+
 // Tempalte specifics
 $smarty->assign("CONTENT", "default.tpl");
 ?>
