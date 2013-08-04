@@ -116,6 +116,18 @@ class Block {
   }
 
   /**
+   * Fetch our average rewards for the past N blocks
+   * @param limit int Maximum blocks to check
+   * @return data float Float value of average shares
+   **/
+  public function getAvgBlockReward($limit=1) {
+    $stmt = $this->mysqli->prepare("SELECT AVG(x.amount) AS average FROM (SELECT amount FROM $this->table ORDER BY height DESC LIMIT ?) AS x");
+    if ($this->checkStmt($stmt) && $stmt->bind_param('i', $limit) && $stmt->execute() && $result = $stmt->get_result())
+      return (float)$result->fetch_object()->average;
+    return false;
+  }
+
+  /**
    * Fetch all unconfirmed blocks from table
    * @param confirmations int Required confirmations to consider block confirmed
    * @return data array Array with database fields as keys

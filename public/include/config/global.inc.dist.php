@@ -347,6 +347,27 @@ $config['reward'] = 50;
 // Confirmations per block required to credit transactions, default: 120
 $config['confirmations'] = 120;
 
+ /**
+ * Available pps options:
+ *  reward_type:
+ *   fixed : Fixed value according to `reward` setting
+ *   blockavg : Dynamic value based on average of x number of block rewards
+ *   block : Dynamic value based on LAST block amount
+ *  reward:
+ *   float value : Any value of your choice but should reflect base block values
+ *   blockcount  :  amount of blocks to average, any integer
+ * Default:
+ *   pps_reward_type  = `fixed` default $config['pps']['reward']['default']
+ *   reward       = 50
+ *
+ **/
+$config['pps']['reward']['default'] = 50;
+$config['pps']['reward']['type'] = 'blockavg';
+$config['pps']['blockavg']['blockcount'] = 10;
+
+// pps base payout target, default 16 = difficulty 1 shares for vardiff
+// (1/(65536 * difficulty) * reward) = (reward / (pow(2,32) * difficulty) * pow(2, 16))
+$config['pps_target'] = 16; // do not change unless you know what it does
 
 /**
  * Memcache configuration
