@@ -38,7 +38,6 @@ $aGlobal = array(
   'hashrate' => $iCurrentPoolHashrate,
   'nethashrate' => $dNetworkHashrate,
   'sharerate' => $iCurrentPoolShareRate,
-  'ppsvalue' => number_format(round((1/(65536 * $dDifficulty) * $config['reward']), 12) ,12),
   'workers' => $iCurrentActiveWorkers,
   'roundshares' => $aRoundShares,
   'fees' => $config['fees'],
@@ -65,17 +64,23 @@ $aGlobal = array(
   )
 );
 
+// We support some dynamic reward targets but fall back to our fixed value
 // Special calculations for PPS Values based on reward_type setting and/or available blocks
-if ($config['reward_type'] != 'block') {
-  $aGlobal['ppsvalue'] = number_format(round(50 / (pow(2,32) * $dDifficulty) * pow(2, $config['difficulty']), 12) ,12);
+if ($config['pps']['reward']['type'] == 'blockavg' && $block->getBlockCount() > 0) {
+  $pps_reward = round($block->getAvgBlockReward($config['pps']['blockavg']['blockcount']));
 } else {
-  // Try to find the last block value and use that for future payouts, revert to fixed reward if none found
-  if ($aLastBlock = $block->getLast()) {
-    $aGlobal['ppsvalue'] = number_format(round($aLastBlock['amount'] / (pow(2,32) * $dDifficulty) * pow(2, $config['difficulty']), 12) ,12);
+  if ($config['pps']['reward']['type'] == 'block') {
+     if ($aLastBlock = $block->getLast()) {
+        $pps_reward = $aLastBlock['amount'];
+     } else {
+     $pps_reward = $config['pps']['reward']['default'];
+     }
   } else {
-    $aGlobal['ppsvalue'] = number_format(round($config['reward'] / (pow(2,32) * $dDifficulty) * pow(2, $config['difficulty']), 12) ,12);
+     $pps_reward = $config['pps']['reward']['default'];
   }
 }
+
+$aGlobal['ppsvalue'] = number_format(round($pps_reward / (pow(2,32) * $dDifficulty) * pow(2, $config['pps_target']), 12) ,12);
 
 // We don't want these session infos cached
 if (@$_SESSION['USERDATA']['id']) {

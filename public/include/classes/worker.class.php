@@ -96,7 +96,7 @@ class Worker {
     $stmt = $this->mysqli->prepare("
        SELECT id, username, password, monitor,
        ( SELECT SIGN(COUNT(id)) FROM " . $this->share->getTableName() . " WHERE username = $this->table.username AND time > DATE_SUB(now(), INTERVAL 10 MINUTE)) AS active,
-       ( SELECT ROUND(SUM(IF(difficulty=0, pow(2, (" . $this->config['difficulty'] . " - 16)) - 1, difficulty)) * 65536/600/1000) FROM " . $this->share->getTableName() . " WHERE username = $this->table.username AND time > DATE_SUB(now(), INTERVAL 10 MINUTE)) AS hashrate
+       ( SELECT ROUND(SUM(IF(difficulty=0, pow(2, (" . $this->config['difficulty'] . " - 16)), difficulty)) * 65536/600/1000) FROM " . $this->share->getTableName() . " WHERE username = $this->table.username AND time > DATE_SUB(now(), INTERVAL 10 MINUTE)) AS hashrate
        FROM $this->table
        WHERE id = ?
        ");
@@ -117,7 +117,7 @@ class Worker {
     $stmt = $this->mysqli->prepare("
       SELECT id, username, password, monitor,
       ( SELECT SIGN(COUNT(id)) FROM " . $this->share->getTableName() . " WHERE our_result = 'Y' AND username = $this->table.username AND time > DATE_SUB(now(), INTERVAL 10 MINUTE)) AS active,
-      ( SELECT ROUND(SUM(IF(difficulty=0, pow(2, (" . $this->config['difficulty'] . " - 16)) - 1, difficulty)) * 65536/600/1000) FROM " . $this->share->getTableName() . " WHERE our_result = 'Y' AND username = $this->table.username AND time > DATE_SUB(now(), INTERVAL 10 MINUTE)) AS hashrate
+      ( SELECT ROUND(SUM(IF(difficulty=0, pow(2, (" . $this->config['difficulty'] . " - 16)), difficulty)) * 65536/600/1000) FROM " . $this->share->getTableName() . " WHERE our_result = 'Y' AND username = $this->table.username AND time > DATE_SUB(now(), INTERVAL 10 MINUTE)) AS hashrate
       FROM $this->table
       WHERE account_id = ?");
     if ($this->checkStmt($stmt) && $stmt->bind_param('i', $account_id) && $stmt->execute() && $result = $stmt->get_result())

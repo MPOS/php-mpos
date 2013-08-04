@@ -62,8 +62,8 @@ target and network difficulty and assuming a zero variance scenario.
         <td class="right">{$BLOCKSFOUND[block].difficulty|number_format:"2"}</td>
         <td class="right">{$BLOCKSFOUND[block].amount|number_format:"2"}</td>
         <td class="right">
-          {math assign="estshares" equation="(65536 * blockdiff)" targetdiff=$GLOBAL.config.targetdiff blockdiff=$BLOCKSFOUND[block].difficulty}
-          {$estshares}
+                    {math assign="estshares" equation="(65536 * blockdiff)" blockdiff=$BLOCKSFOUND[block].difficulty}
+          {$estshares|number_format}
         </td>
         <td class="right">{$BLOCKSFOUND[block].shares|number_format}</td>
         <td class="right">

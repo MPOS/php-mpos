@@ -70,7 +70,7 @@ class Share {
    **/
   public function getRoundShares($previous_upstream=0, $current_upstream) {
     $stmt = $this->mysqli->prepare("SELECT
-      IFNULL(SUM(IF(difficulty=0, pow(2, (" . $this->config['difficulty'] . " - 16)) - 1, difficulty)), 0) as total
+      IFNULL(ROUND(SUM(IF(difficulty=0, pow(2, (" . $this->config['difficulty'] . " - 16)), difficulty)), 8), 0) as total
       FROM $this->table
       WHERE our_result = 'Y'
       AND id > ? AND id <= ?
@@ -98,8 +98,8 @@ class Share {
         a.id,
         SUBSTRING_INDEX( s.username , '.', 1 ) as username,
         a.no_fees AS no_fees,
-        IFNULL(SUM(IF(our_result='Y', IF(difficulty=0, pow(2, (" . $this->config['difficulty'] . " - 16)) - 1, difficulty), 0)), 0) AS valid,
-        IFNULL(SUM(IF(our_result='N', IF(difficulty=0, pow(2, (" . $this->config['difficulty'] . " - 16)) - 1, difficulty), 0)), 0) AS invalid
+        IFNULL(ROUND(SUM(IF(our_result='Y', IF(s.difficulty=0, pow(2, (" . $this->config['difficulty'] . " - 16)), s.difficulty), 0)), 8), 0) AS valid,
+        IFNULL(ROUND(SUM(IF(our_result='N', IF(s.difficulty=0, pow(2, (" . $this->config['difficulty'] . " - 16)), s.difficulty), 0)), 8), 0) AS invalid
       FROM $this->table AS s
       LEFT JOIN " . $this->user->getTableName() . " AS a
       ON a.username = SUBSTRING_INDEX( s.username , '.', 1 )
@@ -137,8 +137,8 @@ class Share {
         a.id,
         SUBSTRING_INDEX( s.username , '.', 1 ) as account,
         a.no_fees AS no_fees,
-        IFNULL(SUM(IF(our_result='Y', 1, 0)), 0) AS valid,
-        IFNULL(SUM(IF(our_result='N', 1, 0)), 0) AS invalid
+        IFNULL(ROUND(SUM(IF(our_result='Y', IF(s.difficulty=0, pow(2, (" . $this->config['difficulty'] . " - 16)), s.difficulty), 0)), 8), 0) AS valid,
+        IFNULL(ROUND(SUM(IF(our_result='N', IF(s.difficulty=0, pow(2, (" . $this->config['difficulty'] . " - 16)), s.difficulty), 0)), 8), 0) AS invalid
       FROM $this->tableArchive AS s
       LEFT JOIN " . $this->user->getTableName() . " AS a
       ON a.username = SUBSTRING_INDEX( s.username , '.', 1 )
@@ -189,7 +189,7 @@ class Share {
   public function moveArchive($current_upstream, $block_id, $previous_upstream=0) {
     $archive_stmt = $this->mysqli->prepare("
       INSERT INTO $this->tableArchive (share_id, username, our_result, upstream_result, block_id, time, difficulty)
-        SELECT id, username, our_result, upstream_result, ?, time
+        SELECT id, username, our_result, upstream_result, ?, time, IF(difficulty=0, pow(2, (" . $this->config['difficulty'] . " - 16)), difficulty) AS difficulty
         FROM $this->table
         WHERE id > ? AND id <= ?");
     if ($this->checkStmt($archive_stmt) && $archive_stmt->bind_param('iii', $block_id, $previous_upstream, $current_upstream) && $archive_stmt->execute()) {

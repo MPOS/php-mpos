@@ -45,16 +45,56 @@ if ( $bitcoin->can_connect() === true ){
 // Value per share calculation
 // We need to use this instead when running VARDIFF
 // $pps_value = number_format(round((1/(65536 * $dDifficulty) * $config['reward']), 12) ,12);
+// pps base payout target, default 16 = difficulty 1 shares for vardiff
+// (1/(65536 * difficulty) * reward) = (reward / (pow(2,32) * difficulty) * pow(2, 16))
+
+// We support some dynamic reward targets but fall back to our fixed value
+// Re-calculate after each run due to re-targets in this loop
+if ($config['pps']['reward']['type'] == 'blockavg' && $block->getBlockCount() > 0) {
+  $pps_reward = round($block->getAvgBlockReward($config['pps']['blockavg']['blockcount']));
+  $log->logInfo("PPS reward using block average, amount: " . $pps_reward . "\tdifficulty: " . $dDifficulty);
+} else {
+  if ($config['pps']['reward']['type'] == 'block') {
+     if ($aLastBlock = $block->getLast()) {
+        $pps_reward = $aLastBlock['amount'];
+        $log->logInfo("PPS reward using last block, amount: " . $pps_reward . "\tdifficulty: " . $dDifficulty);
+     } else {
+     $pps_reward = $config['pps']['reward']['default'];
+     $log->logInfo("PPS reward using default, amount: " . $pps_reward . "\tdifficulty: " . $dDifficulty);
+     }
+  } else {
+     $pps_reward = $config['pps']['reward']['default'];
+     $log->logInfo("PPS reward fixed default, amount: " . $pps_reward . "\tdifficulty: " . $dDifficulty);
+  }
+}
+
+$pps_value = number_format(round($pps_reward / (pow(2,32) * $dDifficulty) * pow(2, $config['pps_target']), 12) ,12);
+//$pps_value = number_format(round((1/(65536 * $dDifficulty) * $pps_reward), 12) ,12);
+
+/**
 if ($config['reward_type'] != 'block') {
-  $pps_value = number_format(round($config['reward'] / (pow(2,32) * $dDifficulty) * pow(2, $config['difficulty']), 12) ,12);
+  $pps_value = number_format(round($config['reward'] / (pow(2,32) * $dDifficulty) * pow(2, $config['pps_target']), 12) ,12);
 } else {
   // Try to find the last block value and use that for future payouts, revert to fixed reward if none found
   if ($aLastBlock = $block->getLast()) {
-    $pps_value = number_format(round($aLastBlock['amount'] / (pow(2,32) * $dDifficulty) * pow(2, $config['difficulty']), 12) ,12);
+    $pps_value = number_format(round($aLastBlock['amount'] / (pow(2,32) * $dDifficulty) * pow(2, $config['pps_target']), 12) ,12);
   } else {
-    $pps_value = number_format(round($config['reward'] / (pow(2,32) * $dDifficulty) * pow(2, $config['difficulty']), 12) ,12);
+    $pps_value = number_format(round($config['reward'] / (pow(2,32) * $dDifficulty) * pow(2, $config['pps_target']), 12) ,12);
   }
 }
+**/
+/**
+if ($config['reward_type'] != 'block') {
+  $pps_value = number_format(round((1/(65536 * $dDifficulty) * $config['reward']), 12) ,12);
+} else {
+  // Try to find the last block value and use that for future payouts, revert to fixed reward if none found
+  if ($aLastBlock = $block->getLast()) {
+    $pps_value = number_format(round((1/(65536 * $dDifficulty) * $aLastBlock['amount']), 12) ,12);
+  } else {
+    $pps_value = number_format(round((1/(65536 * $dDifficulty) * $config['reward']), 12) ,12);
+  }
+}
+**/
 
 // Find our last share accounted and last inserted share for PPS calculations
 $iPreviousShareId = $setting->getValue('pps_last_share_id');
