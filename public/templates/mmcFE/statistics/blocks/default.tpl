@@ -12,7 +12,7 @@
     <tr>
       <th scope="row">Expected</th>
 {section block $BLOCKSFOUND step=-1}
-      <td>{round(pow(2,32 - $GLOBAL.config.targetdiff) * $BLOCKSFOUND[block].difficulty)}</td>
+      <td>{round(65536 * $BLOCKSFOUND[block].difficulty)}</td>
 {/section}
     </tr>
     <tr>
@@ -62,8 +62,8 @@ target and network difficulty and assuming a zero variance scenario.
         <td class="right">{$BLOCKSFOUND[block].difficulty|number_format:"2"}</td>
         <td class="right">{$BLOCKSFOUND[block].amount|number_format:"2"}</td>
         <td class="right">
-          {math assign="estshares" equation="(pow(2,32 - targetdiff) * blockdiff)" targetdiff=$GLOBAL.config.targetdiff blockdiff=$BLOCKSFOUND[block].difficulty}
-          {$estshares|number_format}
+          {math assign="estshares" equation="(65536 * blockdiff)" targetdiff=$GLOBAL.config.targetdiff blockdiff=$BLOCKSFOUND[block].difficulty}
+          {$estshares}
         </td>
         <td class="right">{$BLOCKSFOUND[block].shares|number_format}</td>
         <td class="right">

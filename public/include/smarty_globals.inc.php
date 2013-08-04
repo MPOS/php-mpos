@@ -21,7 +21,7 @@ if (@$_SESSION['AUTHENTICATED']) {
   }
 }
 // Always fetch this since we need for ministats header
-$bitcoin->can_connect() === true ? $dNetworkHashrate = $bitcoin->query('getnetworkhashps') : $dNetworkHashrate = 0;
+//$bitcoin->can_connect() === true ? $dNetworkHashrate = $bitcoin->query('getnetworkhashps') : $dNetworkHashrate = 0;
 
 // Fetch some data
 if (!$iCurrentActiveWorkers = $worker->getCountAllActiveWorkers()) $iCurrentActiveWorkers = 0;
@@ -38,6 +38,7 @@ $aGlobal = array(
   'hashrate' => $iCurrentPoolHashrate,
   'nethashrate' => $dNetworkHashrate,
   'sharerate' => $iCurrentPoolShareRate,
+  'ppsvalue' => number_format(round((1/(65536 * $dDifficulty) * $config['reward']), 12) ,12),
   'workers' => $iCurrentActiveWorkers,
   'roundshares' => $aRoundShares,
   'fees' => $config['fees'],
