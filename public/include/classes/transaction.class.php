@@ -190,7 +190,7 @@ class Transaction extends Base {
     $stmt = $this->mysqli->prepare("
       SELECT
         ROUND((
-          SUM( IF( ( t.type IN ('Credit','Bonus') OR t.type = 'Credit_PPS') AND b.confirmations >= ?, t.amount, 0 ) ) -
+          SUM( IF( ( t.type IN ('Credit','Bonus') AND b.confirmations >= ? ) OR t.type = 'Credit_PPS', t.amount, 0 ) ) -
           SUM( IF( t.type IN ('Debit_MP', 'Debit_AP'), t.amount, 0 ) ) -
           SUM( IF( ( t.type IN ('Donation','Fee') AND b.confirmations >= ? ) OR ( t.type IN ('Donation_PPS', 'Fee_PPS', 'TXFee') ), t.amount, 0 ) )
         ), 8) AS balance
