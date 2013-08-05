@@ -10,43 +10,43 @@
         <th>Message</th>
       </thead>
       <tbody>
-{foreach $CRONSTATUS as $cron=>$v}
+{foreach $CRONSTATUS as $cron => $data}
         <tr>
           <td>{$cron}</td>
-  {foreach $v as $event}
+  {foreach $data as $name => $event}
           <td>
-            {if $event.STATUS.type == 'okerror'}
-              {if $event.STATUS.value == 0}
+            {if $event.type == 'okerror'}
+              {if $event.value == 0}
                 <font color="green">OK</font>
               {else}
                 <font color="red">ERROR</font>
               {/if}
-            {else if $event.STATUS.type == 'message'}
-              <i>{$event.STATUS.value}</i>
-            {else if $event.STATUS.type == 'yesno'}
-              <img src="{$PATH}/images/{if $event.STATUS.value == 1}success{else}error{/if}.gif" />
-            {else if $event.STATUS.type == 'time'}
-              {if $event.STATUS.value > 60}
+            {else if $event.type == 'message'}
+              <i>{$event.value}</i>
+            {else if $event.type == 'yesno'}
+              <img src="{$PATH}/images/{if $event.value == 1}success{else}error{/if}.gif" />
+            {else if $event.type == 'time'}
+              {if $event.value > 60}
                 <font color="orange">
-              {else if $event.STATUS.value > 120}
+              {else if $event.value > 120}
                 <font color="red">
               {else}
                 <font color="green">
               {/if}
-                {$event.STATUS.value|default:"0"|number_format:"2"} seconds
+                {$event.value|default:"0"|number_format:"2"} seconds
               </font>
-            {else if $event.STATUS.type == 'date'}
-              {if ($smarty.now - 180) > $event.STATUS.value}
+            {else if $event.type == 'date'}
+              {if ($smarty.now - 180) > $event.value}
                 <font color="red">
-              {else if ($smarty.now - 120) > $event.STATUS.value}
+              {else if ($smarty.now - 120) > $event.value}
                 <font color="orange">
               {else}
                 <font color="green">
               {/if}
-                {$event.STATUS.value|date_format:"%m/%d %H:%M:%S"}
+                {$event.value|date_format:"%m/%d %H:%M:%S"}
               </font>
             {else}
-              {$event.STATUS.value|default:""}
+              {$event.value|default:""}
             {/if}
           </td>
   {/foreach}
