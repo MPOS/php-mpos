@@ -23,6 +23,7 @@ $smarty->assign("DISABLEINVITATIONS", $setting->getValue('disable_invitations'))
 $smarty->assign("DISABLEAP", $setting->getValue('disable_ap'));
 $smarty->assign("DISABLEMP", $setting->getValue('disable_mp'));
 $smarty->assign("DISABLENOTIFICATIONS", $setting->getValue('disable_notifications'));
+$smarty->assign("MOTD", $setting->getValue('system_motd'));
 
 // Tempalte specifics
 $smarty->assign("CONTENT", "default.tpl");

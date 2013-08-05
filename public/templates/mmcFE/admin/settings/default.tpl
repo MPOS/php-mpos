@@ -11,6 +11,13 @@
     </thead>
     <tbody>
       <tr>
+        <td class="left">Message of the Day</td>
+        <td class="center"><span id='tt'><img src='{$PATH}/images/questionmark.png' height='15px' width='15px' title='Set a pool-wide message of the day.'></span></td>
+        <td>
+          <input name="data[system_motd]" value="{$MOTD|default:""}">
+        </td>
+      </tr>
+      <tr>
         <td class="left">Maintenance Mode</td>
         <td class="center"><span id='tt'><img src='{$PATH}/images/questionmark.png' height='15px' width='15px' title='Enable Maintenance Mode for mmcfe-ng. Only admins can login.'></span></td>
         <td>
