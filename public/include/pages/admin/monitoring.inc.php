@@ -14,11 +14,14 @@ $aCrons = array('statistics','auto_payout','manual_payout','archive_cleanup','bl
 
 // Special cases, only add them if activated
 switch ($config['payout_system']) {
-case 'pplns'||'pps':
-  $aCrons[] = $config['payout_system'];
+case 'pplns':
+  $aCrons[] = $config['payout_system'] . '_payout';
+  break;
+case 'pps':
+  $aCrons[] = $config['payout_system'] . '_payout';
   break;
 case 'prop':
-  $aCrons[] = 'proportional';
+  $aCrons[] = 'proportional_payout';
   break;
 }
 
