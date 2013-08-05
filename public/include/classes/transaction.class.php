@@ -35,8 +35,13 @@ class Transaction extends Base {
    * @param bool boolean True or False
    **/
   public function setArchived($account_id, $txid) {
-    $stmt = $this->mysqli->prepare("UPDATE $this->table SET archived = 1 WHERE account_id = ? AND id <= ?");
-    if ($this->checkStmt($stmt) && $stmt->bind_param('ii', $account_id, $txid) && $stmt->execute())
+    $stmt = $this->mysqli->prepare("
+      UPDATE $this->table AS t
+      INNER JOIN " . $this->block->getTableName() . " AS b
+      ON b.id = t.block_id
+      SET t.archived = 1
+      WHERE t.account_id = ? AND t.id <= ? AND b.confirmations >= ?");
+    if ($this->checkStmt($stmt) && $stmt->bind_param('iii', $account_id, $txid, $this->config['confirmations']) && $stmt->execute())
       return true;
     return false;
   }
