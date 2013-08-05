@@ -320,7 +320,7 @@ class User {
       $this->setErrorMessage('Invalid email address');
       return false;
     }
-    if ($this->bitcoin->can_connect() === true && !empty($address)) {
+/*    if ($this->bitcoin->can_connect() === true && !empty($address)) {
       try {
         $aStatus = $this->bitcoin->validateaddress($address);
         if (!$aStatus['isvalid']) {
@@ -335,6 +335,7 @@ class User {
       $this->setErrorMessage('Unable to connect to RPC server for coin address validation');
       return false;
     }
+ */
     // Number sanitizer, just in case we fall through above
     $threshold = min($this->config['ap_threshold']['max'], max(0, floatval($threshold)));
     $donate = min(100, max(0, floatval($donate)));
