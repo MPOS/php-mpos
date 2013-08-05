@@ -3,19 +3,6 @@
 // Make sure we are called from index.php
 if (!defined('SECURITY')) die('Hacking attempt');
 
-// Check user to ensure they are admin
-if (!$user->isAuthenticated() || !$user->isAdmin($_SESSION['USERDATA']['id'])) {
-  header("HTTP/1.1 404 Page not found");
-  die("404 Page not found");
-}
-
-if (@$_REQUEST['do'] == 'save' && !empty($_REQUEST['data'])) {
-  foreach($_REQUEST['data'] as $var => $value) {
-    $setting->setValue($var, $value);
-  }
-  $_SESSION['POPUP'][] = array('CONTENT' => 'Settings updated');
-}
-
 // Load the settings available in this system
 $aSettings['system'][] = array(
   'display' => 'Maintenance Mode', 'type' => 'select',
@@ -60,9 +47,4 @@ $aSettings['other'][] = array(
   'tooltip' => 'Display a message of the day as information popup if set.'
 );
 
-// Load onto the template
-$smarty->assign("SETTINGS", $aSettings);
-
-// Tempalte specifics
-$smarty->assign("CONTENT", "default.tpl");
 ?>
