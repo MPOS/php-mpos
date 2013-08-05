@@ -78,6 +78,9 @@ if (! empty($users)) {
 
       // Create transaction record
       if ($transaction->addTransaction($aUserData['id'], $dBalance - $config['txfee'], 'Debit_AP', NULL, $aUserData['coin_address']) && $transaction->addTransaction($aUserData['id'], $config['txfee'], 'TXFee', NULL, $aUserData['coin_address'])) {
+        // Mark all older transactions as archived
+        if (!$transaction->setArchived($aUserData['id'], $transaction->insert_id))
+          $log->logError('Failed to mark transactions for user #' . $aUserData['id'] . ' prior to #' . $transaction->insert_id . ' as archived');
         // Notify user via  mail
         $aMailData['email'] = $user->getUserEmail($user->getUserName($aUserData['id']));
         $aMailData['subject'] = 'Auto Payout Completed';

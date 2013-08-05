@@ -36,12 +36,10 @@ class Payout Extends Base {
    * @return data mixed Inserted ID or false
    **/
   public function createPayout($account_id=NULL) {
-    $stmt = $this->mysqli->prepare("
-      INSERT INTO $this->table (account_id)
-      VALUES (?)
-      ");
-    if ($stmt && $stmt->bind_param('i', $account_id) && $stmt->execute())
+    $stmt = $this->mysqli->prepare("INSERT INTO $this->table (account_id) VALUES (?)");
+    if ($stmt && $stmt->bind_param('i', $account_id) && $stmt->execute()) {
       return $stmt->insert_id;
+    }
     $this->setErrorMessage('Unable to create new payout request');
     $this->debug->append('Failed to create new payout request in database: ' . $this->mysqli->error);
     return false;
