@@ -16,14 +16,11 @@ if (@$_REQUEST['do'] == 'save' && !empty($_REQUEST['data'])) {
   $_SESSION['POPUP'][] = array('CONTENT' => 'Settings updated');
 }
 
-// Fetch settings to propagate to template
-$smarty->assign("MAINTENANCE", $setting->getValue('maintenance'));
-$smarty->assign("LOCKREGISTRATION", $setting->getValue('lock_registration'));
-$smarty->assign("DISABLEINVITATIONS", $setting->getValue('disable_invitations'));
-$smarty->assign("DISABLEAP", $setting->getValue('disable_ap'));
-$smarty->assign("DISABLEMP", $setting->getValue('disable_mp'));
-$smarty->assign("DISABLENOTIFICATIONS", $setting->getValue('disable_notifications'));
-$smarty->assign("MOTD", $setting->getValue('system_motd'));
+// Load our available settings from configuration
+require_once(INCLUDE_DIR . '/config/admin_settings.inc.php');
+
+// Load onto the template
+$smarty->assign("SETTINGS", $aSettings);
 
 // Tempalte specifics
 $smarty->assign("CONTENT", "default.tpl");
