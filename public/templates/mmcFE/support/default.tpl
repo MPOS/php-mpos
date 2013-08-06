@@ -55,7 +55,7 @@ window.onload = pause;
 </div>
 {else}
 <center><h1>Contact Form Disabled For Non Authenticated Users</h1></center>
-<center><p>Please <a href="{$smarty.server.PHP_SELF}?page=login">login</a> or <a href="{$smarty.server.PHP_SELF}?page=register">register</a></p>
+<center><p>Please <a href="{$smarty.server.PHP_SELF}?page=login">login</a> or <a href="{$smarty.server.PHP_SELF}?page=register">register</a></p></center>
 </div> <!-- nested block ends -->
 <div class="bendl"></div>
 <div class="bendr"></div>
