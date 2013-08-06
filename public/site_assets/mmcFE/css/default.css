@@ -1,0 +1,224 @@
+/* Set the content dimensions */
+
+#content {
+  width: 800px;
+  padding: 50px;
+  margin: 0 auto;
+  display: block;
+  font-size: 1.2em;
+}
+
+#content h2 {
+  line-height: 1.5em;
+}
+
+
+/* Add curved borders to various elements */
+
+#contactForm, .statusMessage, input[type="submit"], input[type="button"] {
+  -moz-border-radius: 10px;
+  -webkit-border-radius: 10px;  
+  border-radius: 10px;
+}
+
+
+/* Style for the contact form and status messages */
+
+#contactForm, .statusMessage {
+  color: #666;
+  background-color: #ebedf2;
+  background: -webkit-gradient( linear, left bottom, left top, color-stop(0,#dfe1e5), color-stop(1, #ebedf2) );
+  background: -moz-linear-gradient( center bottom, #dfe1e5 0%, #ebedf2 100% );  
+  border: 1px solid #aaa;
+  -moz-box-shadow: 0 0 1em rgba(0, 0, 0, .5);
+  -webkit-box-shadow: 0 0 1em rgba(0, 0, 0, .5);
+  box-shadow: 0 0 1em rgba(0, 0, 0, .5);
+  opacity: .95;
+}
+
+
+/* The form dimensions */
+
+#contactForm {
+  width: 40em;
+  height: 33em;
+  padding: 0 1.5em 1.5em 1.5em;
+  margin: 0 auto;
+}
+
+
+/* Position the form in the middle of the window (if JavaScript is enabled) */
+
+#contactForm.positioned {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  margin-top: auto;
+  margin-bottom: auto;
+}
+
+
+/* Dimensions and position of the status messages */
+
+.statusMessage {
+  display: none;
+  margin: auto;
+  width: 30em;
+  height: 2em;
+  padding: 1.5em;
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+
+.statusMessage p {
+  text-align: center;
+  margin: 0;
+  padding: 0;
+}
+
+
+/* The header at the top of the form */
+
+#contactForm h2 {
+  font-size: 2em;
+  font-style: italic;
+  letter-spacing: .05em;
+  margin: 0 0 1em -.75em;
+  padding: 1em;
+  width: 19.5em;  
+  color: #aeb6aa;
+  background: #dfe0e5;
+  border-bottom: 1px solid #aaa;
+  -moz-border-radius: 10px 10px 0 0;
+  -webkit-border-radius: 10px 10px 0 0;  
+  border-radius: 10px 10px 0 0;
+}
+
+
+/* Give form elements consistent margin, padding and line height */
+
+#contactForm ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+#contactForm ul li {
+  margin: .9em 0 0 0;
+  padding: 0;
+}
+
+#contactForm input, #contactForm label {
+  line-height: 1em;
+}
+
+
+/* The field labels */
+
+label {
+  display: block;
+  float: left;
+  clear: left;
+  text-align: right;
+  width: 28%;
+  padding: .4em 0 0 0;
+  margin: .15em .5em 0 0;
+  font-weight: bold;
+}
+
+
+/* The fields */
+
+input, textarea {
+  display: block;
+  margin: 0;
+  padding: .4em;
+  width: 67%;
+  font-family: "Georgia", serif;
+  font-size: 1em;
+  border: 1px solid #aaa;
+  -moz-border-radius: 5px;
+  -webkit-border-radius: 5px;    
+  border-radius: 5px;
+  -moz-box-shadow: rgba(0,0,0,.2) 0 1px 4px inset;
+  -webkit-box-shadow: rgba(0,0,0,.2) 0 1px 4px inset;
+  box-shadow: rgba(0,0,0,.2) 0 1px 4px inset;
+  background: #fff;
+}
+
+textarea {
+  height: 13em;
+  line-height: 1.5em;
+  resize: none;
+}
+
+
+/* Place a border around focused fields, and hide the inner shadow */
+
+#contactForm *:focus {
+  border: 1px solid #66f;
+  outline: none;
+  box-shadow: none;
+  -moz-box-shadow: none;
+  -webkit-box-shadow: none;
+}
+
+
+/* Display correctly filled-in fields with a green background */
+
+input:valid, textarea:valid {
+  background: #dfd;
+}
+
+
+/* The Send and Cancel buttons */
+
+input[type="submit"], input[type="button"] {
+  float: right;
+  margin: 2em 1em 0 1em;
+  width: 10em;
+  padding: .5em;
+  border: 1px solid #666;
+  -moz-border-radius: 10px;
+  -webkit-border-radius: 10px;  
+  border-radius: 10px;
+  -moz-box-shadow: 0 0 .5em rgba(0, 0, 0, .8);
+  -webkit-box-shadow: 0 0 .5em rgba(0, 0, 0, .8);
+  box-shadow: 0 0 .5em rgba(0, 0, 0, .8);
+  color: #fff;
+  background: #0a0;
+  font-size: 1em;
+  line-height: 1em;
+  font-weight: bold;
+  opacity: .7;
+  -webkit-appearance: none;
+  -moz-transition: opacity .5s;
+  -webkit-transition: opacity .5s;
+  -o-transition: opacity .5s;
+  transition: opacity .5s;
+}
+
+input[type="submit"]:hover,
+input[type="submit"]:active,
+input[type="button"]:hover,
+input[type="button"]:active {
+  cursor: pointer;
+  opacity: 1;
+}
+
+input[type="submit"]:active, input[type="button"]:active {
+  color: #333;
+  background: #eee;
+  -moz-box-shadow: 0 0 .5em rgba(0, 0, 0, .8) inset;
+  -webkit-box-shadow: 0 0 .5em rgba(0, 0, 0, .8) inset;
+  box-shadow: 0 0 .5em rgba(0, 0, 0, .8) inset;
+}
+
+input[type="button"] {
+  background: #f33;
+}
