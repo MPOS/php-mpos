@@ -37,11 +37,12 @@ class Transaction extends Base {
   public function setArchived($account_id, $txid) {
     $stmt = $this->mysqli->prepare("
       UPDATE $this->table AS t
-      INNER JOIN " . $this->block->getTableName() . " AS b
+      LEFT JOIN " . $this->block->getTableName() . " AS b
       ON b.id = t.block_id
       SET t.archived = 1
-      WHERE t.account_id = ? AND t.id <= ? AND b.confirmations >= ?");
-    if ($this->checkStmt($stmt) && $stmt->bind_param('iii', $account_id, $txid, $this->config['confirmations']) && $stmt->execute())
+      WHERE ( t.account_id = ? AND t.id <= ? AND b.confirmations >= ? )
+      OR ( t.account_id = ? AND t.id <= ? AND t.type IN ( 'Credit_PPS', 'Donation_PPS', 'Fee_PPS', 'TXFee', 'Debit_MP', 'Debit_AP' ) )");
+    if ($this->checkStmt($stmt) && $stmt->bind_param('iiiii', $account_id, $txid, $this->config['confirmations'], $account_id, $txid) && $stmt->execute())
       return true;
     return false;
   }
@@ -221,7 +222,7 @@ class Transaction extends Base {
     $stmt = $this->mysqli->prepare("
       SELECT
         ROUND((
-          SUM( IF( ( t.type IN ('Credit','Bonus') OR t.type = 'Credit_PPS') AND b.confirmations >= ?, t.amount, 0 ) ) -
+          SUM( IF( ( t.type IN ('Credit','Bonus') AND b.confirmations >= ? ) OR t.type = 'Credit_PPS', t.amount, 0 ) ) -
           SUM( IF( t.type IN ('Debit_MP', 'Debit_AP'), t.amount, 0 ) ) -
           SUM( IF( ( t.type IN ('Donation','Fee') AND b.confirmations >= ? ) OR ( t.type IN ('Donation_PPS', 'Fee_PPS', 'TXFee') ), t.amount, 0 ) )
         ), 8) AS confirmed,
