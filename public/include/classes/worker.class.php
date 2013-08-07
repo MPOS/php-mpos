@@ -75,14 +75,15 @@ class Worker {
     $this->debug->append("STA " . __METHOD__, 4);
     $stmt = $this->mysqli->prepare("
       SELECT account_id, id, username
-      FROM " . $this->table . "
-      WHERE monitor = 1 AND ( SELECT SIGN(COUNT(id)) FROM " . $this->share->getTableName() . " WHERE username = $this->table.username AND time > DATE_SUB(now(), INTERVAL 10 MINUTE)) = 0");
-
+      FROM " . $this->table . " AS w
+      WHERE monitor = 1
+      AND (
+        SELECT IFNULL(SIGN(IF(our_result = 'Y', COUNT(id), 0)), 0) FROM " . $this->share->getTableName() . " WHERE username = w.username AND time > DATE_SUB(now(), INTERVAL 10 MINUTE)
+      ) = 0");
     if ($this->checkStmt($stmt) && $stmt->execute() && $result = $stmt->get_result())
       return $result->fetch_all(MYSQLI_ASSOC);
     // Catchall
     $this->setErrorMessage("Unable to fetch IDLE, monitored workers");
-    echo $this->mysqli->error;
     return false;
   }
 
