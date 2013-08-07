@@ -95,15 +95,27 @@ class Worker {
     $this->debug->append("STA " . __METHOD__, 4);
     $stmt = $this->mysqli->prepare("
        SELECT id, username, password, monitor,
-       ( SELECT SIGN(COUNT(id)) FROM " . $this->share->getTableName() . " WHERE username = $this->table.username AND time > DATE_SUB(now(), INTERVAL 10 MINUTE)) AS active,
-       ( SELECT ROUND(COUNT(id) * POW(2, " . $this->config['difficulty'] . ")/600/1000) FROM " . $this->share->getTableName() . " WHERE username = $this->table.username AND time > DATE_SUB(now(), INTERVAL 10 MINUTE)) AS hashrate
-       FROM $this->table
+       (
+         SELECT
+          IFNULL(IF(our_result='Y', ROUND(COUNT(id) * POW(2, " . $this->config['difficulty'] . ") / 600 / 1000), 0), 0) AS hashrate
+          FROM " . $this->share->getTableName() . "
+          WHERE
+            username = w.username
+          AND time > DATE_SUB(now(), INTERVAL 10 MINUTE)
+        ) + (
+         SELECT
+          IFNULL(IF(our_result='Y', ROUND(COUNT(id) * POW(2, " . $this->config['difficulty'] . ") / 600 / 1000), 0), 0) AS hashrate
+          FROM " . $this->share->getArchiveTableName() . "
+          WHERE
+            username = w.username
+          AND time > DATE_SUB(now(), INTERVAL 10 MINUTE)
+       ) AS hashrate
+       FROM $this->table AS w
        WHERE id = ?
        ");
     if ($this->checkStmt($stmt) && $stmt->bind_param('i', $id) && $stmt->execute() && $result = $stmt->get_result())
       return $result->fetch_assoc();
     // Catchall
-    echo $this->mysqli->error;
     return false;
   }
 
@@ -116,9 +128,22 @@ class Worker {
     $this->debug->append("STA " . __METHOD__, 4);
     $stmt = $this->mysqli->prepare("
       SELECT id, username, password, monitor,
-      ( SELECT SIGN(COUNT(id)) FROM " . $this->share->getTableName() . " WHERE our_result = 'Y' AND username = $this->table.username AND time > DATE_SUB(now(), INTERVAL 10 MINUTE)) AS active,
-      ( SELECT ROUND(COUNT(id) * POW(2, " . $this->config['difficulty'] . ")/600/1000) FROM " . $this->share->getTableName() . " WHERE our_result = 'Y' AND username = $this->table.username AND time > DATE_SUB(now(), INTERVAL 10 MINUTE)) AS hashrate
-      FROM $this->table
+       (
+         SELECT
+          IFNULL(IF(our_result='Y', ROUND(COUNT(id) * POW(2, " . $this->config['difficulty'] . ") / 600 / 1000), 0), 0) AS hashrate
+          FROM " . $this->share->getTableName() . "
+          WHERE
+            username = w.username
+          AND time > DATE_SUB(now(), INTERVAL 10 MINUTE)
+        ) + (
+         SELECT
+          IFNULL(IF(our_result='Y', ROUND(COUNT(id) * POW(2, " . $this->config['difficulty'] . ") / 600 / 1000), 0), 0) AS hashrate
+          FROM " . $this->share->getArchiveTableName() . "
+          WHERE
+            username = w.username
+          AND time > DATE_SUB(now(), INTERVAL 10 MINUTE)
+       ) AS hashrate
+      FROM $this->table AS w
       WHERE account_id = ?");
     if ($this->checkStmt($stmt) && $stmt->bind_param('i', $account_id) && $stmt->execute() && $result = $stmt->get_result())
       return $result->fetch_all(MYSQLI_ASSOC);
@@ -135,7 +160,7 @@ class Worker {
    **/
   public function getCountAllActiveWorkers() {
     $this->debug->append("STA " . __METHOD__, 4);
-    $stmt = $this->mysqli->prepare("SELECT IFNULL(COUNT(DISTINCT username), 0) AS total FROM "  . $this->share->getTableName() . " WHERE time > DATE_SUB(now(), INTERVAL 10 MINUTE)");
+    $stmt = $this->mysqli->prepare("SELECT IFNULL(IF(our_result='Y', COUNT(DISTINCT username), 0), 0) AS total FROM "  . $this->share->getTableName() . " WHERE time > DATE_SUB(now(), INTERVAL 10 MINUTE)");
     if ($this->checkStmt($stmt) && $stmt->execute() && $result = $stmt->get_result())
       return $result->fetch_object()->total;
     return false;
