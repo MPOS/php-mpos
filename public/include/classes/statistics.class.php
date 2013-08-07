@@ -385,7 +385,7 @@ class Statistics {
       SELECT
       	IFNULL(ROUND(SUM(IF(s.difficulty=0, pow(2, (" . $this->config['difficulty'] . " - 16)), s.difficulty)) * 65536/3600/1000), 0) AS hashrate,
         HOUR(s.time) AS hour
-      FROM " . $this->share->getArchiveTableName() . " AS s, accounts AS a
+      FROM " . $this->share->getTableName() . " AS s, accounts AS a
       WHERE time < NOW() - INTERVAL 1 HOUR
         AND time > NOW() - INTERVAL 25 HOUR
         AND a.username = SUBSTRING_INDEX( s.username, '.', 1 )
@@ -425,7 +425,7 @@ class Statistics {
       SELECT
       	IFNULL(ROUND(SUM(IF(s.difficulty=0, pow(2, (" . $this->config['difficulty'] . " - 16)), s.difficulty)) * 65536/3600/1000), 0) AS hashrate,
         HOUR(s.time) AS hour
-      FROM " . $this->share->getArchiveTableName() . " AS s
+      FROM " . $this->share->getTableName() . " AS s
       WHERE time < NOW() - INTERVAL 1 HOUR
         AND time > NOW() - INTERVAL 25 HOUR
       GROUP BY HOUR(time)
