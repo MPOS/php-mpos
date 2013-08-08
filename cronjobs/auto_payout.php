@@ -70,7 +70,7 @@ if (! empty($users)) {
 
       // Send balance, fees are reduced later by RPC Server
       try {
-        $bitcoin->sendtoaddress($aUserData['coin_address'], $dBalance);
+        $bitcoin->sendtoaddress($aUserData['coin_address'], $dBalance - $config['txfee']);
       } catch (BitcoinClientException $e) {
         $log->logError('Failed to send requested balance to coin address, please check payout process');
         continue;
