@@ -72,51 +72,49 @@ class Transaction extends Base {
       FROM $this->table AS t
       LEFT JOIN " . $this->block->getTableName() . " AS b ON t.block_id = b.id
       LEFT JOIN " . $this->user->getTableName() . " AS a ON t.account_id = a.id";
+    if (!empty($account_id)) {
+      $sql .= " WHERE ( t.account_id = ? ) ";
+      $this->addParam('i', $account_id);
+    }
     if (is_array($filter)) {
       $aFilter = array();
       foreach ($filter as $key => $value) {
         if (!empty($value)) {
           switch ($key) {
           case 'type':
-            $aFilter[] = "t.type = ?";
+            $aFilter[] = "( t.type = ? )";
             $this->addParam('s', $value);
             break;
           case 'status':
             switch ($value) {
             case 'Confirmed':
               if (empty($filter['type']) || ($filter['type'] != 'Debit_AP' && $filter['type'] != 'Debit_MP' && $filter['type'] != 'TXFee' && $filter['type'] != 'Credit_PPS' && $filter['type'] != 'Fee_PPS' && $filter['type'] != 'Donation_PPS')) {
-                $aFilter[] = "b.confirmations >= " . $this->config['confirmations'] . " OR ISNULL(b.confirmations)";
+                $aFilter[] = "( b.confirmations >= " . $this->config['confirmations'] . " OR ISNULL(b.confirmations) )";
               }
                 break;
             case 'Unconfirmed':
-              $aFilter[] = "b.confirmations < " . $this->config['confirmations'] . " AND b.confirmations >= 0";
+              $aFilter[] = "( b.confirmations < " . $this->config['confirmations'] . " AND b.confirmations >= 0 )";
                 break;
             case 'Orphan':
-              $aFilter[] = "b.confirmations = -1";
+              $aFilter[] = "( b.confirmations = -1 )";
                 break;
             }
             break;
             case 'account':
-              $aFilter[] = "LOWER(a.username) = LOWER(?)";
+              $aFilter[] = "( LOWER(a.username) = LOWER(?) )";
               $this->addParam('s', $value);
               break;
             case 'address':
-              $aFilter[] = "t.coin_address = ?";
+              $aFilter[] = "( t.coin_address = ? )";
               $this->addParam('s', $value);
               break;
           }
         }
       }
       if (!empty($aFilter)) {
-        $sql .= " WHERE " . implode(' AND ', $aFilter);
+	empty($account_id) ? $sql .= " WHERE " : $sql .= " AND ";
+        $sql .= implode(' AND ', $aFilter);
       }
-    }
-    if (is_int($account_id) && empty($aFilter)) {
-      $sql .= " WHERE a.id = ?";
-      $this->addParam('i', $account_id);
-    } else if (is_int($account_id)) {
-      $sql .= " AND a.id = ?";
-      $this->addParam('i', $account_id);
     }
     $sql .= "
       ORDER BY id DESC
