@@ -1,3 +1,22 @@
+{include file="global/block_header.tpl" BLOCK_HEADER="Transaction Summary"}
+<table>
+  <thead>
+    <tr>
+    {foreach $SUMMARY as $type=>$total}
+      <th>{$type}</th>
+    {/foreach}
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+    {foreach $SUMMARY as $type=>$total}
+      <td class="right">{$total}</td>
+    {/foreach}
+    </tr>
+  </tbody>
+</table>
+{include file="global/block_footer.tpl"}
+
 {include file="global/block_header.tpl" ALIGN="left" BLOCK_STYLE="width: 23%" BLOCK_HEADER="Transaction Filter"}
 <form action="{$smarty.server.PHP_SELF}">
   <input type="hidden" name="page" value="{$smarty.request.page}" />
