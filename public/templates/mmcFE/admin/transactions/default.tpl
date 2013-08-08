@@ -44,11 +44,11 @@
         </td>
       </tr>
         <tr>
-          <td class="left">TX Type</td>
+          <td class="left">Type</td>
           <td class="right">{html_options name="filter[type]" options=$TRANSACTIONTYPES selected=$smarty.request.filter.type|default:""}</td>
         </tr>
         <tr>
-          <td class="left">TX Status</td>
+          <td class="left">Status</td>
           <td class="right">{html_options name="filter[status]" options=$TXSTATUS selected=$smarty.request.filter.status|default:""}</td>
         </tr>
         <tr>
