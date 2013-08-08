@@ -62,7 +62,7 @@ if (count($aPayouts) > 0) {
         continue;
       }
       try {
-        $bitcoin->sendtoaddress($aData['coin_address'], $dBalance);
+        $bitcoin->sendtoaddress($aData['coin_address'], $dBalance - $config['txfee']);
       } catch (BitcoinClientException $e) {
         $log->logError('Failed to send requested balance to coin address, please check payout process');
         continue;
