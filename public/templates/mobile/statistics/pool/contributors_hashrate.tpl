@@ -16,7 +16,7 @@
       {if $GLOBAL.userdata.username == $CONTRIBSHARES[contrib].account}{assign var=listed value=1}{/if}
       <tr>
         <th>{$rank++}</th>
-        <td>{$CONTRIBHASHES[contrib].account}</td>
+        <td>{if $CONTRIBHASHES[contrib].is_anonymous|default:"0" == 1}anonymous{else}{$CONTRIBHASHES[contrib].account|escape}{/if}</td>
         <td align="right">{$CONTRIBHASHES[contrib].hashrate|number_format}</td>
         <td align="right">{$estday|number_format:"3"}</td>
         <td align="right">{($estday * $GLOBAL.price)|default:"n/a"|number_format:"2"}</td>
