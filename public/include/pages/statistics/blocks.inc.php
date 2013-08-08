@@ -7,7 +7,7 @@ if (!defined('SECURITY')) die('Hacking attempt');
 if (!$smarty->isCached('master.tpl', $smarty_cache_key)) {
   $debug->append('No cached version available, fetching from backend', 3);
   // Grab the last blocks found
-  $iLimit = 20;
+  !empty($config['website']['blocks']['count']) ? $iLimit = $config['website']['blocks']['count'] : $iLimit = 20;
   $aBlocksFoundData = $statistics->getBlocksFound($iLimit);
 
   // Propagate content our template

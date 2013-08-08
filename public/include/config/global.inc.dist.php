@@ -109,6 +109,7 @@ $config['ap_threshold']['max'] = 250;
  *   mobile         :  Enable/Disable mobile theme support
  *   mobile_theme   :  Theme used for mobile browsers
  *   api disabled   :  Disable the sites API functions
+ *   blocks count   :  # of blocks to display on block statistics page
  *
  * Defaults:
  *   title          =  `The Pool - Mining Evolved`
@@ -119,6 +120,7 @@ $config['ap_threshold']['max'] = 250;
  *   mobile         =  true
  *   mobile_theme   =  `mobile`
  *   api disbabled  =  false
+ *   blocks count   =  20
  **/
 $config['website']['title'] = 'The Pool - Mining Evolved';
 $config['website']['name'] = 'The Pool';
@@ -128,6 +130,7 @@ $config['website']['theme'] = 'mmcFE';
 $config['website']['mobile'] = true;
 $config['website']['mobile_theme'] = 'mobile';
 $config['website']['api']['disabled'] = false;
+$config['website']['blocks']['count'] = 20;
 
 /**
  * Account specific settings
