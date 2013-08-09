@@ -32,7 +32,7 @@ target and network difficulty and assuming a zero variance scenario.
 
 {include file="global/block_header.tpl" BLOCK_HEADER="Last $BLOCKLIMIT Blocks Found" BLOCK_STYLE="clear:none;"}
 <center>
-  <table width="100%" style="font-size:13px;">
+  <table width="100%" class="sortable" style="font-size:13px;">
     <thead>
       <tr style="background-color:#B6DAFF;">
         <th class="center">Block</th>
