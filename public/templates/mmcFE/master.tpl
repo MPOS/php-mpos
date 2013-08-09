@@ -14,6 +14,7 @@
     <script src="{$PATH}/js/jquery.tooltip.visualize.js"></script>
     <script src="{$PATH}/js/custom.js"></script>
     <script src="{$PATH}/js/tools.js"></script>
+    <script src="{$PATH}/js/init.js"></script>
     <!--[if IE]><script type="text/javascript" src="{$PATH}/js/excanvas.js"></script><![endif]-->
     <style type="text/css" media="all">
       @import url("{$PATH}/css/style.css");
