@@ -48,6 +48,38 @@ class Transaction extends Base {
   }
 
   /**
+   * Fetch a transaction summary by type with total amounts
+   * @param account_id int Account ID, NULL for all
+   * @return data array type and total
+   **/
+  public function getTransactionSummary($account_id=NULL) {
+    $sql = "SELECT SUM(t.amount) AS total, t.type AS type FROM $this->table AS t";
+    if (!empty($account_id)) {
+      $sql .= " WHERE t.account_id = ? ";
+      $this->addParam('i', $account_id);
+    }
+    $sql .= " GROUP BY t.type";
+    $stmt = $this->mysqli->prepare($sql);
+    if (!empty($account_id)) {
+      if (!($this->checkStmt($stmt) && call_user_func_array( array($stmt, 'bind_param'), $this->getParam()) && $stmt->execute()))
+        return false;
+      $result = $stmt->get_result();
+    } else {
+      if (!($this->checkStmt($stmt) && $stmt->execute()))
+        return false;
+      $result = $stmt->get_result();
+    }
+    if ($result) {
+      $aData = NULL;
+      while ($row = $result->fetch_assoc()) {
+        $aData[$row['type']] = $row['total'];
+      }
+      return $aData;
+    }
+    return false;
+  }
+
+  /**
    * Get all transactions from start for account_id
    * @param start int Starting point, id of transaction
    * @param filter array Filter to limit transactions
