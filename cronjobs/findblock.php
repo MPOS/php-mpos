@@ -58,7 +58,7 @@ if (empty($aTransactions['transactions'])) {
         $aData['confirmations'] . "\t\t" .
         $aData['difficulty'] . "\t" .
         strftime("%Y-%m-%d %H:%M:%S", $aData['time']));
-      if ( ! empty($aBlockInfo['flags']) && $aBlockInfo['flags'] == 'proof-of-stake' ) {
+      if ( ! empty($aBlockInfo['flags']) && preg_match('/proof-of-stake/', $aBlockInfo['flags']) ) {
         $logs->logInfo("Block above with height " .  $aData['height'] . " not added to database, proof-of-stake block!");
         continue;
       }
