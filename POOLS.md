@@ -96,3 +96,9 @@ Small Time Miners are running various stratum only pools for different coins.
 | -------- | ---- | ------------: | ------------------: | ----- |
 | http://www.litecoinfor.me | Litecoin | 0 | 0 | |
 | http://www.fastcoinfor.me | Fastcoin | 0.830 MHash | 2 | |
+
+### ZC
+
+| Pool URL | Coin | Avg. Hashrate | Avg. Active Workers | Notes |
+| -------- | ---- | ------------: | ------------------: | ----- |
+| https://ltc.hashfaster.com | LTC | 70 MHash | 80 | Custom Template |
