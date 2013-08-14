@@ -47,11 +47,13 @@ target and network difficulty and assuming a zero variance scenario.
       </tr>
     </thead>
     <tbody>
-{assign var=rank value=1}
+{assign var=count value=0}
 {assign var=totalexpectedshares value=0}
 {assign var=totalshares value=0}
+{assign var=totalpercentage value=0}
 {section block $BLOCKSFOUND}
       {assign var="totalshares" value=$totalshares+$BLOCKSFOUND[block].shares}
+      {assign var="count" value=$count+1}
       <tr class="{cycle values="odd,even"}">
         <td class="center"><a href="{$GLOBAL.blockexplorer}{$BLOCKSFOUND[block].blockhash}" target="_blank">{$BLOCKSFOUND[block].height}</a></td>
         <td class="center">
@@ -72,6 +74,7 @@ target and network difficulty and assuming a zero variance scenario.
         <td class="right">{$BLOCKSFOUND[block].shares|number_format}</td>
         <td class="right">
           {math assign="percentage" equation="shares / estshares * 100" shares=$BLOCKSFOUND[block].shares estshares=$estshares}
+	  {assign var="totalpercentage" value=$totalpercentage+$percentage}
           <font color="{if ($percentage <= 100)}green{else}red{/if}">{$percentage|number_format:"2"}</font>
         </td>
       </tr>
@@ -80,8 +83,7 @@ target and network difficulty and assuming a zero variance scenario.
       <td colspan="6" class="right"><b>Totals</b></td>
       <td class="right">{$totalexpectedshares|number_format}</td>
       <td class="right">{$totalshares|number_format}</td>
-      {math assign="totalpercentage" equation="shares / estshares * 100" shares=$totalshares estshares=$totalexpectedshares}
-      <td class="right"><font color="{if ($totalpercentage <= 100)}green{else}red{/if}">{$totalpercentage|number_format:"2"}</font>
+      <td class="right"><font color="{if ($totalpercentage <= 100)}green{else}red{/if}">{($totalpercentage / $count)|number_format:"2"}</font>
     </tr>
     </tbody>
   </table>
