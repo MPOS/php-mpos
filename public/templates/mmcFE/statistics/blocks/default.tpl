@@ -48,6 +48,8 @@ target and network difficulty and assuming a zero variance scenario.
     </thead>
     <tbody>
 {assign var=rank value=1}
+{assign var=totalexpectedshares value=0}
+{assign var=totalshares value=0}
 {section block $BLOCKSFOUND}
       {assign var="totalshares" value=$totalshares+$BLOCKSFOUND[block].shares}
       <tr class="{cycle values="odd,even"}">
