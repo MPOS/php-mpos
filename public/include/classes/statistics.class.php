@@ -406,6 +406,17 @@ class Statistics {
       while ($row = $result->fetch_assoc()) {
         $aData[$row['hour']] = $row['hashrate'];
       }
+      // We have no data, so we fill with 0
+      if (empty($aData)) {
+        for ($i = 0; $i <= 24; $i++) $aData[$i] = 0;
+      } else {
+        $count = -1;
+        foreach ($aData as $hour => $hashrate) {
+          $count++;
+          if ($count == $hour) continue;
+          $aData[$count] = 0;
+        }
+      }
       return $this->memcache->setCache(__FUNCTION__ . $account_id, $aData);
     }
     // Catchall
