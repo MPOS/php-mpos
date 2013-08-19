@@ -19,9 +19,9 @@
       {section worker $WORKERS}
       {assign var="username" value="."|escape|explode:$WORKERS[worker].username:2} 
       <tr>
-        <td{if $WORKERS[worker].active} style="color: orange"{/if}>{$username.0|escape}.<input name="data[{$WORKERS[worker].id}][username]" value="{$username.1|escape}" size="10" required/></td>
+        <td{if $WORKERS[worker].hashrate > 0} style="color: orange"{/if}>{$username.0|escape}.<input name="data[{$WORKERS[worker].id}][username]" value="{$username.1|escape}" size="10" required/></td>
         <td><input type="text" name="data[{$WORKERS[worker].id}][password]" value="{$WORKERS[worker].password|escape}" size="10" required></td>
-        <td class="center"><img src="{$PATH}/images/{if $WORKERS[worker].active}success{else}error{/if}.gif" /></td>
+        <td class="center"><img src="{$PATH}/images/{if $WORKERS[worker].hashrate > 0}success{else}error{/if}.gif" /></td>
         {if $GLOBAL.config.disable_notifications != 1}
         <td class="center">
           <input type="checkbox" name="data[{$WORKERS[worker].id}][monitor]" value="1" id="data[{$WORKERS[worker].id}][monitor]" {if $WORKERS[worker].monitor}checked{/if} />

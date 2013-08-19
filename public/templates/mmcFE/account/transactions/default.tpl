@@ -1,3 +1,22 @@
+{include file="global/block_header.tpl" BLOCK_HEADER="Transaction Summary"}
+<table>
+  <thead>
+    <tr>
+    {foreach $SUMMARY as $type=>$total}
+      <th>{$type}</th>
+    {/foreach}
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+    {foreach $SUMMARY as $type=>$total}
+      <td class="right">{$total}</td>
+    {/foreach}
+    </tr>
+  </tbody>
+</table>
+{include file="global/block_footer.tpl"}
+
 {include file="global/block_header.tpl" ALIGN="left" BLOCK_STYLE="width: 23%" BLOCK_HEADER="Transaction Filter"}
 <form action="{$smarty.server.PHP_SELF}">
   <input type="hidden" name="page" value="{$smarty.request.page}" />
@@ -25,11 +44,11 @@
         </td>
       </tr>
         <tr>
-          <td class="left">TX Type</td>
+          <td class="left">Type</td>
           <td class="right">{html_options name="filter[type]" options=$TRANSACTIONTYPES selected=$smarty.request.filter.type|default:""}</td>
         </tr>
         <tr>
-          <td class="left">TX Status</td>
+          <td class="left">Status</td>
           <td class="right">{html_options name="filter[status]" options=$TXSTATUS selected=$smarty.request.filter.status|default:""}</td>
         </tr>
         <tr>

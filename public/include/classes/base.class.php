@@ -103,6 +103,9 @@ class Base {
   }
   public function getParam() {
     $array = array_merge(array($this->types), $this->values);
+    // Clear the data
+    $this->values = NULL;
+    $this->types = NULL;
     // See here why we need this: http://stackoverflow.com/questions/16120822/mysqli-bind-param-expected-to-be-a-reference-value-given
     if (strnatcmp(phpversion(),'5.3') >= 0) {
       $refs = array();
