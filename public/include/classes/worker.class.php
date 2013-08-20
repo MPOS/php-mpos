@@ -136,14 +136,23 @@ class Worker {
           WHERE
             username = w.username
           AND time > DATE_SUB(now(), INTERVAL 10 MINUTE)
-        ) + (
-         SELECT
+      ) + (
+        SELECT
           IFNULL(IF(our_result='Y', ROUND(SUM(IF(difficulty=0, pow(2, (" . $this->config['difficulty'] . " - 16)), difficulty)) * 65536/600/1000), 0), 0) AS hashrate
           FROM " . $this->share->getArchiveTableName() . "
           WHERE
             username = w.username
           AND time > DATE_SUB(now(), INTERVAL 10 MINUTE)
-       ) AS hashrate
+      ) AS hashrate,
+      (
+        SELECT IFNULL(IF(our_result='Y', ROUND(SUM(IF(difficulty=0, pow(2, (" . $this->config['difficulty'] . " - 16)), difficulty)) / COUNT(id), 2), 0), 0)
+        FROM " . $this->share->getTableName() . "
+        WHERE username = w.username AND time > DATE_SUB(now(), INTERVAL 10 MINUTE)
+      ) + (
+        SELECT IFNULL(IF(our_result='Y', ROUND(SUM(IF(difficulty=0, pow(2, (" . $this->config['difficulty'] . " - 16)), difficulty)) / COUNT(id), 2), 0), 0)
+        FROM " . $this->share->getArchiveTableName() . "
+        WHERE username = w.username AND time > DATE_SUB(now(), INTERVAL 10 MINUTE)
+      ) AS difficulty
       FROM $this->table AS w
       WHERE account_id = ?");
     if ($this->checkStmt($stmt) && $stmt->bind_param('i', $account_id) && $stmt->execute() && $result = $stmt->get_result())
