@@ -19,6 +19,13 @@ $aSettings['website'][] = array(
   'tooltip' => 'Enable or Disable maintenance mode. Only admins can still login.'
 );
 $aSettings['website'][] = array(
+  'display' => 'Message of the Day', 'type' => 'text',
+  'size' => 25,
+  'default' => '',
+  'name' => 'system_motd', 'value' => $setting->getValue('system_motd'),
+  'tooltip' => 'Display a message of the day as information popup if set.'
+);
+$aSettings['website'][] = array(
   'display' => 'Website Name', 'type' => 'text',
   'size' => 25,
   'default' => 'The Pool',
@@ -176,13 +183,6 @@ $aSettings['recaptcha'][] = array(
   'default' => 'YOUR_PUBLIC_KEY',
   'name' => 'recaptcha_public_key', 'value' => $setting->getValue('recaptcha_public_key'),
   'tooltip' => 'Your public key as given by your re-Captcha account.'
-);
-$aSettings['other'][] = array(
-  'display' => 'Message of the Day', 'type' => 'text',
-  'size' => 25,
-  'default' => '',
-  'name' => 'system_motd', 'value' => $setting->getValue('system_motd'),
-  'tooltip' => 'Display a message of the day as information popup if set.'
 );
 
 ?>
