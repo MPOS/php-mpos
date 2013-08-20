@@ -20,7 +20,7 @@ if ($bitcoin->can_connect() === true) {
 }
 
 // Always fetch this since we need for ministats header
-//$bitcoin->can_connect() === true ? $dNetworkHashrate = $bitcoin->query('getnetworkhashps') : $dNetworkHashrate = 0;
+$bitcoin->can_connect() === true ? $dNetworkHashrate = $bitcoin->query('getnetworkhashps') : $dNetworkHashrate = 0;
 
 // Fetch some data
 if (!$iCurrentActiveWorkers = $worker->getCountAllActiveWorkers()) $iCurrentActiveWorkers = 0;
