@@ -157,14 +157,6 @@ $config['accounts']['confirm_email']['enabled'] = true;
 $config['accounts']['invitations']['count'] = 5;
 
 /**
- * MailForm settings
- * Options:
- *   'true'   :  Enable mailform
- *   'false'  :  Disable mailform
- **/
-$config['mailform']['enabled'] = true;
-
-/**
  * Some basic access restrictions on some pages
  *
  * Explanation:
