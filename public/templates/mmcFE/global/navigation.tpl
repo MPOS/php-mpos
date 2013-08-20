@@ -8,6 +8,7 @@
                 <li><a href="{$smarty.server.PHP_SELF}?page=account&action=transactions">Transactions</a></li>
                 {if !$GLOBAL.config.disable_notifications}<li><a href="{$smarty.server.PHP_SELF}?page=account&action=notifications">Notifications</a></li>{/if}
                 {if !$GLOBAL.config.disable_invitations}<li><a href="{$smarty.server.PHP_SELF}?page=account&action=invitations">Invitations</a></li>{/if}
+                <li><a href="{$smarty.server.PHP_SELF}?page=account&action=qrcode">QR Codes</a></li>
               </ul>
             </li>
             {/if}

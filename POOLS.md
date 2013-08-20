@@ -96,3 +96,18 @@ Small Time Miners are running various stratum only pools for different coins.
 | -------- | ---- | ------------: | ------------------: | ----- |
 | http://www.litecoinfor.me | Litecoin | 0 | 0 | |
 | http://www.fastcoinfor.me | Fastcoin | 0.830 MHash | 2 | |
+
+### ZC
+
+| Pool URL | Coin | Avg. Hashrate | Avg. Active Workers | Notes |
+| -------- | ---- | ------------: | ------------------: | ----- |
+| https://ltc.hashfaster.com | LTC | 70 MHash | 80 | Custom Template |
+
+### nutnut
+
+
+| Pool URL | Coin | Avg. Hashrate | Avg. Active Workers | Notes |
+| -------- | ---- | ------------: | ------------------: | ----- |
+| http://ftc.nut2pools.com | Feathercoin | 45-50Mhs | 25 workers | New style, PPLNS |
+| http://wdc.nut2pools.com | Worldcoin | 3.5 Mhs | 3 workers | New style, PPLNS |
+| http://pxc.nut2pools.com | Phenixcoin | 0 | 0 | New style | PPLNS |

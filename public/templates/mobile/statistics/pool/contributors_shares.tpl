@@ -9,12 +9,12 @@
     <tbody>
 {assign var=rank value=1}
 {assign var=listed value=0}
-{section hashrate $CONTRIBSHARES}
-{if $GLOBAL.userdata.username == $CONTRIBSHARES[hashrate].account}{assign var=listed value=1}{/if}
+{section shares $CONTRIBSHARES}
+{if $GLOBAL.userdata.username == $CONTRIBSHARES[shares].account}{assign var=listed value=1}{/if}
       <tr>
         <th aign="center">{$rank++}</th>
-        <td>{$CONTRIBSHARES[hashrate].account}</td>
-        <td align="right">{$CONTRIBSHARES[hashrate].shares|number_format}</td>
+        <td>{if $CONTRIBSHARES[shares].is_anonymous|default:"0" == 1}anonymous{else}{$CONTRIBSHARES[shares].account|escape}{/if}</td>
+        <td align="right">{$CONTRIBSHARES[shares].shares|number_format}</td>
       </tr>
 {/section}
 {if $listed != 1}
