@@ -1,5 +1,5 @@
-          <div id="siteinfo">{$GLOBAL.websitename}<br/>
-            <span class="slogan">{$GLOBAL.slogan}</span>
+          <div id="siteinfo">{$GLOBAL.website.name|default:"The Pool"}<br/>
+            <span class="slogan">{$GLOBAL.website.slogan|default:"Resistance is Futile"}</span>
           </div>
           <div id="ministats">
             <table border="0">

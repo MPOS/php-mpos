@@ -5,10 +5,9 @@ if (!defined('SECURITY'))
   die('Hacking attempt');
 
 class Setting {
-  public function __construct($debug, $mysqli, $salt) {
+  public function __construct($debug, $mysqli) {
     $this->debug = $debug;
     $this->mysqli = $mysqli;
-    $this->salt = $salt;
     $this->table = 'settings';
   }
 
@@ -47,9 +46,8 @@ class Setting {
     if ($stmt && $stmt->bind_param('sss', $name, $value, $value) && $stmt->execute())
       return true;
     $this->debug->append("Failed to set $name to $value");
-    echo $this->mysqli->error;
     return false;
   }
 }
 
-$setting = new Setting($debug, $mysqli, SALT);
+$setting = new Setting($debug, $mysqli);

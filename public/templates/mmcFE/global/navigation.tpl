@@ -35,10 +35,10 @@
             {else}
             <li><a href="{$smarty.server.PHP_SELF}?page=statistics">Statistics</a>
               <ul>
-            {if $GLOBAL.config.website.acl.statistics.pool == 'public'}
+            {if $GLOBAL.acl.pool.statistics}
                 <li><a href="{$smarty.server.PHP_SELF}?page=statistics&action=pool">Pool Stats</a></li>
             {/if}
-            {if $GLOBAL.config.website.acl.statistics.blocks == 'public'}
+            {if $GLOBAL.acl.block.statistics}
                 <li><a href="{$smarty.server.PHP_SELF}?page=statistics&action=blocks">Block Stats</a></li>
             {/if}
               </ul>
@@ -48,7 +48,7 @@
             <li><a href="{$smarty.server.PHP_SELF}?page=about&action=pool">About</a>
               <ul>
                 <li><a href="{$smarty.server.PHP_SELF}?page=about&action=pool">This Pool</a></li>
-                {if !$GLOBAL.config.website.api.disabled}<li><a href="{$smarty.server.PHP_SELF}?page=about&action=api">API Reference</a></li>{/if}
+                {if !$GLOBAL.website.api.disabled}<li><a href="{$smarty.server.PHP_SELF}?page=about&action=api">API Reference</a></li>{/if}
                 <li><a href="{$smarty.server.PHP_SELF}?page=about&action=donors">Pool Donors</a></li>
               </ul>
             </li>
