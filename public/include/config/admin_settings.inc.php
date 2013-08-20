@@ -46,5 +46,11 @@ $aSettings['other'][] = array(
   'name' => 'system_motd', 'value' => $setting->getValue('system_motd'),
   'tooltip' => 'Display a message of the day as information popup if set.'
 );
+$aSettings['system'][] = array(
+  'display' => 'Disable Mailform', 'type' => 'select',
+  'options' => array( 0 => 'No', 1 => 'Yes' ),
+  'name' => 'disable_mailform', 'value' => $setting->getValue('disable_mailform'),
+  'tooltip' => 'Enable or Disable Mailform. Users will not be able to use the contect form.'
+);
 
 ?>
