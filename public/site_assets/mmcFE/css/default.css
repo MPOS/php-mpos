@@ -15,7 +15,7 @@
 
 /* Add curved borders to various elements */
 
-#contactForm, .statusMessage, input[type="submit"], input[type="button"] {
+#contactForm, .statusMessage, input[type="submit"], input[type="reset"] {
   -moz-border-radius: 10px;
   -webkit-border-radius: 10px;  
   border-radius: 10px;
@@ -41,7 +41,7 @@
 
 #contactForm {
   width: 40em;
-  height: 33em;
+  height: 40em;
   padding: 0 1.5em 1.5em 1.5em;
   margin: 0 auto;
 }
@@ -92,7 +92,7 @@
   padding: 1em;
   width: 19.5em;  
   color: #aeb6aa;
-  background: #dfe0e5;
+  background: #dfe0e5 15em -3em; 
   border-bottom: 1px solid #aaa;
   -moz-border-radius: 10px 10px 0 0;
   -webkit-border-radius: 10px 10px 0 0;  
@@ -123,7 +123,6 @@
 label {
   display: block;
   float: left;
-  clear: left;
   text-align: right;
   width: 28%;
   padding: .4em 0 0 0;
@@ -178,7 +177,7 @@ input:valid, textarea:valid {
 
 /* The Send and Cancel buttons */
 
-input[type="submit"], input[type="button"] {
+input[type="submit"], input[type="reset"] {
   float: right;
   margin: 2em 1em 0 1em;
   width: 10em;
@@ -205,13 +204,13 @@ input[type="submit"], input[type="button"] {
 
 input[type="submit"]:hover,
 input[type="submit"]:active,
-input[type="button"]:hover,
-input[type="button"]:active {
+input[type="reset"]:hover,
+input[type="reset"]:active {
   cursor: pointer;
   opacity: 1;
 }
 
-input[type="submit"]:active, input[type="button"]:active {
+input[type="submit"]:active, input[type="reset"]:active {
   color: #333;
   background: #eee;
   -moz-box-shadow: 0 0 .5em rgba(0, 0, 0, .8) inset;
@@ -219,6 +218,6 @@ input[type="submit"]:active, input[type="button"]:active {
   box-shadow: 0 0 .5em rgba(0, 0, 0, .8) inset;
 }
 
-input[type="button"] {
+input[type="reset"] {
   background: #f33;
 }
