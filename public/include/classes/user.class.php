@@ -576,6 +576,54 @@ class User {
   }
 
   /**
+  * Mail form contact site admin
+  * @param senderName string senderName
+  * @param senderEmail string senderEmail
+  * @param senderSubject string senderSubject
+  * @param senderMessage string senderMessage
+  * @param email string config Email address
+  * @param subject string header subject
+  * @return bool
+  **/
+  public function mailform($senderName, $senderEmail, $senderSubject, $senderMessage) {
+    $this->debug->append("STA " . __METHOD__, 4);
+    if (preg_match('/[^a-z_\.\!\?\-0-9 ]/i', $senderName)) {
+      $this->setErrorMessage('Username may only contain alphanumeric characters');
+      return false;
+    }
+    if (empty($senderEmail) || !filter_var($senderEmail, FILTER_VALIDATE_EMAIL)) {
+      $this->setErrorMessage( 'Invalid e-mail address' );
+      return false;
+    }
+    if (preg_match('/[^a-z_\.\!\?\-0-9 ]/i', $senderSubject)) {
+      $this->setErrorMessage('Subject may only contain alphanumeric characters');
+      return false;
+    }
+    if (strlen($senderMessage) < 6) {
+      $this->setErrorMessage('Your message needs to be more than 6 characters');
+      return false;
+    }
+    if ($this->config['mailform']['enabled']) {
+      $aData['email'] = $this->config['website']['email'];
+      $aData['senderName'] = $senderName;
+      $aData['senderEmail'] = $senderEmail;
+      $aData['senderSubject'] = $senderSubject;
+      $aData['senderMessage'] = $senderMessage;
+      $aData['email'] = $this->config['website']['email'];
+      $aData['subject'] = 'Contact From';
+      if (!$this->mail->sendMail('mailform/body', $aData)) {
+        $this->setErrorMessage('An error occurred');
+        return false;
+      }
+      return true;
+    } else {
+      $this->setErrorMessage( 'Unable to send email' );
+      return false;
+    }
+    return false;
+  }
+
+  /**
    * User a one time token to reset a password
    * @param token string one time token
    * @param new1 string New password
