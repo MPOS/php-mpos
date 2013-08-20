@@ -23,7 +23,7 @@ if ($setting->getValue('disable_mailform')) {
     if ($rsp->is_valid) {
       $smarty->assign("RECAPTCHA", recaptcha_get_html($config['recaptcha']['public_key']));
       if ($user->mailform($_POST['senderName'], $_POST['senderEmail'], $_POST['senderSubject'], $_POST['senderMesage'])) {
-        $config['mailform']['enabled'] ? $_SESSION['POPUP'][] = array('CONTENT' => 'Thanks for sending your message! We will get back to you shortly') : $_SESSION['POPUP'][] = array('CONTENT' => 'Message Sent');
+      $_SESSION['POPUP'][] = array('CONTENT' => 'Thanks for sending your message! We will get back to you shortly');  
       } else {
         $_SESSION['POPUP'][] = array('CONTENT' => 'There was a problem sending your message. Please try again.' . $user->getError(), 'TYPE' => 'errormsg');
       }
@@ -38,8 +38,8 @@ if ($setting->getValue('disable_mailform')) {
     // Captcha disabled
   } else {
       if ($user->mailform($_POST['senderName'], $_POST['senderEmail'], $_POST['senderSubject'], $_POST['senderMessage'])) {
-      $config['mailform']['enabled'] ? $_SESSION['POPUP'][] = array('CONTENT' => 'Thanks for sending your message! We will get back to you shortly') : $_SESSION['POPUP'][] = array('CONTENT' => 'Message Sent');
-    } else {
+      $_SESSION['POPUP'][] = array('CONTENT' => 'Thanks for sending your message! We will get back to you shortly');
+      } else {
       $_SESSION['POPUP'][] = array('CONTENT' => 'There was a problem sending your message. Please try again. ' . $user->getError(), 'TYPE' => 'errormsg');
     }
   }
