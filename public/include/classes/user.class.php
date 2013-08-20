@@ -603,23 +603,19 @@ class User {
       $this->setErrorMessage('Your message needs to be more than 6 characters');
       return false;
     }
-    if ($this->config['mailform']['enabled']) {
-      $aData['email'] = $this->config['website']['email'];
-      $aData['senderName'] = $senderName;
-      $aData['senderEmail'] = $senderEmail;
-      $aData['senderSubject'] = $senderSubject;
-      $aData['senderMessage'] = $senderMessage;
-      $aData['email'] = $this->config['website']['email'];
-      $aData['subject'] = 'Contact From';
+    $aData['email'] = $this->config['website']['email'];
+    $aData['senderName'] = $senderName;
+    $aData['senderEmail'] = $senderEmail;
+    $aData['senderSubject'] = $senderSubject;
+    $aData['senderMessage'] = $senderMessage;
+    $aData['email'] = $this->config['website']['email'];
+    $aData['subject'] = 'Contact From';
       if (!$this->mail->sendMail('mailform/body', $aData)) {
-        $this->setErrorMessage('An error occurred');
+        $this->setErrorMessage( 'Unable to send email' );
         return false;
-      }
+     } else {
       return true;
-    } else {
-      $this->setErrorMessage( 'Unable to send email' );
-      return false;
-    }
+     }
     return false;
   }
 
