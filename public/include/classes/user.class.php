@@ -599,7 +599,7 @@ class User {
       $this->setErrorMessage('Subject may only contain alphanumeric characters');
       return false;
     }
-    if (strlen($senderMessage) < 6) {
+    if (strlen(strip_tags($senderMessage)) < strlen($senderMessage)) {
       $this->setErrorMessage('Your message needs to be more than 6 characters');
       return false;
     }
