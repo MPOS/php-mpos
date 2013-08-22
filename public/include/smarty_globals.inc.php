@@ -9,10 +9,12 @@ $debug->append('Global smarty variables', 3);
 $debug->append('No cached page detected, loading smarty globals', 3);
 // Defaults to get rid of PHP Notice warnings
 $dDifficulty = 1;
-$aRoundShares = 1;
 
-// Only run these if the user is logged in
-$aRoundShares = $statistics->getRoundShares();
+// Fetch round shares
+if (!$aRoundShares = $statistics->getRoundShares()) {
+  $aRoundShares = array('valid' => 0, 'invalid' => 0);
+}
+
 if ($bitcoin->can_connect() === true) {
   $dDifficulty = $bitcoin->query('getdifficulty');
   if (is_array($dDifficulty) && array_key_exists('proof-of-work', $dDifficulty))
