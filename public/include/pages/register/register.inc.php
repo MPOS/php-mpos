@@ -2,11 +2,11 @@
 // Make sure we are called from index.php
 if (!defined('SECURITY')) die('Hacking attempt');
 
-if ($config['recaptcha']['enabled']) {
+if ($setting->getValue('recaptcha_enabled')) {
   // Load re-captcha specific data
   require_once(INCLUDE_DIR . '/lib/recaptchalib.php');
   $rsp = recaptcha_check_answer (
-    $config['recaptcha']['private_key'],
+    $setting->getValue('recaptcha_private_key'),
     $_SERVER["REMOTE_ADDR"],
     $_POST["recaptcha_challenge_field"],
     $_POST["recaptcha_response_field"]
@@ -19,28 +19,28 @@ if ($setting->getValue('disable_invitations') && $setting->getValue('lock_regist
   $_SESSION['POPUP'][] = array('CONTENT' => 'Only invited users are allowed to register.', 'TYPE' => 'errormsg');
 } else {
   // Check if recaptcha is enabled, process form data if valid
-  if($config['recaptcha']['enabled'] && $_POST["recaptcha_response_field"] && $_POST["recaptcha_response_field"]!=''){
+  if($setting->getValue('recaptcha_enabled') && $_POST["recaptcha_response_field"] && $_POST["recaptcha_response_field"]!=''){
     if ($rsp->is_valid) {
-      $smarty->assign("RECAPTCHA", recaptcha_get_html($config['recaptcha']['public_key']));
+      $smarty->assign("RECAPTCHA", recaptcha_get_html($setting->getValue('recaptcha_public_key')));
       isset($_POST['token']) ? $token = $_POST['token'] : $token = '';
       if ($user->register($_POST['username'], $_POST['password1'], $_POST['password2'], $_POST['pin'], $_POST['email1'], $_POST['email2'], $token)) {
-        $config['accounts']['confirm_email']['enabled'] ? $_SESSION['POPUP'][] = array('CONTENT' => 'Please check your mailbox to activate this account') : $_SESSION['POPUP'][] = array('CONTENT' => 'Account created, please login');
+        ! $setting->getValue('accounts_confirm_email_disabled') ? $_SESSION['POPUP'][] = array('CONTENT' => 'Please check your mailbox to activate this account') : $_SESSION['POPUP'][] = array('CONTENT' => 'Account created, please login');
       } else {
         $_SESSION['POPUP'][] = array('CONTENT' => 'Unable to create account: ' . $user->getError(), 'TYPE' => 'errormsg');
       }
     } else {
-      $smarty->assign("RECAPTCHA", recaptcha_get_html($config['recaptcha']['public_key'], $rsp->error));
+      $smarty->assign("RECAPTCHA", recaptcha_get_html($setting->getValue('recaptcha_public_key'), $rsp->error));
       $_SESSION['POPUP'][] = array('CONTENT' => 'Invalid Captcha, please try again. (' . $rsp->error . ')', 'TYPE' => 'errormsg');
     }
     // Empty captcha
-  } else if ($config['recaptcha']['enabled']) {
-    $smarty->assign("RECAPTCHA", recaptcha_get_html($config['recaptcha']['public_key'], $rsp->error));
+  } else if ($setting->getValue('recaptcha_enabled')) {
+    $smarty->assign("RECAPTCHA", recaptcha_get_html($setting->getValue('recaptcha_public_key'), $rsp->error));
     $_SESSION['POPUP'][] = array('CONTENT' => 'Empty Captcha, please try again.', 'TYPE' => 'errormsg');
     // Captcha disabled
   } else {
     isset($_POST['token']) ? $token = $_POST['token'] : $token = '';
     if ($user->register($_POST['username'], $_POST['password1'], $_POST['password2'], $_POST['pin'], $_POST['email1'], $_POST['email2'], $token)) {
-      $config['accounts']['confirm_email']['enabled'] ? $_SESSION['POPUP'][] = array('CONTENT' => 'Please check your mailbox to activate this account') : $_SESSION['POPUP'][] = array('CONTENT' => 'Account created, please login');
+      ! $setting->getValue('accounts_confirm_email_disabled') ? $_SESSION['POPUP'][] = array('CONTENT' => 'Please check your mailbox to activate this account') : $_SESSION['POPUP'][] = array('CONTENT' => 'Account created, please login');
     } else {
       $_SESSION['POPUP'][] = array('CONTENT' => 'Unable to create account: ' . $user->getError(), 'TYPE' => 'errormsg');
     }

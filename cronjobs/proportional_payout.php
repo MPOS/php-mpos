@@ -60,26 +60,26 @@ foreach ($aAllBlocks as $iIndex => $aBlock) {
     // Loop through all accounts that have found shares for this round
     foreach ($aAccountShares as $key => $aData) {
       // Payout based on shares, PPS system
-      $aData['percentage'] = number_format(round(( 100 / $iRoundShares ) * $aData['valid'], 8), 8);
-      $aData['payout'] = number_format(round(( $aData['percentage'] / 100 ) * $dReward, 8), 8);
+      $aData['percentage'] = round(( 100 / $iRoundShares ) * $aData['valid'], 8);
+      $aData['payout'] = round(( $aData['percentage'] / 100 ) * $dReward, 8);
       // Defaults
       $aData['fee' ] = 0;
       $aData['donation'] = 0;
 
       if ($config['fees'] > 0 && $aData['no_fees'] == 0)
-        $aData['fee'] = number_format(round($config['fees'] / 100 * $aData['payout'], 8), 8);
+        $aData['fee'] = round($config['fees'] / 100 * $aData['payout'], 8);
       // Calculate donation amount, fees not included
-      $aData['donation'] = number_format(round($user->getDonatePercent($user->getUserId($aData['username'])) / 100 * ( $aData['payout'] - $aData['fee']), 8), 8);
+      $aData['donation'] = round($user->getDonatePercent($user->getUserId($aData['username'])) / 100 * ( $aData['payout'] - $aData['fee']), 8);
 
       // Verbose output of this users calculations
       $log->logInfo($aData['id'] . "\t" .
         $aData['username'] . "\t" .
         $aData['valid'] . "\t" .
         $aData['invalid'] . "\t" .
-        $aData['percentage'] . "\t" .
-        $aData['payout'] . "\t" .
-        $aData['donation'] . "\t" .
-        $aData['fee']);
+        number_format($aData['percentage'], 8) . "\t" .
+        number_format($aData['payout'], 8) . "\t" .
+        number_format($aData['donation'], 8) . "\t" .
+        number_format($aData['fee']), 8);
 
       // Update user share statistics
       if (!$statistics->updateShareStatistics($aData, $aBlock['id']))

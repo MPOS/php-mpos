@@ -46,14 +46,14 @@ target and network difficulty and assuming a zero variance scenario.
 {assign var=rank value=1}
 {section block $BLOCKSFOUND}
       <tr class="{cycle values="odd,even"}">
-        <td class="center"><a href="{$GLOBAL.blockexplorer}{$BLOCKSFOUND[block].height}" target="_blank">{$BLOCKSFOUND[block].height}</a></td>
+        <td class="center"><a href="{$GLOBAL.website.blockexplorer.url}{$BLOCKSFOUND[block].height}" target="_blank">{$BLOCKSFOUND[block].height}</a></td>
         <td class="center">
         {if $BLOCKSFOUND[block].confirmations >= $GLOBAL.confirmations}
           <font color="green">Confirmed</font>
         {else if $BLOCKSFOUND[block].confirmations == -1}
           <font color="red">Orphan</font>
         {else}{$GLOBAL.confirmations - $BLOCKSFOUND[block].confirmations} left{/if}</td>
-        <td>{$BLOCKSFOUND[block].finder|default:"unknown"}</td>
+        <td>{if $BLOCKSFOUND[block].is_anonymous|default:"0" == 1}anonymous{else}{$BLOCKSFOUND[block].finder|default:"unknown"|escape}{/if}</td>
         <td class="center">{$BLOCKSFOUND[block].time|date_format:"%d/%m %H:%M:%S"}</td>
         <td class="right">{$BLOCKSFOUND[block].difficulty|number_format:"2"}</td>
         <td class="right">{(pow(2,32 - $GLOBAL.config.targetdiff) * $BLOCKSFOUND[block].difficulty)|number_format}</td>

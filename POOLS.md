@@ -27,7 +27,7 @@ They have succesfully mined blocks on each of those pools listed.
 All pools are running on Stratum only.
 
 | Pool URL | Coin | Avg. Hashrate | Avg. Active Workers | Notes |
-| -------- | ---- | ------------- | -----------------: | ----- |
+| -------- | ---- | ------------: | -----------------: | ----- |
 | http://wdc.nordicminers.eu | Worldcoin | n/a | n/a | |
 | http://lky.nordicminers.eu | Luckycoin | n/a | n/a | |
 | http://fst.nordicminers.eu | Fastcoin | n/a | n/a | |
@@ -48,7 +48,7 @@ running more or less without any issues (related to `mmcfe-ng` that is ;-)). He 
 the most powerful pool!
 
 | Pool URL | Coin | Avg. Hashrate | Avg. Active Workers | Notes |
-| -------- | ---- | ------------- | ------------------: | ----- |
+| -------- | ---- | ------------: | ------------------: | ----- |
 | http://www.ejpool.info | Litecoin | 155 MHash | 120 | |
 
 ### Obigal
@@ -56,7 +56,7 @@ the most powerful pool!
 Small Time Miners are running various stratum only pools for different coins.
 
 | Pool URL | Coin | Avg. Hashrate | Avg. Active Workers | Notes |
-| -------- | ---- | ------------- | ------------------- | ----- |
+| -------- | ---- | ------------: | ------------------- | ----- |
 | http://meg.smalltimeminer.com | Megacoin | 5 - 10 MHash | n/a | |
 | http://flo.smalltimeminer.com | Florincoin | 5 - 6 MHash | n/a | |
 | http://alf.smalltimeminer.com | Alphacoin | 2 - 4 MHash | n/a | |
@@ -65,7 +65,7 @@ Small Time Miners are running various stratum only pools for different coins.
 ### Feeleep75
 
 | Pool URL | Coin | Avg. Hashrate | Avg. Active Workers | Notes |
-| -------- | ---- | ------------- | ------------------: | ----- |
+| -------- | ---- | ------------: | ------------------: | ----- |
 | http://bot.coinmine.pl | Bottlecaps | 3 - 50 MHash | n/a | PoS/PoW type coin |
 | http://yacp.coinmine.pl | YaCoin | 19 MHash | n/a | |
 
@@ -78,7 +78,7 @@ Small Time Miners are running various stratum only pools for different coins.
 ### Sheinsha
 
 | Pool URL | Coin | Avg. Hashrate | Avg. Active Workers | Notes |
-| -------- | ---- | ------------- | ------------------: | ----- |
+| -------- | ---- | ------------: | ------------------: | ----- |
 | http://str.minar.cc | Starcoin | 35 MHash  |  35 | PoS/PoW type coin |
 | http://dmd.minar.cc | Diamondcoin | 90 MHash  |  65 | PoS/PoW type coin |
 | http://jpc.minar.cc | Jupitercoin | 1.8 MHash  |  3 |  |
@@ -90,3 +90,24 @@ Small Time Miners are running various stratum only pools for different coins.
 | -------- | ---- | ------------- | ------------------: | ----- |
 | http://ltc.nushor.net | Litecoin | 130 MHash | 300 | Succesfully migrated from `mmcfe` |
 
+### nrpatten
+
+| Pool URL | Coin | Avg. Hashrate | Avg. Active Workers | Notes |
+| -------- | ---- | ------------: | ------------------: | ----- |
+| http://www.litecoinfor.me | Litecoin | 0 | 0 | |
+| http://www.fastcoinfor.me | Fastcoin | 0.830 MHash | 2 | |
+
+### ZC
+
+| Pool URL | Coin | Avg. Hashrate | Avg. Active Workers | Notes |
+| -------- | ---- | ------------: | ------------------: | ----- |
+| https://ltc.hashfaster.com | LTC | 70 MHash | 80 | Custom Template |
+
+### nutnut
+
+
+| Pool URL | Coin | Avg. Hashrate | Avg. Active Workers | Notes |
+| -------- | ---- | ------------: | ------------------: | ----- |
+| http://ftc.nut2pools.com | Feathercoin | 45-50Mhs | 25 workers | New style, PPLNS |
+| http://wdc.nut2pools.com | Worldcoin | 3.5 Mhs | 3 workers | New style, PPLNS |
+| http://pxc.nut2pools.com | Phenixcoin | 0 | 0 | New style | PPLNS |

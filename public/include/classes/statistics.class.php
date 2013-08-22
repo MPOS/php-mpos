@@ -402,10 +402,11 @@ class Statistics {
         AND a.id = ?
       GROUP BY HOUR(time)");
     if ($this->checkStmt($stmt) && $stmt->bind_param('ii', $account_id, $account_id) && $stmt->execute() && $result = $stmt->get_result()) {
-      $aData = array();
-      while ($row = $result->fetch_assoc()) {
-        $aData[$row['hour']] = $row['hashrate'];
-      }
+      $iStartHour = date('G');
+      // Initilize array
+      for ($i = 0; $i < 24; $i++) $aData[($iStartHour + $i) % 24] = 0;
+      // Fill data
+      while ($row = $result->fetch_assoc()) $aData[$row['hour']] = $row['hashrate'];
       return $this->memcache->setCache(__FUNCTION__ . $account_id, $aData);
     }
     // Catchall
@@ -438,10 +439,12 @@ class Statistics {
         AND time > NOW() - INTERVAL 25 HOUR
       GROUP BY HOUR(time)");
     if ($this->checkStmt($stmt) && $stmt->execute() && $result = $stmt->get_result()) {
-      while ($row = $result->fetch_assoc()) {
-        $aData[$row['hour']] = $row['hashrate'];
-      }
-      return $this->memcache->setCache(__FUNCTION__, @$aData);
+      $iStartHour = date('G');
+      // Initilize array
+      for ($i = 0; $i < 24; $i++) $aData[($iStartHour + $i) % 24] = 0;
+      // Fill data
+      while ($row = $result->fetch_assoc()) $aData[$row['hour']] = (int) $row['hashrate'];
+      return $this->memcache->setCache(__FUNCTION__, $aData);
     }
     // Catchall
     $this->debug->append("Failed to fetch hourly hashrate: " . $this->mysqli->error);

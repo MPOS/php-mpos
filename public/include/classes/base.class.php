@@ -8,6 +8,7 @@ if (!defined('SECURITY'))
 // some cross-class functions.
 class Base {
   private $sError = '';
+  private $values = array(), $types = ''; 
 
   public function setDebug($debug) {
     $this->debug = $debug;
@@ -29,6 +30,12 @@ class Base {
   }
   public function setToken($token) {
     $this->token = $token;
+  }
+  public function setBlock($block) {
+    $this->block = $block;
+  }
+  public function setSetting($setting) {
+    $this->setting = $setting;
   }
   public function setBitcoin($bitcoin) {
     $this->bitcoin = $bitcoin;
@@ -88,6 +95,28 @@ class Base {
       return true;
     $this->debug->append("Unable to update " . $field['name'] . " with " . $field['value'] . " for ID $id");
     return false;
+  }
+
+  /**
+   * We may need to generate our bind_param list
+   **/
+  public function addParam($type, &$value) {
+    $this->values[] = $value;
+    $this->types .= $type;
+  }
+  public function getParam() {
+    $array = array_merge(array($this->types), $this->values);
+    // Clear the data
+    $this->values = NULL;
+    $this->types = NULL;
+    // See here why we need this: http://stackoverflow.com/questions/16120822/mysqli-bind-param-expected-to-be-a-reference-value-given
+    if (strnatcmp(phpversion(),'5.3') >= 0) {
+      $refs = array();
+      foreach($array as $key => $value)
+        $refs[$key] = &$array[$key];
+      return $refs;
+    }
+    return $array;
   }
 }
 ?>
