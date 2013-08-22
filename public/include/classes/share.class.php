@@ -311,6 +311,8 @@ class Share {
    * Fetch the lowest needed share ID from shares
    **/
   function getMinimumShareId($iCount, $current_upstream) {
+    // We don't use baseline here to be more accurate
+    $iCount = $iCount * pow(2, ($this->config['difficulty'] - 16));
     $stmt = $this->mysqli->prepare("
       SELECT MIN(b.id) AS id FROM
       (
@@ -334,7 +336,7 @@ class Share {
     $stmt = $this->mysqli->prepare("
       SELECT MIN(b.share_id) AS share_id FROM
       (
-        SELECT share_id, @total := @total + IF(difficulty=0, pow(2, (" . $this->config['difficulty'] . " - 16)), difficulty) AS total
+        SELECT share_id, @total := @total + (IF(difficulty=0, POW(2, (" . $this->config['difficulty'] . " - 16)), difficulty) / POW(2, (" . $this->config['difficulty'] . " - 16))) AS total
         FROM $this->tableArchive, (SELECT @total := 0) AS a
         WHERE our_result = 'Y'
         AND @total < ?
