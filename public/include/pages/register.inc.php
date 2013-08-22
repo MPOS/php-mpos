@@ -10,11 +10,10 @@ if ($setting->getValue('lock_registration') && $setting->getValue('disable_invit
   $_SESSION['POPUP'][] = array('CONTENT' => 'Only invited users are allowed to register.', 'TYPE' => 'errormsg');
   $smarty->assign("CONTENT", "disabled.tpl");
 } else {
-  if ($config['recaptcha']['enabled']) {
+  if ($setting->getValue('recaptcha_enabled')) {
     require_once(INCLUDE_DIR . '/lib/recaptchalib.php');
-    $smarty->assign("RECAPTCHA", recaptcha_get_html($config['recaptcha']['public_key']));
+    $smarty->assign("RECAPTCHA", recaptcha_get_html($setting->getValue('recaptcha_public_key')));
   }
-  // Tempalte specifics
   $smarty->assign("CONTENT", "default.tpl");
 }
 ?>

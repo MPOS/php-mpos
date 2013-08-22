@@ -24,16 +24,24 @@ if (!$smarty->isCached('master.tpl', $smarty_cache_key)) {
     $dNewmint = -1;
     $_SESSION['POPUP'][] = array('CONTENT' => 'Unable to connect to wallet RPC service: ' . $bitcoin->can_connect(), 'TYPE' => 'errormsg');
   }
+  // Fetch unconfirmed amount from blocks table
+  $aBlocksUnconfirmed = $block->getAllUnconfirmed();
+  $dBlocksUnconfirmedBalance = 0;
+  if (!empty($aBlocksUnconfirmed))
+    foreach ($aBlocksUnconfirmed as $aData) $dBlocksUnconfirmedBalance += $aData['amount'];
+
   // Fetch locked balance from transactions
   $dLockedBalance = $transaction->getLockedBalance();
 } else {
   $debug->append('Using cached page', 3);
 }
 
+$smarty->assign("UNCONFIRMED", $dBlocksUnconfirmedBalance);
 $smarty->assign("BALANCE", $dBalance);
 $smarty->assign("LOCKED", $dLockedBalance);
 $smarty->assign("NEWMINT", $dNewmint);
 
 // Tempalte specifics
 $smarty->assign("CONTENT", "default.tpl");
+
 ?>

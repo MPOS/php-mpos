@@ -46,7 +46,7 @@ target and network difficulty and assuming a zero variance scenario.
 {assign var=rank value=1}
 {section block $BLOCKSFOUND}
       <tr class="{cycle values="odd,even"}">
-        <td class="center"><a href="{$GLOBAL.blockexplorer}{$BLOCKSFOUND[block].height}" target="_blank">{$BLOCKSFOUND[block].height}</a></td>
+        <td class="center"><a href="{$GLOBAL.website.blockexplorer.url}{$BLOCKSFOUND[block].height}" target="_blank">{$BLOCKSFOUND[block].height}</a></td>
         <td class="center">
         {if $BLOCKSFOUND[block].confirmations >= $GLOBAL.confirmations}
           <font color="green">Confirmed</font>

@@ -104,7 +104,7 @@
             <font size="1px">({$TRANSACTIONS[transaction].confirmations|default:"n/a"})</font>
           </td>
           <td>{$TRANSACTIONS[transaction].coin_address}</td>
-          <td>{if $TRANSACTIONS[transaction].height == 0}n/a{else}{if $GLOBAL.blockexplorer}<a href="{$GLOBAL.blockexplorer}{$TRANSACTIONS[transaction].blockhash}">{$TRANSACTIONS[transaction].height}</a>{else}{$TRANSACTIONS[transaction].height}{/if}{/if}</td>
+          <td>{if $TRANSACTIONS[transaction].height == 0}n/a{else}{if $GLOBAL.website.blockexplorer.url}<a href="{$GLOBAL.website.blockexplorer.url}{$TRANSACTIONS[transaction].blockhash}">{$TRANSACTIONS[transaction].height}</a>{else}{$TRANSACTIONS[transaction].height}{/if}{/if}</td>
           <td><font color="{if $TRANSACTIONS[transaction].type == 'Credit' or $TRANSACTIONS[transaction].type == 'Credit_PPS' or $TRANSACTIONS[transaction].type == 'Bonus'}green{else}red{/if}">{$TRANSACTIONS[transaction].amount|number_format:"8"}</td>
         </tr>
 {/section}

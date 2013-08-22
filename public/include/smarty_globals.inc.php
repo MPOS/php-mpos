@@ -34,8 +34,6 @@ if ($iCurrentPoolHashrate > $dNetworkHashrate) $dNetworkHashrate = $iCurrentPool
 
 // Global data for Smarty
 $aGlobal = array(
-  'slogan' => $config['website']['slogan'],
-  'websitename' => $config['website']['name'],
   'hashrate' => $iCurrentPoolHashrate,
   'nethashrate' => $dNetworkHashrate,
   'sharerate' => $iCurrentPoolShareRate,
@@ -45,11 +43,8 @@ $aGlobal = array(
   'confirmations' => $config['confirmations'],
   'reward' => $config['reward'],
   'price' => $setting->getValue('price'),
-  'blockexplorer' => $config['blockexplorer'],
-  'chaininfo' => $config['chaininfo'],
   'disable_mp' => $setting->getValue('disable_mp'),
   'config' => array(
-    'website' => $config['website'],
     'accounts' => $config['accounts'],
     'disable_invitations' => $setting->getValue('disable_invitations'),
     'disable_notifications' => $setting->getValue('disable_notifications'),
@@ -64,6 +59,21 @@ $aGlobal = array(
     )
   )
 );
+
+// Website configurations
+$aGlobal['website']['name'] = $setting->getValue('website_name');
+$aGlobal['website']['title'] = $setting->getValue('website_title');
+$aGlobal['website']['slogan'] = $setting->getValue('website_slogan');
+$aGlobal['website']['email'] = $setting->getValue('website_email');
+$aGlobal['website']['api']['disabled'] = $setting->getValue('disable_api');
+$aGlobal['website']['blockexplorer']['disabled'] = $setting->getValue('website_blockexplorer_disabled');
+$aGlobal['website']['chaininfo']['disabled'] = $setting->getValue('website_chaininfo_disabled');
+$setting->getValue('website_blockexplorer_url') ? $aGlobal['website']['blockexplorer']['url'] = $setting->getValue('website_blockexplorer_url') : $aGlobal['website']['blockexplorer']['url'] = 'http://explorer.litecoin.net/block/';
+$setting->getValue('website_chaininfo_url') ? $aGlobal['website']['chaininfo']['url'] = $setting->getValue('website_chaininfo_url') : $aGlobal['website']['chaininfo']['url'] = 'http://allchains.info';
+
+// ACLs
+$aGlobal['acl']['pool']['statistics'] = $setting->getValue('acl_pool_statistics');
+$aGlobal['acl']['block']['statistics'] = $setting->getValue('acl_block_statistics');
 
 // We support some dynamic reward targets but fall back to our fixed value
 // Special calculations for PPS Values based on reward_type setting and/or available blocks

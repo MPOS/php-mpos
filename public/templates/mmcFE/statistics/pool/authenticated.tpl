@@ -19,10 +19,10 @@
       <td class="leftheader">Current Active Workers</td>
       <td>{$GLOBAL.workers}</td>
     </tr>
-    {if $GLOBAL.blockexplorer}
+    {if $GLOBAL.website.blockexplorer.url}
     <tr>
       <td class="leftheader">Next Network Block</td>
-      <td>{$CURRENTBLOCK + 1} &nbsp;&nbsp;<font size="1"> (Current: <a href="{$GLOBAL.blockexplorer}{$CURRENTBLOCKHASH}" target="_new">{$CURRENTBLOCK})</a></font></td>
+      <td>{$CURRENTBLOCK + 1} &nbsp;&nbsp;<font size="1"> (Current: <a href="{$GLOBAL.website.blockexplorer.url}{$CURRENTBLOCKHASH}" target="_new">{$CURRENTBLOCK})</a></font></td>
     </tr>
     {else}
     <tr>
@@ -32,12 +32,12 @@
     {/if}
     <tr>
       <td class="leftheader">Last Block Found</td>
-      <td>{if $GLOBAL.blockexplorer}<a href="{$GLOBAL.blockexplorer}{$LASTBLOCKHASH}" target="_new">{$LASTBLOCK|default:"0"}</a>{else}{$LASTBLOCK|default:"0"}{/if}</td>
+      <td>{if $GLOBAL.website.blockexplorer.url}<a href="{$GLOBAL.website.blockexplorer.url}{$LASTBLOCKHASH}" target="_new">{$LASTBLOCK|default:"0"}</a>{else}{$LASTBLOCK|default:"0"}{/if}</td>
     </tr>
     <tr>
       <td class="leftheader">Current Difficulty</td>
-      {if $GLOBAL.chaininfo}
-      <td><a href="{$GLOBAL.chaininfo}" target="_new"><font size="2">{$DIFFICULTY}</font></a></td>
+      {if ! $GLOBAL.website.chaininfo.disabled}
+      <td><a href="{$GLOBAL.website.chaininfo.url}" target="_new"><font size="2">{$DIFFICULTY}</font></a></td>
       {else}
       <td><font size="2">{$DIFFICULTY}</font></td>
       {/if}
@@ -57,7 +57,7 @@
     </tr>
   </tbody>
 </table>
-{if !$GLOBAL.config.website.api.disabled}<li>These stats are also available in JSON format <a href="{$smarty.server.PHP_SELF}?page=api&action=getpoolstatus&api_key={$GLOBAL.userdata.api_key}">HERE</a></li>{/if}
+{if !$GLOBAL.website.api.disabled}<li>These stats are also available in JSON format <a href="{$smarty.server.PHP_SELF}?page=api&action=getpoolstatus&api_key={$GLOBAL.userdata.api_key}">HERE</a></li>{/if}
 {include file="global/block_footer.tpl"}
 
 
