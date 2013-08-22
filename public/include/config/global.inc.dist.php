@@ -273,7 +273,8 @@ $config['reward'] = 50;
 
 // Confirmations per block required to credit transactions, default: 120
 $config['confirmations'] = 120;
-
+// Confirmations per block required in network to confirm its transactions, default: 120
+$config['network_confirmations'] = 120;
 
 /**
  * Memcache configuration

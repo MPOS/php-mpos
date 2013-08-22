@@ -9,6 +9,10 @@
     <td class="right">{$LOCKED|number_format:"8"}</td>
   </tr>
   <tr>
+    <th>Unconfirmed</th>
+    <td class="right">{$UNCONFIRMED|number_format:"8"}</td>
+  </tr>
+  <tr>
     <th>Liquid Assets</th>
     <td class="right">{($BALANCE - $LOCKED)|number_format:"8"}</td>
   </tr>
