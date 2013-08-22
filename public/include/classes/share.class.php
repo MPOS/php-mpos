@@ -130,7 +130,7 @@ class Share {
    * return array data Returns an array with usernames as keys for easy access
    **/
   function getArchiveShares($iCount) {
-    $iMinId = $this->getMaxArchiveShareId() - $iCount;
+    $iMinId = $this->getMinArchiveShareId($iCount);
     $iMaxId = $this->getMaxArchiveShareId();
     $stmt = $this->mysqli->prepare("
       SELECT
@@ -304,6 +304,46 @@ class Share {
         return true;
     }
     // Catchall
+    return false;
+  }
+
+  /**
+   * Fetch the lowest needed share ID from shares
+   **/
+  function getMinimumShareId($iCount, $current_upstream) {
+    $stmt = $this->mysqli->prepare("
+      SELECT MIN(b.id) AS id FROM
+      (
+        SELECT id, @total := @total + IF(difficulty=0, POW(2, (" . $this->config['difficulty'] . " - 16)), difficulty) AS total
+        FROM $this->table, (SELECT @total := 0) AS a
+        WHERE our_result = 'Y'
+        AND id <= ? AND @total < ?
+        ORDER BY id DESC
+      ) AS b
+      WHERE total <= ?
+      ");
+    if ($this->checkStmt($stmt) && $stmt->bind_param('iii', $current_upstream, $iCount, $iCount) && $stmt->execute() && $result = $stmt->get_result())
+      return $result->fetch_object()->id;
+    return false;
+  }
+
+  /**
+   * Fetch the lowest needed share ID from archive
+   **/
+  function getMinArchiveShareId($iCount) {
+    $stmt = $this->mysqli->prepare("
+      SELECT MIN(b.share_id) AS share_id FROM
+      (
+        SELECT share_id, @total := @total + IF(difficulty=0, pow(2, (" . $this->config['difficulty'] . " - 16)), difficulty) AS total
+        FROM $this->tableArchive, (SELECT @total := 0) AS a
+        WHERE our_result = 'Y'
+        AND @total < ?
+        ORDER BY share_id DESC
+      ) AS b
+      WHERE total <= ?
+      ");
+    if ($this->checkStmt($stmt) && $stmt->bind_param('ii', $iCount, $iCount) && $stmt->execute() && $result = $stmt->get_result())
+      return $result->fetch_object()->share_id;
     return false;
   }
 
