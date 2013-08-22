@@ -229,7 +229,7 @@ class Statistics {
         a.username AS username,
         a.donate_percent AS donate_percent,
         a.email AS email,
-        IFNULL(SUM(IF(s.difficulty=0, POW(2, (" . $this->config['difficulty'] . " - 16)), s.difficulty)), 0) AS shares
+        ROUND(IFNULL(SUM(IF(s.difficulty=0, POW(2, (" . $this->config['difficulty'] . " - 16)), s.difficulty)), 0) / POW(2, (" . $this->config['difficulty'] . " - 16)), 0) AS shares
       FROM " . $this->user->getTableName() . " AS a
       LEFT JOIN " . $this->share->getTableName() . " AS s
       ON a.username = SUBSTRING_INDEX( s.username, '.', 1 )
