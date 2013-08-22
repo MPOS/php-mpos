@@ -39,7 +39,7 @@ if ($bitcoin->can_connect() !== true) {
   exit(1);
 }
 
-// var_dump($oPayout->createPayout(1.12, 1));
+// Fetch outstanding payout requests
 $aPayouts = $oPayout->getUnprocessedPayouts();
 
 if (count($aPayouts) > 0) {
@@ -62,7 +62,7 @@ if (count($aPayouts) > 0) {
         continue;
       }
       try {
-        $bitcoin->sendtoaddress($aData['coin_address'], $dBalance);
+        $bitcoin->sendtoaddress($aData['coin_address'], $dBalance - $config['txfee']);
       } catch (BitcoinClientException $e) {
         $log->logError('Failed to send requested balance to coin address, please check payout process');
         continue;
@@ -75,7 +75,11 @@ if (count($aPayouts) > 0) {
         $monitoring->setStatus($cron_name . "_status", "okerror", 1);
         exit(1);
       }
+
       if ($transaction->addTransaction($aData['account_id'], $dBalance - $config['txfee'], 'Debit_MP', NULL, $aData['coin_address']) && $transaction->addTransaction($aData['account_id'], $config['txfee'], 'TXFee', NULL, $aData['coin_address'])) {
+        // Mark all older transactions as archived
+        if (!$transaction->setArchived($aData['account_id'], $transaction->insert_id))
+          $log->logError('Failed to mark transactions for #' . $aData['account_id'] . ' prior to #' . $transaction->insert_id . ' as archived');
         // Notify user via  mail
         $aMailData['email'] = $user->getUserEmail($user->getUserName($aData['account_id']));
         $aMailData['subject'] = 'Manual Payout Completed';

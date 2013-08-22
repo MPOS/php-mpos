@@ -67,34 +67,10 @@ if ($config['pps']['reward']['type'] == 'blockavg' && $block->getBlockCount() > 
      $log->logInfo("PPS reward fixed default, amount: " . $pps_reward . "\tdifficulty: " . $dDifficulty);
   }
 }
+**/
 
-$pps_value = number_format(round($pps_reward / (pow(2,32) * $dDifficulty) * pow(2, $config['pps_target']), 12) ,12);
+$pps_value = round($pps_reward / (pow(2,32) * $dDifficulty) * pow(2, $config['pps_target']), 12);
 //$pps_value = number_format(round((1/(65536 * $dDifficulty) * $pps_reward), 12) ,12);
-
-/**
-if ($config['reward_type'] != 'block') {
-  $pps_value = number_format(round($config['reward'] / (pow(2,32) * $dDifficulty) * pow(2, $config['pps_target']), 12) ,12);
-} else {
-  // Try to find the last block value and use that for future payouts, revert to fixed reward if none found
-  if ($aLastBlock = $block->getLast()) {
-    $pps_value = number_format(round($aLastBlock['amount'] / (pow(2,32) * $dDifficulty) * pow(2, $config['pps_target']), 12) ,12);
-  } else {
-    $pps_value = number_format(round($config['reward'] / (pow(2,32) * $dDifficulty) * pow(2, $config['pps_target']), 12) ,12);
-  }
-}
-**/
-/**
-if ($config['reward_type'] != 'block') {
-  $pps_value = number_format(round((1/(65536 * $dDifficulty) * $config['reward']), 12) ,12);
-} else {
-  // Try to find the last block value and use that for future payouts, revert to fixed reward if none found
-  if ($aLastBlock = $block->getLast()) {
-    $pps_value = number_format(round((1/(65536 * $dDifficulty) * $aLastBlock['amount']), 12) ,12);
-  } else {
-    $pps_value = number_format(round((1/(65536 * $dDifficulty) * $config['reward']), 12) ,12);
-  }
-}
-**/
 
 // Find our last share accounted and last inserted share for PPS calculations
 $iPreviousShareId = $setting->getValue('pps_last_share_id');
@@ -107,7 +83,7 @@ $log->logInfo("ID\tUsername\tInvalid\tValid\t\tPPS Value\t\tPayout\t\tDonation\t
 
 foreach ($aAccountShares as $aData) {
   // Take our valid shares and multiply by per share value
-  $aData['payout'] = number_format(round($aData['valid'] * $pps_value, 8), 8);
+  $aData['payout'] = round($aData['valid'] * $pps_value, 8);
 
   // Defaults
   $aData['fee' ] = 0;
@@ -115,18 +91,18 @@ foreach ($aAccountShares as $aData) {
 
   // Calculate block fees
   if ($config['fees'] > 0 && $aData['no_fees'] == 0)
-    $aData['fee'] = number_format(round($config['fees'] / 100 * $aData['payout'], 8), 8); 
+    $aData['fee'] = round($config['fees'] / 100 * $aData['payout'], 8);
   // Calculate donation amount
-  $aData['donation'] = number_format(round($user->getDonatePercent($user->getUserId($aData['username'])) / 100 * ( $aData['payout'] - $aData['fee']), 8), 8); 
+  $aData['donation'] = round($user->getDonatePercent($user->getUserId($aData['username'])) / 100 * ( $aData['payout'] - $aData['fee']), 8);
 
   $log->logInfo($aData['id'] . "\t" .
     $aData['username'] . "\t" .
     $aData['invalid'] . "\t" .
     $aData['valid'] . "\t*\t" .
-    $pps_value . "\t=\t" .
-    $aData['payout'] . "\t" .
-    $aData['donation'] . "\t" .
-    $aData['fee']);
+    number_format($pps_value, 12) . "\t=\t" .
+    number_format($aData['payout'], 8) . "\t" .
+    number_format($aData['donation'], 8) . "\t" .
+    number_format($aData['fee'], 8));
 
   // Add new credit transaction
   if (!$transaction->addTransaction($aData['id'], $aData['payout'], 'Credit_PPS'))

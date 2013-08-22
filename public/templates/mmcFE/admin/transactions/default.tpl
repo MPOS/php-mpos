@@ -1,4 +1,26 @@
+{include file="global/block_header.tpl" BLOCK_HEADER="Transaction Summary"}
+<table>
+  <thead>
+    <tr>
+    {foreach $SUMMARY as $type=>$total}
+      <th>{$type}</th>
+    {/foreach}
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+    {foreach $SUMMARY as $type=>$total}
+      <td class="right">{$total}</td>
+    {/foreach}
+    </tr>
+  </tbody>
+</table>
+{include file="global/block_footer.tpl"}
+
 {include file="global/block_header.tpl" ALIGN="left" BLOCK_STYLE="width: 23%" BLOCK_HEADER="Transaction Filter"}
+<form action="{$smarty.server.PHP_SELF}">
+  <input type="hidden" name="page" value="{$smarty.request.page}" />
+  <input type="hidden" name="action" value="{$smarty.request.action}" />
   <table cellpadding="1" cellspacing="1" width="100%">
     <tbody>
       <tr>
@@ -21,15 +43,12 @@
 {/if}
         </td>
       </tr>
-      <form action="{$smarty.server.PHP_SELF}">
-        <input type="hidden" name="page" value="{$smarty.request.page}" />
-        <input type="hidden" name="action" value="{$smarty.request.action}" />
         <tr>
-          <td class="left">TX Type</td>
+          <td class="left">Type</td>
           <td class="right">{html_options name="filter[type]" options=$TRANSACTIONTYPES selected=$smarty.request.filter.type|default:""}</td>
         </tr>
         <tr>
-          <td class="left">TX Status</td>
+          <td class="left">Status</td>
           <td class="right">{html_options name="filter[status]" options=$TXSTATUS selected=$smarty.request.filter.status|default:""}</td>
         </tr>
         <tr>
@@ -43,9 +62,9 @@
         <tr>
           <td class="center" colspan="2"><input type="submit" class="submit small" value="Filter"></td>
         </tr>
-      </form>
     </tbody>
   </table>
+</form>
 {include file="global/block_footer.tpl"}
 
 {include file="global/block_header.tpl" ALIGN="right" BLOCK_STYLE="width: 75%" BLOCK_HEADER="Transaction History"}
@@ -85,7 +104,7 @@
             <font size="1px">({$TRANSACTIONS[transaction].confirmations|default:"n/a"})</font>
           </td>
           <td>{$TRANSACTIONS[transaction].coin_address}</td>
-          <td>{if $TRANSACTIONS[transaction].height == 0}n/a{else}{if $GLOBAL.blockexplorer}<a href="{$GLOBAL.blockexplorer}{$TRANSACTIONS[transaction].blockhash}">{$TRANSACTIONS[transaction].height}</a>{else}{$TRANSACTIONS[transaction].height}{/if}{/if}</td>
+          <td>{if $TRANSACTIONS[transaction].height == 0}n/a{else}{if $GLOBAL.website.blockexplorer.url}<a href="{$GLOBAL.website.blockexplorer.url}{$TRANSACTIONS[transaction].blockhash}">{$TRANSACTIONS[transaction].height}</a>{else}{$TRANSACTIONS[transaction].height}{/if}{/if}</td>
           <td><font color="{if $TRANSACTIONS[transaction].type == 'Credit' or $TRANSACTIONS[transaction].type == 'Credit_PPS' or $TRANSACTIONS[transaction].type == 'Bonus'}green{else}red{/if}">{$TRANSACTIONS[transaction].amount|number_format:"8"}</td>
         </tr>
 {/section}

@@ -32,7 +32,7 @@ target and network difficulty and assuming a zero variance scenario.
 
 {include file="global/block_header.tpl" BLOCK_HEADER="Last $BLOCKLIMIT Blocks Found" BLOCK_STYLE="clear:none;"}
 <center>
-  <table width="100%" style="font-size:13px;">
+  <table width="100%" class="sortable" style="font-size:13px;">
     <thead>
       <tr style="background-color:#B6DAFF;">
         <th class="center">Block</th>
@@ -47,10 +47,15 @@ target and network difficulty and assuming a zero variance scenario.
       </tr>
     </thead>
     <tbody>
-{assign var=rank value=1}
+{assign var=count value=0}
+{assign var=totalexpectedshares value=0}
+{assign var=totalshares value=0}
+{assign var=totalpercentage value=0}
 {section block $BLOCKSFOUND}
+      {assign var="totalshares" value=$totalshares+$BLOCKSFOUND[block].shares}
+      {assign var="count" value=$count+1}
       <tr class="{cycle values="odd,even"}">
-        <td class="center"><a href="{$GLOBAL.blockexplorer}{$BLOCKSFOUND[block].height}" target="_blank">{$BLOCKSFOUND[block].height}</a></td>
+        <td class="center"><a href="{$GLOBAL.blockexplorer}{$BLOCKSFOUND[block].blockhash}" target="_blank">{$BLOCKSFOUND[block].height}</a></td>
         <td class="center">
         {if $BLOCKSFOUND[block].confirmations >= $GLOBAL.confirmations}
           <font color="green">Confirmed</font>
@@ -62,16 +67,24 @@ target and network difficulty and assuming a zero variance scenario.
         <td class="right">{$BLOCKSFOUND[block].difficulty|number_format:"2"}</td>
         <td class="right">{$BLOCKSFOUND[block].amount|number_format:"2"}</td>
         <td class="right">
-                    {math assign="estshares" equation="(65536 * blockdiff)" blockdiff=$BLOCKSFOUND[block].difficulty}
-          {$estshares|number_format}
+        {math assign="estshares" equation="(65536 * blockdiff)" blockdiff=$BLOCKSFOUND[block].difficulty}
+      	{assign var="totalexpectedshares" value=$totalexpectedshares+$estshares}
+        {$estshares|number_format}
         </td>
         <td class="right">{$BLOCKSFOUND[block].shares|number_format}</td>
         <td class="right">
           {math assign="percentage" equation="shares / estshares * 100" shares=$BLOCKSFOUND[block].shares estshares=$estshares}
+	  {assign var="totalpercentage" value=$totalpercentage+$percentage}
           <font color="{if ($percentage <= 100)}green{else}red{/if}">{$percentage|number_format:"2"}</font>
         </td>
       </tr>
 {/section}
+    <tr>
+      <td colspan="6" class="right"><b>Totals</b></td>
+      <td class="right">{$totalexpectedshares|number_format}</td>
+      <td class="right">{$totalshares|number_format}</td>
+      <td class="right"><font color="{if (($totalpercentage / $count) <= 100)}green{else}red{/if}">{($totalpercentage / $count)|number_format:"2"}</font>
+    </tr>
     </tbody>
   </table>
 </center>

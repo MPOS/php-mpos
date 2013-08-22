@@ -7,7 +7,7 @@ if (!defined('SECURITY')) die('Hacking attempt');
 if (!$smarty->isCached('master.tpl', $smarty_cache_key)) {
   $debug->append('No cached version available, fetching from backend', 3);
   // Grab the last blocks found
-  $iLimit = 20;
+  $setting->getValue('statistics_block_count') ? $iLimit = $setting->getValue('statistics_block_count') : $iLimit = 20;
   $aBlocksFoundData = $statistics->getBlocksFound($iLimit);
 
   // Propagate content our template
@@ -17,7 +17,7 @@ if (!$smarty->isCached('master.tpl', $smarty_cache_key)) {
   $debug->append('Using cached page', 3);
 }
 
-if ($config['website']['acl']['statistics']['blocks'] == 'public') {
+if ($setting->getValue('acl_block_statistics')) {
   $smarty->assign("CONTENT", "default.tpl");
 } else if ($user->isAuthenticated()) {
   $smarty->assign("CONTENT", "default.tpl");

@@ -12,16 +12,15 @@ $dDifficulty = 1;
 $aRoundShares = 1;
 
 // Only run these if the user is logged in
-if (@$_SESSION['AUTHENTICATED']) {
-  $aRoundShares = $statistics->getRoundShares();
-  if ($bitcoin->can_connect() === true) {
-    $dDifficulty = $bitcoin->query('getdifficulty');
-    if (is_array($dDifficulty) && array_key_exists('proof-of-work', $dDifficulty))
-      $dDifficulty = $dDifficulty['proof-of-work'];
-  }
+$aRoundShares = $statistics->getRoundShares();
+if ($bitcoin->can_connect() === true) {
+  $dDifficulty = $bitcoin->query('getdifficulty');
+  if (is_array($dDifficulty) && array_key_exists('proof-of-work', $dDifficulty))
+    $dDifficulty = $dDifficulty['proof-of-work'];
 }
+
 // Always fetch this since we need for ministats header
-//$bitcoin->can_connect() === true ? $dNetworkHashrate = $bitcoin->query('getnetworkhashps') : $dNetworkHashrate = 0;
+$bitcoin->can_connect() === true ? $dNetworkHashrate = $bitcoin->query('getnetworkhashps') : $dNetworkHashrate = 0;
 
 // Fetch some data
 if (!$iCurrentActiveWorkers = $worker->getCountAllActiveWorkers()) $iCurrentActiveWorkers = 0;
@@ -126,6 +125,8 @@ if (@$_SESSION['USERDATA']['id']) {
 
 if ($setting->getValue('maintenance'))
   $_SESSION['POPUP'][] = array('CONTENT' => 'This pool is currently in maintenance mode.', 'TYPE' => 'warning');
+if ($motd = $setting->getValue('system_motd'))
+  $_SESSION['POPUP'][] = array('CONTENT' => $motd, 'TYPE' => 'info');
 
 // Make it available in Smarty
 $smarty->assign('PATH', 'site_assets/' . THEME);

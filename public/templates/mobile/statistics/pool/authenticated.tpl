@@ -24,10 +24,10 @@
       <td class="leftheader">Current Active Workers</td>
       <td>{$GLOBAL.workers}</td>
     </tr>
-    {if $GLOBAL.blockexplorer}
+    {if $GLOBAL.website.blockexplorer.url}
     <tr>
       <td class="leftheader">Next Network Block</td>
-      <td>{$CURRENTBLOCK + 1} &nbsp;&nbsp;<font size="1"> (Current: <a href="{$GLOBAL.blockexplorer}{$CURRENTBLOCKHASH}" target="_new">{$CURRENTBLOCK})</a></font></td>
+      <td>{$CURRENTBLOCK + 1} &nbsp;&nbsp;<font size="1"> (Current: <a href="{$GLOBAL.website.blockexplorer.url}{$CURRENTBLOCKHASH}" target="_new">{$CURRENTBLOCK})</a></font></td>
     </tr>
     {else}
     <tr>
@@ -37,12 +37,12 @@
     {/if}
     <tr>
       <td class="leftheader">Last Block Found</td>
-      <td>{if $GLOBAL.blockexplorer}<a href="{$GLOBAL.blockexplorer}{$LASTBLOCKHASH}" target="_new">{$LASTBLOCK|default:"0"}</a>{else}{$LASTBLOCK|default:"0"}{/if}</td>
+      <td>{if $GLOBAL.website.blockexplorer.url}<a href="{$GLOBAL.website.blockexplorer.url}{$LASTBLOCKHASH}" target="_new">{$LASTBLOCK|default:"0"}</a>{else}{$LASTBLOCK|default:"0"}{/if}</td>
     </tr>
-    {if $GLOBAL.chaininfo}
+    {if ! $GLOBAL.website.chaininfo.disabled}
     <tr>
       <td class="leftheader">Current Difficulty</td>
-      <td><a href="{$GLOBAL.chaininfo}" target="_new"><font size="2">{$DIFFICULTY}</font></a></td>
+      <td><a href="{$GLOBAL.website.chaininfo.url}" target="_new"><font size="2">{$DIFFICULTY}</font></a></td>
     </tr>
     {/if}
     <tr>
