@@ -48,7 +48,8 @@
     </tr>
     <tr>
       <td class="leftheader">Est. Shares this Round</td>
-      <td>{(65536 * $DIFFICULTY)|number_format:"0"} <font size="1">(done: {(100 / (65536 * $DIFFICULTY) * $GLOBAL.roundshares.valid)|number_format:"2"} %)</td>
+      {assign var=estshares value=(65536 * $DIFFICULTY) / pow(2, ($GLOBAL.config.targetdiff - 16))}
+      <td>{$estshares|number_format:"0"} <font size="1">(done: {(100 / $estshares * $GLOBAL.roundshares.valid)|number_format:"2"} %)</td>
     </tr>
     <tr>
       <td class="leftheader">Time Since Last Block</td>

@@ -12,7 +12,7 @@
     <tr>
       <th scope="row">Expected</th>
 {section block $BLOCKSFOUND step=-1}
-      <td>{round(65536 * $BLOCKSFOUND[block].difficulty)}</td>
+      <td>{$BLOCKSFOUND[block].estshares}</td>
 {/section}
     </tr>
     <tr>
@@ -64,16 +64,15 @@ target and network difficulty and assuming a zero variance scenario.
         {else}{$GLOBAL.confirmations - $BLOCKSFOUND[block].confirmations} left{/if}</td>
         <td>{if $BLOCKSFOUND[block].is_anonymous|default:"0" == 1}anonymous{else}{$BLOCKSFOUND[block].finder|default:"unknown"|escape}{/if}</td>
         <td class="center">{$BLOCKSFOUND[block].time|date_format:"%d/%m %H:%M:%S"}</td>
-        <td class="right">{$BLOCKSFOUND[block].difficulty|number_format:"2"}</td>
+        <td class="right">{$BLOCKSFOUND[block].difficulty|number_format:"8"}</td>
         <td class="right">{$BLOCKSFOUND[block].amount|number_format:"2"}</td>
         <td class="right">
-        {math assign="estshares" equation="(65536 * blockdiff)" blockdiff=$BLOCKSFOUND[block].difficulty}
-      	{assign var="totalexpectedshares" value=$totalexpectedshares+$estshares}
-        {$estshares|number_format}
+        {$BLOCKSFOUND[block].estshares|number_format}
+      	{assign var="totalexpectedshares" value=$totalexpectedshares+$BLOCKSFOUND[block].estshares}
         </td>
         <td class="right">{$BLOCKSFOUND[block].shares|number_format}</td>
         <td class="right">
-          {math assign="percentage" equation="shares / estshares * 100" shares=$BLOCKSFOUND[block].shares estshares=$estshares}
+          {math assign="percentage" equation="shares / estshares * 100" shares=$BLOCKSFOUND[block].shares estshares=$BLOCKSFOUND[block].estshares}
 	  {assign var="totalpercentage" value=$totalpercentage+$percentage}
           <font color="{if ($percentage <= 100)}green{else}red{/if}">{$percentage|number_format:"2"}</font>
         </td>
