@@ -32,7 +32,10 @@ class Base {
     $this->token = $token;
   }
   public function setBlock($block) {
-    $this->block= $block;
+    $this->block = $block;
+  }
+  public function setSetting($setting) {
+    $this->setting = $setting;
   }
   public function setBitcoin($bitcoin) {
     $this->bitcoin = $bitcoin;
