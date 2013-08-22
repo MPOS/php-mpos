@@ -123,7 +123,8 @@ class Block {
    **/
   public function getAllUnconfirmed() {
     $stmt = $this->mysqli->prepare("SELECT * FROM $this->table WHERE confirmations < ? AND confirmations > -1");
-    if ($this->checkStmt($stmt) && $stmt->bind_param("i", $this->config['confirmations']) && $stmt->execute() && $result = $stmt->get_result())
+    empty($this->config['network_confirmations']) ? $confirmations = 120 : $confirmations = $this->config['network_confirmations'];
+    if ($this->checkStmt($stmt) && $stmt->bind_param("i", $confirmations) && $stmt->execute() && $result = $stmt->get_result())
       return $result->fetch_all(MYSQLI_ASSOC);
     return false;
   }
