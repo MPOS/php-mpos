@@ -69,7 +69,8 @@ class Share {
    * @return data int Total amount of counted shares
    **/
   public function getRoundShares($previous_upstream=0, $current_upstream) {
-    $stmt = $this->mysqli->prepare("SELECT
+    $stmt = $this->mysqli->prepare("
+      SELECT
       IFNULL(ROUND(SUM(IF(difficulty=0, pow(2, (" . $this->config['difficulty'] . " - 16)), difficulty)), 8), 0) as total
       FROM $this->table
       WHERE our_result = 'Y'
@@ -112,6 +113,24 @@ class Share {
   }
 
   /**
+   * Fetch the lowest needed share ID from shares
+   **/
+  function getMinimumShareId($iCount, $current_upstream) {
+    $stmt = $this->mysqli->prepare("
+      SELECT MIN(b.id) AS id FROM
+         (SELECT id, @total := @total + IF(difficulty=0, pow(2, (" . $this->config['difficulty'] . " - 16)), difficulty) AS total
+         FROM $this->table, (SELECT @total := 0) AS a
+         WHERE our_result = 'Y'
+         AND id <= ? AND @total < ?
+         ORDER BY id DESC ) AS b
+      WHERE total <= ?
+      ");
+    if ($this->checkStmt($stmt) && $stmt->bind_param('iii', $current_upstream, $iCount, $iCount) && $stmt->execute() && $result = $stmt->get_result())
+      return $result->fetch_object()->id;
+    return false;
+  }
+
+  /**
    * Fetch the highest available share ID from archive
    **/
   function getMaxArchiveShareId() {
@@ -124,13 +143,31 @@ class Share {
   }
 
   /**
+   * Fetch the lowest needed share ID from archive
+   **/
+  function getMinArchiveShareId($iCount) {
+    $stmt = $this->mysqli->prepare("
+      SELECT MIN(b.share_id) AS share_id FROM
+         (SELECT share_id, @total := @total + IF(difficulty=0, pow(2, (" . $this->config['difficulty'] . " - 16)), difficulty) AS total
+         FROM $this->tableArchive, (SELECT @total := 0) AS a
+         WHERE our_result = 'Y'
+         AND @total < ?
+         ORDER BY share_id DESC ) AS b
+      WHERE total <= ?
+      ");
+    if ($this->checkStmt($stmt) && $stmt->bind_param('ii', $iCount, $iCount) && $stmt->execute() && $result = $stmt->get_result())
+      return $result->fetch_object()->share_id;
+    return false;
+  }
+
+  /**
    * We need a certain amount of valid archived shares
    * param left int Left/lowest share ID
    * param right int Right/highest share ID
    * return array data Returns an array with usernames as keys for easy access
    **/
   function getArchiveShares($iCount) {
-    $iMinId = $this->getMaxArchiveShareId() - $iCount;
+    $iMinId = $this->getMinArchiveShareId($iCount);
     $iMaxId = $this->getMaxArchiveShareId();
     $stmt = $this->mysqli->prepare("
       SELECT

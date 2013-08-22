@@ -65,7 +65,8 @@ foreach ($aAllBlocks as $iIndex => $aBlock) {
 
     if ($iRoundShares >= $pplns_target) {
       $log->logDebug("Matching or exceeding PPLNS target of $pplns_target with $iRoundShares");
-      $aAccountShares = $share->getSharesForAccounts($aBlock['share_id'] - $pplns_target, $aBlock['share_id']);
+      $iMinimumShareId = $share->getMinimumShareId($pplns_target, $aBlock['share_id']);
+      $aAccountShares = $share->getSharesForAccounts($iMinimumShareId, $aBlock['share_id']);
       if (empty($aAccountShares)) {
         $log->logFatal("No shares found for this block, aborted! Block Height : " . $aBlock['height']);
         $monitoring->setStatus($cron_name . "_active", "yesno", 0); 
@@ -73,8 +74,11 @@ foreach ($aAllBlocks as $iIndex => $aBlock) {
         $monitoring->setStatus($cron_name . "_status", "okerror", 1); 
         exit(1);
       }
-      $log->logInfo('Adjusting round target to PPLNS target ' . $pplns_target);
-      $iRoundShares = $pplns_target;
+      foreach($aAccountShares as $key => $aData) {
+        $iNewRoundShares += $aData['valid'];
+      }
+      $iRoundShares = $iNewRoundShares;
+      $log->logInfo('Adjusting round to PPLNS target of ' . $pplns_target . ' actual shares used ' . $iNewRoundShares);
     } else {
       $log->logDebug("Not able to match PPLNS target of $pplns_target with $iRoundShares");
       // We need to fill up with archived shares
@@ -182,6 +186,7 @@ foreach ($aAllBlocks as $iIndex => $aBlock) {
       $monitoring->setStatus($cron_name . "_status", "okerror", 1); 
       exit(1);
     }
+
   }
 }
 
