@@ -8,7 +8,7 @@ if (!defined('SECURITY')) die('Hacking attempt');
  **/
 class Api extends Base {
   function isActive($error=true) {
-    if (!$this->config['website']['api']['disabled']) {
+    if (!$this->setting->getValue('disable_api')) {
       return true;
     } else {
       if ($error == true) {
@@ -21,3 +21,4 @@ class Api extends Base {
 
 $api = new Api();
 $api->setConfig($config);
+$api->setSetting($setting);

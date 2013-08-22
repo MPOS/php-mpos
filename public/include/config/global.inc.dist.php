@@ -98,48 +98,9 @@ $config['ap_threshold']['max'] = 250;
 
 
 /**
- * Website specific configuration settings
- *
- * Explanation:
- *   title          :  Website title used in master template
- *   name           :  The pool name, displayed in the header and mails
- *   slogan         :  A special slogan, also displayed in the header below name
- *   email          :  `From` addresses used in notifications
- *   theme          :  Theme used for desktop browsers
- *   mobile         :  Enable/Disable mobile theme support
- *   mobile_theme   :  Theme used for mobile browsers
- *   api disabled   :  Disable the sites API functions
- *   blocks count   :  # of blocks to display on block statistics page
- *
- * Defaults:
- *   title          =  `The Pool - Mining Evolved`
- *   name           =  `The Pool`
- *   slogan         =  `Resistance is futile`
- *   email          =  `test@example.com`
- *   theme          =  `mmcFE`
- *   mobile         =  true
- *   mobile_theme   =  `mobile`
- *   api disbabled  =  false
- *   blocks count   =  20
- **/
-$config['website']['title'] = 'The Pool - Mining Evolved';
-$config['website']['name'] = 'The Pool';
-$config['website']['slogan'] = 'Resistance is futile';
-$config['website']['email'] = 'test@example.com';
-$config['website']['theme'] = 'mmcFE';
-$config['website']['mobile'] = true;
-$config['website']['mobile_theme'] = 'mobile';
-$config['website']['api']['disabled'] = false;
-$config['website']['blocks']['count'] = 20;
-
-/**
  * Account specific settings
  *
  * Explanation
- *   You can change some defaults on how accounts are created or registered
- *   By default, all newly created accounts will require an email verificaiton.
- *   Only after acitivating an account the user will be able to login
- *
  *   Invitations will allow your users to invite new members to join the pool.
  *   After sending a mail to the invited user, they can register using the token
  *   created. Invitations can be enabled and disabled through the admin panel.
@@ -149,40 +110,12 @@ $config['website']['blocks']['count'] = 20;
  *   variable.
  *
  *  Options:
- *    confirm_email  :  Send confirmation mail to user after registration
  *    count          :  Maximum invitations a user is able to send
  *
  *  Defaults:
- *    confirm_email  :  true
  *    count          :  5
  **/
-$config['accounts']['confirm_email']['enabled'] = true;
 $config['accounts']['invitations']['count'] = 5;
-
-/**
- * Some basic access restrictions on some pages
- *
- * Explanation:
- *   Some pools would like to run a few pages for public access instead
- *   of enforcing a login. You can change visibility of some pages here.
- *
- * Options:
- *   'public'   :  Allow guest access and authenticated user to view page
- *   'private'  :  Only allow logged in users access to view page
- *
- * Defaults:
- *   'private' for every page
- **/
-$config['website']['acl']['statistics']['pool'] = 'private';
-$config['website']['acl']['statistics']['blocks'] = 'private';
-
-/**
- * Re-Captcha settings
- * Please read http://www.google.com/recaptcha for details
- **/
-$config['recaptcha']['enabled'] = false;
-$config['recaptcha']['public_key'] = 'YOUR_PUBLIC_RECAPTCHA_KEY';
-$config['recaptcha']['private_key'] = 'YOUR_PRIVATE_RECAPTCHA_KEY';
 
 // Currency system used in this pool, default: `LTC`
 $config['currency'] = 'LTC';
@@ -253,15 +186,6 @@ $config['payout_system'] = 'prop';
  **/
 $config['archive']['maxrounds'] = 10; 
 $config['archive']['maxage'] = 60 * 24; 
-
-// URL prefix for block searches, used for block links, default: `http://explorer.litecoin.net/block/`
-// The Blockhash is appended on the templates to this URL
-// If this config is empty, the block link to the block information page will be removed
-$config['blockexplorer'] = 'http://explorer.litecoin.net/block/';
-
-// Link to blockchain information, used for difficulty link, default: `http://allchains.info`
-// If empty, the difficulty link to the chain information will be removed
-$config['chaininfo'] = 'http://allchains.info';
 
 // Pool fees applied to users in percent, default: 0 (disabled)
 $config['fees'] = 0;
