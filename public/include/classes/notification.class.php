@@ -164,9 +164,13 @@ class Notification extends Mail {
     if ($stmt && $stmt->bind_param('si', $strType, $account_id) && $stmt->execute() && $stmt->bind_result($id) && $stmt->fetch()) {
       if ($stmt->close() && $this->sendMail('notifications/' . $strType, $aMailData) && $this->addNotification($account_id, $strType, $aMailData)) {
         return true;
+      } else {
+        $this->setErrorMessage('SendMail call failed: ' . $this->mail->getError());
+        return false;
       }
     } else {
       $this->setErrorMessage('User disabled ' . $strType . ' notifications');
+      return false;
     }
     $this->setErrorMessage('Error sending mail notification');
     return false;
@@ -178,5 +182,5 @@ $notification->setDebug($debug);
 $notification->setMysql($mysqli);
 $notification->setSmarty($smarty);
 $notification->setConfig($config);
-
+$notification->setSetting($setting);
 ?>
