@@ -44,7 +44,11 @@
               </ul>
             {/if}
             <li><a href="{$smarty.server.PHP_SELF}?page=gettingstarted">Getting Started</a></li>
+            {if $smarty.session.AUTHENTICATED|default}
+            <li><a href="{$smarty.server.PHP_SELF}?page=contactform">Support</a></li>
+            {else}
             <li><a href="{$smarty.server.PHP_SELF}?page=support">Support</a></li>
+            {/if}
             <li><a href="{$smarty.server.PHP_SELF}?page=about&action=pool">About</a>
               <ul>
                 <li><a href="{$smarty.server.PHP_SELF}?page=about&action=pool">This Pool</a></li>
