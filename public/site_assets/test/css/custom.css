@@ -1,0 +1,21 @@
+/* Custom checkboxes */
+input[type=checkbox] {
+  display:none;
+}
+
+input[type=checkbox] + label
+{
+  background: url('../images/icn_alert_error.png');
+  height: 16px;
+  width: 16px;
+  display:inline-block;
+  padding: 0 0 0 0px;
+}
+
+input[type=checkbox]:checked + label
+{
+  background: url('../images/icn_alert_success.png');
+  height: 16px;
+  width: 16px;
+  display:inline-block;
+  padding: 0 0 0 0px;
