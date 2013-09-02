@@ -293,51 +293,6 @@ margin: 2px 0;
 color: #444444;
 }
 
-/* Sidebar Icons */
-
-#sidebar li.icn_new_article a {
-background: url(../images/icn_new_article.png) no-repeat center left;
-}
-#sidebar li.icn_edit_article a {
-background: url(../images/icn_edit_article.png) no-repeat center left;
-}
-#sidebar li.icn_categories a {
-background: url(../images/icn_categories.png) no-repeat center left;
-}
-#sidebar li.icn_tags a {
-background: url(../images/icn_tags.png) no-repeat center left;
-}
-#sidebar li.icn_add_user a {
-background: url(../images/icn_add_user.png) no-repeat center left;
-}
-#sidebar li.icn_view_users a {
-background: url(../images/icn_view_users.png) no-repeat center left;
-}
-#sidebar li.icn_profile a {
-background: url(../images/icn_profile.png) no-repeat center left;
-}
-#sidebar li.icn_folder a {
-background: url(../images/icn_folder.png) no-repeat center left;
-}
-#sidebar li.icn_photo a {
-background: url(../images/icn_photo.png) no-repeat center left;
-}
-#sidebar li.icn_audio a {
-background: url(../images/icn_audio.png) no-repeat center left;
-}
-#sidebar li.icn_video a {
-background: url(../images/icn_video.png) no-repeat center left;
-}
-#sidebar li.icn_settings a {
-background: url(../images/icn_settings.png) no-repeat center left;
-}
-#sidebar li.icn_security a {
-background: url(../images/icn_security.png) no-repeat center left;
-}
-#sidebar li.icn_jump_back a {
-background: url(../images/icn_jump_back.png) no-repeat center left;
-}
-
 #sidebar p {
 color: #666666;
 padding-left: 6%;
