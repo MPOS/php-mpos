@@ -55,23 +55,6 @@ class Tools extends Base {
     return false;
   }
 
-  public function getPrice2() {
-    $aData = $this->getApi($this->config['price2']['url'], $this->config['price2']['target']);
-    $strCurrency = $this->config['currency2'];
-    // Check the API type for configured URL
-    if (!$strApiType = $this->getApiType($this->config['price2']['url']))
-      return false;
-    // Extract price depending on API type
-    switch ($strApiType) {
-    case 'btce':
-      return $aData['ticker']['last'];
-      break;
-    }
-    // Catchall, we have no data extractor for this API url
-    $this->setErrorMessage("Undefined API to getPrice() on URL " . $this->config['price2']['url']);
-    return false;
-  }
-
   /**
    * Extract price information from API data
    **/
