@@ -12,7 +12,6 @@
 </style>
 <form action="{$smarty.server.PHP_SELF}" method="post">
 <input type="hidden" name="page" value="{$smarty.request.page|escape}">
-<input type="hidden" name="action" value="{$smarty.request.action}">
 <input type="hidden" name="action" value="contactform">
 <ul>
 <label for="senderName">Your Name:</label>
