@@ -50,7 +50,6 @@
             {assign var=payout_system value=$GLOBAL.config.payout_system}
             {include file="global/sidebar_$payout_system.tpl"}
           {else}
-          {include file="global/sidebar_stats.tpl"}
           {include file="global/login.tpl"}
           {/if}
         </div>
