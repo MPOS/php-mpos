@@ -72,6 +72,7 @@ $setting->getValue('website_chaininfo_url') ? $aGlobal['website']['chaininfo']['
 // ACLs
 $aGlobal['acl']['pool']['statistics'] = $setting->getValue('acl_pool_statistics');
 $aGlobal['acl']['block']['statistics'] = $setting->getValue('acl_block_statistics');
+$aGlobal['acl']['round']['statistics'] = $setting->getValue('acl_round_statistics');
 
 // Special calculations for PPS Values based on reward_type setting and/or available blocks
 if ($config['reward_type'] != 'block') {
