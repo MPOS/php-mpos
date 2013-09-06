@@ -6,18 +6,18 @@ if (!defined('SECURITY')) die('Hacking attempt');
 if (!$smarty->isCached('master.tpl', $smarty_cache_key)) {
   $debug->append('No cached version available, fetching from backend', 3);
 
-if (@$_REQUEST['next'] && !empty($_REQUEST['tx_key'])) {
-  $_REQUEST['tx_key'] = $roundstats->getNextBlockDesc($_REQUEST['tx_key']);
-} else if (@$_REQUEST['prev'] && !empty($_REQUEST['tx_key'])) {
-  $_REQUEST['tx_key'] = $roundstats->getNextBlockAsc($_REQUEST['tx_key']);
+if (@$_REQUEST['next'] && !empty($_REQUEST['height'])) {
+  $_REQUEST['height'] = $roundstats->getNextBlockDesc($_REQUEST['height']);
+} else if (@$_REQUEST['prev'] && !empty($_REQUEST['height'])) {
+  $_REQUEST['height'] = $roundstats->getNextBlockAsc($_REQUEST['height']);
 }   
 
-if (empty($_REQUEST['tx_key'])) {
+if (empty($_REQUEST['height'])) {
   $iBlock = $block->getLast();
   $iKey = $iBlock['height'];
-  $_REQUEST['tx_key'] = $iKey;
+  $_REQUEST['height'] = $iKey;
 } else {
-  $iKey = $_REQUEST['tx_key'];
+  $iKey = $_REQUEST['height'];
 }
 
   $aDetailsForBlockHeight = $roundstats->getDetailsForBlockHeight($iKey, $user->isAdmin($_SESSION['USERDATA']['id']));
@@ -37,5 +37,9 @@ if ($user->isAdmin($_SESSION['USERDATA']['id'])) {
   $debug->append('Using cached page', 3);
 }
 
-$smarty->assign("CONTENT", "default.tpl");
+if ($setting->getValue('acl_round_statistics')) {
+  $smarty->assign("CONTENT", "default.tpl");
+} else if ($user->isAuthenticated()) {
+  $smarty->assign("CONTENT", "default.tpl");
+}
 ?>

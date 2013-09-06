@@ -42,6 +42,9 @@
             {if $GLOBAL.acl.block.statistics}
                 <li><a href="{$smarty.server.PHP_SELF}?page=statistics&action=blocks">Block Stats</a></li>
             {/if}
+            {if $GLOBAL.acl.round.statistics}
+                <li><a href="{$smarty.server.PHP_SELF}?page=statistics&action=round">Round Stats</a></li>
+            {/if}
               </ul>
             {/if}
             <li><a href="{$smarty.server.PHP_SELF}?page=gettingstarted">Getting Started</a></li>

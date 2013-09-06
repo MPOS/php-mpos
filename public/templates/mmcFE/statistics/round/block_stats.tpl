@@ -9,12 +9,16 @@
     </thead>
     <tbody>
       <tr class="odd">
-        <td>Block Id</td>
+        <td>ID</td>
         <td>{$BLOCKDETAILS.id|default:"0"}</td>
       </tr>
       <tr class="even">
-        <td>Heigth</td>
-        <td>{$BLOCKDETAILS.height|default:"0"}</td>
+        <td>Height</td>
+	{if ! $GLOBAL.website.blockexplorer.disabled}
+	<td><a href="{$GLOBAL.website.blockexplorer.url}{$BLOCKDETAILS.blockhash}" target="_new">{$BLOCKDETAILS.height}</a></td>
+	{else}
+	<td>{$BLOCKDETAILS.height}</td>
+	{/if}
       </tr>
       <tr class="odd">
         <td>Amount</td>

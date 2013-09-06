@@ -55,11 +55,7 @@ target and network difficulty and assuming a zero variance scenario.
       {assign var="totalshares" value=$totalshares+$BLOCKSFOUND[block].shares}
       {assign var="count" value=$count+1}
       <tr class="{cycle values="odd,even"}">
-        {if ! $GLOBAL.website.blockexplorer.disabled}
-        <td class="center"><a href="{$GLOBAL.website.blockexplorer.url}{$BLOCKSFOUND[block].blockhash}" target="_blank">{$BLOCKSFOUND[block].height}</a></td>
-        {else}
-        <td class="center">{$BLOCKSFOUND[block].height}</td>
-        {/if}
+        <td class="center"><a href="{$smarty.server.PHP_SELF}?page=statistics&action=round&height={$BLOCKSFOUND[block].height}">{$BLOCKSFOUND[block].height}</a></td>
         <td class="center">
         {if $BLOCKSFOUND[block].confirmations >= $GLOBAL.confirmations}
           <font color="green">Confirmed</font>
