@@ -31,11 +31,11 @@ class RoundStats {
    **/
   public function getNextBlock($iHeight=0) {
     $stmt = $this->mysqli->prepare("
-       SELECT height 
-       FROM $this->tableBlocks
-       WHERE height > ?
-       ORDER BY height ASC 
-       LIMIT 1");
+      SELECT height 
+      FROM $this->tableBlocks
+      WHERE height > ?
+      ORDER BY height ASC 
+      LIMIT 1");
     if ($this->checkStmt($stmt) && $stmt->bind_param('i', $iHeight) && $stmt->execute() && $result = $stmt->get_result())
       return $result->fetch_object()->height;
     return false;
@@ -46,11 +46,11 @@ class RoundStats {
    **/
   public function getPreviousBlock($iHeight=0) {
     $stmt = $this->mysqli->prepare("
-       SELECT height 
-       FROM $this->tableBlocks
-       WHERE height < ?
-       ORDER BY height DESC 
-       LIMIT 1");
+      SELECT height 
+      FROM $this->tableBlocks
+      WHERE height < ?
+      ORDER BY height DESC 
+      LIMIT 1");
     if ($this->checkStmt($stmt) && $stmt->bind_param('i', $iHeight) && $stmt->execute() && $result = $stmt->get_result())
       return $result->fetch_object()->height;
     return false;
@@ -63,12 +63,12 @@ class RoundStats {
    **/
   public function getDetailsForBlockHeight($iHeight=0, $isAdmin=0) {
     $stmt = $this->mysqli->prepare("
-          SELECT 
-          b.id, height, amount, confirmations, difficulty, FROM_UNIXTIME(time) as time, shares,          
-          IF(a.is_anonymous, IF( ? , a.username, 'anonymous'), a.username) AS finder
-          FROM $this->tableBlocks as b
-          LEFT JOIN $this->tableUsers AS a ON b.account_id = a.id
-          WHERE b.height = ? LIMIT 1");
+      SELECT 
+      b.id, height, amount, confirmations, difficulty, FROM_UNIXTIME(time) as time, shares,          
+      IF(a.is_anonymous, IF( ? , a.username, 'anonymous'), a.username) AS finder
+        FROM $this->tableBlocks as b
+        LEFT JOIN $this->tableUsers AS a ON b.account_id = a.id
+        WHERE b.height = ? LIMIT 1");
     if ($this->checkStmt($stmt) && $stmt->bind_param('ii', $isAdmin, $iHeight) && $stmt->execute() && $result = $stmt->get_result())
       return $result->fetch_assoc();
     return false;
@@ -82,16 +82,16 @@ class RoundStats {
   public function getRoundStatsForAccounts($iHeight=0, $isAdmin=0) {
     $stmt = $this->mysqli->prepare("
       SELECT
-        IF(a.is_anonymous, IF( ? , a.username, 'anonymous'), a.username) AS username,
+      IF(a.is_anonymous, IF( ? , a.username, 'anonymous'), a.username) AS username,
         s.valid,
         s.invalid
-      FROM $this->tableStats AS s
-      LEFT JOIN $this->tableBlocks AS b ON s.block_id = b.id
-      LEFT JOIN $this->tableUsers AS a ON a.id = s.account_id
-      WHERE b.height = ?
-      GROUP BY username ASC
-      ORDER BY valid DESC
-      ");
+        FROM $this->tableStats AS s
+        LEFT JOIN $this->tableBlocks AS b ON s.block_id = b.id
+        LEFT JOIN $this->tableUsers AS a ON a.id = s.account_id
+        WHERE b.height = ?
+        GROUP BY username ASC
+        ORDER BY valid DESC
+        ");
     if ($this->checkStmt($stmt) && $stmt->bind_param('ii', $isAdmin, $iHeight) && $stmt->execute() && $result = $stmt->get_result())
       return $result->fetch_all(MYSQLI_ASSOC);
     return false;
@@ -106,10 +106,10 @@ class RoundStats {
     $this->debug->append("STA " . __METHOD__, 4);
     $stmt = $this->mysqli->prepare("
       SELECT
-        t.id AS id,
-        a.username AS username,
-        t.type AS type,
-        t.amount AS amount
+      t.id AS id,
+      a.username AS username,
+      t.type AS type,
+      t.amount AS amount
       FROM $this->tableTrans AS t
       LEFT JOIN $this->tableBlocks AS b ON t.block_id = b.id
       LEFT JOIN $this->tableUsers AS a ON t.account_id = a.id
@@ -131,10 +131,10 @@ class RoundStats {
     $this->debug->append("STA " . __METHOD__, 4);
     $stmt = $this->mysqli->prepare("
       SELECT
-        t.id AS id,
-        a.username AS username,
-        t.type AS type,
-        t.amount AS amount
+      t.id AS id,
+      a.username AS username,
+      t.type AS type,
+      t.amount AS amount
       FROM $this->tableTrans AS t
       LEFT JOIN $this->tableBlocks AS b ON t.block_id = b.id
       LEFT JOIN $this->tableUsers AS a ON t.account_id = a.id
