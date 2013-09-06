@@ -33,5 +33,13 @@ if ($price = $tools->getPrice()) {
   $log->logFatal("failed to fetch API data: " . $tools->getError());
 }
 
+if ($price2 = $tools->getPrice2()) {
+  $log->logInfo("Price update: found $price2 as price2");
+  if (!$setting->setValue('price2', $price2))
+    $log->logError("unable to update value in settings table");
+} else {
+  $log->logFatal("failed to fetch API data: " . $tools->getError());
+}
+
 require_once('cron_end.inc.php');
 ?>
