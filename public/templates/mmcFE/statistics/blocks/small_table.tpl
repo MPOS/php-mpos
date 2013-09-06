@@ -13,11 +13,7 @@
 {assign var=rank value=1}
 {section block $BLOCKSFOUND}
       <tr class="{cycle values="odd,even"}">
-        {if ! $GLOBAL.website.blockexplorer.disabled}
-        <td class="center"><a href="{$GLOBAL.website.blockexplorer.url}{$BLOCKSFOUND[block].blockhash}" target="_new">{$BLOCKSFOUND[block].height}</a></td>
-        {else}
-        <td class="center">{$BLOCKSFOUND[block].height}</td>
-        {/if}
+        <td><a href="{$smarty.server.PHP_SELF}?page=statistics&action=round&height={$BLOCKSFOUND[block].height}">{$BLOCKSFOUND[block].height}</a></td>
         <td>{if $BLOCKSFOUND[block].is_anonymous|default:"0" == 1}anonymous{else}{$BLOCKSFOUND[block].finder|default:"unknown"|escape}{/if}</td>
         <td class="center">{$BLOCKSFOUND[block].time|date_format:"%d/%m %H:%M:%S"}</td>
         <td class="right">{$BLOCKSFOUND[block].shares|number_format}</td>

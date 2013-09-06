@@ -11,6 +11,9 @@ define('CLASS_DIR', INCLUDE_DIR . '/classes');
 // Our pages directory which takes care of
 define('PAGES_DIR', INCLUDE_DIR . '/pages');
 
+// Our theme folder holding all themes
+define('THEME_DIR', BASEPATH . 'templates');
+
 // Set debugging level for our debug class
 define('DEBUG', 0);
 
