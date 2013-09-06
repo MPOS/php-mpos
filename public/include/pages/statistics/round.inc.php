@@ -7,19 +7,19 @@ if (!$smarty->isCached('master.tpl', $smarty_cache_key)) {
   $debug->append('No cached version available, fetching from backend', 3);
 
 if (@$_REQUEST['next'] && !empty($_REQUEST['height'])) {
-  $_REQUEST['height'] = $roundstats->getNextBlockDesc($_REQUEST['height']);
+  $iKey = $roundstats->getNextBlock($_REQUEST['height']);
 } else if (@$_REQUEST['prev'] && !empty($_REQUEST['height'])) {
-  $_REQUEST['height'] = $roundstats->getNextBlockAsc($_REQUEST['height']);
-}   
+  $iKey = $roundstats->getPreviousBlock($_REQUEST['height']);
+} else {  
 
 if (empty($_REQUEST['height'])) {
   $iBlock = $block->getLast();
   $iKey = $iBlock['height'];
-  $_REQUEST['height'] = $iKey;
 } else {
   $iKey = $_REQUEST['height'];
 }
-
+}
+echo $iKey;
   $aDetailsForBlockHeight = $roundstats->getDetailsForBlockHeight($iKey, $user->isAdmin($_SESSION['USERDATA']['id']));
   $aRoundShareStats = $roundstats->getRoundStatsForAccounts($iKey, $user->isAdmin($_SESSION['USERDATA']['id']));
 

@@ -29,12 +29,12 @@ class RoundStats {
   /**
    * Get next block for round stats
    **/
-  public function getNextBlockDesc($iHeight=0) {
+  public function getNextBlock($iHeight=0) {
     $stmt = $this->mysqli->prepare("
        SELECT height 
        FROM $this->tableBlocks
-       WHERE height < ?
-       ORDER BY height DESC 
+       WHERE height > ?
+       ORDER BY height ASC 
        LIMIT 1");
     if ($this->checkStmt($stmt) && $stmt->bind_param('i', $iHeight) && $stmt->execute() && $result = $stmt->get_result())
       return $result->fetch_object()->height;
@@ -44,12 +44,12 @@ class RoundStats {
   /**
    * Get prev block for round stats
    **/
-  public function getNextBlockAsc($iHeight=0) {
+  public function getPreviousBlock($iHeight=0) {
     $stmt = $this->mysqli->prepare("
        SELECT height 
        FROM $this->tableBlocks
-       WHERE height > ?
-       ORDER BY height ASC 
+       WHERE height < ?
+       ORDER BY height DESC 
        LIMIT 1");
     if ($this->checkStmt($stmt) && $stmt->bind_param('i', $iHeight) && $stmt->execute() && $result = $stmt->get_result())
       return $result->fetch_object()->height;

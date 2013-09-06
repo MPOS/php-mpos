@@ -47,18 +47,18 @@
     </tbody>
   </table></td>
   <td class="right">
-  <form action="{$smarty.server.PHP_SELF}" method="POST" id='tx_key'>
+  <form action="{$smarty.server.PHP_SELF}" method="POST" id='height'>
   <input type="hidden" name="page" value="{$smarty.request.page}">
   <input type="hidden" name="action" value="{$smarty.request.action}">
-  <input type="text" class="pin" name="tx_key" value="{$smarty.request.tx_key|default:"%"}">
+  <input type="text" class="pin" name="height" value="{$smarty.request.height|default:"%"}">
   <input type="submit" class="submit small" value="Search">
 </form></td></tr>
       <tr>
         <td class="left">
-          <a href="{$smarty.server.PHP_SELF}?page={$smarty.request.page}&action={$smarty.request.action}&tx_key={$BLOCKDETAILS.height}&prev=1"><img src="{$PATH}/images/prev.png" /></a>
+          <a href="{$smarty.server.PHP_SELF}?page={$smarty.request.page}&action={$smarty.request.action}&height={$BLOCKDETAILS.height}&prev=1"><img src="{$PATH}/images/prev.png" /></a>
         </td>
         <td class="right">
-          <a href="{$smarty.server.PHP_SELF}?page={$smarty.request.page}&action={$smarty.request.action}&tx_key={$BLOCKDETAILS.height}&next=1"><img src="{$PATH}/images/next.png" /></a>
+          <a href="{$smarty.server.PHP_SELF}?page={$smarty.request.page}&action={$smarty.request.action}&height={$BLOCKDETAILS.height}&next=1"><img src="{$PATH}/images/next.png" /></a>
         </td>
       </tr>
 </tbody></table>
