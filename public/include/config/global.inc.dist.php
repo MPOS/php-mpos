@@ -85,9 +85,6 @@ $config['wallet']['password'] = 'testnet';
 $config['price']['url'] = 'https://btc-e.com';
 $config['price']['target'] = '/api/2/ltc_usd/ticker';
 $config['price']['currency'] = 'USD';
-$config['price2']['url'] = 'https://btc-e.com';
-$config['price2']['target'] = '/api/2/ltc_btc/ticker';
-$config['price2']['currency2'] = 'BTC';
 
 /**
  * Automatic payout thresholds
