@@ -10,9 +10,10 @@ class Block {
   // This defines each block
   public $height, $blockhash, $confirmations, $time, $accounted;
 
-  public function __construct($debug, $mysqli, $salt) {
+  public function __construct($debug, $mysqli, $config) {
     $this->debug = $debug;
     $this->mysqli = $mysqli;
+    $this->config = $config;
     $this->debug->append("Instantiated Block class", 2);
   }
 
@@ -120,8 +121,8 @@ class Block {
    * @param confirmations int Required confirmations to consider block confirmed
    * @return data array Array with database fields as keys
    **/
-  public function getAllUnconfirmed($confirmations='120') {
-    $stmt = $this->mysqli->prepare("SELECT id, height, blockhash, confirmations FROM $this->table WHERE confirmations < ? AND confirmations > -1");
+  public function getAllUnconfirmed($confirmations=120) {
+    $stmt = $this->mysqli->prepare("SELECT * FROM $this->table WHERE confirmations < ? AND confirmations > -1");
     if ($this->checkStmt($stmt) && $stmt->bind_param("i", $confirmations) && $stmt->execute() && $result = $stmt->get_result())
       return $result->fetch_all(MYSQLI_ASSOC);
     return false;
@@ -267,4 +268,4 @@ class Block {
 }
 
 // Automatically load our class for furhter usage
-$block = new Block($debug, $mysqli, SALT);
+$block = new Block($debug, $mysqli, $config);

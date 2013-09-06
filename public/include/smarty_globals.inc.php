@@ -12,14 +12,13 @@ $dDifficulty = 1;
 $aRoundShares = 1;
 
 // Only run these if the user is logged in
-if (@$_SESSION['AUTHENTICATED']) {
-  $aRoundShares = $statistics->getRoundShares();
-  if ($bitcoin->can_connect() === true) {
-    $dDifficulty = $bitcoin->query('getdifficulty');
-    if (is_array($dDifficulty) && array_key_exists('proof-of-work', $dDifficulty))
-      $dDifficulty = $dDifficulty['proof-of-work'];
-  }
+$aRoundShares = $statistics->getRoundShares();
+if ($bitcoin->can_connect() === true) {
+  $dDifficulty = $bitcoin->query('getdifficulty');
+  if (is_array($dDifficulty) && array_key_exists('proof-of-work', $dDifficulty))
+    $dDifficulty = $dDifficulty['proof-of-work'];
 }
+
 // Always fetch this since we need for ministats header
 $bitcoin->can_connect() === true ? $dNetworkHashrate = $bitcoin->query('getnetworkhashps') : $dNetworkHashrate = 0;
 
@@ -33,8 +32,6 @@ if ($iCurrentPoolHashrate > $dNetworkHashrate) $dNetworkHashrate = $iCurrentPool
 
 // Global data for Smarty
 $aGlobal = array(
-  'slogan' => $config['website']['slogan'],
-  'websitename' => $config['website']['name'],
   'hashrate' => $iCurrentPoolHashrate,
   'nethashrate' => $dNetworkHashrate,
   'sharerate' => $iCurrentPoolShareRate,
@@ -44,11 +41,8 @@ $aGlobal = array(
   'confirmations' => $config['confirmations'],
   'reward' => $config['reward'],
   'price' => $setting->getValue('price'),
-  'blockexplorer' => $config['blockexplorer'],
-  'chaininfo' => $config['chaininfo'],
   'disable_mp' => $setting->getValue('disable_mp'),
   'config' => array(
-    'website' => $config['website'],
     'accounts' => $config['accounts'],
     'disable_invitations' => $setting->getValue('disable_invitations'),
     'disable_notifications' => $setting->getValue('disable_notifications'),
@@ -64,9 +58,24 @@ $aGlobal = array(
   )
 );
 
+// Website configurations
+$aGlobal['website']['name'] = $setting->getValue('website_name');
+$aGlobal['website']['title'] = $setting->getValue('website_title');
+$aGlobal['website']['slogan'] = $setting->getValue('website_slogan');
+$aGlobal['website']['email'] = $setting->getValue('website_email');
+$aGlobal['website']['api']['disabled'] = $setting->getValue('disable_api');
+$aGlobal['website']['blockexplorer']['disabled'] = $setting->getValue('website_blockexplorer_disabled');
+$aGlobal['website']['chaininfo']['disabled'] = $setting->getValue('website_chaininfo_disabled');
+$setting->getValue('website_blockexplorer_url') ? $aGlobal['website']['blockexplorer']['url'] = $setting->getValue('website_blockexplorer_url') : $aGlobal['website']['blockexplorer']['url'] = 'http://explorer.litecoin.net/block/';
+$setting->getValue('website_chaininfo_url') ? $aGlobal['website']['chaininfo']['url'] = $setting->getValue('website_chaininfo_url') : $aGlobal['website']['chaininfo']['url'] = 'http://allchains.info';
+
+// ACLs
+$aGlobal['acl']['pool']['statistics'] = $setting->getValue('acl_pool_statistics');
+$aGlobal['acl']['block']['statistics'] = $setting->getValue('acl_block_statistics');
+
 // Special calculations for PPS Values based on reward_type setting and/or available blocks
 if ($config['reward_type'] != 'block') {
-  $aGlobal['ppsvalue'] = number_format(round(50 / (pow(2,32) * $dDifficulty) * pow(2, $config['difficulty']), 12) ,12);
+  $aGlobal['ppsvalue'] = number_format(round($config['reward'] / (pow(2,32) * $dDifficulty) * pow(2, $config['difficulty']), 12) ,12);
 } else {
   // Try to find the last block value and use that for future payouts, revert to fixed reward if none found
   if ($aLastBlock = $block->getLast()) {

@@ -29,6 +29,10 @@
                       <td class="right"><i>{$GLOBAL.roundshares.valid|number_format}</i></td>
                     </tr>
                     <tr>
+                      <td><b>Your Valid</b></td>
+                      <td class="right"><i>{$GLOBAL.userdata.shares.valid|number_format}</i></td>
+                    </tr>
+                    <tr>
                       <td><b>Pool Invalid</b></td>
                       <td class="right"><i>{$GLOBAL.roundshares.invalid|number_format}</i>{if $GLOBAL.roundshares.valid > 0}<font size='1px'> ({($GLOBAL.roundshares.invalid / ($GLOBAL.roundshares.valid + $GLOBAL.roundshares.invalid) * 100)|number_format:"2"}%)</font>{/if}</td>
                     </tr>

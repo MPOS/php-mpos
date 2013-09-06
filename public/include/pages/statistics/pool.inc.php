@@ -52,7 +52,7 @@ if (!$smarty->isCached('master.tpl', $smarty_cache_key)) {
   $smarty->assign("CONTRIBSHARES", $aContributorsShares);
   $smarty->assign("CONTRIBHASHES", $aContributorsHashes);
   $smarty->assign("CURRENTBLOCK", $iBlock);
-  $smarty->assign("CURRENTBLOCKHASH", $sBlockHash);
+  $smarty->assign("CURRENTBLOCKHASH", @$sBlockHash);
   if (count($aBlockData) > 0) {
     $smarty->assign("LASTBLOCK", $aBlockData['height']);
     $smarty->assign("LASTBLOCKHASH", $aBlockData['blockhash']);
@@ -66,9 +66,9 @@ if (!$smarty->isCached('master.tpl', $smarty_cache_key)) {
 }
 
 // Public / private page detection
-if ($config['website']['acl']['statistics']['pool'] == 'public') {
+if ($setting->getValue('acl_pool_statistics')) {
   $smarty->assign("CONTENT", "authenticated.tpl");
-} else if ($user->isAuthenticated() && $config['website']['acl']['statistics']['pool'] == 'private') {
+} else if ($user->isAuthenticated() && ! $setting->getValue('acl_pool_statistics')) {
   $smarty->assign("CONTENT", "authenticated.tpl");
 } else {
   $smarty->assign("CONTENT", "../default.tpl");

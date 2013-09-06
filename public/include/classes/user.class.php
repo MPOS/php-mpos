@@ -28,6 +28,9 @@ class User {
   public function setBitcoin($bitcoin) {
     $this->bitcoin = $bitcoin;
   }
+  public function setSetting($setting) {
+    $this->setting = $setting;
+  }
   private function setErrorMessage($msg) {
     $this->sError = $msg;
   }
@@ -525,7 +528,7 @@ class User {
       }
     }
     if ($this->mysqli->query("SELECT id FROM $this->table LIMIT 1")->num_rows > 0) {
-      $this->config['accounts']['confirm_email']['enabled'] ? $is_locked = 1 : $is_locked = 0;
+      ! $this->setting->getValue('accounts_confirm_email_disabled') ? $is_locked = 1 : $is_locked = 0;
       $is_admin = 0;
       $stmt = $this->mysqli->prepare("
         INSERT INTO $this->table (username, pass, email, pin, api_key, is_locked)
@@ -547,14 +550,14 @@ class User {
     $username_clean = strip_tags($username);
 
     if ($this->checkStmt($stmt) && $stmt->bind_param('sssssi', $username_clean, $password_hash, $email1, $pin_hash, $apikey_hash, $is_locked) && $stmt->execute()) {
-      if ($this->config['accounts']['confirm_email']['enabled'] && $is_admin != 1) {
+      if (! $this->setting->getValue('accounts_confirm_email_enabled') && $is_admin != 1) {
         if ($token = $this->token->createToken('confirm_email', $stmt->insert_id)) {
           $aData['username'] = $username_clean;
           $aData['token'] = $token;
           $aData['email'] = $email1;
           $aData['subject'] = 'E-Mail verification';
           if (!$this->mail->sendMail('register/confirm_email', $aData)) {
-            $this->setErrorMessage('Unable to request email confirmation');
+            $this->setErrorMessage('Unable to request email confirmation: ' . $this->mail->getError());
             return false;
           }
           return true;
@@ -666,3 +669,4 @@ $user = new User($debug, $mysqli, SALT, $config);
 $user->setMail($mail);
 $user->setToken($oToken);
 $user->setBitcoin($bitcoin);
+$user->setSetting($setting);
