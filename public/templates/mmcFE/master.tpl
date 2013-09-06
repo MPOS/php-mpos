@@ -14,7 +14,6 @@
     <script src="{$PATH}/js/jquery.tooltip.visualize.js"></script>
     <script src="{$PATH}/js/custom.js"></script>
     <script src="{$PATH}/js/tools.js"></script>
-    <script src="{$PATH}/js/calc.js"></script>
     <!--[if IE]><script type="text/javascript" src="{$PATH}/js/excanvas.js"></script><![endif]-->
     <style type="text/css" media="all">
       @import url("{$PATH}/css/style.css");
@@ -49,7 +48,6 @@
         <div class="sidebar">
           {if $smarty.session.AUTHENTICATED|default}
             {assign var=payout_system value=$GLOBAL.config.payout_system}
-            {include file="global/sidebar_stats.tpl"}
             {include file="global/sidebar_$payout_system.tpl"}
           {else}
           {include file="global/sidebar_stats.tpl"}
