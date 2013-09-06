@@ -30,6 +30,7 @@
                 <li><a href="{$smarty.server.PHP_SELF}?page=statistics&action=pool">Pool Stats</a></li>
                 <li><a href="{$smarty.server.PHP_SELF}?page=statistics&action=blocks">Block Stats</a></li>
                 <li><a href="{$smarty.server.PHP_SELF}?page=statistics&action=graphs">Hashrate Graphs</a></li>
+                <li><a href="{$smarty.server.PHP_SELF}?page=statistics&action=round">Round Stats</a></li>
               </ul>
             </li>
             {else}
