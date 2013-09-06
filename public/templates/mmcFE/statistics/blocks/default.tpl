@@ -12,7 +12,7 @@
     <tr>
       <th scope="row">Expected</th>
 {section block $BLOCKSFOUND step=-1}
-      <td>{round(pow(2,32 - $GLOBAL.config.targetdiff) * $BLOCKSFOUND[block].difficulty)}</td>
+      <td>{round(65536 * $BLOCKSFOUND[block].difficulty)}</td>
 {/section}
     </tr>
     <tr>
@@ -55,11 +55,7 @@ target and network difficulty and assuming a zero variance scenario.
       {assign var="totalshares" value=$totalshares+$BLOCKSFOUND[block].shares}
       {assign var="count" value=$count+1}
       <tr class="{cycle values="odd,even"}">
-        {if ! $GLOBAL.website.blockexplorer.disabled}
-        <td class="center"><a href="{$GLOBAL.website.blockexplorer.url}{$BLOCKSFOUND[block].blockhash}" target="_blank">{$BLOCKSFOUND[block].height}</a></td>
-        {else}
-        <td class="center">{$BLOCKSFOUND[block].height}</td>
-        {/if}
+        <td class="center"><a href="{$GLOBAL.blockexplorer}{$BLOCKSFOUND[block].blockhash}" target="_blank">{$BLOCKSFOUND[block].height}</a></td>
         <td class="center">
         {if $BLOCKSFOUND[block].confirmations >= $GLOBAL.confirmations}
           <font color="green">Confirmed</font>
@@ -71,9 +67,9 @@ target and network difficulty and assuming a zero variance scenario.
         <td class="right">{$BLOCKSFOUND[block].difficulty|number_format:"2"}</td>
         <td class="right">{$BLOCKSFOUND[block].amount|number_format:"2"}</td>
         <td class="right">
-          {math assign="estshares" equation="(pow(2,32 - targetdiff) * blockdiff)" targetdiff=$GLOBAL.config.targetdiff blockdiff=$BLOCKSFOUND[block].difficulty}
-      	  {assign var="totalexpectedshares" value=$totalexpectedshares+$estshares}
-          {$estshares|number_format}
+        {math assign="estshares" equation="(65536 * blockdiff)" blockdiff=$BLOCKSFOUND[block].difficulty}
+      	{assign var="totalexpectedshares" value=$totalexpectedshares+$estshares}
+        {$estshares|number_format}
         </td>
         <td class="right">{$BLOCKSFOUND[block].shares|number_format}</td>
         <td class="right">
