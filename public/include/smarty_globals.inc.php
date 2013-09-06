@@ -34,8 +34,6 @@ if ($iCurrentPoolHashrate > $dNetworkHashrate) $dNetworkHashrate = $iCurrentPool
 
 // Global data for Smarty
 $aGlobal = array(
-  'difficulty' => $dDifficulty,
-  'url' => $config['price']['url'],
   'hashrate' => $iCurrentPoolHashrate,
   'nethashrate' => $dNetworkHashrate,
   'sharerate' => $iCurrentPoolShareRate,
@@ -45,14 +43,12 @@ $aGlobal = array(
   'confirmations' => $config['confirmations'],
   'reward' => $config['reward'],
   'price' => $setting->getValue('price'),
-  'price2' => $setting->getValue('price2'),
   'disable_mp' => $setting->getValue('disable_mp'),
   'config' => array(
     'accounts' => $config['accounts'],
     'disable_invitations' => $setting->getValue('disable_invitations'),
     'disable_notifications' => $setting->getValue('disable_notifications'),
     'price' => array( 'currency' => $config['price']['currency'] ),
-    'price2' => array( 'currency2' => $config['price2']['currency2'] ),
     'targetdiff' => $config['difficulty'],
     'currency' => $config['currency'],
     'txfee' => $config['txfee'],
