@@ -77,6 +77,7 @@ $aSettings['website'][] = array(
 $aSettings['website'][] = array(
   'display' => 'Disable Blockexplorer', 'type' => 'select',
   'options' => array( 0 => 'No', 1 => 'Yes' ),
+  'default' => 0,
   'name' => 'website_blockexplorer_disabled', 'value' => $setting->getValue('website_blockexplorer_disabled'),
   'tooltip' => 'Enabled or disable the blockexplorer URL feature. Will remove any links using the blockexplorer URL.'
 );
@@ -90,6 +91,7 @@ $aSettings['website'][] = array(
 $aSettings['website'][] = array(
   'display' => 'Disable Chaininfo', 'type' => 'select',
   'options' => array( 0 => 'No', 1 => 'Yes' ),
+  'default' => 0,
   'name' => 'website_chaininfo_disabled', 'value' => $setting->getValue('website_chaininfo_disabled'),
   'tooltip' => 'Enabled or disable the chainfo URL feature. Will remove any links using the chaininfo URL.'
 );
@@ -108,11 +110,18 @@ $aSettings['acl'][] = array(
   'tooltip' => 'Make the pool statistics page private (users only) or public.'
 );
 $aSettings['acl'][] = array(
-  'display' => 'Blcok Statistics', 'type' => 'select',
+  'display' => 'Block Statistics', 'type' => 'select',
   'options' => array( 0 => 'Private', 1 => 'Public'),
   'default' => 1,
   'name' => 'acl_block_statistics', 'value' => $setting->getValue('acl_block_statistics'),
   'tooltip' => 'Make the block statistics page private (users only) or public.'
+);
+$aSettings['acl'][] = array(
+  'display' => 'Round Statistics', 'type' => 'select',
+  'options' => array( 0 => 'Private', 1 => 'Public'),
+  'default' => 1,
+  'name' => 'acl_round_statistics', 'value' => $setting->getValue('acl_round_statistics'),
+  'tooltip' => 'Make the round statistics page private (users only) or public.'
 );
 $aSettings['system'][] = array(
   'display' => 'Disable e-mail confirmations', 'type' => 'select',
