@@ -1,4 +1,4 @@
-{if !$GLOBAL.config.website.api.disabled}
+{if !$GLOBAL.website.api.disabled}
 {include file="global/block_header.tpl" BLOCK_HEADER="API String"}
 <p>This code will allow you to import the full API string into your mobile application.</p>
 <script type="text/javascript" src="{$PATH}/js/jquery.qrcode.min.js"></script>

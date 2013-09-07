@@ -77,6 +77,7 @@ $aSettings['website'][] = array(
 $aSettings['website'][] = array(
   'display' => 'Disable Blockexplorer', 'type' => 'select',
   'options' => array( 0 => 'No', 1 => 'Yes' ),
+  'default' => 0,
   'name' => 'website_blockexplorer_disabled', 'value' => $setting->getValue('website_blockexplorer_disabled'),
   'tooltip' => 'Enabled or disable the blockexplorer URL feature. Will remove any links using the blockexplorer URL.'
 );
@@ -90,6 +91,7 @@ $aSettings['website'][] = array(
 $aSettings['website'][] = array(
   'display' => 'Disable Chaininfo', 'type' => 'select',
   'options' => array( 0 => 'No', 1 => 'Yes' ),
+  'default' => 0,
   'name' => 'website_chaininfo_disabled', 'value' => $setting->getValue('website_chaininfo_disabled'),
   'tooltip' => 'Enabled or disable the chainfo URL feature. Will remove any links using the chaininfo URL.'
 );

@@ -79,12 +79,14 @@ target and network difficulty and assuming a zero variance scenario.
         </td>
       </tr>
 {/section}
+    {if $count > 0}
     <tr>
       <td colspan="6" class="right"><b>Totals</b></td>
       <td class="right">{$totalexpectedshares|number_format}</td>
       <td class="right">{$totalshares|number_format}</td>
       <td class="right"><font color="{if (($totalpercentage / $count) <= 100)}green{else}red{/if}">{($totalpercentage / $count)|number_format:"2"}</font>
     </tr>
+    {/if}
     </tbody>
   </table>
 </center>
