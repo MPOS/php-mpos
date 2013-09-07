@@ -19,7 +19,6 @@ if (!$smarty->isCached('master.tpl', $smarty_cache_key)) {
       $iKey = $_REQUEST['height'];
     }
   }
-  echo $iKey;
   $aDetailsForBlockHeight = $roundstats->getDetailsForBlockHeight($iKey, $user->isAdmin($_SESSION['USERDATA']['id']));
   $aRoundShareStats = $roundstats->getRoundStatsForAccounts($iKey, $user->isAdmin($_SESSION['USERDATA']['id']));
 
