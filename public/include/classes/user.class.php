@@ -651,14 +651,14 @@ class User {
    * @param none
    * @return bool
    **/
-  public function isAuthenticated() {
+  public function isAuthenticated($logout=true) {
     $this->debug->append("STA " . __METHOD__, 4);
     if (@$_SESSION['AUTHENTICATED'] == true &&
         !$this->isLocked($_SESSION['USERDATA']['id']) &&
         $this->getUserIp($_SESSION['USERDATA']['id']) == $_SERVER['REMOTE_ADDR']
       ) return true;
     // Catchall
-    $this->logoutUser();
+    if ($logout == true) $this->logoutUser();
     return false;
   }
 }
