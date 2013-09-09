@@ -1,84 +1,85 @@
-{include file="global/block_header.tpl" BLOCK_HEADER="Transaction Summary"}
-<table>
-  <thead>
-    <tr>
+<article class="module width_full">
+  <header><h3>Transaction Summary</h3></header>
+  <table class="tablesorter" cellspacing="0">
+    <thead>
+      <tr>
     {foreach $SUMMARY as $type=>$total}
-      <th>{$type}</th>
+        <th>{$type}</th>
     {/foreach}
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-    {foreach $SUMMARY as $type=>$total}
-      <td class="right">{$total}</td>
-    {/foreach}
-    </tr>
-  </tbody>
-</table>
-{include file="global/block_footer.tpl"}
-
-{include file="global/block_header.tpl" ALIGN="left" BLOCK_STYLE="width: 23%" BLOCK_HEADER="Transaction Filter"}
-<form action="{$smarty.server.PHP_SELF}">
-  <input type="hidden" name="page" value="{$smarty.request.page}" />
-  <input type="hidden" name="action" value="{$smarty.request.action}" />
-  <table cellpadding="1" cellspacing="1" width="100%">
+      </tr>
+    </thead>
     <tbody>
       <tr>
-        <td class="left">
+    {foreach $SUMMARY as $type=>$total}
+        <td class="right">{$total}</td>
+    {/foreach}
+      </tr>
+    </tbody>
+  </table>
+</article>
+
+<article class="module width_quarter">
+  <header><h3>Transaction Filter</h3></header>
+  <form action="{$smarty.server.PHP_SELF}">
+    <input type="hidden" name="page" value="{$smarty.request.page}" />
+    <input type="hidden" name="action" value="{$smarty.request.action}" />
+    <table cellspacing="0" class="tablesorter">
+    <tbody>
+      <tr>
 {if $COUNTTRANSACTIONS / $LIMIT > 1}
+        <td align="left">
   {if $smarty.request.start|default:"0" > 0}
-          <a href="{$smarty.server.PHP_SELF}?page={$smarty.request.page}&action={$smarty.request.action}&start={$smarty.request.start|default:"0" - $LIMIT}{if $FILTERS|default:""}{$FILTERS}{/if}"><img src="{$PATH}/images/prev.png" /></a>
+          <a href="{$smarty.server.PHP_SELF}?page={$smarty.request.page}&action={$smarty.request.action}&start={$smarty.request.start|default:"0" - $LIMIT}{if $FILTERS|default:""}{$FILTERS}{/if}"><i class="icon-left-open"></i></a>
   {else}
-          <img src="{$PATH}/images/prev.png" />
+          <i class="icon-left-open"></i>
   {/if}
-{/if}
         </td>
-        <td class="right">
-{if $COUNTTRANSACTIONS / $LIMIT > 1}
+        <td align="right">
   {if $COUNTTRANSACTIONS - $smarty.request.start|default:"0" - $LIMIT > 0}
-          <a href="{$smarty.server.PHP_SELF}?page={$smarty.request.page}&action={$smarty.request.action}&start={$smarty.request.start|default:"0" + $LIMIT}{if $FILTERS|default:""}{$FILTERS}{/if}"><img src="{$PATH}/images/next.png" /></a>
+          <a href="{$smarty.server.PHP_SELF}?page={$smarty.request.page}&action={$smarty.request.action}&start={$smarty.request.start|default:"0" + $LIMIT}{if $FILTERS|default:""}{$FILTERS}{/if}"><i class="icon-right-open"></i></a>
   {else}
-          <img src="{$PATH}/images/next.png" />
+          <i class="icon-right-open"></i>
   {/if}
 {/if}
         </td>
       </tr>
         <tr>
-          <td class="left">Type</td>
-          <td class="right">{html_options name="filter[type]" options=$TRANSACTIONTYPES selected=$smarty.request.filter.type|default:""}</td>
+          <td align="left">Type</td>
+          <td align="left">{html_options name="filter[type]" options=$TRANSACTIONTYPES selected=$smarty.request.filter.type|default:""}</td>
         </tr>
         <tr>
-          <td class="left">Status</td>
-          <td class="right">{html_options name="filter[status]" options=$TXSTATUS selected=$smarty.request.filter.status|default:""}</td>
-        </tr>
-        <tr>
-          <td class="center" colspan="2"><input type="submit" class="submit small" value="Filter"></td>
+          <td align="left">Status</td>
+          <td align="left">{html_options name="filter[status]" options=$TXSTATUS selected=$smarty.request.filter.status|default:""}</td>
         </tr>
     </tbody>
   </table>
+  <footer>
+    <div class="submit_link">
+      <input type="submit" value="Filter" class="alt_btn">
+    </div>
+  </footer>
 </form>
-{include file="global/block_footer.tpl"}
+</article>
 
-{include file="global/block_header.tpl" ALIGN="right" BLOCK_STYLE="width: 75%" BLOCK_HEADER="Transaction History"}
-<div class="block_content" style="clear:;">
-  <center>
-    <table cellpadding="1" cellspacing="1" width="100%">
-      <thead style="font-size:13px;">
+<article class="module width_3_quarter">
+  <header><h3>Transaction History</h3></header>
+    <table cellspacing="0" class="tablesorter" width="100%">
+      <thead>
         <tr>
-          <th class="header" style="cursor: pointer;">TX #</th>
-          <th class="header" style="cursor: pointer;">Account</th>
-          <th class="header" style="cursor: pointer;">Date</th>
-          <th class="header" style="cursor: pointer;">TX Type</th>
-          <th class="header" style="cursor: pointer;">Status</th>
-          <th class="header" style="cursor: pointer;">Payment Address</th>
-          <th class="header" style="cursor: pointer;">Block #</th>
-          <th class="header" style="cursor: pointer;">Amount</th>
+          <th align="center">TX #</th>
+          <th >Account</th>
+          <th >Date</th>
+          <th >TX Type</th>
+          <th >Status</th>
+          <th >Payment Address</th>
+          <th >Block #</th>
+          <th >Amount</th>
         </tr>
       </thead>
       <tbody style="font-size:12px;">
 {section transaction $TRANSACTIONS}
         <tr class="{cycle values="odd,even"}">
-          <td>{$TRANSACTIONS[transaction].id}</td>
+          <td align="center">{$TRANSACTIONS[transaction].id}</td>
           <td>{$TRANSACTIONS[transaction].username}</td>
           <td>{$TRANSACTIONS[transaction].timestamp}</td>
           <td>{$TRANSACTIONS[transaction].type}</td>
@@ -102,11 +103,5 @@
 {/section}
       </tbody>
     </table>
-    <p>
-      <font color="" size="1">
-        <b>Credit_AP</b> = Auto Threshold Payment, <b>Credit_MP</b> = Manual Payment, <b>Donation</b> = Donation, <b>Fee</b> = Pool Fees (if applicable)
-      </font>
-    </p>
-  </center>
-</div>
-{include file="global/block_footer.tpl"}
+    <footer><font size="1"><b>Credit_AP</b> = Auto Threshold Payment, <b>Credit_MP</b> = Manual Payment, <b>Donation</b> = Donation, <b>Fee</b> = Pool Fees (if applicable)</font></footer>
+</article>
