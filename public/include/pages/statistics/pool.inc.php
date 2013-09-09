@@ -67,9 +67,9 @@ if (!$smarty->isCached('master.tpl', $smarty_cache_key)) {
 
 // Public / private page detection
 if ($setting->getValue('acl_pool_statistics')) {
-  $smarty->assign("CONTENT", "authenticated.tpl");
+  $smarty->assign("CONTENT", "default.tpl");
 } else if ($user->isAuthenticated() && ! $setting->getValue('acl_pool_statistics')) {
-  $smarty->assign("CONTENT", "authenticated.tpl");
+  $smarty->assign("CONTENT", "default.tpl");
 } else {
   $smarty->assign("CONTENT", "../default.tpl");
 }

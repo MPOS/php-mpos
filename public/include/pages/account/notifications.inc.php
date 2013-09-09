@@ -5,7 +5,7 @@ if (!defined('SECURITY')) die('Hacking attempt');
 if ($user->isAuthenticated()) {
   if ($setting->getValue('disable_notifications') == 1) {
     $_SESSION['POPUP'][] = array('CONTENT' => 'Notification system disabled by admin.', 'TYPE' => 'info');
-    $smarty->assign('CONTENT', '../../global/empty.tpl');
+    $smarty->assign('CONTENT', 'empty');
   } else {
     if (@$_REQUEST['do'] == 'save') {
       if ($notification->updateSettings($_SESSION['USERDATA']['id'], $_REQUEST['data'])) {

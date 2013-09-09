@@ -19,13 +19,13 @@ if (!$smarty->isCached('master.tpl', $smarty_cache_key)) {
       $iKey = $_REQUEST['height'];
     }
   }
-  $aDetailsForBlockHeight = $roundstats->getDetailsForBlockHeight($iKey, $user->isAdmin($_SESSION['USERDATA']['id']));
-  $aRoundShareStats = $roundstats->getRoundStatsForAccounts($iKey, $user->isAdmin($_SESSION['USERDATA']['id']));
+  $aDetailsForBlockHeight = $roundstats->getDetailsForBlockHeight($iKey, $user->isAdmin(@$_SESSION['USERDATA']['id']));
+  $aRoundShareStats = $roundstats->getRoundStatsForAccounts($iKey, $user->isAdmin(@$_SESSION['USERDATA']['id']));
 
-  if ($user->isAdmin($_SESSION['USERDATA']['id'])) {
+  if ($user->isAdmin(@$_SESSION['USERDATA']['id'])) {
     $aUserRoundTransactions = $roundstats->getAllRoundTransactions($iKey);
   } else {
-    $aUserRoundTransactions = $roundstats->getUserRoundTransactions($iKey, $_SESSION['USERDATA']['id']);
+    $aUserRoundTransactions = $roundstats->getUserRoundTransactions($iKey, @$_SESSION['USERDATA']['id']);
   }
 
   // Propagate content our template
@@ -38,7 +38,9 @@ if (!$smarty->isCached('master.tpl', $smarty_cache_key)) {
 
 if ($setting->getValue('acl_round_statistics')) {
   $smarty->assign("CONTENT", "default.tpl");
-} else if ($user->isAuthenticated()) {
+} else if ($user->isAuthenticated(false)) {
   $smarty->assign("CONTENT", "default.tpl");
+} else {
+  $smarty->assign("CONTENT", "empty");
 }
 ?>
