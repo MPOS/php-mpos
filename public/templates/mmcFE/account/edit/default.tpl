@@ -6,7 +6,7 @@
       <table>
         <tbody><tr><td>Username: </td><td>{$GLOBAL.userdata.username|escape}</td></tr>
         <tr><td>User Id: </td><td>{$GLOBAL.userdata.id}</td></tr>
-        {if !$GLOBAL.config.website.api.disabled}<tr><td>API Key: </td><td><a href="{$smarty.server.PHP_SELF}?page=api&action=getuserstatus&api_key={$GLOBAL.userdata.api_key}&id={$GLOBAL.userdata.id}">{$GLOBAL.userdata.api_key}</a></td></tr>{/if}
+        {if !$GLOBAL.website.api.disabled}<tr><td>API Key: </td><td><a href="{$smarty.server.PHP_SELF}?page=api&action=getuserstatus&api_key={$GLOBAL.userdata.api_key}&id={$GLOBAL.userdata.id}">{$GLOBAL.userdata.api_key}</a></td></tr>{/if}
         <tr><td>E-Mail: </td><td><input type="text" name="email" value="{nocache}{$GLOBAL.userdata.email|escape}{/nocache}" size="20"></td></tr>
         <tr><td>Payment Address: </td><td><input type="text" name="paymentAddress" value="{nocache}{$smarty.request.paymentAddress|default:$GLOBAL.userdata.coin_address|escape}{nocache}" size="40"></td></tr>
         <tr><td>Donation %: </td><td><input type="text" name="donatePercent" value="{nocache}{$smarty.request.donatePercent|default:$GLOBAL.userdata.donate_percent|escape}{nocache}" size="4"><font size="1"> [donation amount in percent (example: 0.5)]</font></td></tr>

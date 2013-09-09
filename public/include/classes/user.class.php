@@ -201,7 +201,6 @@ class User {
       return $result->fetch_all(MYSQLI_ASSOC);
     }
     $this->debug->append("Unable to fetch users with AP set");
-    echo $this->mysqli->error;
     return false;
   }
 

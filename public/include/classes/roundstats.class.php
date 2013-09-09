@@ -31,10 +31,10 @@ class RoundStats {
    **/
   public function getNextBlock($iHeight=0) {
     $stmt = $this->mysqli->prepare("
-      SELECT height 
+      SELECT height
       FROM $this->tableBlocks
       WHERE height > ?
-      ORDER BY height ASC 
+      ORDER BY height ASC
       LIMIT 1");
     if ($this->checkStmt($stmt) && $stmt->bind_param('i', $iHeight) && $stmt->execute() && $result = $stmt->get_result())
       return $result->fetch_object()->height;
@@ -46,10 +46,10 @@ class RoundStats {
    **/
   public function getPreviousBlock($iHeight=0) {
     $stmt = $this->mysqli->prepare("
-      SELECT height 
+      SELECT height
       FROM $this->tableBlocks
       WHERE height < ?
-      ORDER BY height DESC 
+      ORDER BY height DESC
       LIMIT 1");
     if ($this->checkStmt($stmt) && $stmt->bind_param('i', $iHeight) && $stmt->execute() && $result = $stmt->get_result())
       return $result->fetch_object()->height;
@@ -64,7 +64,7 @@ class RoundStats {
   public function getDetailsForBlockHeight($iHeight=0, $isAdmin=0) {
     $stmt = $this->mysqli->prepare("
       SELECT 
-      b.id, height, amount, confirmations, difficulty, FROM_UNIXTIME(time) as time, shares,          
+      b.id, height, blockhash, amount, confirmations, difficulty, FROM_UNIXTIME(time) as time, shares,
       IF(a.is_anonymous, IF( ? , a.username, 'anonymous'), a.username) AS finder
         FROM $this->tableBlocks as b
         LEFT JOIN $this->tableUsers AS a ON b.account_id = a.id
