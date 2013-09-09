@@ -39,7 +39,7 @@
       </fieldset>
       <fieldset>
         <label>Anonymous Account</label>
-        Will hide your username on the website for others. Only admins can still get your user information.
+        Hide username on website others. Admins can still get your user information.
         <input type="hidden" name="is_anonymous" value="0" />
         <input type="checkbox" name="is_anonymous" value="1" id="is_anonymous" {if $GLOBAL.userdata.is_anonymous}checked{/if} />
         <label class="checkbox" for="is_anonymous"></label>
@@ -68,7 +68,9 @@
       <h3>Cash Out</h3>
     </header>
     <div class="module_content">
-      <font color="">Please note: a {$GLOBAL.config.txfee} {$GLOBAL.config.currency} transaction will apply when processing "On-Demand" manual payments</font>
+      <p style="padding-left:30px; padding-redight:30px; font-size:10px;">
+        Please note: a {$GLOBAL.config.txfee} {$GLOBAL.config.currency} transaction will apply when processing "On-Demand" manual payments
+      </p>
       <fieldset>
         <label>Account Balance</label>
         <input type="text" value="{nocache}{$GLOBAL.userdata.balance.confirmed|escape}{/nocache}" {$GLOBAL.config.currency} readonly/>
@@ -100,7 +102,9 @@
       <h3>Change Password</h3>
     </header>
     <div class="module_content">
+      <p style="padding-left:30px; padding-redight:30px; font-size:10px;">
       Note: You will be redirected to login on successful completion of a password change
+      </p>
       <fieldset>
         <label>Current Password</label>
         <input type="password" name="currentPassword" />
