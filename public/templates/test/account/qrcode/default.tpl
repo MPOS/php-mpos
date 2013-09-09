@@ -1,13 +1,10 @@
-{if !$GLOBAL.config.website.api.disabled}
-{include file="global/block_header.tpl" BLOCK_HEADER="API String"}
-<p>This code will allow you to import the full API string into your mobile application.</p>
+{if !$GLOBAL.website.api.disabled}
 <script type="text/javascript" src="{$PATH}/js/jquery.qrcode.min.js"></script>
 <script type="text/javascript">
   {literal}
-  //Wrap it within $(document).ready() to invoke the function after DOM loads.
   $(document).ready(function(){
     $('#qrcodeholder').qrcode({
-      text    : "{/literal}|http{if $smarty.server.HTTPS eq '1'}s{/if}://{$smarty.server.SERVER_NAME}{$smarty.server.PHP_SELF}?page=api|{$GLOBAL.userdata.api_key}|{$GLOBAL.userdata.id}|{literal}",
+      text    : "{/literal}|http{if $smarty.server.HTTPS|default:"0" eq '1'}s{/if}://{$smarty.server.SERVER_NAME}{$smarty.server.PHP_SELF}?page=api|{$GLOBAL.userdata.api_key}|{$GLOBAL.userdata.id}|{literal}",
       render    : "canvas",  // 'canvas' or 'table'. Default value is 'canvas'
       background : "#ffffff",
       foreground : "#000000",
@@ -17,6 +14,11 @@
   });
   {/literal}
 </script>
-<div id="qrcodeholder"></div>
-{include file="global/block_footer.tpl"}
+<article class="module width_quarter">
+  <header><h3>API String</h3></header>
+  <div class="module_content">
+    <p>This code will allow you to import the full API string into your mobile application.</p>
+    <div id="qrcodeholder"></div>
+  </div>
+</article>
 {/if}
