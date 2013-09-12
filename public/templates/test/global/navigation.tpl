@@ -36,7 +36,7 @@
       {if $smarty.session.AUTHENTICATED|default:"0" == 1}
       <li class="icon-off"><a href="{$smarty.server.PHP_SELF}?page=logout">Logout</a></li>
       {else}
-      <li class=""><a href="{$smarty.server.PHP_SELF}?page=login">Login</a></li>
+      <li class="icon-login"><a href="{$smarty.server.PHP_SELF}?page=login">Login</a></li>
       {/if}
     </ul>
 
