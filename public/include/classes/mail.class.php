@@ -14,7 +14,6 @@ class Mail extends Base {
     }
     return true;
   }
-  
   /**
   * Mail form contact site admin
   * @param senderName string senderName
