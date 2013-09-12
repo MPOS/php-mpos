@@ -86,6 +86,7 @@ $config['price']['url'] = 'https://btc-e.com';
 $config['price']['target'] = '/api/2/ltc_usd/ticker';
 $config['price']['currency'] = 'USD';
 
+
 /**
  * Automatic payout thresholds
  *
