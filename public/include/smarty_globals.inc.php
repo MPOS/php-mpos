@@ -9,12 +9,10 @@ $debug->append('Global smarty variables', 3);
 $debug->append('No cached page detected, loading smarty globals', 3);
 // Defaults to get rid of PHP Notice warnings
 $dDifficulty = 1;
+$aRoundShares = 1;
 
-// Fetch round shares
-if (!$aRoundShares = $statistics->getRoundShares()) {
-  $aRoundShares = array('valid' => 0, 'invalid' => 0);
-}
-
+// Only run these if the user is logged in
+$aRoundShares = $statistics->getRoundShares();
 if ($bitcoin->can_connect() === true) {
   $dDifficulty = $bitcoin->query('getdifficulty');
   if (is_array($dDifficulty) && array_key_exists('proof-of-work', $dDifficulty))
@@ -26,7 +24,7 @@ $bitcoin->can_connect() === true ? $dNetworkHashrate = $bitcoin->query('getnetwo
 
 // Fetch some data
 if (!$iCurrentActiveWorkers = $worker->getCountAllActiveWorkers()) $iCurrentActiveWorkers = 0;
-$iCurrentPoolHashrate =  $statistics->getCurrentHashrate();
+$iCurrentPoolHashrate = $statistics->getCurrentHashrate();
 $iCurrentPoolShareRate = $statistics->getCurrentShareRate();
 
 // Avoid confusion, ensure our nethash isn't higher than poolhash
@@ -74,24 +72,19 @@ $setting->getValue('website_chaininfo_url') ? $aGlobal['website']['chaininfo']['
 // ACLs
 $aGlobal['acl']['pool']['statistics'] = $setting->getValue('acl_pool_statistics');
 $aGlobal['acl']['block']['statistics'] = $setting->getValue('acl_block_statistics');
+$aGlobal['acl']['round']['statistics'] = $setting->getValue('acl_round_statistics');
 
-// We support some dynamic reward targets but fall back to our fixed value
 // Special calculations for PPS Values based on reward_type setting and/or available blocks
-if ($config['pps']['reward']['type'] == 'blockavg' && $block->getBlockCount() > 0) {
-  $pps_reward = round($block->getAvgBlockReward($config['pps']['blockavg']['blockcount']));
+if ($config['reward_type'] != 'block') {
+  $aGlobal['ppsvalue'] = number_format(round($config['reward'] / (pow(2,32) * $dDifficulty) * pow(2, $config['difficulty']), 12) ,12);
 } else {
-  if ($config['pps']['reward']['type'] == 'block') {
-     if ($aLastBlock = $block->getLast()) {
-        $pps_reward = $aLastBlock['amount'];
-     } else {
-     $pps_reward = $config['pps']['reward']['default'];
-     }
+  // Try to find the last block value and use that for future payouts, revert to fixed reward if none found
+  if ($aLastBlock = $block->getLast()) {
+    $aGlobal['ppsvalue'] = number_format(round($aLastBlock['amount'] / (pow(2,32) * $dDifficulty) * pow(2, $config['difficulty']), 12) ,12);
   } else {
-     $pps_reward = $config['pps']['reward']['default'];
+    $aGlobal['ppsvalue'] = number_format(round($config['reward'] / (pow(2,32) * $dDifficulty) * pow(2, $config['difficulty']), 12) ,12);
   }
 }
-
-$aGlobal['ppsvalue'] = number_format(round($pps_reward / (pow(2,32) * $dDifficulty) * pow(2, $config['pps_target']), 12) ,12);
 
 // We don't want these session infos cached
 if (@$_SESSION['USERDATA']['id']) {
