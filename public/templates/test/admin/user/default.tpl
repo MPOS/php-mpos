@@ -28,7 +28,7 @@
     <h3>User Information</h3>
     <div class="submit_link">{include file="global/pagination.tpl"}</div>
   </header>
-<table width="100%" class="tablesort">
+<table width="100%" class="tablesorterpager">
   <thead>
     <tr>
       <th align="center">ID</th>

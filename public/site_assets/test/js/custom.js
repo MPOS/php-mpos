@@ -1,5 +1,6 @@
 $(document).ready(function() {
-  $(".tablesorter").tablesorter().tablesorterPager({positionFixed: false, container: $("#pager"), cssNext: ".icon-forward", cssPrev: ".icon-backward", cssFirst: ".icon-fast-backward", cssLast: ".icon-fast-forward"});
+  $(".tablesorter").tablesorter();
+  $(".tablesorterpager").tablesorter().tablesorterPager({positionFixed: false, container: $("#pager"), cssNext: ".icon-forward", cssPrev: ".icon-backward", cssFirst: ".icon-fast-backward", cssLast: ".icon-fast-forward"});
   $(".tab_content").hide(); //Hide all content
   $("ul.tabs li:first").addClass("active").show(); //Activate first tab
   $(".tab_content:first").show(); //Show first tab content
