@@ -15,7 +15,11 @@
 .icon-ok:before { content: '\e80b'; } /* '' */
 .icon-off:before { content: '\e811'; } /* '' */
 .icon-indent-left:before { content: '\e80d'; } /* '' */
+.icon-forward:before { content: '\e81d'; } /* '' */
+.icon-fast-forward:before { content: '\e820'; } /* '' */
+.icon-fast-backward:before { content: '\e81f'; } /* '' */
 .icon-gauge:before { content: '\e803'; } /* '' */
+.icon-backward:before { content: '\e81e'; } /* '' */
 .icon-right-open:before { content: '\e800'; } /* '' */
 .icon-left-open:before { content: '\e801'; } /* '' */
 .icon-bell:before { content: '\e817'; } /* '' */

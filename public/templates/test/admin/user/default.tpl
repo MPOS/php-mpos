@@ -24,7 +24,10 @@
 
 
 <article class="module width_full">
-  <header><h3>User Information</h3></header>
+  <header>
+    <h3>User Information</h3>
+    <div class="submit_link">{include file="global/pagination.tpl"}</div>
+  </header>
 <table width="100%" class="tablesort">
   <thead>
     <tr>

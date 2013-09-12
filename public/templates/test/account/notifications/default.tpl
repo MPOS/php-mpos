@@ -3,7 +3,9 @@
   <input type="hidden" name="action" value="{$smarty.request.action}">
   <input type="hidden" name="do" value="save">
   <article class="module width_quarter">
-    <header><h3>Notification Settings</h3></header>
+    <header>
+      <h3>Notification Settings</h3>
+    </header>
     <div class="module_content">
     <table width="100%">
       <tr>
@@ -53,7 +55,10 @@
 </form>
 
 <article class="module width_3_quarter">
-  <header><h3>Notification History</h3></header>
+  <header>
+      <h3>Notification History</h3>
+      <div class="submit_link">{include file="global/pagination.tpl"}</div>
+  </header>
   <table width="100%" class="tablesorter" cellspacing="0">
     <thead style="font-size:13px;">
       <tr>
