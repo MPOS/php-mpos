@@ -59,7 +59,7 @@ class Tools extends Base {
    * Extract price information from API data
    **/
   public function getPrice() {
-    $aData = $this->getApi($this->config['price']['url'], $this->config['price']['target']);  
+    $aData = $this->getApi($this->config['price']['url'], $this->config['price']['target']);
     $strCurrency = $this->config['currency'];
     // Check the API type for configured URL
     if (!$strApiType = $this->getApiType($this->config['price']['url']))
