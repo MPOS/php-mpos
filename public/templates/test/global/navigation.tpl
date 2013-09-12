@@ -31,6 +31,22 @@
       <li class="icon-chart"><a href="{$smarty.server.PHP_SELF}?page=statistics&action=graphs">Graphs</a></li>
       <li class="icon-chart"><a href="{$smarty.server.PHP_SELF}?page=statistics&action=round">Round</a></li>
     </ul>
+    {else}
+    <h3>Statistics</h3>
+    <ul class="toggle">
+     {if $GLOBAL.acl.pool.statistics}
+     <li class="icon-align-left"><a href="{$smarty.server.PHP_SELF}?page=statistics&action=pool">Pool</a></li>
+     {else}
+     <li class="icon-align-left"><a href="{$smarty.server.PHP_SELF}?page=statistics">Statistics</a>
+     {/if}
+     {if $GLOBAL.acl.block.statistics}
+     <li class="icon-th-large"><a href="{$smarty.server.PHP_SELF}?page=statistics&action=blocks">Blocks</a></li>
+     {/if}
+     {if $GLOBAL.acl.round.statistics}
+     <li class="icon-chart"><a href="{$smarty.server.PHP_SELF}?page=statistics&action=round">Round</a></li>
+    {/if}
+    </ul>
+    {/if}
     <h3>Help</h3>
     <ul class="toggle">
       <li class="icon-desktop"><a href="{$smarty.server.PHP_SELF}?page=gettingstarted">GettingStarted</a></li>
