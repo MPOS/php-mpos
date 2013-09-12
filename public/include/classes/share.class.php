@@ -70,7 +70,7 @@ class Share {
    **/
   public function getRoundShares($previous_upstream=0, $current_upstream) {
     $stmt = $this->mysqli->prepare("SELECT
-      ROUND(IFNULL(SUM(IF(difficulty=0, POW(2, (" . $this->config['difficulty'] . " - 16)), difficulty)), 0) / POW(2, (" . $this->config['difficulty'] . " - 16)), 0) AS total
+      ROUND(IFNULL(SUM(IF(difficulty=0, POW(2, (" . $this->config['difficulty'] . " - 16)), difficulty)), 0) / POW(2, (" . $this->config['difficulty'] . " - 16)), 8) AS total
       FROM $this->table
       WHERE our_result = 'Y'
       AND id > ? AND id <= ?
