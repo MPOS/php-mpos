@@ -31,12 +31,25 @@
       <li class="icon-chart"><a href="{$smarty.server.PHP_SELF}?page=statistics&action=graphs">Graphs</a></li>
       <li class="icon-chart"><a href="{$smarty.server.PHP_SELF}?page=statistics&action=round">Round</a></li>
     </ul>
+    <h3>Help</h3>
+    <ul class="toggle">
+      <li class="icon-desktop"><a href="{$smarty.server.PHP_SELF}?page=gettingstarted">GettingStarted</a></li>
+      <li class="icon-doc"><a href="{$smarty.server.PHP_SELF}?page=about&action=pool">About</a></li>
+      <li class="icon-bell"><a href="{$smarty.server.PHP_SELF}?page=about&action=pplns">PPLNS</a></li>
+      <li class="icon-wrench"><a href="{$smarty.server.PHP_SELF}?page=about&action=vardiff">VARDIFF</a></li>
+      <li class="icon-money"><a href="{$smarty.server.PHP_SELF}?page=about&action=donors">Donors</a></li>
+    </ul>
     <h3>Other</h3>
     <ul class="toggle">
       {if $smarty.session.AUTHENTICATED|default:"0" == 1}
+      {if !$GLOBAL.config.disable_contactform}
+      <li class="icon-mail"><a href="{$smarty.server.PHP_SELF}?page=contactform">Support</a></li>
+      {/if}
       <li class="icon-off"><a href="{$smarty.server.PHP_SELF}?page=logout">Logout</a></li>
       {else}
       <li class="icon-login"><a href="{$smarty.server.PHP_SELF}?page=login">Login</a></li>
+      <li class="icon-pencil"><a href="{$smarty.server.PHP_SELF}?page=register">Sign Up</a></li>
+      <li class="icon-mail"><a href="{$smarty.server.PHP_SELF}?page=support">Support</a></li>
       {/if}
     </ul>
 
