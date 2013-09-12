@@ -58,17 +58,17 @@
       {assign var="count" value=$count+1}
       <tr class="{cycle values="odd,even"}">
 {if ! $GLOBAL.website.blockexplorer.disabled}
-        <td align="center"><a href="{$GLOBAL.website.blockexplorer.url}{$BLOCKSFOUND[block].blockhash}" target="_blank">{$BLOCKSFOUND[block].height}</a></td>
+        <td align="center"><a href="{$smarty.server.PHP_SELF}?page=statistics&action=round&height={$BLOCKSFOUND[block].height}">{$BLOCKSFOUND[block].height}</a></td>
 {else}
         <td align="center">{$BLOCKSFOUND[block].height}</td>
 {/if}
         <td align="center">
 {if $BLOCKSFOUND[block].confirmations >= $GLOBAL.confirmations}
-          <font color="green">Confirmed</font>
+          <span class="confirmed">Confirmed</span>
 {else if $BLOCKSFOUND[block].confirmations == -1}
-          <font color="red">Orphan</font>
+          <span class="orphan">Orphan</span>
 {else}
-          {$GLOBAL.confirmations - $BLOCKSFOUND[block].confirmations} left
+          <span class="unconfirmed">{$GLOBAL.confirmations - $BLOCKSFOUND[block].confirmations} left</span>
 {/if}
         </td>
         <td>{if $BLOCKSFOUND[block].is_anonymous|default:"0" == 1}anonymous{else}{$BLOCKSFOUND[block].finder|default:"unknown"|escape}{/if}</td>

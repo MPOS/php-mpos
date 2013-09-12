@@ -836,3 +836,35 @@ color: #32510F;
 padding: 10px 0;
 text-indent: 40px;
 font-size: 14px;}
+
+/* Custom stuff */
+span.confirmed {
+  display: inline-block;
+  width: 60px;
+  font-size: 10px;
+  background: #e6efc2;
+  color:#264409;
+  padding: 2px 4px;
+  border:1px solid #c6d880;
+  border-radius: 4px;
+}
+span.orphan {
+  display: inline-block;
+  width: 60px;
+  font-size: 10px;
+  background: #ff9473;
+  color:#264409;
+  padding: 2px 4px;
+  border:1px solid #ff6342;
+  border-radius: 4px;
+}
+span.unconfirmed {
+  display: inline-block;
+  width: 60px;
+  font-size: 10px;
+  background: #ffce9c;
+  color:#264409;
+  padding: 2px 4px;
+  border:1px solid #ffb573;
+  border-radius: 4px;
+}

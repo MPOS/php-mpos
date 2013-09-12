@@ -70,7 +70,7 @@
           <th >Account</th>
           <th >Date</th>
           <th >TX Type</th>
-          <th >Status</th>
+          <th align="center">Status</th>
           <th >Payment Address</th>
           <th >Block #</th>
           <th >Amount</th>
@@ -83,7 +83,7 @@
           <td>{$TRANSACTIONS[transaction].username}</td>
           <td>{$TRANSACTIONS[transaction].timestamp}</td>
           <td>{$TRANSACTIONS[transaction].type}</td>
-          <td>
+          <td align="center">
             {if $TRANSACTIONS[transaction].type == 'Credit_PPS' OR
                 $TRANSACTIONS[transaction].type == 'Fee_PPS' OR
                 $TRANSACTIONS[transaction].type == 'Donation_PPS' OR
@@ -91,10 +91,9 @@
                 $TRANSACTIONS[transaction].type == 'Debit_AP' OR
                 $TRANSACTIONS[transaction].type == 'TXFee' OR
                 $TRANSACTIONS[transaction].confirmations >= $GLOBAL.confirmations
-            }<font color="green">Confirmed</font>
-            {else if $TRANSACTIONS[transaction].confirmations == -1}<font color="red">Orphaned</font>
-            {else}<font color="orange">Unconfirmed</font>{/if}
-            <font size="1px">({$TRANSACTIONS[transaction].confirmations|default:"n/a"})</font>
+            }<span class="confirmed">Confirmed</span>
+            {else if $TRANSACTIONS[transaction].confirmations == -1}<span class="orphan">Orphaned</span>
+            {else}<span class="unconfirmed">Unconfirmed</span>{/if}
           </td>
           <td>{$TRANSACTIONS[transaction].coin_address}</td>
           <td>{if $TRANSACTIONS[transaction].height == 0}n/a{else}{if $GLOBAL.website.blockexplorer.url}<a href="{$GLOBAL.website.blockexplorer.url}{$TRANSACTIONS[transaction].blockhash}">{$TRANSACTIONS[transaction].height}</a>{else}{$TRANSACTIONS[transaction].height}{/if}{/if}</td>
@@ -103,5 +102,5 @@
 {/section}
       </tbody>
     </table>
-    <footer><font size="1"><b>Credit_AP</b> = Auto Threshold Payment, <b>Credit_MP</b> = Manual Payment, <b>Donation</b> = Donation, <b>Fee</b> = Pool Fees (if applicable)</font></footer>
+    <footer><p style="margin-left: 25px; font-size: 9px;"><b>Debit_AP</b> = Auto Threshold Payment, <b>Debit_MP</b> = Manual Payment, <b>Donation</b> = Donation, <b>Fee</b> = Pool Fees (if applicable)</p></footer>
 </article>
