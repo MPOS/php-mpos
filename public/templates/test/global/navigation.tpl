@@ -24,6 +24,7 @@
       <li class="icon-doc"><a href="{$smarty.server.PHP_SELF}?page=admin&action=news">News</a></li>
     </ul>
     {/if}
+    {if $smarty.session.AUTHENTICATED|default}
     <h3>Statistics</h3>
     <ul class="toggle">
       <li class="icon-align-left"><a href="{$smarty.server.PHP_SELF}?page=statistics&action=pool">Pool</a></li>
