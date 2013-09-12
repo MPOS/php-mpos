@@ -24,7 +24,7 @@ $bitcoin->can_connect() === true ? $dNetworkHashrate = $bitcoin->query('getnetwo
 
 // Fetch some data
 if (!$iCurrentActiveWorkers = $worker->getCountAllActiveWorkers()) $iCurrentActiveWorkers = 0;
-$iCurrentPoolHashrate =  $statistics->getCurrentHashrate();
+$iCurrentPoolHashrate = $statistics->getCurrentHashrate();
 $iCurrentPoolShareRate = $statistics->getCurrentShareRate();
 
 // Avoid confusion, ensure our nethash isn't higher than poolhash
