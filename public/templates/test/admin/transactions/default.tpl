@@ -20,6 +20,7 @@
 
 <article class="module width_quarter">
   <header><h3>Transaction Filter</h3></header>
+  <div class="module_content">
   <form action="{$smarty.server.PHP_SELF}">
     <input type="hidden" name="page" value="{$smarty.request.page}" />
     <input type="hidden" name="action" value="{$smarty.request.action}" />
@@ -42,25 +43,25 @@
   {/if}
 {/if}
         </td>
-      </tr>
-        <tr>
-          <td align="left">Type</td>
-          <td align="left">{html_options name="filter[type]" options=$TRANSACTIONTYPES selected=$smarty.request.filter.type|default:""}</td>
-        </tr>
-        <tr>
-          <td align="left">Status</td>
-          <td align="left">{html_options name="filter[status]" options=$TXSTATUS selected=$smarty.request.filter.status|default:""}</td>
-        </tr>
-        <tr>
-          <td align="left">Account</td>
-          <td align="left"><input size="20" type="text" name="filter[account]" value="{$smarty.request.filter.account|default:""}" /></td>
-        </tr>
-        <tr>
-          <td align="left">Address</td>
-          <td align="left"><input size="20" type="text" name="filter[address]" value="{$smarty.request.filter.address|default:""}" /></td>
-        </tr>
     </tbody>
   </table>
+    <fieldset>
+      <label>Type</label>
+      {html_options name="filter[type]" options=$TRANSACTIONTYPES selected=$smarty.request.filter.type|default:""}
+    </fieldset>
+    <fieldset>
+      <label>Status</label>
+      {html_options name="filter[status]" options=$TXSTATUS selected=$smarty.request.filter.status|default:""}
+    </fieldset>
+    <fieldset>
+      <label>Account</label>
+      <input size="20" type="text" name="filter[address]" value="{$smarty.request.filter.address|default:""}" />
+    </fieldset>
+    <fieldset>
+      <label>Address</label>
+      <input size="20" type="text" name="filter[address]" value="{$smarty.request.filter.address|default:""}" />
+    </fieldset>
+    </div>
   <footer>
     <div class="submit_link">
       <input type="submit" value="Filter" class="alt_btn">
