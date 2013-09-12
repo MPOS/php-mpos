@@ -30,8 +30,8 @@
   <div class="module_content">{$NEWS[news].content}</div>
   <footer>
     <div class="submit_link">
-      <i class="icon-edit"><a href='{$smarty.server.PHP_SELF}?page={$smarty.request.page}&action=news_edit&id={$NEWS[news].id}'></a></i>&nbsp;
-      <button><a href='{$smarty.server.PHP_SELF}?page={$smarty.request.page}&action={$smarty.request.action}&do=delete&id={$NEWS[news].id}'>Delete</a></button>
+      <a href='{$smarty.server.PHP_SELF}?page={$smarty.request.page}&action=news_edit&id={$NEWS[news].id}'><i class="icon-wrench"></i></a>&nbsp;
+      <a href='{$smarty.server.PHP_SELF}?page={$smarty.request.page}&action={$smarty.request.action}&do=delete&id={$NEWS[news].id}'><i class="icon-trash"></i></a>
     </div>
   </footer>
 </article>
