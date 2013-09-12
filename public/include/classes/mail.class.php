@@ -25,7 +25,7 @@ class Mail extends Base {
   * @param subject string header subject
   * @return bool
   **/
-   public function contactform($senderName, $senderEmail, $senderSubject, $senderMessage) {
+  public function contactform($senderName, $senderEmail, $senderSubject, $senderMessage) {
     $this->debug->append("STA " . __METHOD__, 4);
     if (preg_match('/[^a-z_\.\!\?\-0-9\\s ]/i', $senderName)) {
       $this->setErrorMessage('Username may only contain alphanumeric characters');
