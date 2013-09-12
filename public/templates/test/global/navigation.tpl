@@ -59,7 +59,7 @@
     <h3>Other</h3>
     <ul class="toggle">
       {if $smarty.session.AUTHENTICATED|default:"0" == 1}
-      {if !$GLOBAL.config.disable_contactform}
+      {if !$GLOBAL.config.disable_contactform|default:"0" == 1}
       <li class="icon-mail"><a href="{$smarty.server.PHP_SELF}?page=contactform">Support</a></li>
       {/if}
       <li class="icon-off"><a href="{$smarty.server.PHP_SELF}?page=logout">Logout</a></li>
