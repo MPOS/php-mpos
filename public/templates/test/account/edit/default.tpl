@@ -39,10 +39,12 @@
       </fieldset>
       <fieldset>
         <label>Anonymous Account</label>
-        Hide username on website others. Admins can still get your user information.
-        <input type="hidden" name="is_anonymous" value="0" />
-        <input type="checkbox" name="is_anonymous" value="1" id="is_anonymous" {if $GLOBAL.userdata.is_anonymous}checked{/if} />
-        <label class="checkbox" for="is_anonymous"></label>
+        Hide username on website from others. Admins can still get your user information.
+        <label class="checkbox" for="is_anonymous">
+        <input class="ios-switch" type="hidden" name="is_anonymous" value="0" />
+        <input class="ios-switch" type="checkbox" name="is_anonymous" value="1" id="is_anonymous" {if $GLOBAL.userdata.is_anonymous}checked{/if} />
+        <div class="switch"></div>
+        </label>
       </fieldset>
       <fieldset>
         <label>4 digit PIN</label>

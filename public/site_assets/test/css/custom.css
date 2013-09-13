@@ -1,6 +1,7 @@
 /* Custom checkboxes */
 input[type=checkbox] {
-  display:none;
+  position: absolute;
+  opacity: 0;
 }
 
 input[type=checkbox] + label
@@ -19,3 +20,79 @@ input[type=checkbox]:checked + label
   width: 16px;
   display:inline-block;
   padding: 0 0 0 0px;
+}
+
+/* Test toggle switch Begin */
+
+:root input[type="checkbox"] {
+	position: absolute;
+	opacity: 0;
+}
+
+:root input[type="checkbox"].ios-switch + div {
+	display: inline-block;
+	vertical-align: middle;
+	width: 3em;	height: 1em;
+	border: 1px solid rgba(0,0,0,.3);
+	border-radius: 999px;
+	margin: 0 .5em;
+	background: white;
+	background-image: linear-gradient(rgba(0,0,0,.1), transparent),
+	                  linear-gradient(90deg, hsl(210, 90%, 60%) 50%, transparent 50%);
+	background-size: 200% 100%;
+	background-position: 100% 0;
+	background-origin: border-box;
+	background-clip: border-box;
+	overflow: hidden;
+	transition-duration: .4s;
+	transition-property: padding, width, background-position, text-indent;
+	box-shadow: 0 .1em .1em rgba(0,0,0,.2) inset,
+	            0 .45em 0 .1em rgba(0,0,0,.05) inset;
+	font-size: 150%;
+}
+
+:root input[type="checkbox"].ios-switch:checked + div {
+	padding-left: 2em;	width: 1em;
+	background-position: 0 0;
+}
+
+:root input[type="checkbox"].ios-switch + div:before {
+	content: 'On';
+	float: left;
+	width: 1.65em; height: 1.65em;
+	margin: -.1em;
+	border: 1px solid rgba(0,0,0,.35);
+	border-radius: inherit;
+	background: white;
+	background-image: linear-gradient(rgba(0,0,0,.2), transparent);
+	box-shadow: 0 .1em .1em .1em hsla(0,0%,100%,.8) inset,
+	            0 0 .5em rgba(0,0,0,.3);
+	color: white;
+	text-shadow: 0 -1px 1px rgba(0,0,0,.3);
+	text-indent: -2.5em;
+}
+
+:root input[type="checkbox"].ios-switch:active + div:before {
+	background-color: #eee;
+}
+
+:root input[type="checkbox"].ios-switch:focus + div {
+	box-shadow: 0 .1em .1em rgba(0,0,0,.2) inset,
+	            0 .45em 0 .1em rgba(0,0,0,.05) inset,
+	            0 0 .4em 1px rgba(255,0,0,.5);
+}
+
+:root input[type="checkbox"].ios-switch + div:before,
+:root input[type="checkbox"].ios-switch + div:after {
+	font: bold 60%/1.9 sans-serif;
+	text-transform: uppercase;
+}
+
+:root input[type="checkbox"].ios-switch + div:after {
+	content: 'Off';
+	float: left;
+	text-indent: .5em;
+	color: rgba(0,0,0,.45);
+	text-shadow: none;
+
+}

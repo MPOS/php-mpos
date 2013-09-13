@@ -14,34 +14,42 @@
       </tr>
       <tr>
         <td align="left">IDLE Worker</td>
-        <td align="center">
+        <td>
+          <label for="data[idle_worker]">
           <input type="hidden" name="data[idle_worker]" value="0" />
-          <input type="checkbox" name="data[idle_worker]" id="data[idle_worker]" value="1"{nocache}{if $SETTINGS['idle_worker']}checked{/if}{/nocache} />
-          <label for="data[idle_worker]"></label>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" class="ios-switch" name="data[idle_worker]" id="data[idle_worker]" value="1"{nocache}{if $SETTINGS['idle_worker']}checked{/if}{/nocache} />
+          <div class="switch"></div>
+          </label>
         </td>
       </tr>
       <tr>
         <td align="left">New Blocks</td>
-        <td align="center">
+        <td>
+          <label for="data[new_block]">
           <input type="hidden" name="data[new_block]" value="0" />
-          <input type="checkbox" name="data[new_block]" id="data[new_block]" value="1"{nocache}{if $SETTINGS['new_block']}checked{/if}{/nocache} />
-          <label for="data[new_block]"></label>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" class="ios-switch" name="data[new_block]" id="data[new_block]" value="1"{nocache}{if $SETTINGS['new_block']}checked{/if}{/nocache} />
+          <div class="switch"></div>
+          </label>
         </td>
       </tr>
       <tr>
         <td align="left">Auto Payout</td>
-        <td align="center">
+        <td>
+          <label for="data[auto_payout]">
           <input type="hidden" name="data[auto_payout]" value="0" />
-          <input type="checkbox" name="data[auto_payout]" id="data[auto_payout]" value="1"{nocache}{if $SETTINGS['auto_payout']}checked{/if}{/nocache} />
-          <label for="data[auto_payout]"></label>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" class="ios-switch" name="data[auto_payout]" id="data[auto_payout]" value="1"{nocache}{if $SETTINGS['auto_payout']}checked{/if}{/nocache} />
+          <div class="switch"></div>
+          </label>
         </td>
       </tr>
       <tr>
         <td align="left">Manual Payout</td>
-        <td align="center">
+        <td>
+          <label for="data[manual_payout]">
           <input type="hidden" name="data[manual_payout]" value="0" />
-          <input type="checkbox" name="data[manual_payout]" id="data[manual_payout]" value="1"{nocache}{if $SETTINGS['manual_payout']}checked{/if}{/nocache} />
-          <label for="data[manual_payout]"></label>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" class="ios-switch" name="data[manual_payout]" id="data[manual_payout]" value="1"{nocache}{if $SETTINGS['manual_payout']}checked{/if}{/nocache} />
+          <div class="switch"></div>
+          </label>
         </td>
       </tr>
     </table>
