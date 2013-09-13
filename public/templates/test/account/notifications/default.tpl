@@ -3,7 +3,9 @@
   <input type="hidden" name="action" value="{$smarty.request.action}">
   <input type="hidden" name="do" value="save">
   <article class="module width_quarter">
-    <header><h3>Notification Settings</h3></header>
+    <header>
+      <h3>Notification Settings</h3>
+    </header>
     <div class="module_content">
     <table width="100%">
       <tr>
