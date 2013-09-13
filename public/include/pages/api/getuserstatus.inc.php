@@ -35,7 +35,8 @@ if ( ! $user->isAdmin($user_id) && ($_REQUEST['id'] != $user_id && !empty($_REQU
 echo json_encode(array('getuserstatus' => array(
   'username' => $username,
   'shares' =>  $statistics->getUserShares($id),
-  'hashrate' => $statistics->getUserHashrate($id)
+  'hashrate' => $statistics->getUserHashrate($id),
+  'sharerate' => $statistics->getUserSharerate($id)
 )));
 
 // Supress master template
