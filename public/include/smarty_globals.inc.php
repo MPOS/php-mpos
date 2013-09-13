@@ -17,21 +17,45 @@ if ($bitcoin->can_connect() === true) {
   $dDifficulty = $bitcoin->query('getdifficulty');
   if (is_array($dDifficulty) && array_key_exists('proof-of-work', $dDifficulty))
     $dDifficulty = $dDifficulty['proof-of-work'];
+  try { $dNetworkHashrate = $bitcoin->query('getnetworkhashps') / 1000; } catch (Exception $e) {
+    // Maybe we are SHA
+    try { $dNetworkHashrate = $bitcoin->query('gethashespersec') / 1000; } catch (Exception $e) {
+      $dNetworkHashrate = 0;
+    }
+    $dNetworkHashrate = 0;
+  }
+} else {
+  $dNetworkHashrate = 0;
 }
 
-// Always fetch this since we need for ministats header
-$bitcoin->can_connect() === true ? $dNetworkHashrate = $bitcoin->query('getnetworkhashps') : $dNetworkHashrate = 0;
-
-// Fetch some data
-if (!$iCurrentActiveWorkers = $worker->getCountAllActiveWorkers()) $iCurrentActiveWorkers = 0;
+// Baseline pool hashrate for templates
+if ( ! $dPoolHashrateModifier = $setting->getValue('statistics_pool_hashrate_modifier') ) $dPoolHashrateModifier = 1;
 $iCurrentPoolHashrate =  $statistics->getCurrentHashrate();
-$iCurrentPoolShareRate = $statistics->getCurrentShareRate();
 
 // Avoid confusion, ensure our nethash isn't higher than poolhash
 if ($iCurrentPoolHashrate > $dNetworkHashrate) $dNetworkHashrate = $iCurrentPoolHashrate;
 
+// Baseline network hashrate for templates
+if ( ! $dPersonalHashrateModifier = $setting->getValue('statistics_personal_hashrate_modifier') ) $dPersonalHashrateModifier = 1;
+if ( ! $dNetworkHashrateModifier = $setting->getValue('statistics_network_hashrate_modifier') ) $dNetworkHashrateModifier = 1;
+
+// Apply modifier now
+$dNetworkHashrate = $dNetworkHashrate * $dNetworkHashrateModifier;
+$iCurrentPoolHashrate = $iCurrentPoolHashrate * $dPoolHashrateModifier;
+
+// Share rate of the entire pool
+$iCurrentPoolShareRate = $statistics->getCurrentShareRate();
+
+// Active workers
+if (!$iCurrentActiveWorkers = $worker->getCountAllActiveWorkers()) $iCurrentActiveWorkers = 0;
+
+// Small helper array
+$aHashunits = array( '1' => 'KH/s', '0.001' => 'MH/s', '0.000001' => 'GH/s' );
+
 // Global data for Smarty
 $aGlobal = array(
+  'hashunits' => array( 'pool' => $aHashunits[$dPoolHashrateModifier], 'network' => $aHashunits[$dNetworkHashrateModifier], 'personal' => $aHashunits[$dPersonalHashrateModifier]),
+  'hashmods' => array( 'personal' => $dPersonalHashrateModifier ),
   'hashrate' => $iCurrentPoolHashrate,
   'nethashrate' => $dNetworkHashrate,
   'sharerate' => $iCurrentPoolShareRate,
@@ -93,7 +117,7 @@ if (@$_SESSION['USERDATA']['id']) {
 
   // Other userdata that we can cache savely
   $aGlobal['userdata']['shares'] = $statistics->getUserShares($_SESSION['USERDATA']['id']);
-  $aGlobal['userdata']['hashrate'] = $statistics->getUserHashrate($_SESSION['USERDATA']['id']);
+  $aGlobal['userdata']['hashrate'] = $statistics->getUserHashrate($_SESSION['USERDATA']['id']) * $dPersonalHashrateModifier;
   $aGlobal['userdata']['sharerate'] = $statistics->getUserSharerate($_SESSION['USERDATA']['id']);
 
   switch ($config['payout_system']) {
