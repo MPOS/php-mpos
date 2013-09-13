@@ -50,10 +50,12 @@
           <td align="center"><img src="{$PATH}/images/{if $WORKERS[worker].hashrate > 0}icn_alert_success{else}icn_alert_error{/if}.png" /></td>
           {if $GLOBAL.config.disable_notifications != 1}
           <td>
+            <span class="toggle">
             <label for="data[{$WORKERS[worker].id}][monitor]">
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" class="ios-switch" name="data[{$WORKERS[worker].id}][monitor]" value="1" id="data[{$WORKERS[worker].id}][monitor]" {if $WORKERS[worker].monitor}checked{/if} />
+            <input type="checkbox" class="ios-switch" name="data[{$WORKERS[worker].id}][monitor]" value="1" id="data[{$WORKERS[worker].id}][monitor]" {if $WORKERS[worker].monitor}checked{/if} />
             <div class="switch"></div>
             </label>
+            </span>
           </td>
           {/if}
           <td align="right">{$WORKERS[worker].hashrate|number_format}</td>
