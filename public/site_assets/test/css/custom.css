@@ -23,6 +23,12 @@ input[type=checkbox]:checked + label
 }
 
 /* Test toggle switch Begin */
+span.toggle {
+   display:block;
+   width: 75px;
+   height: 100%;
+   margin: 0 auto;
+}
 
 :root input[type="checkbox"] {
 	position: absolute;
