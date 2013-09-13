@@ -22,13 +22,18 @@ if ($bitcoin->can_connect() === true){
   if (is_array($dDifficulty) && array_key_exists('proof-of-work', $dDifficulty))
     $dDifficulty = $dDifficulty['proof-of-work'];
   $iBlock = $bitcoin->getblockcount();
+  $dNetworkHashrate = $bitcoin->query('getnetworkhashps');
 } else {
   $dDifficulty = 1;
   $iBlock = 0;
+  $dNetworkHashrate = 0;
 }
 
 // Estimated time to find the next block
 $iCurrentPoolHashrate =  $statistics->getCurrentHashrate();
+
+// Avoid confusion, ensure our nethash isn't higher than poolhash
+if ($iCurrentPoolHashrate > $dNetworkHashrate) $dNetworkHashrate = $iCurrentPoolHashrate;
 
 // Time in seconds, not hours, using modifier in smarty to translate
 $iCurrentPoolHashrate > 0 ? $iEstTime = $dDifficulty * pow(2,32) / ($iCurrentPoolHashrate * 1000) : $iEstTime = 0;
@@ -56,6 +61,7 @@ echo json_encode(
       'esttime' => $iEstTime,
       'estshares' => $iEstShares,
       'timesincelast' => $dTimeSinceLast,
+      'nethashrate' => $dNetworkHashrate
     )));
 
 // Supress master template
