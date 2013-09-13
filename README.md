@@ -23,6 +23,10 @@ I was hoping to keep this out of the README but apparently people remove or chan
 at the bottom of the page. For those of you finding my project and are willing to appreciate the work
 with some hard earned LTC feel free to donate to my LTC address: `Lge95QR2frp9y1wJufjUPCycVsg5gLJPW8`
 
+# Website Footer
+
+When you decide to use `mmcfe-ng` please be so kind and leave the footer intact. You are not the author of the software and should honor those that have worked on it. I don't mind changing the LTC donation address at the bottom, but keep in mind who really wrote this software and would deserve those ;-).
+
 Donors
 ======
 
