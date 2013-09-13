@@ -65,9 +65,9 @@
 <article class="module width_3_quarter">
   <header>
       <h3>Notification History</h3>
-      <div class="submit_link">{include file="global/pagination.tpl"}</div>     
+      <div class="submit_link">{include file="global/pagination.tpl"}</div>
   </header>
-  <table width="100%" class="tablesorter" cellspacing="0">
+  <table width="100%" class="tablesorterpager" cellspacing="0">
     <thead style="font-size:13px;">
       <tr>
         <th align="center" style="cursor: pointer;">ID</th>
