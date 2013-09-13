@@ -25,11 +25,13 @@
       <tr>
         <td align="left">New Blocks</td>
         <td>
+          <span class="toggle">
           <label for="data[new_block]">
           <input type="hidden" name="data[new_block]" value="0" />
-          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" class="ios-switch" name="data[new_block]" id="data[new_block]" value="1"{nocache}{if $SETTINGS['new_block']}checked{/if}{/nocache} />
+          <input type="checkbox" class="ios-switch" name="data[new_block]" id="data[new_block]" value="1"{nocache}{if $SETTINGS['new_block']}checked{/if}{/nocache} />
           <div class="switch"></div>
           </label>
+          </span>
         </td>
       </tr>
       <tr>
