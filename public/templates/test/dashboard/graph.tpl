@@ -1,7 +1,7 @@
-<article class="module width_half">
+<article class="module width_full">
   <header><h3>Graphs</h3></header>
   <div class="module_content">
-	<div id="hashrategraph" style="height:250px;width:600px; "></div>
+	<div id="hashrategraph" style="height:250px;width:100%; "></div>
   </div>
 </article>
 
