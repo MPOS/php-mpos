@@ -41,7 +41,7 @@ $(document).ready(function(){
     legend: { show: true },
     title: 'Hashrate',
     axes: {
-      yaxis:{ min: 0, padMin: 0, padMax: 1.5, label: '{/literal}{$GLOBAL.hashunits.personal}{literal}', labelRenderer: $.jqplot.CanvasAxisLabelRenderer},
+      yaxis:{ pad: 1.05, label: '{/literal}{$GLOBAL.hashunits.personal}{literal}', labelRenderer: $.jqplot.CanvasAxisLabelRenderer},
       xaxis:{ tickInterval: {/literal}{$GLOBAL.config.statistics_ajax_refresh_interval}{literal}, label: 'Time', labelRenderer: $.jqplot.CanvasAxisLabelRenderer, renderer: $.jqplot.DateAxisRenderer, tickOptions: { formatString: '%T' } }
     },
   };
