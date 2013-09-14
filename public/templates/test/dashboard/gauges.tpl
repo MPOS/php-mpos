@@ -11,102 +11,38 @@
 <script>
 {literal}
 window.onload = function(){
-  // Auto-adjust max value
-  if ({/literal}{$GLOBAL.nethashrate}{literal} < 20000000000) {
-    maxVal = 20;
-  } else if ({/literal}{$GLOBAL.nethashrate}{literal} < 40000000000) {
-    maxVal = 40;
-  } else if ({/literal}{$GLOBAL.nethashrate}{literal} < 80000000000) {
-    maxVal = 80;
-  } else if ({/literal}{$GLOBAL.nethashrate}{literal} < 160000000000) {
-    maxVal = 160;
-  } else if ({/literal}{$GLOBAL.nethashrate}{literal} < 320000000000) {
-    maxVal = 320;
-  } else {
-    maxVal = 1000;
-  }
   var g1 = new JustGage({
     id: "nethashrate",
-    value: {/literal}{($GLOBAL.nethashrate / 1000 / 1000 / 1000)|number_format:"2"}{literal},
+    value: parseFloat({/literal}{$GLOBAL.nethashrate}{literal}).toFixed(2),
     min: 0,
-    max: maxVal,
+    max: Math.round({/literal}{$GLOBAL.nethashrate}{literal} * 2),
     title: "Net Hashrate",
-    label: "ghash/s"
+    label: "{/literal}{$GLOBAL.hashunits.network}{literal}"
   });
 
-  // Auto-adjust max value
-  if ({/literal}{$GLOBAL.hashrate}{literal} < 5000) {
-    maxVal = 5;
-  } else if ({/literal}{$GLOBAL.hashrate}{literal} < 10000) {
-    maxVal = 10;
-  } else if ({/literal}{$GLOBAL.hashrate}{literal} < 20000) {
-    maxVal = 20;
-  } else if ({/literal}{$GLOBAL.hashrate}{literal} < 40000) {
-    maxVal = 40;
-  } else if ({/literal}{$GLOBAL.hashrate}{literal} < 80000) {
-    maxVal = 80;
-  } else if ({/literal}{$GLOBAL.hashrate}{literal} < 160000) {
-    maxVal = 160;
-  } else if ({/literal}{$GLOBAL.hashrate}{literal} < 320000) {
-    maxVal = 320;
-  } else {
-    maxVal = 1000;
-  }
   var g2 = new JustGage({
     id: "poolhashrate",
-    value: {/literal}{$GLOBAL.hashrate / 1000}{literal},
+    value: parseFloat({/literal}{$GLOBAL.hashrate}{literal}).toFixed(2),
     min: 0,
-    max: maxVal,
+    max: Math.round({/literal}{$GLOBAL.hashrate}{literal} * 2),
     title: "Pool Hashrate",
-    label: "mhash/s"
+    label: "{/literal}{$GLOBAL.hashunits.pool}{literal}"
   });
 
-  // Auto-adjust max value
-  if ({/literal}{$GLOBAL.userdata.hashrate}{literal} < 1000) {
-    maxVal = 1;
-  } else if ({/literal}{$GLOBAL.userdata.hashrate}{literal} < 2000) {
-    maxVal = 2;
-  } else if ({/literal}{$GLOBAL.userdata.hashrate}{literal} < 5000) {
-    maxVal = 5;
-  } else if ({/literal}{$GLOBAL.userdata.hashrate}{literal} < 10000) {
-    maxVal = 10;
-  } else if ({/literal}{$GLOBAL.userdata.hashrate}{literal} < 20000) {
-    maxVal = 20;
-  } else {
-    maxVal = 150;
-  }
   var g3 = new JustGage({
     id: "hashrate",
-    value: {/literal}{$GLOBAL.userdata.hashrate / 1000}{literal},
+    value: parseFloat({/literal}{$GLOBAL.userdata.hashrate}{literal}).toFixed(2),
     min: 0,
-    max: maxVal,
+    max: Math.round({/literal}{$GLOBAL.userdata.hashrate}{literal} * 2),
     title: "Hashrate",
-    label: "mhash/s"
+    label: "{/literal}{$GLOBAL.hashunits.personal}{literal}"
   });
-
-  // Auto-adjust max value
-  function findShareMax(val) {
-    if ( val < 1.0 ) {
-      maxVal = 1.0;
-    } else if ( val < 2.0 ) {
-      maxVal = 2.0;
-    } else if ( val < 5.0 ) {
-      maxVal = 5.0;
-    } else if ( val < 10.0 ) {
-      maxVal = 10.0;
-    } else if ( val < 20.0 ) {
-      maxVal = 20.0;
-    } else {
-      maxVal = 100.0;
-    }
-    return maxVal;
-  };
 
   var g4 = new JustGage({
     id: "sharerate",
-    value: {/literal}{$GLOBAL.userdata.sharerate|number_format:"2"}{literal},
+    value: parseFloat({/literal}{$GLOBAL.userdata.sharerate}{literal}).toFixed(2),
     min: 0,
-    max: findShareMax({/literal}{$GLOBAL.userdata.sharerate|number_format:"2"}{literal}),
+    max: Math.round({/literal}{$GLOBAL.userdata.sharerate}{literal} * 2),
     title: "Sharerate",
     label: "shares/s"
   });
@@ -114,28 +50,15 @@ window.onload = function(){
   // Our reload and refresh gauges handler
   setInterval(function() {
     $.ajax({
-      url: '{/literal}{$smarty.server.PHP_SELF}?page=api&action=getpoolhashrate&api_key={$GLOBAL.userdata.api_key}{literal}',
+      url: '{/literal}{$smarty.server.PHP_SELF}?page=api&action=getdashboarddata&api_key={$GLOBAL.userdata.api_key}&id={$GLOBAL.userdata.id}{literal}',
       dataType: 'json',
       async: false,
       success: function (data) {
-        g2.refresh(parseFloat(data.getpoolhashrate.hashrate / 1000).toFixed(3));
+        g1.refresh(parseFloat(data.getdashboarddata.network.hashrate).toFixed(2));
+        g2.refresh(parseFloat(data.getdashboarddata.pool.hashrate).toFixed(2));
+        g3.refresh(parseFloat(data.getdashboarddata.personal.hashrate).toFixed(2));
+        g4.refresh(parseFloat(data.getdashboarddata.personal.sharerate).toFixed(2));
       }
-    });
-    $.ajax({
-      url: '{/literal}{$smarty.server.PHP_SELF}?page=api&action=getuserhashrate&api_key={$GLOBAL.userdata.api_key}&id={$GLOBAL.userdata.id}{literal}',
-      dataType: 'json',
-      async: false,
-      success: function (data) {
-        g3.refresh(parseFloat(data.getuserhashrate.hashrate / 1000).toFixed(3));
-      },
-    });
-    $.ajax({
-      url: '{/literal}{$smarty.server.PHP_SELF}?page=api&action=getusersharerate&api_key={$GLOBAL.userdata.api_key}&id={$GLOBAL.userdata.id}{literal}',
-      dataType: 'json',
-      async: false,
-      success: function (data) {
-        g4.refresh(parseFloat(data.getusersharerate.sharerate).toFixed(2));
-      },
     });
   }, 2000);
 };
