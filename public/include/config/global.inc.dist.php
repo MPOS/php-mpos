@@ -78,7 +78,7 @@ $config['wallet']['password'] = 'testnet';
  *   currency  =  `BTC`
  *
  * Optional (cryptsy.com):
- *   url       =  `https://www.cryptsy.com`
+ *   url       =  `https://pubapi.cryptsy.com`
  *   target    =  `/api.php?method=marketdata`
  *   currency  =  `BTC`
  **/

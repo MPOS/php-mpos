@@ -117,3 +117,9 @@ Small Time Miners are running various stratum only pools for different coins.
 | Pool URL | Coin | Avg. Hashrate | Avg. Active Workers | Notes |
 | -------- | ---- | ------------: | ------------------: | ----- |
 | http://poolmine.it | Litecoin | 0.23 MHash | 5 | PPLNS, Custom Template |
+
+### 4782
+
+| Pool URL | Coin | Avg. Hashrate | Avg. Active Workers | Notes |
+| -------- | ---- | ------------: | ------------------: | ----- |
+| http://pirate-pool.com | LTC | 0.5 MHash | 2 | |
