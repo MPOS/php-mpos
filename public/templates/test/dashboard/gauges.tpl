@@ -11,52 +11,21 @@
 
 <script>
 {literal}
-window.onload = function(){
-  var g1 = new JustGage({
-    id: "nethashrate",
-    value: parseFloat({/literal}{$GLOBAL.nethashrate}{literal}).toFixed(2),
-    min: 0,
-    max: Math.round({/literal}{$GLOBAL.nethashrate}{literal} * 2),
-    title: "Net Hashrate",
-    label: "{/literal}{$GLOBAL.hashunits.network}{literal}"
-  });
+$(document).ready(function(){
+  var g1, g2, g3, g4, g5;
 
-  var g2 = new JustGage({
-    id: "poolhashrate",
-    value: parseFloat({/literal}{$GLOBAL.hashrate}{literal}).toFixed(2),
-    min: 0,
-    max: Math.round({/literal}{$GLOBAL.hashrate}{literal} * 2),
-    title: "Pool Hashrate",
-    label: "{/literal}{$GLOBAL.hashunits.pool}{literal}"
+  // Fetch initial data via Ajax
+  $.ajax({
+    url: '{/literal}{$smarty.server.PHP_SELF}?page=api&action=getdashboarddata&api_key={$GLOBAL.userdata.api_key}&id={$GLOBAL.userdata.id}{literal}',
+    dataType: 'json',
+    success: function (data) {
+      g1 = new JustGage({id: "nethashrate", value: parseFloat(data.getdashboarddata.network.hashrate).toFixed(2), min: 0, max: Math.round(data.getdashboarddata.network.hashrate * 2), title: "Net Hashrate", label: "{/literal}{$GLOBAL.hashunits.network}{literal}"});
+      g2 = new JustGage({id: "poolhashrate", value: parseFloat(data.getdashboarddata.pool.hashrate).toFixed(2), min: 0, max: Math.round(data.getdashboarddata.pool.hashrate * 2), title: "Pool Hashrate", label: "{/literal}{$GLOBAL.hashunits.pool}{literal}"});
+      g3 = new JustGage({id: "hashrate", value: parseFloat(data.getdashboarddata.personal.hashrate).toFixed(2), min: 0, max: Math.round(data.getdashboarddata.personal.hashrate * 2), title: "Hashrate", label: "{/literal}{$GLOBAL.hashunits.personal}{literal}"});
+      g4 = new JustGage({id: "sharerate", value: parseFloat(data.getdashboarddata.personal.sharerate).toFixed(2), min: 0, max: Math.round(data.getdashboarddata.personal.sharerate * 2), title: "Sharerate", label: "shares/s"});
+      g5 = new JustGage({id: "sharerate", value: parseFloat(data.getdashboarddata.datatime).toFixed(2), min: 0, max: Math.round(data.getdashboarddata.datatime * 3), title: "Querytime", label: "ms"});
+    }
   });
-
-  var g3 = new JustGage({
-    id: "hashrate",
-    value: parseFloat({/literal}{$GLOBAL.userdata.hashrate}{literal}).toFixed(2),
-    min: 0,
-    max: Math.round({/literal}{$GLOBAL.userdata.hashrate}{literal} * 2),
-    title: "Hashrate",
-    label: "{/literal}{$GLOBAL.hashunits.personal}{literal}"
-  });
-
-  var g4 = new JustGage({
-    id: "sharerate",
-    value: parseFloat({/literal}{$GLOBAL.userdata.sharerate}{literal}).toFixed(2),
-    min: 0,
-    max: Math.round({/literal}{$GLOBAL.userdata.sharerate}{literal} * 2),
-    title: "Sharerate",
-    label: "shares/s"
-  });
-  
-  var g5 = new JustGage({
-    id: "sharerate",
-    value: parseFloat(0.00).toFixed(2),
-    min: 5,
-    max: 50,
-    title: "Querytime",
-    label: "ms"
-  });
-
 
   // Our reload and refresh gauges handler
   setInterval(function() {
@@ -72,6 +41,6 @@ window.onload = function(){
       }
     });
   }, 10000);
-};
+});
 {/literal}
 </script>
