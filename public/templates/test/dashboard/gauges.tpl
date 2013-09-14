@@ -9,7 +9,7 @@
       <div id="querytime" style="width:150px; height:120px; float: left;"></div>
     </div>
   </div>
-  <footer><p style="margin-left: 25px">Refresh interval: {$GLOBAL.config.statistics_ajax_refresh_interval|default:"10"} seconds</p></footer>
+  <footer><p style="margin-left: 25px">Refresh interval: {$GLOBAL.config.statistics_ajax_refresh_interval|default:"10"} seconds. Hashrate based on shares submitted in the past {$INTERVAL|default:"5"} minutes.</p></footer>
 </article>
 
 <script>

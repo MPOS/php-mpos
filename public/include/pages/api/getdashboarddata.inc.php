@@ -36,7 +36,7 @@ $bitcoin->can_connect() === true ? $dNetworkHashrate = $bitcoin->query('getnetwo
 
 // Some settings
 $start = microtime(true);
-$interval = 300;
+if ( ! $interval = $setting->getValue('statistics_ajax_data_interval')) $interval = 300;
 if ( ! $dPoolHashrateModifier = $setting->getValue('statistics_pool_hashrate_modifier') ) $dPoolHashrateModifier = 1;
 if ( ! $dPersonalHashrateModifier = $setting->getValue('statistics_personal_hashrate_modifier') ) $dPersonalHashrateModifier = 1;
 if ( ! $dNetworkHashrateModifier = $setting->getValue('statistics_network_hashrate_modifier') ) $dNetworkHashrateModifier = 1;

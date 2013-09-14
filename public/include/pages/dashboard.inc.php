@@ -4,6 +4,7 @@
 if (!defined('SECURITY')) die('Hacking attempt');
 
 if ($user->isAuthenticated()) {
+  if (! $interval = $setting->getValue('statistics_ajax_data_interval')) $interval = 300;
   // Defaults to get rid of PHP Notice warnings
   $dDifficulty = 1;
   $aRoundShares = 1;
@@ -42,6 +43,7 @@ if ($user->isAuthenticated()) {
   if ($iCurrentPoolHashrate > $dNetworkHashrate) $dNetworkHashrate = $iCurrentPoolHashrate;
 
   // Make it available in Smarty
+  $smarty->assign('INTERVAL', $interval / 60);
   $smarty->assign('CONTENT', 'default.tpl');
 }
 
