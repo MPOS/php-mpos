@@ -5,6 +5,7 @@
     <div id="poolhashrate" style="width:150px; height:120px; float: left;"></div>
     <div id="nethashrate" style="width:150px; height:120px; float: left;"></div>
     <div id="sharerate" style="width:150px; height:120px; float: left;"></div>
+    <div id="querytime" style="width:150px; height:120px; float: left;"></div>
   </div>
 </article>
 
@@ -46,6 +47,16 @@ window.onload = function(){
     title: "Sharerate",
     label: "shares/s"
   });
+  
+  var g5 = new JustGage({
+    id: "sharerate",
+    value: parseFloat(0.00).toFixed(2),
+    min: 5,
+    max: 50,
+    title: "Querytime",
+    label: "ms"
+  });
+
 
   // Our reload and refresh gauges handler
   setInterval(function() {
@@ -58,6 +69,7 @@ window.onload = function(){
         g2.refresh(parseFloat(data.getdashboarddata.pool.hashrate).toFixed(2));
         g3.refresh(parseFloat(data.getdashboarddata.personal.hashrate).toFixed(2));
         g4.refresh(parseFloat(data.getdashboarddata.personal.sharerate).toFixed(2));
+        g5.refresh(parseFloat(data.getdashboarddata.datatime).toFixed(2));
       }
     });
   }, 2000);
