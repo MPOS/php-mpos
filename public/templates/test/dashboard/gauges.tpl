@@ -63,7 +63,6 @@ window.onload = function(){
     $.ajax({
       url: '{/literal}{$smarty.server.PHP_SELF}?page=api&action=getdashboarddata&api_key={$GLOBAL.userdata.api_key}&id={$GLOBAL.userdata.id}{literal}',
       dataType: 'json',
-      async: false,
       success: function (data) {
         g1.refresh(parseFloat(data.getdashboarddata.network.hashrate).toFixed(2));
         g2.refresh(parseFloat(data.getdashboarddata.pool.hashrate).toFixed(2));
