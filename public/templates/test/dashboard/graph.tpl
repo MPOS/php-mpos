@@ -24,9 +24,6 @@ $(document).ready(function(){
   $.jqplot('hashrategraph', [storedData], options); 
   setInterval(function() {
     $.ajax({
-      // have to use synchronous here, else the function 
-      // will return before the data is fetched
-      async: false,
       url: url,
       dataType: "json",
       success: function(data) {
