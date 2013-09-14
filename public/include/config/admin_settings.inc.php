@@ -96,6 +96,13 @@ $aSettings['website'][] = array(
   'tooltip' => 'Enabled or disable the chainfo URL feature. Will remove any links using the chaininfo URL.'
 );
 $aSettings['statistics'][] = array(
+  'display' => 'Ajax Refresh Interval', 'type' => 'select',
+  'options' => array('5' => '5', '10' => '10', '15' => '15', '30' => '30', '60' => '60' ),
+  'default' => 10,
+  'name' => 'statistics_ajax_refresh_interval', 'value' => $setting->getValue('statistics_ajax_refresh_interval'),
+  'tooltip' => 'How often to refresh data via ajax in seconds.'
+);
+$aSettings['statistics'][] = array(
   'display' => 'Block Statistics Count', 'type' => 'text',
   'size' => 25,
   'default' => 20,

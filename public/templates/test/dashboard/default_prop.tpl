@@ -1,4 +1,4 @@
- <article class="module width_half">
+ <article class="module width_quarter">
    <header><h3>Dashboard</h3></header>
    <div class="module_content">
      <table width="100%">

@@ -1,12 +1,15 @@
-<article class="module width_half">
+<article class="module width_3_quarter">
   <header><h3>Gauges</h3></header>
   <div class="module_content">
-    <div id="hashrate" style="width:150px; height:120px; float: left;"></div>
-    <div id="poolhashrate" style="width:150px; height:120px; float: left;"></div>
-    <div id="nethashrate" style="width:150px; height:120px; float: left;"></div>
-    <div id="sharerate" style="width:150px; height:120px; float: left;"></div>
-    <div id="querytime" style="width:150px; height:120px; float: left;"></div>
+    <div style="display: inline-block; min-height: 250px;">
+      <div id="hashrate" style="width:150px; height:120px; float: left;"></div>
+      <div id="poolhashrate" style="width:150px; height:120px; float: left;"></div>
+      <div id="nethashrate" style="width:150px; height:120px; float: left;"></div>
+      <div id="sharerate" style="width:150px; height:120px; float: left;"></div>
+      <div id="querytime" style="width:150px; height:120px; float: left;"></div>
+    </div>
   </div>
+  <footer><p style="margin-left: 25px">Refresh interval: {$GLOBAL.config.statistics_ajax_refresh_interval|default:"10"} seconds</p></footer>
 </article>
 
 <script>
@@ -40,7 +43,7 @@ $(document).ready(function(){
         g5.refresh(parseFloat(data.getdashboarddata.datatime).toFixed(2));
       }
     });
-  }, 10000);
+  }, {/literal}{($GLOBAL.config.statistics_ajax_refresh_interval * 1000)|default:"10000"}{literal});
 });
 {/literal}
 </script>
