@@ -85,39 +85,57 @@ window.onload = function(){
   });
 
   // Auto-adjust max value
-  if ({/literal}{$GLOBAL.userdata.sharerate}{literal} < 0.5) {
-    maxVal = 0.5;
-  } else if ({/literal}{$GLOBAL.userdata.sharerate}{literal} < 1.0) {
-    maxVal = 1.0;
-  } else if ({/literal}{$GLOBAL.userdata.sharerate}{literal} < 2.0) {
-    maxVal = 2.0;
-  } else if ({/literal}{$GLOBAL.userdata.sharerate}{literal} < 5.0) {
-    maxVal = 5.0;
-  } else if ({/literal}{$GLOBAL.userdata.sharerate}{literal} < 10.0) {
-    maxVal = 10.0;
-  } else if ({/literal}{$GLOBAL.userdata.sharerate}{literal} < 20.0) {
-    maxVal = 20.0;
-  } else {
-    maxVal = 100.0;
-  }
+  function findShareMax(val) {
+    if ( val < 1.0 ) {
+      maxVal = 1.0;
+    } else if ( val < 2.0 ) {
+      maxVal = 2.0;
+    } else if ( val < 5.0 ) {
+      maxVal = 5.0;
+    } else if ( val < 10.0 ) {
+      maxVal = 10.0;
+    } else if ( val < 20.0 ) {
+      maxVal = 20.0;
+    } else {
+      maxVal = 100.0;
+    }
+    return maxVal;
+  };
+
   var g4 = new JustGage({
     id: "sharerate",
     value: {/literal}{$GLOBAL.userdata.sharerate|number_format:"2"}{literal},
     min: 0,
-    max: maxVal,
+    max: findShareMax({/literal}{$GLOBAL.userdata.sharerate|number_format:"2"}{literal}),
     title: "Sharerate",
     label: "shares/s"
   });
 
   // Our reload and refresh gauges handler
   setInterval(function() {
-    $.getJSON('{/literal}{$smarty.server.PHP_SELF}?page=api&action=getpoolstatus&api_key={$GLOBAL.userdata.api_key}{literal}', function (data) {
-      g1.refresh(parseFloat(data.getpoolstatus.nethashrate / 1000 / 1000 / 1000).toFixed(2));
-      g2.refresh(parseFloat(data.getpoolstatus.hashrate / 1000).toFixed(3));
+    $.ajax({
+      url: '{/literal}{$smarty.server.PHP_SELF}?page=api&action=getpoolhashrate&api_key={$GLOBAL.userdata.api_key}{literal}',
+      dataType: 'json',
+      async: false,
+      success: function (data) {
+        g2.refresh(parseFloat(data.getpoolhashrate.hashrate / 1000).toFixed(3));
+      }
     });
-    $.getJSON('{/literal}{$smarty.server.PHP_SELF}?page=api&action=getuserstatus&api_key={$GLOBAL.userdata.api_key}&id={$GLOBAL.userdata.id}{literal}', function (data) {
-      g3.refresh(parseFloat(data.getuserstatus.hashrate / 1000).toFixed(3));
-      g4.refresh(parseFloat(data.getuserstatus.sharerate).toFixed(2));
+    $.ajax({
+      url: '{/literal}{$smarty.server.PHP_SELF}?page=api&action=getuserhashrate&api_key={$GLOBAL.userdata.api_key}&id={$GLOBAL.userdata.id}{literal}',
+      dataType: 'json',
+      async: false,
+      success: function (data) {
+        g3.refresh(parseFloat(data.getuserhashrate.hashrate / 1000).toFixed(3));
+      },
+    });
+    $.ajax({
+      url: '{/literal}{$smarty.server.PHP_SELF}?page=api&action=getusersharerate&api_key={$GLOBAL.userdata.api_key}&id={$GLOBAL.userdata.id}{literal}',
+      dataType: 'json',
+      async: false,
+      success: function (data) {
+        g4.refresh(parseFloat(data.getusersharerate.sharerate).toFixed(2));
+      },
     });
   }, 2000);
 };

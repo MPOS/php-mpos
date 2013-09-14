@@ -98,25 +98,25 @@ class Statistics {
    * @param none
    * @return data object Return our hashrateas an object
    **/
-  public function getCurrentHashrate() {
+  public function getCurrentHashrate($interval=600) {
     $this->debug->append("STA " . __METHOD__, 4);
     if ($this->getGetCache() && $data = $this->memcache->get(__FUNCTION__)) return $data;
     $stmt = $this->mysqli->prepare("
       SELECT
       (
         (
-          SELECT IFNULL(ROUND(COUNT(id) * POW(2, " . $this->config['difficulty'] . ")/600/1000), 0) AS hashrate
+          SELECT IFNULL(ROUND(COUNT(id) * POW(2, " . $this->config['difficulty'] . ") / ? / 1000), 0) AS hashrate
           FROM " . $this->share->getTableName() . "
-          WHERE time > DATE_SUB(now(), INTERVAL 10 MINUTE)
+          WHERE time > DATE_SUB(now(), INTERVAL ? SECOND)
         ) + (
-          SELECT IFNULL(ROUND(COUNT(id) * POW(2, " . $this->config['difficulty'] . ")/600/1000), 0) AS hashrate
+          SELECT IFNULL(ROUND(COUNT(id) * POW(2, " . $this->config['difficulty'] . ") / ? / 1000), 0) AS hashrate
           FROM " . $this->share->getArchiveTableName() . "
-          WHERE time > DATE_SUB(now(), INTERVAL 10 MINUTE)
+          WHERE time > DATE_SUB(now(), INTERVAL ? SECOND)
         )
       ) AS hashrate
       FROM DUAL");
     // Catchall
-    if ($this->checkStmt($stmt) && $stmt->execute() && $result = $stmt->get_result() ) return $this->memcache->setCache(__FUNCTION__, $result->fetch_object()->hashrate);
+    if ($this->checkStmt($stmt) && $stmt->bind_param('iiii', $interval, $interval, $interval, $interval) && $stmt->execute() && $result = $stmt->get_result() ) return $this->memcache->setCache(__FUNCTION__, $result->fetch_object()->hashrate);
     $this->debug->append("Failed to get hashrate: " . $this->mysqli->error);
     return false;
   }
@@ -246,28 +246,28 @@ class Statistics {
    * @param account_id integer User ID
    * @return data integer Current Hashrate in khash/s
    **/
-  public function getUserHashrate($account_id) {
+  public function getUserHashrate($account_id, $interval=600) {
     $this->debug->append("STA " . __METHOD__, 4);
-    if ($data = $this->memcache->get(__FUNCTION__ . $account_id)) return $data;
+    if ($this->getGetCache() && $data = $this->memcache->get(__FUNCTION__ . $account_id)) return $data;
     $stmt = $this->mysqli->prepare("
       SELECT
         (
-          SELECT IFNULL(ROUND(COUNT(s.id) * POW(2, " . $this->config['difficulty'] . ") / 600 / 1000), 0) AS hashrate
+          SELECT IFNULL(ROUND(COUNT(s.id) * POW(2, " . $this->config['difficulty'] . ") / ? / 1000), 0) AS hashrate
           FROM " . $this->share->getTableName() . " AS s,
                " . $this->user->getTableName() . " AS u
           WHERE u.username = SUBSTRING_INDEX( s.username, '.', 1 )
-            AND s.time > DATE_SUB(now(), INTERVAL 10 MINUTE)
+            AND s.time > DATE_SUB(now(), INTERVAL ? SECOND)
             AND u.id = ?
         ) + (
-          SELECT IFNULL(ROUND(COUNT(s.id) * POW(2, " . $this->config['difficulty'] . ") / 600 / 1000), 0) AS hashrate
+          SELECT IFNULL(ROUND(COUNT(s.id) * POW(2, " . $this->config['difficulty'] . ") / ? / 1000), 0) AS hashrate
           FROM " . $this->share->getArchiveTableName() . " AS s,
                " . $this->user->getTableName() . " AS u
           WHERE u.username = SUBSTRING_INDEX( s.username, '.', 1 )
-            AND s.time > DATE_SUB(now(), INTERVAL 10 MINUTE)
+            AND s.time > DATE_SUB(now(), INTERVAL ? SECOND)
             AND u.id = ?
         ) AS hashrate
       FROM DUAL");
-    if ($this->checkStmt($stmt) && $stmt->bind_param("ii", $account_id, $account_id) && $stmt->execute() && $result = $stmt->get_result() )
+    if ($this->checkStmt($stmt) && $stmt->bind_param("iiiiii", $interval, $interval, $account_id, $interval, $interval, $account_id) && $stmt->execute() && $result = $stmt->get_result() )
       return $this->memcache->setCache(__FUNCTION__ . $account_id, $result->fetch_object()->hashrate);
     // Catchall
     $this->debug->append("Failed to fetch hashrate: " . $this->mysqli->error);
@@ -279,17 +279,17 @@ class Statistics {
    * @param account_id integer User ID
    * @return data integer Current Sharerate in shares/s
    **/
-  public function getUserSharerate($account_id) {
+  public function getUserSharerate($account_id, $interval=600) {
     $this->debug->append("STA " . __METHOD__, 4);
-    if ($data = $this->memcache->get(__FUNCTION__ . $account_id)) return $data;
+    if ($this->getGetCache() && $data = $this->memcache->get(__FUNCTION__ . $account_id)) return $data;
     $stmt = $this->mysqli->prepare("
-      SELECT COUNT(s.id)/600 AS sharerate
+      SELECT COUNT(s.id) / ? AS sharerate
       FROM " . $this->share->getTableName() . " AS s,
            " . $this->user->getTableName() . " AS u
       WHERE u.username = SUBSTRING_INDEX( s.username, '.', 1 )
-        AND s.time > DATE_SUB(now(), INTERVAL 10 MINUTE)
+        AND s.time > DATE_SUB(now(), INTERVAL ? SECOND)
         AND u.id = ?");
-    if ($this->checkStmt($stmt) && $stmt->bind_param("i", $account_id) && $stmt->execute() && $result = $stmt->get_result() )
+    if ($this->checkStmt($stmt) && $stmt->bind_param("iii", $interval, $interval, $account_id) && $stmt->execute() && $result = $stmt->get_result() )
       return $this->memcache->setCache(__FUNCTION__ . $account_id, $result->fetch_object()->sharerate);
     // Catchall
     $this->debug->append("Failed to fetch sharerate: " . $this->mysqli->error);

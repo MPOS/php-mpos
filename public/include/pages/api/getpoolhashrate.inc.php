@@ -10,7 +10,16 @@ $api->isActive();
 $id = $user->checkApiKey($_REQUEST['api_key']);
 
 // Output JSON format
-echo json_encode(array('getpoolhashrate' => $statistics->getCurrentHashrate()));
+$statistics->setGetCache(false);
+$start = microtime(true);
+$dPoolHashrate = $statistics->getCurrentHashrate(300);
+$end = microtime(true);
+$runtime = ($end - $start) * 1000;
+$statistics->setGetCache(true);
+echo json_encode(array('getpoolhashrate' => array(
+  'runtime' => $runtime,
+  'hashrate' => $dPoolHashrate,
+)));
 
 // Supress master template
 $supress_master = 1;
