@@ -22,10 +22,15 @@ $(document).ready(function(){
   var url = "{/literal}{$smarty.server.PHP_SELF}?page=api&action=getuserhashrate&api_key={$GLOBAL.userdata.api_key}&id={$GLOBAL.userdata.id}{literal}";
   var storedData = Array();
   var jqPlotOptions = {
-    series:[{ label: 'hashrate', trendline: { color: '#d30000', lineWidth: 1.0, label: 'average' } }],
+    seriesDefaults:{
+      fill: true,
+      fillAlpha: 1,
+      label: 'hashrate',
+      trendline: { color: '#d30000', lineWidth: 1.0, label: 'average' },
+      markerOptions: { size: 6 },
+    },
     legend: { show: true },
     title: 'Hashrate',
-    
     axes: {
       yaxis:{ min:0, padMin: 0, padMax: 1.5, label: '{/literal}{$GLOBAL.hashunits.personal}{literal}', labelRenderer: $.jqplot.CanvasAxisLabelRenderer},
       xaxis:{ min:0, max: 60, tickInterval: 10, padMax: 0, label: 'Minutes', labelRenderer: $.jqplot.CanvasAxisLabelRenderer}
