@@ -31,10 +31,13 @@ if ( ! $user->isAdmin($user_id) && ($_REQUEST['id'] != $user_id && !empty($_REQU
   $username = $user->getUserName($id);
 }
 
+// Fetch some settings
+if ( ! $interval = $setting->getValue('statistics_ajax_data_interval')) $interval = 300;
+
 // Gather un-cached data
 $statistics->setGetCache(false);
 $start = microtime(true);
-$hashrate = $statistics->getUserHashrate($id, 300);
+$hashrate = $statistics->getUserHashrate($id, $interval);
 $end = microtime(true);
 $runtime = ($end - $start)* 1000;
 
