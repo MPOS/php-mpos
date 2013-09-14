@@ -17,7 +17,6 @@ $(document).ready(function(){
       xaxis:{ min:0, max: 59, tickInterval: 5, pad: 0},
     },
   };
-  console.log(options);
   for (var i = 0; i < 59; i++) { storedData[i] = [i, 0] }
   var d = new Date();
   storedData[d.getMinutes()] = [ d.getMinutes(), {/literal}{$GLOBAL.userdata.hashrate}{literal} ];
