@@ -411,7 +411,7 @@ class User {
    * @param none
    * @return true
    **/
-  public function logoutUser($redirect="index.php") {
+  public function logoutUser($from="") {
     $this->debug->append("STA " . __METHOD__, 4);
     // Unset all of the session variables
     $_SESSION = array();
@@ -424,8 +424,11 @@ class User {
     session_destroy();
     // Enforce generation of a new Session ID and delete the old
     session_regenerate_id(true);
-    // Enforce a page reload
-    header("Location: $redirect");
+    // Enforce a page reload and point towards login with referrer included, if supplied
+    $location = @$_SERVER['HTTPS'] ? 'https' : 'http' . '://' . $_SERVER['SERVER_NAME'] . $_SERVER['PHP_SELF'];
+    if (!empty($from)) $location .= '?page=login&to=' . urlencode($from);
+    // if (!headers_sent()) header('Location: ' . $location, true, 307);
+    exit('<meta http-equiv="refresh" content="0; url=' . $location . '"/>');
   }
 
   /**
@@ -658,7 +661,7 @@ class User {
         $this->getUserIp($_SESSION['USERDATA']['id']) == $_SERVER['REMOTE_ADDR']
       ) return true;
     // Catchall
-    if ($logout == true) $this->logoutUser();
+    if ($logout == true) $this->logoutUser($_SERVER['REQUEST_URI']);
     return false;
   }
 }
