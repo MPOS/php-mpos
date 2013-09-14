@@ -8,7 +8,7 @@
 <article class="module width_full">
   <header><h3>Graphs</h3></header>
   <div class="module_content">
-	  <div id="hashrategraph" style="height:200px; width: 95%;"></div>
+	  <div id="hashrategraph" style="height:200px; width: 100%;"></div>
   </div>
   <footer>
     <p style="margin-left: 25px">Refresh interval: {$GLOBAL.config.statistics_ajax_refresh_interval|default:"10"} seconds. Hashrate based on shares submitted in the past {$INTERVAL|default:"5"} minutes.</p>
@@ -22,12 +22,19 @@ $(document).ready(function(){
   var url = "{/literal}{$smarty.server.PHP_SELF}?page=api&action=getuserhashrate&api_key={$GLOBAL.userdata.api_key}&id={$GLOBAL.userdata.id}{literal}";
   var storedData = Array();
   var jqPlotOptions = {
+    grid: { drawBorder: false, background: '#fbfbfb', shadow: false },
     seriesDefaults:{
+      shadow: false,
       fill: true,
-      fillAlpha: 1,
+      fillAndStroke: true,
+      fillAlpha: 0.3,
+      fillColor: '#26a4ed',
       label: 'hashrate',
-      trendline: { color: '#d30000', lineWidth: 1.0, label: 'average' },
-      markerOptions: { size: 6 },
+      color: '#26a4ed',
+      lineWidth: 4,
+      trendline: { color: '#d30000', lineWidth: 1.0, label: 'average', shadow: true },
+      markerOptions: { show: false, size: 8},
+      rendererOptions: { smooth: true }
     },
     legend: { show: true },
     title: 'Hashrate',
