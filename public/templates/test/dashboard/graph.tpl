@@ -19,8 +19,10 @@
 $(document).ready(function(){
   $.jqplot.config.enablePlugins = true;
 
+  // Ajax API URL
   var url = "{/literal}{$smarty.server.PHP_SELF}?page=api&action=getuserhashrate&api_key={$GLOBAL.userdata.api_key}&id={$GLOBAL.userdata.id}{literal}";
-  var storedData = Array();
+  
+  // jqPlit defaults
   var jqPlotOptions = {
     grid: { drawBorder: false, background: '#fbfbfb', shadow: false },
     seriesDefaults:{
@@ -33,39 +35,43 @@ $(document).ready(function(){
       color: '#26a4ed',
       lineWidth: 4,
       trendline: { color: '#d30000', lineWidth: 1.0, label: 'average', shadow: true },
-      markerOptions: { show: false, size: 8},
+      markerOptions: { show: true, size: 8},
       rendererOptions: { smooth: true }
     },
     legend: { show: true },
     title: 'Hashrate',
     axes: {
-      yaxis:{ min:0, padMin: 0, padMax: 1.5, label: '{/literal}{$GLOBAL.hashunits.personal}{literal}', labelRenderer: $.jqplot.CanvasAxisLabelRenderer},
-      xaxis:{ min:0, max: 60, tickInterval: 10, padMax: 0, label: 'Minutes', labelRenderer: $.jqplot.CanvasAxisLabelRenderer}
+      yaxis:{ min: 0, padMin: 0, padMax: 1.5, label: '{/literal}{$GLOBAL.hashunits.personal}{literal}', labelRenderer: $.jqplot.CanvasAxisLabelRenderer},
+      xaxis:{ tickInterval: {/literal}{$GLOBAL.config.statistics_ajax_refresh_interval}{literal}, label: 'Time', labelRenderer: $.jqplot.CanvasAxisLabelRenderer, renderer: $.jqplot.DateAxisRenderer, tickOptions: { formatString: '%T' } }
     },
   };
+
   // Init empty graph with 0 data
-  for (var i = 0; i < 60; i++) { storedData[i] = [i, 0] }
-  $.jqplot('hashrategraph', [storedData], jqPlotOptions);
+  $.jqplot('hashrategraph', [[[]]], jqPlotOptions);
+
+  // Store our data globally
+  var storedData = Array();
 
   // Fetch current datapoint as initial data
-  var d = new Date();
   $.ajax({
     url: url,
     dataType: "json",
     success: function(data) {
-      storedData[d.getMinutes()] = [d.getMinutes(), data.getuserhashrate.hashrate];
+      storedData[storedData.length] = [new Date().getTime(), data.getuserhashrate.hashrate];
       $.jqplot('hashrategraph', [storedData], jqPlotOptions).replot();
     }
   });
 
   // Update graph
   setInterval(function() {
-    var d = new Date();
     $.ajax({
       url: url,
       dataType: "json",
       success: function(data) {
-        storedData[d.getMinutes()] = [d.getMinutes(), data.getuserhashrate.hashrate];
+        console.log(storedData.length);
+        // Start dropping out elements
+        if (storedData.length > 60) { storedData.shift(); }
+        storedData[storedData.length] = [new Date().getTime(), data.getuserhashrate.hashrate];
         $.jqplot('hashrategraph', [storedData], jqPlotOptions).replot();
       }
     });
