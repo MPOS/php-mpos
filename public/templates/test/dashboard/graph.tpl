@@ -70,7 +70,7 @@ $(document).ready(function(){
       success: function(data) {
         console.log(storedData.length);
         // Start dropping out elements
-        if (storedData.length > 60) { storedData.shift(); }
+        if (storedData.length > 20) { storedData.shift(); }
         storedData[storedData.length] = [new Date().getTime(), data.getuserhashrate.hashrate];
         $.jqplot('hashrategraph', [storedData], jqPlotOptions).replot();
       }
