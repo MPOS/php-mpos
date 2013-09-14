@@ -3,6 +3,7 @@
 <script type="text/javascript" src="{$PATH}/js/plugins/jqplot.highlighter.js"></script>
 <script type="text/javascript" src="{$PATH}/js/plugins/jqplot.canvasTextRenderer.min.js"></script>
 <script type="text/javascript" src="{$PATH}/js/plugins/jqplot.canvasAxisLabelRenderer.min.js"></script>
+<script type="text/javascript" src="{$PATH}/js/plugins/jqplot.trendline.min.js"></script>
 
 <article class="module width_full">
   <header><h3>Graphs</h3></header>
@@ -16,11 +17,15 @@
 
 <script>{literal}
 $(document).ready(function(){
+  $.jqplot.config.enablePlugins = true;
+
   var url = "{/literal}{$smarty.server.PHP_SELF}?page=api&action=getuserhashrate&api_key={$GLOBAL.userdata.api_key}&id={$GLOBAL.userdata.id}{literal}";
   var storedData = Array();
-  var options = {
-    highlighter: { tooltipAxes: 'both', show: true },
+  var jqPlotOptions = {
+    series:[{ label: 'hashrate', trendline: { color: '#d30000', lineWidth: 1.0, label: 'average' } }],
+    legend: { show: true },
     title: 'Hashrate',
+    
     axes: {
       yaxis:{ min:0, padMin: 0, padMax: 1.5, label: '{/literal}{$GLOBAL.hashunits.personal}{literal}', labelRenderer: $.jqplot.CanvasAxisLabelRenderer},
       xaxis:{ min:0, max: 60, tickInterval: 10, padMax: 0, label: 'Minutes', labelRenderer: $.jqplot.CanvasAxisLabelRenderer}
@@ -28,7 +33,7 @@ $(document).ready(function(){
   };
   // Init empty graph with 0 data
   for (var i = 0; i < 60; i++) { storedData[i] = [i, 0] }
-  $.jqplot('hashrategraph', [storedData], options);
+  $.jqplot('hashrategraph', [storedData], jqPlotOptions);
 
   // Fetch current datapoint as initial data
   var d = new Date();
@@ -37,7 +42,7 @@ $(document).ready(function(){
     dataType: "json",
     success: function(data) {
       storedData[d.getMinutes()] = [d.getMinutes(), data.getuserhashrate.hashrate];
-      $.jqplot('hashrategraph', [storedData], options).replot();
+      $.jqplot('hashrategraph', [storedData], jqPlotOptions).replot();
     }
   });
 
@@ -49,7 +54,7 @@ $(document).ready(function(){
       dataType: "json",
       success: function(data) {
         storedData[d.getMinutes()] = [d.getMinutes(), data.getuserhashrate.hashrate];
-        $.jqplot('hashrategraph', [storedData], options).replot();
+        $.jqplot('hashrategraph', [storedData], jqPlotOptions).replot();
       }
     });
   }, {/literal}{($GLOBAL.config.statistics_ajax_refresh_interval * 1000)|default:"10000"}{literal});
