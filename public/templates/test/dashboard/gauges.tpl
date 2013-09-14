@@ -71,7 +71,7 @@ window.onload = function(){
         g5.refresh(parseFloat(data.getdashboarddata.datatime).toFixed(2));
       }
     });
-  }, 2000);
+  }, 10000);
 };
 {/literal}
 </script>
