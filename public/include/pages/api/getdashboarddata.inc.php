@@ -35,7 +35,6 @@ if ( ! $user->isAdmin($user_id) && ($_REQUEST['id'] != $user_id && !empty($_REQU
 $bitcoin->can_connect() === true ? $dNetworkHashrate = $bitcoin->query('getnetworkhashps') : $dNetworkHashrate = 0;
 
 // Some settings
-$start = microtime(true);
 if ( ! $interval = $setting->getValue('statistics_ajax_data_interval')) $interval = 300;
 if ( ! $dPoolHashrateModifier = $setting->getValue('statistics_pool_hashrate_modifier') ) $dPoolHashrateModifier = 1;
 if ( ! $dPersonalHashrateModifier = $setting->getValue('statistics_personal_hashrate_modifier') ) $dPersonalHashrateModifier = 1;
@@ -49,8 +48,6 @@ $dPersonalHashrate = $statistics->getUserHashrate($id, $interval);
 $dPersonalSharerate = $statistics->getUserSharerate($id, $interval);
 $statistics->setGetCache(true);
 
-$runtime = (microtime(true) - $start) * 1000;
-
 // Apply pool modifiers
 $dPersonalHashrate = $dPersonalHashrate * $dPersonalHashrateModifier;
 $dPoolHashrate = $dPoolHashrate * $dPoolHashrateModifier;
@@ -58,7 +55,7 @@ $dNetworkHashrate = $dNetworkHashrate / 1000 * $dNetworkHashrateModifier;
 
 // Output JSON format
 echo json_encode(array($_REQUEST['action'] => array(
-  'datatime' => $runtime,
+  'runtime' => (microtime(true) - $dTimeStart) * 1000,
   'personal' => array ( 'hashrate' => $dPersonalHashrate, 'sharerate' => $dPersonalSharerate ),
   'pool' => array( 'hashrate' => $dPoolHashrate ),
   'network' => array( 'hashrate' => $dNetworkHashrate ),
