@@ -17,7 +17,7 @@
 
 <script>{literal}
 $(document).ready(function(){
-  // $.jqplot.config.enablePlugins = true;
+  $.jqplot.config.enablePlugins = true;
 
   // Ajax API URL
   var url = "{/literal}{$smarty.server.PHP_SELF}?page=api&action=getuserhashrate&api_key={$GLOBAL.userdata.api_key}&id={$GLOBAL.userdata.id}{literal}";
