@@ -17,11 +17,11 @@
 
 <script>{literal}
 $(document).ready(function(){
-  $.jqplot.config.enablePlugins = true;
+  // $.jqplot.config.enablePlugins = true;
 
   // Ajax API URL
   var url = "{/literal}{$smarty.server.PHP_SELF}?page=api&action=getuserhashrate&api_key={$GLOBAL.userdata.api_key}&id={$GLOBAL.userdata.id}{literal}";
-  
+
   // jqPlit defaults
   var jqPlotOptions = {
     grid: { drawBorder: false, background: '#fbfbfb', shadow: false },
@@ -47,23 +47,13 @@ $(document).ready(function(){
   };
 
   // Init empty graph with 0 data
-  $.jqplot('hashrategraph', [[[]]], jqPlotOptions);
+  var plot1 = $.jqplot('hashrategraph', [[[]]], jqPlotOptions);
 
   // Store our data globally
   var storedData = Array();
 
-  // Fetch current datapoint as initial data
-  $.ajax({
-    url: url,
-    dataType: "json",
-    success: function(data) {
-      storedData[storedData.length] = [new Date().getTime(), data.getuserhashrate.hashrate];
-      $.jqplot('hashrategraph', [storedData], jqPlotOptions).replot();
-    }
-  });
-
-  // Update graph
-  setInterval(function() {
+  // Our refresh worker process, updated at intervals
+ (function workerHashrateGraph() {
     $.ajax({
       url: url,
       dataType: "json",
@@ -71,9 +61,11 @@ $(document).ready(function(){
         // Start dropping out elements
         if (storedData.length > 20) { storedData.shift(); }
         storedData[storedData.length] = [new Date().getTime(), data.getuserhashrate.hashrate];
-        $.jqplot('hashrategraph', [storedData], jqPlotOptions).replot();
-      }
+        console.log(storedData);
+        if (typeof(plot1) != "undefined") plot1.replot({data: [storedData]});
+      },
+      complete: function() { setTimeout(workerHashrateGraph, {/literal}{($GLOBAL.config.statistics_ajax_refresh_interval * 1000)|default:"10000"}{literal}) }
     });
-  }, {/literal}{($GLOBAL.config.statistics_ajax_refresh_interval * 1000)|default:"10000"}{literal});
+  })();
 });
 {/literal}</script>
