@@ -61,7 +61,6 @@ $(document).ready(function(){
         // Start dropping out elements
         if (storedData.length > 20) { storedData.shift(); }
         storedData[storedData.length] = [new Date().getTime(), data.getuserhashrate.hashrate];
-        console.log(storedData);
         if (typeof(plot1) != "undefined") plot1.replot({data: [storedData]});
       },
       complete: function() { setTimeout(workerHashrateGraph, {/literal}{($GLOBAL.config.statistics_ajax_refresh_interval * 1000)|default:"10000"}{literal}) }
