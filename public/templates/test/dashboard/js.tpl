@@ -5,6 +5,11 @@
 <script type="text/javascript" src="{$PATH}/js/plugins/jqplot.canvasAxisLabelRenderer.min.js"></script>
 <script type="text/javascript" src="{$PATH}/js/plugins/jqplot.trendline.min.js"></script>
 <script type="text/javascript" src="{$PATH}/js/plugins/jqplot.enhancedLegendRenderer.min.js"></script>
+<script type="text/javascript" src="{$PATH}/js/plugins/jqplot.canvasTextRenderer.min.js"></script>
+<script type="text/javascript" src="{$PATH}/js/plugins/jqplot.canvasAxisTickRenderer.min.js"></script>
+<script type="text/javascript" src="{$PATH}/js/plugins/jqplot.categoryAxisRenderer.min.js"></script>
+<script type="text/javascript" src="{$PATH}/js/plugins/jqplot.barRenderer.min.js"></script>
+<script type="text/javascript" src="{$PATH}/js/plugins/jqplot.pointLabels.js"></script>
 
 <script>
 {literal}
@@ -15,7 +20,7 @@ $(document).ready(function(){
   var url = "{/literal}{$smarty.server.PHP_SELF}?page=api&action=getdashboarddata&api_key={$GLOBAL.userdata.api_key}&id={$GLOBAL.userdata.id}{literal}";
 
   // Enable all included plugins
-  $.jqplot.config.enablePlugins = true;
+  //  $.jqplot.config.enablePlugins = true;
 
   // Store our data globally
   var storedPersonalHashrate=[];
@@ -23,14 +28,15 @@ $(document).ready(function(){
   var storedPersonalSharerate=[];
 
   // jqPlit defaults
-  var jqPlotOptions = {
+  var jqPlotOverviewOptions = {
+    highlighter: { show: true },
     grid: { drawBorder: false, background: '#fbfbfb', shadow: false },
     stackSeries: false,
     seriesColors: [ '#26a4ed', '#ee8310', '#e9e744' ],
     seriesDefaults:{
       lineWidth: 4, shadow: false,
       fill: false, fillAndStroke: true, fillAlpha: 0.3,
-      trendline: { color: '#be1e2d', lineWidth: 1.0, label: 'Your Average', shadow: true },
+      trendline: { show: true, color: '#be1e2d', lineWidth: 1.0, label: 'Your Average', shadow: true },
       markerOptions: { show: true, size: 6 },
       rendererOptions: { smooth: true }
     },
@@ -47,8 +53,38 @@ $(document).ready(function(){
     },
   };
 
-  // Init empty graph with 0 data
-  var plot1 = $.jqplot('hashrategraph', [[storedPersonalHashrate], [storedPoolHashrate], [[0, 1.5]]], jqPlotOptions);
+  var jqPlotShareinfoOptions = {
+    title: 'Shares',
+    highlighter: { show: false },
+    grid: { drawBorder: false, background: '#fbfbfb', shadow: false },
+    seriesColors: [ '#26a4ed', '#ee8310', '#e9e744' ],
+    seriesDefaults: {
+      pointLabels: { show: true },
+      renderer: $.jqplot.BarRenderer,
+      shadowAngle: 135,
+      rendererOptions: {
+        barWidth: 5,
+        barDirection: 'horizontal'
+      },
+      trendline: { show: false },
+    },
+    axesDefaults: {
+        autoscale: true,
+        tickRenderer: $.jqplot.CanvasAxisTickRenderer ,
+    },
+    series: [
+      {label: 'Own', }, {label: 'Pool'}
+    ],
+    legend: { show: true, location: 'ne', renderer: $.jqplot.EnhancedLegendRenderer, rendererOptions: { seriesToggleReplot: { resetAxes: true } } },
+    axes: {
+      yaxis: { tickOptions: { angle: -90 }, ticks:  [ 'invalid', 'valid' ], renderer: $.jqplot.CategoryAxisRenderer },
+      xaxis: { tickOptions: { angle: -15 }, pointLabels: { show: true } }
+    }
+  };
+
+  // Init empty graph with 0 data, otherwise some plugins fail
+  var plot1 = $.jqplot('hashrategraph', [[storedPersonalHashrate], [storedPoolHashrate], [[0, 0.0]]], jqPlotOverviewOptions);
+  var plot2 = $.jqplot('shareinfograph', [[[0]]], jqPlotShareinfoOptions);
 
   // Helper to initilize gauges
   function initGauges(data) {
@@ -59,17 +95,13 @@ $(document).ready(function(){
     g5 = new JustGage({id: "querytime", value: parseFloat(data.getdashboarddata.runtime).toFixed(2), min: 0, max: Math.round(data.getdashboarddata.runtime * 3), title: "Querytime", label: "ms"});
   }
 
-  // Helper to refresh gauges
-  function refreshGauges(data) {
+  // Helper to refresh graphs
+  function refreshInformation(data) {
     g1.refresh(parseFloat(data.getdashboarddata.network.hashrate).toFixed(2));
     g2.refresh(parseFloat(data.getdashboarddata.pool.hashrate).toFixed(2));
     g3.refresh(parseFloat(data.getdashboarddata.personal.hashrate).toFixed(2));
     g4.refresh(parseFloat(data.getdashboarddata.personal.sharerate).toFixed(2));
     g5.refresh(parseFloat(data.getdashboarddata.runtime).toFixed(2));
-  }
-
-  // Helper to refresh graphs
-  function refreshGraph(data) {
     if (storedPersonalHashrate.length > 20) { storedPersonalHashrate.shift(); }
     if (storedPoolHashrate.length > 20) { storedPoolHashrate.shift(); }
     if (storedPersonalSharerate.length > 20) { storedPersonalSharerate.shift(); }
@@ -77,11 +109,19 @@ $(document).ready(function(){
     storedPersonalHashrate[storedPersonalHashrate.length] = [timeNow, data.getdashboarddata.raw.personal.hashrate];
     storedPersonalSharerate[storedPersonalSharerate.length] = [timeNow, parseFloat(data.getdashboarddata.personal.sharerate)];
     storedPoolHashrate[storedPoolHashrate.length] = [timeNow, data.getdashboarddata.raw.pool.hashrate];
-    replotOptions = {
+    tempShareinfoData = [
+        [parseInt(data.getdashboarddata.personal.shares.valid), parseInt(data.getdashboarddata.personal.shares.invalid)],
+        [parseInt(data.getdashboarddata.pool.shares.valid), parseInt(data.getdashboarddata.pool.shares.invalid)]
+    ];
+    replotOverviewOptions = {
       data: [storedPersonalHashrate, storedPoolHashrate, storedPersonalSharerate],
       series: [ {show: plot1.series[0].show}, {show: plot1.series[1].show}, {show: plot1.series[2].show} ]
     };
-    if (typeof(plot1) != "undefined") plot1.replot(replotOptions);
+    replotShareinfoOptions= {
+      data: tempShareinfoData
+    };
+    if (typeof(plot1) != "undefined") plot1.replot(replotOverviewOptions);
+    if (typeof(plot2) != "undefined") plot2.replot(replotShareinfoOptions);
   }
 
   // Fetch initial data via Ajax, starts proper gauges to display
@@ -98,8 +138,7 @@ $(document).ready(function(){
       url: url,
       dataType: 'json',
       success: function(data) {
-        refreshGauges(data);
-        refreshGraph(data);
+        refreshInformation(data);
       },
       complete: function() {
         setTimeout(worker, {/literal}{($GLOBAL.config.statistics_ajax_refresh_interval * 1000)|default:"10000"}{literal})
