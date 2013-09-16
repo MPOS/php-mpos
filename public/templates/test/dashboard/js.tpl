@@ -24,7 +24,6 @@ $(document).ready(function(){
 
   // jqPlit defaults
   var jqPlotOptions = {
-    title: 'Overview',
     grid: { drawBorder: false, background: '#fbfbfb', shadow: false },
     stackSeries: false,
     seriesColors: [ '#26a4ed', '#ee8310', '#e9e744' ],
@@ -36,7 +35,7 @@ $(document).ready(function(){
       rendererOptions: { smooth: true }
     },
     series: [
-      { yaxid: 'yaxis', label: 'Own',    fill: true                                            },
+      { yaxis: 'yaxis', label: 'Own',    fill: true                                            },
       { yaxis: 'yaxis', label: 'Pool',   fill: false, trendline: { show: false }, lineWidth: 2, markerOptions: { show: true, size: 4 }},
       { yaxis: 'y3axis', label: 'Sharerate', fill: false, trendline: { show: false }              },
     ],
@@ -44,7 +43,7 @@ $(document).ready(function(){
     axes: {
       yaxis:  { min: 0, pad: 1.25, label: 'Hashrate' , labelRenderer: $.jqplot.CanvasAxisLabelRenderer },
       y3axis: { min: 0, pad: 1.25, label: 'Sharerate', labelRenderer: $.jqplot.CanvasAxisLabelRenderer },
-      xaxis:  { tickInterval: {/literal}{$GLOBAL.config.statistics_ajax_refresh_interval}{literal}, label: 'Time', labelRenderer: $.jqplot.CanvasAxisLabelRenderer, renderer: $.jqplot.DateAxisRenderer, angle: 30, tickOptions: { formatString: '%T' } },
+      xaxis:  { tickInterval: {/literal}{$GLOBAL.config.statistics_ajax_refresh_interval}{literal}, labelRenderer: $.jqplot.CanvasAxisLabelRenderer, renderer: $.jqplot.DateAxisRenderer, angle: 30, tickOptions: { formatString: '%T' } },
     },
   };
 
@@ -57,7 +56,7 @@ $(document).ready(function(){
     g2 = new JustGage({id: "poolhashrate", value: parseFloat(data.getdashboarddata.pool.hashrate).toFixed(2), min: 0, max: Math.round(data.getdashboarddata.pool.hashrate * 2), title: "Pool Hashrate", label: "{/literal}{$GLOBAL.hashunits.pool}{literal}"});
     g3 = new JustGage({id: "hashrate", value: parseFloat(data.getdashboarddata.personal.hashrate).toFixed(2), min: 0, max: Math.round(data.getdashboarddata.personal.hashrate * 2), title: "Hashrate", label: "{/literal}{$GLOBAL.hashunits.personal}{literal}"});
     g4 = new JustGage({id: "sharerate", value: parseFloat(data.getdashboarddata.personal.sharerate).toFixed(2), min: 0, max: Math.round(data.getdashboarddata.personal.sharerate * 2), title: "Sharerate", label: "shares/s"});
-    g5 = new JustGage({id: "sharerate", value: parseFloat(data.getdashboarddata.runtime).toFixed(2), min: 0, max: Math.round(data.getdashboarddata.runtime * 3), title: "Querytime", label: "ms"});
+    g5 = new JustGage({id: "querytime", value: parseFloat(data.getdashboarddata.runtime).toFixed(2), min: 0, max: Math.round(data.getdashboarddata.runtime * 3), title: "Querytime", label: "ms"});
   }
 
   // Helper to refresh gauges
