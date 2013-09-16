@@ -20,31 +20,36 @@ $(document).ready(function(){
   // Store our data globally
   var storedPersonalHashrate=[];
   var storedPoolHashrate=[];
+  var storedPersonalSharerate=[];
 
   // jqPlit defaults
   var jqPlotOptions = {
+    title: 'Overview',
     grid: { drawBorder: false, background: '#fbfbfb', shadow: false },
     stackSeries: false,
-    seriesColors: [ '#26a4ed', '#ee8310' ],
+    seriesColors: [ '#26a4ed', '#ee8310', '#e9e744' ],
     seriesDefaults:{
       lineWidth: 4, shadow: false,
-      lineAlpha: 0.3,
       fill: false, fillAndStroke: true, fillAlpha: 0.3,
       trendline: { color: '#be1e2d', lineWidth: 1.0, label: 'Your Average', shadow: true },
-      markerOptions: { show: true, size: 8},
+      markerOptions: { show: true, size: 6 },
       rendererOptions: { smooth: true }
     },
-    series: [ {label: 'Own', fill: true}, {label: 'Pool', trendline: { show: false } } ],
+    series: [
+      { yaxid: 'yaxis', label: 'Own',    fill: true                                            },
+      { yaxis: 'yaxis', label: 'Pool',   fill: false, trendline: { show: false }, lineWidth: 2, markerOptions: { show: true, size: 4 }},
+      { yaxis: 'y3axis', label: 'Sharerate', fill: false, trendline: { show: false }              },
+    ],
     legend: { show: true, location: 'sw', renderer: $.jqplot.EnhancedLegendRenderer, rendererOptions: { seriesToggleReplot: { resetAxes: true } } },
-    title: 'Hashrate',
     axes: {
-      yaxis: { padMin: 0, padMax: 1.05, label: 'Hashrate', labelRenderer: $.jqplot.CanvasAxisLabelRenderer},
-      xaxis:  { tickInterval: {/literal}{$GLOBAL.config.statistics_ajax_refresh_interval}{literal}, label: 'Time', labelRenderer: $.jqplot.CanvasAxisLabelRenderer, renderer: $.jqplot.DateAxisRenderer, tickOptions: { angle: 30, formatString: '%T' } },
+      yaxis:  { min: 0, pad: 1.25, label: 'Hashrate' , labelRenderer: $.jqplot.CanvasAxisLabelRenderer },
+      y3axis: { min: 0, pad: 1.25, label: 'Sharerate', labelRenderer: $.jqplot.CanvasAxisLabelRenderer },
+      xaxis:  { tickInterval: {/literal}{$GLOBAL.config.statistics_ajax_refresh_interval}{literal}, label: 'Time', labelRenderer: $.jqplot.CanvasAxisLabelRenderer, renderer: $.jqplot.DateAxisRenderer, angle: 30, tickOptions: { formatString: '%T' } },
     },
   };
 
   // Init empty graph with 0 data
-  var plot1 = $.jqplot('hashrategraph', [[storedPersonalHashrate], [storedPoolHashrate]], jqPlotOptions);
+  var plot1 = $.jqplot('hashrategraph', [[storedPersonalHashrate], [storedPoolHashrate], [[0, 1.5]]], jqPlotOptions);
 
   // Helper to initilize gauges
   function initGauges(data) {
@@ -68,12 +73,14 @@ $(document).ready(function(){
   function refreshGraph(data) {
     if (storedPersonalHashrate.length > 20) { storedPersonalHashrate.shift(); }
     if (storedPoolHashrate.length > 20) { storedPoolHashrate.shift(); }
+    if (storedPersonalSharerate.length > 20) { storedPersonalSharerate.shift(); }
     timeNow = new Date().getTime();
     storedPersonalHashrate[storedPersonalHashrate.length] = [timeNow, data.getdashboarddata.raw.personal.hashrate];
+    storedPersonalSharerate[storedPersonalSharerate.length] = [timeNow, parseFloat(data.getdashboarddata.personal.sharerate)];
     storedPoolHashrate[storedPoolHashrate.length] = [timeNow, data.getdashboarddata.raw.pool.hashrate];
     replotOptions = {
-      data: [storedPersonalHashrate, storedPoolHashrate],
-      series: [{show: plot1.series[0].show}, {show: plot1.series[1].show} ]
+      data: [storedPersonalHashrate, storedPoolHashrate, storedPersonalSharerate],
+      series: [ {show: plot1.series[0].show}, {show: plot1.series[1].show}, {show: plot1.series[2].show} ]
     };
     if (typeof(plot1) != "undefined") plot1.replot(replotOptions);
   }
@@ -91,7 +98,10 @@ $(document).ready(function(){
     $.ajax({
       url: url,
       dataType: 'json',
-      success: function(data) { refreshGauges(data); refreshGraph(data) },
+      success: function(data) {
+        refreshGauges(data);
+        refreshGraph(data);
+      },
       complete: function() {
         setTimeout(worker, {/literal}{($GLOBAL.config.statistics_ajax_refresh_interval * 1000)|default:"10000"}{literal})
       }
