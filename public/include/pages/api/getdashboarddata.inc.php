@@ -48,6 +48,10 @@ $dPersonalHashrate = $statistics->getUserHashrate($id, $interval);
 $dPersonalSharerate = $statistics->getUserSharerate($id, $interval);
 $statistics->setGetCache(true);
 
+// Use caches for this one
+$aUserRoundShares = $statistics->getUserShares($id);
+$aRoundShares = $statistics->getRoundShares();
+
 // Apply pool modifiers
 $dPersonalHashrateAdjusted = $dPersonalHashrate * $dPersonalHashrateModifier;
 $dPoolHashrateAdjusted = $dPoolHashrate * $dPoolHashrateModifier;
@@ -57,8 +61,8 @@ $dNetworkHashrateAdjusted = $dNetworkHashrate / 1000 * $dNetworkHashrateModifier
 echo json_encode(array($_REQUEST['action'] => array(
   'runtime' => (microtime(true) - $dTimeStart) * 1000,
   'raw' => array( 'personal' => array( 'hashrate' => $dPersonalHashrate ), 'pool' => array( 'hashrate' => $dPoolHashrate ), 'network' => array( 'hashrate' => $dNetworkHashrate / 1000 ) ),
-  'personal' => array ( 'hashrate' => $dPersonalHashrateAdjusted, 'sharerate' => $dPersonalSharerate ),
-  'pool' => array( 'hashrate' => $dPoolHashrateAdjusted ),
+  'personal' => array ( 'hashrate' => $dPersonalHashrateAdjusted, 'sharerate' => $dPersonalSharerate, 'shares' => $aUserRoundShares),
+  'pool' => array( 'hashrate' => $dPoolHashrateAdjusted, 'shares' => $aRoundShares ),
   'network' => array( 'hashrate' => $dNetworkHashrateAdjusted ),
 )));
 
