@@ -49,16 +49,17 @@ $dPersonalSharerate = $statistics->getUserSharerate($id, $interval);
 $statistics->setGetCache(true);
 
 // Apply pool modifiers
-$dPersonalHashrate = $dPersonalHashrate * $dPersonalHashrateModifier;
-$dPoolHashrate = $dPoolHashrate * $dPoolHashrateModifier;
-$dNetworkHashrate = $dNetworkHashrate / 1000 * $dNetworkHashrateModifier;
+$dPersonalHashrateAdjusted = $dPersonalHashrate * $dPersonalHashrateModifier;
+$dPoolHashrateAdjusted = $dPoolHashrate * $dPoolHashrateModifier;
+$dNetworkHashrateAdjusted = $dNetworkHashrate / 1000 * $dNetworkHashrateModifier;
 
 // Output JSON format
 echo json_encode(array($_REQUEST['action'] => array(
   'runtime' => (microtime(true) - $dTimeStart) * 1000,
-  'personal' => array ( 'hashrate' => $dPersonalHashrate, 'sharerate' => $dPersonalSharerate ),
-  'pool' => array( 'hashrate' => $dPoolHashrate ),
-  'network' => array( 'hashrate' => $dNetworkHashrate ),
+  'raw' => array( 'personal' => array( 'hashrate' => $dPersonalHashrate ), 'pool' => array( 'hashrate' => $dPoolHashrate ), 'network' => array( 'hashrate' => $dNetworkHashrate / 1000 ) ),
+  'personal' => array ( 'hashrate' => $dPersonalHashrateAdjusted, 'sharerate' => $dPersonalSharerate ),
+  'pool' => array( 'hashrate' => $dPoolHashrateAdjusted ),
+  'network' => array( 'hashrate' => $dNetworkHashrateAdjusted ),
 )));
 
 // Supress master template

@@ -3,4 +3,5 @@
   {include file="dashboard/graph.tpl"}
   {include file="dashboard/default_$payout_system.tpl"}
   {include file="dashboard/gauges.tpl"}
+  {include file="dashboard/js.tpl"}
 {/if}
