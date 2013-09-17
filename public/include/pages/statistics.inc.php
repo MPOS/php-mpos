@@ -8,7 +8,7 @@ if (!$smarty->isCached('master.tpl', $smarty_cache_key)) {
   $debug->append('No cached version available, fetching from backend', 3);
   if ($bitcoin->can_connect() === true){
     $dDifficulty = $bitcoin->getdifficulty();
-    $iBlock = $bitcoin->query('getblockcount');
+    $iBlock = $bitcoin->getblockcount();
   } else {
     $dDifficulty = 1;
     $iBlock = 0;
