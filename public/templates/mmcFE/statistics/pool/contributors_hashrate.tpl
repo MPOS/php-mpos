@@ -5,7 +5,7 @@
       <tr style="background-color:#B6DAFF;">
         <th align="left">Rank</th>
         <th align="left" scope="col">User Name</th>
-        <th class="right" scope="col">KH/s</th>
+        <th class="right" scope="col">{$GLOBAL.hashunits.personal}</th>
         <th class="right">{$GLOBAL.config.currency}/Day</th>
         {if $GLOBAL.config.price.currency}<th class="right">{$GLOBAL.config.price.currency}/Day</th>{/if}
       </tr>
@@ -18,7 +18,7 @@
       <tr{if $GLOBAL.userdata.username == $CONTRIBHASHES[contrib].account}{assign var=listed value=1} style="background-color:#99EB99;"{else} class="{cycle values="odd,even"}"{/if}>
         <td>{$rank++}</td>
         <td>{if $CONTRIBHASHES[contrib].is_anonymous|default:"0" == 1}anonymous{else}{$CONTRIBHASHES[contrib].account|escape}{/if}</td>
-        <td class="right">{$CONTRIBHASHES[contrib].hashrate|number_format}</td>
+        <td class="right">{($CONTRIBHASHES[contrib].hashrate * $GLOBAL.hashmods.personal)|number_format:"2"}</td>
         <td class="right">{$estday|number_format:"3"}</td>
         {if $GLOBAL.config.price.currency}<td class="right">{($estday * $GLOBAL.price)|default:"n/a"|number_format:"2"}</td>{/if}
       </tr>
