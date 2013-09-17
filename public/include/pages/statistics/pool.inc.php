@@ -8,8 +8,6 @@ if (!$smarty->isCached('master.tpl', $smarty_cache_key)) {
   // Fetch data from wallet
   if ($bitcoin->can_connect() === true){
     $dDifficulty = $bitcoin->getdifficulty();
-    if (is_array($dDifficulty) && array_key_exists('proof-of-work', $dDifficulty))
-      $dDifficulty = $dDifficulty['proof-of-work'];
     $iBlock = $bitcoin->getblockcount();
     is_int($iBlock) && $iBlock > 0 ? $sBlockHash = $bitcoin->query('getblockhash', $iBlock) : $sBlockHash = '';
   } else {

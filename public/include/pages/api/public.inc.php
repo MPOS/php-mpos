@@ -11,7 +11,7 @@ $aLastBlock = $block->getLast();
 $aShares = $statistics->getRoundShares();
 
 // RPC Calls
-$bitcoin->can_connect() === true ? $dNetworkHashrate = $bitcoin->query('getnetworkhashps') : $dNetworkHashrate = 0;
+$bitcoin->can_connect() === true ? $dNetworkHashrate = $bitcoin->getnetworkhashps() : $dNetworkHashrate = 0;
 
 echo json_encode(
   array(

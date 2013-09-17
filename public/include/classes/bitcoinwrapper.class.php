@@ -25,19 +25,32 @@ class BitcoinWrapper extends BitcoinClient {
   public function getblockcount() {
     $this->oDebug->append("STA " . __METHOD__, 4);
     if ($data = $this->memcache->get(__FUNCTION__)) return $data;
-    return $this->memcache->setCache(__FUNCTION__, parent::getblockcount());
+    return $this->memcache->setCache(__FUNCTION__, parent::getblockcount(), 30);
   }
   public function getdifficulty() {
     $this->oDebug->append("STA " . __METHOD__, 4);
     if ($data = $this->memcache->get(__FUNCTION__)) return $data;
-    return $this->memcache->setCache(__FUNCTION__, parent::getdifficulty());
+    $data = parent::getdifficulty();
+    // Check for PoS/PoW coins
+    if (is_array($data) && array_key_exists('proof-of-work', $data))
+      $data = $data['proof-of-work'];
+    return $this->memcache->setCache(__FUNCTION__, $data, 30);
   }
   public function getestimatedtime($iCurrentPoolHashrate) {
     $this->oDebug->append("STA " . __METHOD__, 4);
     if ($iCurrentPoolHashrate == 0) return 0;
     if ($data = $this->memcache->get(__FUNCTION__)) return $data;
-    $dDifficulty = parent::getdifficulty();
-    return $this->memcache->setCache(__FUNCTION__, $dDifficulty * pow(2,32) / $iCurrentPoolHashrate);
+    $dDifficulty = $this->getdifficulty();
+    return $this->memcache->setCache(__FUNCTION__, $dDifficulty * pow(2,32) / $iCurrentPoolHashrate, 30);
+  }
+  public function getnetworkhashps() {
+    $this->oDebug->append("STA " . __METHOD__, 4);
+    if ($data = $this->memcache->get(__FUNCTION__)) return $data;
+    try { $dNetworkHashrate = $this->query('getnetworkhashps') / 1000; } catch (Exception $e) {
+      // Maybe we are SHA
+      try { $dNetworkHashrate = $this->query('gethashespersec') / 1000; } catch (Exception $e) { return false; }
+    }
+    return $this->memcache->setCache(__FUNCTION__, $dNetworkHashrate, 30);
   }
 }
 
