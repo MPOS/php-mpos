@@ -6,33 +6,19 @@ if (!defined('SECURITY')) die('Hacking attempt');
 // Check if the API is activated
 $api->isActive();
 
-// Check user token
-$user_id = $user->checkApiKey($_REQUEST['api_key']);
+// Check user token and access level permissions
+$user_id = $api->checkAccess($user->checkApiKey($_REQUEST['api_key']), @$_REQUEST['id']);
 
-/**
- * This check will ensure the user can do the following:
- * Admin: Check any user via request id
- * Regular: Check your own status
- * Other: Deny access via checkApiKey
- **/
-if ( ! $user->isAdmin($user_id) && ($_REQUEST['id'] != $user_id && !empty($_REQUEST['id']))) {
-  // User is admin and tries to access an ID that is not their own
-  header("HTTP/1.1 401 Unauthorized");
-  die("Access denied");
-} else if ($user->isAdmin($user_id)) {
-  // Admin, so allow any ID passed in request
-  $id = $_REQUEST['id'];
-  // Is it a username or a user ID
-  ctype_digit($_REQUEST['id']) ? $username = $user->getUserName($_REQUEST['id']) : $username = $_REQUEST['id'];
-  ctype_digit($_REQUEST['id']) ? $id = $_REQUEST['id'] : $id = $user->getUserId($_REQUEST['id']);
+// Fetch RPC information
+if ($bitcoin->can_connect() === true) {
+  $dNetworkHashrate = $bitcoin->getnetworkhashps();
+  $dDifficulty = $bitcoin->getdifficulty();
+  $iBlock = $bitcoin->getblockcount();
 } else {
-  // Not admin, only allow own user ID
-  $id = $user_id;
-  $username = $user->getUserName($id);
+  $dNetworkHashrate = 0;
+  $dDifficulty = 1;
+  $iBlock = 0;
 }
-
-// Fetch raw RPC data
-$bitcoin->can_connect() === true ? $dNetworkHashrate = $bitcoin->query('getnetworkhashps') : $dNetworkHashrate = 0;
 
 // Some settings
 if ( ! $interval = $setting->getValue('statistics_ajax_data_interval')) $interval = 300;
@@ -44,12 +30,12 @@ if ( ! $dNetworkHashrateModifier = $setting->getValue('statistics_network_hashra
 $statistics->setGetCache(false);
 $dPoolHashrate = $statistics->getCurrentHashrate($interval);
 if ($dPoolHashrate > $dNetworkHashrate) $dNetworkHashrate = $dPoolHashrate;
-$dPersonalHashrate = $statistics->getUserHashrate($id, $interval);
-$dPersonalSharerate = $statistics->getUserSharerate($id, $interval);
+$dPersonalHashrate = $statistics->getUserHashrate($user_id, $interval);
+$dPersonalSharerate = $statistics->getUserSharerate($user_id, $interval);
 $statistics->setGetCache(true);
 
 // Use caches for this one
-$aUserRoundShares = $statistics->getUserShares($id);
+$aUserRoundShares = $statistics->getUserShares($user_id);
 $aRoundShares = $statistics->getRoundShares();
 
 // Apply pool modifiers
@@ -58,13 +44,13 @@ $dPoolHashrateAdjusted = $dPoolHashrate * $dPoolHashrateModifier;
 $dNetworkHashrateAdjusted = $dNetworkHashrate / 1000 * $dNetworkHashrateModifier;
 
 // Output JSON format
-echo json_encode(array($_REQUEST['action'] => array(
-  'runtime' => (microtime(true) - $dTimeStart) * 1000,
+$data = array(
   'raw' => array( 'personal' => array( 'hashrate' => $dPersonalHashrate ), 'pool' => array( 'hashrate' => $dPoolHashrate ), 'network' => array( 'hashrate' => $dNetworkHashrate / 1000 ) ),
   'personal' => array ( 'hashrate' => $dPersonalHashrateAdjusted, 'sharerate' => $dPersonalSharerate, 'shares' => $aUserRoundShares),
   'pool' => array( 'hashrate' => $dPoolHashrateAdjusted, 'shares' => $aRoundShares ),
-  'network' => array( 'hashrate' => $dNetworkHashrateAdjusted ),
-)));
+  'network' => array( 'hashrate' => $dNetworkHashrateAdjusted, 'difficulty' => $dDifficulty, 'block' => $iBlock ),
+);
+echo $api->get_json($data);
 
 // Supress master template
 $supress_master = 1;

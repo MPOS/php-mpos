@@ -7,7 +7,7 @@ if (!defined('SECURITY')) die('Hacking attempt');
 $api->isActive();
 
 // Check user token
-$user_id = $user->checkApiKey($_REQUEST['api_key']);
+$user_id = $api->checkAccess($user->checkApiKey($_REQUEST['api_key']), @$_REQUEST['id']);
 
 // Fetch last block information
 $aLastBlock = $block->getLast();
@@ -20,7 +20,7 @@ $aShares['valid'] > 0 ? $dEfficiency = round((100 - (100 / $aShares['valid'] * $
 if ($bitcoin->can_connect() === true){
   $dDifficulty = $bitcoin->getdifficulty();
   $iBlock = $bitcoin->getblockcount();
-  $dNetworkHashrate = $bitcoin->query('getnetworkhashps');
+  $dNetworkHashrate = $bitcoin->getnetworkhashps();
 } else {
   $dDifficulty = 1;
   $iBlock = 0;
@@ -46,21 +46,21 @@ if (!empty($aLastBlock)) {
 }
 
 // Output JSON format
-echo json_encode(
-  array(
-    'getpoolstatus' => array(
-      'hashrate' => $iCurrentPoolHashrate,
-      'efficiency' => $dEfficiency,
-      'workers' => $worker->getCountAllActiveWorkers(),
-      'currentnetworkblock' =>  $iBlock,
-      'nextnetworkblock' =>  $iBlock + 1,
-      'lastblock' => $aLastBlock['height'],
-      'networkdiff' => $dDifficulty,
-      'esttime' => $iEstTime,
-      'estshares' => $iEstShares,
-      'timesincelast' => $dTimeSinceLast,
-      'nethashrate' => $dNetworkHashrate
-    )));
+$data = array(
+  'hashrate' => $iCurrentPoolHashrate,
+  'efficiency' => $dEfficiency,
+  'workers' => $worker->getCountAllActiveWorkers(),
+  'currentnetworkblock' =>  $iBlock,
+  'nextnetworkblock' =>  $iBlock + 1,
+  'lastblock' => $aLastBlock['height'],
+  'networkdiff' => $dDifficulty,
+  'esttime' => $iEstTime,
+  'estshares' => $iEstShares,
+  'timesincelast' => $dTimeSinceLast,
+  'nethashrate' => $dNetworkHashrate
+);
+
+echo $api->get_json($data);
 
 // Supress master template
 $supress_master = 1;

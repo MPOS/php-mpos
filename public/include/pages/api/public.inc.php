@@ -13,6 +13,7 @@ $aShares = $statistics->getRoundShares();
 // RPC Calls
 $bitcoin->can_connect() === true ? $dNetworkHashrate = $bitcoin->getnetworkhashps() : $dNetworkHashrate = 0;
 
+// Backwards compatible with the existing services
 echo json_encode(
   array(
     'pool_name' => $setting->getValue('website_name'),

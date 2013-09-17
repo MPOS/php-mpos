@@ -7,21 +7,17 @@ if (!defined('SECURITY')) die('Hacking attempt');
 $api->isActive();
 
 // Check user token
-$id = $user->checkApiKey($_REQUEST['api_key']);
+$user_id = $api->checkAccess($user->checkApiKey($_REQUEST['api_key']), @$_REQUEST['id']);
 
 // Fetch our last block found
 $aBlocksFoundData = $statistics->getBlocksFound(1);
 
 // Time since last block
 $now = new DateTime( "now" );
-if (!empty($aBlocksFoundData)) {
-  $dTimeSinceLast = ($now->getTimestamp() - $aBlocksFoundData[0]['time']);
-} else {
-  $dTimeSinceLast = 0;
-}
+! empty($aBlocksFoundData) ? $dTimeSinceLast = ($now->getTimestamp() - $aBlocksFoundData[0]['time']) : $dTimeSinceLast = 0;
 
 // Output JSON format
-echo json_encode(array('gettimesincelastblock' => $dTimeSinceLast));
+echo $api->get_json($dTimeSinceLast);
 
 // Supress master template
 $supress_master = 1;

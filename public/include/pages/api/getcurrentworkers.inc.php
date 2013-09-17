@@ -7,10 +7,10 @@ if (!defined('SECURITY')) die('Hacking attempt');
 $api->isActive();
 
 // Check user token
-$id = $user->checkApiKey($_REQUEST['api_key']);
+$user_id = $api->checkAccess($user->checkApiKey($_REQUEST['api_key']), @$_REQUEST['id']);
 
 // Output JSON format
-echo json_encode(array('getcurrentworkers' => $worker->getCountAllActiveWorkers()));
+echo $api->get_json($worker->getCountAllActiveWorkers());
 
 // Supress master template
 $supress_master = 1;

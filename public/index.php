@@ -19,7 +19,7 @@ limitations under the License.
  */
 
 // Used for performance calculations
-$dTimeStart = microtime(true);
+$dStartTime = microtime(true);
 
 // This should be okay
 define("BASEPATH", "./");
@@ -84,7 +84,7 @@ require_once(INCLUDE_DIR . '/smarty_globals.inc.php');
 // Load debug information into template
 $debug->append("Loading debug information into template", 4);
 $smarty->assign('DebuggerInfo', $debug->getDebugInfo());
-$smarty->assign('RUNTIME', (microtime(true) - $dTimeStart) * 1000);
+$smarty->assign('RUNTIME', (microtime(true) - $dStartTime) * 1000);
 
 // Display our page
 if (!@$supress_master) $smarty->display("master.tpl", $smarty_cache_key);
