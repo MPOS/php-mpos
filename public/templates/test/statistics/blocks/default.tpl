@@ -92,7 +92,7 @@
       <td colspan="6" align="right"><b>Totals</b></td>
       <td align="right">{$totalexpectedshares|number_format}</td>
       <td align="right">{$totalshares|number_format}</td>
-      <td align="right" style="padding-right: 25px;"><font color="{if (($totalpercentage / $count) <= 100)}green{else}red{/if}">{($totalpercentage / $count)|number_format:"2"}</font>
+      <td align="right" style="padding-right: 25px;">{if $count > 0}<font color="{if (($totalpercentage / $count) <= 100)}green{else}red{/if}">{($totalpercentage / $count)|number_format:"2"}</font>{else}0{/if}</td>
     </tr>
     </tbody>
   </table>
