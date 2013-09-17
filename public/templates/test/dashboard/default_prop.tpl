@@ -46,9 +46,6 @@
            <td class="right">{$GLOBAL.userdata.est_payout|number_format:"8"}</td>
          </tr>
          <tr><td colspan="2">&nbsp;</td></tr>
-         <tr><td colspan="2"><b><u>{$GLOBAL.config.currency} Account Balance</u></b></td></tr>
-         <tr><td>Confirmed</td><td class="right"><b>{$GLOBAL.userdata.balance.confirmed|default:"0"}</td></tr>
-         <tr><td>Unconfirmed</td><td class="right"><b>{$GLOBAL.userdata.balance.unconfirmed|default:"0"}</td></tr>
        </tbody>
       </table>
     </div>

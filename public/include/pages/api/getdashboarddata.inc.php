@@ -46,7 +46,7 @@ $dNetworkHashrateAdjusted = $dNetworkHashrate / 1000 * $dNetworkHashrateModifier
 // Output JSON format
 $data = array(
   'raw' => array( 'personal' => array( 'hashrate' => $dPersonalHashrate ), 'pool' => array( 'hashrate' => $dPoolHashrate ), 'network' => array( 'hashrate' => $dNetworkHashrate / 1000 ) ),
-  'personal' => array ( 'hashrate' => $dPersonalHashrateAdjusted, 'sharerate' => $dPersonalSharerate, 'shares' => $aUserRoundShares),
+  'personal' => array ( 'hashrate' => $dPersonalHashrateAdjusted, 'sharerate' => $dPersonalSharerate, 'shares' => $aUserRoundShares, 'balance' => $transaction->getBalance($user_id)),
   'pool' => array( 'hashrate' => $dPoolHashrateAdjusted, 'shares' => $aRoundShares ),
   'network' => array( 'hashrate' => $dNetworkHashrateAdjusted, 'difficulty' => $dDifficulty, 'block' => $iBlock ),
 );

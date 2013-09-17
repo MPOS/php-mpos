@@ -77,8 +77,8 @@ $(document).ready(function(){
     ],
     legend: { show: true, location: 'ne', renderer: $.jqplot.EnhancedLegendRenderer, rendererOptions: { seriesToggleReplot: { resetAxes: true } } },
     axes: {
-      yaxis: { tickOptions: { angle: -90 }, ticks:  [ 'invalid', 'valid' ], renderer: $.jqplot.CategoryAxisRenderer },
-      xaxis: { tickOptions: { angle: -15 }, pointLabels: { show: true } }
+      yaxis: { tickOptions: { angle: -90 }, ticks:  [ 'valid', 'invalid' ], renderer: $.jqplot.CategoryAxisRenderer },
+      xaxis: { tickOptions: { angle: -17 }, pointLabels: { show: true } }
     }
   };
 
@@ -132,6 +132,11 @@ $(document).ready(function(){
     success: function (data) { initGauges(data); }
   });
 
+  function refreshStaticData(data) {
+    $('#b-confirmed').html(data.getdashboarddata.data.personal.balance.confirmed);
+    $('#b-unconfirmed').html(data.getdashboarddata.data.personal.balance.unconfirmed);
+  }
+
   // Our worker process to keep gauges and graph updated
   (function worker() {
     $.ajax({
@@ -139,6 +144,7 @@ $(document).ready(function(){
       dataType: 'json',
       success: function(data) {
         refreshInformation(data);
+        refreshStaticData(data);
       },
       complete: function() {
         setTimeout(worker, {/literal}{($GLOBAL.config.statistics_ajax_refresh_interval * 1000)|default:"10000"}{literal})
