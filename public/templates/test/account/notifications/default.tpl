@@ -97,7 +97,7 @@
 {/if}
         </td>
         <td align="center">
-          <img src="{$PATH}/images/icn_alert_{if $NOTIFICATIONS[notification].active}success{else}error{/if}.png" />
+          <i class="icon-{if $NOTIFICATIONS[notification].active}ok{else}cancel{/if}"></i>
         </td>
       </tr>
 {/section}
