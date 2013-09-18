@@ -117,6 +117,20 @@ $aSettings['statistics'][] = array(
   'tooltip' => 'Time in minutes, interval for hashrate and sharerate calculations. Higher intervals allow for better accuracy at a higer server load.'
 );
 $aSettings['statistics'][] = array(
+  'display' => 'Ajax Caching', 'type' => 'select',
+  'options' => array('0' => 'No', '1' => 'Yes'),
+  'default' => 0,
+  'name' => 'statistics_ajax_cache', 'value' => $setting->getValue('statistics_ajax_cache'),
+  'tooltip' => 'Enable or disable the Ajax cache for memcache.'
+);
+$aSettings['statistics'][] = array(
+  'display' => 'Ajax Cache Expiration', 'type' => 'select',
+  'options' => array('5' => '5', '10' => '10', '20' => '20', '40' => '40', '60' => '60'),
+  'default' => 10,
+  'name' => 'statistics_ajax_cache_expiration', 'value' => $setting->getValue('statistics_ajax_cache_expiration'),
+  'tooltip' => 'Change expiration time for memcache keys.'
+);
+$aSettings['statistics'][] = array(
   'display' => 'Block Statistics Count', 'type' => 'text',
   'size' => 25,
   'default' => 20,
