@@ -112,6 +112,16 @@ class Share {
   }
 
   /**
+   * Fetch the highest available share ID
+   **/
+  function getMaxShareId() {
+    $stmt = $this->mysqli->prepare("SELECT MAX(id) AS id FROM $this->table");
+    if ($this->checkStmt($stmt) && $stmt->execute() && $result = $stmt->get_result())
+      return $result->fetch_object()->id;
+    return false;
+  }
+
+  /**
    * Fetch the highest available share ID from archive
    **/
   function getMaxArchiveShareId() {
