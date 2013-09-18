@@ -37,6 +37,9 @@ class Base {
   public function setSetting($setting) {
     $this->setting = $setting;
   }
+  public function setMemcache($memcache) {
+    $this->memcache = $memcache;
+  }
   public function setBitcoin($bitcoin) {
     $this->bitcoin = $bitcoin;
   }

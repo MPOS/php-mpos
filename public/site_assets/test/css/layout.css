@@ -442,18 +442,18 @@ margin-bottom: 8px}
 
 /* Content Manager */
 
-.tablesorter {
+.tablesorter, .tablesorterpager {
 width: 100%;
 margin: -5px 0 0 0;
 }
 
-.tablesorter td{
+.tablesorter, .tablesorterpager td{
 margin: 0;
 padding: 0;
 border-bottom: 1px dotted #ccc;
 }
 
-.tablesorter thead tr {
+.tablesorter, .tablesorterpager thead tr {
 height: 34px;
 background: url(../images/table_sorter_header.png) repeat-x;
 text-align: left;
@@ -461,11 +461,11 @@ text-indent: 10px;
 cursor: pointer;
 }
 
-.tablesorter td {
+.tablesorter, .tablesorterpager td {
 padding: 15px 10px;
 }
 
-.tablesorter input[type=image] {
+.tablesorter, .tablesorterpager input[type=image] {
 margin-right: 10px;}
 
 ul.tabs {
