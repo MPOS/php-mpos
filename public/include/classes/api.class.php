@@ -30,19 +30,13 @@ class Api extends Base {
    * @return string JSON object
    **/
   function get_json($data, $force=false) {
-    // Create a request specific memcache key
-    $sMemcacheKey = @$_REQUEST['page'] . '_' . @$_REQUEST['action'] . '_' . __FUNCTION__ . '_' . @$SESSION['USERDATA']['id'] . '_' . $_SESSION['REMOTE_ADDR'];
-    if ($this->setting->getValue('statistics_ajax_cache') && $json_data = $this->memcache->get($sMemcacheKey)) return $json_data;
-    $json_data =json_encode(
+    return json_encode(
       array( $_REQUEST['action'] => array(
         'version' => $this->api_version,
         'runtime' => (microtime(true) - $this->dStartTime) * 1000,
         'data' => $data
       )), $force ? JSON_FORCE_OBJECT : 0
     );
-    if (! $expiration = $this->setting->getValue('statistics_ajax_cache_expiration')) $expiration = 10;
-    if ($this->setting->getValue('statistics_ajax_cache'))
-      return $this->memcache->setCache($sMemcacheKey, $json_data, $expiration);
   }
 
   /**
@@ -69,5 +63,4 @@ $api = new Api();
 $api->setConfig($config);
 $api->setUser($user);
 $api->setSetting($setting);
-$api->setMemcache($memcache);
 $api->setStartTime($dStartTime);
