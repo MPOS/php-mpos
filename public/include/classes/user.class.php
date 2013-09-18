@@ -427,7 +427,7 @@ class User {
     // Enforce a page reload and point towards login with referrer included, if supplied
     $location = @$_SERVER['HTTPS'] ? 'https' : 'http' . '://' . $_SERVER['SERVER_NAME'] . $_SERVER['PHP_SELF'];
     if (!empty($from)) $location .= '?page=login&to=' . urlencode($from);
-    // if (!headers_sent()) header('Location: ' . $location, true, 307);
+    // if (!headers_sent()) header('Location: ' . $location);
     exit('<meta http-equiv="refresh" content="0; url=' . $location . '"/>');
   }
 
