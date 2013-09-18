@@ -127,14 +127,24 @@ class Statistics {
    * @param none
    * @return data object Our share rate in shares per second
    **/
-  public function getCurrentShareRate() {
+  public function getCurrentShareRate($interval=600) {
     $this->debug->append("STA " . __METHOD__, 4);
     if ($data = $this->memcache->get(__FUNCTION__)) return $data;
     $stmt = $this->mysqli->prepare("
-      SELECT ROUND(SUM(IF(difficulty=0, POW(2, (" . $this->config['difficulty'] . " - 16)), difficulty)) / POW(2, (" . $this->config['difficulty'] . " - 16)) / 600, 2) AS sharerate
-      FROM " . $this->share->getTableName() . "
-      WHERE time > DATE_SUB(now(), INTERVAL 10 MINUTE)");
-    if ($this->checkStmt($stmt) && $stmt->execute() && $result = $stmt->get_result() ) return $this->memcache->setCache(__FUNCTION__, $result->fetch_object()->sharerate);
+      SELECT
+      (
+        (
+          SELECT ROUND(COUNT(id) / ?, 2) AS sharerate
+          FROM " . $this->share->getTableName() . "
+          WHERE time > DATE_SUB(now(), INTERVAL ? SECOND)
+        ) + (
+          SELECT ROUND(COUNT(id) / ?, 2) AS sharerate
+          FROM " . $this->share->getArchiveTableName() . "
+          WHERE time > DATE_SUB(now(), INTERVAL ? SECOND)
+        )
+      ) AS sharerate
+      FROM DUAL");
+    if ($this->checkStmt($stmt) && $stmt->bind_param('iiii', $interval, $interval, $interval, $interval) && $stmt->execute() && $result = $stmt->get_result() ) return $this->memcache->setCache(__FUNCTION__, $result->fetch_object()->sharerate);
     // Catchall
     $this->debug->append("Failed to fetch share rate: " . $this->mysqli->error);
     return false;
@@ -147,7 +157,20 @@ class Statistics {
    **/
   public function getRoundShares() {
     $this->debug->append("STA " . __METHOD__, 4);
-    if ($this->getGetCache() && $data = $this->memcache->get(__FUNCTION__)) return $data;
+    // Try the statistics cron cache, then function cache, then fallback to SQL
+    if ($data = $this->memcache->get(STATISTICS_ALL_USER_SHARES)) {
+      $this->debug->append("Found data in statistics cache", 2);
+      $total = array('valid' => 0, 'invalid' => 0);
+      foreach ($data['data'] as $aUser) {
+        $total['valid'] += $aUser['valid'];
+        $total['invalid'] += $aUser['invalid'];
+      }
+      return $total;
+    }
+    if ($data = $this->memcache->get(STATISTICS_ROUND_SHARES)) {
+      $this->debug->append("Found data in local cache", 2);
+      return $data;
+    }
     $stmt = $this->mysqli->prepare("
       SELECT
         ROUND(IFNULL(SUM(IF(our_result='Y', IF(difficulty=0, POW(2, (" . $this->config['difficulty'] . " - 16)), difficulty), 0)), 0) / POW(2, (" . $this->config['difficulty'] . " - 16)), 0) AS valid,
@@ -155,7 +178,7 @@ class Statistics {
       FROM " . $this->share->getTableName() . "
       WHERE UNIX_TIMESTAMP(time) > IFNULL((SELECT MAX(time) FROM " . $this->block->getTableName() . "), 0)");
     if ( $this->checkStmt($stmt) && $stmt->execute() && $result = $stmt->get_result() )
-      return $this->memcache->setCache(__FUNCTION__, $result->fetch_assoc());
+      return $this->memcache->setCache(STATISTICS_ROUND_SHARES, $result->fetch_assoc());
     // Catchall
     $this->debug->append("Failed to fetch round shares: " . $this->mysqli->error);
     return false;
@@ -169,20 +192,41 @@ class Statistics {
    **/
   public function getAllUserShares() {
     $this->debug->append("STA " . __METHOD__, 4);
-    if ($this->getGetCache() && $data = $this->memcache->get(__FUNCTION__)) return $data;
+    if (! $data = $this->memcache->get(STATISTICS_ALL_USER_SHARES)) {
+      $data['share_id'] = 0;
+      $data['data'] = array();
+    }
     $stmt = $this->mysqli->prepare("
       SELECT
         ROUND(IFNULL(SUM(IF(our_result='Y', IF(s.difficulty=0, POW(2, (" . $this->config['difficulty'] . " - 16)), s.difficulty), 0)), 0) / POW(2, (" . $this->config['difficulty'] . " - 16)), 0) AS valid,
         ROUND(IFNULL(SUM(IF(our_result='N', IF(s.difficulty=0, POW(2, (" . $this->config['difficulty'] . " - 16)), s.difficulty), 0)), 0) / POW(2, (" . $this->config['difficulty'] . " - 16)), 0) AS invalid,
         u.id AS id,
+        u.donate_percent AS donate_percent,
+        u.is_anonymous AS is_anonymous,
         u.username AS username
       FROM " . $this->share->getTableName() . " AS s,
            " . $this->user->getTableName() . " AS u
       WHERE u.username = SUBSTRING_INDEX( s.username, '.', 1 )
-        AND UNIX_TIMESTAMP(s.time) >IFNULL((SELECT MAX(b.time) FROM " . $this->block->getTableName() . " AS b),0)
-      GROUP BY u.id");
-    if ($stmt && $stmt->execute() && $result = $stmt->get_result())
-      return $this->memcache->setCache(__FUNCTION__, $result->fetch_all(MYSQLI_ASSOC));
+        AND UNIX_TIMESTAMP(s.time) > IFNULL(
+          (
+            SELECT MAX(b.time)
+            FROM " . $this->block->getTableName() . " AS b
+          ) ,0 )
+        AND s.id > ?
+        GROUP BY u.id");
+    if ($stmt && $stmt->bind_param('i', $data['share_id']) && $stmt->execute() && $result = $stmt->get_result()) {
+      $data_new = array();
+      while ($row = $result->fetch_assoc()) {
+        if (! array_key_exists($row['id'], $data['data'])) {
+          $data['data'][$row['id']] = $row;
+        } else {
+          $data['data'][$row['id']]['valid'] += $row['valid'];
+          $data['data'][$row['id']]['invalid'] += $row['invalid'];
+        }
+      }
+      $data['share_id'] = $this->share->getMaxShareId();
+      return $this->memcache->setCache(STATISTICS_ALL_USER_SHARES, $data);
+    }
     // Catchall
     $this->debug->append("Unable to fetch all users round shares: " . $this->mysqli->error);
     return false;
@@ -195,7 +239,9 @@ class Statistics {
    **/
   public function getUserShares($account_id) {
     $this->debug->append("STA " . __METHOD__, 4);
-    if ($this->getGetCache() && $data = $this->memcache->get(__FUNCTION__ . $account_id)) return $data;
+    // Dual-caching, try statistics cron first, then fallback to local, then fallbock to SQL
+    if ($data = $this->memcache->get(STATISTICS_ALL_USER_SHARES)) return $data['data'][$account_id];
+    if ($data = $this->memcache->get(__FUNCTION__ . $account_id)) return $data;
     $stmt = $this->mysqli->prepare("
       SELECT
         ROUND(IFNULL(SUM(IF(our_result='Y', IF(s.difficulty=0, POW(2, (" . $this->config['difficulty'] . " - 16)), s.difficulty), 0)), 0) / POW(2, (" . $this->config['difficulty'] . " - 16)), 0) AS valid,
@@ -284,13 +330,26 @@ class Statistics {
     $this->debug->append("STA " . __METHOD__, 4);
     if ($data = $this->memcache->get(__FUNCTION__ . $account_id)) return $data;
     $stmt = $this->mysqli->prepare("
-      SELECT COUNT(s.id) / 600 AS sharerate
-      FROM " . $this->share->getTableName() . " AS s,
-           " . $this->user->getTableName() . " AS u
-      WHERE u.username = SUBSTRING_INDEX( s.username, '.', 1 )
-        AND s.time > DATE_SUB(now(), INTERVAL 600 SECOND)
-        AND u.id = ?");
-    if ($this->checkStmt($stmt) && $stmt->bind_param("i", $account_id) && $stmt->execute() && $result = $stmt->get_result() )
+      SELECT
+      (
+        (
+          SELECT COUNT(s.id) / ? AS sharerate
+          FROM " . $this->share->getTableName() . " AS s,
+               " . $this->user->getTableName() . " AS u
+          WHERE u.username = SUBSTRING_INDEX( s.username, '.', 1 )
+            AND s.time > DATE_SUB(now(), INTERVAL ? SECOND)
+            AND u.id = ?
+        ) + (
+          SELECT COUNT(s.id) / ? AS sharerate
+          FROM " . $this->share->getArchiveTableName() . " AS s,
+               " . $this->user->getTableName() . " AS u
+          WHERE u.username = SUBSTRING_INDEX( s.username, '.', 1 )
+            AND s.time > DATE_SUB(now(), INTERVAL ? SECOND)
+            AND u.id = ?
+        )
+      ) AS sharerate
+      FROM DUAL");
+    if ($this->checkStmt($stmt) && $stmt->bind_param("iiiiii", $interval, $interval, $account_id, $interval, $interval, $account_id) && $stmt->execute() && $result = $stmt->get_result() )
       return $this->memcache->setCache(__FUNCTION__ . $account_id, $result->fetch_object()->sharerate);
     // Catchall
     $this->debug->append("Failed to fetch sharerate: " . $this->mysqli->error);
@@ -330,6 +389,21 @@ class Statistics {
     if ($this->getGetCache() && $data = $this->memcache->get(__FUNCTION__ . $type . $limit)) return $data;
     switch ($type) {
     case 'shares':
+      if ($data = $this->memcache->get(STATISTICS_ALL_USER_SHARES)) {
+        // Use global cache to build data
+        $max = 0;
+        foreach($data['data'] as $key => $aUser) {
+          $shares[$key] = $aUser['valid'];
+          $username[$key] = $aUser['username'];
+        }
+        array_multisort($shares, SORT_DESC, $username, SORT_ASC, $data['data']);
+        foreach ($data['data'] as $key => $aUser) {
+          $data_new[$key]['shares'] = $aUser['valid'];
+          $data_new[$key]['account'] = $aUser['username'];
+        }
+        return $data_new;
+      }
+      // No cached data, fallback to SQL and cache in local cache
       $stmt = $this->mysqli->prepare("
         SELECT
           a.donate_percent AS donate_percent,

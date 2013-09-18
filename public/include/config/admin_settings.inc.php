@@ -95,6 +95,13 @@ $aSettings['website'][] = array(
   'name' => 'website_chaininfo_disabled', 'value' => $setting->getValue('website_chaininfo_disabled'),
   'tooltip' => 'Enabled or disable the chainfo URL feature. Will remove any links using the chaininfo URL.'
 );
+$aSettings['wallet'][] = array(
+  'display' => 'Cold Coins', 'type' => 'text',
+  'size' => 6,
+  'default' => 0,
+  'name' => 'wallet_cold_coins', 'value' => $setting->getValue('wallet_cold_coins'),
+  'tooltip' => 'Amount of coins held in a pools cold wallet.'
+);
 $aSettings['statistics'][] = array(
   'display' => 'Block Statistics Count', 'type' => 'text',
   'size' => 25,
