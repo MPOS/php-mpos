@@ -43,6 +43,9 @@ class User {
   public function getUserName($id) {
     return $this->getSingle($id, 'username', 'id');
   }
+  public function getUserNameByEmail($email) {
+    return $this->getSingle($email, 'username', 'email', 's');
+  }
   public function getUserId($username) {
     return $this->getSingle($username, 'id', 'username', 's');
   }
@@ -125,6 +128,13 @@ class User {
     if (empty($username) || empty($password)) {
       $this->setErrorMessage("Invalid username or password.");
       return false;
+    }
+    if (filter_var($username, FILTER_VALIDATE_EMAIL)) {
+      $this->debug->append("Username is an e-mail", 2);
+      if (!$username = $this->getUserNameByEmail($username)) {
+        $this->setErrorMessage("Invalid username or password.");
+        return false;
+      }
     }
     if ($this->isLocked($this->getUserId($username))) {
       $this->setErrorMessage("Account is locked. Please contact site support.");
