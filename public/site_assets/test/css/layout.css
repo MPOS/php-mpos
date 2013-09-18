@@ -866,3 +866,11 @@ span.unconfirmed {
   border:1px solid #ffb573;
   border-radius: 4px;
 }
+div.login_small {
+    float: right;
+    background: #E0E0E3;
+    position: absolute;
+    padding: 5px;
+    top: 10px;
+    right: 10px;
+}
