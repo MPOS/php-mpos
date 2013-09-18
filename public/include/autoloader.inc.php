@@ -2,11 +2,9 @@
 
 // Default classes
 require_once(CLASS_DIR . '/debug.class.php');
-require_once(CLASS_DIR . '/bitcoin.class.php');
-require_once(CLASS_DIR . '/statscache.class.php');
-require_once(CLASS_DIR . '/bitcoinwrapper.class.php');
 require_once(INCLUDE_DIR . '/lib/KLogger.php');
 require_once(INCLUDE_DIR . '/database.inc.php');
+require_once(INCLUDE_DIR . '/config/memcache_keys.inc.php');
 
 // We need to load these two first
 require_once(CLASS_DIR . '/base.class.php');
@@ -34,6 +32,12 @@ require_once(CLASS_DIR . '/tokentype.class.php');
 require_once(CLASS_DIR . '/token.class.php');
 require_once(CLASS_DIR . '/payout.class.php');
 require_once(CLASS_DIR . '/block.class.php');
+
+// We require the block class to properly grab the round ID
+require_once(CLASS_DIR . '/statscache.class.php');
+
+require_once(CLASS_DIR . '/bitcoin.class.php');
+require_once(CLASS_DIR . '/bitcoinwrapper.class.php');
 require_once(CLASS_DIR . '/monitoring.class.php');
 require_once(CLASS_DIR . '/user.class.php');
 require_once(CLASS_DIR . '/invitation.class.php');

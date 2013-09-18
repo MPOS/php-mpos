@@ -33,12 +33,16 @@ if (!$smarty->isCached('master.tpl', $smarty_cache_key)) {
 
   // Fetch locked balance from transactions
   $dLockedBalance = $transaction->getLockedBalance();
+
+  // Cold wallet balance
+  if (! $dColdCoins = $setting->getValue('wallet_cold_coins')) $dColdCoins = 0;
 } else {
   $debug->append('Using cached page', 3);
 }
 
 $smarty->assign("UNCONFIRMED", $dBlocksUnconfirmedBalance);
 $smarty->assign("BALANCE", $dBalance);
+$smarty->assign("COLDCOINS", $dColdCoins);
 $smarty->assign("LOCKED", $dLockedBalance);
 $smarty->assign("NEWMINT", $dNewmint);
 

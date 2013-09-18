@@ -22,5 +22,11 @@
     <td class="right">{$NEWMINT|number_format:"8"}</td>
   </tr>
 {/if}
+  {if $COLDCOINS != 0}
+  <tr>
+    <th>Cold Coins</th>
+    <td class="right">{$COLDCOINS|number_format:"8"}</td>
+  </tr>
+  {/if}
 </table>
 {include file="global/block_footer.tpl"}
