@@ -417,7 +417,7 @@ class Statistics {
         ORDER BY shares DESC
         LIMIT ?");
       if ($this->checkStmt($stmt) && $stmt->bind_param("i", $limit) && $stmt->execute() && $result = $stmt->get_result())
-        $this->memcache->set(__FUNCTION__ . $type . $limit, $result->fetch_all(MYSQLI_ASSOC));
+        return $this->memcache->setCache(__FUNCTION__ . $type . $limit, $result->fetch_all(MYSQLI_ASSOC));
       $this->debug->append("Fetching shares failed: ");
       return false;
       break;
