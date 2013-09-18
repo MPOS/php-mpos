@@ -22,11 +22,11 @@ limitations under the License.
 // Include all settings and classes
 require_once('shared.inc.php');
 
-// Since fetching from cache is disabled, overwrite our stats
+// Per user share statistics based on all shares submitted
 $start = microtime(true);
-if (!$statistics->getTopContributors('shares'))
-  $log->logError("getTopContributors shares update failed");
-$log->logInfo("getTopContributors shares " . number_format(microtime(true) - $start, 2) . " seconds");
+if ( ! $aAllUserShares = $statistics->getAllUserShares() )
+  $log->logError('getAllUserShares update failed');
+$log->logInfo("getAllUserShares " . number_format(microtime(true) - $start, 2) . " seconds");
 
 $start = microtime(true);
 if (!$statistics->getTopContributors('hashes'))
@@ -37,12 +37,6 @@ $start = microtime(true);
 if (!$statistics->getCurrentHashrate())
   $log->logError("getCurrentHashrate update failed");
 $log->logInfo("getCurrentHashrate " . number_format(microtime(true) - $start, 2) . " seconds");
-
-// Per user share statistics based on all shares submitted
-$start = microtime(true);
-if ( ! $aAllUserShares = $statistics->getAllUserShares() )
-  $log->logError('getAllUserShares update failed');
-$log->logInfo("getAllUserShares " . number_format(microtime(true) - $start, 2) . " seconds");
 
 /*
 // Admin specific statistics, we cache the global query due to slowness

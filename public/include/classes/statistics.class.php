@@ -190,6 +190,8 @@ class Statistics {
         IFNULL(SUM(IF(our_result='Y', 1, 0)), 0) AS valid,
         IFNULL(SUM(IF(our_result='N', 1, 0)), 0) AS invalid,
         u.id AS id,
+        u.donate_percent AS donate_percent,
+        u.is_anonymous AS is_anonymous,
         u.username AS username
       FROM " . $this->share->getTableName() . " AS s,
            " . $this->user->getTableName() . " AS u
@@ -363,6 +365,21 @@ class Statistics {
     if ($this->getGetCache() && $data = $this->memcache->get(__FUNCTION__ . $type . $limit)) return $data;
     switch ($type) {
     case 'shares':
+      if ($data = $this->memcache->get(STATISTICS_ALL_USER_SHARES)) {
+        // Use global cache to build data
+        $max = 0;
+        foreach($data['data'] as $key => $aUser) {
+          $shares[$key] = $aUser['valid'];
+          $username[$key] = $aUser['username'];
+        }
+        array_multisort($shares, SORT_DESC, $username, SORT_ASC, $data['data']);
+        foreach ($data['data'] as $key => $aUser) {
+          $data_new[$key]['shares'] = $aUser['valid'];
+          $data_new[$key]['account'] = $aUser['username'];
+        }
+        return $data_new;
+      }
+      // No cached data, fallback to SQL and cache in local cache
       $stmt = $this->mysqli->prepare("
         SELECT
           a.donate_percent AS donate_percent,
