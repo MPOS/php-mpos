@@ -28,16 +28,16 @@
     <thead style="font-size:13px;">
       <tr>
         <th>E-Mail</th>
-        <th class="center">Sent</th>
-        <th class="center">Activated</th>
+        <th align="center">Sent</th>
+        <th align="center">Activated</th>
       </tr>
     </thead>
     <tbody>
 {section name=invite loop=$INVITATIONS}
       <tr>
         <td>{$INVITATIONS[invite].email}</td>
-        <td class="center">{$INVITATIONS[invite].time|date_format:"%d/%m/%Y %H:%M:%S"}</td>
-        <td class="center"><img src="{$PATH}/images/{if $INVITATIONS[invite].is_activated}success{else}error{/if}.gif" /></td>
+        <td align="center">{$INVITATIONS[invite].time|date_format:"%d/%m/%Y %H:%M:%S"}</td>
+        <td align="center"><i class="icon-{if $INVITATIONS[invite].is_activated}ok{else}cancel{/if}"></i></td>
       </tr>
 {/section}
     <tbody>

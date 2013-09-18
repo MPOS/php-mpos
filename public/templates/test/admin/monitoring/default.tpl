@@ -3,19 +3,19 @@
     <table class="tablesorter" cellspacing="0">
       <thead>
         <th>Cronjob</th>
-        <th>Exit Code</th>
-        <th>Active</th>
-        <th>Runtime</th>
-        <th>Start Time</th>
-        <th>End Time</th>
-        <th>Message</th>
+        <th align="center">Exit Code</th>
+        <th align="center">Active</th>
+        <th align="center">Runtime</th>
+        <th align="center">Start Time</th>
+        <th align="center">End Time</th>
+        <th align="center">Message</th>
       </thead>
       <tbody>
 {foreach $CRONSTATUS as $cron => $data}
         <tr>
           <td>{$cron}</td>
   {foreach $data as $name => $event}
-          <td>
+          <td align="center">
             {if $event.type == 'okerror'}
               {if $event.value == 0}
                 <font color="green">OK</font>
@@ -25,7 +25,7 @@
             {else if $event.type == 'message'}
               <i>{$event.value}</i>
             {else if $event.type == 'yesno'}
-              <img src="{$PATH}/images/icn_alert_{if $event.value == 1}success{else}error{/if}.png" />
+              <i class="icon-{if $event.value == 1}ok{else}cancel{/if}"></i>
             {else if $event.type == 'time'}
               {if $event.value > 60}
                 <font color="orange">

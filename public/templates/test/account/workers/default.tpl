@@ -47,7 +47,7 @@
         <tr>
           <td align="left"{if $WORKERS[worker].hashrate > 0} style="color: orange"{/if}>{$username.0|escape}.<input name="data[{$WORKERS[worker].id}][username]" value="{$username.1|escape}" size="10" required/></td>
           <td align="left"><input type="text" name="data[{$WORKERS[worker].id}][password]" value="{$WORKERS[worker].password|escape}" size="10" required></td>
-          <td align="center"><img src="{$PATH}/images/{if $WORKERS[worker].hashrate > 0}icn_alert_success{else}icn_alert_error{/if}.png" /></td>
+          <td align="center"><i class="icon-{if $WORKERS[worker].hashrate > 0}ok{else}cancel{/if}"></i></td>
           {if $GLOBAL.config.disable_notifications != 1}
           <td>
             <span class="toggle">
