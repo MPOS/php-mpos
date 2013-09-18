@@ -418,7 +418,7 @@ class Statistics {
         LIMIT ?");
       if ($this->checkStmt($stmt) && $stmt->bind_param("i", $limit) && $stmt->execute() && $result = $stmt->get_result())
         return $this->memcache->setCache(__FUNCTION__ . $type . $limit, $result->fetch_all(MYSQLI_ASSOC));
-      $this->debug->append("Fetching shares failed: " . $this->mysqli->error);
+      $this->debug->append("Fetching shares failed: ");
       return false;
       break;
 
