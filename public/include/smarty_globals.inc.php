@@ -154,6 +154,9 @@ if ($setting->getValue('maintenance'))
 if ($motd = $setting->getValue('system_motd'))
   $_SESSION['POPUP'][] = array('CONTENT' => $motd, 'TYPE' => 'info');
 
+// So we can display additional info
+$smarty->assign('DEBUG', DEBUG);
+
 // Make it available in Smarty
 $smarty->assign('PATH', 'site_assets/' . THEME);
 $smarty->assign('GLOBAL', $aGlobal);

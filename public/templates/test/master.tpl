@@ -50,5 +50,9 @@
     {if $CONTENT != "empty" or $CONTENT != ""}{if file_exists($smarty.current_dir|cat:"/$PAGE/$ACTION/$CONTENT")}{include file="$PAGE/$ACTION/$CONTENT"}{else}Missing template for this page{/if}{/if}
 		<div class="spacer"></div>
 	</section>
+  {if $DEBUG > 0}<div id="debug">
+    {nocache}{include file="system/debugger.tpl"}{/nocache}
+  </div>
+  {/if}
 </body>
 </html>
