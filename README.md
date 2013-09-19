@@ -86,7 +86,7 @@ The following feature have been implemented so far:
 * Statistics are cached in Memcache by Cronjob for quick data access
   * **NEW** Now supporting incremental round share updates!
 * **SOON** New Theme
- * **SOON* Live Dashboard
+ * **SOON** Live Dashboard
  * **SOON** AJAX Support
  * **SOON** Overhauled API
 * Web User accounts
