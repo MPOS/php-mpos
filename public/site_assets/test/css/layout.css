@@ -196,7 +196,7 @@ min-width: 150px;
 width: 10%;
 background: #E0E0E3 url(../images/sidebar.png) repeat;
 float: left;
-min-height: 88%;
+min-height: 85%;
 margin-top: -4px;
 }
 
@@ -320,7 +320,7 @@ section#main {
 background: url("../images/sidebar_shadow.png") repeat-y scroll left top transparent;
 float: left;
 margin-top: -2px;
-min-height: 80%;
+min-height: 85%;
 width: 88%;
 }
 
@@ -712,7 +712,7 @@ background-position: 10px 6px;
 margin: 0 0.5%;
 display: block;
 float: left;
-width: 96%;
+width: 92%;
 margin: 0 10px;
 }
 
