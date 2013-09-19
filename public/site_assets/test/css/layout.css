@@ -317,11 +317,11 @@ margin-top: 20%;
 
 
 section#main {
-width: 87%;
-min-height: 88%;
-background: url(../images/sidebar_shadow.png) repeat-y left top;
+background: url("../images/sidebar_shadow.png") repeat-y scroll left top transparent;
 float: left;
 margin-top: -2px;
+min-height: 80%;
+width: 88%;
 }
 
 #main h3 {
@@ -378,23 +378,25 @@ color: #666;}
 
 .width_full {
 width: 95%;
+margin: 20px 0px 10px 30px;
+float: left;
 }
 
 .width_half {
 width: 46%;
-margin-right: 0;
+margin: 20px 0px 10px 30px;
 float: left;
 }
 
 .width_quarter {
 width: 26%;
-margin-right: 0;
+margin: 20px 0px 10px 30px;
 float: left;
 }
 
 .width_3_quarter {
 width: 66%;
-margin-right: 0;
+margin: 20px 0px 10px 30px;
 float: left;
 }
 

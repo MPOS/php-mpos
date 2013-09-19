@@ -193,8 +193,8 @@ span.toggle {
 footer.footer {
   clear: both;
   text-align: center;
-  height: 80px;
-  margin-top: -80px;
+  height: 60px;
+  margin-top: -60px;
   position: relative;
   padding: 4px 0px 0px 0px;
   background:url("../images/header_bg.png") repeat-x scroll 0% 0% rgb(34, 34, 34);
