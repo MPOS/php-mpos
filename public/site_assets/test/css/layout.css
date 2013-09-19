@@ -97,7 +97,8 @@ background: #F1F1F4 url(../images/secondary_bar.png) repeat-x;
 
 section#secondary_bar .user {
 float: left;
-width: 12%;
+width: 10%;
+min-width: 150px;
 height: 38px;
 }
 
@@ -191,7 +192,8 @@ margin: 0 5px;
 /* Sidebar */
 
 aside#sidebar {
-width: 12%;
+min-width: 150px;
+width: 10%;
 background: #E0E0E3 url(../images/sidebar.png) repeat;
 float: left;
 min-height: 88%;
@@ -278,7 +280,7 @@ margin: 0 0 0 12%; padding: 0;
 
 #sidebar li a {
 color: #666666;
-padding-left: 25px;
+padding-left: 12px;
 text-decoration: none;
 display: inline-block;
 height: 17px;
@@ -834,91 +836,3 @@ color: #32510F;
 padding: 10px 0;
 text-indent: 40px;
 font-size: 14px;}
-
-/* Custom stuff */
-span.confirmed {
-  display: inline-block;
-  width: 60px;
-  font-size: 10px;
-  background: #e6efc2;
-  color:#264409;
-  padding: 2px 4px;
-  border:1px solid #c6d880;
-  border-radius: 4px;
-}
-span.orphan {
-  display: inline-block;
-  width: 60px;
-  font-size: 10px;
-  background: #ff9473;
-  color:#264409;
-  padding: 2px 4px;
-  border:1px solid #ff6342;
-  border-radius: 4px;
-}
-span.unconfirmed {
-  display: inline-block;
-  width: 60px;
-  font-size: 10px;
-  background: #ffce9c;
-  color:#264409;
-  padding: 2px 4px;
-  border:1px solid #ffb573;
-  border-radius: 4px;
-}
-div.login_small {
-  float: right;
-  background: #E0E0E3;
-  background: linear-gradient(to bottom, rgb(255, 255, 255) 0%, rgb(241, 241, 241) 50%, rgb(225, 225, 225) 51%, rgb(246, 246, 246) 100%) repeat scroll 0% 0%;
-  border-radius: 5px 5px 5px 5px;
-  position: absolute;
-  padding: 5px;
-  top: 10px;
-  right: 10px;
-}
-
-fieldset2 {
-  -webkit-border-radius: 5px;
-  -moz-border-radius: 5px;
-  border-radius: 5px;
-  background: #F6F6F6;
-  padding: 1% 0%;
-  margin: 10px 0;
-}
-
-fieldset2 label {
-  display: block;
-  float: left;
-  height: 25px;
-  line-height: 25px;
-  text-shadow: 0 1px 0 #fff;
-  font-weight: bold;
-  padding-left: 10px;
-  text-transform: uppercase;
-}
-
-fieldset2 input[type=text], fieldset2 input[type=password] {
-  -webkit-border-radius: 5px;
-  -moz-border-radius: 5px;
-  border-radius: 5px;
-  border: 1px solid #BBBBBB;
-  height: 20px;
-  color: #666666;
-  -webkit-box-shadow: inset 0 2px 2px #ccc, 0 1px 0 #fff;
-  -moz-box-shadow: inset 0 2px 2px #ccc, 0 1px 0 #fff;
-  box-shadow: inset 0 2px 2px #ccc, 0 1px 0 #fff;
-  padding-left: 10px;
-  background-position: 10px 6px;
-  margin: 0;
-  display: block;
-  float: left;
-  margin: 0 10px;
-}
-
-fieldset2 input[type=text]:focus, fieldset2 input[type=password]:focus, fieldset2 input[type=checkbox] {
-  outline: none;
-  border: 1px solid #77BACE;
-  -webkit-box-shadow: inset 0 2px 2px #ccc, 0 0 10px #ADDCE6;
-  -moz-box-shadow: inset 0 2px 2px #ccc, 0 0 10px #ADDCE6;
-  box-shadow: inset 0 2px 2px #ccc, 0 0 10px #ADDCE6;
-}

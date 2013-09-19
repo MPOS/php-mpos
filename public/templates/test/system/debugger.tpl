@@ -4,7 +4,8 @@
     <a href="#" id="toggle" class="toggle">Debugger Console</a>
     <div id="panel">
         <div id="DebuggerConsole">
-            <table width="100%">
+          <br /><br />
+            <table width="100%" class="tablesorter" cellspacing="0">
                 <thead>
                     <tr>
                         <th width="15"><b>Level</b></th>
