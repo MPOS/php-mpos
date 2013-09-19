@@ -21,7 +21,10 @@ Donations
 
 I was hoping to keep this out of the README but apparently people remove or change the LTC address
 at the bottom of the page. For those of you finding my project and are willing to appreciate the work
-with some hard earned LTC feel free to donate to my LTC address: `Lge95QR2frp9y1wJufjUPCycVsg5gLJPW8`
+with some hard earned coins feel free to donate:
+
+* LTC address: `Lge95QR2frp9y1wJufjUPCycVsg5gLJPW8`
+* FTC address: `6jDgGaUzMVyac5uqBhJCMiFMKCtH1LagTA`
 
 # Website Footer
 
