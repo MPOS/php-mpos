@@ -25,6 +25,7 @@ with some hard earned coins feel free to donate:
 
 * LTC address: `Lge95QR2frp9y1wJufjUPCycVsg5gLJPW8`
 * FTC address: `6jDgGaUzMVyac5uqBhJCMiFMKCtH1LagTA`
+* NVC address: `4Guct6z7NVPVALHRAVn517TTmvqQve4WYr`
 
 # Website Footer
 
