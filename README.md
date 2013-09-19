@@ -82,8 +82,9 @@ The following feature have been implemented so far:
 * Reward Systems
  * Propotional
  * PPS
- * PPLNS **NEW**
+ * PPLNS
 * Statistics are cached in Memcache by Cronjob for quick data access
+  * **NEW** Now supporting incremental round share updates!
 * Web User accounts
  * Re-Captcha protected registration form
 * Worker accounts
@@ -97,10 +98,10 @@ The following feature have been implemented so far:
 * Auto payout
 * Transaction list (confirmed and unconfirmed)
 * Admin Panel
- * Cron Monitoring Overview **NEW**
+ * Cron Monitoring Overview
  * User Listing including statistics
  * Wallet information
- * User Transactions **NEW**
+ * User Transactions
  * News Posts
 * Notification system
  * IDLE Workers
