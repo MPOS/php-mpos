@@ -85,29 +85,36 @@ The following feature have been implemented so far:
  * PPLNS
 * Statistics are cached in Memcache by Cronjob for quick data access
   * **NEW** Now supporting incremental round share updates!
+* **SOON** New Theme
+ * **SOON* Live Dashboard
+ * **SOON** AJAX Support
+ * **SOON** Overhauled API
 * Web User accounts
  * Re-Captcha protected registration form
 * Worker accounts
- * Worker activity (live, past 10 minutes)
- * Worker hashrates (live, past 10 minutes)
+ * Worker activity
+ * Worker hashrates
 * Pool statistics
 * Minimal Block statistics
 * Pool donations
 * Pool fees
+* Block Bonus Payouts **NEW**
 * Manual payout
 * Auto payout
-* Transaction list (confirmed and unconfirmed)
+* Transaction list
 * Admin Panel
  * Cron Monitoring Overview
  * User Listing including statistics
  * Wallet information
  * User Transactions
  * News Posts
+ * Pool Settings **NEW**
 * Notification system
  * IDLE Workers
  * New blocks found in pool
  * Auto Payout
  * Manual Payout
+* User-to-user Invitation System **NEW**
 * Support for various Scrypt based coins via config
  * MNC
  * LTC
