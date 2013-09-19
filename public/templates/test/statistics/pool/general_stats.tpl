@@ -28,7 +28,7 @@
     {/if}
         <tr>
           <th align="left">Last Block Found</td>
-          <td>{if $GLOBAL.website.blockexplorer.url}<a href="{$GLOBAL.website.blockexplorer.url}{$LASTBLOCKHASH}" target="_new">{$LASTBLOCK|default:"0"}</a>{else}{$LASTBLOCK|default:"0"}{/if}</td>
+          <td><a href="{$smarty.server.PHP_SELF}?page=statistics&action=round&height={$LASTBLOCK}" target="_new">{$LASTBLOCK|default:"0"}</a></td>
         </tr>
         <tr>
           <th align="left">Current Difficulty</td>
