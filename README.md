@@ -21,7 +21,11 @@ Donations
 
 I was hoping to keep this out of the README but apparently people remove or change the LTC address
 at the bottom of the page. For those of you finding my project and are willing to appreciate the work
-with some hard earned LTC feel free to donate to my LTC address: `Lge95QR2frp9y1wJufjUPCycVsg5gLJPW8`
+with some hard earned coins feel free to donate:
+
+* LTC address: `Lge95QR2frp9y1wJufjUPCycVsg5gLJPW8`
+* FTC address: `6jDgGaUzMVyac5uqBhJCMiFMKCtH1LagTA`
+* NVC address: `4Guct6z7NVPVALHRAVn517TTmvqQve4WYr`
 
 # Website Footer
 
@@ -78,31 +82,39 @@ The following feature have been implemented so far:
 * Reward Systems
  * Propotional
  * PPS
- * PPLNS **NEW**
+ * PPLNS
 * Statistics are cached in Memcache by Cronjob for quick data access
+  * **NEW** Now supporting incremental round share updates!
+* **SOON** New Theme
+ * **SOON** Live Dashboard
+ * **SOON** AJAX Support
+ * **SOON** Overhauled API
 * Web User accounts
  * Re-Captcha protected registration form
 * Worker accounts
- * Worker activity (live, past 10 minutes)
- * Worker hashrates (live, past 10 minutes)
+ * Worker activity
+ * Worker hashrates
 * Pool statistics
 * Minimal Block statistics
 * Pool donations
 * Pool fees
+* Block Bonus Payouts **NEW**
 * Manual payout
 * Auto payout
-* Transaction list (confirmed and unconfirmed)
+* Transaction list
 * Admin Panel
- * Cron Monitoring Overview **NEW**
+ * Cron Monitoring Overview
  * User Listing including statistics
  * Wallet information
- * User Transactions **NEW**
+ * User Transactions
  * News Posts
+ * Pool Settings **NEW**
 * Notification system
  * IDLE Workers
  * New blocks found in pool
  * Auto Payout
  * Manual Payout
+* User-to-user Invitation System **NEW**
 * Support for various Scrypt based coins via config
  * MNC
  * LTC
