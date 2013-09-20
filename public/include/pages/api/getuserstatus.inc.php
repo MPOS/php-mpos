@@ -11,6 +11,7 @@ $user_id = $api->checkAccess($user->checkApiKey($_REQUEST['api_key']), @$_REQUES
 
 // Output JSON format
 $data = array(
+  'username' => $user->getUsername($user_id),
   'shares' =>  $statistics->getUserShares($user_id),
   'hashrate' => $statistics->getUserHashrate($user_id),
   'sharerate' => $statistics->getUserSharerate($user_id)
