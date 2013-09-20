@@ -78,7 +78,7 @@ class Worker {
       FROM " . $this->table . " AS w
       WHERE monitor = 1
       AND (
-        SELECT IFNULL(SIGN(IF(our_result = 'Y', COUNT(id), 0)), 0) FROM " . $this->share->getTableName() . " WHERE username = w.username AND time > DATE_SUB(now(), INTERVAL 10 MINUTE)
+        SELECT IFNULL(SUM(IF(our_result = 'Y', 1, 0)), 0) FROM " . $this->share->getTableName() . " WHERE username = w.username AND time > DATE_SUB(now(), INTERVAL 10 MINUTE)
       ) = 0");
     if ($this->checkStmt($stmt) && $stmt->execute() && $result = $stmt->get_result())
       return $result->fetch_all(MYSQLI_ASSOC);
