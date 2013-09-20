@@ -79,7 +79,7 @@ $smarty->assign("PAGE", $page);
 $smarty->assign("ACTION", $action);
 
 // Now with all loaded and processed, setup some globals we need for smarty templates
-require_once(INCLUDE_DIR . '/smarty_globals.inc.php');
+if ($page != 'api') require_once(INCLUDE_DIR . '/smarty_globals.inc.php');
 
 // Load debug information into template
 $debug->append("Loading debug information into template", 4);
