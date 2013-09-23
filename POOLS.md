@@ -102,11 +102,6 @@ Small Time Miners are running various stratum only pools for different coins.
 | http://wdc.nut2pools.com | Worldcoin | 3.5 Mhs | 3 workers | New style, PPLNS |
 | http://pxc.nut2pools.com | Phenixcoin | 0 | 0 | New style | PPLNS |
 
-### Dids
-
-| Pool URL | Coin | Avg. Hashrate | Avg. Active Workers | Notes |
-| -------- | ---- | ------------: | ------------------: | ----- |
-| http://poolmine.it | Litecoin | 0.23 MHash | 5 | PPLNS, Custom Template |
 
 ### 4782
 
