@@ -9,16 +9,6 @@ tested it on various coins.
 These tables represent their users pools. Be aware that all values are
 as of this writing and may have changed since then.
 
-### ahmedbodi
-
-A helpful tester for features and bug fixes in `mmcfe-ng`, he is running
-an active pool for Redcoin.
-
-| Pool URL | Coin | Avg. Hashrate | Avg. Active Workers | Notes |
-| :------- | :--- | ------------: | ------------------: | ----- |
-| http://crypto-expert.com/REDpool/public | Redcoin | 10 MHash | 12 | No modifications required |
-| http://crypto-expert.com/ANONpool/public | Anoncoin | 0 MHash | 0 | Template Changes |
-
 
 ### vias79
 
