@@ -101,3 +101,16 @@ Small Time Miners are running various stratum only pools for different coins.
 | http://ftc.nut2pools.com | Feathercoin | 45-50Mhs | 25 workers | New style, PPLNS |
 | http://wdc.nut2pools.com | Worldcoin | 3.5 Mhs | 3 workers | New style, PPLNS |
 | http://pxc.nut2pools.com | Phenixcoin | 0 | 0 | New style | PPLNS |
+
+### ahmedbodi
+
+
+| Pool URL | Coin | Avg. Hashrate | Avg. Active Workers | Notes |
+| -------- | ---- | ------------: | ------------------: | ----- |
+| http://gme.crypto-expert.com | Gamecoin | 1.5Mhs | 3 workers | Custom Template, Prop |
+| http://orb.crypto-expert.com | Orbitcoin | 0.2 Mhs | 1 workers | Custom Template, PPLNS |
+| http://src.crypto-expert.com | Securecoin | 25 | 20 |  Custom Template, Prop |
+| http://dgc.crypto-expert.com | Digitalcoin | 0 | 0  | Custom Template, Prop |
+| http://arg.crypto-expert.com | Argentum | 0 | 0 | Custom Template, Prop|
+| http://crypto-expert.com/TIX | Tix | 0.5 | 1 |  Custom Template, Prop| 
+
