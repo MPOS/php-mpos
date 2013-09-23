@@ -325,7 +325,7 @@ class Statistics {
    * @param account_id integer User ID
    * @return data integer Current Sharerate in shares/s
    **/
-  public function getUserSharerate($account_id, $interval) {
+  public function getUserSharerate($account_id, $interval=600) {
     $this->debug->append("STA " . __METHOD__, 4);
     if ($data = $this->memcache->get(__FUNCTION__ . $account_id)) return $data;
     $stmt = $this->mysqli->prepare("
