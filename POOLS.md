@@ -9,16 +9,6 @@ tested it on various coins.
 These tables represent their users pools. Be aware that all values are
 as of this writing and may have changed since then.
 
-### ahmedbodi
-
-A helpful tester for features and bug fixes in `mmcfe-ng`, he is running
-an active pool for Redcoin.
-
-| Pool URL | Coin | Avg. Hashrate | Avg. Active Workers | Notes |
-| :------- | :--- | ------------: | ------------------: | ----- |
-| http://crypto-expert.com/REDpool/public | Redcoin | 10 MHash | 12 | No modifications required |
-| http://crypto-expert.com/ANONpool/public | Anoncoin | 0 MHash | 0 | Template Changes |
-
 
 ### vias79
 
@@ -112,14 +102,15 @@ Small Time Miners are running various stratum only pools for different coins.
 | http://wdc.nut2pools.com | Worldcoin | 3.5 Mhs | 3 workers | New style, PPLNS |
 | http://pxc.nut2pools.com | Phenixcoin | 0 | 0 | New style | PPLNS |
 
-### Dids
+### ahmedbodi
+
 
 | Pool URL | Coin | Avg. Hashrate | Avg. Active Workers | Notes |
 | -------- | ---- | ------------: | ------------------: | ----- |
-| http://poolmine.it | Litecoin | 0.23 MHash | 5 | PPLNS, Custom Template |
+| http://gme.crypto-expert.com | Gamecoin | 1.5Mhs | 3 workers | Custom Template, Prop |
+| http://orb.crypto-expert.com | Orbitcoin | 0.2 Mhs | 1 workers | Custom Template, PPLNS |
+| http://src.crypto-expert.com | Securecoin | 25 | 20 |  Custom Template, Prop |
+| http://dgc.crypto-expert.com | Digitalcoin | 0 | 0  | Custom Template, Prop |
+| http://arg.crypto-expert.com | Argentum | 0 | 0 | Custom Template, Prop|
+| http://crypto-expert.com/TIX | Tix | 0.5 | 1 |  Custom Template, Prop| 
 
-### 4782
-
-| Pool URL | Coin | Avg. Hashrate | Avg. Active Workers | Notes |
-| -------- | ---- | ------------: | ------------------: | ----- |
-| http://pirate-pool.com | LTC | 0.5 MHash | 2 | |
