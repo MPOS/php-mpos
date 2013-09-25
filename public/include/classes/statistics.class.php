@@ -221,6 +221,8 @@ class Statistics {
         } else {
           $data['data'][$row['id']]['valid'] += $row['valid'];
           $data['data'][$row['id']]['invalid'] += $row['invalid'];
+          $data['data'][$row['id']]['donate_percent'] = $row['donate_percent'];
+          $data['data'][$row['id']]['is_anonymous'] = $row['is_anonymous'];
         }
       }
       $data['share_id'] = $this->share->getMaxShareId();
@@ -399,6 +401,8 @@ class Statistics {
         foreach ($data['data'] as $key => $aUser) {
           $data_new[$key]['shares'] = $aUser['valid'];
           $data_new[$key]['account'] = $aUser['username'];
+          $data_new[$key]['donate_percent'] = $aUser['donate_percent'];
+          $data_new[$key]['is_anonymous'] = $aUser['is_anonymous'];
         }
         return $data_new;
       }
