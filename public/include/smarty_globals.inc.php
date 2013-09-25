@@ -17,7 +17,7 @@ if ($bitcoin->can_connect() === true) {
   $dDifficulty = $bitcoin->getdifficulty();
   $dNetworkHashrate = $bitcoin->getnetworkhashps();
 } else {
-  $dDifficulty = 0;
+  $dDifficulty = 1;
   $dNetworkHashrate = 0;
 }
 
