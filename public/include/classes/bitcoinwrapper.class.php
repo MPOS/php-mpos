@@ -46,9 +46,18 @@ class BitcoinWrapper extends BitcoinClient {
   public function getnetworkhashps() {
     $this->oDebug->append("STA " . __METHOD__, 4);
     if ($data = $this->memcache->get(__FUNCTION__)) return $data;
-    try { $dNetworkHashrate = $this->query('getnetworkhashps') / 1000; } catch (Exception $e) {
-      // Maybe we are SHA
-      try { $dNetworkHashrate = $this->query('gethashespersec') / 1000; } catch (Exception $e) { return false; }
+    try {
+      $dNetworkHashrate = $this->query('getmininginfo');
+      if (is_array($dNetworkHashrate) && array_key_exists('networkhashps', $dNetworkHashrate)) {
+        $dNetworkHashrate = $dNetworkHashrate['networkhashps'];
+      } else if (is_array($dNetworkHashrate) && array_key_exists('hashespersec', $dNetworkHashrate)) {
+        $dNetworkHashrate = $dNetworkHashrate['hashespersec'];
+      }
+    } catch (Exception $e) {
+      try { $dNetworkHashrate = $this->query('getnetworkhashps') / 1000; } catch (Exception $e) {
+        // Maybe we are SHA
+        try { $dNetworkHashrate = $this->query('gethashespersec') / 1000; } catch (Exception $e) { return false; }
+      }
     }
     return $this->memcache->setCache(__FUNCTION__, $dNetworkHashrate, 30);
   }
