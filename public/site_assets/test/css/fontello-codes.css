@@ -10,6 +10,7 @@
 .icon-star-empty:before { content: '\e821'; } /* '' */
 .icon-desktop:before { content: '\e806'; } /* '' */
 .icon-cancel:before { content: '\e80a'; } /* '' */
+.icon-record:before { content: '\e822'; } /* '' */
 .icon-plus:before { content: '\e80c'; } /* '' */
 .icon-photo:before { content: '\e815'; } /* '' */
 .icon-pencil:before { content: '\e802'; } /* '' */
