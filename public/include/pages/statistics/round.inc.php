@@ -22,8 +22,8 @@ if (!$smarty->isCached('master.tpl', $smarty_cache_key)) {
   $aDetailsForBlockHeight = $roundstats->getDetailsForBlockHeight($iKey, $user->isAdmin(@$_SESSION['USERDATA']['id']));
   $aRoundShareStats = $roundstats->getRoundStatsForAccounts($iKey, $user->isAdmin(@$_SESSION['USERDATA']['id']));
 
-  if ($user->isAdmin(@$_SESSION['USERDATA']['id'])) {
-    $aUserRoundTransactions = $roundstats->getAllRoundTransactions($iKey);
+  if ($user->isAdmin(@$_SESSION['USERDATA']['id']) || $setting->getValue('acl_round_transactions')) {
+    $aUserRoundTransactions = $roundstats->getAllRoundTransactions($iKey, @$_SESSION['USERDATA']['id']);
   } else {
     $aUserRoundTransactions = $roundstats->getUserRoundTransactions($iKey, @$_SESSION['USERDATA']['id']);
   }
