@@ -1,6 +1,11 @@
 <article class="module width_quarter">
   <header><h3>Account Information</h3></header>
   <div class="module_content">
+{if $GLOBAL.userdata.no_fees}
+    <p>You are mining without any pool fees applied.</p>
+{else if $GLOBAL.fees > 0}
+    <p>You are mining at <font color="orange">{$GLOBAL.fees|escape}%</font> pool fee.</p>
+{/if}
     <table width="100%">
       <caption style="text-align: left;">{$GLOBAL.config.currency} Account Balance</caption>
       <tr>
