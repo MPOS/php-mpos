@@ -19,6 +19,9 @@ limitations under the License.
 
  */
 
+// Change to working directory
+chdir(dirname(__FILE__));
+
 // Include all settings and classes
 require_once('shared.inc.php');
 
