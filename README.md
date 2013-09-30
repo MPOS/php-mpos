@@ -80,7 +80,7 @@ The following feature have been implemented so far:
 
 * Fully re-written GUI with [Smarty][2] templates
 * Mobile WebUI
-* **SOON** VARDIFF Support
+* **NEW** VARDIFF Support
 * Reward Systems
  * Propotional
  * PPS
