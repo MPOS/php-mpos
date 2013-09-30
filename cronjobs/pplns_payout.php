@@ -48,7 +48,7 @@ foreach ($aAllBlocks as $iIndex => $aBlock) {
   if ($config['pplns']['shares']['type'] == 'blockavg' && $block->getBlockCount() > 0) {
     $pplns_target = round($block->getAvgBlockShares($config['pplns']['blockavg']['blockcount']));
   } else {
-    $pplns_target = $config['pplns']['shares']['default'] ;
+    $pplns_target = $config['pplns']['shares']['default'];
   }
 
   if (!$aBlock['accounted']) {
@@ -68,7 +68,9 @@ foreach ($aAllBlocks as $iIndex => $aBlock) {
 
     if ($iRoundShares >= $pplns_target) {
       $log->logDebug("Matching or exceeding PPLNS target of $pplns_target with $iRoundShares");
-      $aAccountShares = $share->getSharesForAccounts($aBlock['share_id'] - $pplns_target, $aBlock['share_id']);
+      $iMinimumShareId = $share->getMinimumShareId($pplns_target, $aBlock['share_id']);
+      // We need to go one ID lower due to `id >` or we won't match if minimum share ID == $aBlock['share_id']
+      $aAccountShares = $share->getSharesForAccounts($iMinimumShareId - 1, $aBlock['share_id']);
       if (empty($aAccountShares)) {
         $log->logFatal("No shares found for this block, aborted! Block Height : " . $aBlock['height']);
         $monitoring->setStatus($cron_name . "_active", "yesno", 0); 
@@ -76,8 +78,11 @@ foreach ($aAllBlocks as $iIndex => $aBlock) {
         $monitoring->setStatus($cron_name . "_status", "okerror", 1); 
         exit(1);
       }
-      $log->logInfo('Adjusting round target to PPLNS target ' . $pplns_target);
-      $iRoundShares = $pplns_target;
+      foreach($aAccountShares as $key => $aData) {
+        $iNewRoundShares += $aData['valid'];
+      }
+      $log->logInfo('Adjusting round target to PPLNS target ' . $iNewRoundShares);
+      $iRoundShares = $iNewRoundShares;
     } else {
       $log->logDebug("Not able to match PPLNS target of $pplns_target with $iRoundShares");
       // We need to fill up with archived shares
@@ -156,6 +161,7 @@ foreach ($aAllBlocks as $iIndex => $aBlock) {
           if (!$statistics->updateShareStatistics($aRoundData, $aBlock['id']))
             $log->logError('Failed to update share statistics for ' . $aData['username']);
       }
+
       // Add new credit transaction
       if (!$transaction->addTransaction($aData['id'], $aData['payout'], 'Credit', $aBlock['id']))
         $log->logFatal('Failed to insert new Credit transaction to database for ' . $aData['username']);

@@ -7,6 +7,10 @@
                       <td><b>Hashrate</b></td>
                       <td align="right">{$GLOBAL.userdata.hashrate|number_format} KH/s</td>
                     </tr>
+                    <tr>
+                      <td><b>Share Rate</b></td>
+                      <td align="right">{$GLOBAL.userdata.sharerate|number_format:"2"} S/s</td>
+                    </tr>
                     <tr><td colspan="2">&nbsp;</td></tr>
                     <tr>
                       <td colspan="2"><b><u>Round Shares</u></b></td>
