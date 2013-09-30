@@ -37,6 +37,7 @@
           <th align="center">Active</th>
           {if $GLOBAL.config.disable_notifications != 1}<th align="center">Monitor</th>{/if}
           <th align="right">Khash/s</th>
+          <th align="right">Difficulty</th>
           <th align="center" style="padding-right: 25px;">Action</th>
         </tr>
       </thead>
@@ -59,6 +60,7 @@
           </td>
           {/if}
           <td align="right">{$WORKERS[worker].hashrate|number_format}</td>
+          <td align="right">{$WORKERS[worker].difficulty|number_format:"2"}</td>
           <td align="center" style="padding-right: 25px;"><a href="{$smarty.server.PHP_SELF}?page={$smarty.request.page|escape}&action={$smarty.request.action|escape}&do=delete&id={$WORKERS[worker].id|escape}" class="icn_trash"><i class="icon-trash" /></a></td>
         </tr>
           {/section}
