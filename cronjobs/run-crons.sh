@@ -63,7 +63,7 @@ fi
 # Find scripts path
 if [[ -L $0 ]]; then
   CRONHOME=$( dirname $( readlink $0 ) )
-else 
+else
   CRONHOME=$( dirname $0 )
 fi
 

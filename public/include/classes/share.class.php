@@ -11,7 +11,7 @@ class Share {
   private $oUpstream;
   private $iLastUpstreamId;
   // This defines each share
-  public $rem_host, $username, $our_result, $upstream_result, $reason, $solution, $time;
+  public $rem_host, $username, $our_result, $upstream_result, $reason, $solution, $time, $difficulty;
 
   public function __construct($debug, $mysqli, $user, $block, $config) {
     $this->debug = $debug;
@@ -70,7 +70,7 @@ class Share {
    **/
   public function getRoundShares($previous_upstream=0, $current_upstream) {
     $stmt = $this->mysqli->prepare("SELECT
-      count(id) as total
+      ROUND(IFNULL(SUM(IF(difficulty=0, POW(2, (" . $this->config['difficulty'] . " - 16)), difficulty)), 0) / POW(2, (" . $this->config['difficulty'] . " - 16)), 8) AS total
       FROM $this->table
       WHERE our_result = 'Y'
       AND id > ? AND id <= ?
@@ -98,8 +98,8 @@ class Share {
         a.id,
         SUBSTRING_INDEX( s.username , '.', 1 ) as username,
         a.no_fees AS no_fees,
-        IFNULL(SUM(IF(our_result='Y', 1, 0)), 0) AS valid,
-        IFNULL(SUM(IF(our_result='N', 1, 0)), 0) AS invalid
+        ROUND(IFNULL(SUM(IF(our_result='Y', IF(s.difficulty=0, POW(2, (" . $this->config['difficulty'] . " - 16)), s.difficulty), 0)), 0) / POW(2, (" . $this->config['difficulty'] . " - 16)), 8) AS valid,
+        ROUND(IFNULL(SUM(IF(our_result='N', IF(s.difficulty=0, POW(2, (" . $this->config['difficulty'] . " - 16)), s.difficulty), 0)), 0) / POW(2, (" . $this->config['difficulty'] . " - 16)), 8) AS invalid
       FROM $this->table AS s
       LEFT JOIN " . $this->user->getTableName() . " AS a
       ON a.username = SUBSTRING_INDEX( s.username , '.', 1 )
@@ -140,15 +140,15 @@ class Share {
    * return array data Returns an array with usernames as keys for easy access
    **/
   function getArchiveShares($iCount) {
-    $iMinId = $this->getMaxArchiveShareId() - $iCount;
+    $iMinId = $this->getMinArchiveShareId($iCount);
     $iMaxId = $this->getMaxArchiveShareId();
     $stmt = $this->mysqli->prepare("
       SELECT
         a.id,
         SUBSTRING_INDEX( s.username , '.', 1 ) as account,
         a.no_fees AS no_fees,
-        IFNULL(SUM(IF(our_result='Y', 1, 0)), 0) AS valid,
-        IFNULL(SUM(IF(our_result='N', 1, 0)), 0) AS invalid
+        ROUND(IFNULL(SUM(IF(our_result='Y', IF(s.difficulty=0, pow(2, (" . $this->config['difficulty'] . " - 16)), s.difficulty), 0)), 0) / POW(2, (" . $this->config['difficulty'] . " - 16)), 8) AS valid,
+        ROUND(IFNULL(SUM(IF(our_result='N', IF(s.difficulty=0, pow(2, (" . $this->config['difficulty'] . " - 16)), s.difficulty), 0)), 0) / POW(2, (" . $this->config['difficulty'] . " - 16)), 8) AS invalid
       FROM $this->tableArchive AS s
       LEFT JOIN " . $this->user->getTableName() . " AS a
       ON a.username = SUBSTRING_INDEX( s.username , '.', 1 )
@@ -198,8 +198,8 @@ class Share {
    **/
   public function moveArchive($current_upstream, $block_id, $previous_upstream=0) {
     $archive_stmt = $this->mysqli->prepare("
-      INSERT INTO $this->tableArchive (share_id, username, our_result, upstream_result, block_id, time)
-        SELECT id, username, our_result, upstream_result, ?, time
+      INSERT INTO $this->tableArchive (share_id, username, our_result, upstream_result, block_id, time, difficulty)
+        SELECT id, username, our_result, upstream_result, ?, time, IF(difficulty=0, pow(2, (" . $this->config['difficulty'] . " - 16)), difficulty) AS difficulty
         FROM $this->table
         WHERE id > ? AND id <= ?");
     if ($this->checkStmt($archive_stmt) && $archive_stmt->bind_param('iii', $block_id, $previous_upstream, $current_upstream) && $archive_stmt->execute()) {
@@ -314,6 +314,48 @@ class Share {
         return true;
     }
     // Catchall
+    return false;
+  }
+
+  /**
+   * Fetch the lowest needed share ID from shares
+   **/
+  function getMinimumShareId($iCount, $current_upstream) {
+    // We don't use baseline here to be more accurate
+    $iCount = $iCount * pow(2, ($this->config['difficulty'] - 16));
+    $stmt = $this->mysqli->prepare("
+      SELECT MIN(b.id) AS id FROM
+      (
+        SELECT id, @total := @total + IF(difficulty=0, POW(2, (" . $this->config['difficulty'] . " - 16)), difficulty) AS total
+        FROM $this->table, (SELECT @total := 0) AS a
+        WHERE our_result = 'Y'
+        AND id <= ? AND @total < ?
+        ORDER BY id DESC
+      ) AS b
+      WHERE total <= ?
+      ");
+    if ($this->checkStmt($stmt) && $stmt->bind_param('iii', $current_upstream, $iCount, $iCount) && $stmt->execute() && $result = $stmt->get_result())
+      return $result->fetch_object()->id;
+    return false;
+  }
+
+  /**
+   * Fetch the lowest needed share ID from archive
+   **/
+  function getMinArchiveShareId($iCount) {
+    $stmt = $this->mysqli->prepare("
+      SELECT MIN(b.share_id) AS share_id FROM
+      (
+        SELECT share_id, @total := @total + (IF(difficulty=0, POW(2, (" . $this->config['difficulty'] . " - 16)), difficulty) / POW(2, (" . $this->config['difficulty'] . " - 16))) AS total
+        FROM $this->tableArchive, (SELECT @total := 0) AS a
+        WHERE our_result = 'Y'
+        AND @total < ?
+        ORDER BY share_id DESC
+      ) AS b
+      WHERE total <= ?
+      ");
+    if ($this->checkStmt($stmt) && $stmt->bind_param('ii', $iCount, $iCount) && $stmt->execute() && $result = $stmt->get_result())
+      return $result->fetch_object()->share_id;
     return false;
   }
 

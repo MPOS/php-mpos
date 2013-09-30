@@ -19,6 +19,10 @@
                       <td class="right">{$GLOBAL.userdata.hashrate|number_format:"2"} {$GLOBAL.hashunits.personal}</td>
                     </tr>
                     <tr>
+                      <td><b>Share Rate</b></td>
+                      <td class="right">{$GLOBAL.userdata.sharerate|number_format:"2"} S/s</td>
+                    </tr>
+                    <tr>
                       <td colspan="2"><b><u>Unpaid Shares</u></b> <span id='tt'><img src='{$PATH}/images/questionmark.png' height='15px' width='15px' title='Submitted shares between the last 120 confirms block until now.'></span></td>
                     </tr>
                     <tr>

@@ -19,6 +19,9 @@ limitations under the License.
 
  */
 
+// Change to working directory
+chdir(dirname(__FILE__));
+
 // Include all settings and classes
 require_once('shared.inc.php');
 
@@ -42,17 +45,28 @@ if ( $bitcoin->can_connect() === true ){
   exit(1);
 }
 
-// Value per share calculation
-if ($config['reward_type'] != 'block') {
-  $pps_value = round($config['reward'] / (pow(2,32) * $dDifficulty) * pow(2, $config['difficulty']), 12);
+// We support some dynamic reward targets but fall back to our fixed value
+// Re-calculate after each run due to re-targets in this loop
+if ($config['pps']['reward']['type'] == 'blockavg' && $block->getBlockCount() > 0) {
+  $pps_reward = round($block->getAvgBlockReward($config['pps']['blockavg']['blockcount']));
+  $log->logInfo("PPS reward using block average, amount: " . $pps_reward . "\tdifficulty: " . $dDifficulty);
 } else {
-  // Try to find the last block value and use that for future payouts, revert to fixed reward if none found
-  if ($aLastBlock = $block->getLast()) {
-    $pps_value = round($aLastBlock['amount'] / (pow(2,32) * $dDifficulty) * pow(2, $config['difficulty']), 12);
+  if ($config['pps']['reward']['type'] == 'block') {
+     if ($aLastBlock = $block->getLast()) {
+        $pps_reward = $aLastBlock['amount'];
+        $log->logInfo("PPS reward using last block, amount: " . $pps_reward . "\tdifficulty: " . $dDifficulty);
+     } else {
+       $pps_reward = $config['pps']['reward']['default'];
+       $log->logInfo("PPS reward using default, amount: " . $pps_reward . "\tdifficulty: " . $dDifficulty);
+     }
   } else {
-    $pps_value = round($config['reward'] / (pow(2,32) * $dDifficulty) * pow(2, $config['difficulty']), 12);
+     $pps_reward = $config['pps']['reward']['default'];
+     $log->logInfo("PPS reward fixed default, amount: " . $pps_reward . "\tdifficulty: " . $dDifficulty);
   }
 }
+
+// Per-share value to be paid out to users
+$pps_value = round($pps_reward / (pow(2,32) * $dDifficulty) * pow(2, $config['pps_target']), 12);
 
 // Find our last share accounted and last inserted share for PPS calculations
 $iPreviousShareId = $setting->getValue('pps_last_share_id');
@@ -84,7 +98,7 @@ foreach ($aAccountShares as $aData) {
     number_format($pps_value, 12) . "\t=\t" .
     number_format($aData['payout'], 8) . "\t" .
     number_format($aData['donation'], 8) . "\t" .
-    number_format($aData['fee']), 8);
+    number_format($aData['fee'], 8));
 
   // Add new credit transaction
   if (!$transaction->addTransaction($aData['id'], $aData['payout'], 'Credit_PPS'))
@@ -104,9 +118,7 @@ $setting->setValue('pps_last_share_id', $iLastShareId);
 
 // Fetch all unaccounted blocks
 $aAllBlocks = $block->getAllUnaccounted('ASC');
-if (empty($aAllBlocks)) {
-  $log->logDebug("No new unaccounted blocks found");
-}
+if (empty($aAllBlocks)) $log->logDebug("No new unaccounted blocks found");
 
 // Go through blocks and archive/delete shares that have been accounted for
 foreach ($aAllBlocks as $iIndex => $aBlock) {
