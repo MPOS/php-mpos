@@ -7,13 +7,13 @@
     <table border="0" cellpadding="3" cellspacing="3">
       <tbody>
       <tr>
-        <td>Worker Name</td>
-        <td>Password</td>
-        <td class="center">Active</td>
-        {if $GLOBAL.config.disable_notifications != 1}<td class="center">Monitor</td>{/if}
-        <td class="right">Khash/s</td>
-        <td>&nbsp;</td>
-        <td>&nbsp;</td>
+        <th>Worker Name</th>
+        <th>Password</th>
+        <th class="center">Active</th>
+        {if $GLOBAL.config.disable_notifications != 1}<th class="center">Monitor</th>{/if}
+        <th class="right">Khash/s</th>
+        <th class="right">Difficulty</th>
+        <th>Action</th>
       </tr>
       {nocache}
       {section worker $WORKERS}
@@ -29,6 +29,7 @@
         </td>
         {/if}
         <td class="right">{$WORKERS[worker].hashrate|number_format}</td>
+        <td class="right">{$WORKERS[worker].difficulty|number_format:"2"}</td>
         <td align="right"><a href="{$smarty.server.PHP_SELF}?page={$smarty.request.page|escape}&action={$smarty.request.action|escape}&do=delete&id={$WORKERS[worker].id|escape}"><button style="padding:5px" type="button">Delete</button></a></td>
       </tr>
       {/section}
