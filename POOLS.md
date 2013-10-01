@@ -114,3 +114,9 @@ Small Time Miners are running various stratum only pools for different coins.
 | http://arg.crypto-expert.com | Argentum | 0 | 0 | Custom Template, Prop|
 | http://crypto-expert.com/TIX | Tix | 0.5 | 1 |  Custom Template, Prop| 
 
+### Neozonz
+
+
+| Pool URL | Coin | Avg. Hashrate | Avg. Active Workers | Notes |
+| -------- | ---- | ------------: | ------------------: | ----- |
+| https://www.mine-litecoin.com | Litecoin | 10Mhs | 75 workers | Custom Template, Prop |
