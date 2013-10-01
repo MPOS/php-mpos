@@ -69,10 +69,10 @@ Small Time Miners are running various stratum only pools for different coins.
 
 | Pool URL | Coin | Avg. Hashrate | Avg. Active Workers | Notes |
 | -------- | ---- | ------------: | ------------------: | ----- |
-| http://str.minar.cc | Starcoin | 35 MHash  |  35 | PoS/PoW type coin |
-| http://dmd.minar.cc | Diamondcoin | 90 MHash  |  65 | PoS/PoW type coin |
-| http://jpc.minar.cc | Jupitercoin | 1.8 MHash  |  3 |  |
-| http://phs.minar.cc | Philosopherstone Coin | 170 MHash | 130 | PoS/PoW type coin |
+| http://str.minar.cc | StarCoin | 35 MHash  |  35 | PPLNS+VARDIFF, PoS/PoW type coin |
+| http://dmd.minar.cc | DiamondCoin | 90 MHash  |  65 | PPLNS+VARDIFF, PoS/PoW type coin |
+| http://cgb.minar.cc | CryptogenicBullion | 18 MHash  |  15 | PPLNS+VARDIFF, PoS/PoW type coin |
+| http://phs.minar.cc | Philosopherstone Coin | 170 MHash | 130 | PPLNS+VARDIFF, PoS/PoW type coin |
 
 ### IainKay & Nushor
 
