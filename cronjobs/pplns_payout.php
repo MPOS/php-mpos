@@ -46,7 +46,7 @@ foreach ($aAllBlocks as $iIndex => $aBlock) {
   // We support some dynamic share targets but fall back to our fixed value
   // Re-calculate after each run due to re-targets in this loop
   if ($config['pplns']['shares']['type'] == 'blockavg' && $block->getBlockCount() > 0) {
-    $pplns_target = round($block->getAvgBlockShares($config['pplns']['blockavg']['blockcount']));
+    $pplns_target = round($block->getAvgBlockShares($aBlock['height'], $config['pplns']['blockavg']['blockcount']));
   } else {
     $pplns_target = $config['pplns']['shares']['default'];
   }
