@@ -1,7 +1,11 @@
 Description
 ===========
 
-mmcFE-ng is a web frontend for Pooled LTC Mining. A pool using this interface is running at http://pool.grewe.ca
+mmcFE-ng is a web frontend for Pooled LTC Mining. A few pools using this interface are running at:
+
+* http://ltc.pool.grewe.ca
+* http://fst.pool.grewe.ca
+* http://nvc.pool.grewe.ca
 
 The web frontend layout is based on mmcFE, the original work by Greedi:
 https://github.com/Greedi/mmcFE
