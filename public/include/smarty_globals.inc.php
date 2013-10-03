@@ -136,7 +136,7 @@ if (@$_SESSION['USERDATA']['id']) {
       $aGlobal['userdata']['est_payout'] = 0;
     }
   case 'pplns':
-    if ($iAvgBlockShares = round($block->getAvgBlockShares($config['pplns']['blockavg']['blockcount']))) {
+    if ($aLastBlock = $block->getLast() && $iAvgBlockShares = round($block->getAvgBlockShares($aLastBlock['height'], $config['pplns']['blockavg']['blockcount']))) {
       $aGlobal['pplns']['target'] = $iAvgBlockShares;
     } else {
       $aGlobal['pplns']['target'] = $config['pplns']['shares']['default'];
