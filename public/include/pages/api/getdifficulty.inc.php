@@ -7,17 +7,13 @@ if (!defined('SECURITY')) die('Hacking attempt');
 $api->isActive();
 
 // Check user token
-$id = $user->checkApiKey($_REQUEST['api_key']);
+$user_id = $api->checkAccess($user->checkApiKey($_REQUEST['api_key']), @$_REQUEST['id']);
 
 // Fetch data from wallet
-if ($bitcoin->can_connect() === true){
-  $dDifficulty = $bitcoin->getdifficulty();
-} else {
-  $iDifficulty = 1;
-}
+$bitcoin->can_connect() === true ? $dDifficulty = $bitcoin->getdifficulty() : $iDifficulty = 1;
 
 // Output JSON format
-echo json_encode(array('getdifficulty' => $dDifficulty));
+echo $api->get_json($dDifficulty);
 
 // Supress master template
 $supress_master = 1;
