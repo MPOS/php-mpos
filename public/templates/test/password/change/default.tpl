@@ -8,11 +8,11 @@
     <div class="module_content">
       <fieldset>
         <label>New Password</label>
-        <input type="text" name="newPassword" required>
+        <input type="password" name="newPassword" required>
       </fieldset>
       <fieldset>
         <label>Repeat New Password</label>
-        <input type="text" name="newPassword2" required>
+        <input type="password" name="newPassword2" required>
       </fieldset>
       <div class="clear"></div>
     </div>
