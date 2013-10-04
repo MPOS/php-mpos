@@ -18,6 +18,9 @@ limitations under the License.
 
  */
 
+// Used for performance calculations
+$dStartTime = microtime(true);
+
 // This should be okay
 define("BASEPATH", "./");
 
@@ -76,15 +79,15 @@ $smarty->assign("PAGE", $page);
 $smarty->assign("ACTION", $action);
 
 // Now with all loaded and processed, setup some globals we need for smarty templates
-require_once(INCLUDE_DIR . '/smarty_globals.inc.php');
+if ($page != 'api') require_once(INCLUDE_DIR . '/smarty_globals.inc.php');
 
 // Load debug information into template
 $debug->append("Loading debug information into template", 4);
 $smarty->assign('DebuggerInfo', $debug->getDebugInfo());
+$smarty->assign('RUNTIME', (microtime(true) - $dStartTime) * 1000);
 
 // Display our page
-if (!@$supress_master)
-  $smarty->display("master.tpl", $smarty_cache_key);
+if (!@$supress_master) $smarty->display("master.tpl", $smarty_cache_key);
 
 // Unset any temporary values here
 unset($_SESSION['POPUP']);

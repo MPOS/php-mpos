@@ -9,5 +9,5 @@ if ($user->isAuthenticated()) {
   header("Location: " . $_SERVER['HTTP_REFERER']);
 }
 // Somehow we still need to load this empty template
-$smarty->assign("CONTENT", "../../global/empty.tpl");
+$smarty->assign("CONTENT", "empty");
 ?>

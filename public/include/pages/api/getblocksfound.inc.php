@@ -7,15 +7,13 @@ if (!defined('SECURITY')) die('Hacking attempt');
 $api->isActive();
 
 // Check user token
-$id = $user->checkApiKey($_REQUEST['api_key']);
+$user_id = $api->checkAccess($user->checkApiKey($_REQUEST['api_key']), @$_REQUEST['id']);
 
-// Set a sane limit, overwrite with URL parameter
-$iLimit = 10;
-if (@$_REQUEST['limit'])
-  $iLimit = $_REQUEST['limit'];
+// Check how many blocks to fetch
+$setting->getValue('statistics_block_count') ? $iLimit = $setting->getValue('statistics_block_count') : $iLimit = 20;
 
 // Output JSON format
-echo json_encode(array('getblocksfound' => $statistics->getBlocksFound($iLimit)));
+echo $api->get_json($statistics->getBlocksFound($iLimit));
 
 // Supress master template
 $supress_master = 1;

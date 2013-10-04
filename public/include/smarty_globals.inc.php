@@ -44,6 +44,9 @@ $iCurrentPoolShareRate = $statistics->getCurrentShareRate();
 // Active workers
 if (!$iCurrentActiveWorkers = $worker->getCountAllActiveWorkers()) $iCurrentActiveWorkers = 0;
 
+// Some settings to propagate to template
+if (! $statistics_ajax_refresh_interval = $setting->getValue('statistics_ajax_refresh_interval')) $statistics_ajax_refresh_interval = 10;
+
 // Small helper array
 $aHashunits = array( '1' => 'KH/s', '0.001' => 'MH/s', '0.000001' => 'GH/s' );
 
@@ -65,6 +68,7 @@ $aGlobal = array(
     'accounts' => $config['accounts'],
     'disable_invitations' => $setting->getValue('disable_invitations'),
     'disable_notifications' => $setting->getValue('disable_notifications'),
+    'statistics_ajax_refresh_interval' => $statistics_ajax_refresh_interval,
     'price' => array( 'currency' => $config['price']['currency'] ),
     'targetdiff' => $config['difficulty'],
     'currency' => $config['currency'],
@@ -157,6 +161,9 @@ if ($setting->getValue('maintenance'))
   $_SESSION['POPUP'][] = array('CONTENT' => 'This pool is currently in maintenance mode.', 'TYPE' => 'warning');
 if ($motd = $setting->getValue('system_motd'))
   $_SESSION['POPUP'][] = array('CONTENT' => $motd, 'TYPE' => 'info');
+
+// So we can display additional info
+$smarty->assign('DEBUG', DEBUG);
 
 // Make it available in Smarty
 $smarty->assign('PATH', 'site_assets/' . THEME);

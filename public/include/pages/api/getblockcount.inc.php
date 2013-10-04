@@ -7,19 +7,16 @@ if (!defined('SECURITY')) die('Hacking attempt');
 $api->isActive();
 
 // Check user token
-$id = $user->checkApiKey($_REQUEST['api_key']);
+$user_id = $api->checkAccess($user->checkApiKey($_REQUEST['api_key']), @$_REQUEST['id']);
 
 if ($bitcoin->can_connect() === true){
-  if (!$iBlock = $memcache->get('iBlock')) {
-    $iBlock = $bitcoin->query('getblockcount');
-    $memcache->set('iBlock', $iBlock);
-  }
+  $iBlock = $bitcoin->getblockcount();
 } else {
   $iBlock = 0;
 }
 
 // Output JSON format
-echo json_encode(array('getblockcount' => $iBlock));
+echo $api->get_json($iBlock);
 
 // Supress master template
 $supress_master = 1;

@@ -102,12 +102,12 @@ class RoundStats {
    * @param height int Block Height
    * @return data array Block round transactions
    **/
-  public function getAllRoundTransactions($iHeight=0) {
+  public function getAllRoundTransactions($iHeight=0, $admin) {
     $this->debug->append("STA " . __METHOD__, 4);
     $stmt = $this->mysqli->prepare("
       SELECT
       t.id AS id,
-      a.username AS username,
+      IF(a.is_anonymous, IF( ? , a.username, 'anonymous'), a.username) AS username,
       t.type AS type,
       t.amount AS amount
       FROM $this->tableTrans AS t
@@ -115,7 +115,7 @@ class RoundStats {
       LEFT JOIN $this->tableUsers AS a ON t.account_id = a.id
       WHERE b.height = ?
       ORDER BY id ASC");
-    if ($this->checkStmt($stmt) && $stmt->bind_param('i', $iHeight) && $stmt->execute() && $result = $stmt->get_result())
+    if ($this->checkStmt($stmt) && $stmt->bind_param('ii', $admin, $iHeight) && $stmt->execute() && $result = $stmt->get_result())
       return $result->fetch_all(MYSQLI_ASSOC);
     $this->debug->append('Unable to fetch transactions');
     return false;

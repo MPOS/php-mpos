@@ -22,10 +22,13 @@ limitations under the License.
 // We need to find our include files so set this properly
 define("BASEPATH", "../public/");
 
-
 /*****************************************************
  * No need to change beyond this point               *
  *****************************************************/
+
+// Used in autoloading of API class, adding it to stop PHP warnings
+$dStartTime = microtime(true);
+
 // Our cron name
 $cron_name = basename($_SERVER['PHP_SELF'], '.php');
 
