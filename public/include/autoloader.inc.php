@@ -19,7 +19,7 @@ if ($detect->isMobile() && $setting->getValue('website_mobile_theme')) {
   $setting->getValue('website_mobile_theme') ? $theme = $setting->getValue('website_mobile_theme') : $theme = 'mobile';
 } else {
   // Use configured theme, fallback to default theme
-  $setting->getValue('website_theme') ? $theme = $setting->getValue('website_theme') : $theme = 'mmcFE';
+  $setting->getValue('website_theme') ? $theme = $setting->getValue('website_theme') : $theme = 'mpos';
 }
 define('THEME', $theme);
 
