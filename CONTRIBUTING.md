@@ -54,7 +54,7 @@ consider following this contribution guide!
 * [General GitHub documentation][2]
 * [GitHub pull request documentation][3]
 
-[1]: https://github.com/TheSerapher/php-mmcfe-ng/issues "Issue"
+[1]: https://github.com/TheSerapher/php-mpos/issues "Issue"
 [2]: http://help.github.com/ "GitHub documentation"
 [3]: http://help.github.com/send-pull-requests/ "GitHub pull request documentation"
 [4]: https://github.com/signup/free "GitHub account"

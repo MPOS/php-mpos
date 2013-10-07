@@ -1,20 +1,11 @@
 Description
 ===========
 
-mmcFE-ng is a web frontend for Pooled LTC Mining. A few pools using this interface are running at:
+MPOS is a web based Mining Portal for various crypto currencies. A few pools using this interface are running at:
 
 * http://ltc.pool.grewe.ca
 * http://fst.pool.grewe.ca
 * http://nvc.pool.grewe.ca
-
-The web frontend layout is based on mmcFE, the original work by Greedi:
-https://github.com/Greedi/mmcFE
-
-After working a few days trying to learn to run my own pool and the
-systems behind it I figured I'd look a bit deeper in the code to
-understand how it works. While doing so I also migrated the existing
-code over to my own framework so maintenance would be easier in the
-future.
 
 **NOTE**: This project is still under development and commits are happening on a daily basis.
 I do not recommend using this for a live setup as of yet. Wait for the later Release Candidate
@@ -32,9 +23,10 @@ with some hard earned coins feel free to donate:
 * NVC address: `4Guct6z7NVPVALHRAVn517TTmvqQve4WYr`
 * FST address: `g17CfFHqNqR5JnUjtG8RNBYh2WrhEirV67`
 
-# Website Footer
+Website Footer
+==============
 
-When you decide to use `mmcfe-ng` please be so kind and leave the footer intact. You are not the author of the software and should honor those that have worked on it. I don't mind changing the LTC donation address at the bottom, but keep in mind who really wrote this software and would deserve those ;-).
+When you decide to use `MPOS` please be so kind and leave the footer intact. You are not the author of the software and should honor those that have worked on it. I don't mind changing the LTC donation address at the bottom, but keep in mind who really wrote this software and would deserve those ;-).
 
 Donors
 ======
@@ -47,8 +39,8 @@ These people have supported this project with a donation:
 * [ZC](https://github.com/zccopwrx)
 * Nutnut
 
-Pools running mmcfe-ng
-======================
+Pools running MPOS
+==================
 
 You can find a list of active pools [here](POOLS.md).
 
@@ -60,7 +52,7 @@ It should also work on any related distribution (RHEL, Debian).
 For support on how to get `litecoind` or `pushpoold` to work, please ask
 in the appropriate forums.
 
-Be aware that `mmcfe-ng` is **only** for pooled mining. Solo Mining is not
+Be aware that `MPOS` is **only** for pooled mining. Solo Mining is not
 supported. They will never match an upstream share, solo miners do not create
 any shares, only blocks. Expect weird behavior if trying to mix them. See #299
 for full information.
@@ -129,8 +121,8 @@ The following feature have been implemented so far:
 Installation
 ============
 
-Please take a look at the [Quick Start Guide](https://github.com/TheSerapher/php-mmcfe-ng/wiki/Quick-Start-Guide). This will give you
-an idea how to setup `mmcfe-ng`.
+Please take a look at the [Quick Start Guide](https://github.com/TheSerapher/php-mpos/wiki/Quick-Start-Guide). This will give you
+an idea how to setup `MPOS`.
 
 Contributing
 ============
@@ -144,7 +136,7 @@ You can contribute to this project in different ways:
 Contact
 =======
 
-You can find me on Freenode.net, #mmcfe-ng.
+You can find me on Freenode.net, #MPOS.
 
 License and Author
 ==================
@@ -164,5 +156,5 @@ See the License for the specific language governing permissions and
 limitations under the License.
 
 
-  [1]: https://github.com/TheSerapher/php-mmcfe-ng/issues "Issue"
+  [1]: https://github.com/TheSerapher/php-mpos/issues "Issue"
   [2]: http://www.smarty.net/docs/en/ "Smarty"
