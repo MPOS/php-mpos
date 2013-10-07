@@ -60,8 +60,9 @@ text-decoration: none;
 }
 
 header#header h2.section_title {
-text-align: center;
+text-align: left;
 text-indent: 4.5%;
+text-transform: uppercase;
 width: 68%;
 background: url(../images/header_shadow.png) no-repeat left top;
 }
@@ -98,7 +99,6 @@ background: #F1F1F4 url(../images/secondary_bar.png) repeat-x;
 section#secondary_bar .user {
 float: left;
 width: 12%;
-min-width: 150px;
 height: 38px;
 }
 
@@ -320,7 +320,7 @@ background: url("../images/sidebar_shadow.png") repeat-y scroll left top transpa
 float: left;
 margin-top: -2px;
 min-height: 85%;
-width: 87%;
+width: 88%;
 }
 
 #main h3 {
