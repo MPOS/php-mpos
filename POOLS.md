@@ -1,7 +1,7 @@
-Pools running mmcfe-ng
-======================
+Pools running MPOS
+==================
 
-If you are not sure if you want to use `mmcfe-ng` on your own pool,
+If you are not sure if you want to use `MPOS` on your own pool,
 maybe this list will push you over the edge of decision making. Some
 small and large pools are already running on it and have succesfully
 tested it on various coins.
@@ -12,7 +12,7 @@ as of this writing and may have changed since then.
 
 ### vias79
 
-Vias is using mmcfe-ng with a small group of people to mine various coins.
+Vias is using MPOS with a small group of people to mine various coins.
 They have succesfully mined blocks on each of those pools listed.
 All pools are running on Stratum only.
 
@@ -32,9 +32,9 @@ All pools are running on Stratum only.
 
 ### WKNiGHT
 
-WKNiGHT was an early adopter of `mmcfe-ng`. He has been around since a first stable release
+WKNiGHT was an early adopter of `MPOS`. He has been around since a first stable release
 which only featured proportional payouts. He successfully moved to PPS since then and is
-running more or less without any issues (related to `mmcfe-ng` that is ;-)). He is also running
+running more or less without any issues (related to `MPOS` that is ;-)). He is also running
 the most powerful pool!
 
 | Pool URL | Coin | Avg. Hashrate | Avg. Active Workers | Notes |

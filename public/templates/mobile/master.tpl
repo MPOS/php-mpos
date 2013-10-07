@@ -9,8 +9,8 @@
     {if $smarty.session.AUTHENTICATED|default:"0" == 1}
     <script>
 {literal}
-      $( document ).on( "pageinit", "#mmcfe-ng-page", function() {
-        $( document ).on( "swipeleft swiperight", "#mmcfe-ng-page", function( e ) {
+      $( document ).on( "pageinit", "#mpos-page", function() {
+        $( document ).on( "swipeleft swiperight", "#mpos-page", function( e ) {
           // We check if there is no open panel on the page because otherwise
           // a swipe to close the left panel would also open the right panel (and v.v.).
           // We do this by checking the data that the framework stores on the page element (panel: open).
@@ -28,7 +28,7 @@
 {/if}
   </head>
   <body>
-    <div data-role="page" id="mmcfe-ng-page" data-url="mmcfe-ng-page">
+    <div data-role="page" id="mpos-page" data-url="mpos-page">
 {if $smarty.session.AUTHENTICATED|default:"0" == 1}
 {assign var=payout_system value=$GLOBAL.config.payout_system}
       <div data-role="panel" id="left-sidebar" data-theme="a">

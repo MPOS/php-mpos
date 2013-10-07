@@ -9,9 +9,9 @@
 <ul>
 <li><a href="https://github.com/litecoin-project/litecoin">Litecoin</a></li>
 <li>1. Provides litecoind, used to synchronize blocks and offer the API the pool connects to</li>
-<li><a href="https://github.com/ArtForz/pushpool/tree/tenebrix">Pushpool 0.5.1-tenebrix</a>, a modified version of Pushpool supporting changed target difficulties (2^22 in this pool)</li>
+<li><a href="https://github.com/ArtForz/pushpool/tree/tenebrix">Pushpool 0.5.1-tenebrix</a>, a modified version of Pushpool supporting changed target difficulties (2^20 in this pool)</li>
 <li>2. Provides the API each worker (client miner) authenticates and connects to</li>
-<li><a href="https://github.com/Greedi/mmcFE">mmcFE</a> modified by Greedi & g2x3k with adjustments for this pool (proper hashrate for 2^22 difficulty)</li>
+<li><a href="https://github.com/TheSerapher/php-mpos">MPOS</a> (proper hashrate for 2^20 target difficulty)</li>
 <li>3. The Webinterface merging SQL and API information into a cohesive interface for user and worker management</li>
 </ul>
 

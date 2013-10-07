@@ -23,7 +23,7 @@ define('SALT', 'PLEASEMAKEMESOMETHINGRANDOM');
 /**
  * Database configuration
  *
- * A MySQL database backend is required for mmcfe-ng.
+ * A MySQL database backend is required for MPOS.
  * Also ensure the database structure is imported!
  * The SQL file should be included in this project under the `sql` directory
  *
@@ -32,18 +32,18 @@ define('SALT', 'PLEASEMAKEMESOMETHINGRANDOM');
  *   port     =  3306
  *   user     =  'someuser'
  *   pass     =  'somepass'
- *   name     =  'mmcfe_ng'
+ *   name     =  'mpos'
  **/
 $config['db']['host'] = 'localhost';
 $config['db']['user'] = 'someuser';
 $config['db']['pass'] = 'somepass';
 $config['db']['port'] = 3306;
-$config['db']['name'] = 'mmcfe_ng';
+$config['db']['name'] = 'mpos';
 
 /**
  * Local wallet RPC configuration
  *
- * mmcfe-ng uses the RPC backend to fetch transactions, blocks
+ * MPOS uses the RPC backend to fetch transactions, blocks
  * and various other things. They need to match your coind RPC
  * configuration.
  *
@@ -62,9 +62,9 @@ $config['wallet']['password'] = 'testnet';
  * API configuration to fetch prices for set currency
  *
  * Explanation:
- *   mmcfe-ng will try to fetch the current exchange rates
+ *   MPOS will try to fetch the current exchange rates
  *   from this API URL/target. Currently btc-e and coinchoose
- *   are supported in mmcfe-ng. If you want to remove the trade
+ *   are supported in MPOS. If you want to remove the trade
  *   header just set currency to an empty string.
  *
  * Default (btc-e.com):
@@ -236,7 +236,7 @@ $config['pplns']['shares']['type'] = 'blockavg';
 $config['pplns']['blockavg']['blockcount'] = 10;
 
 // Pool target difficulty as set in pushpoold configuration file
-// Please also read this for stratum: https://github.com/TheSerapher/php-mmcfe-ng/wiki/FAQ
+// Please also read this for stratum: https://github.com/TheSerapher/php-mpos/wiki/FAQ
 $config['difficulty'] = 20;
 
 
@@ -315,7 +315,7 @@ $config['pps_target'] = 16; // do not change unless you know what it does
  *   enabled     :   Disable (false) memcache for debugging or enable (true) it
  *   host        :   Host IP or hostname
  *   port        :   memcache port
- *   keyprefix   :   Must be changed for multiple mmcfe-ng instances on one host
+ *   keyprefix   :   Must be changed for multiple MPOS instances on one host
  *   expiration  :   Default expiration time in seconds of all cached keys.
  *                   Increase if caches expire too fast.
  *   splay       :   Default randomizer for expiration times.
@@ -325,14 +325,14 @@ $config['pps_target'] = 16; // do not change unless you know what it does
  *   enabled     =  `true`
  *   host        =  `localhost`
  *   port        =  11211
- *   keyprefix   =  `mmcfe_ng_`
+ *   keyprefix   =  `mpos_`
  *   expiration  =  90
  *   splay       =  15
  **/
 $config['memcache']['enabled'] = true;
 $config['memcache']['host'] = 'localhost';
 $config['memcache']['port'] = 11211;
-$config['memcache']['keyprefix'] = 'mmcfe_ng_';
+$config['memcache']['keyprefix'] = 'mpos_';
 $config['memcache']['expiration'] = 90;
 $config['memcache']['splay'] = 15;
 
@@ -342,7 +342,7 @@ $config['memcache']['splay'] = 15;
  *
  * You can configure the cookie behaviour to secure your cookies more than the PHP defaults
  *
- * For multiple installations of mmcfe-ng on the same domain you must change the cookie path.
+ * For multiple installations of MPOS on the same domain you must change the cookie path.
  *
  * Explanation:
  * duration:
@@ -393,7 +393,7 @@ $config['cookie']['secure'] = false;
  *   all data so rendering the page should not take too long anyway.
  *
  *   You can test this out and enable (1) this setting but it's not guaranteed to
- *   work with mmcfe-ng.
+ *   work with MPOS.
  *
  *   Ensure that the folder `templates/cache` is writable by the webserver!
  *
