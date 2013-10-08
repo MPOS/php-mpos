@@ -3,7 +3,7 @@
   <tbody>
   <tr>
     <td class="leftheader">Pool Hash Rate</td>
-    <td>{$GLOBAL.hashrate / 1000} Mhash/s</td>
+    <td>{$GLOBAL.hashrate|number_format:"3"} {$GLOBAL.hashunits.pool}</td>
   </tr>
   <tr>
     <td class="leftheader">Current Total Miners</td>
