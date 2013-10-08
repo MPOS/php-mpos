@@ -82,11 +82,10 @@ The following feature have been implemented so far:
  * PPS
  * PPLNS
 * Statistics are cached in Memcache by Cronjob for quick data access
-  * **NEW** Now supporting incremental round share updates!
-* **SOON** New Theme
- * **SOON** Live Dashboard
- * **SOON** AJAX Support
- * **SOON** Overhauled API
+* **NEW** New Theme
+ * **NEW** Live Dashboard
+ * **NEW** AJAX Support
+ * **NEW** Overhauled API
 * Web User accounts
  * Re-Captcha protected registration form
 * Worker accounts
@@ -96,7 +95,7 @@ The following feature have been implemented so far:
 * Minimal Block statistics
 * Pool donations
 * Pool fees
-* Block Bonus Payouts **NEW**
+* Block Bonus Payouts
 * Manual payout
 * Auto payout
 * Transaction list
@@ -106,13 +105,13 @@ The following feature have been implemented so far:
  * Wallet information
  * User Transactions
  * News Posts
- * Pool Settings **NEW**
+ * Pool Settings
 * Notification system
  * IDLE Workers
  * New blocks found in pool
  * Auto Payout
  * Manual Payout
-* User-to-user Invitation System **NEW**
+* User-to-user Invitation System
 * Support for various Scrypt based coins via config
  * MNC
  * LTC
@@ -124,6 +123,25 @@ Installation
 Please take a look at the [Quick Start Guide](https://github.com/TheSerapher/php-mpos/wiki/Quick-Start-Guide). This will give you
 an idea how to setup `MPOS`.
 
+Customization
+=============
+
+This project was meant to allow users to easily cusomize the system and templates. Hence no upstream framework was used to keep it as simple as possible.
+If you are just using the system, there will be no need to adjust anything. Things will work out of the box! But if you plan on creating
+your own theme, things are pretty easy:
+
+* Create a new theme folder in `public/templates/`
+* Create a new site_assets folder in `public/site_assets`
+* Create your own complete custom template or copy from an existing one
+* Change your theme in the `Admin Panel` and point it to the newly created folder
+
+The good thing with this approach: You can keep the backend code updated! Since your new theme will never conflict with existing themes, a simple git pull will
+keep your installation updated. You decide which new feature you'd like to integrate on your own theme. Bugfixes to the code will work out of the box!
+
+Other customizations are also possible but will require merging changes together. Usually users would not need to change the backend code unless they wish to work
+on non-existing features in `MPOS`. For the vast majority, adjusting themes should be enough to highlight your pool from others.
+
+In all that, I humbly ask to keep the `MPOS` author reference and Github URL intact.
 Contributing
 ============
 
