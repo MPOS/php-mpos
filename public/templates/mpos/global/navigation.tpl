@@ -7,11 +7,23 @@
       <li class="icon-user"><a href="{$smarty.server.PHP_SELF}?page=account&action=edit">Edit Account</a></li>
       <li class="icon-photo"><a href="{$smarty.server.PHP_SELF}?page=account&action=workers">My Workers</a></li>
       <li class="icon-indent-left"><a href="{$smarty.server.PHP_SELF}?page=account&action=transactions">Transactions</a></li>
-    {if !$GLOBAL.config.disable_notifications}<li class="icon-megaphone"><a href="{$smarty.server.PHP_SELF}?page=account&action=notifications">Notifications</a></li>{/if}
-    {if !$GLOBAL.config.disable_invitations}<li class="icon-plus"><a href="{$smarty.server.PHP_SELF}?page=account&action=invitations">Invitations</a></li>{/if}
+      {if !$GLOBAL.config.disable_notifications}<li class="icon-megaphone"><a href="{$smarty.server.PHP_SELF}?page=account&action=notifications">Notifications</a></li>{/if}
+      {if !$GLOBAL.config.disable_invitations}<li class="icon-plus"><a href="{$smarty.server.PHP_SELF}?page=account&action=invitations">Invitations</a></li>{/if}
       <li class="icon-barcode"><a href="{$smarty.server.PHP_SELF}?page=account&action=qrcode">QR Codes</a></li>
     </ul>
     </li>
+    {/if}
+    {if !$GLOBAL.config.disable_teams|default}
+    <h3>Teams</h3>
+    <ul class="toggle">
+    {if $GLOBAL.userdata.team_id|default}
+    <li class=""><a href="{$smarty.server.PHP_SELF}?page=teams&action=leave">Leave Team</a></li>
+    {if $GLOBAL.userdata.id == $GLOBAL.userdata.team_owner}<li class=""><a href="{$smarty.server.PHP_SELF}?page=teams&action=owner">Change Owner</a></li>{/if}
+    {else}
+    <li class=""><a href="{$smarty.server.PHP_SELF}?page=teams&action=join">Join Team</a></li>
+    <li class=""><a href="{$smarty.server.PHP_SELF}?page=teams&action=create">Create Team</a></li>
+    {/if}
+    </ul>
     {/if}
     {if $smarty.session.AUTHENTICATED|default:"0" == 1 && $GLOBAL.userdata.is_admin == 1}
     <h3>Admin Panel</h3>

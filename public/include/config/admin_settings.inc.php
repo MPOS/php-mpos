@@ -265,6 +265,13 @@ $aSettings['system'][] = array(
   'tooltip' => 'Enable or Disable the pool wide API functions. See API reference on Github for details.'
 );
 $aSettings['system'][] = array(
+  'display' => 'Disable Teams', 'type' => 'select',
+  'options' => array( 0 => 'No', 1 => 'Yes' ),
+  'default' => 0,
+  'name' => 'disable_teams', 'value' => $setting->getValue('disable_teams'),
+  'tooltip' => 'Enable or Disable the pool wide Team support.'
+);
+$aSettings['system'][] = array(
   'display' => 'Disable Contactform', 'type' => 'select',
   'options' => array( 0 => 'No', 1 => 'Yes' ),
   'default' => 0,
