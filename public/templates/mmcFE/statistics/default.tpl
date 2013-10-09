@@ -3,7 +3,7 @@
   <tbody>
   <tr>
     <td class="leftheader">Pool Hash Rate</td>
-    <td>{$GLOBAL.hashrate / 1000} Mhash/s</td>
+    <td>{$GLOBAL.hashrate|number_format:"3"} {$GLOBAL.hashunits.pool}</td>
   </tr>
   <tr>
     <td class="leftheader">Current Total Miners</td>
@@ -11,11 +11,19 @@
   </tr>
   <tr>
     <td class="leftheader">Current Block</td>
-    <td><a href="http://explorer.litecoin.net/search?q={$CURRENTBLOCK}" target="_new">{$CURRENTBLOCK}</a></td>
+    {if ! $GLOBAL.website.blockexplorer.disabled}
+      <td><a href="{$GLOBAL.website.blockexplorer.url}{$CURRENTBLOCKHASH}" target="_new">{$CURRENTBLOCK}</a></td>
+    {else}
+      <td>{$CURRENTBLOCK}</td>
+    {/if}
   </tr>
   <tr>
     <td class="leftheader">Current Difficulty</td>
-    <td><a href="http://allchains.info/" target="_new">{$DIFFICULTY}</a></td>
+      {if ! $GLOBAL.website.chaininfo.disabled}
+        <td><a href="{$GLOBAL.website.chaininfo.url}" target="_new">{$DIFFICULTY}</a></td>
+      {else}
+        <td>{$DIFFICULTY}</td>
+      {/if}
   </tr>
   </tbody>
 </table>
