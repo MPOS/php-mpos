@@ -10,9 +10,10 @@ class Block {
   // This defines each block
   public $height, $blockhash, $confirmations, $time, $accounted;
 
-  public function __construct($debug, $mysqli, $salt) {
+  public function __construct($debug, $mysqli, $config) {
     $this->debug = $debug;
     $this->mysqli = $mysqli;
+    $this->config = $config;
     $this->debug->append("Instantiated Block class", 2);
   }
 
@@ -44,6 +45,18 @@ class Block {
   }
 
   /**
+   * Get a specific block, by block height
+   * @param height int Block Height
+   * @return data array Block information from DB
+   **/
+  public function getBlock($height) {
+    $stmt = $this->mysqli->prepare("SELECT * FROM $this->table WHERE height = ? LIMIT 1");
+    if ($this->checkStmt($stmt) && $stmt->bind_param('i', $height) && $stmt->execute() && $result = $stmt->get_result())
+      return $result->fetch_assoc();
+    return false;
+  }
+
+  /**
    * Get our last, highest share ID inserted for a block
    * @param none
    * @return int data Share ID
@@ -56,18 +69,62 @@ class Block {
   }
 
   /**
+   * Fetch all blocks without a share ID
+   * @param order string Sort order, default ASC
+   * @return data array Array with database fields as keys
+   **/
+  public function getAllUnsetShareId($order='ASC') {
+    $stmt = $this->mysqli->prepare("SELECT * FROM $this->table WHERE ISNULL(share_id) ORDER BY height $order");
+    if ($this->checkStmt($stmt) && $stmt->execute() && $result = $stmt->get_result())
+      return $result->fetch_all(MYSQLI_ASSOC);
+    return false;
+  }
+
+  /**
    * Fetch all unaccounted blocks
    * @param order string Sort order, default ASC
    * @return data array Array with database fields as keys
    **/
   public function getAllUnaccounted($order='ASC') {
     $stmt = $this->mysqli->prepare("SELECT * FROM $this->table WHERE accounted = 0 ORDER BY height $order");
-    if ($this->checkStmt($stmt)) {
-      $stmt->execute();
-      $result = $stmt->get_result();
-      $stmt->close();
+    if ($this->checkStmt($stmt) && $stmt->execute() && $result = $stmt->get_result())
       return $result->fetch_all(MYSQLI_ASSOC);
-    }
+    return false;
+  }
+
+  /**
+   * Get total amount of blocks in our table
+   * @param noone
+   * @return data int Count of rows
+   **/
+  public function getBlockCount() {
+    $stmt = $this->mysqli->prepare("SELECT COUNT(id) AS blocks FROM $this->table");
+    if ($this->checkStmt($stmt) && $stmt->execute() && $result = $stmt->get_result())
+      return (int)$result->fetch_object()->blocks;
+    return false;
+  }
+
+  /**
+   * Fetch our average share count for the past N blocks
+   * @param limit int Maximum blocks to check
+   * @return data float Float value of average shares
+   **/
+  public function getAvgBlockShares($height, $limit=1) {
+    $stmt = $this->mysqli->prepare("SELECT AVG(x.shares) AS average FROM (SELECT shares FROM $this->table WHERE height <= ? ORDER BY height DESC LIMIT ?) AS x");
+    if ($this->checkStmt($stmt) && $stmt->bind_param('ii', $height, $limit) && $stmt->execute() && $result = $stmt->get_result())
+      return (float)$result->fetch_object()->average;
+    return false;
+  }
+
+  /**
+   * Fetch our average rewards for the past N blocks
+   * @param limit int Maximum blocks to check
+   * @return data float Float value of average shares
+   **/
+  public function getAvgBlockReward($limit=1) {
+    $stmt = $this->mysqli->prepare("SELECT AVG(x.amount) AS average FROM (SELECT amount FROM $this->table ORDER BY height DESC LIMIT ?) AS x");
+    if ($this->checkStmt($stmt) && $stmt->bind_param('i', $limit) && $stmt->execute() && $result = $stmt->get_result())
+      return (float)$result->fetch_object()->average;
     return false;
   }
 
@@ -76,15 +133,10 @@ class Block {
    * @param confirmations int Required confirmations to consider block confirmed
    * @return data array Array with database fields as keys
    **/
-  public function getAllUnconfirmed($confirmations='120') {
-    $stmt = $this->mysqli->prepare("SELECT id, blockhash, confirmations FROM $this->table WHERE confirmations < ? AND confirmations > -1");
-    if ($this->checkStmt($stmt)) {
-      $stmt->bind_param("i", $confirmations);
-      $stmt->execute();
-      $result = $stmt->get_result();
-      $stmt->close();
+  public function getAllUnconfirmed($confirmations=120) {
+    $stmt = $this->mysqli->prepare("SELECT * FROM $this->table WHERE confirmations < ? AND confirmations > -1");
+    if ($this->checkStmt($stmt) && $stmt->bind_param("i", $confirmations) && $stmt->execute() && $result = $stmt->get_result())
       return $result->fetch_all(MYSQLI_ASSOC);
-    }
     return false;
   }
 
@@ -228,4 +280,4 @@ class Block {
 }
 
 // Automatically load our class for furhter usage
-$block = new Block($debug, $mysqli, SALT);
+$block = new Block($debug, $mysqli, $config);

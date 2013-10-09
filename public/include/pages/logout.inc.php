@@ -6,5 +6,6 @@ if (!defined('SECURITY'))
 
 // This probably (?) never fails
 $user->logoutUser();
-header('Location: index.php?page=home');
+$smarty->assign("CONTENT", "default.tpl");
+// header('Location: index.php?page=home');
 ?>

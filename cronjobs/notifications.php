@@ -19,38 +19,61 @@ limitations under the License.
 
  */
 
+// Change to working directory
+chdir(dirname(__FILE__));
+
 // Include all settings and classes
 require_once('shared.inc.php');
 
+if ($setting->getValue('disable_notifications') == 1) {
+  $monitoring->setStatus($cron_name . "_active", "yesno", 0);
+  $monitoring->setStatus($cron_name . "_message", "message", "Cron disabled by admin");
+  $monitoring->setStatus($cron_name . "_status", "okerror", 0);
+  exit(0);
+}
+
+$log->logDebug("  IDLE Worker Notifications ...");
 // Find all IDLE workers
 $aWorkers = $worker->getAllIdleWorkers();
 if (empty($aWorkers)) {
-  verbose("No idle workers found\n");
+  $log->logDebug(" no idle workers found\n");
 } else {
+  $log->logInfo(" found " . count($aWorkers) . " IDLE workers\n");
   foreach ($aWorkers as $aWorker) {
     $aData = $aWorker;
     $aData['username'] = $user->getUserName($aWorker['account_id']);
     $aData['subject'] = 'IDLE Worker : ' . $aWorker['username'];
     $aData['worker'] = $aWorker['username'];
     $aData['email'] = $user->getUserEmail($aData['username']);
+    $log->logInfo("    " . $aWorker['username'] . "...");
     if (!$notification->sendNotification($aWorker['account_id'], 'idle_worker', $aData))
-      verbose($notification->getError() . "\n");
+      $log->logError("    Failed sending notifications: " . $notification->getError() . "\n");
   }
 }
 
+
+$log->logDebug("  Reset IDLE Worker Notifications ...");
 // We notified, lets check which recovered
 $aNotifications = $notification->getAllActive('idle_worker');
 if (!empty($aNotifications)) {
+  $log->logInfo(" found " . count($aNotifications) . " active notification(s)\n");
   foreach ($aNotifications as $aNotification) {
     $aData = json_decode($aNotification['data'], true);
     $aWorker = $worker->getWorker($aData['id']);
-    if ($aWorker['active'] == 1) {
+    $log->logInfo("    " . $aWorker['username'] . " ...");
+    if ($aWorker['hashrate'] > 0) {
       if ($notification->setInactive($aNotification['id'])) {
-        verbose("Marked notification " . $aNotification['id'] . " as inactive\n");
+        $log->logInfo(" updated #" . $aNotification['id'] . " for " . $aWorker['username'] . " as inactive\n");
       } else {
-        verbose("Failed to set notification inactive for " . $aWorker['username'] . "\n");
+        $log->logInfo(" failed to update #" . $aNotification['id'] . " for " . $aWorker['username'] . "\n");
       }
+    } else {
+      $log->logInfo(" still inactive\n");
     }
   }
+} else {
+  $log->logDebug(" no active IDLE worker notifications\n");
 }
+
+require_once('cron_end.inc.php');
 ?>

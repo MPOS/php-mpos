@@ -17,21 +17,6 @@ class Notification extends Mail {
     return $this->updateSingle($id, $field);
   }
 
-  /** 
-   * Update a single row in a table
-   * @param userID int Account ID
-   * @param field string Field to update
-   * @return bool
-   **/
-  private function updateSingle($id, $field, $table='') {
-    if (empty($table)) $table = $this->table;
-    $this->debug->append("STA " . __METHOD__, 4); 
-    $stmt = $this->mysqli->prepare("UPDATE $table SET " . $field['name'] . " = ? WHERE id = ? LIMIT 1");
-    if ($this->checkStmt($stmt) && $stmt->bind_param($field['type'].'i', $field['value'], $id) && $stmt->execute())
-      return true;
-    $this->debug->append("Unable to update " . $field['name'] . " with " . $field['value'] . " for ID $id");
-    return false;
-  }
   /**
    * We check our notification table for existing data
    * so we can avoid duplicate entries
@@ -99,12 +84,16 @@ class Notification extends Mail {
     $this->debug->append("STA " . __METHOD__, 4);
     $stmt = $this->mysqli->prepare("SELECT * FROM $this->tableSettings WHERE account_id = ?");
     if ($stmt && $stmt->bind_param('i', $account_id) && $stmt->execute() && $result = $stmt->get_result()) {
-      while ($row = $result->fetch_assoc()) {
-        $aData[$row['type']] = $row['active'];
+      if ($result->num_rows > 0) {
+        while ($row = $result->fetch_assoc()) {
+          $aData[$row['type']] = $row['active'];
+        }
+        return $aData;
       }
-      return $aData;
     }
     // Catchall
+    $this->setErrorMessage('Unable to fetch notification settings');
+    $this->debug->append('Failed fetching notification settings for ' . $account_id . ': ' . $this->mysqli->error);
     return false;
   }
 
@@ -173,11 +162,17 @@ class Notification extends Mail {
     // Check if this user wants strType notifications
     $stmt = $this->mysqli->prepare("SELECT account_id FROM $this->tableSettings WHERE type = ? AND active = 1 AND account_id = ?");
     if ($stmt && $stmt->bind_param('si', $strType, $account_id) && $stmt->execute() && $stmt->bind_result($id) && $stmt->fetch()) {
-      if ($stmt->close() && $this->sendMail('notifications/' . $strType, $aMailData) && $this->addNotification($account_id, $strType, $aMailData))
+      if ($stmt->close() && $this->sendMail('notifications/' . $strType, $aMailData) && $this->addNotification($account_id, $strType, $aMailData)) {
         return true;
+      } else {
+        $this->setErrorMessage('SendMail call failed: ' . $this->mail->getError());
+        return false;
+      }
     } else {
       $this->setErrorMessage('User disabled ' . $strType . ' notifications');
+      return false;
     }
+    $this->setErrorMessage('Error sending mail notification');
     return false;
   }
 }
@@ -187,5 +182,5 @@ $notification->setDebug($debug);
 $notification->setMysql($mysqli);
 $notification->setSmarty($smarty);
 $notification->setConfig($config);
-
+$notification->setSetting($setting);
 ?>

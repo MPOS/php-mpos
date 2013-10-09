@@ -1,12 +1,12 @@
 <!DOCTYPE unspecified PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
   <head>
-    <title>ThePool</title>
+    <title>{$GLOBAL.website.title}</title>
     <meta http-equiv="X-UA-Compatible" content="IE=7" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <link rel="shortcut icon" href="#" />
+    <link rel="shortcut icon" href="favicon.ico" />
     <link rel="stylesheet" href="{$PATH}/css/mainstyle.css" type="text/css" />
-    <script src="http://code.jquery.com/jquery-1.9.1.min.js"></script>
+    <script src="{$PATH}/js/jquery-1.9.1.min.js"></script>
     <script src="{$PATH}/js/jquery.browser.js"></script>
     <script src="{$PATH}/js/jquery.tablesorter.min.js"></script>
     <script src="{$PATH}/js/jquery.tablesorter.pager.js"></script>
@@ -47,11 +47,8 @@
       <div class="block_content">
         <div class="sidebar">
           {if $smarty.session.AUTHENTICATED|default}
-            {if $GLOBAL.config.payout_system == 'pps'}
-              {include file="global/sidebar_pps.tpl"}
-            {else}
-              {include file="global/sidebar.tpl"}
-            {/if}
+            {assign var=payout_system value=$GLOBAL.config.payout_system}
+            {include file="global/sidebar_$payout_system.tpl"}
           {else}
           {include file="global/login.tpl"}
           {/if}
@@ -62,7 +59,7 @@
               <div class="message {$smarty.session.POPUP[popup].TYPE|default:"success"}"><p>{$smarty.session.POPUP[popup].CONTENT}</p></div>
             {/section}
           {/if}
-          {include file="$PAGE/$ACTION/$CONTENT"}
+          {if file_exists($smarty.current_dir|cat:"/$PAGE/$ACTION/$CONTENT")}{include file="$PAGE/$ACTION/$CONTENT"}{else}Missing template for this page{/if}
         </div>
         <div class"clear"></div>
         <div id="footer" style="font-size: 10px;">
@@ -72,7 +69,7 @@
     </div>
   </div>
   <div id="debug">
-    {include file="system/debugger.tpl"}
+    {nocache}{include file="system/debugger.tpl"}{/nocache}
   </div>
 </div>
 </body>

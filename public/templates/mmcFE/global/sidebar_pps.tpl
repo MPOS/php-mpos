@@ -11,7 +11,7 @@
                     </tr>
                     <tr>
                       <td><b>Hashrate</b></td>
-                      <td class="right">{$GLOBAL.userdata.hashrate|number_format} KH/s</td>
+                      <td class="right">{$GLOBAL.userdata.hashrate|number_format:"2"} {$GLOBAL.hashunits.personal}</td>
                     </tr>
                     <tr>
                       <td><b>Share Rate</b></td>
@@ -29,12 +29,16 @@
                       <td class="right"><i>{$GLOBAL.roundshares.valid|number_format}</i></td>
                     </tr>
                     <tr>
+                      <td><b>Your Valid</b></td>
+                      <td class="right"><i>{$GLOBAL.userdata.shares.valid|number_format}</i></td>
+                    </tr>
+                    <tr>
                       <td><b>Pool Invalid</b></td>
-                      <td class="right"><i>{$GLOBAL.roundshares.invalid|number_format}</i></td>
+                      <td class="right"><i>{$GLOBAL.roundshares.invalid|number_format}</i>{if $GLOBAL.roundshares.valid > 0}<font size='1px'> ({($GLOBAL.roundshares.invalid / ($GLOBAL.roundshares.valid + $GLOBAL.roundshares.invalid) * 100)|number_format:"2"}%)</font>{/if}</td>
                     </tr>
                     <tr>
                       <td><b>Your Invalid</b></td>
-                      <td class="right"><i>{$GLOBAL.userdata.shares.invalid|number_format}</i><font size='1px'></font></td>
+                      <td class="right"><i>{$GLOBAL.userdata.shares.invalid|number_format}</i>{if $GLOBAL.roundshares.valid > 0}<font size='1px'> ({($GLOBAL.userdata.shares.invalid / ($GLOBAL.roundshares.valid + $GLOBAL.roundshares.invalid) * 100)|number_format:"2"}%)</font>{/if}</td>
                     </tr>
                     <tr><td colspan="2">&nbsp;</td></tr>
                     <tr><td colspan="2"><b><u>{$GLOBAL.config.currency} Estimates</u></b></td></tr>

@@ -5,27 +5,19 @@
     <thead>
       <tr>
         <td></td>
-{for $i=date('G') to 23}
-        <th scope="col">{$i}:00</th>
-{/for}
-{for $i=0 to date('G', time () - 60 * 60)}
-        <th scope="col">{$i}:00</th>
-{/for}
+{foreach $YOURHASHRATES as $hour=>$hashrate}
+        <th scope="col">{$hour|default:"0"}:00</th>
+{/foreach}
       </tr>
     </thead>
     <tbody>
       <tr>
         <th scope="row">{$smarty.session.USERDATA.username}</th>
-{for $i=date('G') to 23}
-        <td>{$YOURHASHRATES.$i|default:"0"}</td>
-{/for}
-{for $i=0 to date('G', time() - 60 * 60)}
-        <td>{$YOURHASHRATES.$i|default:"0"}</td>
-{/for}
+{foreach $YOURHASHRATES as $hour=>$hashrate}
+        <td>{$hashrate|default:"0"}</td>
+{/foreach}
       </tr>
     </tbody>
   </table>
 </div>
-{else}
-<p><li>No shares available to start calculations</li></p>
 {/if}

@@ -19,71 +19,86 @@ limitations under the License.
 
  */
 
+// Change to working directory
+chdir(dirname(__FILE__));
+
 // Include all settings and classes
 require_once('shared.inc.php');
 
-if ($bitcoin->can_connect() !== true) {
-  verbose("Unable to connect to RPC server, exiting");
-  exit(1);
+if ($setting->getValue('disable_ap') == 1) {
+  $log->logInfo(" auto payout disabled via admin panel");
+  $monitoring->setStatus($cron_name . "_active", "yesno", 0);
+  $monitoring->setStatus($cron_name . "_message", "message", "Auto-Payout disabled");
+  $monitoring->setStatus($cron_name . "_status", "okerror", 1);
+  $monitoring->setStatus($cron_name . "_endtime", "date", time());
+  exit(0);
 }
 
-// Mark this job as active
-$setting->setValue('auto_payout_active', 1);
+if ($bitcoin->can_connect() !== true) {
+  $log->logFatal(" unable to connect to RPC server, exiting");
+  $monitoring->setStatus($cron_name . "_active", "yesno", 0);
+  $monitoring->setStatus($cron_name . "_message", "message", "Unable to connect to RPC server");
+  $monitoring->setStatus($cron_name . "_status", "okerror", 1);
+  exit(1);
+}
 
 // Fetch all users with setup AP
 $users = $user->getAllAutoPayout();
 
+// Quick summary
+if (count($users) > 0) $log->logInfo(" found " . count($users) . " queued payout(s)");
+
 // Go through users and run transactions
 if (! empty($users)) {
-  verbose("UserID\tUsername\tBalance\tThreshold\tAddress\t\t\t\t\tStatus\n\n");
+  $log->logInfo("\tUserID\tUsername\tBalance\tThreshold\tAddress");
 
   foreach ($users as $aUserData) {
     $aBalance = $transaction->getBalance($aUserData['id']);
     $dBalance = $aBalance['confirmed'];
-    verbose($aUserData['id'] . "\t" . $aUserData['username'] . "\t" . $dBalance . "\t" . $aUserData['ap_threshold'] . "\t\t" . $aUserData['coin_address'] . "\t");
+    $log->logInfo("\t" . $aUserData['id'] . "\t" . $aUserData['username'] . "\t" . $dBalance . "\t" . $aUserData['ap_threshold'] . "\t\t" . $aUserData['coin_address']);
 
     // Only run if balance meets threshold and can pay the potential transaction fee
     if ($dBalance > $aUserData['ap_threshold'] && $dBalance > $config['txfee']) {
       // Validate address against RPC
       try {
-        $bitcoin->validateaddress($aUserData['coin_address']);
+        $aStatus = $bitcoin->validateaddress($aUserData['coin_address']);
+        if (!$aStatus['isvalid']) {
+          $log->logError('Failed to verify this users coin address, skipping payout');
+          continue;
+        }
       } catch (BitcoinClientException $e) {
-        verbose("VERIFY FAILED\n");
+        $log->logError('Failed to verifu this users coin address, skipping payout');
         continue;
       }
 
       // Send balance, fees are reduced later by RPC Server
       try {
-        $bitcoin->sendtoaddress($aUserData['coin_address'], $dBalance);
+        $bitcoin->sendtoaddress($aUserData['coin_address'], $dBalance - $config['txfee']);
       } catch (BitcoinClientException $e) {
-        verbose("SEND FAILED\n");
+        $log->logError('Failed to send requested balance to coin address, please check payout process');
         continue;
       }
 
       // Create transaction record
       if ($transaction->addTransaction($aUserData['id'], $dBalance - $config['txfee'], 'Debit_AP', NULL, $aUserData['coin_address']) && $transaction->addTransaction($aUserData['id'], $config['txfee'], 'TXFee', NULL, $aUserData['coin_address'])) {
+        // Mark all older transactions as archived
+        if (!$transaction->setArchived($aUserData['id'], $transaction->insert_id))
+          $log->logError('Failed to mark transactions for user #' . $aUserData['id'] . ' prior to #' . $transaction->insert_id . ' as archived');
         // Notify user via  mail
         $aMailData['email'] = $user->getUserEmail($user->getUserName($aUserData['id']));
         $aMailData['subject'] = 'Auto Payout Completed';
         $aMailData['amount'] = $dBalance;
-        if (!$notification->sendNotification($aUserData['id'], 'auto_payout', $aMailData)) {
-          verbose("NOTIFY FAILED\n");
-        } else {
-          verbose("OK\n");
-        }
+        if (!$notification->sendNotification($aUserData['id'], 'auto_payout', $aMailData))
+          $log->logError('Failed to send notification email to users address: ' . $aMailData['email']);
       } else {
-        verbose("FAILED\n");
+        $log->logError('Failed to add new Debit_AP transaction in database for user ' . $user->getUserName($aUserData['id']));
       }
-
-    } else {
-      verbose("SKIPPED\n");
     }
   }
 } else {
-  verbose("No user has configured their AP > 0\n");
+  $log->logDebug("  no user has configured their AP > 0");
 }
 
-// Mark this job as inactive
-$setting->setValue('auto_payout_active', 0);
-
+// Cron cleanup and monitoring
+require_once('cron_end.inc.php');
 ?>
