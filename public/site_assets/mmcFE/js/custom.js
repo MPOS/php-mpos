@@ -16,10 +16,14 @@ $(function () {
             var statsType = 'area';
         }
 
+        // hack to statically set width as something is broken with div width calculation - anni
+        var chart_width = $(document).width() - 400;
+
         if (statsType == 'line' || statsType == 'pie') {
             $(this).hide().visualize({
                 type: statsType,
                 // 'bar', 'area', 'pie', 'line'
+                width: chart_width,
                 height: '240px',
                 colors: ['#6fb9e8', '#ec8526', '#9dc453', '#ddd74c'],
                 lineDots: 'double',
@@ -37,6 +41,7 @@ $(function () {
         } else {
             $(this).hide().visualize({
                 // 'bar', 'area', 'pie', 'line'
+                width: chart_width,
                 type: statsType,
                 height: '240px',
                 colors: ['#6fb9e8', '#ec8526', '#9dc453', '#ddd74c']

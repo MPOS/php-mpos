@@ -4,15 +4,21 @@
 if (!defined('SECURITY'))
     die('Hacking attempt');
 
-if ($bitcoin->can_connect() === true){
-  $dDifficulty = $bitcoin->query('getdifficulty');
-  $iBlock = $bitcoin->query('getblockcount');
+if (!$smarty->isCached('master.tpl', $smarty_cache_key)) {
+  $debug->append('No cached version available, fetching from backend', 3);
+  if ($bitcoin->can_connect() === true){
+    $dDifficulty = $bitcoin->getdifficulty();
+    $iBlock = $bitcoin->getblockcount();
+  } else {
+    $dDifficulty = 1;
+    $iBlock = 0;
+    $_SESSION['POPUP'][] = array('CONTENT' => 'Unable to connect to litecoind RPC service: ' . $bitcoin->can_connect(), 'TYPE' => 'errormsg');
+  }
+  $smarty->assign("CURRENTBLOCK", $iBlock);
+  $smarty->assign("DIFFICULTY", $dDifficulty);
 } else {
-  $dDifficulty = 1;
-  $iBlock = 0;
-  $_SESSION['POPUP'][] = array('CONTENT' => 'Unable to connect to litecoind RPC service: ' . $bitcoin->can_connect(), 'TYPE' => 'errormsg');
+  $debug->append('Using cached page', 3);
 }
 
-$smarty->assign("CURRENTBLOCK", $iBlock);
-$smarty->assign("DIFFICULTY", $dDifficulty);
 $smarty->assign("CONTENT", "default.tpl");
+?>

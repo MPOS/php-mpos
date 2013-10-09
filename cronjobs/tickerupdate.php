@@ -19,18 +19,22 @@ limitations under the License.
 
  */
 
+// Change to working directory
+chdir(dirname(__FILE__));
+
 // Include all settings and classes
 require_once('shared.inc.php');
 
 // Include additional file not set in autoloader
-require_once(BASEPATH . CLASS_DIR . '/tools.class.php');
+require_once(CLASS_DIR . '/tools.class.php');
 
-verbose("Running updates\n");
-if ($aData = $tools->getApi($config['price']['url'], $config['price']['target'])) {
-  if (!$setting->setValue('price', $aData['ticker']['last']))
-    verbose("ERR Table update failed");
+if ($price = $tools->getPrice()) {
+  $log->logInfo("Price update: found $price as price");
+  if (!$setting->setValue('price', $price))
+    $log->logError("unable to update value in settings table");
 } else {
-  verbose("ERR Failed download JSON data from " . $config['price']['url'].$config['price']['target'] . "\n");
+  $log->logFatal("failed to fetch API data: " . $tools->getError());
 }
 
+require_once('cron_end.inc.php');
 ?>

@@ -19,31 +19,35 @@ limitations under the License.
 
  */
 
+// Change to working directory
+chdir(dirname(__FILE__));
+
 // Include all settings and classes
 require_once('shared.inc.php');
 
-// Fetch all cachable values but disable fetching from cache
-$statistics->setGetCache(false);
-
-// Since fetching from cache is disabled, overwrite our stats
-if (!$statistics->getRoundShares())
-  verbose("Unable to fetch and store current round shares\n");
-if (!$statistics->getTopContributors('shares'))
-  verbose("Unable to fetch and store top share contributors\n");
-if (!$statistics->getTopContributors('hashes'))
-  verbose("Unable to fetch and store top hashrate contributors\n");
-if (!$statistics->getCurrentHashrate())
-  verbose("Unable to fetch and store pool hashrate\n");
-// Admin specific statistics, we cache the global query due to slowness
-if (!$statistics->getAllUserStats('%'))
-  verbose("Unable to fetch and store admin panel full user list\n");
-
 // Per user share statistics based on all shares submitted
-$stmt = $mysqli->prepare("SELECT DISTINCT SUBSTRING_INDEX( `username` , '.', 1 ) AS username FROM " . $share->getTableName());
-if ($stmt && $stmt->execute() && $result = $stmt->get_result()) {
-  while ($row = $result->fetch_assoc()) {
-    if (!$statistics->getUserShares($user->getUserId($row['username'])))
-      verbose("Failed to fetch and store user stats for " . $row['username'] . "\n");
-  }
-}
+$start = microtime(true);
+if ( ! $aAllUserShares = $statistics->getAllUserShares() )
+  $log->logError('getAllUserShares update failed');
+$log->logInfo("getAllUserShares " . number_format(microtime(true) - $start, 2) . " seconds");
+
+$start = microtime(true);
+if (!$statistics->getTopContributors('hashes'))
+  $log->logError("getTopContributors hashes update failed");
+$log->logInfo("getTopContributors hashes " . number_format(microtime(true) - $start, 2) . " seconds");
+
+$start = microtime(true);
+if (!$statistics->getCurrentHashrate())
+  $log->logError("getCurrentHashrate update failed");
+$log->logInfo("getCurrentHashrate " . number_format(microtime(true) - $start, 2) . " seconds");
+
+/*
+// Admin specific statistics, we cache the global query due to slowness
+$start = microtime(true);
+if (!$statistics->getAllUserStats('%'))
+  $log->logError("getAllUserStats update failed");
+$log->logInfo("getAllUserStats " . number_format(microtime(true) - $start, 2) . " seconds");
+*/
+
+require_once('cron_end.inc.php');
 ?>

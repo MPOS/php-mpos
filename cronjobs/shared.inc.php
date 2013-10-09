@@ -22,6 +22,16 @@ limitations under the License.
 // We need to find our include files so set this properly
 define("BASEPATH", "../public/");
 
+/*****************************************************
+ * No need to change beyond this point               *
+ *****************************************************/
+
+// Used in autoloading of API class, adding it to stop PHP warnings
+$dStartTime = microtime(true);
+
+// Our cron name
+$cron_name = basename($_SERVER['PHP_SELF'], '.php');
+
 // Our security check
 define("SECURITY", 1);
 
@@ -31,16 +41,15 @@ require_once(BASEPATH . 'include/config/global.inc.php');
 // We include all needed files here, even though our templates could load them themself
 require_once(INCLUDE_DIR . '/autoloader.inc.php');
 
-// Parse command line
-$options = getopt("v");
-if (array_key_exists('v', $options)) {
-  define("VERBOSE", true);
-} else {
-  define("VERBOSE", false);
-}
+// Load 3rd party logging library for running crons
+$log = new KLogger ( 'logs/' . $cron_name . '.txt' , KLogger::INFO );
+$log->LogDebug('Starting ' . $cron_name);
 
-// Command line cron functions only
-function verbose($msg) {
-  if (VERBOSE) echo $msg;
-}
+// Load the start time for later runtime calculations for monitoring
+$cron_start[$cron_name] = microtime(true);
 
+// Mark cron as running for monitoring
+$log->logDebug('Marking cronjob as running for monitoring');
+$monitoring->setStatus($cron_name . '_active', 'yesno', 1);
+$monitoring->setStatus($cron_name . '_starttime', 'date', time());
+?>

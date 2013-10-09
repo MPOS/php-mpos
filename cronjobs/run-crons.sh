@@ -9,26 +9,63 @@
 # PHP Detections, if this fails hard code it
 PHP_BIN=$( which php )
 
-# Path to PID file, needs to be writable by user running this
-PIDFILE='/tmp/mmcfe-ng-cron.pid'
-
-# Location of our cronjobs, assume current directory
-CRONHOME='.'
-
 # List of cruns to execute
-CRONS="findblock.php proportional_payout.php pps_payout.php blockupdate.php auto_payout.php tickerupdate.php notifications.php statistics.php"
-
-# Additional arguments to pass to cronjobs
-CRONARGS="-v"
+CRONS="findblock.php proportional_payout.php pplns_payout.php pps_payout.php blockupdate.php manual_payout.php auto_payout.php tickerupdate.php notifications.php statistics.php archive_cleanup.php"
 
 # Output additional runtime information
 VERBOSE="0"
+
+# Base path for PIDFILE, (full path).
+BASEPATH="/tmp"
+
+# Subfolder for PIDFILE, so it's path will be unique in a multipool server.
+# Path relative to BASEPATH.
+# Eg. SUBFOLDER="LTC"
+SUBFOLDER=""
 
 ################################################################
 #                                                              #
 # You probably don't need to change anything beyond this point #
 #                                                              #
 ################################################################
+
+# My own name
+ME=$( basename $0 )
+
+# Overwrite some settings via command line arguments
+while getopts "hvp:d:" opt; do
+  case "$opt" in
+    h|\?)
+      echo "Usage: $0 [-v] [-p PHP_BINARY] [-d SUBFOLDER]";
+      exit 0
+      ;;
+    v) VERBOSE=1 ;;
+    p) PHP_BIN=$OPTARG ;;
+    d) SUBFOLDER=$OPTARG ;;
+    :)
+      echo "Option -$OPTARG requires an argument." >&2
+      exit 1
+    ;;
+  esac
+done
+
+# Path to PID file, needs to be writable by user running this
+PIDFILE="${BASEPATH}/${SUBFOLDER}/${ME}.pid"
+# Clean PIDFILE path
+PIDFILE=$(readlink -m "$PIDFILE")
+
+# Create folders recursively if necessary
+if ! $(mkdir -p $( dirname $PIDFILE)); then
+  echo "Error creating PIDFILE path: $( dirname $PIDFILE )"
+  exit 1
+fi
+
+# Find scripts path
+if [[ -L $0 ]]; then
+  CRONHOME=$( dirname $( readlink $0 ) )
+else
+  CRONHOME=$( dirname $0 )
+fi
 
 # Change working director to CRONHOME
 if ! cd $CRONHOME 2>/dev/null; then
@@ -66,8 +103,8 @@ fi
 echo $PID > $PIDFILE
 
 for cron in $CRONS; do
-  [[ $VERBOSE == 1 ]] && echo "Running $cron, see output below for details"
-  $PHP_BIN $cron $CRONARGS
+  [[ $VERBOSE == 1 ]] && echo "Running $cron, check logfile for details"
+  $PHP_BIN $cron
 done
 
 # Remove pidfile
