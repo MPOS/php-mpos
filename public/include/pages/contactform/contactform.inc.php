@@ -22,7 +22,7 @@ if ($setting->getValue('disable_contactform')) {
   if($setting->getValue('recaptcha_enabled') && $_POST["recaptcha_response_field"] && $_POST["recaptcha_response_field"]!=''){
     if ($rsp->is_valid) {
       $smarty->assign("RECAPTCHA", recaptcha_get_html($setting->getValue('recaptcha_public_key')));
-      if ($user->contactform($_POST['senderName'], $_POST['senderEmail'], $_POST['senderSubject'], $_POST['senderMesage'])) {
+      if ($mail->contactform($_POST['senderName'], $_POST['senderEmail'], $_POST['senderSubject'], $_POST['senderMessage'])) {
       $_SESSION['POPUP'][] = array('CONTENT' => 'Thanks for sending your message! We will get back to you shortly');
       } else {
         $_SESSION['POPUP'][] = array('CONTENT' => 'There was a problem sending your message. Please try again.' . $user->getError(), 'TYPE' => 'errormsg');
