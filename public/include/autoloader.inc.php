@@ -19,7 +19,7 @@ if ($detect->isMobile() && $setting->getValue('website_mobile_theme')) {
   $setting->getValue('website_mobile_theme') ? $theme = $setting->getValue('website_mobile_theme') : $theme = 'mobile';
 } else {
   // Use configured theme, fallback to default theme
-  $setting->getValue('website_theme') ? $theme = $setting->getValue('website_theme') : $theme = 'mmcFE';
+  $setting->getValue('website_theme') ? $theme = $setting->getValue('website_theme') : $theme = 'mpos';
 }
 define('THEME', $theme);
 
@@ -27,7 +27,6 @@ define('THEME', $theme);
 require_once(INCLUDE_DIR . '/smarty.inc.php');
 
 // Load everything else in proper order
-require_once(CLASS_DIR . '/api.class.php');
 require_once(CLASS_DIR . '/mail.class.php');
 require_once(CLASS_DIR . '/tokentype.class.php');
 require_once(CLASS_DIR . '/token.class.php');
@@ -49,6 +48,7 @@ require_once(CLASS_DIR . '/roundstats.class.php');
 require_once(CLASS_DIR . '/transaction.class.php');
 require_once(CLASS_DIR . '/notification.class.php');
 require_once(CLASS_DIR . '/news.class.php');
+require_once(CLASS_DIR . '/api.class.php');
 require_once(INCLUDE_DIR . '/lib/Michelf/Markdown.php');
 require_once(INCLUDE_DIR . '/lib/scrypt.php');
 

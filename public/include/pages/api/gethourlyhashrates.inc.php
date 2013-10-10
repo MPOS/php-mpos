@@ -7,25 +7,15 @@ if (!defined('SECURITY')) die('Hacking attempt');
 $api->isActive();
 
 // Check user token
-$user_id = $user->checkApiKey($_REQUEST['api_key']);
-
-if ( ! $user->isAdmin($user_id) && ($_REQUEST['id'] != $user_id && !empty($_REQUEST['id']))) {
-  // User is admin and tries to access an ID that is not their own
-  header("HTTP/1.1 401 Unauthorized");
-  die("Access denied");
-} else if ($user->isAdmin($user_id)) {
-  // Is it a username or a user ID
-  ctype_digit($_REQUEST['id']) ? $id = $_REQUEST['id'] : $id = $user->getUserId($_REQUEST['id']);
-} else {
-  // Not admin, only allow own user ID
-  $id = $user_id;
-}
+$user_id = $api->checkAccess($user->checkApiKey($_REQUEST['api_key']), @$_REQUEST['id']);
 
 // Output JSON format
-echo json_encode(array('gethourlyhashrates' => array(
+$data = array(
   'mine' => $statistics->getHourlyHashrateByAccount($id),
   'pool' => $statistics->getHourlyHashrateByPool()
-)), JSON_FORCE_OBJECT);
+);
+
+echo $api->json($data);
 
 // Supress master template
 $supress_master = 1;

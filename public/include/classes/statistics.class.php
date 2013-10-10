@@ -99,25 +99,25 @@ class Statistics {
    * @param none
    * @return data object Return our hashrateas an object
    **/
-  public function getCurrentHashrate() {
+  public function getCurrentHashrate($interval=600) {
     $this->debug->append("STA " . __METHOD__, 4);
     if ($this->getGetCache() && $data = $this->memcache->get(__FUNCTION__)) return $data;
     $stmt = $this->mysqli->prepare("
       SELECT
       (
         (
-          SELECT IFNULL(ROUND(SUM(IF(difficulty=0, POW(2, (" . $this->config['difficulty'] . " - 16)), difficulty)) * 65536 / 600 / 1000), 0) AS hashrate
+          SELECT IFNULL(ROUND(SUM(IF(difficulty=0, POW(2, (" . $this->config['difficulty'] . " - 16)), difficulty)) * 65536 / ? / 1000), 0) AS hashrate
           FROM " . $this->share->getTableName() . "
-          WHERE time > DATE_SUB(now(), INTERVAL 600 SECOND)
+          WHERE time > DATE_SUB(now(), INTERVAL ? SECOND)
         ) + (
-          SELECT IFNULL(ROUND(SUM(IF(difficulty=0, POW(2, (" . $this->config['difficulty'] . " - 16)), difficulty)) * 65536 / 600 / 1000), 0) AS hashrate
+          SELECT IFNULL(ROUND(SUM(IF(difficulty=0, POW(2, (" . $this->config['difficulty'] . " - 16)), difficulty)) * 65536 / ? / 1000), 0) AS hashrate
           FROM " . $this->share->getArchiveTableName() . "
-          WHERE time > DATE_SUB(now(), INTERVAL 600 SECOND)
+          WHERE time > DATE_SUB(now(), INTERVAL ? SECOND)
         )
       ) AS hashrate
       FROM DUAL");
     // Catchall
-    if ($this->checkStmt($stmt) && $stmt->execute() && $result = $stmt->get_result() ) return $this->memcache->setCache(__FUNCTION__, $result->fetch_object()->hashrate);
+    if ($this->checkStmt($stmt) && $stmt->bind_param('iiii', $interval, $interval, $interval, $interval) && $stmt->execute() && $result = $stmt->get_result() ) return $this->memcache->setCache(__FUNCTION__, $result->fetch_object()->hashrate);
     $this->debug->append("Failed to get hashrate: " . $this->mysqli->error);
     return false;
   }
@@ -222,6 +222,8 @@ class Statistics {
         } else {
           $data['data'][$row['id']]['valid'] += $row['valid'];
           $data['data'][$row['id']]['invalid'] += $row['invalid'];
+          $data['data'][$row['id']]['donate_percent'] = $row['donate_percent'];
+          $data['data'][$row['id']]['is_anonymous'] = $row['is_anonymous'];
         }
       }
       $data['share_id'] = $this->share->getMaxShareId();
@@ -240,7 +242,7 @@ class Statistics {
   public function getUserShares($account_id) {
     $this->debug->append("STA " . __METHOD__, 4);
     // Dual-caching, try statistics cron first, then fallback to local, then fallbock to SQL
-    if ($data = $this->memcache->get(STATISTICS_ALL_USER_SHARES)) return $data['data'][$account_id];
+    if ($data = $this->memcache->get(STATISTICS_ALL_USER_SHARES)) return @$data['data'][$account_id];
     if ($data = $this->memcache->get(__FUNCTION__ . $account_id)) return $data;
     $stmt = $this->mysqli->prepare("
       SELECT
@@ -293,28 +295,28 @@ class Statistics {
    * @param account_id integer User ID
    * @return data integer Current Hashrate in khash/s
    **/
-  public function getUserHashrate($account_id) {
+  public function getUserHashrate($account_id, $interval=600) {
     $this->debug->append("STA " . __METHOD__, 4);
-    if ($data = $this->memcache->get(__FUNCTION__ . $account_id)) return $data;
+    if ($this->getGetCache() && $data = $this->memcache->get(__FUNCTION__ . $account_id)) return $data;
     $stmt = $this->mysqli->prepare("
       SELECT
         (
-          SELECT IFNULL(ROUND(SUM(IF(difficulty=0, POW(2, (" . $this->config['difficulty'] . " - 16)), difficulty)) * 65536 / 600 / 1000), 0) AS hashrate
+          SELECT IFNULL(ROUND(SUM(IF(difficulty=0, POW(2, (" . $this->config['difficulty'] . " - 16)), difficulty)) * 65536 / ? / 1000), 0) AS hashrate
           FROM " . $this->share->getTableName() . " AS s,
                " . $this->user->getTableName() . " AS u
           WHERE u.username = SUBSTRING_INDEX( s.username, '.', 1 )
-            AND s.time > DATE_SUB(now(), INTERVAL 600 SECOND)
+            AND s.time > DATE_SUB(now(), INTERVAL ? SECOND)
             AND u.id = ?
         ) + (
-          SELECT IFNULL(ROUND(SUM(IF(difficulty=0, POW(2, (" . $this->config['difficulty'] . " - 16)), difficulty)) * 65536 / 600 / 1000), 0) AS hashrate
+          SELECT IFNULL(ROUND(SUM(IF(difficulty=0, POW(2, (" . $this->config['difficulty'] . " - 16)), difficulty)) * 65536 / ? / 1000), 0) AS hashrate
           FROM " . $this->share->getArchiveTableName() . " AS s,
                " . $this->user->getTableName() . " AS u
           WHERE u.username = SUBSTRING_INDEX( s.username, '.', 1 )
-            AND s.time > DATE_SUB(now(), INTERVAL 600 SECOND)
+            AND s.time > DATE_SUB(now(), INTERVAL ? SECOND)
             AND u.id = ?
         ) AS hashrate
       FROM DUAL");
-    if ($this->checkStmt($stmt) && $stmt->bind_param("ii", $account_id, $account_id) && $stmt->execute() && $result = $stmt->get_result() )
+    if ($this->checkStmt($stmt) && $stmt->bind_param("iiiiii", $interval, $interval, $account_id, $interval, $interval, $account_id) && $stmt->execute() && $result = $stmt->get_result() )
       return $this->memcache->setCache(__FUNCTION__ . $account_id, $result->fetch_object()->hashrate);
     // Catchall
     $this->debug->append("Failed to fetch hashrate: " . $this->mysqli->error);
@@ -328,7 +330,7 @@ class Statistics {
    **/
   public function getUserSharerate($account_id, $interval=600) {
     $this->debug->append("STA " . __METHOD__, 4);
-    if ($data = $this->memcache->get(__FUNCTION__ . $account_id)) return $data;
+    if ($this->getGetCache() && $data = $this->memcache->get(__FUNCTION__ . $account_id)) return $data;
     $stmt = $this->mysqli->prepare("
       SELECT
       (
@@ -400,6 +402,8 @@ class Statistics {
         foreach ($data['data'] as $key => $aUser) {
           $data_new[$key]['shares'] = $aUser['valid'];
           $data_new[$key]['account'] = $aUser['username'];
+          $data_new[$key]['donate_percent'] = $aUser['donate_percent'];
+          $data_new[$key]['is_anonymous'] = $aUser['is_anonymous'];
         }
         return $data_new;
       }

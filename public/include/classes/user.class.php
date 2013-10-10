@@ -43,6 +43,9 @@ class User {
   public function getUserName($id) {
     return $this->getSingle($id, 'username', 'id');
   }
+  public function getUserNameByEmail($email) {
+    return $this->getSingle($email, 'username', 'email', 's');
+  }
   public function getUserId($username) {
     return $this->getSingle($username, 'id', 'username', 's');
   }
@@ -125,6 +128,13 @@ class User {
     if (empty($username) || empty($password)) {
       $this->setErrorMessage("Invalid username or password.");
       return false;
+    }
+    if (filter_var($username, FILTER_VALIDATE_EMAIL)) {
+      $this->debug->append("Username is an e-mail", 2);
+      if (!$username = $this->getUserNameByEmail($username)) {
+        $this->setErrorMessage("Invalid username or password.");
+        return false;
+      }
     }
     if ($this->isLocked($this->getUserId($username))) {
       $this->setErrorMessage("Account is locked. Please contact site support.");
@@ -411,7 +421,7 @@ class User {
    * @param none
    * @return true
    **/
-  public function logoutUser($redirect="index.php") {
+  public function logoutUser($from="") {
     $this->debug->append("STA " . __METHOD__, 4);
     // Unset all of the session variables
     $_SESSION = array();
@@ -424,8 +434,11 @@ class User {
     session_destroy();
     // Enforce generation of a new Session ID and delete the old
     session_regenerate_id(true);
-    // Enforce a page reload
-    header("Location: $redirect");
+    // Enforce a page reload and point towards login with referrer included, if supplied
+    $location = @$_SERVER['HTTPS'] ? 'https' . '://' . $_SERVER['SERVER_NAME'] . $_SERVER['PHP_SELF'] : 'http' . '://' . $_SERVER['SERVER_NAME'] . $_SERVER['PHP_SELF'];
+    if (!empty($from)) $location .= '?page=login&to=' . urlencode($from);
+    // if (!headers_sent()) header('Location: ' . $location);
+    exit('<meta http-equiv="refresh" content="0; url=' . $location . '"/>');
   }
 
   /**
@@ -651,14 +664,14 @@ class User {
    * @param none
    * @return bool
    **/
-  public function isAuthenticated() {
+  public function isAuthenticated($logout=true) {
     $this->debug->append("STA " . __METHOD__, 4);
     if (@$_SESSION['AUTHENTICATED'] == true &&
         !$this->isLocked($_SESSION['USERDATA']['id']) &&
         $this->getUserIp($_SESSION['USERDATA']['id']) == $_SERVER['REMOTE_ADDR']
       ) return true;
     // Catchall
-    $this->logoutUser();
+    if ($logout == true) $this->logoutUser($_SERVER['REQUEST_URI']);
     return false;
   }
 }

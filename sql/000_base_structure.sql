@@ -1,4 +1,4 @@
-SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
+SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
@@ -10,6 +10,8 @@ SET time_zone = "+00:00";
 CREATE TABLE IF NOT EXISTS `accounts` (
   `id` int(255) NOT NULL AUTO_INCREMENT,
   `is_admin` tinyint(1) NOT NULL DEFAULT '0',
+  `is_anonymous` tinyint(1) NOT NULL DEFAULT '0',
+  `no_fees` tinyint(1) NOT NULL DEFAULT '0',
   `username` varchar(40) NOT NULL,
   `pass` varchar(255) NOT NULL,
   `email` varchar(255) DEFAULT NULL COMMENT 'Assocaited email: used for validating users, and re-setting passwords',
@@ -24,7 +26,8 @@ CREATE TABLE IF NOT EXISTS `accounts` (
   `ap_threshold` float DEFAULT '0',
   `coin_address` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `username` (`username`)
+  UNIQUE KEY `username` (`username`),
+  UNIQUE KEY `email` (`email`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
 CREATE TABLE IF NOT EXISTS `blocks` (
@@ -43,6 +46,25 @@ CREATE TABLE IF NOT EXISTS `blocks` (
   UNIQUE KEY `height` (`height`,`blockhash`),
   KEY `time` (`time`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='Discovered blocks persisted from Litecoin Service';
+
+CREATE TABLE IF NOT EXISTS `invitations` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `account_id` int(11) unsigned NOT NULL,
+  `email` varchar(50) NOT NULL,
+  `token_id` int(11) NOT NULL,
+  `is_activated` tinyint(1) NOT NULL DEFAULT '0',
+  `time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
+
+CREATE TABLE IF NOT EXISTS `monitoring` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(30) NOT NULL,
+  `type` varchar(15) NOT NULL,
+  `value` varchar(25) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `name` (`name`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='Monitoring events from cronjobs';
 
 CREATE TABLE IF NOT EXISTS `news` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
@@ -75,6 +97,15 @@ CREATE TABLE IF NOT EXISTS `notification_settings` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
+CREATE TABLE IF NOT EXISTS `payouts` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `account_id` int(11) NOT NULL,
+  `time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `completed` tinyint(1) NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`),
+  KEY `account_id` (`account_id`,`completed`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
 CREATE TABLE IF NOT EXISTS `pool_worker` (
   `id` int(255) NOT NULL AUTO_INCREMENT,
   `account_id` int(255) NOT NULL,
@@ -84,7 +115,8 @@ CREATE TABLE IF NOT EXISTS `pool_worker` (
   `monitor` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   UNIQUE KEY `username` (`username`),
-  KEY `account_id` (`account_id`)
+  KEY `account_id` (`account_id`),
+  KEY `pool_worker_username` (`username`(10))
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
 CREATE TABLE IF NOT EXISTS `settings` (
@@ -108,7 +140,8 @@ CREATE TABLE IF NOT EXISTS `shares` (
   KEY `time` (`time`),
   KEY `upstream_result` (`upstream_result`),
   KEY `our_result` (`our_result`),
-  KEY `username` (`username`)
+  KEY `username` (`username`),
+  KEY `shares_username` (`username`(10))
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
 CREATE TABLE IF NOT EXISTS `shares_archive` (
@@ -136,6 +169,29 @@ CREATE TABLE IF NOT EXISTS `statistics_shares` (
   KEY `block_id` (`block_id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
+CREATE TABLE IF NOT EXISTS `tokens` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `account_id` int(11) NOT NULL,
+  `token` varchar(65) NOT NULL,
+  `type` tinyint(4) NOT NULL,
+  `time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `token` (`token`),
+  KEY `account_id` (`account_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
+
+CREATE TABLE IF NOT EXISTS `token_types` (
+  `id` tinyint(4) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(25) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `name` (`name`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
+
+INSERT INTO `token_types` (`id`, `name`) VALUES
+(1, 'password_reset'),
+(2, 'confirm_email'),
+(3, 'invitation');
+
 CREATE TABLE IF NOT EXISTS `transactions` (
   `id` int(255) NOT NULL AUTO_INCREMENT,
   `account_id` int(255) unsigned NOT NULL,
@@ -144,10 +200,12 @@ CREATE TABLE IF NOT EXISTS `transactions` (
   `amount` double DEFAULT '0',
   `block_id` int(255) DEFAULT NULL,
   `timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `archived` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   KEY `block_id` (`block_id`),
   KEY `account_id` (`account_id`),
-  KEY `type` (`type`)
+  KEY `type` (`type`),
+  KEY `archived` (`archived`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
