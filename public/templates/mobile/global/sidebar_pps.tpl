@@ -5,7 +5,7 @@
                     </tr>
                     <tr>
                       <td><b>Hashrate</b></td>
-                      <td align="right">{$GLOBAL.userdata.hashrate|number_format} KH/s</td>
+                      <td align="right">{$GLOBAL.userdata.hashrate|number_format} {$GLOBAL.hashunits.personal}</td>
                     </tr>
                     <tr>
                       <td><b>Share Rate</b></td>

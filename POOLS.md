@@ -120,3 +120,15 @@ Small Time Miners are running various stratum only pools for different coins.
 | Pool URL | Coin | Avg. Hashrate | Avg. Active Workers | Notes |
 | -------- | ---- | ------------: | ------------------: | ----- |
 | https://www.mine-litecoin.com | Litecoin | 10Mhs | 75 workers | Custom Template, Prop |
+
+### CaptainAK
+
+
+| Pool URL | Coin | Avg. Hashrate | Avg. Active Workers | Notes |
+| -------- | ---- | ------------: | ------------------: | ----- |
+| http://btb.pnwminer.com | Bitbar | 5-10 Mhs | 5 workers | PPLNS |
+| http://dgc.pnwminer.com | DigitalCoin | 0 Mhs | 0 workers | PPLNS |
+| http://btg.pnwminer.com | BitGem | .5-2 Mhs | 1 workers | PPLNS |
+| http://ezc.pnwminer.com | EZCoin | 5-10Mhs | 2 workers | PPLNS |
+| http://nbl.pnwminer.com | Nibble | 0 Mhs | 0 workers | PPLNS |
+| http://mst.pnwminer.com | MasterCoin | 1-5 Mhs | 2 workers | PPLNS |

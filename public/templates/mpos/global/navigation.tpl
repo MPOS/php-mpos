@@ -52,8 +52,6 @@
     <ul class="toggle">
       <li class="icon-desktop"><a href="{$smarty.server.PHP_SELF}?page=gettingstarted">GettingStarted</a></li>
       <li class="icon-doc"><a href="{$smarty.server.PHP_SELF}?page=about&action=pool">About</a></li>
-      <li class="icon-bell"><a href="{$smarty.server.PHP_SELF}?page=about&action=pplns">PPLNS</a></li>
-      <li class="icon-wrench"><a href="{$smarty.server.PHP_SELF}?page=about&action=vardiff">VARDIFF</a></li>
       <li class="icon-money"><a href="{$smarty.server.PHP_SELF}?page=about&action=donors">Donors</a></li>
     </ul>
     <h3>Other</h3>
