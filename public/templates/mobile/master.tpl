@@ -4,7 +4,9 @@
     <title>{$GLOBAL.website.title}</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet"  href="{$PATH}/css/jquery.mobile-1.3.2.min.css" />
-    <script src="{$PATH}/js/jquery-1.9.1.min.js"></script>
+    <script type="text/javascript" src="{$PATH}/js/jquery-1.9.1.min.js" type="text/javascript"></script>
+    <script type="text/javascript" src="{$PATH}/js/raphael.2.1.0.min.js"></script>
+    <script type="text/javascript" src="{$PATH}/js/justgage.1.0.1.min.js"></script>
     <script src="{$PATH}/js/jquery.mobile-1.3.2.min.js"></script>
     {if $smarty.session.AUTHENTICATED|default:"0" == 1}
     <script>
