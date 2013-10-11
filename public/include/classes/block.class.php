@@ -133,7 +133,7 @@ class Block {
    * @param confirmations int Required confirmations to consider block confirmed
    * @return data array Array with database fields as keys
    **/
-  public function getAllUnconfirmed($confirmations=120) {
+  public function getAllUnconfirmed($confirmations) {
     $stmt = $this->mysqli->prepare("SELECT * FROM $this->table WHERE confirmations < ? AND confirmations > -1");
     if ($this->checkStmt($stmt) && $stmt->bind_param("i", $confirmations) && $stmt->execute() && $result = $stmt->get_result())
       return $result->fetch_all(MYSQLI_ASSOC);
