@@ -43,8 +43,7 @@ header#header h1.site_title, header#header h2.section_title {
 float: left;
 margin: 0;
 font-size: 22px;
-display: block;
-width: 23%;
+display: inline-block;
 height: 55px;
 font-weight: normal;
 text-align: left;
@@ -63,7 +62,6 @@ header#header h2.section_title {
 text-align: left;
 text-indent: 4.5%;
 text-transform: uppercase;
-width: 68%;
 background: url(../images/header_shadow.png) no-repeat left top;
 }
 
@@ -346,7 +344,7 @@ background: #ffffff;
 
 #main .module header h3 {
 display: block;
-width: 60%;
+width: 90%;
 float: left;
 }
 
@@ -647,6 +645,15 @@ background: #F6F6F6;
 border: 1px solid #ccc;
 padding: 1% 0%;
 margin: 10px 0;
+}
+
+fieldset a {
+height: 20px;
+padding-left: 10px;
+display: block;
+float: left;
+width: 92%;
+margin: 0 10px;
 }
 
 fieldset label {
