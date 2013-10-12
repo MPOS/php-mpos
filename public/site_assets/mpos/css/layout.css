@@ -647,6 +647,15 @@ padding: 1% 0%;
 margin: 10px 0;
 }
 
+fieldset a {
+height: 20px;
+padding-left: 10px;
+display: block;
+float: left;
+width: 92%;
+margin: 0 10px;
+}
+
 fieldset label {
 display: block;
 float: left;
