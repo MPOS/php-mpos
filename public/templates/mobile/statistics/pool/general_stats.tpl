@@ -12,7 +12,7 @@
       <td class="leftheader">Current Active Workers</td>
       <td>{$GLOBAL.workers}</td>
     </tr>
-    {if $GLOBAL.website.blockexplorer.url}
+    {if ! $GLOBAL.website.blockexplorer.disabled}
     <tr>
       <td class="leftheader">Next Network Block</td>
       <td>{$CURRENTBLOCK + 1} &nbsp;&nbsp;<font size="1"> (Current: <a href="{$GLOBAL.website.blockexplorer.url}{$CURRENTBLOCKHASH}" target="_new">{$CURRENTBLOCK})</a></font></td>
