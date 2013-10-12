@@ -175,6 +175,9 @@ foreach ($aAllBlocks as $iIndex => $aBlock) {
           $log->logFatal('Failed to insert new Donation transaction to database for ' . $aData['username']);
     }
 
+    // Store this blocks height as last accounted for
+    $setting->setValue('last_accounted_block_height', $aBlock['height']);
+
     // Move counted shares to archive before this blockhash upstream share
     if (!$share->moveArchive($iCurrentUpstreamId, $aBlock['id'], $iPreviousShareId))
       $log->logError('Failed to copy shares to archive table');
@@ -183,8 +186,6 @@ foreach ($aAllBlocks as $iIndex => $aBlock) {
       $log->logFatal("Failed to delete accounted shares from $iPreviousShareId to $iCurrentUpstreamId, aborting!");
       exit(1);
     }
-    // Store this blocks height as last accounted for
-    $setting->setValue('last_accounted_block_height', $aBlock['height']);
     // Mark this block as accounted for
     if (!$block->setAccounted($aBlock['id'])) {
       $log->logFatal("Failed to mark block as accounted! Aborting!");
