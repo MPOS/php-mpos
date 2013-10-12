@@ -43,8 +43,7 @@ header#header h1.site_title, header#header h2.section_title {
 float: left;
 margin: 0;
 font-size: 22px;
-display: block;
-width: 40%;
+display: inline-block;
 height: 55px;
 font-weight: normal;
 text-align: left;
@@ -63,7 +62,6 @@ header#header h2.section_title {
 text-align: left;
 text-indent: 4.5%;
 text-transform: uppercase;
-width: 60%;
 background: url(../images/header_shadow.png) no-repeat left top;
 }
 
