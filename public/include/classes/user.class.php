@@ -46,11 +46,11 @@ class User {
   public function getUserNameByEmail($email) {
     return $this->getSingle($email, 'username', 'email', 's');
   }
-  public function getUserId($username) {
-    return $this->getSingle($username, 'id', 'username', 's');
+  public function getUserId($username, $lower=false) {
+    return $this->getSingle($username, 'id', 'username', 's', $lower);
   }
-  public function getUserEmail($username) {
-    return $this->getSingle($username, 'email', 'username', 's');
+  public function getUserEmail($username, $lower=false) {
+    return $this->getSingle($username, 'email', 'username', 's', $lower);
   }
   public function getUserNoFee($id) {
     return $this->getSingle($id, 'no_fees', 'id');
@@ -130,7 +130,7 @@ class User {
       return false;
     }
     if (filter_var($username, FILTER_VALIDATE_EMAIL)) {
-      $this->debug->append("Username is an e-mail", 2);
+      $this->debug->append("Username is an e-mail: $username", 2);
       if (!$username = $this->getUserNameByEmail($username)) {
         $this->setErrorMessage("Invalid username or password.");
         return false;
@@ -179,9 +179,12 @@ class User {
    * @param type string Type of value
    * @return array Return result
    **/
-  private function getSingle($value, $search='id', $field='id', $type="i") {
+  private function getSingle($value, $search='id', $field='id', $type="i", $lower=false) {
     $this->debug->append("STA " . __METHOD__, 4);
-    $stmt = $this->mysqli->prepare("SELECT $search FROM $this->table WHERE $field = ? LIMIT 1");
+    $sql = "SELECT $search FROM $this->table WHERE";
+    $lower ? $sql .= " LOWER($field) = LOWER(?)" : $sql .= " $field = ?";
+    $sql .= " LIMIT 1";
+    $stmt = $this->mysqli->prepare($sql);
     if ($this->checkStmt($stmt)) {
       $stmt->bind_param($type, $value);
       $stmt->execute();
@@ -388,16 +391,13 @@ class User {
     $this->debug->append("STA " . __METHOD__, 4);
     $user = array();
     $password_hash = $this->getHash($password);
-    $stmt = $this->mysqli->prepare("SELECT username, id, is_admin FROM $this->table WHERE username=? AND pass=? LIMIT 1");
-    if ($this->checkStmt($stmt)) {
-      $stmt->bind_param('ss', $username, $password_hash);
-      $stmt->execute();
-      $stmt->bind_result($row_username, $row_id, $row_admin);
+    $stmt = $this->mysqli->prepare("SELECT username, id, is_admin FROM $this->table WHERE LOWER(username) = LOWER(?) AND pass = ? LIMIT 1");
+    if ($this->checkStmt($stmt) && $stmt->bind_param('ss', $username, $password_hash) && $stmt->execute() && $stmt->bind_result($row_username, $row_id, $row_admin)) {
       $stmt->fetch();
       $stmt->close();
       // Store the basic login information
       $this->user = array('username' => $row_username, 'id' => $row_id, 'is_admin' => $row_admin);
-      return $username === $row_username;
+      return strtolower($username) === strtolower($row_username);
     }
     return false;
   }
@@ -638,20 +638,27 @@ class User {
       $this->serErrorMessage("Username must not be empty");
       return false;
     }
-    if (!$aData['email'] = $this->getUserEmail($username)) {
+    if (filter_var($username, FILTER_VALIDATE_EMAIL)) {
+      $this->debug->append("Username is an e-mail: $username", 2);
+      if (!$username = $this->getUserNameByEmail($username)) {
+        $this->setErrorMessage("Invalid username or password.");
+        return false;
+      }
+    }
+    if (!$aData['email'] = $this->getUserEmail($username, true)) {
       $this->setErrorMessage("Unable to find a mail address for user $username");
       return false;
     }
-    if (!$aData['token'] = $this->token->createToken('password_reset', $this->getUserId($username))) {
+    if (!$aData['token'] = $this->token->createToken('password_reset', $this->getUserId($username, true))) {
       $this->setErrorMessage('Unable to setup token for password reset');
       return false;
     }
-    $aData['username'] = $username;
+    $aData['username'] = $this->getUserName($this->getUserId($username, true));
     $aData['subject'] = 'Password Reset Request';
     if ($this->mail->sendMail('password/reset', $aData)) {
         return true;
       } else {
-        $this->setErrorMessage("Unable to send mail to your address");
+        $this->setErrorMessage('Unable to send mail to your address');
         return false;
       }
     return false;
