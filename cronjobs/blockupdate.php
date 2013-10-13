@@ -34,7 +34,7 @@ if ( $bitcoin->can_connect() !== true ) {
 }
 
 // Fetch all unconfirmed blocks
-$aAllBlocks = $block->getAllUnconfirmed($config['confirmations']);
+$aAllBlocks = $block->getAllUnconfirmed($config['network_confirmations']);
 
 $log->logInfo("ID\tHeight\tBlockhash\tConfirmations");
 foreach ($aAllBlocks as $iIndex => $aBlock) {
