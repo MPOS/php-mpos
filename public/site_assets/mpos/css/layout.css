@@ -40,8 +40,10 @@ background: #222222 url(../images/header_bg.png) repeat-x;
 }
 
 header#header h1.site_title, header#header h2.section_title {
+white-space: nowrap;
 float: left;
 margin: 0;
+margin-right: 2.8%;
 padding-right: 1.8%;
 font-size: 22px;
 display: inline-block;
