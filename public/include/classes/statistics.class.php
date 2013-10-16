@@ -534,6 +534,31 @@ class Statistics {
     $this->debug->append("Failed to fetch hourly hashrate: " . $this->mysqli->error);
     return false;
   }
+
+  /**
+   * get user estimated payouts based on share counts
+   * @param aRoundShares array Round shares
+   * @param aUserShares array User shares
+   * @param dDonate double User donation setting
+   * @param bNoFees bool User no-fees option setting
+   * @return aEstimates array User estimations
+   **/
+  public function getUserEstimates($aRoundShares, $aUserShares, $dDonate, $bNoFees) {
+    $this->debug->append("STA " . __METHOD__, 4);
+    // Fetch some user information that we need
+    if (@$aRoundShares['valid'] > 0  && @$aUserShares['valid'] > 0) {
+      $aEstimates['block'] = round(( (int)$aUserShares['valid'] / (int)$aRoundShares['valid'] ) * (float)$this->config['reward'], 8);
+      $bNoFees == 0 ? $aEstimates['fee'] = round(((float)$this->config['fees'] / 100) * (float)$aEstimates['block'], 8) : $aEstimates['fee'] = 0;
+      $aEstimates['donation'] = round((( (float)$dDonate / 100) * ((float)$aEstimates['block'] - (float)$aEstimates['fee'])), 8);
+      $aEstimates['payout'] = round((float)$aEstimates['block'] - (float)$aEstimates['donation'] - (float)$aEstimates['fee'], 8);
+    } else {
+      $aEstimates['block'] = 0;
+      $aEstimates['fee'] = 0;
+      $aEstimates['donation'] = 0;
+      $aEstimates['payout'] = 0;
+    }
+    return $aEstimates;
+  }
 }
 
 $statistics = new Statistics($debug, $mysqli, $config, $share, $user, $block, $memcache);

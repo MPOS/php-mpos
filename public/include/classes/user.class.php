@@ -55,6 +55,9 @@ class User {
   public function getUserNoFee($id) {
     return $this->getSingle($id, 'no_fees', 'id');
   }
+  public function getUserDonatePercent($id) {
+    return $this->getSingle($id, 'donate_percent', 'id');
+  }
   public function getUserAdmin($id) {
     return $this->getSingle($id, 'is_admin', 'id');
   }
