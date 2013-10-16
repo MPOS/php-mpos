@@ -242,7 +242,12 @@ class Statistics {
   public function getUserShares($account_id) {
     $this->debug->append("STA " . __METHOD__, 4);
     // Dual-caching, try statistics cron first, then fallback to local, then fallbock to SQL
-    if ($data = $this->memcache->get(STATISTICS_ALL_USER_SHARES)) return @$data['data'][$account_id];
+    if ($data = $this->memcache->get(STATISTICS_ALL_USER_SHARES)) {
+      if (array_key_exists($account_id, $data['data']))
+        return $data['data'][$account_id];
+      // We have no cached value, we return defaults
+      return array('valid' => 0, 'invalid' => 0, 'donate_percent' => 0, 'is_anonymous' => 0);
+    }
     if ($data = $this->memcache->get(__FUNCTION__ . $account_id)) return $data;
     $stmt = $this->mysqli->prepare("
       SELECT
