@@ -37,6 +37,7 @@ $statistics->setGetCache(true);
 // Use caches for this one
 $aUserRoundShares = $statistics->getUserShares($user_id);
 $aRoundShares = $statistics->getRoundShares();
+$aEstimates = $statistics->getUserEstimates($aRoundShares, $aUserRoundShares, $user->getUserDonatePercent($user_id), $user->getUserNoFee($user_id));
 
 // Apply pool modifiers
 $dPersonalHashrateAdjusted = $dPersonalHashrate * $dPersonalHashrateModifier;
@@ -46,7 +47,7 @@ $dNetworkHashrateAdjusted = $dNetworkHashrate / 1000 * $dNetworkHashrateModifier
 // Output JSON format
 $data = array(
   'raw' => array( 'personal' => array( 'hashrate' => $dPersonalHashrate ), 'pool' => array( 'hashrate' => $dPoolHashrate ), 'network' => array( 'hashrate' => $dNetworkHashrate / 1000 ) ),
-  'personal' => array ( 'hashrate' => $dPersonalHashrateAdjusted, 'sharerate' => $dPersonalSharerate, 'shares' => $aUserRoundShares, 'balance' => $transaction->getBalance($user_id)),
+  'personal' => array ( 'hashrate' => $dPersonalHashrateAdjusted, 'sharerate' => $dPersonalSharerate, 'shares' => $aUserRoundShares, 'balance' => $transaction->getBalance($user_id), 'estimates' => $aEstimates),
   'pool' => array( 'hashrate' => $dPoolHashrateAdjusted, 'shares' => $aRoundShares ),
   'network' => array( 'hashrate' => $dNetworkHashrateAdjusted, 'difficulty' => $dDifficulty, 'block' => $iBlock ),
 );
