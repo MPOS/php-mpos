@@ -128,7 +128,7 @@ if (@$_SESSION['USERDATA']['id']) {
   switch ($config['payout_system']) {
   case 'prop' || 'pplns':
     // Some estimations
-    $aEstimates = $statistics->getUserEstimates($aRoundShares, $aGlobal['userdata']['shares'], $aGlobal['userdata']['no_fees'], $aGlobal['userdata']['donate_percent']);
+    $aEstimates = $statistics->getUserEstimates($aRoundShares, $aGlobal['userdata']['shares'], $aGlobal['userdata']['donate_percent'], $aGlobal['userdata']['no_fees']);
     $aGlobal['userdata']['est_block'] = $aEstimates['block'];
     $aGlobal['userdata']['est_fee'] = $aEstimates['fee'];
     $aGlobal['userdata']['est_donation'] = $aEstimates['donation'];
