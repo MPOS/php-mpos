@@ -128,17 +128,11 @@ if (@$_SESSION['USERDATA']['id']) {
   switch ($config['payout_system']) {
   case 'prop' || 'pplns':
     // Some estimations
-    if (@$aRoundShares['valid'] > 0) {
-      $aGlobal['userdata']['est_block'] = round(( (int)$aGlobal['userdata']['shares']['valid'] / (int)$aRoundShares['valid'] ) * (float)$config['reward'], 8);
-      $aGlobal['userdata']['no_fees'] == 0 ? $aGlobal['userdata']['est_fee'] = round(((float)$config['fees'] / 100) * (float)$aGlobal['userdata']['est_block'], 8) : $aGlobal['userdata']['est_fee'] = 0;
-      $aGlobal['userdata']['est_donation'] = round((( (float)$aGlobal['userdata']['donate_percent'] / 100) * ((float)$aGlobal['userdata']['est_block'] - (float)$aGlobal['userdata']['est_fee'])), 8);
-      $aGlobal['userdata']['est_payout'] = round((float)$aGlobal['userdata']['est_block'] - (float)$aGlobal['userdata']['est_donation'] - (float)$aGlobal['userdata']['est_fee'], 8);
-    } else {
-      $aGlobal['userdata']['est_block'] = 0;
-      $aGlobal['userdata']['est_fee'] = 0;
-      $aGlobal['userdata']['est_donation'] = 0;
-      $aGlobal['userdata']['est_payout'] = 0;
-    }
+    $aEstimates = $statistics->getUserEstimates($aRoundShares, $aGlobal['userdata']['shares'], $aGlobal['userdata']['donate_percent'], $aGlobal['userdata']['no_fees']);
+    $aGlobal['userdata']['est_block'] = $aEstimates['block'];
+    $aGlobal['userdata']['est_fee'] = $aEstimates['fee'];
+    $aGlobal['userdata']['est_donation'] = $aEstimates['donation'];
+    $aGlobal['userdata']['est_payout'] = $aEstimates['payout'];
   case 'pplns':
     $aGlobal['pplns']['target'] = $config['pplns']['shares']['default'];
     if ($aLastBlock = $block->getLast()) {
