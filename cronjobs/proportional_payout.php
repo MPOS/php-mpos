@@ -45,7 +45,7 @@ $count = 0;
 // Table header for account shares
 $log->logInfo("ID\tUsername\tValid\tInvalid\tPercentage\tPayout\t\tDonation\tFee");
 foreach ($aAllBlocks as $iIndex => $aBlock) {
-  if (!$aBlock['accounted']) {
+  if (!$aBlock['accounted'] && $aBlock['height'] > $setting->getValue('last_accounted_block_height')) {
     $iPreviousShareId = @$aAllBlocks[$iIndex - 1]['share_id'] ? $aAllBlocks[$iIndex - 1]['share_id'] : 0;
     $iCurrentUpstreamId = $aBlock['share_id'];
     $aAccountShares = $share->getSharesForAccounts($iPreviousShareId, $aBlock['share_id']);
@@ -82,7 +82,7 @@ foreach ($aAllBlocks as $iIndex => $aBlock) {
         number_format($aData['percentage'], 8) . "\t" .
         number_format($aData['payout'], 8) . "\t" .
         number_format($aData['donation'], 8) . "\t" .
-        number_format($aData['fee']), 8);
+        number_format($aData['fee'], 8));
 
       // Update user share statistics
       if (!$statistics->updateShareStatistics($aData, $aBlock['id']))
@@ -99,6 +99,9 @@ foreach ($aAllBlocks as $iIndex => $aBlock) {
         if (!$transaction->addTransaction($aData['id'], $aData['donation'], 'Donation', $aBlock['id']))
           $log->logFatal('Failed to insert new Donation transaction to database for ' . $aData['username']);
     }
+
+    // Add block as accounted for into settings table
+    $setting->setValue('last_accounted_block_height', $aBlock['height']);
 
     // Move counted shares to archive before this blockhash upstream share
     if (!$share->moveArchive($iCurrentUpstreamId, $aBlock['id'], $iPreviousShareId))
@@ -119,6 +122,22 @@ foreach ($aAllBlocks as $iIndex => $aBlock) {
       $monitoring->setStatus($cron_name . "_status", "okerror", 1); 
       exit(1);
     }
+  } else {
+    $log->logFatal('Possible double payout detected. Aborted.');
+    $aMailData = array(
+      'email' => $setting->getValue('website_email'),
+      'subject' => 'Payout Failure: Double Payout',
+      'Error' => 'Possible double payout detected',
+      'BlockID' => $aBlock['id'],
+      'Block Height' => $aBlock['height'],
+      'Block Share ID' => $aBlock['share_id']
+    );
+    if (!$mail->sendMail('notifications/error', $aMailData))
+      $log->logError("    Failed sending notifications: " . $notification->getError() . "\n");
+    $monitoring->setStatus($cron_name . "_active", "yesno", 0);
+    $monitoring->setStatus($cron_name . "_message", "message", 'Possible double payout detected. Aborted.');
+    $monitoring->setStatus($cron_name . "_status", "okerror", 1);
+    exit(1);
   }
 }
 

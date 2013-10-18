@@ -51,7 +51,7 @@ foreach ($aAllBlocks as $iIndex => $aBlock) {
     $pplns_target = $config['pplns']['shares']['default'];
   }
 
-  if (!$aBlock['accounted']) {
+  if (!$aBlock['accounted'] && $aBlock['height'] > $setting->getValue('last_accounted_block_height')) {
     $iPreviousShareId = @$aAllBlocks[$iIndex - 1]['share_id'] ? $aAllBlocks[$iIndex - 1]['share_id'] : 0;
     $iCurrentUpstreamId = $aBlock['share_id'];
     if (!is_numeric($iCurrentUpstreamId)) {
@@ -175,6 +175,9 @@ foreach ($aAllBlocks as $iIndex => $aBlock) {
           $log->logFatal('Failed to insert new Donation transaction to database for ' . $aData['username']);
     }
 
+    // Store this blocks height as last accounted for
+    $setting->setValue('last_accounted_block_height', $aBlock['height']);
+
     // Move counted shares to archive before this blockhash upstream share
     if (!$share->moveArchive($iCurrentUpstreamId, $aBlock['id'], $iPreviousShareId))
       $log->logError('Failed to copy shares to archive table');
@@ -191,6 +194,22 @@ foreach ($aAllBlocks as $iIndex => $aBlock) {
       $monitoring->setStatus($cron_name . "_status", "okerror", 1); 
       exit(1);
     }
+  } else {
+    $aMailData = array(
+      'email' => $setting->getValue('website_email'),
+      'subject' => 'Payout processing aborted',
+      'Error' => 'Potential double payout detected. All payouts halted until fixed!',
+      'BlockID' => $aBlock['id'],
+      'Block Height' => $aBlock['height'],
+      'Block Share ID' => $aBlock['share_id']
+    );
+    if (!$mail->sendMail('notifications/error', $aMailData))
+      $log->logError("    Failed sending notifications: " . $notification->getError() . "\n");
+    $log->logFatal('Potential double payout detected. Aborted.');
+    $monitoring->setStatus($cron_name . "_active", "yesno", 0);
+    $monitoring->setStatus($cron_name . "_message", "message", "Block height for block too low! Potential double payout detected.");
+    $monitoring->setStatus($cron_name . "_status", "okerror", 1);
+    exit(1);
   }
 }
 

@@ -6,7 +6,7 @@
     <div class="module_content">
       <p>If you have an email set for your account, enter your username to get your password reset</p>
       <fieldset>
-        <label>Username</label>
+        <label>Username or E-Mail</label>
         <input type="text" name="username" value="{$smarty.post.username|default:""}" size="22" maxlength="20" required>
       </fieldset>
       <div class="clear"></div>
