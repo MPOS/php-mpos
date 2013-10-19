@@ -196,6 +196,7 @@ class Statistics {
       $data['share_id'] = 0;
       $data['data'] = array();
     }
+    $data['last_update'] = time();
     $stmt = $this->mysqli->prepare("
       SELECT
         ROUND(IFNULL(SUM(IF(our_result='Y', IF(s.difficulty=0, POW(2, (" . $this->config['difficulty'] . " - 16)), s.difficulty), 0)), 0) / POW(2, (" . $this->config['difficulty'] . " - 16)), 0) AS valid,
@@ -245,14 +246,12 @@ class Statistics {
     if ($data = $this->memcache->get(STATISTICS_ALL_USER_SHARES)) {
       if (array_key_exists($account_id, $data['data']))
         return $data['data'][$account_id];
-      // We have no cached value, we return defaults
-      return array('valid' => 0, 'invalid' => 0, 'donate_percent' => 0, 'is_anonymous' => 0);
     }
-    if ($data = $this->memcache->get(__FUNCTION__ . $account_id)) return $data;
+    // if ($data = $this->memcache->get(__FUNCTION__ . $account_id)) return $data;
     $stmt = $this->mysqli->prepare("
       SELECT
-        ROUND(IFNULL(SUM(IF(our_result='Y', IF(s.difficulty=0, POW(2, (" . $this->config['difficulty'] . " - 16)), s.difficulty), 0)), 0) / POW(2, (" . $this->config['difficulty'] . " - 16)), 0) AS valid,
-        ROUND(IFNULL(SUM(IF(our_result='N', IF(s.difficulty=0, POW(2, (" . $this->config['difficulty'] . " - 16)), s.difficulty), 0)), 0) / POW(2, (" . $this->config['difficulty'] . " - 16)), 0) AS invalid
+        ROUND(IFNULL(SUM(IF(our_result='Y', IF(s.difficulty=0, POW(2, (" . $this->config['difficulty'] . " - 16)), s.difficulty), 0)) / POW(2, (" . $this->config['difficulty'] . " - 16)), 0), 0) AS valid,
+        ROUND(IFNULL(SUM(IF(our_result='N', IF(s.difficulty=0, POW(2, (" . $this->config['difficulty'] . " - 16)), s.difficulty), 0)) / POW(2, (" . $this->config['difficulty'] . " - 16)), 0), 0) AS invalid
       FROM " . $this->share->getTableName() . " AS s,
            " . $this->user->getTableName() . " AS u
       WHERE
