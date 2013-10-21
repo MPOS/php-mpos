@@ -9,7 +9,7 @@
         <thead>
           <tr>
             <th>Name</th>
-            <th align="right">%<th>
+            <th align="right">%</th>
             <th align="right" style="padding-right: 25px">{$GLOBAL.config.currency} Total</th>
           </tr>
         </thead>
