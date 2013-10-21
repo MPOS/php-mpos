@@ -16,7 +16,7 @@
 {section contrib $ROUNDSHARES}
       <tr{if $GLOBAL.userdata.username == $ROUNDSHARES[contrib].username}{assign var=listed value=1} style="background-color:#99EB99;"{else} class="{cycle values="odd,even"}"{/if}>
         <td class="center">{$rank++}</td>
-        <td>{if $ROUNDSHARES[contrib].is_anonymous|default:"0" == 1}anonymous{else}{$ROUNDSHARES[contrib].username|escape}{/if}</td>
+        <td>{if $ROUNDSHARES[contrib].is_anonymous|default:"0" == 1 && $GLOBAL.userdata.is_admin|default:"0" == 0}anonymous{else}{$ROUNDSHARES[contrib].username|escape}{/if}</td>
         <td class="right">{$ROUNDSHARES[contrib].valid|number_format}</td>
         <td class="right">{$ROUNDSHARES[contrib].invalid|number_format}</td>
 	<td class="right">{($ROUNDSHARES[contrib].invalid / $ROUNDSHARES[contrib].valid * 100)|number_format:"2"}</td>
