@@ -12,7 +12,7 @@
 {assign var=rank value=1}
 {assign var=listed value=0}
 {section shares $CONTRIBSHARES}
-      <tr{if $GLOBAL.userdata.username|default:""|lower == $CONTRIBSHARES[shares].account|lower}{assign var=listed value=1} style="background-color:#99EB99;"{else} class="{cycle values="odd,even"}"{/if}>
+      <tr{if $GLOBAL.userdata.username|lower|default:"" == $CONTRIBSHARES[shares].account|lower}{assign var=listed value=1} style="background-color:#99EB99;"{else} class="{cycle values="odd,even"}"{/if}>
         <td>{$rank++}</td>
         <td>{if $CONTRIBSHARES[shares].is_anonymous|default:"0" == 1}anonymous{else}{$CONTRIBSHARES[shares].account|escape}{/if}</td>
         <td class="right">{$CONTRIBSHARES[shares].shares|number_format}</td>
