@@ -71,7 +71,7 @@ class Worker {
    * @param none
    * @return data array Workers in IDLE state and monitoring enabled
    **/
-  public function eetAllIdleWorkers() {
+  public function getAllIdleWorkers() {
     $this->debug->append("STA " . __METHOD__, 4);
     $stmt = $this->mysqli->prepare("
       SELECT account_id, id, username
