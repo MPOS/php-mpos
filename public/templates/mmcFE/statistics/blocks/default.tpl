@@ -62,7 +62,7 @@ target and network difficulty and assuming a zero variance scenario.
         {else if $BLOCKSFOUND[block].confirmations == -1}
           <font color="red">Orphan</font>
         {else}{$GLOBAL.confirmations - $BLOCKSFOUND[block].confirmations} left{/if}</td>
-        <td>{if $BLOCKSFOUND[block].is_anonymous|default:"0" == 1}anonymous{else}{$BLOCKSFOUND[block].finder|default:"unknown"|escape}{/if}</td>
+        <td>{if $BLOCKSFOUND[block].is_anonymous|default:"0" == 1 && $GLOBAL.userdata.is_admin|default:"0" == 0}anonymous{else}{$BLOCKSFOUND[block].finder|default:"unknown"|escape}{/if}</td>
         <td class="center">{$BLOCKSFOUND[block].time|date_format:"%d/%m %H:%M:%S"}</td>
         <td class="right">{$BLOCKSFOUND[block].difficulty|number_format:"8"}</td>
         <td class="right">{$BLOCKSFOUND[block].amount|number_format:"2"}</td>

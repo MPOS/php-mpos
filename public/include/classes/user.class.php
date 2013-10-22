@@ -565,7 +565,7 @@ class User {
     $username_clean = strip_tags($username);
 
     if ($this->checkStmt($stmt) && $stmt->bind_param('sssssi', $username_clean, $password_hash, $email1, $pin_hash, $apikey_hash, $is_locked) && $stmt->execute()) {
-      if (! $this->setting->getValue('accounts_confirm_email_enabled') && $is_admin != 1) {
+      if (! $this->setting->getValue('accounts_confirm_email_disabled') && $is_admin != 1) {
         if ($token = $this->token->createToken('confirm_email', $stmt->insert_id)) {
           $aData['username'] = $username_clean;
           $aData['token'] = $token;
