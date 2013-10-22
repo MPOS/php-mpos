@@ -12,7 +12,7 @@
     <p>Please consider <a href="{$smarty.server.PHP_SELF}?page=account&action=edit">donating</a> some of your mined coins to the pool operator.</p>
 {/if}
     <table width="100%">
-      <caption style="text-align: left;">{$GLOBAL.config.currency} Account Balance</caption>
+      <caption style="text-align: left;"><b>{$GLOBAL.config.currency} Account Balance</b></caption>
       <tr>
         <th align="left">Confirmed</th>
         <td id="b-confirmed" align="right"></td>

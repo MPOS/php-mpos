@@ -137,6 +137,21 @@ $(document).ready(function(){
     $('#b-unconfirmed').html(data.getdashboarddata.data.personal.balance.unconfirmed);
   }
 
+  // Refresh worker information
+  function refreshWorkerData(data) {
+    data = data.getdashboarddata.data;
+    workers = data.personal.workers;
+    length = workers.length;
+    $('#b-workers').html('');
+    for (var i = j = 0; i < length; i++) {
+      if (workers[i].hashrate > 0) {
+        j++;
+        $('#b-workers').append('<tr><td>' + workers[i].username + '</td><td align="right">' + workers[i].hashrate + '</td><td align="right">' + workers[i].difficulty + '</td></tr>');
+      }
+    }
+    if (j == 0) { $('#b-workers').html('<tr><td colspan="3" align="center">No active workers</td></tr>'); }
+  }
+
   // Our worker process to keep gauges and graph updated
   (function worker() {
     $.ajax({
@@ -145,6 +160,7 @@ $(document).ready(function(){
       success: function(data) {
         refreshInformation(data);
         refreshStaticData(data);
+        refreshWorkerData(data);
       },
       complete: function() {
         setTimeout(worker, {/literal}{($GLOBAL.config.statistics_ajax_refresh_interval * 1000)|default:"10000"}{literal})
