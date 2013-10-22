@@ -71,7 +71,7 @@ class Worker {
    * @param none
    * @return data array Workers in IDLE state and monitoring enabled
    **/
-  public function getAllIdleWorkers() {
+  public function eetAllIdleWorkers() {
     $this->debug->append("STA " . __METHOD__, 4);
     $stmt = $this->mysqli->prepare("
       SELECT account_id, id, username
@@ -183,7 +183,12 @@ class Worker {
    **/
   public function getCountAllActiveWorkers() {
     $this->debug->append("STA " . __METHOD__, 4);
-    $stmt = $this->mysqli->prepare("SELECT IFNULL(IF(our_result='Y', COUNT(DISTINCT username), 0), 0) AS total FROM "  . $this->share->getTableName() . " WHERE time > DATE_SUB(now(), INTERVAL 10 MINUTE)");
+    $stmt = $this->mysqli->prepare("
+      SELECT COUNT(DISTINCT(username)) AS total
+      FROM "  . $this->share->getTableName() . "
+      WHERE our_result = 'Y'
+      AND time > DATE_SUB(now(), INTERVAL 10 MINUTE)
+    ");
     if ($this->checkStmt($stmt) && $stmt->execute() && $result = $stmt->get_result())
       return $result->fetch_object()->total;
     return false;
