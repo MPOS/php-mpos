@@ -19,7 +19,7 @@
         <td>{if $ROUNDSHARES[contrib].is_anonymous|default:"0" == 1}anonymous{else}{$ROUNDSHARES[contrib].username|escape}{/if}</td>
         <td align="right">{$ROUNDSHARES[contrib].valid|number_format}</td>
         <td align="right">{$ROUNDSHARES[contrib].invalid|number_format}</td>
-      	<td align="right" style="padding-right: 25px;">{($ROUNDSHARES[contrib].invalid / $ROUNDSHARES[contrib].valid * 100)|number_format:"2"}</td>
+      	<td align="right" style="padding-right: 25px;">{if $ROUNDSHARES[contrib].invalid > 0 }{($ROUNDSHARES[contrib].invalid / $ROUNDSHARES[contrib].valid * 100)|number_format:"2"|default:"0"}{else}0.00{/if}</td>
       </tr>
 {/section}
     </tbody>

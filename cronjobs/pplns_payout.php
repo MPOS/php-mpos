@@ -46,7 +46,9 @@ foreach ($aAllBlocks as $iIndex => $aBlock) {
   // We support some dynamic share targets but fall back to our fixed value
   // Re-calculate after each run due to re-targets in this loop
   if ($config['pplns']['shares']['type'] == 'blockavg' && $block->getBlockCount() > 0) {
-    $pplns_target = round($block->getAvgBlockShares($aBlock['height'], $config['pplns']['blockavg']['blockcount']));
+      $pplns_target = round($block->getAvgBlockShares($aBlock['height'], $config['pplns']['blockavg']['blockcount']));
+  } else if ($config['pplns']['shares']['type'] == 'dynamic' && $block->getBlockCount() > 0) {
+      $pplns_target = round($block->getAvgBlockShares($aBlock['height'], $config['pplns']['blockavg']['blockcount']) * (100 - $config['pplns']['dynamic']['percent'])/100 + $aBlock['shares'] * $config['pplns']['dynamic']['percent']/100);
   } else {
     $pplns_target = $config['pplns']['shares']['default'];
   }
@@ -66,6 +68,8 @@ foreach ($aAllBlocks as $iIndex => $aBlock) {
     $config['reward_type'] == 'block' ? $dReward = $aBlock['amount'] : $dReward = $config['reward'];
     $aRoundAccountShares = $share->getSharesForAccounts($iPreviousShareId, $aBlock['share_id']);
 
+    $log->logInfo('Shares: ' . $iRoundShares . "\t" . 'Height: ' . $aBlock['height'] . ' Amount: ' . $aBlock['amount'] . "\t" . 'Found by ID: ' . $aBlock['account_id']);
+
     if ($iRoundShares >= $pplns_target) {
       $log->logDebug("Matching or exceeding PPLNS target of $pplns_target with $iRoundShares");
       $iMinimumShareId = $share->getMinimumShareId($pplns_target, $aBlock['share_id']);
@@ -81,7 +85,7 @@ foreach ($aAllBlocks as $iIndex => $aBlock) {
       foreach($aAccountShares as $key => $aData) {
         $iNewRoundShares += $aData['valid'];
       }
-      $log->logInfo('Adjusting round target to PPLNS target ' . $iNewRoundShares);
+      $log->logInfo('Adjusting round to PPLNS target of ' . $pplns_target . ' shares used ' . $iNewRoundShares);
       $iRoundShares = $iNewRoundShares;
     } else {
       $log->logDebug("Not able to match PPLNS target of $pplns_target with $iRoundShares");
@@ -114,6 +118,24 @@ foreach ($aAllBlocks as $iIndex => $aBlock) {
               $aAccountShares[$key]['invalid'] += $aArchiveShares[$aData['username']]['invalid'];
             }
           }
+          // reverse payout
+          if ($config['pplns']['reverse_payout']) {
+             $aSharesData = NULL;
+             foreach($aAccountShares as $key => $aData) {
+               $aSharesData[$aData['username']] = $aData;
+             }
+             // Add users from archive not in current round
+             foreach($aArchiveShares as $key => $aArchData) {
+               if (!array_key_exists($aArchData['account'], $aSharesData)) {
+                 $log->logDebug('Adding user ' . $aArchData['account'] . ' to round shares');
+                 $log->logDebug('  valid   : ' . $aArchData['valid']);
+                 $log->logDebug('  invalid   : ' . $aArchData['invalid']);
+                 $aArchData['username'] = $aArchData['account'];
+                 $aSharesData[$aArchData['account']] = $aArchData;
+               }
+             }
+          $aAccountShares = $aSharesData;
+          }  
         }
         // We tried to fill up to PPLNS target, now we need to check the actual shares to properly payout users
         foreach($aAccountShares as $key => $aData) {
@@ -160,6 +182,19 @@ foreach ($aAllBlocks as $iIndex => $aBlock) {
         if ($aRoundData['username'] == $aData['username'])
           if (!$statistics->updateShareStatistics($aRoundData, $aBlock['id']))
             $log->logError('Failed to update share statistics for ' . $aData['username']);
+      }
+
+      // Add PPLNS share statistics
+      foreach ($aAccountShares as $key => $aRoundData) {
+        if ($aRoundData['username'] == $aData['username']){
+          if (@$statistics->getIdShareStatistics($aRoundData, $aBlock['id'])){
+            if (!$statistics->updatePPLNSShareStatistics($aRoundData, $aBlock['id']))
+            $log->logError('Failed to update pplns statistics for ' . $aData['username']);
+          } else {
+          if (!$statistics->insertPPLNSShareStatistics($aRoundData, $aBlock['id']))
+            $log->logError('Failed to insert pplns statistics for ' . $aData['username']);
+          }
+        }
       }
 
       // Add new credit transaction

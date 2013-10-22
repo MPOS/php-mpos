@@ -124,6 +124,13 @@ $aSettings['statistics'][] = array(
   'tooltip' => 'Blocks to fetch for the block statistics page.'
 );
 $aSettings['statistics'][] = array(
+  'display' => 'Show block average', 'type' => 'select',
+  'options' => array( 0 => 'No', 1 => 'Yes' ),
+  'default' => 0,
+  'name' => 'show_block_average', 'value' => $setting->getValue('show_block_average'),
+  'tooltip' => 'Show block average in block statistics page.'
+);
+$aSettings['statistics'][] = array(
   'display' => 'Pool Hashrate Modifier', 'type' => 'select',
   'options' => array( '1' => 'KH/s', '0.001' => 'MH/s', '0.000001' => 'GH/s' ),
   'default' => '1',
@@ -164,13 +171,6 @@ $aSettings['acl'][] = array(
   'default' => 1,
   'name' => 'acl_round_statistics', 'value' => $setting->getValue('acl_round_statistics'),
   'tooltip' => 'Make the round statistics page private (users only) or public.'
-);
-$aSettings['acl'][] = array(
-  'display' => 'Round Transactions', 'type' => 'select',
-  'options' => array( 0 => 'Admins', 1 => 'Public'),
-  'default' => 0,
-  'name' => 'acl_round_transactions', 'value' => $setting->getValue('acl_round_transactions'),
-  'tooltip' => 'Display all transactions regardless of admin status.'
 );
 $aSettings['system'][] = array(
   'display' => 'Disable e-mail confirmations', 'type' => 'select',
