@@ -44,10 +44,16 @@ $dPersonalHashrateAdjusted = $dPersonalHashrate * $dPersonalHashrateModifier;
 $dPoolHashrateAdjusted = $dPoolHashrate * $dPoolHashrateModifier;
 $dNetworkHashrateAdjusted = $dNetworkHashrate / 1000 * $dNetworkHashrateModifier;
 
+// Worker information
+$aWorkers = $worker->getWorkers($user_id, $interval);
+
 // Output JSON format
 $data = array(
   'raw' => array( 'personal' => array( 'hashrate' => $dPersonalHashrate ), 'pool' => array( 'hashrate' => $dPoolHashrate ), 'network' => array( 'hashrate' => $dNetworkHashrate / 1000 ) ),
-  'personal' => array ( 'hashrate' => $dPersonalHashrateAdjusted, 'sharerate' => $dPersonalSharerate, 'shares' => array('valid' => $aUserRoundShares['valid'], 'invalid' => $aUserRoundShares['invalid']), 'balance' => $transaction->getBalance($user_id), 'estimates' => $aEstimates),
+  'personal' => array (
+    'hashrate' => $dPersonalHashrateAdjusted, 'sharerate' => $dPersonalSharerate,
+    'shares' => array('valid' => $aUserRoundShares['valid'], 'invalid' => $aUserRoundShares['invalid']),
+    'balance' => $transaction->getBalance($user_id), 'estimates' => $aEstimates, 'workers' => $aWorkers),
   'pool' => array( 'hashrate' => $dPoolHashrateAdjusted, 'shares' => $aRoundShares ),
   'network' => array( 'hashrate' => $dNetworkHashrateAdjusted, 'difficulty' => $dDifficulty, 'block' => $iBlock ),
 );

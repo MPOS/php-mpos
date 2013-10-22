@@ -1,23 +1,16 @@
- <article class="module width_half">
+ <article class="module width_quarter">
    <header><h3>Dashboard</h3></header>
    <div class="module_content">
-     <table width="100%">
+     <table align="center" width="50%">
        <tbody>
          <tr>
            <td><b>PPLNS Target</b></td>
-           <td class="right">{$GLOBAL.pplns.target|number_format}</td>
+           <td>{$GLOBAL.pplns.target|number_format}</td>
          </tr>
-         <tr>
-           <td colspan="2"><b><u>Your Stats</u></b></td>
-         </tr>
-         <tr>
-           <td><b>Hashrate</b></td>
-           <td class="right">{$GLOBAL.userdata.hashrate|number_format} KH/s</td>
-         </tr>
-         <tr>
-           <td><b>Share Rate</b></td>
-           <td class="right">{$GLOBAL.userdata.sharerate|number_format:"2"} S/s</td>
-         </tr>
+       </tbody>
+     </table>
+     <table align="left" width="50%">
+       <tbody>
          <tr>
            <td colspan="2"><b><u>Round Shares</u></b> <span id='tt'><img src='{$PATH}/images/questionmark.png' height='15px' width='15px' title='Submitted shares since last found block (ie. round shares)'></span></td>
          </tr>
@@ -37,6 +30,10 @@
            <td><b>Your Invalid</b></td>
            <td class="right"><i>{$GLOBAL.userdata.shares.invalid|number_format}</i>{if $GLOBAL.roundshares.valid > 0}<font size='1px'> ({($GLOBAL.userdata.shares.invalid / ($GLOBAL.roundshares.valid + $GLOBAL.roundshares.invalid) * 100)|number_format:"2"}%)</font>{/if}</td>
          </tr>
+        </tbody>
+      </table>
+      <table align="right" width="50%">
+        <tbody>
          <tr>
            <td colspan="2"><b><u>{$GLOBAL.config.currency} Round Estimate</u></b></td>
          </tr>
@@ -56,9 +53,6 @@
            <td><b>Payout</b></td>
            <td class="right">{$GLOBAL.userdata.est_payout|number_format:"3"}</td>
          </tr>
-         <tr><td colspan="2"><b><u>{$GLOBAL.config.currency} Account Balance</u></b></td></tr>
-         <tr><td>Confirmed</td><td class="right"><b>{$GLOBAL.userdata.balance.confirmed|default:"0"}</td></tr>
-         <tr><td>Unconfirmed</td><td class="right"><b>{$GLOBAL.userdata.balance.unconfirmed|default:"0"}</td></tr>
        </tbody>
       </table>
     </div>
