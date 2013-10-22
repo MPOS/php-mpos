@@ -403,7 +403,10 @@ class Statistics {
           $username[$key] = $aUser['username'];
         }
         array_multisort($shares, SORT_DESC, $username, SORT_ASC, $data['data']);
+        $count = 0;
         foreach ($data['data'] as $key => $aUser) {
+          if ($count == $limit) break;
+          $count++;
           $data_new[$key]['shares'] = $aUser['valid'];
           $data_new[$key]['account'] = $aUser['username'];
           $data_new[$key]['donate_percent'] = $aUser['donate_percent'];
