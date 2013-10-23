@@ -7,7 +7,7 @@
 #                       #
 #########################
 # PHP Detections, if this fails hard code it
-PHP_BIN="/usr/bin/php-cli"
+PHP_BIN=$( which php )
 
 # List of cruns to execute
 CRONS="findblock.php proportional_payout.php pplns_payout.php pps_payout.php blockupdate.php manual_payout.php auto_payout.php tickerupdate.php notifications.php statistics.php archive_cleanup.php"
