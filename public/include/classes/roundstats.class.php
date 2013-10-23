@@ -124,7 +124,7 @@ class RoundStats {
         GROUP BY username ASC
         ORDER BY valid DESC
         ");
-    if ($this->checkStmt($stmt) && $stmt->bind_param('i',$iHeight) && $stmt->execute() && $result = $stmt->get_result())
+    if ($this->checkStmt($stmt) && $stmt->bind_param('i', $iHeight) && $stmt->execute() && $result = $stmt->get_result())
       return $result->fetch_all(MYSQLI_ASSOC);
     return false;
   }

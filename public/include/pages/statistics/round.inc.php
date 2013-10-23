@@ -26,6 +26,7 @@ if (!$smarty->isCached('master.tpl', $smarty_cache_key)) {
   $_REQUEST['height'] = $iHeight;
 
   $iPPLNSShares = 0;
+  $aSharesData = array();
   $aDetailsForBlockHeight = $roundstats->getDetailsForBlockHeight($iHeight);
   $aRoundShareStats = $roundstats->getRoundStatsForAccounts($iHeight);
 

@@ -12,7 +12,7 @@
     <tbody>
 {section txs $ROUNDTRANSACTIONS}
       <tr{if $GLOBAL.userdata.username|default:"" == $ROUNDTRANSACTIONS[txs].username} style="background-color:#99EB99;"{else} class="{cycle values="odd,even"}"{/if}>
-        <td>{if $ROUNDTRANSACTIONS[txs].is_anonymous|default:"0" == 1}anonymous{else}{$ROUNDTRANSACTIONS[txs].username|escape}{/if}</td>
+        <td>{if $ROUNDTRANSACTIONS[txs].is_anonymous|default:"0" == 1 && $GLOBAL.userdata.is_admin|default:"0" == 0}anonymous{else}{$ROUNDTRANSACTIONS[txs].username|escape}{/if}</td>
         <td class="right">{$ROUNDTRANSACTIONS[txs].type|default:""}</td>
         <td class="right">{(( 100 / $BLOCKDETAILS.shares) * $ROUNDSHARES[txs].valid)|number_format:"2"}</td>
         <td class="right">{$ROUNDTRANSACTIONS[txs].amount|default:"0"|number_format:"8"}</td>

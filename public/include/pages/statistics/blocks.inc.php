@@ -44,13 +44,13 @@ if (!$smarty->isCached('master.tpl', $smarty_cache_key)) {
   if ($config['payout_system'] == 'pplns') {
     foreach($aBlocksFoundData as $key => $aData) {
       $aBlocksFoundData[$key]['pplns_shares'] = $roundstats->getPPLNSRoundShares($aData['height']);
-      if ($setting->getValue('show_block_average') && !$test) {
+      if ($setting->getValue('statistics_show_block_average') && !$test) {
         $aBlocksFoundData[$key]['block_avg'] = round($block->getAvgBlockShares($aData['height'], $config['pplns']['blockavg']['blockcount']));
         $use_average = true;
       } 
     }
   } else if ($config['payout_system'] == 'prop' || $config['payout_system'] == 'pps') {
-      if ($setting->getValue('show_block_average') && !$test) {
+      if ($setting->getValue('statistics_show_block_average') && !$test) {
         foreach($aBlocksFoundData as $key => $aData) {
         $aBlocksFoundData[$key]['block_avg'] = round($block->getAvgBlockShares($aData['height'], $config['pplns']['blockavg']['blockcount']));
         $use_average = true;
@@ -68,7 +68,7 @@ if (!$smarty->isCached('master.tpl', $smarty_cache_key)) {
       }
     }
   }
-
+//var_dump($aBlocksFoundData);
   // Propagate content our template
   $smarty->assign("BLOCKSFOUND", $aBlocksFoundData);
   $smarty->assign("BLOCKLIMIT", $iLimit);

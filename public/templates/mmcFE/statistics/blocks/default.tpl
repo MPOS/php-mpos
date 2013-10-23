@@ -44,10 +44,10 @@ target and network difficulty and assuming a zero variance scenario.
     <tbody>
       <tr>
         <td class="left">
-          <a href="{$smarty.server.PHP_SELF}?page={$smarty.request.page}&action={$smarty.request.action}&height={$BLOCKSFOUND[$BLOCKLIMIT - 1].height}&prev=1"><img src="{$PATH}/images/prev.png" /></a>
+          <a href="{$smarty.server.PHP_SELF}?page={$smarty.request.page}&action={$smarty.request.action}&height={if is_array($BLOCKSFOUND) && count($BLOCKSFOUND) > ($BLOCKLIMIT - 1)}{$BLOCKSFOUND[$BLOCKLIMIT - 1].height}{/if}&prev=1"><img src="{$PATH}/images/prev.png" /></a>
         </td>
         <td class="right">
-          <a href="{$smarty.server.PHP_SELF}?page={$smarty.request.page}&action={$smarty.request.action}&height={$BLOCKSFOUND[0].height}&next=1"><img src="{$PATH}/images/next.png" /></a>
+          <a href="{$smarty.server.PHP_SELF}?page={$smarty.request.page}&action={$smarty.request.action}&height={if is_array($BLOCKSFOUND) && count($BLOCKSFOUND) > 0}{$BLOCKSFOUND[0].height}{/if}&next=1"><img src="{$PATH}/images/next.png" /></i></a>
         </td>
       </tr>
     </tbody>
@@ -90,7 +90,7 @@ target and network difficulty and assuming a zero variance scenario.
         {else if $BLOCKSFOUND[block].confirmations == -1}
           <font color="red">Orphan</font>
         {else}{$GLOBAL.confirmations - $BLOCKSFOUND[block].confirmations} left{/if}</td>
-        <td>{if $BLOCKSFOUND[block].is_anonymous|default:"0" == 1}anonymous{else}{$BLOCKSFOUND[block].finder|default:"unknown"|escape}{/if}</td>
+        <td>{if $BLOCKSFOUND[block].is_anonymous|default:"0" == 1 && $GLOBAL.userdata.is_admin|default:"0" == 0}anonymous{else}{$BLOCKSFOUND[block].finder|default:"unknown"|escape}{/if}</td>
         <td class="center">{$BLOCKSFOUND[block].time|date_format:"%d/%m %H:%M:%S"}</td>
         <td class="right">{$BLOCKSFOUND[block].difficulty|number_format:"8"}</td>
         <td class="right">{$BLOCKSFOUND[block].amount|number_format:"2"}</td>
