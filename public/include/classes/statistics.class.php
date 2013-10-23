@@ -395,23 +395,24 @@ class Statistics {
     switch ($type) {
     case 'shares':
       if ($data = $this->memcache->get(STATISTICS_ALL_USER_SHARES)) {
-        // Use global cache to build data
-        $max = 0;
-        foreach($data['data'] as $key => $aUser) {
-          $shares[$key] = $aUser['valid'];
-          $username[$key] = $aUser['username'];
+        // Use global cache to build data, if we have any data there
+        if (!empty($data['data']) && is_array($data['data'])) {
+          foreach($data['data'] as $key => $aUser) {
+            $shares[$key] = $aUser['valid'];
+            $username[$key] = $aUser['username'];
+          }
+          array_multisort($shares, SORT_DESC, $username, SORT_ASC, $data['data']);
+          $count = 0;
+          foreach ($data['data'] as $key => $aUser) {
+            if ($count == $limit) break;
+            $count++;
+            $data_new[$key]['shares'] = $aUser['valid'];
+            $data_new[$key]['account'] = $aUser['username'];
+            $data_new[$key]['donate_percent'] = $aUser['donate_percent'];
+            $data_new[$key]['is_anonymous'] = $aUser['is_anonymous'];
+          }
+          return $data_new;
         }
-        array_multisort($shares, SORT_DESC, $username, SORT_ASC, $data['data']);
-        $count = 0;
-        foreach ($data['data'] as $key => $aUser) {
-          if ($count == $limit) break;
-          $count++;
-          $data_new[$key]['shares'] = $aUser['valid'];
-          $data_new[$key]['account'] = $aUser['username'];
-          $data_new[$key]['donate_percent'] = $aUser['donate_percent'];
-          $data_new[$key]['is_anonymous'] = $aUser['is_anonymous'];
-        }
-        return $data_new;
       }
       // No cached data, fallback to SQL and cache in local cache
       $stmt = $this->mysqli->prepare("
