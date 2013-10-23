@@ -18,7 +18,7 @@
         <td class="right">{$CONTRIBSHARES[shares].shares|number_format}</td>
       </tr>
 {/section}
-{if $listed != 1 && $GLOBAL.userdata.username|default:""}
+{if $listed != 1 && $GLOBAL.userdata.username|default:"" && $GLOBAL.userdata.shares.valid|default:"0" > 0}
       <tr style="background-color:#99EB99;">
         <td>n/a</td>
         <td>{$GLOBAL.userdata.username|escape}</td>

@@ -20,7 +20,7 @@
         <td align="right" style="padding-right: 25px;">{$CONTRIBSHARES[shares].shares|number_format}</td>
       </tr>
 {/section}
-{if $listed != 1 && $GLOBAL.userdata.username|default:""}
+{if $listed != 1 && $GLOBAL.userdata.username|default:"" && $GLOBAL.userdata.shares.valid|default:"0" > 0}
       <tr>
         <td align="center">n/a</td>
         <td align="right">{if $GLOBAL.userdata.donate_percent > 0}<i class="icon-star-empty"></i>{/if}</td>

@@ -26,7 +26,7 @@
         {if $GLOBAL.config.price.currency}<td align="right" style="padding-right: 25px;">{($estday * $GLOBAL.price)|default:"n/a"|number_format:"2"}</td>{/if}
       </tr>
 {/section}
-{if $listed != 1 && $GLOBAL.userdata.username|default:""}
+{if $listed != 1 && $GLOBAL.userdata.username|default:"" && $GLOBAL.userdata.hashrate|default:"0" > 0}
       {if $GLOBAL.userdata.hashrate > 0}{math assign="myestday" equation="round(reward / ( diff * pow(2,32) / ( hashrate * 1000 ) / 3600 / 24), 3)" diff=$DIFFICULTY reward=$REWARD hashrate=$GLOBAL.userdata.hashrate}{/if}
       <tr>
         <td align="center">n/a</td>
