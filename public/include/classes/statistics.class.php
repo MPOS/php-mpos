@@ -196,7 +196,6 @@ class Statistics {
       $data['share_id'] = 0;
       $data['data'] = array();
     }
-    $data['last_update'] = time();
     $stmt = $this->mysqli->prepare("
       SELECT
         ROUND(IFNULL(SUM(IF(our_result='Y', IF(s.difficulty=0, POW(2, (" . $this->config['difficulty'] . " - 16)), s.difficulty), 0)), 0) / POW(2, (" . $this->config['difficulty'] . " - 16)), 0) AS valid,
@@ -417,10 +416,10 @@ class Statistics {
       // No cached data, fallback to SQL and cache in local cache
       $stmt = $this->mysqli->prepare("
         SELECT
+          a.username AS account,
           a.donate_percent AS donate_percent,
           a.is_anonymous AS is_anonymous,
-          ROUND(IFNULL(SUM(IF(s.difficulty=0, POW(2, (" . $this->config['difficulty'] . " - 16)), s.difficulty)), 0) / POW(2, (" . $this->config['difficulty'] . " - 16)), 0) AS shares,
-          SUBSTRING_INDEX( s.username, '.', 1 ) AS account
+          ROUND(IFNULL(SUM(IF(s.difficulty=0, POW(2, (" . $this->config['difficulty'] . " - 16)), s.difficulty)), 0) / POW(2, (" . $this->config['difficulty'] . " - 16)), 0) AS shares
         FROM " . $this->share->getTableName() . " AS s
         LEFT JOIN " . $this->user->getTableName() . " AS a
         ON SUBSTRING_INDEX( s.username, '.', 1 ) = a.username
@@ -437,10 +436,10 @@ class Statistics {
     case 'hashes':
       $stmt = $this->mysqli->prepare("
          SELECT
+          a.username AS account,
           a.donate_percent AS donate_percent,
           a.is_anonymous AS is_anonymous,
-          IFNULL(ROUND(SUM(t1.difficulty)  * 65536/600/1000, 2), 0) AS hashrate,
-          SUBSTRING_INDEX( t1.username, '.', 1 ) AS account
+          IFNULL(ROUND(SUM(t1.difficulty)  * 65536 / 600 / 1000, 2), 0) AS hashrate
         FROM
         (
           SELECT IFNULL(IF(difficulty=0, pow(2, (" . $this->config['difficulty'] . " - 16)), difficulty), 0) AS difficulty, username FROM " . $this->share->getTableName() . " WHERE time > DATE_SUB(now(), INTERVAL 10 MINUTE) AND our_result = 'Y'
