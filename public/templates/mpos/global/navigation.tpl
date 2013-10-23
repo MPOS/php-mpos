@@ -67,4 +67,21 @@
       <li class="icon-mail"><a href="{$smarty.server.PHP_SELF}?page=support">Support</a></li>
       {/if}
     </ul>
-
+    <ul>
+      <hr/>
+    </ul>
+    {if $smarty.session.AUTHENTICATED|default:"0" == 1}
+     <br />
+    {else}
+    <ul>
+     <center>
+      <div style="display: inline-block;">
+      <i><u><b><font size="2">LIVE STATS</font></b></u></i>
+      <div id="mr" style="width:180px; height:120px;"></div>
+      <div id="hr" style="width:180px; height:120px;"></div>
+      </div>
+     </center>
+    </ul>
+      <hr/>
+    {include file="global/navjs.tpl"}
+    {/if}
