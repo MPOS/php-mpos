@@ -12,7 +12,7 @@
          </tr>
          <tr>
            <td><b>Hashrate</b></td>
-           <td class="right"><span id="b-hashrate"></span> MH/s</td>
+           <td class="right"><span id="b-hashrate"></span> {$GLOBAL.hashunits.pool}</td>
          </tr>
          <tr>
            <td><b>Share Rate</b></td>
