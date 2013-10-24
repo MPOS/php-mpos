@@ -57,6 +57,30 @@ class Block {
   }
 
   /**
+   * Get a specific block, by share_id
+   * @param share_id int Blocks share_id
+   * @return data array Block information from DB
+   **/
+  public function getBlockByShareId($share_id) {
+    $stmt = $this->mysqli->prepare("SELECT * FROM $this->table WHERE share_id = ? LIMIT 1");
+    if ($this->checkStmt($stmt) && $stmt->bind_param('i', $share_id) && $stmt->execute() && $result = $stmt->get_result())
+      return $result->fetch_assoc();
+    return false;
+  }
+
+  /**
+   * Get a specific block, by id
+   * @param share_id int Blocks share_id
+   * @return data array Block information from DB
+   **/
+  public function getBlockById($id) {
+    $stmt = $this->mysqli->prepare("SELECT * FROM $this->table WHERE id = ? LIMIT 1");
+    if ($this->checkStmt($stmt) && $stmt->bind_param('i', $id) && $stmt->execute() && $result = $stmt->get_result())
+      return $result->fetch_assoc();
+    return false;
+  }
+
+  /**
    * Get our last, highest share ID inserted for a block
    * @param none
    * @return int data Share ID

@@ -50,6 +50,13 @@ class Base {
     return $this->sError;
   }
 
+  protected function getAllAssoc($value, $field='id', $type='i') {
+    $this->debug->append("STA " . __METHOD__, 4);
+    $stmt = $this->mysqli->prepare("SELECT * FROM $this->table WHERE $field = ? LIMIT 1");
+    if ($this->checkStmt($stmt) && $stmt->bind_param($type, $value) && $stmt->execute() && $result = $stmt->get_result())
+      return $result->fetch_assoc();
+    return false;
+  }
   /**
    * Get a single row from the table
    * @param value string Value to search for
