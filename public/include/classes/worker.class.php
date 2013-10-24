@@ -136,7 +136,7 @@ class Worker {
    * @param account_id int User ID
    * @return mixed array Workers and their settings or false
    **/
-  public function getWorkers($account_id, $interval) {
+  public function getWorkers($account_id, $interval=600) {
     $this->debug->append("STA " . __METHOD__, 4);
     $stmt = $this->mysqli->prepare("
       SELECT id, username, password, monitor,
