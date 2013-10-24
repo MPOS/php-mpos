@@ -5,7 +5,8 @@ if (!defined('SECURITY'))
   die('Hacking attempt');
 
 class Transaction extends Base {
-  private $sError = '', $table = 'transactions';
+  private $sError = '';
+  protected $table = 'transactions';
   public $num_rows = 0, $insert_id = 0;
 
   /**

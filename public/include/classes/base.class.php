@@ -8,8 +8,12 @@ if (!defined('SECURITY'))
 // some cross-class functions.
 class Base {
   private $sError = '';
+  protected $table = '';
   private $values = array(), $types = ''; 
 
+  public function getTableName() {
+    return $this->table;
+  }
   public function setDebug($debug) {
     $this->debug = $debug;
   }
