@@ -3,17 +3,17 @@
          </tr>
          <tr>
            <td><b>Pool Valid</b></td>
-           <td class="right"><span id="b-pvalid" class="confirmed" style="width: 100%; font-size: 12px;"></td>
+           <td id="b-pvalid" class="right"></td>
          </tr>
          <tr>
            <td><b>Your Valid<b></td>
-           <td class="right"><span id="b-yvalid" class="confirmed" style="width: 100%; font-size: 12px;"></td>
+           <td id="b-yvalid" class="right"></td>
          </tr>
          <tr>
            <td><b>Pool Invalid</b></td>
-           <td class="right"><span id="b-pivalid" class="orphan" style="width: 100%; font-size: 12px;"></td>
+           <td id="b-pivalid" class="right"></td>
          </tr>
          <tr>
            <td><b>Your Invalid</b></td>
-           <td class="right"><span id="b-yivalid" class="orphan" style="width: 100%; font-size: 12px;"></td>
+           <td id="b-yivalid" class="right"></td>
          </tr>
