@@ -60,6 +60,15 @@ if ($config['payout_system'] != 'pps') {
   $aEstimates = $statistics->getUserEstimates($dPersonalSharerate, $dPersonalShareDifficulty, $user->getUserDonatePercent($user_id), $user->getUserNoFee($user_id), $ppsvalue);
 }
 
+$iTotalRoundShares = $aRoundShares['valid'] + $aRoundShares['invalid'];
+if ($iTotalRoundShares > 0) {
+  $dUserInvalidPercent = $aUserRoundShares['invalid'] / $iTotalRoundShares * 100;
+  $dPoolInvalidPercent = $aRoundShares['invalid'] / $iTotalRoundShares * 100;
+} else {
+  $dUserInvalidPercent = 0;
+  $dPoolInvalidPercent = 0;
+}
+
 // Apply pool modifiers
 $dPersonalHashrateAdjusted = $dPersonalHashrate * $dPersonalHashrateModifier;
 $dPoolHashrateAdjusted = $dPoolHashrate * $dPoolHashrateModifier;
@@ -71,14 +80,24 @@ $aWorkers = $worker->getWorkers($user_id, $interval);
 // Coin price
 $aPrice = $setting->getValue('price');
 
+// Round progress
+$iEstShares = round((65536 * $dDifficulty) / pow(2, ($config['difficulty'] - 16)));
+$dEstPercent = round(100 / $iEstShares * $aRoundShares['valid'], 2);
+
 // Output JSON format
 $data = array(
   'raw' => array( 'personal' => array( 'hashrate' => $dPersonalHashrate ), 'pool' => array( 'hashrate' => $dPoolHashrate ), 'network' => array( 'hashrate' => $dNetworkHashrate / 1000 ) ),
   'personal' => array (
     'hashrate' => $dPersonalHashrateAdjusted, 'sharerate' => $dPersonalSharerate, 'sharedifficulty' => $dPersonalShareDifficulty,
-    'shares' => array('valid' => $aUserRoundShares['valid'], 'invalid' => $aUserRoundShares['invalid']),
+    'shares' => array('valid' => $aUserRoundShares['valid'], 'invalid' => $aUserRoundShares['invalid'], 'invalid_percent' => $dUserInvalidPercent),
     'balance' => $transaction->getBalance($user_id), 'estimates' => $aEstimates, 'workers' => $aWorkers ),
-  'pool' => array( 'workers' => $worker->getCountAllActiveWorkers(), 'hashrate' => $dPoolHashrateAdjusted, 'shares' => $aRoundShares, 'price' => $aPrice ),
+  'pool' => array(
+    'workers' => $worker->getCountAllActiveWorkers(), 'hashrate' => $dPoolHashrateAdjusted,
+    'shares' => array( 'valid' => $aRoundShares['valid'], 'invalid' => $aRoundShares['invalid'], 'invalid_percent' => $dPoolInvalidPercent, 'estimated' => $iEstShares, 'progress' => $dEstPercent ),
+    'price' => $aPrice,
+    'difficulty' => pow(2, $config['difficulty'] - 16),
+    'target_bits' => $config['difficulty']
+  ),
   'network' => array( 'hashrate' => $dNetworkHashrateAdjusted, 'difficulty' => $dDifficulty, 'block' => $iBlock ),
 );
 echo $api->get_json($data);

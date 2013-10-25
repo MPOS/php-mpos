@@ -145,9 +145,9 @@ $(document).ready(function(){
     $('#b-hashrate').html((parseFloat(data.getdashboarddata.data.personal.hashrate).toFixed(2)));
     $('#b-sharerate').html((parseFloat(data.getdashboarddata.data.personal.sharerate).toFixed(2)));
     $('#b-yvalid').html(data.getdashboarddata.data.personal.shares.valid);
-    $('#b-yivalid').html(data.getdashboarddata.data.personal.shares.invalid);
-    $('#b-pvalid').html(data.getdashboarddata.data.pool.shares.valid);
-    $('#b-pivalid').html(data.getdashboarddata.data.pool.shares.invalid);
+    $('#b-yivalid').html(data.getdashboarddata.data.personal.shares.invalid + " (" + data.getdashboarddata.data.personal.shares.invalid_percent + "%)" );
+    $('#b-pvalid').html(data.getdashboarddata.data.pool.shares.valid + " (est: " + data.getdashboarddata.data.pool.shares.progress + "%)");
+    $('#b-pivalid').html(data.getdashboarddata.data.pool.shares.invalid + " (" + data.getdashboarddata.data.pool.shares.invalid_percent + "%)" );
     $('#b-diff').html(data.getdashboarddata.data.network.difficulty);
     $('#b-nblock').html(data.getdashboarddata.data.network.block);
     {/literal}{if $GLOBAL.config.payout_system != 'pps'}{literal }
