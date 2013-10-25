@@ -32,12 +32,33 @@ $dPoolHashrate = $statistics->getCurrentHashrate($interval);
 if ($dPoolHashrate > $dNetworkHashrate) $dNetworkHashrate = $dPoolHashrate;
 $dPersonalHashrate = $statistics->getUserHashrate($user_id, $interval);
 $dPersonalSharerate = $statistics->getUserSharerate($user_id, $interval);
+$dPersonalShareDifficulty = $statistics->getUserShareDifficulty($user_id, $interval);
 $statistics->setGetCache(true);
 
 // Use caches for this one
 $aUserRoundShares = $statistics->getUserShares($user_id);
 $aRoundShares = $statistics->getRoundShares();
-$aEstimates = $statistics->getUserEstimates($aRoundShares, $aUserRoundShares, $user->getUserDonatePercent($user_id), $user->getUserNoFee($user_id));
+
+if ($config['payout_system'] != 'pps') {
+  $aEstimates = $statistics->getUserEstimates($aRoundShares, $aUserRoundShares, $user->getUserDonatePercent($user_id), $user->getUserNoFee($user_id));
+} else {
+  if ($config['pps']['reward']['type'] == 'blockavg' && $block->getBlockCount() > 0) {
+    $pps_reward = round($block->getAvgBlockReward($config['pps']['blockavg']['blockcount']));
+  } else {
+    if ($config['pps']['reward']['type'] == 'block') {
+      if ($aLastBlock = $block->getLast()) {
+        $pps_reward = $aLastBlock['amount'];
+      } else {
+        $pps_reward = $config['pps']['reward']['default'];
+      }
+    } else {
+      $pps_reward = $config['pps']['reward']['default'];
+    }
+  }
+
+  $ppsvalue = round($pps_reward / (pow(2,32) * $dDifficulty) * pow(2, $config['pps_target']), 12);
+  $aEstimates = $statistics->getUserEstimates($dPersonalSharerate, $dPersonalShareDifficulty, $user->getUserDonatePercent($user_id), $user->getUserNoFee($user_id), $ppsvalue);
+}
 
 // Apply pool modifiers
 $dPersonalHashrateAdjusted = $dPersonalHashrate * $dPersonalHashrateModifier;
@@ -54,7 +75,7 @@ $aPrice = $setting->getValue('price');
 $data = array(
   'raw' => array( 'personal' => array( 'hashrate' => $dPersonalHashrate ), 'pool' => array( 'hashrate' => $dPoolHashrate ), 'network' => array( 'hashrate' => $dNetworkHashrate / 1000 ) ),
   'personal' => array (
-    'hashrate' => $dPersonalHashrateAdjusted, 'sharerate' => $dPersonalSharerate,
+    'hashrate' => $dPersonalHashrateAdjusted, 'sharerate' => $dPersonalSharerate, 'sharedifficulty' => $dPersonalShareDifficulty,
     'shares' => array('valid' => $aUserRoundShares['valid'], 'invalid' => $aUserRoundShares['invalid']),
     'balance' => $transaction->getBalance($user_id), 'estimates' => $aEstimates, 'workers' => $aWorkers ),
   'pool' => array( 'workers' => $worker->getCountAllActiveWorkers(), 'hashrate' => $dPoolHashrateAdjusted, 'shares' => $aRoundShares, 'price' => $aPrice ),
