@@ -1,6 +1,6 @@
 
          <tr>
-           <td colspan="2"><b><u>{$GLOBAL.config.currency} Round Estimate</u></b></td>
+           <td colspan="2"><b><u>{$GLOBAL.config.currency} Estimates</u></b></td>
          </tr>
 {if $GLOBAL.config.payout_system != 'pps'}
          <tr>
