@@ -62,8 +62,8 @@ if ($config['payout_system'] != 'pps') {
 
 $iTotalRoundShares = $aRoundShares['valid'] + $aRoundShares['invalid'];
 if ($iTotalRoundShares > 0) {
-  $dUserInvalidPercent = $aUserRoundShares['invalid'] / $iTotalRoundShares * 100;
-  $dPoolInvalidPercent = $aRoundShares['invalid'] / $iTotalRoundShares * 100;
+  $dUserInvalidPercent = round($aUserRoundShares['invalid'] / $iTotalRoundShares * 100, 2);
+  $dPoolInvalidPercent = round($aRoundShares['invalid'] / $iTotalRoundShares * 100, 2);
 } else {
   $dUserInvalidPercent = 0;
   $dPoolInvalidPercent = 0;
