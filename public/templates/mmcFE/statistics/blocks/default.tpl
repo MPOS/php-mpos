@@ -21,13 +21,38 @@
       <td>{$BLOCKSFOUND[block].shares}</td>
 {/section}
    </tr>
+    {if $GLOBAL.config.payout_system == 'pplns'}<tr>
+      <th scope="row">PPLNS</th>
+{section block $BLOCKSFOUND step=-1}
+      <td>{$BLOCKSFOUND[block].pplns_shares}</td>
+{/section}
+   </tr>{/if}
+    {if $USEBLOCKAVERAGE}<tr>
+      <th scope="row">Average</th>
+{section block $BLOCKSFOUND step=-1}
+      <td>{$BLOCKSFOUND[block].block_avg}</td>
+{/section}
+   </tr>{/if}
   </tbody>
 </table>
 <center><br>
 <p style="padding-left:30px; padding-redight:30px; font-size:10px;">
 The graph above illustrates N shares to find a block vs. E Shares expected to find a block based on
 target and network difficulty and assuming a zero variance scenario.
-</p></center>
+</p>
+<table align="left" width="100%" border="0" style="font-size:13px;">
+    <tbody>
+      <tr>
+        <td class="left">
+          <a href="{$smarty.server.PHP_SELF}?page={$smarty.request.page}&action={$smarty.request.action}&height={if is_array($BLOCKSFOUND) && count($BLOCKSFOUND) > ($BLOCKLIMIT - 1)}{$BLOCKSFOUND[$BLOCKLIMIT - 1].height}{/if}&prev=1"><img src="{$PATH}/images/prev.png" /></a>
+        </td>
+        <td class="right">
+          <a href="{$smarty.server.PHP_SELF}?page={$smarty.request.page}&action={$smarty.request.action}&height={if is_array($BLOCKSFOUND) && count($BLOCKSFOUND) > 0}{$BLOCKSFOUND[0].height}{/if}&next=1"><img src="{$PATH}/images/next.png" /></i></a>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</center>
 {include file="global/block_footer.tpl"}
 
 {include file="global/block_header.tpl" BLOCK_HEADER="Last $BLOCKLIMIT Blocks Found" BLOCK_STYLE="clear:none;"}
@@ -42,6 +67,7 @@ target and network difficulty and assuming a zero variance scenario.
         <th class="right">Difficulty</th>
         <th class="right">Amount</th>
         <th class="right">Expected Shares</th>
+        {if $GLOBAL.config.payout_system == 'pplns'}<th class="right">PPLNS Shares</th>{/if}
         <th class="right">Actual Shares</th>
         <th class="right">Percentage</th>
       </tr>
@@ -51,9 +77,11 @@ target and network difficulty and assuming a zero variance scenario.
 {assign var=totalexpectedshares value=0}
 {assign var=totalshares value=0}
 {assign var=totalpercentage value=0}
+{assign var=pplnsshares value=0}
 {section block $BLOCKSFOUND}
       {assign var="totalshares" value=$totalshares+$BLOCKSFOUND[block].shares}
       {assign var="count" value=$count+1}
+      {if $GLOBAL.config.payout_system == 'pplns'}{assign var="pplnsshares" value=$pplnsshares+$BLOCKSFOUND[block].pplns_shares}{/if}
       <tr class="{cycle values="odd,even"}">
         <td class="center"><a href="{$smarty.server.PHP_SELF}?page=statistics&action=round&height={$BLOCKSFOUND[block].height}">{$BLOCKSFOUND[block].height}</a></td>
         <td class="center">
@@ -70,6 +98,7 @@ target and network difficulty and assuming a zero variance scenario.
         {$BLOCKSFOUND[block].estshares|number_format}
       	{assign var="totalexpectedshares" value=$totalexpectedshares+$BLOCKSFOUND[block].estshares}
         </td>
+        {if $GLOBAL.config.payout_system == 'pplns'}<td class="right">{$BLOCKSFOUND[block].pplns_shares|number_format}</td>{/if}
         <td class="right">{$BLOCKSFOUND[block].shares|number_format}</td>
         <td class="right">
           {math assign="percentage" equation="shares / estshares * 100" shares=$BLOCKSFOUND[block].shares estshares=$BLOCKSFOUND[block].estshares}
@@ -82,6 +111,7 @@ target and network difficulty and assuming a zero variance scenario.
     <tr>
       <td colspan="6" class="right"><b>Totals</b></td>
       <td class="right">{$totalexpectedshares|number_format}</td>
+      {if $GLOBAL.config.payout_system == 'pplns'}<td class="right">{$pplnsshares|number_format}</td>{/if}
       <td class="right">{$totalshares|number_format}</td>
       <td class="right"><font color="{if (($totalpercentage / $count) <= 100)}green{else}red{/if}">{($totalpercentage / $count)|number_format:"2"}</font>
     </tr>

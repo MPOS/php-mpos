@@ -78,6 +78,32 @@ class Statistics {
   }
 
   /**
+   * Get our last $limit blocks found by height
+   * @param limit int Last limit blocks
+   * @return array
+   **/
+  public function getBlocksFoundHeight($iHeight=0, $limit=10) {
+    $this->debug->append("STA " . __METHOD__, 4);
+    if ($data = $this->memcache->get(__FUNCTION__ . $iHeight  . $limit)) return $data;
+    $stmt = $this->mysqli->prepare("
+      SELECT
+        b.*,
+        a.username AS finder,
+        a.is_anonymous AS is_anonymous,
+        ROUND((difficulty * 65535) / POW(2, (" . $this->config['difficulty'] . " -16)), 0) AS estshares
+      FROM " . $this->block->getTableName() . " AS b
+      LEFT JOIN " . $this->user->getTableName() . " AS a 
+      ON b.account_id = a.id
+      WHERE b.height <= ?
+      ORDER BY height DESC LIMIT ?");
+    if ($this->checkStmt($stmt) && $stmt->bind_param("ii", $iHeight, $limit) && $stmt->execute() && $result = $stmt->get_result())
+      return $this->memcache->setCache(__FUNCTION__ . $iHeight . $limit, $result->fetch_all(MYSQLI_ASSOC), 5);
+    // Catchall
+    $this->debug->append("Failed to find blocks:" . $this->mysqli->error);
+    return false;
+  }
+
+  /**
    * Currently the only function writing to the database
    * Stored per block user statistics of valid and invalid shares
    * @param aStats array Array with user id, valid and invalid shares
@@ -90,6 +116,44 @@ class Statistics {
     if ($this->checkStmt($stmt) && $stmt->bind_param('iiii', $aStats['id'], $aStats['valid'], $aStats['invalid'], $iBlockId) && $stmt->execute()) return true;
     // Catchall
     $this->debug->append("Failed to update share stats: " . $this->mysqli->error);
+    return false;
+  }
+
+  /**
+   * update user statistics of valid and invalid pplns shares
+   **/
+  public function updatePPLNSShareStatistics($aStats, $iBlockId) {
+    $this->debug->append("STA " . __METHOD__, 4);
+    $stmt = $this->mysqli->prepare("
+      UPDATE $this->table SET pplns_valid = ?, pplns_invalid = ? WHERE account_id = ? AND block_id = ?");
+    if ($this->checkStmt($stmt) && $stmt->bind_param('iiii', $aStats['valid'], $aStats['invalid'], $aStats['id'], $iBlockId) && $stmt->execute()) return true;
+    // Catchall
+    $this->debug->append("Failed to update pplns share stats: " . $this->mysqli->error);
+    return false;
+  }
+
+  /**
+   * insert user statistics of valid and invalid pplns shares "rbpplns"
+   **/
+  public function insertPPLNSShareStatistics($aStats, $iBlockId) {
+    $this->debug->append("STA " . __METHOD__, 4);
+    $stmt = $this->mysqli->prepare("INSERT INTO $this->table (account_id, valid, invalid, pplns_valid, pplns_invalid, block_id) VALUES (?, 0, 0, ?, ?, ?)");
+    if ($this->checkStmt($stmt) && $stmt->bind_param('iiii', $aStats['id'], $aStats['valid'], $aStats['invalid'], $iBlockId) && $stmt->execute()) return true;
+    // Catchall
+    $this->debug->append("Failed to insert pplns share stats: " . $this->mysqli->error);
+    return false;
+  }
+
+  /**
+   * Fetch the share ID from stats for rbpplns
+   **/
+  function getIdShareStatistics($aStats, $iBlockId) {
+    $stmt = $this->mysqli->prepare("
+      SELECT id AS id FROM $this->table
+      WHERE account_id = ? AND block_id = ?
+      ");
+    if ($this->checkStmt($stmt) && $stmt->bind_param('ii', $aStats['id'], $iBlockId) && $stmt->execute() && $result = $stmt->get_result())
+      return $result->fetch_object()->id;
     return false;
   }
 
@@ -245,12 +309,14 @@ class Statistics {
     if ($data = $this->memcache->get(STATISTICS_ALL_USER_SHARES)) {
       if (array_key_exists($account_id, $data['data']))
         return $data['data'][$account_id];
+      // We have no cached value, we return defaults
+      return array('valid' => 0, 'invalid' => 0, 'donate_percent' => 0, 'is_anonymous' => 0);
     }
-    // if ($data = $this->memcache->get(__FUNCTION__ . $account_id)) return $data;
+    if ($data = $this->memcache->get(__FUNCTION__ . $account_id)) return $data;
     $stmt = $this->mysqli->prepare("
       SELECT
-        ROUND(IFNULL(SUM(IF(our_result='Y', IF(s.difficulty=0, POW(2, (" . $this->config['difficulty'] . " - 16)), s.difficulty), 0)) / POW(2, (" . $this->config['difficulty'] . " - 16)), 0), 0) AS valid,
-        ROUND(IFNULL(SUM(IF(our_result='N', IF(s.difficulty=0, POW(2, (" . $this->config['difficulty'] . " - 16)), s.difficulty), 0)) / POW(2, (" . $this->config['difficulty'] . " - 16)), 0), 0) AS invalid
+        ROUND(IFNULL(SUM(IF(our_result='Y', IF(s.difficulty=0, POW(2, (" . $this->config['difficulty'] . " - 16)), s.difficulty), 0)), 0) / POW(2, (" . $this->config['difficulty'] . " - 16)), 0) AS valid,
+        ROUND(IFNULL(SUM(IF(our_result='N', IF(s.difficulty=0, POW(2, (" . $this->config['difficulty'] . " - 16)), s.difficulty), 0)), 0) / POW(2, (" . $this->config['difficulty'] . " - 16)), 0) AS invalid
       FROM " . $this->share->getTableName() . " AS s,
            " . $this->user->getTableName() . " AS u
       WHERE

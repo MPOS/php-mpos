@@ -57,19 +57,50 @@ class RoundStats {
   }
 
   /**
+   * search for block height
+   **/
+  public function searchForBlockHeight($iHeight=0) {
+    $stmt = $this->mysqli->prepare("
+       SELECT height 
+       FROM $this->tableBlocks
+       WHERE height >= ?
+       ORDER BY height ASC 
+       LIMIT 1");
+    if ($this->checkStmt($stmt) && $stmt->bind_param('i', $iHeight) && $stmt->execute() && $result = $stmt->get_result())
+      return $result->fetch_object()->height;
+    return false;
+  }
+
+  /**
+   * get next block for stats paging
+   **/
+  public function getNextBlockForStats($iHeight=0, $limit=10) {
+    $stmt = $this->mysqli->prepare("
+      SELECT MAX(x.height) AS height 
+      FROM (SELECT height FROM $this->tableBlocks 
+      WHERE height >= ?
+      ORDER BY height ASC LIMIT ?) AS x");
+    if ($this->checkStmt($stmt) && $stmt->bind_param("ii", $iHeight, $limit) && $stmt->execute() && $result = $stmt->get_result())
+      return $result->fetch_object()->height;
+    return false;
+  }
+
+  /**
    * Get details for block height
    * @param height int Block Height
    * @return data array Block information from DB
    **/
-  public function getDetailsForBlockHeight($iHeight=0, $isAdmin=0) {
+  public function getDetailsForBlockHeight($iHeight=0) {
     $stmt = $this->mysqli->prepare("
       SELECT 
       b.id, height, blockhash, amount, confirmations, difficulty, FROM_UNIXTIME(time) as time, shares,
-      IF(a.is_anonymous, IF( ? , a.username, 'anonymous'), a.username) AS finder
+      IF(a.is_anonymous, 'anonymous', a.username) AS finder,
+      ROUND((difficulty * 65535) / POW(2, (" . $this->config['difficulty'] . " -16)), 0) AS estshares, 
+      (time - (SELECT time FROM $this->tableBlocks WHERE height < ? ORDER BY height DESC LIMIT 1)) AS round_time
         FROM $this->tableBlocks as b
         LEFT JOIN $this->tableUsers AS a ON b.account_id = a.id
         WHERE b.height = ? LIMIT 1");
-    if ($this->checkStmt($stmt) && $stmt->bind_param('ii', $isAdmin, $iHeight) && $stmt->execute() && $result = $stmt->get_result())
+    if ($this->checkStmt($stmt) && $stmt->bind_param('ii', $iHeight, $iHeight) && $stmt->execute() && $result = $stmt->get_result())
       return $result->fetch_assoc();
     return false;
   }
@@ -79,10 +110,11 @@ class RoundStats {
    * @param height int Block Height
    * @return data array Block information from DB
    **/
-  public function getRoundStatsForAccounts($iHeight=0, $isAdmin=0) {
+  public function getRoundStatsForAccounts($iHeight=0) {
     $stmt = $this->mysqli->prepare("
       SELECT
-      IF(a.is_anonymous, IF( ? , a.username, 'anonymous'), a.username) AS username,
+        a.username,
+        a.is_anonymous,
         s.valid,
         s.invalid
         FROM $this->tableStats AS s
@@ -92,8 +124,48 @@ class RoundStats {
         GROUP BY username ASC
         ORDER BY valid DESC
         ");
-    if ($this->checkStmt($stmt) && $stmt->bind_param('ii', $isAdmin, $iHeight) && $stmt->execute() && $result = $stmt->get_result())
+    if ($this->checkStmt($stmt) && $stmt->bind_param('i', $iHeight) && $stmt->execute() && $result = $stmt->get_result())
       return $result->fetch_all(MYSQLI_ASSOC);
+    return false;
+  }
+
+  /**
+   * Get pplns statistics for round block height
+   * @param height int Block Height
+   * @return data array Block information from DB
+   **/
+  public function getPPLNSRoundStatsForAccounts($iHeight=0) {
+    $stmt = $this->mysqli->prepare("
+      SELECT
+        a.username,
+        a.is_anonymous,
+        s.pplns_valid,
+        s.pplns_invalid
+        FROM $this->tableStats AS s
+        LEFT JOIN $this->tableBlocks AS b ON s.block_id = b.id
+        LEFT JOIN $this->tableUsers AS a ON a.id = s.account_id
+        WHERE b.height = ?
+        GROUP BY username ASC
+        ORDER BY pplns_valid DESC
+        ");
+    if ($this->checkStmt($stmt) && $stmt->bind_param('i', $iHeight) && $stmt->execute() && $result = $stmt->get_result())
+      return $result->fetch_all(MYSQLI_ASSOC);
+    return false;
+  }
+
+  /**
+   * Get total valid pplns shares for block height
+   **/
+  public function getPPLNSRoundShares($iHeight=0) {
+    $stmt = $this->mysqli->prepare("
+      SELECT
+        SUM(s.pplns_valid) AS pplns_valid
+        FROM $this->tableStats AS s
+        LEFT JOIN $this->tableBlocks AS b ON s.block_id = b.id
+        WHERE b.height = ?
+        ");
+    if ($this->checkStmt($stmt) && $stmt->bind_param('i', $iHeight) && $stmt->execute() && $result = $stmt->get_result())
+      return $result->fetch_object()->pplns_valid;
     return false;
   }
 
@@ -102,20 +174,21 @@ class RoundStats {
    * @param height int Block Height
    * @return data array Block round transactions
    **/
-  public function getAllRoundTransactions($iHeight=0, $admin) {
+  public function getAllRoundTransactions($iHeight=0) {
     $this->debug->append("STA " . __METHOD__, 4);
     $stmt = $this->mysqli->prepare("
       SELECT
       t.id AS id,
-      IF(a.is_anonymous, IF( ? , a.username, 'anonymous'), a.username) AS username,
+      a.username AS username,
+      a.is_anonymous,
       t.type AS type,
       t.amount AS amount
       FROM $this->tableTrans AS t
       LEFT JOIN $this->tableBlocks AS b ON t.block_id = b.id
       LEFT JOIN $this->tableUsers AS a ON t.account_id = a.id
-      WHERE b.height = ?
-      ORDER BY id ASC");
-    if ($this->checkStmt($stmt) && $stmt->bind_param('ii', $admin, $iHeight) && $stmt->execute() && $result = $stmt->get_result())
+      WHERE b.height = ? AND t.type = 'Credit'
+      ORDER BY amount DESC");
+    if ($this->checkStmt($stmt) && $stmt->bind_param('i', $iHeight) && $stmt->execute() && $result = $stmt->get_result())
       return $result->fetch_all(MYSQLI_ASSOC);
     $this->debug->append('Unable to fetch transactions');
     return false;
