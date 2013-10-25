@@ -97,24 +97,6 @@ $aGlobal['acl']['pool']['statistics'] = $setting->getValue('acl_pool_statistics'
 $aGlobal['acl']['block']['statistics'] = $setting->getValue('acl_block_statistics');
 $aGlobal['acl']['round']['statistics'] = $setting->getValue('acl_round_statistics');
 
-// We support some dynamic reward targets but fall back to our fixed value
-// Special calculations for PPS Values based on reward_type setting and/or available blocks
-if ($config['pps']['reward']['type'] == 'blockavg' && $block->getBlockCount() > 0) {
-  $pps_reward = round($block->getAvgBlockReward($config['pps']['blockavg']['blockcount']));
-} else {
-  if ($config['pps']['reward']['type'] == 'block') {
-     if ($aLastBlock = $block->getLast()) {
-        $pps_reward = $aLastBlock['amount'];
-     } else {
-     $pps_reward = $config['pps']['reward']['default'];
-     }
-  } else {
-     $pps_reward = $config['pps']['reward']['default'];
-  }
-}
-
-$aGlobal['ppsvalue'] = number_format(round($pps_reward / (pow(2,32) * $dDifficulty) * pow(2, $config['pps_target']), 12) ,12);
-
 // We don't want these session infos cached
 if (@$_SESSION['USERDATA']['id']) {
   $aGlobal['userdata'] = $_SESSION['USERDATA']['id'] ? $user->getUserData($_SESSION['USERDATA']['id']) : array();
@@ -126,13 +108,11 @@ if (@$_SESSION['USERDATA']['id']) {
   $aGlobal['userdata']['sharerate'] = $statistics->getUserSharerate($_SESSION['USERDATA']['id']);
 
   switch ($config['payout_system']) {
-  case 'prop' || 'pplns':
+  case 'prop':
     // Some estimations
     $aEstimates = $statistics->getUserEstimates($aRoundShares, $aGlobal['userdata']['shares'], $aGlobal['userdata']['donate_percent'], $aGlobal['userdata']['no_fees']);
-    $aGlobal['userdata']['est_block'] = $aEstimates['block'];
-    $aGlobal['userdata']['est_fee'] = $aEstimates['fee'];
-    $aGlobal['userdata']['est_donation'] = $aEstimates['donation'];
-    $aGlobal['userdata']['est_payout'] = $aEstimates['payout'];
+    $aGlobal['userdata']['estimates'] = $aEstimates;
+    break;
   case 'pplns':
     $aGlobal['pplns']['target'] = $config['pplns']['shares']['default'];
     if ($aLastBlock = $block->getLast()) {
@@ -140,8 +120,29 @@ if (@$_SESSION['USERDATA']['id']) {
         $aGlobal['pplns']['target'] = $iAvgBlockShares;
       }
     }
+    $aEstimates = $statistics->getUserEstimates($aRoundShares, $aGlobal['userdata']['shares'], $aGlobal['userdata']['donate_percent'], $aGlobal['userdata']['no_fees']);
+    $aGlobal['userdata']['estimates'] = $aEstimates;
     break;
   case 'pps':
+    // We support some dynamic reward targets but fall back to our fixed value
+    // Special calculations for PPS Values based on reward_type setting and/or available blocks
+    if ($config['pps']['reward']['type'] == 'blockavg' && $block->getBlockCount() > 0) {
+      $pps_reward = round($block->getAvgBlockReward($config['pps']['blockavg']['blockcount']));
+    } else {
+      if ($config['pps']['reward']['type'] == 'block') {
+        if ($aLastBlock = $block->getLast()) {
+          $pps_reward = $aLastBlock['amount'];
+        } else {
+          $pps_reward = $config['pps']['reward']['default'];
+        }
+      } else {
+        $pps_reward = $config['pps']['reward']['default'];
+      }
+    }
+
+    $aGlobal['ppsvalue'] = number_format(round($pps_reward / (pow(2,32) * $dDifficulty) * pow(2, $config['pps_target']), 12) ,12);
+    $aGlobal['userdata']['sharedifficulty'] = $statistics->getUserShareDifficulty($_SESSION['USERDATA']['id']);
+    $aGlobal['userdata']['estimates'] = $statistics->getUserEstimates($aGlobal['userdata']['sharerate'], $aGlobal['userdata']['sharedifficulty'], $aGlobal['userdata']['donate_percent'], $aGlobal['userdata']['no_fees'], $aGlobal['ppsvalue']);
     break;
   }
 

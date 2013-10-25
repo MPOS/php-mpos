@@ -392,6 +392,24 @@ class Statistics {
     return false;
   }
 
+
+  public function getUserShareDifficulty($account_id, $interval=600) {
+    $this->debug->append("STA " . __METHOD__, 4);
+    if ($this->getGetCache() && $data = $this->memcache->get(__FUNCTION__ . $account_id)) return $data;
+    $stmt = $this->mysqli->prepare("
+      SELECT
+        AVG(IF(difficulty=0, pow(2, (" . $this->config['difficulty'] . " - 16)), difficulty)) AS avgsharediff,
+        COUNT(s.id) AS total
+      FROM " . $this->share->getTableName() . " AS s JOIN " . $this->user->getTableName() . " AS a
+      ON a.username = SUBSTRING_INDEX( s.username, '.', 1 )
+      WHERE s.time > DATE_SUB(now(), INTERVAL ? SECOND)
+      AND a.id = ?");
+    if ($this->checkStmt($stmt) && $stmt->bind_param("ii", $interval, $account_id) && $stmt->execute() && $result = $stmt->get_result() )
+      return $this->memcache->setCache(__FUNCTION__ . $account_id, $result->fetch_object()->avgsharediff);
+    $this->debug->append("Failed fetching average share dificulty: " . $this->mysqli->error, 3);
+    return 0;
+  }
+
   /**
    * Same as getUserHashrate for Sharerate
    * @param account_id integer User ID
@@ -605,28 +623,51 @@ class Statistics {
 
   /**
    * get user estimated payouts based on share counts
-   * @param aRoundShares array Round shares
-   * @param aUserShares array User shares
+   * @param value1 mixed Round shares OR share rate
+   * @param value2 mixed User shares OR share difficulty
    * @param dDonate double User donation setting
    * @param bNoFees bool User no-fees option setting
    * @return aEstimates array User estimations
    **/
-  public function getUserEstimates($aRoundShares, $aUserShares, $dDonate, $bNoFees) {
+  public function getUserEstimates($value1, $value2, $dDonate, $bNoFees, $ppsvalue=0) {
     $this->debug->append("STA " . __METHOD__, 4);
-    // Fetch some user information that we need
-    if (@$aRoundShares['valid'] > 0  && @$aUserShares['valid'] > 0) {
-      $aEstimates['block'] = round(( (int)$aUserShares['valid'] / (int)$aRoundShares['valid'] ) * (float)$this->config['reward'], 8);
-      $bNoFees == 0 ? $aEstimates['fee'] = round(((float)$this->config['fees'] / 100) * (float)$aEstimates['block'], 8) : $aEstimates['fee'] = 0;
-      $aEstimates['donation'] = round((( (float)$dDonate / 100) * ((float)$aEstimates['block'] - (float)$aEstimates['fee'])), 8);
-      $aEstimates['payout'] = round((float)$aEstimates['block'] - (float)$aEstimates['donation'] - (float)$aEstimates['fee'], 8);
+    if ($this->config['payout_system'] != 'pps') {
+      if (@$value1['valid'] > 0  && @$value2['valid'] > 0) {
+        $aEstimates['block'] = round(( (int)$value2['valid'] / (int)$value1['valid'] ) * (float)$this->config['reward'], 8);
+        $bNoFees == 0 ? $aEstimates['fee'] = round(((float)$this->config['fees'] / 100) * (float)$aEstimates['block'], 8) : $aEstimates['fee'] = 0;
+        $aEstimates['donation'] = round((( (float)$dDonate / 100) * ((float)$aEstimates['block'] - (float)$aEstimates['fee'])), 8);
+        $aEstimates['payout'] = round((float)$aEstimates['block'] - (float)$aEstimates['donation'] - (float)$aEstimates['fee'], 8);
+      } else {
+        $aEstimates['block'] = 0;
+        $aEstimates['fee'] = 0;
+        $aEstimates['donation'] = 0;
+        $aEstimates['payout'] = 0;
+      }
     } else {
-      $aEstimates['block'] = 0;
-      $aEstimates['fee'] = 0;
-      $aEstimates['donation'] = 0;
-      $aEstimates['payout'] = 0;
+      // Hack so we can use this method for PPS estimates too
+      if (@$value1 > 0 && @$value2 > 0) {
+        // Default: No fees applied so multiply by 1
+        $fee = 1;
+        if ($this->config['fees'] > 0)
+          $bNoFees == 0 ? $fee = round(((float)$this->config['fees'] / 100), 8) : $fee = 1;
+        $pps = $value1 * $value2 * $ppsvalue;
+        $hour = 3600;
+        $aEstimates['hours1'] = $pps * $hour * $fee;
+        $aEstimates['hours24'] = $pps * 24 * $hour;
+        $aEstimates['days7'] = $pps * 24 * 7 * $hour;
+        $aEstimates['days14'] = $pps * 14 * 24 * 7 * $hour;
+        $aEstimates['days30'] = $pps * 30 * 24 * 7 * $hour;
+      } else {
+        $aEstimates['hours1'] = 0;
+        $aEstimates['hours24'] = 0;
+        $aEstimates['days7'] = 0;
+        $aEstimates['days14'] = 0;
+        $aEstimates['days30'] = 0;
+      }
     }
     return $aEstimates;
   }
 }
+
 
 $statistics = new Statistics($debug, $mysqli, $config, $share, $user, $block, $memcache);
