@@ -150,11 +150,22 @@ $(document).ready(function(){
     $('#b-pivalid').html(data.getdashboarddata.data.pool.shares.invalid);
     $('#b-diff').html(data.getdashboarddata.data.network.difficulty);
     $('#b-nblock').html(data.getdashboarddata.data.network.block);
+    {/literal}{if $GLOBAL.config.payout_system != 'pps'}{literal }
     $('#b-payout').html((parseFloat(data.getdashboarddata.data.personal.estimates.payout).toFixed(4)));
     $('#b-block').html((parseFloat(data.getdashboarddata.data.personal.estimates.block).toFixed(4)));
     $('#b-fee').html((parseFloat(data.getdashboarddata.data.personal.estimates.fee).toFixed(4)));
     $('#b-donation').html((parseFloat(data.getdashboarddata.data.personal.estimates.donation).toFixed(4)));
+{/literal}{else}{literal}
+    $('#b-ppsdiff').html((parseFloat(data.getdashboarddata.data.personal.sharedifficulty).toFixed(2)));
+    $('#b-est1').html((parseFloat(data.getdashboarddata.data.personal.estimates.hours1).toFixed(8)));
+    $('#b-est24hours').html((parseFloat(data.getdashboarddata.data.personal.estimates.hours24).toFixed(8)));
+    $('#b-est7days').html((parseFloat(data.getdashboarddata.data.personal.estimates.days7).toFixed(8)));
+    $('#b-est14days').html((parseFloat(data.getdashboarddata.data.personal.estimates.days14).toFixed(8)));
+    $('#b-est30days').html((parseFloat(data.getdashboarddata.data.personal.estimates.days30).toFixed(8)));
+{/literal}{/if}{literal}
+{/literal}{if $GLOBAL.config.payout_system == 'pplns'}{literal}
     $('#b-pplns').html({/literal}{$GLOBAL.pplns.target}{literal});
+{/literal}{/if}{literal}
   }
 
   // Refresh worker information
