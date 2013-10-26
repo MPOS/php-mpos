@@ -326,7 +326,7 @@ class Share {
     $stmt = $this->mysqli->prepare("
       SELECT MIN(b.id) AS id FROM
       (
-        SELECT id, @total := @total + IF(difficulty=0, POW(2, (" . $this->config['difficulty'] . " - 16)), difficulty) AS total
+        SELECT id, @total := @total + IF(difficulty=0, POW(2, (" . $this->config['difficulty'] . " - 16)), difficulty) / POW(2, (" . $this->config['difficulty'] . " - 16)) AS total
         FROM $this->table, (SELECT @total := 0) AS a
         WHERE our_result = 'Y'
         AND id <= ? AND @total < ?
