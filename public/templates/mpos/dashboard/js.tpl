@@ -146,10 +146,11 @@ $(document).ready(function(){
     $('#b-sharerate').html((parseFloat(data.getdashboarddata.data.personal.sharerate).toFixed(2)));
     $('#b-yvalid').html(data.getdashboarddata.data.personal.shares.valid);
     $('#b-yivalid').html(data.getdashboarddata.data.personal.shares.invalid + " (" + data.getdashboarddata.data.personal.shares.invalid_percent + "%)" );
-    $('#b-pvalid').html(data.getdashboarddata.data.pool.shares.valid + " (est: " + data.getdashboarddata.data.pool.shares.progress + "%)");
+    $('#b-pvalid').html(data.getdashboarddata.data.pool.shares.valid);
     $('#b-pivalid').html(data.getdashboarddata.data.pool.shares.invalid + " (" + data.getdashboarddata.data.pool.shares.invalid_percent + "%)" );
     $('#b-diff').html(data.getdashboarddata.data.network.difficulty);
     $('#b-nblock').html(data.getdashboarddata.data.network.block);
+    $('#b-target').html(data.getdashboarddata.data.pool.shares.estimated + " (done: " + data.getdashboarddata.data.pool.shares.progress + "%)" );
     {/literal}{if $GLOBAL.config.payout_system != 'pps'}{literal }
     $('#b-payout').html((parseFloat(data.getdashboarddata.data.personal.estimates.payout).toFixed(4)));
     $('#b-block').html((parseFloat(data.getdashboarddata.data.personal.estimates.block).toFixed(4)));
