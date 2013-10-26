@@ -103,14 +103,13 @@
         <td align="right">{$BLOCKSFOUND[block].difficulty|number_format:"2"}</td>
         <td align="right">{$BLOCKSFOUND[block].amount|number_format:"2"}</td>
         <td align="right">
-{math assign="estshares" equation="(pow(2,32 - targetdiff) * blockdiff)" targetdiff=$GLOBAL.config.targetdiff blockdiff=$BLOCKSFOUND[block].difficulty}
-{assign var="totalexpectedshares" value=$totalexpectedshares+$estshares}
-          {$estshares|number_format}
+{assign var="totalexpectedshares" value=$totalexpectedshares+$BLOCKSFOUND[block].estshares}
+          {$BLOCKSFOUND[block].estshares|number_format}
         </td>
 {if $GLOBAL.config.payout_system == 'pplns'}<td align="right">{$BLOCKSFOUND[block].pplns_shares|number_format}</td>{/if}
         <td align="right">{$BLOCKSFOUND[block].shares|number_format}</td>
         <td align="right" style="padding-right: 25px;">
-{math assign="percentage" equation="shares / estshares * 100" shares=$BLOCKSFOUND[block].shares estshares=$estshares}
+{math assign="percentage" equation="shares / estshares * 100" shares=$BLOCKSFOUND[block].shares estshares=$BLOCKSFOUND[block].estshares}
 {assign var="totalpercentage" value=$totalpercentage+$percentage}
           <font color="{if ($percentage <= 100)}green{else}red{/if}">{$percentage|number_format:"2"}</font>
         </td>

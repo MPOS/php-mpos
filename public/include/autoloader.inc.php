@@ -1,5 +1,11 @@
 <?php
+// SHA/Scrypt check
 
+if (empty($config['algorithm']) || $config['algorithm'] == 'scrypt') {
+  $config['target_bits'] = 16;
+} else {
+  $config['target_bits'] = 32;
+}
 // Default classes
 require_once(CLASS_DIR . '/debug.class.php');
 require_once(INCLUDE_DIR . '/lib/KLogger.php');

@@ -42,6 +42,7 @@ $aRoundShares = $statistics->getRoundShares();
 if ($config['payout_system'] != 'pps') {
   $aEstimates = $statistics->getUserEstimates($aRoundShares, $aUserRoundShares, $user->getUserDonatePercent($user_id), $user->getUserNoFee($user_id));
 } else {
+  $dUnpaidShares = $statistics->getUserUnpaidPPSShares($user_id, $setting->getValue('pps_last_share_id'));
   if ($config['pps']['reward']['type'] == 'blockavg' && $block->getBlockCount() > 0) {
     $pps_reward = round($block->getAvgBlockReward($config['pps']['blockavg']['blockcount']));
   } else {
@@ -56,7 +57,7 @@ if ($config['payout_system'] != 'pps') {
     }
   }
 
-  $ppsvalue = round($pps_reward / (pow(2,32) * $dDifficulty) * pow(2, $config['pps_target']), 12);
+  $ppsvalue = round($pps_reward / (pow(2,32) * $dDifficulty) * pow(2, $config['target_bits']), 12);
   $aEstimates = $statistics->getUserEstimates($dPersonalSharerate, $dPersonalShareDifficulty, $user->getUserDonatePercent($user_id), $user->getUserNoFee($user_id), $ppsvalue);
 }
 
@@ -89,7 +90,7 @@ $data = array(
   'raw' => array( 'personal' => array( 'hashrate' => $dPersonalHashrate ), 'pool' => array( 'hashrate' => $dPoolHashrate ), 'network' => array( 'hashrate' => $dNetworkHashrate / 1000 ) ),
   'personal' => array (
     'hashrate' => $dPersonalHashrateAdjusted, 'sharerate' => $dPersonalSharerate, 'sharedifficulty' => $dPersonalShareDifficulty,
-    'shares' => array('valid' => $aUserRoundShares['valid'], 'invalid' => $aUserRoundShares['invalid'], 'invalid_percent' => $dUserInvalidPercent),
+    'shares' => array('valid' => $aUserRoundShares['valid'], 'invalid' => $aUserRoundShares['invalid'], 'invalid_percent' => $dUserInvalidPercent, 'unpaid' => $dUnpaidShares ),
     'balance' => $transaction->getBalance($user_id), 'estimates' => $aEstimates, 'workers' => $aWorkers ),
   'pool' => array(
     'workers' => $worker->getCountAllActiveWorkers(), 'hashrate' => $dPoolHashrateAdjusted,

@@ -156,6 +156,7 @@ $(document).ready(function(){
     $('#b-fee').html((parseFloat(data.getdashboarddata.data.personal.estimates.fee).toFixed(4)));
     $('#b-donation').html((parseFloat(data.getdashboarddata.data.personal.estimates.donation).toFixed(4)));
 {/literal}{else}{literal}
+    $('#b-ppsunpaid').html((parseFloat(data.getdashboarddata.data.personal.shares.unpaid).toFixed(0)));
     $('#b-ppsdiff').html((parseFloat(data.getdashboarddata.data.personal.sharedifficulty).toFixed(2)));
     $('#b-est1').html((parseFloat(data.getdashboarddata.data.personal.estimates.hours1).toFixed(8)));
     $('#b-est24hours').html((parseFloat(data.getdashboarddata.data.personal.estimates.hours24).toFixed(8)));

@@ -21,6 +21,17 @@ define('DEBUG', 0);
 define('SALT', 'PLEASEMAKEMESOMETHINGRANDOM');
 
 /**
+  * Underlying coin algorithm that you are mining on. Set this to whatever your coin needs:
+  *
+  * Options:
+  *   sha256d    :  SHA coins like Bitcoin
+  *   scrypt     :  Scrypt based coins like Litecoin
+  * Default:
+  *   scrypt   :  Scrypt is default
+  **/
+$config['algorithm'] = 'scrypt';
+
+/**
  * Database configuration
  *
  * A MySQL database backend is required for MPOS.
@@ -307,21 +318,6 @@ $config['network_confirmations'] = 120;
 $config['pps']['reward']['default'] = 50;
 $config['pps']['reward']['type'] = 'blockavg';
 $config['pps']['blockavg']['blockcount'] = 10;
-
-/**
-  * Please note: Do NOT touch this if you are running MPOS in scrypt coins!
-  * The VARDIFF / Stratum Settings / Target Bits system can be VERY confusing
-  * so unless you have spend over 2 hours talking with pooler, do not edit this.
-  *
-  * I have added this here to allow SHA256 coins in the future. For now, leave it
-  * at 16!
-  *
-  * Default:
-  *   16    =  Scrypt
-  * Options:
-  *   32    =  SHA256
-  **/
-$config['pps_target'] = 16;
 
 /**
  * Memcache configuration
