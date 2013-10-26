@@ -653,8 +653,8 @@ class Statistics {
         $aEstimates['hours1'] = $pps * $hour;
         $aEstimates['hours24'] = $pps * 24 * $hour;
         $aEstimates['days7'] = $pps * 24 * 7 * $hour;
-        $aEstimates['days14'] = $pps * 14 * 24 * 7 * $hour;
-        $aEstimates['days30'] = $pps * 30 * 24 * 7 * $hour;
+        $aEstimates['days14'] = $pps * 14 * 24 * $hour;
+        $aEstimates['days30'] = $pps * 30 * 24 * $hour;
       } else {
         $aEstimates['hours1'] = 0;
         $aEstimates['hours24'] = 0;
