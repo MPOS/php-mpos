@@ -308,9 +308,20 @@ $config['pps']['reward']['default'] = 50;
 $config['pps']['reward']['type'] = 'blockavg';
 $config['pps']['blockavg']['blockcount'] = 10;
 
-// pps base payout target, default 16 = difficulty 1 shares for vardiff
-// (1/(65536 * difficulty) * reward) = (reward / (pow(2,32) * difficulty) * pow(2, 16))
-$config['pps_target'] = 16; // do not change unless you know what it does
+/**
+  * Please note: Do NOT touch this if you are running MPOS in scrypt coins!
+  * The VARDIFF / Stratum Settings / Target Bits system can be VERY confusing
+  * so unless you have spend over 2 hours talking with pooler, do not edit this.
+  *
+  * I have added this here to allow SHA256 coins in the future. For now, leave it
+  * at 16!
+  *
+  * Default:
+  *   16    =  Scrypt
+  * Options:
+  *   32    =  SHA256
+  **/
+$config['pps_target'] = 16;
 
 /**
  * Memcache configuration

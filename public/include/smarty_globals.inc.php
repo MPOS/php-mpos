@@ -140,7 +140,7 @@ if (@$_SESSION['USERDATA']['id']) {
       }
     }
 
-    $aGlobal['ppsvalue'] = number_format(round($pps_reward / (pow(2,32) * $dDifficulty) * pow(2, $config['pps_target']), 12) ,12);
+    $aGlobal['ppsvalue'] = number_format(round($pps_reward / (pow(2, $config['pps_target']) * $dDifficulty), 12) ,12);
     $aGlobal['userdata']['sharedifficulty'] = $statistics->getUserShareDifficulty($_SESSION['USERDATA']['id']);
     $aGlobal['userdata']['estimates'] = $statistics->getUserEstimates($aGlobal['userdata']['sharerate'], $aGlobal['userdata']['sharedifficulty'], $aGlobal['userdata']['donate_percent'], $aGlobal['userdata']['no_fees'], $aGlobal['ppsvalue']);
     break;

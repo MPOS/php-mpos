@@ -645,14 +645,12 @@ class Statistics {
       }
     } else {
       // Hack so we can use this method for PPS estimates too
+      // value1 = shares/s
+      // value2 = avg share difficulty
       if (@$value1 > 0 && @$value2 > 0) {
-        // Default: No fees applied so multiply by 1
-        $fee = 1;
-        if ($this->config['fees'] > 0)
-          $bNoFees == 0 ? $fee = round(((float)$this->config['fees'] / 100), 8) : $fee = 1;
+        $hour = 60 * 60;
         $pps = $value1 * $value2 * $ppsvalue;
-        $hour = 3600;
-        $aEstimates['hours1'] = $pps * $hour * $fee;
+        $aEstimates['hours1'] = $pps * $hour;
         $aEstimates['hours24'] = $pps * 24 * $hour;
         $aEstimates['days7'] = $pps * 24 * 7 * $hour;
         $aEstimates['days14'] = $pps * 14 * 24 * 7 * $hour;
