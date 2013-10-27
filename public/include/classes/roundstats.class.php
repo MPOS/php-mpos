@@ -113,6 +113,7 @@ class RoundStats {
   public function getRoundStatsForAccounts($iHeight=0) {
     $stmt = $this->mysqli->prepare("
       SELECT
+        a.id,
         a.username,
         a.is_anonymous,
         s.valid,
@@ -124,8 +125,12 @@ class RoundStats {
         GROUP BY username ASC
         ORDER BY valid DESC
         ");
-    if ($this->checkStmt($stmt) && $stmt->bind_param('i', $iHeight) && $stmt->execute() && $result = $stmt->get_result())
-      return $result->fetch_all(MYSQLI_ASSOC);
+    if ($this->checkStmt($stmt) && $stmt->bind_param('i', $iHeight) && $stmt->execute() && $result = $stmt->get_result()) {
+      while ($row = $result->fetch_assoc()) {
+        $aData[$row['id']] = $row;
+      }
+      return $aData;
+    }
     return false;
   }
 
@@ -179,6 +184,7 @@ class RoundStats {
     $stmt = $this->mysqli->prepare("
       SELECT
       t.id AS id,
+      a.id AS uid,
       a.username AS username,
       a.is_anonymous,
       t.type AS type,
