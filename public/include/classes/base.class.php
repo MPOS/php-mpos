@@ -8,8 +8,12 @@ if (!defined('SECURITY'))
 // some cross-class functions.
 class Base {
   private $sError = '';
+  protected $table = '';
   private $values = array(), $types = ''; 
 
+  public function getTableName() {
+    return $this->table;
+  }
   public function setDebug($debug) {
     $this->debug = $debug;
   }
@@ -50,6 +54,13 @@ class Base {
     return $this->sError;
   }
 
+  protected function getAllAssoc($value, $field='id', $type='i') {
+    $this->debug->append("STA " . __METHOD__, 4);
+    $stmt = $this->mysqli->prepare("SELECT * FROM $this->table WHERE $field = ? LIMIT 1");
+    if ($this->checkStmt($stmt) && $stmt->bind_param($type, $value) && $stmt->execute() && $result = $stmt->get_result())
+      return $result->fetch_assoc();
+    return false;
+  }
   /**
    * Get a single row from the table
    * @param value string Value to search for
