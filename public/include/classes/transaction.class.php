@@ -59,8 +59,7 @@ class Transaction extends Base {
       FROM transactions AS t
       LEFT OUTER JOIN blocks AS b
       ON b.id = t.block_id
-      WHERE b.confirmations > 0
-      OR    b.id IS NULL
+      WHERE ( b.confirmations > 0 OR b.id IS NULL )
     ";
     if (!empty($account_id)) {
       $sql .= " AND t.account_id = ? ";
