@@ -53,9 +53,17 @@ class Transaction extends Base {
    * @return data array type and total
    **/
   public function getTransactionSummary($account_id=NULL) {
-    $sql = "SELECT SUM(t.amount) AS total, t.type AS type FROM $this->table AS t";
+    $sql = "
+      SELECT
+                    SUM(t.amount) AS total, t.type AS type
+      FROM transactions AS t
+      LEFT OUTER JOIN blocks AS b
+      ON b.id = t.block_id
+      WHERE b.confirmations > 0
+      OR    b.id IS NULL
+    ";
     if (!empty($account_id)) {
-      $sql .= " WHERE t.account_id = ? ";
+      $sql .= " AND t.account_id = ? ";
       $this->addParam('i', $account_id);
     }
     $sql .= " GROUP BY t.type";
