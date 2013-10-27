@@ -17,7 +17,7 @@
         <td align="right">{$CONTRIBSHARES[shares].shares|number_format}</td>
       </tr>
 {/section}
-{if $listed != 1}
+{if $listed != 1 && $GLOBAL.userdata.username|default:"" && $GLOBAL.userdata.shares|default:"0" > 0}
       <tr>
         <th>n/a</th>
         <td>{$GLOBAL.userdata.username}</td>

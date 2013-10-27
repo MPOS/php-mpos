@@ -98,8 +98,8 @@
   <footer>
     <div class="submit_link">
     <form action="{$smarty.server.PHP_SELF}" method="POST" id='query'>
-      <input type="hidden" name="page" value="{$smarty.request.page}">
-      <input type="hidden" name="action" value="{$smarty.request.action}">
+      <input type="hidden" name="page" value="{$smarty.request.page|escape}">
+      <input type="hidden" name="action" value="{$smarty.request.action|escape}">
       <input type="text" class="pin" name="query" value="{$smarty.request.query|default:"%"}">
       <input type="submit" value="Query" class="alt_btn">
     </form>

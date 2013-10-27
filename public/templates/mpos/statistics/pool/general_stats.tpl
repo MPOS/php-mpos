@@ -5,7 +5,7 @@
       <tbody>
         <tr>
           <th align="left" width="30%">Pool Hash Rate</th>
-          <td width="70%">{($GLOBAL.hashrate)|number_format:"3"} {$GLOBAL.hashunits.pool}</td>
+          <td width="70%"><span id="b-hashrate"></span> {$GLOBAL.hashunits.pool}</td>
         </tr>
         <tr>
           <th align="left">Pool Efficiency</td>
@@ -13,7 +13,7 @@
         </tr>
         <tr>
           <th align="left">Current Active Workers</td>
-          <td>{$GLOBAL.workers}</td>
+          <td id="b-workers"></td>
         </tr>
     {if ! $GLOBAL.website.blockexplorer.disabled}
         <tr>
@@ -33,9 +33,9 @@
         <tr>
           <th align="left">Current Difficulty</td>
       {if ! $GLOBAL.website.chaininfo.disabled}
-          <td><a href="{$GLOBAL.website.chaininfo.url}" target="_new"><font size="2">{$DIFFICULTY}</font></a></td>
+          <td><a href="{$GLOBAL.website.chaininfo.url}" target="_new"><font size="2"><span id="b-diff"></span></font></a></td>
       {else}
-          <td><font size="2">{$DIFFICULTY}</font></td>
+          <td><font size="2"><span id="b-diff"></span></font></td>
       {/if}
         </tr>
         <tr>
@@ -44,7 +44,7 @@
         </tr>
         <tr>
           <th align="left">Est. Shares this Round</td>
-          <td>{(pow(2, 32 - $GLOBAL.config.targetdiff) * $DIFFICULTY)|number_format:"0"} <font size="1">(done: {(100 / (pow(2, 32 - $GLOBAL.config.targetdiff) * $DIFFICULTY) * $GLOBAL.roundshares.valid)|number_format:"2"} %)</td>
+          <td id="b-target"></td>
         </tr>
         <tr>
           <th align="left">Time Since Last Block</td>

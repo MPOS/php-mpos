@@ -22,6 +22,30 @@
         <td>{$BLOCKSFOUND[block].shares}</td>
 {/section}
      </tr>
+    {if $GLOBAL.config.payout_system == 'pplns'}<tr>
+      <th scope="row">PPLNS</th>
+{section block $BLOCKSFOUND step=-1}
+      <td>{$BLOCKSFOUND[block].pplns_shares}</td>
+{/section}
+   </tr>{/if}
+    {if $USEBLOCKAVERAGE}<tr>
+      <th scope="row">Average</th>
+{section block $BLOCKSFOUND step=-1}
+      <td>{$BLOCKSFOUND[block].block_avg}</td>
+{/section}
+   </tr>{/if}
+    </tbody>
+  </table>
+<table class="tablesorter">
+    <tbody>
+      <tr>
+        <td align="left">
+          <a href="{$smarty.server.PHP_SELF}?page={$smarty.request.page}&action={$smarty.request.action}&height={if is_array($BLOCKSFOUND) && count($BLOCKSFOUND) > ($BLOCKLIMIT - 1)}{$BLOCKSFOUND[$BLOCKLIMIT - 1].height}{/if}&prev=1"><i class="icon-left-open"></i></a>
+        </td>
+        <td align="right">
+          <a href="{$smarty.server.PHP_SELF}?page={$smarty.request.page}&action={$smarty.request.action}&height={if is_array($BLOCKSFOUND) && count($BLOCKSFOUND) > 0}{$BLOCKSFOUND[0].height}{/if}&next=1"><i class="icon-right-open"></i></a>
+        </td>
+      </tr>
     </tbody>
   </table>
   <footer>
@@ -44,6 +68,7 @@
         <th align="right">Difficulty</th>
         <th align="right">Amount</th>
         <th align="right">Expected Shares</th>
+{if $GLOBAL.config.payout_system == 'pplns'}<th align="right">PPLNS Shares</th>{/if}
         <th align="right">Actual Shares</th>
         <th align="right" style="padding-right: 25px;">Percentage</th>
       </tr>
@@ -53,9 +78,11 @@
 {assign var=totalexpectedshares value=0}
 {assign var=totalshares value=0}
 {assign var=totalpercentage value=0}
+{assign var=pplnsshares value=0}
 {section block $BLOCKSFOUND}
       {assign var="totalshares" value=$totalshares+$BLOCKSFOUND[block].shares}
       {assign var="count" value=$count+1}
+      {if $GLOBAL.config.payout_system == 'pplns'}{assign var="pplnsshares" value=$pplnsshares+$BLOCKSFOUND[block].pplns_shares}{/if}
       <tr class="{cycle values="odd,even"}">
 {if ! $GLOBAL.website.blockexplorer.disabled}
         <td align="center"><a href="{$smarty.server.PHP_SELF}?page=statistics&action=round&height={$BLOCKSFOUND[block].height}">{$BLOCKSFOUND[block].height}</a></td>
@@ -80,6 +107,7 @@
 {assign var="totalexpectedshares" value=$totalexpectedshares+$estshares}
           {$estshares|number_format}
         </td>
+{if $GLOBAL.config.payout_system == 'pplns'}<td align="right">{$BLOCKSFOUND[block].pplns_shares|number_format}</td>{/if}
         <td align="right">{$BLOCKSFOUND[block].shares|number_format}</td>
         <td align="right" style="padding-right: 25px;">
 {math assign="percentage" equation="shares / estshares * 100" shares=$BLOCKSFOUND[block].shares estshares=$estshares}
@@ -91,8 +119,9 @@
     <tr>
       <td colspan="6" align="right"><b>Totals</b></td>
       <td align="right">{$totalexpectedshares|number_format}</td>
+      {if $GLOBAL.config.payout_system == 'pplns'}<td align="right">{$pplnsshares|number_format}</td>{/if}
       <td align="right">{$totalshares|number_format}</td>
-      <td align="right" style="padding-right: 25px;">{if $count > 0}<font color="{if (($totalpercentage / $count) <= 100)}green{else}red{/if}">{($totalpercentage / $count)|number_format:"2"}</font>{else}0{/if}</td>
+      <td align="right" style="padding-right: 25px;">{if $count > 0}<font color="{if (($totalshares / $totalexpectedshares * 100) <= 100)}green{else}red{/if}">{($totalshares / $totalexpectedshares * 100)|number_format:"2"}</font>{else}0{/if}</td>
     </tr>
     </tbody>
   </table>

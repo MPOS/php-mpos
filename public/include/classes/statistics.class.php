@@ -78,6 +78,32 @@ class Statistics {
   }
 
   /**
+   * Get our last $limit blocks found by height
+   * @param limit int Last limit blocks
+   * @return array
+   **/
+  public function getBlocksFoundHeight($iHeight=0, $limit=10) {
+    $this->debug->append("STA " . __METHOD__, 4);
+    if ($data = $this->memcache->get(__FUNCTION__ . $iHeight  . $limit)) return $data;
+    $stmt = $this->mysqli->prepare("
+      SELECT
+        b.*,
+        a.username AS finder,
+        a.is_anonymous AS is_anonymous,
+        ROUND((difficulty * 65535) / POW(2, (" . $this->config['difficulty'] . " -16)), 0) AS estshares
+      FROM " . $this->block->getTableName() . " AS b
+      LEFT JOIN " . $this->user->getTableName() . " AS a 
+      ON b.account_id = a.id
+      WHERE b.height <= ?
+      ORDER BY height DESC LIMIT ?");
+    if ($this->checkStmt($stmt) && $stmt->bind_param("ii", $iHeight, $limit) && $stmt->execute() && $result = $stmt->get_result())
+      return $this->memcache->setCache(__FUNCTION__ . $iHeight . $limit, $result->fetch_all(MYSQLI_ASSOC), 5);
+    // Catchall
+    $this->debug->append("Failed to find blocks:" . $this->mysqli->error);
+    return false;
+  }
+
+  /**
    * Currently the only function writing to the database
    * Stored per block user statistics of valid and invalid shares
    * @param aStats array Array with user id, valid and invalid shares
@@ -90,6 +116,44 @@ class Statistics {
     if ($this->checkStmt($stmt) && $stmt->bind_param('iiii', $aStats['id'], $aStats['valid'], $aStats['invalid'], $iBlockId) && $stmt->execute()) return true;
     // Catchall
     $this->debug->append("Failed to update share stats: " . $this->mysqli->error);
+    return false;
+  }
+
+  /**
+   * update user statistics of valid and invalid pplns shares
+   **/
+  public function updatePPLNSShareStatistics($aStats, $iBlockId) {
+    $this->debug->append("STA " . __METHOD__, 4);
+    $stmt = $this->mysqli->prepare("
+      UPDATE $this->table SET pplns_valid = ?, pplns_invalid = ? WHERE account_id = ? AND block_id = ?");
+    if ($this->checkStmt($stmt) && $stmt->bind_param('iiii', $aStats['valid'], $aStats['invalid'], $aStats['id'], $iBlockId) && $stmt->execute()) return true;
+    // Catchall
+    $this->debug->append("Failed to update pplns share stats: " . $this->mysqli->error);
+    return false;
+  }
+
+  /**
+   * insert user statistics of valid and invalid pplns shares "rbpplns"
+   **/
+  public function insertPPLNSShareStatistics($aStats, $iBlockId) {
+    $this->debug->append("STA " . __METHOD__, 4);
+    $stmt = $this->mysqli->prepare("INSERT INTO $this->table (account_id, valid, invalid, pplns_valid, pplns_invalid, block_id) VALUES (?, 0, 0, ?, ?, ?)");
+    if ($this->checkStmt($stmt) && $stmt->bind_param('iiii', $aStats['id'], $aStats['valid'], $aStats['invalid'], $iBlockId) && $stmt->execute()) return true;
+    // Catchall
+    $this->debug->append("Failed to insert pplns share stats: " . $this->mysqli->error);
+    return false;
+  }
+
+  /**
+   * Fetch the share ID from stats for rbpplns
+   **/
+  function getIdShareStatistics($aStats, $iBlockId) {
+    $stmt = $this->mysqli->prepare("
+      SELECT id AS id FROM $this->table
+      WHERE account_id = ? AND block_id = ?
+      ");
+    if ($this->checkStmt($stmt) && $stmt->bind_param('ii', $aStats['id'], $iBlockId) && $stmt->execute() && $result = $stmt->get_result())
+      return $result->fetch_object()->id;
     return false;
   }
 
@@ -196,7 +260,6 @@ class Statistics {
       $data['share_id'] = 0;
       $data['data'] = array();
     }
-    $data['last_update'] = time();
     $stmt = $this->mysqli->prepare("
       SELECT
         ROUND(IFNULL(SUM(IF(our_result='Y', IF(s.difficulty=0, POW(2, (" . $this->config['difficulty'] . " - 16)), s.difficulty), 0)), 0) / POW(2, (" . $this->config['difficulty'] . " - 16)), 0) AS valid,
@@ -246,12 +309,14 @@ class Statistics {
     if ($data = $this->memcache->get(STATISTICS_ALL_USER_SHARES)) {
       if (array_key_exists($account_id, $data['data']))
         return $data['data'][$account_id];
+      // We have no cached value, we return defaults
+      return array('valid' => 0, 'invalid' => 0, 'donate_percent' => 0, 'is_anonymous' => 0);
     }
-    // if ($data = $this->memcache->get(__FUNCTION__ . $account_id)) return $data;
+    if ($data = $this->memcache->get(__FUNCTION__ . $account_id)) return $data;
     $stmt = $this->mysqli->prepare("
       SELECT
-        ROUND(IFNULL(SUM(IF(our_result='Y', IF(s.difficulty=0, POW(2, (" . $this->config['difficulty'] . " - 16)), s.difficulty), 0)) / POW(2, (" . $this->config['difficulty'] . " - 16)), 0), 0) AS valid,
-        ROUND(IFNULL(SUM(IF(our_result='N', IF(s.difficulty=0, POW(2, (" . $this->config['difficulty'] . " - 16)), s.difficulty), 0)) / POW(2, (" . $this->config['difficulty'] . " - 16)), 0), 0) AS invalid
+        ROUND(IFNULL(SUM(IF(our_result='Y', IF(s.difficulty=0, POW(2, (" . $this->config['difficulty'] . " - 16)), s.difficulty), 0)), 0) / POW(2, (" . $this->config['difficulty'] . " - 16)), 0) AS valid,
+        ROUND(IFNULL(SUM(IF(our_result='N', IF(s.difficulty=0, POW(2, (" . $this->config['difficulty'] . " - 16)), s.difficulty), 0)), 0) / POW(2, (" . $this->config['difficulty'] . " - 16)), 0) AS invalid
       FROM " . $this->share->getTableName() . " AS s,
            " . $this->user->getTableName() . " AS u
       WHERE
@@ -327,6 +392,24 @@ class Statistics {
     return false;
   }
 
+
+  public function getUserShareDifficulty($account_id, $interval=600) {
+    $this->debug->append("STA " . __METHOD__, 4);
+    if ($this->getGetCache() && $data = $this->memcache->get(__FUNCTION__ . $account_id)) return $data;
+    $stmt = $this->mysqli->prepare("
+      SELECT
+        IFNULL(AVG(IF(difficulty=0, pow(2, (" . $this->config['difficulty'] . " - 16)), difficulty)), 0) AS avgsharediff,
+        COUNT(s.id) AS total
+      FROM " . $this->share->getTableName() . " AS s JOIN " . $this->user->getTableName() . " AS a
+      ON a.username = SUBSTRING_INDEX( s.username, '.', 1 )
+      WHERE s.time > DATE_SUB(now(), INTERVAL ? SECOND)
+      AND a.id = ?");
+    if ($this->checkStmt($stmt) && $stmt->bind_param("ii", $interval, $account_id) && $stmt->execute() && $result = $stmt->get_result() )
+      return $this->memcache->setCache(__FUNCTION__ . $account_id, $result->fetch_object()->avgsharediff);
+    $this->debug->append("Failed fetching average share dificulty: " . $this->mysqli->error, 3);
+    return 0;
+  }
+
   /**
    * Same as getUserHashrate for Sharerate
    * @param account_id integer User ID
@@ -396,28 +479,32 @@ class Statistics {
     switch ($type) {
     case 'shares':
       if ($data = $this->memcache->get(STATISTICS_ALL_USER_SHARES)) {
-        // Use global cache to build data
-        $max = 0;
-        foreach($data['data'] as $key => $aUser) {
-          $shares[$key] = $aUser['valid'];
-          $username[$key] = $aUser['username'];
+        // Use global cache to build data, if we have any data there
+        if (!empty($data['data']) && is_array($data['data'])) {
+          foreach($data['data'] as $key => $aUser) {
+            $shares[$key] = $aUser['valid'];
+            $username[$key] = $aUser['username'];
+          }
+          array_multisort($shares, SORT_DESC, $username, SORT_ASC, $data['data']);
+          $count = 0;
+          foreach ($data['data'] as $key => $aUser) {
+            if ($count == $limit) break;
+            $count++;
+            $data_new[$key]['shares'] = $aUser['valid'];
+            $data_new[$key]['account'] = $aUser['username'];
+            $data_new[$key]['donate_percent'] = $aUser['donate_percent'];
+            $data_new[$key]['is_anonymous'] = $aUser['is_anonymous'];
+          }
+          return $data_new;
         }
-        array_multisort($shares, SORT_DESC, $username, SORT_ASC, $data['data']);
-        foreach ($data['data'] as $key => $aUser) {
-          $data_new[$key]['shares'] = $aUser['valid'];
-          $data_new[$key]['account'] = $aUser['username'];
-          $data_new[$key]['donate_percent'] = $aUser['donate_percent'];
-          $data_new[$key]['is_anonymous'] = $aUser['is_anonymous'];
-        }
-        return $data_new;
       }
       // No cached data, fallback to SQL and cache in local cache
       $stmt = $this->mysqli->prepare("
         SELECT
+          a.username AS account,
           a.donate_percent AS donate_percent,
           a.is_anonymous AS is_anonymous,
-          ROUND(IFNULL(SUM(IF(s.difficulty=0, POW(2, (" . $this->config['difficulty'] . " - 16)), s.difficulty)), 0) / POW(2, (" . $this->config['difficulty'] . " - 16)), 0) AS shares,
-          SUBSTRING_INDEX( s.username, '.', 1 ) AS account
+          ROUND(IFNULL(SUM(IF(s.difficulty=0, POW(2, (" . $this->config['difficulty'] . " - 16)), s.difficulty)), 0) / POW(2, (" . $this->config['difficulty'] . " - 16)), 0) AS shares
         FROM " . $this->share->getTableName() . " AS s
         LEFT JOIN " . $this->user->getTableName() . " AS a
         ON SUBSTRING_INDEX( s.username, '.', 1 ) = a.username
@@ -434,10 +521,10 @@ class Statistics {
     case 'hashes':
       $stmt = $this->mysqli->prepare("
          SELECT
+          a.username AS account,
           a.donate_percent AS donate_percent,
           a.is_anonymous AS is_anonymous,
-          IFNULL(ROUND(SUM(t1.difficulty)  * 65536/600/1000, 2), 0) AS hashrate,
-          SUBSTRING_INDEX( t1.username, '.', 1 ) AS account
+          IFNULL(ROUND(SUM(t1.difficulty)  * 65536 / 600 / 1000, 2), 0) AS hashrate
         FROM
         (
           SELECT IFNULL(IF(difficulty=0, pow(2, (" . $this->config['difficulty'] . " - 16)), difficulty), 0) AS difficulty, username FROM " . $this->share->getTableName() . " WHERE time > DATE_SUB(now(), INTERVAL 10 MINUTE) AND our_result = 'Y'
@@ -536,28 +623,51 @@ class Statistics {
 
   /**
    * get user estimated payouts based on share counts
-   * @param aRoundShares array Round shares
-   * @param aUserShares array User shares
+   * @param value1 mixed Round shares OR share rate
+   * @param value2 mixed User shares OR share difficulty
    * @param dDonate double User donation setting
    * @param bNoFees bool User no-fees option setting
    * @return aEstimates array User estimations
    **/
-  public function getUserEstimates($aRoundShares, $aUserShares, $dDonate, $bNoFees) {
+  public function getUserEstimates($value1, $value2, $dDonate, $bNoFees, $ppsvalue=0) {
     $this->debug->append("STA " . __METHOD__, 4);
-    // Fetch some user information that we need
-    if (@$aRoundShares['valid'] > 0  && @$aUserShares['valid'] > 0) {
-      $aEstimates['block'] = round(( (int)$aUserShares['valid'] / (int)$aRoundShares['valid'] ) * (float)$this->config['reward'], 8);
-      $bNoFees == 0 ? $aEstimates['fee'] = round(((float)$this->config['fees'] / 100) * (float)$aEstimates['block'], 8) : $aEstimates['fee'] = 0;
-      $aEstimates['donation'] = round((( (float)$dDonate / 100) * ((float)$aEstimates['block'] - (float)$aEstimates['fee'])), 8);
-      $aEstimates['payout'] = round((float)$aEstimates['block'] - (float)$aEstimates['donation'] - (float)$aEstimates['fee'], 8);
+    if ($this->config['payout_system'] != 'pps') {
+      if (@$value1['valid'] > 0  && @$value2['valid'] > 0) {
+        $aEstimates['block'] = round(( (int)$value2['valid'] / (int)$value1['valid'] ) * (float)$this->config['reward'], 8);
+        $bNoFees == 0 ? $aEstimates['fee'] = round(((float)$this->config['fees'] / 100) * (float)$aEstimates['block'], 8) : $aEstimates['fee'] = 0;
+        $aEstimates['donation'] = round((( (float)$dDonate / 100) * ((float)$aEstimates['block'] - (float)$aEstimates['fee'])), 8);
+        $aEstimates['payout'] = round((float)$aEstimates['block'] - (float)$aEstimates['donation'] - (float)$aEstimates['fee'], 8);
+      } else {
+        $aEstimates['block'] = 0;
+        $aEstimates['fee'] = 0;
+        $aEstimates['donation'] = 0;
+        $aEstimates['payout'] = 0;
+      }
     } else {
-      $aEstimates['block'] = 0;
-      $aEstimates['fee'] = 0;
-      $aEstimates['donation'] = 0;
-      $aEstimates['payout'] = 0;
+      // Hack so we can use this method for PPS estimates too
+      if (@$value1 > 0 && @$value2 > 0) {
+        // Default: No fees applied so multiply by 1
+        $fee = 1;
+        if ($this->config['fees'] > 0)
+          $bNoFees == 0 ? $fee = round(((float)$this->config['fees'] / 100), 8) : $fee = 1;
+        $pps = $value1 * $value2 * $ppsvalue;
+        $hour = 3600;
+        $aEstimates['hours1'] = $pps * $hour * $fee;
+        $aEstimates['hours24'] = $pps * 24 * $hour;
+        $aEstimates['days7'] = $pps * 24 * 7 * $hour;
+        $aEstimates['days14'] = $pps * 14 * 24 * 7 * $hour;
+        $aEstimates['days30'] = $pps * 30 * 24 * 7 * $hour;
+      } else {
+        $aEstimates['hours1'] = 0;
+        $aEstimates['hours24'] = 0;
+        $aEstimates['days7'] = 0;
+        $aEstimates['days14'] = 0;
+        $aEstimates['days30'] = 0;
+      }
     }
     return $aEstimates;
   }
 }
+
 
 $statistics = new Statistics($debug, $mysqli, $config, $share, $user, $block, $memcache);

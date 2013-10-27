@@ -88,11 +88,16 @@ $(document).ready(function(){
 
   // Helper to initilize gauges
   function initGauges(data) {
-    g1 = new JustGage({id: "nethashrate", value: parseFloat(data.getdashboarddata.data.network.hashrate).toFixed(2), min: 0, max: Math.round(data.getdashboarddata.data.network.hashrate * 2), title: "Net Hashrate", label: "{/literal}{$GLOBAL.hashunits.network}{literal}"});
-    g2 = new JustGage({id: "poolhashrate", value: parseFloat(data.getdashboarddata.data.pool.hashrate).toFixed(2), min: 0, max: Math.round(data.getdashboarddata.data.pool.hashrate * 2), title: "Pool Hashrate", label: "{/literal}{$GLOBAL.hashunits.pool}{literal}"});
-    g3 = new JustGage({id: "hashrate", value: parseFloat(data.getdashboarddata.data.personal.hashrate).toFixed(2), min: 0, max: Math.round(data.getdashboarddata.data.personal.hashrate * 2), title: "Hashrate", label: "{/literal}{$GLOBAL.hashunits.personal}{literal}"});
-    g4 = new JustGage({id: "sharerate", value: parseFloat(data.getdashboarddata.data.personal.sharerate).toFixed(2), min: 0, max: Math.round(data.getdashboarddata.data.personal.sharerate * 2), title: "Sharerate", label: "shares/s"});
-    g5 = new JustGage({id: "querytime", value: parseFloat(data.getdashboarddata.runtime).toFixed(2), min: 0, max: Math.round(data.getdashboarddata.runtime * 3), title: "Querytime", label: "ms"});
+    g1 = new JustGage({id: "nethashrate", value: parseFloat(data.getdashboarddata.data.network.hashrate).toFixed(2), min: 0, max: Math.round(data.getdashboarddata.data.network.hashrate * 2), title: "Net Hashrate", gaugeColor: '#6f7a8a', valueFontColor: '#555', shadowOpacity : 0.8, shadowSize : 0, shadowVerticalOffset : 10, label: "{/literal}{$GLOBAL.hashunits.network}{literal}"});
+    g2 = new JustGage({id: "poolhashrate", value: parseFloat(data.getdashboarddata.data.pool.hashrate).toFixed(2), min: 0, max: Math.round(data.getdashboarddata.data.pool.hashrate * 4), title: "Pool Hashrate", gaugeColor: '#6f7a8a', valueFontColor: '#555', shadowOpacity : 0.8, shadowSize : 0, shadowVerticalOffset : 10, label: "{/literal}{$GLOBAL.hashunits.pool}{literal}"});
+    g3 = new JustGage({id: "hashrate", value: parseFloat(data.getdashboarddata.data.personal.hashrate).toFixed(2), min: 0, max: Math.round(data.getdashboarddata.data.personal.hashrate * 4), title: "Hashrate", gaugeColor: '#6f7a8a', valueFontColor: '#555', shadowOpacity : 0.8, shadowSize : 0, shadowVerticalOffset : 10, label: "{/literal}{$GLOBAL.hashunits.personal}{literal}"});
+    if (data.getdashboarddata.data.personal.sharerate > 1) {
+      initSharerate = data.getdashboarddata.data.personal.sharerate * 2
+    } else {
+      initSharerate = 1
+    }
+    g4 = new JustGage({id: "sharerate", value: parseFloat(data.getdashboarddata.data.personal.sharerate).toFixed(2), min: 0, max: Math.round(initSharerate), gaugeColor: '#6f7a8a', valueFontColor: '#555', shadowOpacity : 0.8, shadowSize : 0, shadowVerticalOffset : 10, title: "Sharerate", label: "shares/s"});
+    g5 = new JustGage({id: "querytime", value: parseFloat(data.getdashboarddata.runtime).toFixed(0), min: 0, max: Math.round(data.getdashboarddata.runtime * 100), gaugeColor: '#6f7a8a', valueFontColor: '#555', shadowOpacity : 0.8, shadowSize : 0, shadowVerticalOffset : 10, title: "Querytime", label: "ms"});
   }
 
   // Helper to refresh graphs
@@ -101,7 +106,7 @@ $(document).ready(function(){
     g2.refresh(parseFloat(data.getdashboarddata.data.pool.hashrate).toFixed(2));
     g3.refresh(parseFloat(data.getdashboarddata.data.personal.hashrate).toFixed(2));
     g4.refresh(parseFloat(data.getdashboarddata.data.personal.sharerate).toFixed(2));
-    g5.refresh(parseFloat(data.getdashboarddata.runtime).toFixed(2));
+    g5.refresh(parseFloat(data.getdashboarddata.runtime).toFixed(0));
     if (storedPersonalHashrate.length > 20) { storedPersonalHashrate.shift(); }
     if (storedPoolHashrate.length > 20) { storedPoolHashrate.shift(); }
     if (storedPersonalSharerate.length > 20) { storedPersonalSharerate.shift(); }
@@ -135,6 +140,48 @@ $(document).ready(function(){
   function refreshStaticData(data) {
     $('#b-confirmed').html(data.getdashboarddata.data.personal.balance.confirmed);
     $('#b-unconfirmed').html(data.getdashboarddata.data.personal.balance.unconfirmed);
+    $('#b-price').html((parseFloat(data.getdashboarddata.data.pool.price).toFixed(4)));
+    $('#b-dworkers').html(data.getdashboarddata.data.pool.workers);
+    $('#b-hashrate').html((parseFloat(data.getdashboarddata.data.personal.hashrate).toFixed(2)));
+    $('#b-sharerate').html((parseFloat(data.getdashboarddata.data.personal.sharerate).toFixed(2)));
+    $('#b-yvalid').html(data.getdashboarddata.data.personal.shares.valid);
+    $('#b-yivalid').html(data.getdashboarddata.data.personal.shares.invalid + " (" + data.getdashboarddata.data.personal.shares.invalid_percent + "%)" );
+    $('#b-pvalid').html(data.getdashboarddata.data.pool.shares.valid);
+    $('#b-pivalid').html(data.getdashboarddata.data.pool.shares.invalid + " (" + data.getdashboarddata.data.pool.shares.invalid_percent + "%)" );
+    $('#b-diff').html(data.getdashboarddata.data.network.difficulty);
+    $('#b-nblock').html(data.getdashboarddata.data.network.block);
+    $('#b-target').html(data.getdashboarddata.data.pool.shares.estimated + " (done: " + data.getdashboarddata.data.pool.shares.progress + "%)" );
+    {/literal}{if $GLOBAL.config.payout_system != 'pps'}{literal }
+    $('#b-payout').html((parseFloat(data.getdashboarddata.data.personal.estimates.payout).toFixed(4)));
+    $('#b-block').html((parseFloat(data.getdashboarddata.data.personal.estimates.block).toFixed(4)));
+    $('#b-fee').html((parseFloat(data.getdashboarddata.data.personal.estimates.fee).toFixed(4)));
+    $('#b-donation').html((parseFloat(data.getdashboarddata.data.personal.estimates.donation).toFixed(4)));
+{/literal}{else}{literal}
+    $('#b-ppsdiff').html((parseFloat(data.getdashboarddata.data.personal.sharedifficulty).toFixed(2)));
+    $('#b-est1').html((parseFloat(data.getdashboarddata.data.personal.estimates.hours1).toFixed(8)));
+    $('#b-est24hours').html((parseFloat(data.getdashboarddata.data.personal.estimates.hours24).toFixed(8)));
+    $('#b-est7days').html((parseFloat(data.getdashboarddata.data.personal.estimates.days7).toFixed(8)));
+    $('#b-est14days').html((parseFloat(data.getdashboarddata.data.personal.estimates.days14).toFixed(8)));
+    $('#b-est30days').html((parseFloat(data.getdashboarddata.data.personal.estimates.days30).toFixed(8)));
+{/literal}{/if}{literal}
+{/literal}{if $GLOBAL.config.payout_system == 'pplns'}{literal}
+    $('#b-pplns').html({/literal}{$GLOBAL.pplns.target}{literal});
+{/literal}{/if}{literal}
+  }
+
+  // Refresh worker information
+  function refreshWorkerData(data) {
+    data = data.getdashboarddata.data;
+    workers = data.personal.workers;
+    length = workers.length;
+    $('#b-workers').html('');
+    for (var i = j = 0; i < length; i++) {
+      if (workers[i].hashrate > 0) {
+        j++;
+        $('#b-workers').append('<tr><td>' + workers[i].username + '</td><td align="right">' + workers[i].hashrate + '</td><td align="right">' + workers[i].difficulty + '</td></tr>');
+      }
+    }
+    if (j == 0) { $('#b-workers').html('<tr><td colspan="3" align="center">No active workers</td></tr>'); }
   }
 
   // Our worker process to keep gauges and graph updated
@@ -145,6 +192,7 @@ $(document).ready(function(){
       success: function(data) {
         refreshInformation(data);
         refreshStaticData(data);
+        refreshWorkerData(data);
       },
       complete: function() {
         setTimeout(worker, {/literal}{($GLOBAL.config.statistics_ajax_refresh_interval * 1000)|default:"10000"}{literal})

@@ -55,7 +55,7 @@
     </fieldset>
     <fieldset>
       <label>Account</label>
-      <input size="20" type="text" name="filter[address]" value="{$smarty.request.filter.address|default:""}" />
+      <input size="20" type="text" name="filter[account]" value="{$smarty.request.filter.account|default:""}" />
     </fieldset>
     <fieldset>
       <label>Address</label>

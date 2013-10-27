@@ -35,15 +35,15 @@
                     <tr><td colspan="2"><b><u>{$GLOBAL.config.currency} Estimates</u></b></td></tr>
                     <tr>
                       <td><b>in 24 hours</b></td>
-                      <td align="right">{($GLOBAL.userdata.sharerate * 24 * 60 * 60 * $GLOBAL.ppsvalue)|number_format:"8"}</td>
+                      <td align="right">{$GLOBAL.userdata.estimates.hours24}</td>
                     </tr>
                     <tr>
                       <td><b>in 7 days</b></td>
-                      <td align="right">{($GLOBAL.userdata.sharerate * 7 * 24 * 60 * 60 * $GLOBAL.ppsvalue)|number_format:"8"}</td>
+                      <td align="right">{$GLOBAL.userdata.estimates.days7}</td>
                     </tr>
                     <tr>
                       <td><b>in 14 days</b></td>
-                      <td align="right">{($GLOBAL.userdata.sharerate * 14 * 24 * 60 * 60 * $GLOBAL.ppsvalue)|number_format:"8"}</td>
+                      <td align="right">{$GLOBAL.userdata.estimates.days14}</td>
                     </tr>
                     <tr><td colspan="2">&nbsp;</td></tr>
                     <tr><td colspan="2"><b><u>{$GLOBAL.config.currency} Account Balance</u></b></td></tr>

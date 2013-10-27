@@ -231,9 +231,20 @@ $config['fees'] = 0;
   *   type        =  `blockavg`
   *   blockcount  =  10
   **/
+/**
+ * $config['pplns']['shares']['type'] = 'dynamic';
+ * Dynamic target adjustment allows the blockavg target to adjust faster to share counts
+ * while still tracking round share averages by using a percentage of the current round shares
+ * to alter the pplns blockavg target this is useful with the nature of many alt coins low and fast 
+ * adjusting difficulties and quick round times 
+ * reverse_payout is useful to even out payouts for fast round times when even steady miners 
+ * are missing share submissions for the current round
+**/
 $config['pplns']['shares']['default'] = 4000000;
 $config['pplns']['shares']['type'] = 'blockavg';
 $config['pplns']['blockavg']['blockcount'] = 10;
+$config['pplns']['reverse_payout'] = false;  // add user shares from archive even if user not in current round
+$config['pplns']['dynamic']['percent'] = 30; // percentage of round shares factored into block average when using dynamic type
 
 // Pool target difficulty as set in pushpoold configuration file
 // Please also read this for stratum: https://github.com/TheSerapher/php-mpos/wiki/FAQ

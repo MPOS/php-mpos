@@ -3,46 +3,39 @@
   <table class="tablesorter">
     <tbody>
       <tr>
-        <td class="left">
+        <td align="left">
           <a href="{$smarty.server.PHP_SELF}?page={$smarty.request.page}&action={$smarty.request.action}&height={$BLOCKDETAILS.height}&prev=1"><i class="icon-left-open"></i></a>
         </td>
-        <td class="right">
+        <td colspan="7" align="right">
           <a href="{$smarty.server.PHP_SELF}?page={$smarty.request.page}&action={$smarty.request.action}&height={$BLOCKDETAILS.height}&next=1"><i class="icon-right-open"></i></a>
         </td>
       </tr>
       <tr class="odd">
         <td>ID</td>
-        <td>{$BLOCKDETAILS.id|default:"0"}</td>
-      </tr>
-      <tr class="even">
+        <td>{$BLOCKDETAILS.id|number_format:"0"|default:"0"}</td>
         <td>Height</td>
 	{if ! $GLOBAL.website.blockexplorer.disabled}
-      	<td><a href="{$GLOBAL.website.blockexplorer.url}{$BLOCKDETAILS.blockhash}" target="_new">{$BLOCKDETAILS.height}</a></td>
+      	<td><a href="{$GLOBAL.website.blockexplorer.url}{$BLOCKDETAILS.blockhash}" target="_new">{$BLOCKDETAILS.height|number_format:"0"|default:"0"}</a></td>
 	{else}
-      	<td>{$BLOCKDETAILS.height}</td>
+      	<td>{$BLOCKDETAILS.height|number_format:"0"|default:"0"}</td>
 	{/if}
-      </tr>
-      <tr class="odd">
         <td>Amount</td>
-        <td>{$BLOCKDETAILS.amount|default:"0"}</td>
+        <td>{$BLOCKDETAILS.amount|number_format|default:"0"}</td>
+        <td>Confirmations</td>
+        <td>{if $BLOCKDETAILS.confirmations >= $GLOBAL.confirmations}
+          <font color="green">Confirmed</font>
+        {else if $BLOCKDETAILS.confirmations == -1}
+          <font color="red">Orphan</font>
+        {else if $BLOCKDETAILS.confirmations == 0}0
+        {else}{($GLOBAL.confirmations - $BLOCKDETAILS.confirmations)|default:"0"} left{/if}</td>
       </tr>
       <tr class="even">
-        <td>Confirmations</td>
-        <td>{$BLOCKDETAILS.confirmations|default:"0"}</td>
-      </tr>
-      <tr class="odd">
         <td>Difficulty</td>
         <td>{$BLOCKDETAILS.difficulty|default:"0"}</td>
-      </tr>
-      <tr class="even">
         <td>Time</td>
         <td>{$BLOCKDETAILS.time|default:"0"}</td>
-      </tr>
-      <tr class="odd">
         <td>Shares</td>
-        <td>{$BLOCKDETAILS.shares|default:"0"}</td>
-      </tr>
-      <tr class="even">
+        <td>{$BLOCKDETAILS.shares|number_format:"0"|default:"0"}</td>
         <td>Finder</td>
         <td>{$BLOCKDETAILS.finder|default:"0"}</td>
       </tr>
@@ -50,10 +43,10 @@
   </table>
   <footer>
     <div class="submit_link">
-      <form action="{$smarty.server.PHP_SELF}" method="POST" id='height'>
+      <form action="{$smarty.server.PHP_SELF}" method="POST" id='search'>
         <input type="hidden" name="page" value="{$smarty.request.page}">
         <input type="hidden" name="action" value="{$smarty.request.action}">
-        <input type="text" class="pin" name="height" value="{$smarty.request.height|default:"%"}">
+        <input type="text" class="pin" name="search" value="{$smarty.request.height|default:"%"}">
         <input type="submit" value="Search" class="alt_btn">
       </form>
     </div>
