@@ -37,7 +37,6 @@ $aRoundShares = $statistics->getRoundShares();
 
 $iTotalRoundShares = $aRoundShares['valid'] + $aRoundShares['invalid'];
 if ($iTotalRoundShares > 0) {
-  $dUserInvalidPercent = round($aUserRoundShares['invalid'] / $iTotalRoundShares * 100, 2);
   $dPoolInvalidPercent = round($aRoundShares['invalid'] / $iTotalRoundShares * 100, 2);
 } else {
   $dUserInvalidPercent = 0;
