@@ -41,6 +41,7 @@ $aRoundShares = $statistics->getRoundShares();
 
 if ($config['payout_system'] != 'pps') {
   $aEstimates = $statistics->getUserEstimates($aRoundShares, $aUserRoundShares, $user->getUserDonatePercent($user_id), $user->getUserNoFee($user_id));
+  $dUnpaidShares = 0;
 } else {
   $dUnpaidShares = $statistics->getUserUnpaidPPSShares($user_id, $setting->getValue('pps_last_share_id'));
   if ($config['pps']['reward']['type'] == 'blockavg' && $block->getBlockCount() > 0) {
