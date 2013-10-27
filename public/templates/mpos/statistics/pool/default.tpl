@@ -6,4 +6,4 @@
 
 {include file="statistics/blocks/small_table.tpl" ALIGN="right" SHORT=true}
 
-{include file="statistics/statsjs.tpl"}
+{include file="statistics/js.tpl"}
