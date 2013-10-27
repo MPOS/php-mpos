@@ -45,7 +45,7 @@ if (empty($aWorkers)) {
     $aData['subject'] = 'IDLE Worker : ' . $aWorker['username'];
     $aData['worker'] = $aWorker['username'];
     $aData['email'] = $user->getUserEmail($aData['username']);
-    $log->logInfo("    " . $aWorker['username'] . "...");
+    $log->logDebug("    " . $aWorker['username'] . "...");
     if (!$notification->sendNotification($aWorker['account_id'], 'idle_worker', $aData))
       $log->logError("    Failed sending notifications: " . $notification->getError() . "\n");
   }
@@ -60,15 +60,15 @@ if (!empty($aNotifications)) {
   foreach ($aNotifications as $aNotification) {
     $aData = json_decode($aNotification['data'], true);
     $aWorker = $worker->getWorker($aData['id']);
-    $log->logInfo("    " . $aWorker['username'] . " ...");
+    $log->logDebug("    " . $aWorker['username'] . " ...");
     if ($aWorker['hashrate'] > 0) {
       if ($notification->setInactive($aNotification['id'])) {
-        $log->logInfo(" updated #" . $aNotification['id'] . " for " . $aWorker['username'] . " as inactive\n");
+        $log->logDebug(" updated #" . $aNotification['id'] . " for " . $aWorker['username'] . " as inactive\n");
       } else {
         $log->logInfo(" failed to update #" . $aNotification['id'] . " for " . $aWorker['username'] . "\n");
       }
     } else {
-      $log->logInfo(" still inactive\n");
+      $log->logDebug(" still inactive\n");
     }
   }
 } else {
