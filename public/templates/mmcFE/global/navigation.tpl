@@ -21,6 +21,7 @@
                 <li><a href="{$smarty.server.PHP_SELF}?page=admin&action=transactions">Transactions</a></li>
                 <li><a href="{$smarty.server.PHP_SELF}?page=admin&action=settings">Settings</a></li>
                 <li><a href="{$smarty.server.PHP_SELF}?page=admin&action=news">News</a></li>
+                <li><a href="{$smarty.server.PHP_SELF}?page=admin&action=poolworkers">Pool Workers</a></li>
               </ul>
             </li>
             {/if}

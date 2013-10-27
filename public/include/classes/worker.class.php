@@ -177,6 +177,40 @@ class Worker {
   }
 
   /**
+   * Fetch all workers for admin panel
+   * @param limit int 
+   * @return mixed array Workers and their settings or false
+   **/
+  public function getAllWorkers($iLimit=0) {
+    $this->debug->append("STA " . __METHOD__, 4);
+    $stmt = $this->mysqli->prepare("
+      SELECT id, username, password, monitor, difficulty,
+       (
+         SELECT
+          IFNULL(IF(our_result='Y', ROUND(SUM(IF(difficulty=0, pow(2, (" . $this->config['difficulty'] . " - 16)), difficulty)) * 65536 / 600 / 1000), 0), 0) AS hashrate
+          FROM " . $this->share->getTableName() . "
+          WHERE
+            username = w.username
+          AND time > DATE_SUB(now(), INTERVAL 10 MINUTE)
+        ) + (
+         SELECT
+          IFNULL(IF(our_result='Y', ROUND(SUM(IF(difficulty=0, pow(2, (" . $this->config['difficulty'] . " - 16)), difficulty)) * 65536 / 600 / 1000), 0), 0) AS hashrate
+          FROM " . $this->share->getArchiveTableName() . "
+          WHERE
+            username = w.username
+          AND time > DATE_SUB(now(), INTERVAL 10 MINUTE)
+       ) AS hashrate
+      FROM $this->table AS w
+      ORDER BY hashrate DESC LIMIT ?");
+    if ($this->checkStmt($stmt) && $stmt->bind_param('i', $iLimit) && $stmt->execute() && $result = $stmt->get_result())
+      return $result->fetch_all(MYSQLI_ASSOC);
+    // Catchall
+    $this->setErrorMessage('Failed to fetch workers');
+    $this->debug->append('Fetching workers failed: ' . $this->mysqli->error);
+    return false;
+  }
+
+  /**
    * Get all currently active workers in the past 10 minutes
    * @param none
    * @return data mixed int count if any workers are active, false otherwise
