@@ -40,28 +40,28 @@
     <tr>
       <td class="leftheader">Est. Shares this Round</td>
       <td>{((65536 * $DIFFICULTY) / pow(2, ($GLOBAL.config.targetdiff - 16)))|number_format:"0"} <font size="1">(done: {(100 / ((65536 * $DIFFICULTY) / pow(2, ($GLOBAL.config.targetdiff - 16))) * $GLOBAL.roundshares.valid)|number_format:"2"} %)</td>
-        </tr>
-        <tr>
-          <th align="left">Found / Valid / Orphan</td>
-          <td>{$BLOCKSTATSVALID + $BLOCKSTATSORPHAN} / {$BLOCKSTATSVALID} / {$BLOCKSTATSORPHAN}</td>
-        </tr>
-        <tr>
-          <th align="left">Blocks found last hour</td>
-          <td>{$FOUNDLASTHOUR}</td>
-        </tr>
-        <tr>
-          <th align="left">Blocks found last 24 hours</td>
-          <td>{$FOUNDLAST24HOURS}</td>
-        </tr>
-        <tr>
-          <th align="left">Blocks found last 7 days</td>
-          <td>{$FOUNDLAST7DAYS}</td>
-        </tr>
-        <tr>
-          <th align="left">Blocks found last 4 weeks</td>
-          <td>{$FOUNDLAST4WEEKS}</td>
-        </tr>
-        <tr>
+    </tr>
+    <tr>
+      <th align="left">All Blocks - Found / Valid / Orphan</td>
+      <td>{$FOUNDALLVALID + $FOUNDALLORPHAN} / {$FOUNDALLVALID} / {$FOUNDALLORPHAN}</td>
+    </tr>
+    <tr>
+      <th align="left">Blocks last hour - Found / Valid / Orphan</td>
+      <td>{$FOUNDLASTHOURVALID + $FOUNDLASTHOURORPHAN} / {$FOUNDLASTHOURVALID} / {$FOUNDLASTHOURORPHAN}</td>
+    </tr>
+	<tr>
+      <th align="left">Blocks last 24 hours - Found / Valid / Orphan</td>
+      <td>{$FOUNDLAST24HOURSVALID + $FOUNDLAST24HOURSORPHAN} / {$FOUNDLAST24HOURSVALID} / {$FOUNDLAST24HOURSORPHAN}</td>
+    </tr>
+	<tr>
+     <th align="left">Blocks last 7 days - Found / Valid / Orphan</td>
+      <td>{$FOUNDLAST7DAYSVALID + $FOUNDLAST7DAYSORPHAN} / {$FOUNDLAST7DAYSVALID} / {$FOUNDLAST7DAYSORPHAN}</td>
+    </tr>
+	<tr>
+      <th align="left">Blocks last 4 weeks - Found / Valid / Orphan</td>
+	  <td>{$FOUNDLAST4WEEKSVALID + $FOUNDLAST4WEEKSORPHAN} / {$FOUNDLAST4WEEKSVALID} / {$FOUNDLAST4WEEKSORPHAN}</td>
+    </tr>
+    <tr>
       <td class="leftheader">Time Since Last Block</td>
       <td>{$TIMESINCELAST|seconds_to_words}</td>
     </tr>

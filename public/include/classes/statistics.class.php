@@ -52,59 +52,53 @@ class Statistics {
     return true;
   }
 
-
-
-
-
-  /**
-   * Fetch last found orphaned / valid
-   **/
-  function getBlockCountStatistics($aSearch) {
-    $this->debug->append("STA " . __METHOD__, 4);
-    if ($data = $this->memcache->get(__FUNCTION__ . $aSearch)) return $data;
-    
-    if ($aSearch == 1)
-    {
-    $stmt = $this->mysqli->prepare("
-      SELECT COUNT(id) AS count FROM " . $this->block->getTableName() . "
-      WHERE confirmations > 0
-      ");
-    } else {
-    $stmt = $this->mysqli->prepare("
-      SELECT COUNT(id) AS count FROM " . $this->block->getTableName() . "
-      WHERE confirmations = -1
-      ");
-    }
-    if ($this->checkStmt($stmt) && $stmt->execute() && $result = $stmt->get_result())
-    	if ($aSearch == 1) return $this->memcache->setCache(BLOCKSTATSVALID, $result->fetch_object()->count);
-    	if ($aSearch == 0) return $this->memcache->setCache(BLOCKSTATSORPHAN, $result->fetch_object()->count);
-    $this->debug->append("Failed to get Blocks by time: ". $this->mysqli->error);
-    return false;
-  }
-
-
-
-
-
   /**
    * Fetch last found blocks by time
    **/
-  function getLastFoundBlocksbyTime($aTimeFrame) {
+  function getLastValidBlocksbyTime($aTimeFrame) {
     $this->debug->append("STA " . __METHOD__, 4);
     if ($data = $this->memcache->get(__FUNCTION__ . $aTimeFrame)) return $data;
   	$date = new DateTime();
   	$actualTime = $date->getTimestamp();
   	$aTimeDiff = $actualTime - $aTimeFrame;
+  	if ($aTimeFrame == 0) $aTimeDiff = 0;
     $stmt = $this->mysqli->prepare("
       SELECT COUNT(id) AS count FROM " . $this->block->getTableName() . "
-      WHERE time > ?
+      WHERE confirmations > 0 
+      AND time >= ?
       ");
       
     if ($this->checkStmt($stmt) && $stmt->bind_param('i', $aTimeDiff) && $stmt->execute() && $result = $stmt->get_result())
-    	if ($aTimeFrame == 3600) return $this->memcache->setCache(FOUNDLASTHOUR, $result->fetch_object()->count);
-    	if ($aTimeFrame == 86400) return $this->memcache->setCache(FOUNDLAST24HOURS, $result->fetch_object()->count);
-    	if ($aTimeFrame == 604800) return $this->memcache->setCache(FOUNDLAST7DAYS, $result->fetch_object()->count);
-    	if ($aTimeFrame == 2419200) return $this->memcache->setCache(FOUNDLAST4WEEKS, $result->fetch_object()->count);
+    	if ($aTimeFrame == 0) return $this->memcache->setCache(FOUNDALLVALID, $result->fetch_object()->count);
+    	if ($aTimeFrame == 3600) return $this->memcache->setCache(FOUNDLASTHOURVALID, $result->fetch_object()->count);
+    	if ($aTimeFrame == 86400) return $this->memcache->setCache(FOUNDLAST24HOURSVALID, $result->fetch_object()->count);
+    	if ($aTimeFrame == 604800) return $this->memcache->setCache(FOUNDLAST7DAYSVALID, $result->fetch_object()->count);
+    	if ($aTimeFrame == 2419200) return $this->memcache->setCache(FOUNDLAST4WEEKSVALID, $result->fetch_object()->count);
+    $this->debug->append("Failed to get Blocks by time: ". $this->mysqli->error);
+    return false;
+  }
+  
+  
+
+  function getLastOrphanBlocksbyTime($aTimeFrame) {
+    $this->debug->append("STA " . __METHOD__, 4);
+    if ($data = $this->memcache->get(__FUNCTION__ . $aTimeFrame)) return $data;
+  	$date = new DateTime();
+  	$actualTime = $date->getTimestamp();
+  	$aTimeDiff = $actualTime - $aTimeFrame;
+  	if ($aTimeFrame == 0) $aTimeDiff = 0;
+    $stmt = $this->mysqli->prepare("
+      SELECT COUNT(id) AS count FROM " . $this->block->getTableName() . "
+      WHERE confirmations = -1 
+      AND time >= ? 
+      ");
+      
+    if ($this->checkStmt($stmt) && $stmt->bind_param('i', $aTimeDiff) && $stmt->execute() && $result = $stmt->get_result())
+    	if ($aTimeFrame == 0) return $this->memcache->setCache(FOUNDALLORPHAN, $result->fetch_object()->count);
+    	if ($aTimeFrame == 3600) return $this->memcache->setCache(FOUNDLASTHOURORPHAN, $result->fetch_object()->count);
+    	if ($aTimeFrame == 86400) return $this->memcache->setCache(FOUNDLAST24HOURSORPHAN, $result->fetch_object()->count);
+    	if ($aTimeFrame == 604800) return $this->memcache->setCache(FOUNDLAST7DAYSORPHAN, $result->fetch_object()->count);
+    	if ($aTimeFrame == 2419200) return $this->memcache->setCache(FOUNDLAST4WEEKSORPHAN, $result->fetch_object()->count);
     $this->debug->append("Failed to get Blocks by time: ". $this->mysqli->error);
     return false;
   }
