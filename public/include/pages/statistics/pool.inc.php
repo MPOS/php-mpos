@@ -42,7 +42,25 @@ if (!$smarty->isCached('master.tpl', $smarty_cache_key)) {
     $dTimeSinceLast = 0;
   }
 
+  $iFoundLastHour = $statistics->getLastFoundBlocksbyTime(3600);
+  $iFoundLastDay = $statistics->getLastFoundBlocksbyTime(86400);
+  $iFoundLastWeek = $statistics->getLastFoundBlocksbyTime(604800);
+  $iFoundLastMonth = $statistics->getLastFoundBlocksbyTime(2419200);
+  
+  $iFoundValidBlock = $statistics->getBlockCountStatistics(1);
+  $iFoundOrphanBlock = $statistics->getBlockCountStatistics(0);
+  
   // Propagate content our template
+  
+  $smarty->assign("FOUNDLASTHOUR", $iFoundLastHour);
+  $smarty->assign("FOUNDLAST24HOURS", $iFoundLastDay);
+  $smarty->assign("FOUNDLAST7DAYS", $iFoundLastWeek);
+  $smarty->assign("FOUNDLAST4WEEKS", $iFoundLastMonth);
+  
+  $smarty->assign("BLOCKSTATSVALID", $iFoundValidBlock);
+  $smarty->assign("BLOCKSTATSORPHAN", $iFoundOrphanBlock);
+  
+  $smarty->assign("ESTTIME", $iEstTime);
   $smarty->assign("ESTTIME", $iEstTime);
   $smarty->assign("TIMESINCELAST", $dTimeSinceLast);
   $smarty->assign("BLOCKSFOUND", $aBlocksFoundData);

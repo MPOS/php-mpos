@@ -50,8 +50,28 @@
       <td class="leftheader">Est. Shares this Round</td>
       {assign var=estshares value=(65536 * $DIFFICULTY) / pow(2, ($GLOBAL.config.targetdiff - 16))}
       <td>{$estshares|number_format:"0"} <font size="1">(done: {(100 / $estshares * $GLOBAL.roundshares.valid)|number_format:"2"} %)</td>
-    </tr>
-    <tr>
+        </tr>
+        <tr>
+          <th align="left">Found / Valid / Orphan</td>
+          <td>{$BLOCKSTATSVALID + $BLOCKSTATSORPHAN} / {$BLOCKSTATSVALID} / {$BLOCKSTATSORPHAN}</td>
+        </tr>
+        <tr>
+          <th align="left">Blocks found last hour</td>
+          <td>{$FOUNDLASTHOUR}</td>
+        </tr>
+        <tr>
+          <th align="left">Blocks found last 24 hours</td>
+          <td>{$FOUNDLAST24HOURS}</td>
+        </tr>
+        <tr>
+          <th align="left">Blocks found last 7 days</td>
+          <td>{$FOUNDLAST7DAYS}</td>
+        </tr>
+        <tr>
+          <th align="left">Blocks found last 4 weeks</td>
+          <td>{$FOUNDLAST4WEEKS}</td>
+        </tr>
+        <tr>
       <td class="leftheader">Time Since Last Block</td>
       <td>{$TIMESINCELAST|seconds_to_words}</td>
     </tr>
