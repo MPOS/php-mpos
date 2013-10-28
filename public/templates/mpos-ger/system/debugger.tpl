@@ -9,8 +9,8 @@
                 <thead>
                     <tr>
                         <th width="15"><b>Level</b></th>
-                        <th width="25"><b>Time</b></th>
-                        <th width="*"><b>Message</b></th>
+                        <th width="25"><b>Zeit</b></th>
+                        <th width="*"><b>Nachricht</b></th>
                         <th width="*"><b>Backtrace</b></th>
                     </tr>
                 </thead>

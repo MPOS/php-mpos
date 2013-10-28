@@ -182,7 +182,7 @@ $(document).ready(function(){
         $('#b-workers').append('<tr><td>' + workers[i].username + '</td><td align="right">' + workers[i].hashrate + '</td><td align="right">' + workers[i].difficulty + '</td></tr>');
       }
     }
-    if (j == 0) { $('#b-workers').html('<tr><td colspan="3" align="center">No active workers</td></tr>'); }
+    if (j == 0) { $('#b-workers').html('<tr><td colspan="3" align="center">keine aktiven Arbeiter</td></tr>'); }
   }
 
   // Our worker process to keep gauges and graph updated

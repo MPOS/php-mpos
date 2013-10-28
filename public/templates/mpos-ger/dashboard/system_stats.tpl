@@ -5,12 +5,12 @@
        <tbody>
 {if $GLOBAL.config.payout_system == 'pplns'}
          <tr>
-           <td><b>PPLNS Target</b></td>
+           <td><b>PPLNS Ziel</b></td>
            <td id="b-pplns" class="right"></td>
          </tr>
 {elseif $GLOBAL.config.payout_system == 'pps'}
         <tr>
-          <td><b>Unpaid Shares</b></td>
+          <td><b>Unbezahlte Shares</b></td>
           <td id="b-ppsunpaid">{$GLOBAL.userdata.pps.unpaidshares}</td>
         </tr>
         <tr>
@@ -22,7 +22,7 @@
           <td>{$GLOBAL.poolppsvalue} {$GLOBAL.config.currency}</td>
         </tr>
         <tr>
-          <td><b>PPS Difficulty</b></td>
+          <td><b>PPS Schwierigkeit</b></td>
           <td id="b-ppsdiff">{$GLOBAL.userdata.sharedifficulty|number_format:"2"}</td>
         </tr>
 {/if}
