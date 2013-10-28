@@ -68,7 +68,7 @@ foreach ($aAllBlocks as $iIndex => $aBlock) {
     $config['reward_type'] == 'block' ? $dReward = $aBlock['amount'] : $dReward = $config['reward'];
     $aRoundAccountShares = $share->getSharesForAccounts($iPreviousShareId, $aBlock['share_id']);
 
-    $log->logInfo('Shares: ' . $iRoundShares . "\t" . 'Height: ' . $aBlock['height'] . ' Amount: ' . $aBlock['amount'] . "\t" . 'Found by ID: ' . $aBlock['account_id']);
+    $log->logInfo('Target: ' . $pplns_target . '; Shares: ' . $iRoundShares . '; Height: ' . $aBlock['height'] . '; Amount: ' . $aBlock['amount'] . '; Found by ID: ' . $aBlock['account_id']);
 
     if ($iRoundShares >= $pplns_target) {
       $log->logDebug("Matching or exceeding PPLNS target of $pplns_target with $iRoundShares");

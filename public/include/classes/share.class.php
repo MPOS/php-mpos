@@ -364,10 +364,12 @@ class Share Extends Base {
    * Fetch the lowest needed share ID from archive
    **/
   function getMinArchiveShareId($iCount) {
+    // We don't use baseline here to be more accurate
+    $iCount = $iCount * pow(2, ($this->config['difficulty'] - 16));
     $stmt = $this->mysqli->prepare("
       SELECT MIN(b.share_id) AS share_id FROM
       (
-        SELECT share_id, @total := @total + (IF(difficulty=0, POW(2, (" . $this->config['difficulty'] . " - 16)), difficulty) / POW(2, (" . $this->config['difficulty'] . " - 16))) AS total
+        SELECT share_id, @total := @total + IF(difficulty=0, POW(2, (" . $this->config['difficulty'] . " - 16)), difficulty) AS total
         FROM $this->tableArchive, (SELECT @total := 0) AS a
         WHERE our_result = 'Y'
         AND @total < ?
@@ -377,6 +379,7 @@ class Share Extends Base {
       ");
     if ($this->checkStmt($stmt) && $stmt->bind_param('ii', $iCount, $iCount) && $stmt->execute() && $result = $stmt->get_result())
       return $result->fetch_object()->share_id;
+    $this->setErrorMessage("Failed fetching additional shares from archive: " . $this->mysqli->error);
     return false;
   }
 }

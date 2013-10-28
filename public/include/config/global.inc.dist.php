@@ -21,6 +21,17 @@ define('DEBUG', 0);
 define('SALT', 'PLEASEMAKEMESOMETHINGRANDOM');
 
 /**
+  * Underlying coin algorithm that you are mining on. Set this to whatever your coin needs:
+  *
+  * Options:
+  *   sha256d    :  SHA coins like Bitcoin
+  *   scrypt     :  Scrypt based coins like Litecoin
+  * Default:
+  *   scrypt   :  Scrypt is default
+  **/
+$config['algorithm'] = 'scrypt';
+
+/**
  * Database configuration
  *
  * A MySQL database backend is required for MPOS.
@@ -307,10 +318,6 @@ $config['network_confirmations'] = 120;
 $config['pps']['reward']['default'] = 50;
 $config['pps']['reward']['type'] = 'blockavg';
 $config['pps']['blockavg']['blockcount'] = 10;
-
-// pps base payout target, default 16 = difficulty 1 shares for vardiff
-// (1/(65536 * difficulty) * reward) = (reward / (pow(2,32) * difficulty) * pow(2, 16))
-$config['pps_target'] = 16; // do not change unless you know what it does
 
 /**
  * Memcache configuration

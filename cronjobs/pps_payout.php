@@ -54,19 +54,17 @@ if ($config['pps']['reward']['type'] == 'blockavg' && $block->getBlockCount() > 
   if ($config['pps']['reward']['type'] == 'block') {
      if ($aLastBlock = $block->getLast()) {
         $pps_reward = $aLastBlock['amount'];
-        $log->logInfo("PPS reward using last block, amount: " . $pps_reward . "\tdifficulty: " . $dDifficulty);
      } else {
        $pps_reward = $config['pps']['reward']['default'];
-       $log->logInfo("PPS reward using default, amount: " . $pps_reward . "\tdifficulty: " . $dDifficulty);
      }
   } else {
      $pps_reward = $config['pps']['reward']['default'];
-     $log->logInfo("PPS reward fixed default, amount: " . $pps_reward . "\tdifficulty: " . $dDifficulty);
   }
 }
 
 // Per-share value to be paid out to users
-$pps_value = round($pps_reward / (pow(2,32) * $dDifficulty) * pow(2, $config['pps_target']), 12);
+$pps_value = round($pps_reward / (pow(2, $config['target_bits']) * $dDifficulty), 12);
+
 
 // Find our last share accounted and last inserted share for PPS calculations
 $iPreviousShareId = $setting->getValue('pps_last_share_id');
@@ -75,11 +73,16 @@ $iLastShareId = $share->getLastInsertedShareId();
 // Check for all new shares, we start one higher as our last accounted share to avoid duplicates
 $aAccountShares = $share->getSharesForAccounts($iPreviousShareId + 1, $iLastShareId);
 
-$log->logInfo("ID\tUsername\tInvalid\tValid\t\tPPS Value\t\tPayout\t\tDonation\tFee");
+if (!empty($aAccountShares)) {
+  // Info for this payout
+  $log->logInfo("PPS reward type: " . $config['pps']['reward']['type'] . ", amount: " . $pps_reward . "\tdifficulty: " . $dDifficulty . "\tPPS value: " . $pps_value);
+  $log->logInfo("ID\tUsername\tInvalid\tValid\t\tPPS Value\t\tPayout\t\tDonation\tFee");
+}
 
 foreach ($aAccountShares as $aData) {
-  // Take our valid shares and multiply by per share value
-  $aData['payout'] = round($aData['valid'] * $pps_value, 8);
+  // MPOS uses a base difficulty setting to avoid showing weightened shares
+  // Since we need weightened shares here, we go back to the proper value for payouts
+  $aData['payout'] = round($aData['valid'] * pow(2, ($config['difficulty'] - 16)) * $pps_value, 8);
 
   // Defaults
   $aData['fee' ] = 0;
@@ -94,7 +97,7 @@ foreach ($aAccountShares as $aData) {
   $log->logInfo($aData['id'] . "\t" .
     $aData['username'] . "\t" .
     $aData['invalid'] . "\t" .
-    $aData['valid'] . "\t*\t" .
+    $aData['valid'] * pow(2, ($config['difficulty'] - 16)) . "\t*\t" .
     number_format($pps_value, 12) . "\t=\t" .
     number_format($aData['payout'], 8) . "\t" .
     number_format($aData['donation'], 8) . "\t" .
