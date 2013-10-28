@@ -1,4 +1,4 @@
-<article class="module width_half">
+ <article class="module width_half">
   <header><h3>General Statistics</h3></header>
   <div class="module_content">
     <table width="100%">
@@ -45,6 +45,26 @@
         <tr>
           <th align="left">Est. Shares this Round</td>
           <td id="b-target"></td>
+        </tr>
+        <tr>
+          <th align="left">Found / Valid / Orphan</td>
+          <td>{$BLOCKSTATSVALID + $BLOCKSTATSORPHAN} / {$BLOCKSTATSVALID} / {$BLOCKSTATSORPHAN}</td>
+        </tr>
+        <tr>
+          <th align="left">Blocks found last hour</td>
+          <td>{$FOUNDLASTHOUR}</td>
+        </tr>
+        <tr>
+          <th align="left">Blocks found last 24 hours</td>
+          <td>{$FOUNDLAST24HOURS}</td>
+        </tr>
+        <tr>
+          <th align="left">Blocks found last 7 days</td>
+          <td>{$FOUNDLAST7DAYS}</td>
+        </tr>
+        <tr>
+          <th align="left">Blocks found last 4 weeks</td>
+          <td>{$FOUNDLAST4WEEKS}</td>
         </tr>
         <tr>
           <th align="left">Time Since Last Block</td>
