@@ -1,4 +1,6 @@
-{include file="global/block_header.tpl" BLOCK_HEADER="Getting Started Guide" BLOCK_STYLE="clear:none;"}
+<article class="module width_full">
+  <header><h3>Getting Started Guide</h3></header>
+  <div class="module_content">
     <li>1. <strong>Create account.</strong>
       <ul>
         <li>Register <a href="{$smarty.server.PHP_SELF}?page=register">here</a>, or login if you already have account</li>
@@ -25,10 +27,12 @@
       <p>If you use a command-line miner, type:</p>
       <pre>./cgminer --scrypt -o stratum+tcp://{$smarty.server.SERVER_NAME}:3333 -u <em>Weblogin</em>.<em>Worker</em> -p <em>Worker password</em></pre>
       <p>If you want, you can create additional workers with usernames and passwords of your choice <a href="{$smarty.server.PHP_SELF}?page=account&action=workers">Here</a></p>
-      <p>Users Without Stratum Support (minerd, etc):</p>
-      
+    
+	  <p><b>Users Without Stratum Support (minerd, etc):</b></p>
+
       <table width="50%">
         <tbody>
+		  Auch mit Clients ohne Stratum Support kannst Du trotzdem im Pool minen und alle Vorteile von Stratum nutzen, indem Du Dir die freie Stratum Proxy Software herunterl&auml;dst.
 		  <p>
 		  Download:
 		  <ul>
@@ -57,4 +61,5 @@
         <li>Here's a great <a href="https://docs.google.com/document/d/1Gw7YPYgMgNNU42skibULbJJUx_suP_CpjSEdSi8_z9U/preview?sle=true">guide</a> how to get up and running with Xubuntu.</li>
       </ul>
     </li>
-{include file="global/block_footer.tpl"}
+  </div>
+</article>
