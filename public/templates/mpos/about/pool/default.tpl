@@ -1,5 +1,5 @@
 <article class="module width_full">
-<header><h3>ThePool Collective</h3></header>
+<header><h3>{$GLOBAL.website.name}</h3></header>
 <div class="module_content">
 <table width="100%">
 <tbody>
