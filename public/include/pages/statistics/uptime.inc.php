@@ -8,6 +8,7 @@ if (!$smarty->isCached('master.tpl', $smarty_cache_key)) {
   if ($setting->getValue('monitoring_uptimerobot_private_key')) {
     if ($aStatus = $monitoring->getUptimeRobotStatus()) {
       $smarty->assign("STATUS", $aStatus);
+      $smarty->assign("UPDATED", $setting->getValue('monitoring_uptimerobot_lastcheck'));
       $smarty->assign("CODES", array(
         0 => 'Paused',
         1 => 'Unchecked',

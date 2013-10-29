@@ -24,6 +24,7 @@
 {/foreach}
     </tbody>
   </table>
+  <ul><li>Last update {$UPDATED|date_format:"%b %d, %Y %H:%M"}</li></ul>
 
 <script>
 {literal}
@@ -50,6 +51,4 @@ $(document).ready(function(){
 });
 {/literal}
 </script>
-
-{if !$GLOBAL.website.api.disabled}<li>These stats are also available in JSON format <a href="{$smarty.server.PHP_SELF}?page=api&action=public" target="_api">HERE</a></li>{/if}
 {include file="global/block_footer.tpl"}

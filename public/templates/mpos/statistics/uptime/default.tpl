@@ -7,8 +7,8 @@
       <tr>
         <th align="center">Location</th>
         <th align="center">Service</th>
-        <th align="center">State Since</th>
         <th align="center">Status</th>
+        <th align="center">Status Since</th>
         <th align="center" style="padding-right: 10px">Uptime</th>
       </tr>
     </thead>
@@ -18,13 +18,16 @@
       <tr>
         <td align="center"><img src="{$GLOBALASSETS}/images/flags/{$node.0}.png"/></td>
         <td align="center">{$node.1}</td>
-        <td align="center">{$item.log.1.datetime|date_format:"%b %d, %Y %H:%M"}</td>
         <td align="center"><span class="ur-status-{$CODES[$item.status]|lower}">{$CODES[$item.status]}</span></td>
+        <td align="center">{$item.log.1.datetime|date_format:"%b %d, %Y %H:%M"}</td>
         <td align="center"><span class="chart-{$item.id}" data-percent="{$item.customuptimeratio}"><span class="percent"></span></span></td>
       </tr>
 {/foreach}
     </tbody>
   </table>
+  <footer>
+    <ul><li>Last update {$UPDATED|date_format:"%b %d, %Y %H:%M"}</li></ul>
+  </footer>
 </article>
 
 <script>

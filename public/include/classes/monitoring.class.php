@@ -17,7 +17,7 @@ class Monitoring extends Base {
         $this->setErrorMessage('Failed to run API call: ' . $this->tools->getError());
         return false;
       }
-      if (!$this->setting->setValue('monitoring_uptimerobot_status', $json)) {
+      if (!$this->setting->setValue('monitoring_uptimerobot_status', $json) || !$this->setting->setValue('monitoring_uptimerobot_lastcheck', time())) {
         $this->setErrorMessage('Failed to store uptime status: ' . $setting->getError());
       }
     }
