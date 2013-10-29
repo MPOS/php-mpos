@@ -4,11 +4,30 @@
 if (!defined('SECURITY'))
   die('Hacking attempt');
 
-class Monitoring {
-  public function __construct($debug, $mysqli) {
-    $this->debug = $debug;
-    $this->mysqli = $mysqli;
+class Monitoring extends Base {
+  public function __construct() {
     $this->table = 'monitoring';
+  }
+
+  public function storeUptimeRobotStatus() {
+    if ($api_key = $this->setting->getValue('monitoring_uptimerobot_private_key')) {
+      $url = 'http://api.uptimerobot.com';
+      $target = '/getMonitors?apiKey=' . $api_key . '&format=json&noJsonCallback=1&customUptimeRatio=1&logs=1';
+      if (!$json = json_encode($this->tools->getApi($url, $target))) {
+        $this->setErrorMessage('Failed to run API call: ' . $this->tools->getError());
+        return false;
+      }
+      if (!$this->setting->setValue('monitoring_uptimerobot_status', $json)) {
+        $this->setErrorMessage('Failed to store uptime status: ' . $setting->getError());
+      }
+    }
+    return true;
+  }
+
+  public function getUptimeRobotStatus() {
+    if ($json = $this->setting->getValue('monitoring_uptimerobot_status'))
+      return json_decode($json, true);
+    return false;
   }
 
   /**
@@ -46,4 +65,8 @@ class Monitoring {
   }
 }
 
-$monitoring = new Monitoring($debug, $mysqli);
+$monitoring = new Monitoring();
+$monitoring->setConfig($config);
+$monitoring->setDebug($debug);
+$monitoring->setMysql($mysqli);
+$monitoring->setSetting($setting);

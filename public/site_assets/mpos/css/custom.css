@@ -1,4 +1,48 @@
 /* Custom stuff */
+span.ur-status-up {
+  text-align: center;
+  display: inline-block;
+  font-size: 10px;
+  color: #264409;
+  background :#92CCA6;
+  padding: 2px 4px;
+  border:1px solid #c6d880;
+  border-radius: 4px;
+  width: calc(80px);
+}
+span.ur-status-down {
+  text-align: center;
+  display: inline-block;
+  font-size: 10px;
+  color: #264409;
+  background :#FF7878;
+  padding: 2px 4px;
+  border:1px solid #c6d880;
+  border-radius: 4px;
+  width: calc(80px);
+}
+span.ur-status-unchecked {
+  text-align: center;
+  display: inline-block;
+  font-size: 10px;
+  color: #264409;
+  background :#7EA7D8;
+  padding: 2px 4px;
+  border:1px solid #c6d880;
+  border-radius: 4px;
+  width: calc(80px);
+}
+span.ur-status-paused {
+  text-align: center;
+  display: inline-block;
+  font-size: 10px;
+  color: #264409;
+  background :#FFF79A;
+  padding: 2px 4px;
+  border:1px solid #c6d880;
+  border-radius: 4px;
+  width: calc(80px);
+}
 span.confirmed {
   display: inline-block;
   width: 60px;

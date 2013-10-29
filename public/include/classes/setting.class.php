@@ -1,15 +1,10 @@
 <?php
 
 // Make sure we are called from index.php
-if (!defined('SECURITY'))
-  die('Hacking attempt');
+if (!defined('SECURITY')) die('Hacking attempt');
 
-class Setting {
-  public function __construct($debug, $mysqli) {
-    $this->debug = $debug;
-    $this->mysqli = $mysqli;
-    $this->table = 'settings';
-  }
+class Setting extends Base {
+  protected $table = 'settings';
 
   /**
    * Fetch a value from our table
@@ -51,3 +46,5 @@ class Setting {
 }
 
 $setting = new Setting($debug, $mysqli);
+$setting->setDebug($debug);
+$setting->setMysql($mysqli);

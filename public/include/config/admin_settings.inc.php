@@ -172,6 +172,13 @@ $aSettings['acl'][] = array(
   'name' => 'acl_round_statistics', 'value' => $setting->getValue('acl_round_statistics'),
   'tooltip' => 'Make the round statistics page private (users only) or public.'
 );
+$aSettings['acl'][] = array(
+  'display' => 'Uptime Statistics', 'type' => 'select',
+  'options' => array( 0 => 'Private', 1 => 'Public'),
+  'default' => 1,
+  'name' => 'acl_uptime_statistics', 'value' => $setting->getValue('acl_uptime_statistics'),
+  'tooltip' => 'Make the uptime statistics page private (users only) or public.'
+);
 $aSettings['system'][] = array(
   'display' => 'Disable e-mail confirmations', 'type' => 'select',
   'options' => array( 0 => 'No', 1 => 'Yes' ),
@@ -248,6 +255,13 @@ $aSettings['recaptcha'][] = array(
   'default' => 'YOUR_PUBLIC_KEY',
   'name' => 'recaptcha_public_key', 'value' => $setting->getValue('recaptcha_public_key'),
   'tooltip' => 'Your public key as given by your re-Captcha account.'
+);
+$aSettings['monitoring'][] = array(
+  'display' => 'Uptime Robot Private API Key', 'type' => 'text',
+  'size' => 25,
+  'default' => 'MAIN_API_KEY',
+  'name' => 'monitoring_uptimerobot_private_key', 'value' => $setting->getValue('monitoring_uptimerobot_private_key'),
+  'tooltip' => 'Your private key. You can find it in your account as the Main API Key.'
 );
 
 ?>

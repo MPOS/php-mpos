@@ -17,7 +17,7 @@ class Tools extends Base {
    * @param auth array Optional authentication data to be sent with
    * @return dec array JSON decoded PHP array
    **/
-  private function getApi($url, $target, $auth=NULL) {
+  public function getApi($url, $target, $auth=NULL) {
     static $ch = null;
     static $ch = null;
     if (is_null($ch)) {
