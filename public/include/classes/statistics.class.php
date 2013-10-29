@@ -69,12 +69,8 @@ class Statistics {
       ");
       
     if ($this->checkStmt($stmt) && $stmt->bind_param('i', $aTimeDiff) && $stmt->execute() && $result = $stmt->get_result())
-    	if ($aTimeFrame == 0) return $this->memcache->setCache(FOUNDALLVALID, $result->fetch_object()->count);
-    	if ($aTimeFrame == 3600) return $this->memcache->setCache(FOUNDLASTHOURVALID, $result->fetch_object()->count);
-    	if ($aTimeFrame == 86400) return $this->memcache->setCache(FOUNDLAST24HOURSVALID, $result->fetch_object()->count);
-    	if ($aTimeFrame == 604800) return $this->memcache->setCache(FOUNDLAST7DAYSVALID, $result->fetch_object()->count);
-    	if ($aTimeFrame == 2419200) return $this->memcache->setCache(FOUNDLAST4WEEKSVALID, $result->fetch_object()->count);
-    $this->debug->append("Failed to get Blocks by time: ". $this->mysqli->error);
+    	return $this->memcache->setCache(__FUNCTION__ . $aTimeFrame, $result->fetch_object()->count);
+    $this->debug->append("Failed to get valid Blocks by time: ". $this->mysqli->error);
     return false;
   }
   
@@ -94,12 +90,8 @@ class Statistics {
       ");
       
     if ($this->checkStmt($stmt) && $stmt->bind_param('i', $aTimeDiff) && $stmt->execute() && $result = $stmt->get_result())
-    	if ($aTimeFrame == 0) return $this->memcache->setCache(FOUNDALLORPHAN, $result->fetch_object()->count);
-    	if ($aTimeFrame == 3600) return $this->memcache->setCache(FOUNDLASTHOURORPHAN, $result->fetch_object()->count);
-    	if ($aTimeFrame == 86400) return $this->memcache->setCache(FOUNDLAST24HOURSORPHAN, $result->fetch_object()->count);
-    	if ($aTimeFrame == 604800) return $this->memcache->setCache(FOUNDLAST7DAYSORPHAN, $result->fetch_object()->count);
-    	if ($aTimeFrame == 2419200) return $this->memcache->setCache(FOUNDLAST4WEEKSORPHAN, $result->fetch_object()->count);
-    $this->debug->append("Failed to get Blocks by time: ". $this->mysqli->error);
+    	return $this->memcache->setCache(__FUNCTION__ . $aTimeFrame, $result->fetch_object()->count);
+    $this->debug->append("Failed to get orphan Blocks by time: ". $this->mysqli->error);
     return false;
   }
   
