@@ -42,35 +42,7 @@ if (!$smarty->isCached('master.tpl', $smarty_cache_key)) {
     $dTimeSinceLast = 0;
   }
 
-
-  $iFoundLastValid = $statistics->getLastValidBlocksbyTime(0);
-  $iFoundLastHourValid = $statistics->getLastValidBlocksbyTime(3600);
-  $iFoundLastDayValid = $statistics->getLastValidBlocksbyTime(86400);
-  $iFoundLastWeekValid = $statistics->getLastValidBlocksbyTime(604800);
-  $iFoundLastMonthValid = $statistics->getLastValidBlocksbyTime(2419200);
-
-  $iFoundLastOrphan = $statistics->getLastOrphanBlocksbyTime(0);
-  $iFoundLastHourOrphan = $statistics->getLastOrphanBlocksbyTime(3600);
-  $iFoundLastDayOrphan = $statistics->getLastOrphanBlocksbyTime(86400);
-  $iFoundLastWeekOrphan = $statistics->getLastOrphanBlocksbyTime(604800);
-  $iFoundLastMonthOrphan = $statistics->getLastOrphanBlocksbyTime(2419200);
-
-
   // Propagate content our template
-  
-  $smarty->assign("FOUNDALLVALID", $iFoundLastValid);
-  $smarty->assign("FOUNDLASTHOURVALID", $iFoundLastHourValid);
-  $smarty->assign("FOUNDLAST24HOURSVALID", $iFoundLastDayValid);
-  $smarty->assign("FOUNDLAST7DAYSVALID", $iFoundLastWeekValid);
-  $smarty->assign("FOUNDLAST4WEEKSVALID", $iFoundLastMonthValid);
-  
-  $smarty->assign("FOUNDALLORPHAN", $iFoundLastOrphan);
-  $smarty->assign("FOUNDLASTHOURORPHAN", $iFoundLastHourOrphan);
-  $smarty->assign("FOUNDLAST24HOURSORPHAN", $iFoundLastDayOrphan);
-  $smarty->assign("FOUNDLAST7DAYSORPHAN", $iFoundLastWeekOrphan);
-  $smarty->assign("FOUNDLAST4WEEKSORPHAN", $iFoundLastMonthOrphan);
-  
-  $smarty->assign("ESTTIME", $iEstTime);
   $smarty->assign("ESTTIME", $iEstTime);
   $smarty->assign("TIMESINCELAST", $dTimeSinceLast);
   $smarty->assign("BLOCKSFOUND", $aBlocksFoundData);
