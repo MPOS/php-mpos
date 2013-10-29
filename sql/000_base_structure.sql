@@ -121,7 +121,7 @@ CREATE TABLE IF NOT EXISTS `pool_worker` (
 
 CREATE TABLE IF NOT EXISTS `settings` (
   `name` varchar(255) NOT NULL,
-  `value` varchar(255) DEFAULT NULL,
+  `value` text DEFAULT NULL,
   PRIMARY KEY (`name`),
   UNIQUE KEY `setting` (`name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
