@@ -4,9 +4,8 @@
 if (!defined('SECURITY'))
   die('Hacking attempt');
 
-class Share {
-  private $sError = '';
-  private $table = 'shares';
+class Share Extends Base {
+  protected $table = 'shares';
   private $tableArchive = 'shares_archive';
   private $oUpstream;
   private $iLastUpstreamId;
@@ -22,14 +21,6 @@ class Share {
     $this->debug->append("Instantiated Share class", 2);
   }
 
-  // get and set methods
-  private function setErrorMessage($msg) {
-    $this->sError = $msg;
-  }
-  public function getError() {
-    return $this->sError;
-  }
-
   /**
    * Fetch archive tables name for this class
    * @param none
@@ -38,13 +29,43 @@ class Share {
   public function getArchiveTableName() {
     return $this->tableArchive;
   }
+
   /**
-   * Fetch normal table name for this class
-   * @param none
-   * @return data string Table name
+   * Fetch a single share by ID
+   * @param id int Share ID
+   * @return array Share data
    **/
-  public function getTableName() {
-    return $this->table;
+  public function getShareById($id) {
+    return $this->getAllAssoc($id);
+  }
+
+  /**
+   * Update an entire shares data
+   **/
+  public function updateShareById($id, $data) {
+    $this->debug->append("STA " . __METHOD__, 4);
+    $sql = "UPDATE $this->table SET";
+    $start = true;
+    // Remove ID column
+    unset($data['id']);
+    foreach ($data as $column => $value) {
+      $start == true ? $sql .= " $column = ? " : $sql .= ", $column = ?";
+      $start = false;
+      switch($column) {
+      case 'difficulty':
+        $this->addParam('d', $value);
+        break;
+      default:
+        $this->addParam('s', $value);
+        break;
+      }
+    }
+    $sql .= " WHERE id = ? LIMIT 1";
+    $this->addParam('i', $id);
+    $stmt = $this->mysqli->prepare($sql);
+    if ($this->checkStmt($stmt) && call_user_func_array( array($stmt, 'bind_param'), $this->getParam()) && $stmt->execute())
+      return true;
+    return false;
   }
 
   /**
@@ -229,7 +250,7 @@ class Share {
   public function getUpstreamFinder() {
     return @$this->oUpstream->account;
   }
-  public function getUpstreamId() {
+  public function getUpstreamShareId() {
     return @$this->oUpstream->id;
   }
   /**
@@ -240,7 +261,7 @@ class Share {
    * @param last int Skips all shares up to last to find new share
    * @return bool
    **/
-  public function setUpstream($aBlock, $last=0) {
+  public function findUpstreamShare($aBlock, $last=0) {
     // Many use stratum, so we create our stratum check first
     $version = pack("I*", sprintf('%08d', $aBlock['version']));
     $previousblockhash = pack("H*", swapEndian($aBlock['previousblockhash']));
@@ -343,10 +364,12 @@ class Share {
    * Fetch the lowest needed share ID from archive
    **/
   function getMinArchiveShareId($iCount) {
+    // We don't use baseline here to be more accurate
+    $iCount = $iCount * pow(2, ($this->config['difficulty'] - 16));
     $stmt = $this->mysqli->prepare("
       SELECT MIN(b.share_id) AS share_id FROM
       (
-        SELECT share_id, @total := @total + (IF(difficulty=0, POW(2, (" . $this->config['difficulty'] . " - 16)), difficulty) / POW(2, (" . $this->config['difficulty'] . " - 16))) AS total
+        SELECT share_id, @total := @total + IF(difficulty=0, POW(2, (" . $this->config['difficulty'] . " - 16)), difficulty) AS total
         FROM $this->tableArchive, (SELECT @total := 0) AS a
         WHERE our_result = 'Y'
         AND @total < ?
@@ -356,20 +379,13 @@ class Share {
       ");
     if ($this->checkStmt($stmt) && $stmt->bind_param('ii', $iCount, $iCount) && $stmt->execute() && $result = $stmt->get_result())
       return $result->fetch_object()->share_id;
+    $this->setErrorMessage("Failed fetching additional shares from archive: " . $this->mysqli->error);
     return false;
-  }
-
-  /**
-   * Helper function
-   **/
-  private function checkStmt($bState) {
-    if ($bState ===! true) {
-      $this->debug->append("Failed to prepare statement: " . $this->mysqli->error);
-      $this->setErrorMessage('Internal application Error');
-      return false;
-    }
-    return true;
   }
 }
 
 $share = new Share($debug, $mysqli, $user, $block, $config);
+$share->setMysql($mysqli);
+$share->setConfig($config);
+$share->setUser($user);
+$share->setBlock($block);

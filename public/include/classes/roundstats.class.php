@@ -225,6 +225,97 @@ class RoundStats {
     return false;
   }
 
+  /**
+   * Get ALL last blocks from height for admin panel
+   **/
+  public function getAllReportBlocksFoundHeight($iHeight=0, $limit=10) {
+    $stmt = $this->mysqli->prepare("
+      SELECT
+        height, shares
+      FROM $this->tableBlocks 
+      WHERE height <= ?
+      ORDER BY height DESC LIMIT ?");
+    if ($this->checkStmt($stmt) && $stmt->bind_param("ii", $iHeight, $limit) && $stmt->execute() && $result = $stmt->get_result())
+      return $result->fetch_all(MYSQLI_ASSOC);
+    return false;
+  }
+
+  /**
+   * Get USER last blocks from height for admin panel
+   **/
+  public function getUserReportBlocksFoundHeight($iHeight=0, $limit=10, $iUser) {
+    $stmt = $this->mysqli->prepare("
+      SELECT
+        b.height, b.shares
+        FROM $this->tableBlocks AS b
+        LEFT JOIN $this->tableStats AS s ON s.block_id = b.id
+        LEFT JOIN $this->tableUsers AS a ON a.id = s.account_id 
+      WHERE b.height <= ? AND a.id = ?
+      ORDER BY height DESC LIMIT ?");
+    if ($this->checkStmt($stmt) && $stmt->bind_param('iii', $iHeight, $iUser, $limit) && $stmt->execute() && $result = $stmt->get_result())
+      return $result->fetch_all(MYSQLI_ASSOC);
+    return false;
+  }
+
+  /**
+   * Get shares for block height for user admin panel
+   **/
+  public function getRoundStatsForUser($iHeight=0, $iUser) {
+    $stmt = $this->mysqli->prepare("
+      SELECT
+        s.valid,
+        s.invalid,
+        s.pplns_valid,
+        s.pplns_invalid
+        FROM $this->tableStats AS s
+        LEFT JOIN $this->tableBlocks AS b ON s.block_id = b.id
+        LEFT JOIN $this->tableUsers AS a ON a.id = s.account_id
+        WHERE b.height = ? AND a.id = ?");
+    if ($this->checkStmt($stmt) && $stmt->bind_param('ii', $iHeight, $iUser) && $stmt->execute() && $result = $stmt->get_result())
+      return $result->fetch_assoc();
+    return false;
+  }
+
+  /**
+   * Get credit transactions for round block height for admin panel
+   **/
+  public function getUserRoundTransHeight($iHeight=0, $iUser) {
+    $this->debug->append("STA " . __METHOD__, 4);
+    $stmt = $this->mysqli->prepare("
+      SELECT
+      IFNULL(t.amount, 0) AS amount
+      FROM $this->tableTrans AS t
+      LEFT JOIN $this->tableBlocks AS b ON t.block_id = b.id
+      LEFT JOIN $this->tableUsers AS a ON t.account_id = a.id
+      WHERE b.height = ? AND t.type = 'Credit' AND t.account_id = ?");
+    if ($this->checkStmt($stmt) && $stmt->bind_param('ii', $iHeight, $iUser) && $stmt->execute() && $result = $stmt->get_result())
+      return $result->fetch_object()->amount;
+    $this->debug->append('Unable to fetch transactions');
+    return false;
+  }
+
+  /**
+   * Get all users for admin panel
+   **/
+  public function getAllUsers($filter='%') {
+    $this->debug->append("STA " . __METHOD__, 4);
+    $stmt = $this->mysqli->prepare("
+      SELECT
+        a.id AS id,
+        a.username AS username
+      FROM $this->tableUsers AS a
+      WHERE a.username LIKE ?
+      GROUP BY username
+      ORDER BY username");
+    if ($this->checkStmt($stmt) && $stmt->bind_param('s', $filter) && $stmt->execute() && $result = $stmt->get_result()) {
+      while ($row = $result->fetch_assoc()) {
+        $aData[$row['id']] = $row['username'];
+      }
+      return $aData;
+    }
+    return false;
+  }
+
   private function checkStmt($bState) {
     if ($bState ===! true) {
       $this->debug->append("Failed to prepare statement: " . $this->mysqli->error);
