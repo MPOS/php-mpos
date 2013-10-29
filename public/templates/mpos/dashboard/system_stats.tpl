@@ -15,11 +15,11 @@
         </tr>
         <tr>
           <td><b>Baseline PPS Rate</b></td>
-          <td>{$GLOBAL.ppsvalue} {$GLOBAL.config.currency}</td>
+          <td>{$GLOBAL.ppsvalue|number_format:"12"} {$GLOBAL.config.currency}</td>
         </tr>
         <tr>
           <td><b>Pools PPS Rate</b></td>
-          <td>{$GLOBAL.poolppsvalue} {$GLOBAL.config.currency}</td>
+          <td>{$GLOBAL.poolppsvalue|number_format:"12"} {$GLOBAL.config.currency}</td>
         </tr>
         <tr>
           <td><b>PPS Difficulty</b></td>
