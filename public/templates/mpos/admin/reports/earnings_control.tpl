@@ -35,15 +35,14 @@
             <input type="text" class="pin" name="search" value="{$HEIGHT|default:"%"}">
           </fieldset>       
         </td>
-          <td align="center"><b>SHOW EMPTY ROUNDS</b><br><br>
-            <span class="toggle">
-            <label for="Show empty rounds">
+        <td align="center"><b>SHOW EMPTY ROUNDS</b><br><br>
+          <span class="toggle">
+            <label for="filter">
             <input type="checkbox" class="ios-switch" name="filter" value="1" id="filter" {if $FILTER}checked{/if} />
             <div class="switch"></div>
             </label>
-            </span>
-          </td>
-
+          </span>
+        </td>
     </tbody>
   </table>
   <footer>
