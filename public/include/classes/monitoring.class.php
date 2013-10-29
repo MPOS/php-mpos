@@ -10,14 +10,24 @@ class Monitoring extends Base {
   }
 
   public function storeUptimeRobotStatus() {
-    if ($api_key = $this->setting->getValue('monitoring_uptimerobot_private_key')) {
+    if ($api_keys = $this->setting->getValue('monitoring_uptimerobot_private_key')) {
+      $aJSONData = array();
       $url = 'http://api.uptimerobot.com';
-      $target = '/getMonitors?apiKey=' . $api_key . '&format=json&noJsonCallback=1&customUptimeRatio=1&logs=1';
-      if (!$json = json_encode($this->tools->getApi($url, $target))) {
-        $this->setErrorMessage('Failed to run API call: ' . $this->tools->getError());
-        return false;
+      $aMonitors = explode(',', $api_keys);
+      foreach ($aMonitors as $aData) {
+        $temp = explode('|', $aData);
+        $aMonitor['api_key'] = $temp[0];
+        $aMonitor['monitor_id'] = $temp[1];
+        $target = '/getMonitors?apiKey=' . $aMonitor['api_key'] . '&monitors=' . $aMonitor['monitor_id'] . '&format=json&noJsonCallback=1&customUptimeRatio=1-7-30&logs=1';
+        if (!$aMonitorStatus = $this->tools->getApi($url, $target)) {
+          $this->setErrorMessage('Failed to run API call: ' . $this->tools->getError());
+          return false;
+        }
+        $aMonitorStatus['monitors']['monitor'][0]['customuptimeratio'] = explode('-', $aMonitorStatus['monitors']['monitor'][0]['customuptimeratio']);
+        var_dump($aMonitorStatus['monitors']['monitor'][0]);
+        $aAllMonitorsStatus[] = $aMonitorStatus['monitors']['monitor'][0];
       }
-      if (!$this->setting->setValue('monitoring_uptimerobot_status', $json) || !$this->setting->setValue('monitoring_uptimerobot_lastcheck', time())) {
+      if (!$this->setting->setValue('monitoring_uptimerobot_status', json_encode($aAllMonitorsStatus)) || !$this->setting->setValue('monitoring_uptimerobot_lastcheck', time())) {
         $this->setErrorMessage('Failed to store uptime status: ' . $setting->getError());
       }
     }

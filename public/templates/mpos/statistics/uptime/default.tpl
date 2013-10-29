@@ -9,18 +9,28 @@
         <th align="center">Service</th>
         <th align="center">Status</th>
         <th align="center">Status Since</th>
-        <th align="center" style="padding-right: 10px">Uptime</th>
+        <th align="center" colspan="4" style="padding-right: 10px">Uptime</th>
+      </tr>
+      <tr>
+        <th colspan="4"></th>
+        <th>Day</th>
+        <th>Week</th>
+        <th>Month</th>
+        <th>All Time</th>
       </tr>
     </thead>
     <tbody>
-{foreach key=key item=item from=$STATUS.monitors.monitor}
+{foreach key=key item=item from=$STATUS}
 {assign var=node value="."|explode:$item.friendlyname}
       <tr>
         <td align="center"><img src="{$GLOBALASSETS}/images/flags/{$node.0}.png"/></td>
         <td align="center">{$node.1}</td>
         <td align="center"><span class="ur-status-{$CODES[$item.status]|lower}">{$CODES[$item.status]}</span></td>
         <td align="center">{$item.log.1.datetime|date_format:"%b %d, %Y %H:%M"}</td>
-        <td align="center"><span class="chart-{$item.id}" data-percent="{$item.customuptimeratio}"><span class="percent"></span></span></td>
+        <td align="center"><span class="chart" data-percent="{$item.customuptimeratio.0}"><span class="percent"></span></span></td>
+        <td align="center"><span class="chart" data-percent="{$item.customuptimeratio.1}"><span class="percent"></span></span></td>
+        <td align="center"><span class="chart" data-percent="{$item.customuptimeratio.2}"><span class="percent"></span></span></td>
+        <td align="center"><span class="chart" data-percent="{$item.alltimeuptimeratio}"><span class="percent"></span></span></td>
       </tr>
 {/foreach}
     </tbody>
@@ -33,10 +43,7 @@
 <script>
 {literal}
 $(document).ready(function(){
-{/literal}
-{foreach key=key item=item from=$STATUS.monitors.monitor}
-{literal}
-  $('.chart-{/literal}{$item.id}{literal}').easyPieChart({
+  $('.chart').easyPieChart({
     easing: 'easeOutBounce',
     size: 26,
     scaleColor: false,
@@ -49,9 +56,6 @@ $(document).ready(function(){
       $(this.el).find('.percent-{/literal}{$item.id}{literal}').text(Math.round(percent));
     }
   });
-{/literal}
-{/foreach}
-{literal}
 });
 {/literal}
 </script>
