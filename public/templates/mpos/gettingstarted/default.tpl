@@ -9,24 +9,39 @@
     </li>
     <li>2. <strong>Download a miner.</strong>
       <ul>
-        <li><em>Windows:</em> <a href="http://ck.kolivas.org/apps/cgminer/3.4/cgminer-3.4.3-windows.zip">Cgminer for Windows</a></li>
-        <li><em>Linux:</em> <a href="http://ck.kolivas.org/apps/cgminer/3.4/cgminer-3.4.3-x86_64-built.tar.bz2">Cgminer for Linux (64bit)</a></li>
+        <li><em>Windows:</em> <a href="http://ck.kolivas.org/apps/cgminer/cgminer-3.6.6-windows.zip">Cgminer for Windows</a></li>
+        <li><em>Linux:</em> <a href="http://ck.kolivas.org/apps/cgminer/cgminer-3.6.6-x86_64-built.tar.bz2">Cgminer for Linux (64bit)</a></li>
         <li><em>Mac OS X:</em> precompiled binaries are available <a href="https://bitcointalk.org/index.php?topic=55038.msg654850#msg654850">here</a>.</li>
       </ul>
     </li>
     <li>3. <strong>Configure your miner.</strong>
-      <p>Settings for Stratum (recommended):</p>
+        <table width="50%">
+          <tbody>     
+            <ul>
+            <p><strong>Settings for Stratum (recommended):</strong></p>
+            <li>STRATUM: <kbd>stratum+tcp://{$smarty.server.SERVER_NAME}</kbd></li>
+            <li>PORT: <kbd>3333</kbd></li>
+            <li>Username: <kbd><em>Weblogin</em>.<em>Worker</em></kbd></li>
+            <li>Password: <kbd>Worker Password</kbd></li>
+            
+            <p>If you use a command-line miner, type:</p>
+    	    <pre>./cgminer --scrypt -o stratum+tcp://{$smarty.server.SERVER_NAME}:3333 -u <em>Weblogin</em>.<em>Worker</em> -p <em>Worker password</em></pre>
+   	        <p>If you want, you can create additional workers with usernames and passwords of your choice <a href="{$smarty.server.PHP_SELF}?page=account&action=workers">Here</a></p>
+          </ul>
+        </tbody>
+      </table>      
       <table width="50%">
         <tbody>
-          <tr><td>STRATUM:</td><td><kbd>stratum+tcp://{$smarty.server.SERVER_NAME}</kbd></td></tr>
-          <tr><td>PORT:</td><td><kbd>3333</kbd></td></tr>
-          <tr><td>Username:</td><td><kbd><em>Weblogin</em>.<em>Worker</em></kbd></td></tr>
-          <tr><td>Password:</td><td><kbd>Worker Password</kbd></td></tr>
+		  <ul>
+		    <p><strong>Users Without Stratum Support (minerd, etc):</strong></p>
+		    <strong>Download:</strong>
+		    <li>Stratum Proxy Windows: <a href="https://github.com/CryptoManiac/stratum-mining-proxy" target="_blank">Download Here</a></li>
+		    <li>Proxy Linux Sourcen: <a href="https://github.com/bandroidx/stratum-mining-proxy" target="_blank">GitHub Repo</a></li>
+		    <li>CPU Miner: <a href="https://bitcointalk.org/index.php?topic=55038.0" target="_blank">Download Here</a></li>
+		    <p>Run Stratum Proxy above, then run cpuminer with minerd.exe -o http://127.0.0.1:8332 -u workername -p password</p>
+		  </ul>
         </tbody>
       </table>
-      <p>If you use a command-line miner, type:</p>
-      <pre>./cgminer --scrypt -o stratum+tcp://{$smarty.server.SERVER_NAME}:3333 -u <em>Weblogin</em>.<em>Worker</em> -p <em>Worker password</em></pre>
-      <p>If you want, you can create additional workers with usernames and passwords of your choice <a href="{$smarty.server.PHP_SELF}?page=account&action=workers">Here</a></p>
     </li>
     <li>4. <strong>Create a Litecoin address to recieve payments.</strong>
       <ul>
