@@ -216,6 +216,7 @@ class Transaction extends Base {
         t.type = 'Donation_PPS'
       )
       GROUP BY a.username
+      ORDER BY donation DESC
       ");
     if ($this->checkStmt($stmt) && $stmt->execute() && $result = $stmt->get_result())
       return $result->fetch_all(MYSQLI_ASSOC);
