@@ -1,4 +1,4 @@
-<article class="module width_3_quarter">
+<article class="module width_full">
   <form method="POST">
     <input type="hidden" name="page" value="{$smarty.request.page}" />
     <input type="hidden" name="action" value="{$smarty.request.action}" />
