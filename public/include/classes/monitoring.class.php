@@ -24,7 +24,6 @@ class Monitoring extends Base {
           return false;
         }
         $aMonitorStatus['monitors']['monitor'][0]['customuptimeratio'] = explode('-', $aMonitorStatus['monitors']['monitor'][0]['customuptimeratio']);
-        var_dump($aMonitorStatus['monitors']['monitor'][0]);
         $aAllMonitorsStatus[] = $aMonitorStatus['monitors']['monitor'][0];
       }
       if (!$this->setting->setValue('monitoring_uptimerobot_status', json_encode($aAllMonitorsStatus)) || !$this->setting->setValue('monitoring_uptimerobot_lastcheck', time())) {
