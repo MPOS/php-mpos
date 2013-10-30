@@ -82,11 +82,8 @@ if (empty($aAllBlocks)) {
   foreach ($aAllBlocks as $iIndex => $aBlock) {
     if (empty($aBlock['share_id'])) {
       // Fetch share information
-      $iPreviousShareId = $block->getLastShareId();
-      if ( !$iPreviousShareId && $block->getBlockCount() > 1) {
+      if ( !$iPreviousShareId = $block->getLastShareId())
         $iPreviousShareId = 0;
-        // $log->logError('Unable to find highest share ID found so far, assuming share ID 0 as previous found upstream share.');
-      }
 
       // Fetch this blocks upstream ID
       $aBlockRPCInfo = $bitcoin->query('getblock', $aBlock['blockhash']);
