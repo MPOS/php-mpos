@@ -38,11 +38,9 @@
   </table>
 
   <br>
-  <table class="tablesorter">
+  <header><h3>Last 24 hour totals</h3></header>
+  <table class="tablesorter" cellspacing="0">
     <thead>
-      <tr>
-        <th align="center" colspan="6">Last 24 hour totals</th>
-      </tr>
       <tr style="background-color:#B6DAFF;">
         <th align="center">Blocks Found</th>
         <th align="center">Rewards</th>
