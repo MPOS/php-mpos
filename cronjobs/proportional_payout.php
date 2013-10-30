@@ -50,7 +50,8 @@ foreach ($aAllBlocks as $iIndex => $aBlock) {
   } else {
     $iLastBlockHeight = 0;
   }
-  if (!$aBlock['accounted'] && $aBlock['height'] > $iLastBlockHeight && @$aLastAccountedBlock['confirmations'] != -1) {
+  // Double payout detection
+  if ( ( !$aBlock['accounted'] && $aBlock['height'] > $iLastBlockHeight ) || @$aLastAccountedBlock['confirmations'] == -1) {
     $iPreviousShareId = @$aAllBlocks[$iIndex - 1]['share_id'] ? $aAllBlocks[$iIndex - 1]['share_id'] : 0;
     $iCurrentUpstreamId = $aBlock['share_id'];
     $aAccountShares = $share->getSharesForAccounts($iPreviousShareId, $aBlock['share_id']);
