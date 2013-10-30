@@ -731,6 +731,32 @@ class Statistics {
     }
     return $aEstimates;
   }
+
+  /**
+   * Get pool stats last 24 hours
+   * @param limit int Last number of hours
+   * @return array
+   **/
+  public function getPoolStatsHours($hour=24) {
+    $this->debug->append("STA " . __METHOD__, 4);
+    if ($data = $this->memcache->get(__FUNCTION__ . $hour)) return $data;
+    $stmt = $this->mysqli->prepare("
+      SELECT 
+      IFNULL(COUNT(id), 0) as count, 
+      IFNULL(AVG(difficulty), 0) as average,
+      IFNULL(ROUND(SUM((difficulty * 65536) / POW(2, (" . $this->config['difficulty'] . " -16))), 0), 0) AS expected,
+      IFNULL(ROUND(SUM(shares)), 0) as shares,
+      IFNULL(SUM(amount), 0) as rewards 
+      FROM " . $this->block->getTableName() . "
+      WHERE FROM_UNIXTIME(time) > DATE_SUB(now(), INTERVAL ? HOUR)
+      AND confirmations >= 1");
+    if ($this->checkStmt($stmt) && $stmt->bind_param("i", $hour) && $stmt->execute() && $result = $stmt->get_result())
+      return $this->memcache->setCache(__FUNCTION__ . $hour, $result->fetch_assoc());
+    // Catchall
+    $this->debug->append("Failed to get pool statistics:" . $this->mysqli->error);
+    return false;
+  }
+
 }
 
 
