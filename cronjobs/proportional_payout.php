@@ -125,7 +125,7 @@ foreach ($aAllBlocks as $iIndex => $aBlock) {
   } else {
     $log->logFatal('Possible double payout detected. Aborted.');
     $aMailData = array(
-      'email' => $setting->getValue('website_email'),
+      'email' => $setting->getValue('system_error_email'),
       'subject' => 'Payout Failure: Double Payout',
       'Error' => 'Possible double payout detected',
       'BlockID' => $aBlock['id'],
