@@ -40,6 +40,35 @@
 The graph above illustrates N shares to find a block vs. E Shares expected to find a block based on
 target and network difficulty and assuming a zero variance scenario.
 </p>
+
+  <table width="100%" style="font-size:13px;">
+    <thead>
+      <tr>
+        <th class="center" colspan="6">Last 24 hour totals</th>
+      </tr>
+      <tr style="background-color:#B6DAFF;">
+        <th class="center">Blocks Found</th>
+        <th class="center">Rewards</th>
+        <th class="center">Avg Difficulty</th>
+        <th class="center">Expected Shares</th>
+        <th class="center">Actual Shares</th>
+        <th class="center">Percentage</th>
+      </tr>
+    </thead>
+    <tbody>
+      {assign var=percentage1 value=0}
+      <tr>
+         <td class="center">{$POOLSTATS.count|number_format:"0"}</td>
+         <td class="center">{$POOLSTATS.rewards|number_format:"4"}</td>
+         <td class="center">{$POOLSTATS.average|number_format:"4"}</td>
+         <td class="center">{$POOLSTATS.expected|number_format:"0"}</td>
+         <td class="center">{$POOLSTATS.shares|number_format:"0"}</td>
+         <td class="center">{if $POOLSTATS.shares > 0}{math assign="percentage1" equation="shares1 / estshares1 * 100" shares1=$POOLSTATS.shares estshares1=$POOLSTATS.expected}{/if}
+          <font color="{if ($percentage1 <= 100)}green{else}red{/if}">{$percentage1|number_format:"2"}</font></b></td>
+      </tr>
+    </tbody>
+  </table>
+
 <table align="left" width="100%" border="0" style="font-size:13px;">
     <tbody>
       <tr>

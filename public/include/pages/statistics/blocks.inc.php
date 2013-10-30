@@ -68,11 +68,15 @@ if (!$smarty->isCached('master.tpl', $smarty_cache_key)) {
       }
     }
   }
-//var_dump($aBlocksFoundData);
+
+  $iHours = 24;
+  $aPoolStatistics = $statistics->getPoolStatsHours($iHours);
+
   // Propagate content our template
   $smarty->assign("BLOCKSFOUND", $aBlocksFoundData);
   $smarty->assign("BLOCKLIMIT", $iLimit);
   $smarty->assign("USEBLOCKAVERAGE", $use_average);
+  $smarty->assign("POOLSTATS", $aPoolStatistics);
 } else {
   $debug->append('Using cached page', 3);
 }
