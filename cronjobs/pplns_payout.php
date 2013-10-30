@@ -231,7 +231,7 @@ foreach ($aAllBlocks as $iIndex => $aBlock) {
     }
   } else {
     $aMailData = array(
-      'email' => $setting->getValue('website_email'),
+      'email' => $setting->getValue('system_error_email'),
       'subject' => 'Payout processing aborted',
       'Error' => 'Potential double payout detected. All payouts halted until fixed!',
       'BlockID' => $aBlock['id'],
