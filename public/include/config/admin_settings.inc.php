@@ -173,6 +173,13 @@ $aSettings['acl'][] = array(
   'tooltip' => 'Make the round statistics page private (users only) or public.'
 );
 $aSettings['system'][] = array(
+  'display' => 'E-mail address for system error notifications', 'type' => 'text',
+  'size' => 25,
+  'default' => 'test@example.com',
+  'name' => 'system_error_email', 'value' => $setting->getValue('system_error_email'),
+  'tooltip' => 'The email address for system errors notifications, like cronjobs failures.'
+);
+$aSettings['system'][] = array(
   'display' => 'Disable e-mail confirmations', 'type' => 'select',
   'options' => array( 0 => 'No', 1 => 'Yes' ),
   'default' => 0,
