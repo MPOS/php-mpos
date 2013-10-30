@@ -45,7 +45,12 @@ $count = 0;
 // Table header for account shares
 $log->logInfo("ID\tUsername\tValid\tInvalid\tPercentage\tPayout\t\tDonation\tFee");
 foreach ($aAllBlocks as $iIndex => $aBlock) {
-  if (!$aBlock['accounted'] && $aBlock['height'] > $setting->getValue('last_accounted_block_height')) {
+  if ($iLastBlockHeight = $setting->getValue('last_accounted_block_height')) {
+    $aLastAccountedBlock = $block->getBlock($iLastBlockHeight);
+  } else {
+    $iLastBlockHeight = 0;
+  }
+  if (!$aBlock['accounted'] && $aBlock['height'] > $iLastBlockHeight && @$aLastAccountedBlock['confirmations'] != -1) {
     $iPreviousShareId = @$aAllBlocks[$iIndex - 1]['share_id'] ? $aAllBlocks[$iIndex - 1]['share_id'] : 0;
     $iCurrentUpstreamId = $aBlock['share_id'];
     $aAccountShares = $share->getSharesForAccounts($iPreviousShareId, $aBlock['share_id']);
