@@ -181,28 +181,46 @@ class Worker {
    * @param limit int 
    * @return mixed array Workers and their settings or false
    **/
-  public function getAllWorkers($iLimit=0) {
+  public function getAllWorkers($iLimit=0, $interval=600) {
     $this->debug->append("STA " . __METHOD__, 4);
     $stmt = $this->mysqli->prepare("
-      SELECT id, username, password, monitor, difficulty,
+      SELECT id, username, password, monitor,
+      IFNULL(IF(difficulty=0, pow(2, (" . $this->config['difficulty'] . " - 16)), difficulty), 0) AS difficulty,
        (
          SELECT
-          IFNULL(IF(our_result='Y', ROUND(SUM(IF(difficulty=0, pow(2, (" . $this->config['difficulty'] . " - 16)), difficulty)) * 65536 / 600 / 1000), 0), 0) AS hashrate
+          IFNULL(IF(our_result='Y', ROUND(SUM(IF(difficulty=0, pow(2, (" . $this->config['difficulty'] . " - 16)), difficulty)) * 65536 / ? / 1000), 0), 0) AS hashrate
           FROM " . $this->share->getTableName() . "
           WHERE
             username = w.username
-          AND time > DATE_SUB(now(), INTERVAL 10 MINUTE)
-        ) + (
-         SELECT
-          IFNULL(IF(our_result='Y', ROUND(SUM(IF(difficulty=0, pow(2, (" . $this->config['difficulty'] . " - 16)), difficulty)) * 65536 / 600 / 1000), 0), 0) AS hashrate
+          AND time > DATE_SUB(now(), INTERVAL ? SECOND)
+      ) + (
+        SELECT
+          IFNULL(IF(our_result='Y', ROUND(SUM(IF(difficulty=0, pow(2, (" . $this->config['difficulty'] . " - 16)), difficulty)) * 65536 / ? / 1000), 0), 0) AS hashrate
           FROM " . $this->share->getArchiveTableName() . "
           WHERE
             username = w.username
-          AND time > DATE_SUB(now(), INTERVAL 10 MINUTE)
-       ) AS hashrate
+          AND time > DATE_SUB(now(), INTERVAL ? SECOND)
+      ) AS hashrate,
+      ((
+        SELECT IFNULL(ROUND(SUM(IF(difficulty=0, pow(2, (" . $this->config['difficulty'] . " - 16)), difficulty)), 2), 0)
+        FROM " . $this->share->getTableName() . "
+        WHERE username = w.username AND time > DATE_SUB(now(), INTERVAL ? SECOND)
+      ) + (
+        SELECT IFNULL(ROUND(SUM(IF(difficulty=0, pow(2, (" . $this->config['difficulty'] . " - 16)), difficulty)), 2), 0)
+        FROM " . $this->share->getArchiveTableName() . "
+        WHERE username = w.username AND time > DATE_SUB(now(), INTERVAL ? SECOND)
+      )) / ((
+        SELECT COUNT(id) 
+        FROM " . $this->share->getTableName() . " 
+        WHERE username = w.username AND time > DATE_SUB(now(), INTERVAL ? SECOND)
+      ) + ( 
+        SELECT COUNT(id) 
+        FROM " . $this->share->getArchiveTableName() . " 
+        WHERE username = w.username AND time > DATE_SUB(now(), INTERVAL ? SECOND)
+      )) AS avg_difficulty
       FROM $this->table AS w
       ORDER BY hashrate DESC LIMIT ?");
-    if ($this->checkStmt($stmt) && $stmt->bind_param('i', $iLimit) && $stmt->execute() && $result = $stmt->get_result())
+    if ($this->checkStmt($stmt) && $stmt->bind_param('iiiiiiiii', $interval, $interval, $interval, $interval, $interval, $interval, $interval, $interval, $iLimit) && $stmt->execute() && $result = $stmt->get_result())
       return $result->fetch_all(MYSQLI_ASSOC);
     // Catchall
     $this->setErrorMessage('Failed to fetch workers');
