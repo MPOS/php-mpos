@@ -100,14 +100,14 @@ class Worker {
        ( SELECT COUNT(id) FROM " . $this->share->getArchiveTableName() . " WHERE username = w.username AND time > DATE_SUB(now(), INTERVAL 10 MINUTE)) AS count_all_archive,
        (
          SELECT
-          IFNULL(IF(our_result='Y', ROUND(SUM(IF(difficulty=0, pow(2, (" . $this->config['difficulty'] . " - 16)), difficulty)) * 65536/600/1000), 0), 0) AS hashrate
+          IFNULL(IF(our_result='Y', ROUND(SUM(IF(difficulty=0, pow(2, (" . $this->config['difficulty'] . " - 16)), difficulty)) * POW(2, " . $this->config['target_bits'] . ") / 600 / 1000), 0), 0) AS hashrate
           FROM " . $this->share->getTableName() . "
           WHERE
             username = w.username
           AND time > DATE_SUB(now(), INTERVAL 10 MINUTE)
         ) + (
          SELECT
-          IFNULL(IF(our_result='Y', ROUND(SUM(IF(difficulty=0, pow(2, (" . $this->config['difficulty'] . " - 16)), difficulty)) * 65536/600/1000), 0), 0) AS hashrate
+          IFNULL(IF(our_result='Y', ROUND(SUM(IF(difficulty=0, pow(2, (" . $this->config['difficulty'] . " - 16)), difficulty)) * POW(2, " . $this->config['target_bits'] . ") / 600 / 1000), 0), 0) AS hashrate
           FROM " . $this->share->getArchiveTableName() . "
           WHERE
             username = w.username
