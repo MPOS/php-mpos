@@ -20,7 +20,7 @@
         <td>{if $CONTRIBHASHES[contrib].is_anonymous|default:"0" == 1 && $GLOBAL.userdata.is_admin|default:"0" == 0}anonymous{else}{$CONTRIBHASHES[contrib].account|escape}{/if}</td>
         <td class="right">{($CONTRIBHASHES[contrib].hashrate * $GLOBAL.hashmods.personal)|number_format:"2"}</td>
         <td class="right">{$estday|number_format:"3"}</td>
-        {if $GLOBAL.config.price.currency}<td class="right">{($estday * $GLOBAL.price)|default:"n/a"|number_format:"2"}</td>{/if}
+        {if $GLOBAL.config.price.currency}<td class="right">{($estday * $GLOBAL.price)|default:"n/a"|number_format:"4"}</td>{/if}
       </tr>
 {/section}
 {if $listed != 1 && $GLOBAL.userdata.username|default:"" && $GLOBAL.userdata.hashrate|default:"0" > 0}
@@ -30,7 +30,7 @@
         <td>{$GLOBAL.userdata.username|escape}</td>
         <td class="right">{$GLOBAL.userdata.hashrate}</td>
         <td class="right">{$myestday|number_format:"3"|default:"n/a"}</td>
-        {if $GLOBAL.config.price.currency}<td class="right">{($myestday * $GLOBAL.price)|default:"n/a"|number_format:"2"}</td>{/if}
+        {if $GLOBAL.config.price.currency}<td class="right">{($myestday * $GLOBAL.price)|default:"n/a"|number_format:"4"}</td>{/if}
       </tr>
 {/if}
     </tbody>
