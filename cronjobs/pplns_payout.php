@@ -53,7 +53,13 @@ foreach ($aAllBlocks as $iIndex => $aBlock) {
     $pplns_target = $config['pplns']['shares']['default'];
   }
 
-  if (!$aBlock['accounted'] && $aBlock['height'] > $setting->getValue('last_accounted_block_height')) {
+  if ($iLastBlockHeight = $setting->getValue('last_accounted_block_height')) {
+    $aLastAccountedBlock = $block->getBlock($iLastBlockHeight);
+  } else {
+    $iLastBlockHeight = 0;
+  }
+  // Double payout detection
+  if ( ( !$aBlock['accounted'] && $aBlock['height'] > $iLastBlockHeight ) || @$aLastAccountedBlock['confirmations'] == -1) {
     $iPreviousShareId = @$aAllBlocks[$iIndex - 1]['share_id'] ? $aAllBlocks[$iIndex - 1]['share_id'] : 0;
     $iCurrentUpstreamId = $aBlock['share_id'];
     if (!is_numeric($iCurrentUpstreamId)) {
