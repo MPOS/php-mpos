@@ -50,8 +50,6 @@ Requirements
 
 This setup has been tested on Ubuntu 12.04, Ubuntu 13.04 and CentOS.
 It should also work on any related distribution (RHEL, Debian).
-For support on how to get `litecoind` or `pushpoold` to work, please ask
-in the appropriate forums.
 
 Be aware that `MPOS` is **only** for pooled mining. Solo Mining is not
 supported. They will never match an upstream share, solo miners do not create
@@ -77,16 +75,16 @@ The following feature have been implemented so far:
 
 * Fully re-written GUI with [Smarty][2] templates
 * Mobile WebUI
-* **NEW** VARDIFF Support
+* Scrypt, **NEW** SHA256, VARDIFF Support
 * Reward Systems
  * Propotional
  * PPS
  * PPLNS
 * Statistics are cached in Memcache by Cronjob for quick data access
-* **NEW** New Theme
- * **NEW** Live Dashboard
- * **NEW** AJAX Support
- * **NEW** Overhauled API
+* New Theme
+ * Live Dashboard
+ * AJAX Support
+ * Overhauled API
 * Web User accounts
  * Re-Captcha protected registration form
 * Worker accounts
