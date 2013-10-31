@@ -217,10 +217,12 @@ class Statistics {
           SELECT IFNULL(ROUND(SUM(IF(difficulty=0, POW(2, (" . $this->config['difficulty'] . " - 16)), difficulty)) * POW(2, " . $this->config['target_bits'] . ") / ? / 1000), 0) AS hashrate
           FROM " . $this->share->getTableName() . "
           WHERE time > DATE_SUB(now(), INTERVAL ? SECOND)
+          AND our_result = 'Y'
         ) + (
           SELECT IFNULL(ROUND(SUM(IF(difficulty=0, POW(2, (" . $this->config['difficulty'] . " - 16)), difficulty)) * POW(2, " . $this->config['target_bits'] . ") / ? / 1000), 0) AS hashrate
           FROM " . $this->share->getArchiveTableName() . "
           WHERE time > DATE_SUB(now(), INTERVAL ? SECOND)
+          AND our_result = 'Y'
         )
       ) AS hashrate
       FROM DUAL");
@@ -245,10 +247,12 @@ class Statistics {
           SELECT ROUND(COUNT(id) / ?, 2) AS sharerate
           FROM " . $this->share->getTableName() . "
           WHERE time > DATE_SUB(now(), INTERVAL ? SECOND)
+          AND our_result = 'Y'
         ) + (
           SELECT ROUND(COUNT(id) / ?, 2) AS sharerate
           FROM " . $this->share->getArchiveTableName() . "
           WHERE time > DATE_SUB(now(), INTERVAL ? SECOND)
+          AND our_result = 'Y'
         )
       ) AS sharerate
       FROM DUAL");
@@ -418,6 +422,7 @@ class Statistics {
           FROM " . $this->share->getTableName() . " AS s,
                " . $this->user->getTableName() . " AS u
           WHERE u.username = SUBSTRING_INDEX( s.username, '.', 1 )
+            AND our_result = 'Y'
             AND s.time > DATE_SUB(now(), INTERVAL ? SECOND)
             AND u.id = ?
         ) + (
@@ -425,6 +430,7 @@ class Statistics {
           FROM " . $this->share->getArchiveTableName() . " AS s,
                " . $this->user->getTableName() . " AS u
           WHERE u.username = SUBSTRING_INDEX( s.username, '.', 1 )
+            AND our_result = 'Y'
             AND s.time > DATE_SUB(now(), INTERVAL ? SECOND)
             AND u.id = ?
         ) AS hashrate
@@ -446,7 +452,8 @@ class Statistics {
       JOIN " . $this->user->getTableName() . " AS a
       ON a.username = SUBSTRING_INDEX( s.username, '.', 1 )
       AND a.id = ?
-      AND s.id > ?");
+      AND s.id > ?
+      WHERE our_result = 'Y'");
     if ($this->checkStmt($stmt) && $stmt->bind_param("ii", $account_id, $last_paid_pps_id) && $stmt->execute() && $result = $stmt->get_result() )
       return $this->memcache->setCache(__FUNCTION__ . $account_id, $result->fetch_object()->total);
     $this->debug->append("Failed fetching average share dificulty: " . $this->mysqli->error, 3);
@@ -469,6 +476,7 @@ class Statistics {
       FROM " . $this->share->getTableName() . " AS s JOIN " . $this->user->getTableName() . " AS a
       ON a.username = SUBSTRING_INDEX( s.username, '.', 1 )
       WHERE s.time > DATE_SUB(now(), INTERVAL ? SECOND)
+      AND our_result = 'Y'
       AND a.id = ?");
     if ($this->checkStmt($stmt) && $stmt->bind_param("ii", $interval, $account_id) && $stmt->execute() && $result = $stmt->get_result() )
       return $this->memcache->setCache(__FUNCTION__ . $account_id, $result->fetch_object()->avgsharediff);
@@ -492,6 +500,7 @@ class Statistics {
           FROM " . $this->share->getTableName() . " AS s,
                " . $this->user->getTableName() . " AS u
           WHERE u.username = SUBSTRING_INDEX( s.username, '.', 1 )
+            AND our_result = 'Y'
             AND s.time > DATE_SUB(now(), INTERVAL ? SECOND)
             AND u.id = ?
         ) + (
@@ -499,6 +508,7 @@ class Statistics {
           FROM " . $this->share->getArchiveTableName() . " AS s,
                " . $this->user->getTableName() . " AS u
           WHERE u.username = SUBSTRING_INDEX( s.username, '.', 1 )
+            AND our_result = 'Y'
             AND s.time > DATE_SUB(now(), INTERVAL ? SECOND)
             AND u.id = ?
         )
@@ -524,6 +534,7 @@ class Statistics {
       FROM " . $this->share->getTableName() . " AS s,
            " . $this->user->getTableName() . " AS u
       WHERE u.username = SUBSTRING_INDEX( s.username, '.', 1 )
+        AND our_result = 'Y'
         AND s.time > DATE_SUB(now(), INTERVAL 600 SECOND)
         AND u.id = ?");
     if ($this->checkStmt($stmt) && $stmt->bind_param("i", $account_id) && $stmt->execute() && $result = $stmt->get_result() )
@@ -623,6 +634,7 @@ class Statistics {
         HOUR(s.time) AS hour
       FROM " . $this->share->getTableName() . " AS s, accounts AS a
       WHERE time < NOW() - INTERVAL 1 HOUR
+        AND our_result = 'Y'
         AND time > NOW() - INTERVAL 25 HOUR
         AND a.username = SUBSTRING_INDEX( s.username, '.', 1 )
         AND a.id = ?
@@ -633,6 +645,7 @@ class Statistics {
         HOUR(s.time) AS hour
       FROM " . $this->share->getArchiveTableName() . " AS s, accounts AS a
       WHERE time < NOW() - INTERVAL 1 HOUR
+        AND our_result = 'Y'
         AND time > NOW() - INTERVAL 25 HOUR
         AND a.username = SUBSTRING_INDEX( s.username, '.', 1 )
         AND a.id = ?
@@ -665,6 +678,7 @@ class Statistics {
       FROM " . $this->share->getTableName() . " AS s
       WHERE time < NOW() - INTERVAL 1 HOUR
         AND time > NOW() - INTERVAL 25 HOUR
+        AND our_result = 'Y'
       GROUP BY HOUR(time)
       UNION ALL
       SELECT
@@ -673,6 +687,7 @@ class Statistics {
       FROM " . $this->share->getArchiveTableName() . " AS s
       WHERE time < NOW() - INTERVAL 1 HOUR
         AND time > NOW() - INTERVAL 25 HOUR
+        AND our_result = 'Y'
       GROUP BY HOUR(time)");
     if ($this->checkStmt($stmt) && $stmt->execute() && $result = $stmt->get_result()) {
       $iStartHour = date('G');
