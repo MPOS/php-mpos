@@ -28,9 +28,9 @@
       <pre>./cgminer --scrypt -o stratum+tcp://{$smarty.server.SERVER_NAME}:3333 -u <em>Weblogin</em>.<em>Worker</em> -p <em>Worker password</em></pre>
       <p>If you want, you can create additional workers with usernames and passwords of your choice <a href="{$smarty.server.PHP_SELF}?page=account&action=workers">Here</a></p>
     </li>
-    <li>4. <strong>Create a Litecoin address to recieve payments.</strong>
+    <li>4. <strong>Create a {$GLOBAL.config.currency} address to recieve payments.</strong>
       <ul>
-        <li> Downloading the client &amp; block chain: 	Download the Litecoin client from the <a href="http://www.litecoin.org/">here</a>.
+        <li> Downloading the client &amp; block chain: 	Download the {$GLOBAL.config.currency} client from the coin website.</a>.
           <p>Generate a new address and input it on your account page to receive payments.</p>
         </li>
       </ul>
