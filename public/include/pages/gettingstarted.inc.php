@@ -4,6 +4,9 @@
 if (!defined('SECURITY'))
     die('Hacking attempt');
 
+
+
+
 // Tempalte specifics
 $smarty->assign("CONTENT", "default.tpl");
 ?>
