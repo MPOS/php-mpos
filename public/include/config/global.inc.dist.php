@@ -69,6 +69,24 @@ $config['wallet']['host'] = 'localhost:19334';
 $config['wallet']['username'] = 'testnet';
 $config['wallet']['password'] = 'testnet';
 
+
+
+
+/**
+ * Getting Started Config
+ *
+ * This is displayed on GettingStarted Page
+ * to make it more dynamic
+ *
+ *
+ **/
+$config['gettingstarted']['coinname'] = 'Litecoin';
+$config['gettingstarted']['coinurl'] = 'http://www.litecoin.org';
+$config['gettingstarted']['stratumport'] = '3333';
+ 
+ 
+ 
+
 /**
  * API configuration to fetch prices for set currency
  *
