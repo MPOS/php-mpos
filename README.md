@@ -50,8 +50,6 @@ Requirements
 
 This setup has been tested on Ubuntu 12.04, Ubuntu 13.04 and CentOS.
 It should also work on any related distribution (RHEL, Debian).
-For support on how to get `litecoind` or `pushpoold` to work, please ask
-in the appropriate forums.
 
 Be aware that `MPOS` is **only** for pooled mining. Solo Mining is not
 supported. They will never match an upstream share, solo miners do not create
@@ -77,16 +75,16 @@ The following feature have been implemented so far:
 
 * Fully re-written GUI with [Smarty][2] templates
 * Mobile WebUI
-* **NEW** VARDIFF Support
+* Scrypt, **NEW** SHA256, VARDIFF Support
 * Reward Systems
  * Propotional
  * PPS
  * PPLNS
 * Statistics are cached in Memcache by Cronjob for quick data access
-* **NEW** New Theme
- * **NEW** Live Dashboard
- * **NEW** AJAX Support
- * **NEW** Overhauled API
+* New Theme
+ * Live Dashboard
+ * AJAX Support
+ * Overhauled API
 * Web User accounts
  * Re-Captcha protected registration form
 * Worker accounts
@@ -143,6 +141,15 @@ Other customizations are also possible but will require merging changes together
 on non-existing features in `MPOS`. For the vast majority, adjusting themes should be enough to highlight your pool from others.
 
 In all that, I humbly ask to keep the `MPOS` author reference and Github URL intact.
+
+Related Software
+================
+
+There are a few other projects out there that take advantage of MPOS and it's included API. Here a quick list that you can check out for yourself:
+
+* [MPOS IRC Bot](https://github.com/WKNiGHT-/mpos-bot) written in Python, standlone bot, using the MPOS API
+* [MPOS Eggdrop Module](https://github.com/iAmShorty/mpos-eggdrop-tcl) written in TCL, adding MPOS commands to this bot, using the MPOS API
+
 Contributing
 ============
 
