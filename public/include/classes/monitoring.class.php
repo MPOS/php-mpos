@@ -9,6 +9,11 @@ class Monitoring extends Base {
     $this->table = 'monitoring';
   }
 
+  /**
+   * Store Uptime Robot status information as JSON in settings table
+   * @param none
+   * @return bool true on success, false on error
+   **/
   public function storeUptimeRobotStatus() {
     if ($api_keys = $this->setting->getValue('monitoring_uptimerobot_private_key')) {
       $aJSONData = array();
@@ -28,11 +33,17 @@ class Monitoring extends Base {
       }
       if (!$this->setting->setValue('monitoring_uptimerobot_status', json_encode($aAllMonitorsStatus)) || !$this->setting->setValue('monitoring_uptimerobot_lastcheck', time())) {
         $this->setErrorMessage('Failed to store uptime status: ' . $setting->getError());
+        return false;
       }
     }
     return true;
   }
 
+  /**
+   * Fetch Uptime Robot Status from settings table
+   * @param none
+   * @return array Data on success, false on failure
+   **/
   public function getUptimeRobotStatus() {
     if ($json = $this->setting->getValue('monitoring_uptimerobot_status'))
       return json_decode($json, true);

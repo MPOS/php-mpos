@@ -32,9 +32,15 @@ class Tools extends Base {
 
     // run the query
     $res = curl_exec($ch);
-    if ($res === false) throw new Exception('Could not get reply: '.curl_error($ch));
+    if ($res === false) {
+      $this->setErrorMessage('Could not get reply: '.curl_error($ch));
+      return false;
+    }
     $dec = json_decode($res, true);
-    if (!$dec) throw new Exception('Invalid data received, please make sure connection is working and requested API exists');
+    if (!$dec) {
+      $this->setErrorMessage('Invalid data received, please make sure connection is working and requested API exists');
+      return false;
+    }
     return $dec;
   }
 
