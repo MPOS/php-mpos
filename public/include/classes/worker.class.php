@@ -1,38 +1,10 @@
 <?php
 
 // Make sure we are called from index.php
-if (!defined('SECURITY'))
-  die('Hacking attempt');
+if (!defined('SECURITY')) die('Hacking attempt');
 
-class Worker {
-  private $sError = '';
-  private $table = 'pool_worker';
-
-  public function __construct($debug, $mysqli, $user, $share, $config) {
-    $this->debug = $debug;
-    $this->mysqli = $mysqli;
-    $this->user = $user;
-    $this->share = $share;
-    $this->config = $config;
-    $this->debug->append("Instantiated Worker class", 2);
-  }
-
-  // get and set methods
-  private function setErrorMessage($msg) {
-    $this->sError = $msg;
-  }
-  public function getError() {
-    return $this->sError;
-  }
-
-  private function checkStmt($bState) {
-    if ($bState ===! true) {
-      $this->debug->append("Failed to prepare statement: " . $this->mysqli->error);
-      $this->setErrorMessage('Internal application Error');
-      return false;
-    }
-    return true;
-  }
+class Worker extends Base {
+  protected $table = 'pool_worker';
 
   /**
    * Update worker list for a user
@@ -71,16 +43,19 @@ class Worker {
    * @param none
    * @return data array Workers in IDLE state and monitoring enabled
    **/
-  public function getAllIdleWorkers() {
+  public function getAllIdleWorkers($interval=600) {
     $this->debug->append("STA " . __METHOD__, 4);
     $stmt = $this->mysqli->prepare("
-      SELECT account_id, id, username
-      FROM " . $this->table . " AS w
-      WHERE monitor = 1
-      AND (
-        SELECT IFNULL(SUM(IF(our_result = 'Y', 1, 0)), 0) FROM " . $this->share->getTableName() . " WHERE username = w.username AND time > DATE_SUB(now(), INTERVAL 10 MINUTE)
-      ) = 0");
-    if ($this->checkStmt($stmt) && $stmt->execute() && $result = $stmt->get_result())
+      SELECT w.account_id AS account_id, w.id AS id, w.username AS username
+      FROM " . $this->share->getTableName() . " AS s
+      RIGHT JOIN " . $this->getTableName() . " AS w
+      ON w.username = s.username
+      AND s.time > DATE_SUB(now(), INTERVAL ? SECOND)
+      AND our_result = 'Y'
+      WHERE w.monitor = 1
+      AND s.id IS NULL
+    ");
+    if ($this->checkStmt($stmt) && $stmt->bind_param('i', $interval) && $stmt->execute() && $result = $stmt->get_result())
       return $result->fetch_all(MYSQLI_ASSOC);
     // Catchall
     $this->setErrorMessage("Unable to fetch IDLE, monitored workers");
@@ -297,4 +272,8 @@ class Worker {
   }
 }
 
-$worker = new Worker($debug, $mysqli, $user, $share, $config);
+$worker = new Worker();
+$worker->setDebug($debug);
+$worker->setMysql($mysqli);
+$worker->setShare($share);
+$worker->setConfig($config);
