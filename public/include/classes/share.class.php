@@ -276,7 +276,7 @@ class Share Extends Base {
     $stmt = $this->mysqli->prepare("SELECT SUBSTRING_INDEX( `username` , '.', 1 ) AS account, id FROM $this->table WHERE solution = ? LIMIT 1");
     if ($this->checkStmt($stmt) && $stmt->bind_param('s', $aBlock['hash']) && $stmt->execute() && $result = $stmt->get_result()) {
       $this->oUpstream = $result->fetch_object();
-      $this->share_type = 'startum_blockhash';
+      $this->share_type = 'stratum_blockhash';
       if (!empty($this->oUpstream->account) && is_int($this->oUpstream->id))
         return true;
     }
@@ -286,7 +286,7 @@ class Share Extends Base {
     $stmt = $this->mysqli->prepare("SELECT SUBSTRING_INDEX( `username` , '.', 1 ) AS account, id FROM $this->table WHERE solution = ? LIMIT 1");
     if ($this->checkStmt($stmt) && $stmt->bind_param('s', $scrypt_hash) && $stmt->execute() && $result = $stmt->get_result()) {
       $this->oUpstream = $result->fetch_object();
-      $this->share_type = 'startum_solution';
+      $this->share_type = 'stratum_solution';
       if (!empty($this->oUpstream->account) && is_int($this->oUpstream->id))
         return true;
     }
