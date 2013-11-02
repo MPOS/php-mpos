@@ -100,7 +100,7 @@
     <form action="{$smarty.server.PHP_SELF}" method="POST" id='query'>
       <input type="hidden" name="page" value="{$smarty.request.page|escape}">
       <input type="hidden" name="action" value="{$smarty.request.action|escape}">
-      <input type="text" class="pin" name="query" value="{$smarty.request.query|default:"%"}">
+      <input type="text" class="pin" name="query" value="{$smarty.request.query|default:"%"|escape}">
       <input type="submit" value="Query" class="alt_btn">
     </form>
     </div>
