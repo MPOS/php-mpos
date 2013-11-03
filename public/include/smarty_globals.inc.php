@@ -68,6 +68,7 @@ $aGlobal = array(
     'accounts' => $config['accounts'],
     'disable_invitations' => $setting->getValue('disable_invitations'),
     'disable_notifications' => $setting->getValue('disable_notifications'),
+    'monitoring_uptimerobot_private_key' => $setting->getValue('monitoring_uptimerobot_private_key'),
     'statistics_ajax_refresh_interval' => $statistics_ajax_refresh_interval,
     'price' => array( 'currency' => $config['price']['currency'] ),
     'targetdiff' => $config['difficulty'],
