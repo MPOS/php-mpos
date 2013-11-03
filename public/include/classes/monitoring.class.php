@@ -4,11 +4,50 @@
 if (!defined('SECURITY'))
   die('Hacking attempt');
 
-class Monitoring {
-  public function __construct($debug, $mysqli) {
-    $this->debug = $debug;
-    $this->mysqli = $mysqli;
+class Monitoring extends Base {
+  public function __construct() {
     $this->table = 'monitoring';
+  }
+
+  /**
+   * Store Uptime Robot status information as JSON in settings table
+   * @param none
+   * @return bool true on success, false on error
+   **/
+  public function storeUptimeRobotStatus() {
+    if ($api_keys = $this->setting->getValue('monitoring_uptimerobot_private_key')) {
+      $aJSONData = array();
+      $url = 'http://api.uptimerobot.com';
+      $aMonitors = explode(',', $api_keys);
+      foreach ($aMonitors as $aData) {
+        $temp = explode('|', $aData);
+        $aMonitor['api_key'] = $temp[0];
+        $aMonitor['monitor_id'] = $temp[1];
+        $target = '/getMonitors?apiKey=' . $aMonitor['api_key'] . '&monitors=' . $aMonitor['monitor_id'] . '&format=json&noJsonCallback=1&customUptimeRatio=1-7-30&logs=1';
+        if (!$aMonitorStatus = $this->tools->getApi($url, $target)) {
+          $this->setErrorMessage('Failed to run API call: ' . $this->tools->getError());
+          return false;
+        }
+        $aMonitorStatus['monitors']['monitor'][0]['customuptimeratio'] = explode('-', $aMonitorStatus['monitors']['monitor'][0]['customuptimeratio']);
+        $aAllMonitorsStatus[] = $aMonitorStatus['monitors']['monitor'][0];
+      }
+      if (!$this->setting->setValue('monitoring_uptimerobot_status', json_encode($aAllMonitorsStatus)) || !$this->setting->setValue('monitoring_uptimerobot_lastcheck', time())) {
+        $this->setErrorMessage('Failed to store uptime status: ' . $setting->getError());
+        return false;
+      }
+    }
+    return true;
+  }
+
+  /**
+   * Fetch Uptime Robot Status from settings table
+   * @param none
+   * @return array Data on success, false on failure
+   **/
+  public function getUptimeRobotStatus() {
+    if ($json = $this->setting->getValue('monitoring_uptimerobot_status'))
+      return json_decode($json, true);
+    return false;
   }
 
   /**
@@ -46,4 +85,8 @@ class Monitoring {
   }
 }
 
-$monitoring = new Monitoring($debug, $mysqli);
+$monitoring = new Monitoring();
+$monitoring->setConfig($config);
+$monitoring->setDebug($debug);
+$monitoring->setMysql($mysqli);
+$monitoring->setSetting($setting);

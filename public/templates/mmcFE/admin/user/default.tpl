@@ -26,7 +26,7 @@
 <form action="{$smarty.server.PHP_SELF}" method="POST" id='query'>
   <input type="hidden" name="page" value="{$smarty.request.page}">
   <input type="hidden" name="action" value="{$smarty.request.action}">
-  <input type="text" class="pin" name="query" value="{$smarty.request.query|default:"%"}">
+  <input type="text" class="pin" name="query" value="{$smarty.request.query|default:"%"|escape}">
   <input type="submit" class="submit small" value="Query">
 </form>
 {include file="global/block_footer.tpl"}
