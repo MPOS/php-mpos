@@ -151,6 +151,21 @@ $aSettings['statistics'][] = array(
   'name' => 'statistics_personal_hashrate_modifier', 'value' => $setting->getValue('statistics_personal_hashrate_modifier'),
   'tooltip' => 'Auto-adjust displayed personal hashrates to a certain limit.'
 );
+$aSettings['statistics'][] = array(
+  'display' => 'Enable Google analytics', 'type' => 'select',
+  'options' => array( 0 => 'No', 1 => 'Yes' ),
+  'default' => 0,
+  'name' => 'statistics_analytics_enabled', 'value' => $setting->getValue('statistics_analytics_enabled'),
+  'tooltip' => 'Enable or Disable Google Analytics.'
+);
+$aSettings['statistics'][] = array(
+  'display' => 'Google Analytics Code', 'type' => 'textarea',
+  'size' => 5,
+  'height' => 10,
+  'default' => 'Code from Google Analytics',
+  'name' => 'statistics_analytics_code', 'value' => $setting->getValue('statistics_analytics_code'),
+  'tooltip' => '.'
+);
 $aSettings['acl'][] = array(
   'display' => 'Pool Statistics', 'type' => 'select',
   'options' => array( 0 => 'Private', 1 => 'Public'),
@@ -262,21 +277,6 @@ $aSettings['recaptcha'][] = array(
   'default' => 'YOUR_PUBLIC_KEY',
   'name' => 'recaptcha_public_key', 'value' => $setting->getValue('recaptcha_public_key'),
   'tooltip' => 'Your public key as given by your re-Captcha account.'
-);
-$aSettings['analytics'][] = array(
-  'display' => 'Enable Google analytics', 'type' => 'select',
-  'options' => array( 0 => 'No', 1 => 'Yes' ),
-  'default' => 0,
-  'name' => 'analytics_enabled', 'value' => $setting->getValue('analytics_enabled'),
-  'tooltip' => 'Enable or Disable Google Analytics.'
-);
-$aSettings['analytics'][] = array(
-  'display' => 'Google Analytics Code', 'type' => 'textarea',
-  'size' => 5,
-  'height' => 10,
-  'default' => 'Code from Google Analytics',
-  'name' => 'analytics_code', 'value' => $setting->getValue('analytics_code'),
-  'tooltip' => '.'
 );
 $aSettings['monitoring'][] = array(
   'display' => 'Uptime Robot Private API Key', 'type' => 'text',

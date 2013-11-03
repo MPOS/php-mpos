@@ -93,8 +93,8 @@ $setting->getValue('website_blockexplorer_url') ? $aGlobal['website']['blockexpl
 $setting->getValue('website_chaininfo_url') ? $aGlobal['website']['chaininfo']['url'] = $setting->getValue('website_chaininfo_url') : $aGlobal['website']['chaininfo']['url'] = 'http://allchains.info';
 
 // Google Analytics
-$aGlobal['analytics']['enabled'] = $setting->getValue('analytics_enabled');
-$aGlobal['analytics']['code'] = $setting->getValue('analytics_code');
+$aGlobal['analytics']['enabled'] = $setting->getValue('statistics_analytics_enabled');
+$aGlobal['analytics']['code'] = $setting->getValue('statistics_analytics_code');
 
 // ACLs
 $aGlobal['acl']['pool']['statistics'] = $setting->getValue('acl_pool_statistics');
