@@ -23,7 +23,12 @@
       @import url("{$PATH}/css/date_input.css");
     </style>
     <!--[if lt IE 8]><style type="text/css" media="all">@import url("{$PATH}/css/ie.css");</style><![endif]-->
-  </head>
+  
+    {if $GLOBAL.analytics.enabled}
+      {$GLOBAL.analytics.code}
+    {/if}
+    
+</head>
 
 <body>
 <div id="hld">

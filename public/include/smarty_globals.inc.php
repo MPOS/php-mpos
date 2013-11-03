@@ -92,6 +92,10 @@ $aGlobal['website']['chaininfo']['disabled'] = $setting->getValue('website_chain
 $setting->getValue('website_blockexplorer_url') ? $aGlobal['website']['blockexplorer']['url'] = $setting->getValue('website_blockexplorer_url') : $aGlobal['website']['blockexplorer']['url'] = 'http://explorer.litecoin.net/block/';
 $setting->getValue('website_chaininfo_url') ? $aGlobal['website']['chaininfo']['url'] = $setting->getValue('website_chaininfo_url') : $aGlobal['website']['chaininfo']['url'] = 'http://allchains.info';
 
+// Google Analytics
+$aGlobal['analytics']['enabled'] = $setting->getValue('analytics_enabled');
+$aGlobal['analytics']['code'] = $setting->getValue('analytics_code');
+
 // ACLs
 $aGlobal['acl']['pool']['statistics'] = $setting->getValue('acl_pool_statistics');
 $aGlobal['acl']['block']['statistics'] = $setting->getValue('acl_block_statistics');

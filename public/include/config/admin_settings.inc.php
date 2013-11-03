@@ -263,6 +263,21 @@ $aSettings['recaptcha'][] = array(
   'name' => 'recaptcha_public_key', 'value' => $setting->getValue('recaptcha_public_key'),
   'tooltip' => 'Your public key as given by your re-Captcha account.'
 );
+$aSettings['analytics'][] = array(
+  'display' => 'Enable Google analytics', 'type' => 'select',
+  'options' => array( 0 => 'No', 1 => 'Yes' ),
+  'default' => 0,
+  'name' => 'analytics_enabled', 'value' => $setting->getValue('analytics_enabled'),
+  'tooltip' => 'Enable or Disable Google Analytics.'
+);
+$aSettings['analytics'][] = array(
+  'display' => 'Google Analytics Code', 'type' => 'textarea',
+  'size' => 5,
+  'height' => 10,
+  'default' => 'Code from Google Analytics',
+  'name' => 'analytics_code', 'value' => $setting->getValue('analytics_code'),
+  'tooltip' => '.'
+);
 $aSettings['monitoring'][] = array(
   'display' => 'Uptime Robot Private API Key', 'type' => 'text',
   'size' => 25,
