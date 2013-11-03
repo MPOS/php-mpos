@@ -24,8 +24,8 @@
     </style>
     <!--[if lt IE 8]><style type="text/css" media="all">@import url("{$PATH}/css/ie.css");</style><![endif]-->
   
-    {if $GLOBAL.analytics.enabled}
-      {$GLOBAL.analytics.code}
+    {if $GLOBAL.statistics.analytics.enabled}
+      {$GLOBAL.statistics.analytics.code}
     {/if}
     
 </head>

@@ -160,8 +160,8 @@ $aSettings['statistics'][] = array(
 );
 $aSettings['statistics'][] = array(
   'display' => 'Google Analytics Code', 'type' => 'textarea',
-  'size' => 5,
-  'height' => 10,
+  'size' => 20,
+  'height' => 12,
   'default' => 'Code from Google Analytics',
   'name' => 'statistics_analytics_code', 'value' => $setting->getValue('statistics_analytics_code'),
   'tooltip' => '.'

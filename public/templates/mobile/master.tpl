@@ -29,11 +29,11 @@
     </script>
 {/if}
   
-    {if $GLOBAL.analytics.enabled}
-      {$GLOBAL.analytics.code}
+    {if $GLOBAL.statistics.analytics.enabled}
+      {$GLOBAL.statistics.analytics.code}
     {/if}
     
-</head>
+  </head>
   <body>
     <div data-role="page" id="mpos-page" data-url="mpos-page">
 {if $smarty.session.AUTHENTICATED|default:"0" == 1}

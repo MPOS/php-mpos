@@ -28,8 +28,8 @@
 	<script type="text/javascript" src="{$PATH}/js/custom.js"></script>
   <!--[if IE]><script type="text/javascript" src="{$PATH}/js/excanvas.js"></script><![endif]-->
   
-    {if $GLOBAL.analytics.enabled}
-      {$GLOBAL.analytics.code}
+    {if $GLOBAL.statistics.analytics.enabled}
+      {$GLOBAL.statistics.analytics.code}
     {/if}
     
 </head>
