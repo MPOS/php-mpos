@@ -50,6 +50,9 @@ class Base {
   public function setTokenType($tokentype) {
     $this->tokentype = $tokentype;
   }
+  public function setShare($share) {
+    $this->share = $share;
+  }
   public function setErrorMessage($msg) {
     $this->sError = $msg;
   }
