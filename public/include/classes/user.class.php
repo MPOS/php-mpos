@@ -120,12 +120,12 @@ class User {
   }
 
   /**
-   * Check user login
+   * Check user mpos login
    * @param username string Username
    * @param password string Password
    * @return bool
    **/
-  public function checkLogin($username, $password) {
+  public function loginUserMPOS($username, $password) {
     $this->debug->append("STA " . __METHOD__, 4);
     $this->debug->append("Checking login for $username with password $password", 2);
     if (empty($username) || empty($password)) {
@@ -154,6 +154,76 @@ class User {
 
     return false;
   }
+  
+    /**
+   * Check user mpos login
+   * @param provider string
+   * @return bool
+   **/
+  public function loginUserOpenID($provider) {
+    $this->debug->append("STA " . __METHOD__, 4);
+    $this->debug->append("Checking login for $username with password $password", 2);
+    if ($this->isLocked($this->getUserId($username))) {
+      $this->setErrorMessage("Account is locked. Please contact site support.");
+      return false;
+    }
+	try {
+	$openid = new LightOpenID($_SERVER['SERVER_NAME']);
+		if (!$openid->mode) {
+			if ($provider) {
+				switch($provider) {
+                case 'facebook' :
+                    $openid->identity = 'http://facebook-openid.appspot.com';
+                    break;
+                case 'google' :
+                    $openid->identity = 'https://www.google.com/accounts/o8/id';
+                    break;
+                case 'yahoo' :
+                    $openid->identity = 'https://me.yahoo.com';
+                    break;
+                default :
+                    $openid->identity = 'https://www.google.com/accounts/o8/id';
+                    break;
+				}
+				$openid->required = array('contact/email');
+				header('Location: ' . $openid->authUrl());
+			}
+		} 
+		elseif ($openid->mode == 'cancel') {
+			header('Location: http://www.google.com/');
+		} 
+		else {
+			if ($openid->validate()) {
+				$id = $openid->getAttributes();
+				$email = $id['contact/email'];
+
+				if (!getUserNameByEmail($email)) {
+					$username = "_undef_" . rand(1, 10000000000);
+					$password1 = "P@ssw0rd";
+					$password2 = "P@ssw0rd";
+					$pin = "1234";
+					$email1 = $email;
+					$email2 = $email;
+					$this->register($username, $password1, $password2, $pin, $email1='', $email2='', $strToken='');
+				}
+			
+				elseif (getUserNameByEmail($email)) {
+					$username = getUserNameByEmail($email);
+					$this->createSession($username);
+					if ($this->setUserIp($this->getUserId($username), $_SERVER['REMOTE_ADDR']))
+					return true;
+				}
+			}
+			header('Location: index.php');
+		}
+	} 
+	catch(ErrorException $e) {
+		trigger_error($e->getMessage());
+	}
+	return false;
+  }
+  
+  
 
   /**
    * Check the users PIN for confirmation
