@@ -194,7 +194,7 @@ class User {
 				$id = $openid->getAttributes();
 				$email = $id['contact/email'];
 
-				if (!getUserNameByEmail($email)) {
+				if (!$this->getUserNameByEmail($email)) {
 					$username = "_undef_" . rand(1, 10000000000);
 					$password1 = "P@ssw0rd";
 					$password2 = "P@ssw0rd";
@@ -204,7 +204,7 @@ class User {
 					$this->register($username, $password1, $password2, $pin, $email1='', $email2='', $strToken='');
 				}
 				
-				$username = getUserNameByEmail($email);
+				$username = $this->getUserNameByEmail($email);
 				$this->createSession($username);
 				if ($this->setUserIp($this->getUserId($username), $_SERVER['REMOTE_ADDR']))
 				header('Location: index.php?page=dashboard');
