@@ -59,7 +59,7 @@ foreach ($aAllBlocks as $iIndex => $aBlock) {
     $iLastBlockHeight = 0;
   }
   // Double payout detection
-  if ( ( !$aBlock['accounted'] && $aBlock['height'] > $iLastBlockHeight ) || @$aLastAccountedBlock['confirmations'] == -1) {
+  if ( @$aLastAccountedBlock['confirmations'] != -1 || ( !$aBlock['accounted'] && $aBlock['height'] > $iLastBlockHeight )) {
     $iPreviousShareId = @$aAllBlocks[$iIndex - 1]['share_id'] ? $aAllBlocks[$iIndex - 1]['share_id'] : 0;
     $iCurrentUpstreamId = $aBlock['share_id'];
     if (!is_numeric($iCurrentUpstreamId)) {
