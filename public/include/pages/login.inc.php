@@ -7,6 +7,7 @@ if ($setting->getValue('maintenance') && !$user->isAdmin($user->getUserId($_POST
   $_SESSION['POPUP'][] = array('CONTENT' => 'You are not allowed to login during maintenace.', 'TYPE' => 'info');
 } 
 
+// Check if user is logging in via openid method
 if ($user->loginUserOpenID(@$_POST['openid'])) {
   empty($_POST['to']) ? $to = $_SERVER['PHP_SELF'] : $to = $_POST['to'];
   $port = ($_SERVER["SERVER_PORT"] == "80" or $_SERVER["SERVER_PORT"] == "443") ? "" : (":".$_SERVER["SERVER_PORT"]);
@@ -14,7 +15,7 @@ if ($user->loginUserOpenID(@$_POST['openid'])) {
   if (!headers_sent()) header('Location: ' . $location);
   exit('<meta http-equiv="refresh" content="0; url=' . $location . '"/>');
 }
-
+// Check fi user is logging in via mpos login method
 elseif ($user->loginUserMPOS(@$_POST['username'], @$_POST['password'])) {
   empty($_POST['to']) ? $to = $_SERVER['PHP_SELF'] : $to = $_POST['to'];
   $port = ($_SERVER["SERVER_PORT"] == "80" or $_SERVER["SERVER_PORT"] == "443") ? "" : (":".$_SERVER["SERVER_PORT"]);
@@ -22,6 +23,7 @@ elseif ($user->loginUserMPOS(@$_POST['username'], @$_POST['password'])) {
   if (!headers_sent()) header('Location: ' . $location);
   exit('<meta http-equiv="refresh" content="0; url=' . $location . '"/>');
 } 
+
 elseif (@$_POST['username'] && @$_POST['password']) {
   $_SESSION['POPUP'][] = array('CONTENT' => 'Unable to login: '. $user->getError(), 'TYPE' => 'errormsg');
 }
