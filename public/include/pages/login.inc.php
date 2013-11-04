@@ -8,16 +8,15 @@ if ($setting->getValue('maintenance') && !$user->isAdmin($user->getUserId($_POST
 } 
 
 
-if ($user->loginUserOpenID(@$_POST['openid']))
-else if ($user->loginUserMPOS(@$_POST['username'], @$_POST['password'])) 
-{
+if ($user->loginUserOpenID(@$_POST['openid']));
+elseif ($user->loginUserMPOS(@$_POST['username'], @$_POST['password'])) {
   empty($_POST['to']) ? $to = $_SERVER['PHP_SELF'] : $to = $_POST['to'];
   $port = ($_SERVER["SERVER_PORT"] == "80" or $_SERVER["SERVER_PORT"] == "443") ? "" : (":".$_SERVER["SERVER_PORT"]);
   $location = @$_SERVER['HTTPS'] === true ? 'https://' . $_SERVER['SERVER_NAME'] . $port . $to : 'http://' . $_SERVER['SERVER_NAME'] . $port . $to;
   if (!headers_sent()) header('Location: ' . $location);
   exit('<meta http-equiv="refresh" content="0; url=' . $location . '"/>');
 } 
-else if (@$_POST['username'] && @$_POST['password']) {
+elseif (@$_POST['username'] && @$_POST['password']) {
   $_SESSION['POPUP'][] = array('CONTENT' => 'Unable to login: '. $user->getError(), 'TYPE' => 'errormsg');
 }
 

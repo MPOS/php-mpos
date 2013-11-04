@@ -168,22 +168,19 @@ class User {
       return false;
     }
 	try {
-	$openid = new LightOpenID($_SERVER['SERVER_NAME']);
+		$openid = new LightOpenID($_SERVER['SERVER_NAME']);
 		if (!$openid->mode) {
 			if ($provider) {
 				switch($provider) {
-                case 'facebook' :
-                    $openid->identity = 'http://facebook-openid.appspot.com';
-                    break;
-                case 'google' :
-                    $openid->identity = 'https://www.google.com/accounts/o8/id';
-                    break;
-                case 'yahoo' :
-                    $openid->identity = 'https://me.yahoo.com';
-                    break;
-                default :
-                    $openid->identity = 'https://www.google.com/accounts/o8/id';
-                    break;
+                			case 'facebook' :
+                    				$openid->identity = 'http://facebook-openid.appspot.com';
+                    				break;
+                			case 'google' :
+			                	$openid->identity = 'https://www.google.com/accounts/o8/id';
+                    				break;
+                			default :
+                    				$openid->identity = 'https://www.google.com/accounts/o8/id';
+                    				break;
 				}
 				$openid->required = array('contact/email');
 				header('Location: ' . $openid->authUrl());
@@ -206,24 +203,15 @@ class User {
 					$email2 = $email;
 					$this->register($username, $password1, $password2, $pin, $email1='', $email2='', $strToken='');
 				}
-			
-				elseif (getUserNameByEmail($email)) {
-					$username = getUserNameByEmail($email);
-					$this->createSession($username);
-					if ($this->setUserIp($this->getUserId($username), $_SERVER['REMOTE_ADDR']))
-					return true;
-				}
+				
+				$username = getUserNameByEmail($email);
+				$this->createSession($username);
+				if ($this->setUserIp($this->getUserId($username), $_SERVER['REMOTE_ADDR']))
+				header('Location: index.php?page=dashboard');
 			}
-			header('Location: index.php');
 		}
-	} 
-	catch(ErrorException $e) {
-		trigger_error($e->getMessage());
-	}
-	return false;
-  }
-  
-  
+  	  }
+}
 
   /**
    * Check the users PIN for confirmation
