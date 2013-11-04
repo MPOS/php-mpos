@@ -162,11 +162,7 @@ class User {
    **/
   public function loginUserOpenID($provider) {
     $this->debug->append("STA " . __METHOD__, 4);
-    $this->debug->append("Checking login for $username with password $password", 2);
-    if ($this->isLocked($this->getUserId($username))) {
-      $this->setErrorMessage("Account is locked. Please contact site support.");
-      return false;
-    }
+    $this->debug->append("Authenticating via $provider", 2);
 	try {
 		$openid = new LightOpenID($_SERVER['SERVER_NAME']);
 		if (!$openid->mode) {
@@ -196,18 +192,31 @@ class User {
 
 				if (!$this->getUserNameByEmail($email)) {
 					$username = "_undef_" . rand(1, 10000000000);
-					$password1 = "P@ssw0rd";
-					$password2 = "P@ssw0rd";
-					$pin = "1234";
-					$email1 = $email;
-					$email2 = $email;
-					$this->register($username, $password1, $password2, $pin, $email1='', $email2='', $strToken='');
+					$password = "adadad" . $this->getHash(rand(1000,9000));
+					$pin = intval( "0" . rand(1,9) . rand(0,9) . rand(0,9) . rand(0,9) );
+					$this->register($username, $password, $password, $pin, $email, $email, $strToken='');
 				}
-				
+
 				$username = $this->getUserNameByEmail($email);
-				$this->createSession($username);
-				if ($this->setUserIp($this->getUserId($username), $_SERVER['REMOTE_ADDR']))
-				header('Location: index.php?page=dashboard');
+
+		    		if ($this->isLocked($this->getUserId($username))) {
+      					$this->setErrorMessage("Account is locked. Please contact site support.");
+      					return false;
+    				}
+		
+    				$stmt = $this->mysqli->prepare("SELECT username, id, is_admin, email FROM $this->table WHERE email=? LIMIT 1");
+    				if ($this->checkStmt($stmt)) {
+      					$stmt->bind_param('s', $email);
+      					$stmt->execute();
+      					$stmt->bind_result($row_username, $row_id, $row_admin, $row_email);
+      					$stmt->fetch();
+      					$stmt->close();
+					$user = array();
+      				 	$this->user = array('username' => $row_username, 'id' => $row_id, 'is_admin' => $row_admin, 'email' => $row_email);
+				 	$this->createSession($username);
+				 	if ($this->setUserIp($this->getUserId($username), $_SERVER['REMOTE_ADDR']));
+				}
+
 			}
 		}
   	}

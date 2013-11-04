@@ -8,7 +8,14 @@ if ($setting->getValue('maintenance') && !$user->isAdmin($user->getUserId($_POST
 } 
 
 
-if ($user->loginUserOpenID(@$_POST['openid']));
+if ($user->loginUserOpenID(@$_POST['openid'])) {
+  empty($_POST['to']) ? $to = $_SERVER['PHP_SELF'] : $to = $_POST['to'];
+  $port = ($_SERVER["SERVER_PORT"] == "80" or $_SERVER["SERVER_PORT"] == "443") ? "" : (":".$_SERVER["SERVER_PORT"]);
+  $location = @$_SERVER['HTTPS'] === true ? 'https://' . $_SERVER['SERVER_NAME'] . $port . $to : 'http://' . $_SERVER['SERVER_NAME'] . $port . $to;
+  if (!headers_sent()) header('Location: ' . $location);
+  exit('<meta http-equiv="refresh" content="0; url=' . $location . '"/>');
+}
+
 elseif ($user->loginUserMPOS(@$_POST['username'], @$_POST['password'])) {
   empty($_POST['to']) ? $to = $_SERVER['PHP_SELF'] : $to = $_POST['to'];
   $port = ($_SERVER["SERVER_PORT"] == "80" or $_SERVER["SERVER_PORT"] == "443") ? "" : (":".$_SERVER["SERVER_PORT"]);
