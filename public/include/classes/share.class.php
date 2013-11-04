@@ -228,6 +228,7 @@ class Share Extends Base {
       return true;
     }
     // Catchall
+    $this->setErrorMessage('Archiving shares failed: ' . $this->mysqli->error);
     return false;
   }
 
@@ -236,6 +237,7 @@ class Share Extends Base {
     if ($this->checkStmt($stmt) && $stmt->bind_param('ii', $previous_upstream, $current_upstream) && $stmt->execute())
       return true;
     // Catchall
+    $this->setErrorMessage('Deleting shares failed: ' . $this->mysqli->error);
     return false;
   }
   /**

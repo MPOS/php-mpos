@@ -146,23 +146,17 @@ foreach ($aAllBlocks as $iIndex => $aBlock) {
   // Move shares to archive
   if ($aBlock['share_id'] < $iLastShareId) {
     if (!$share->moveArchive($aBlock['share_id'], $aBlock['id'], @$iLastBlockShare))
-      $log->logError("Archving failed");
+      $log->logError("Failed to copy shares to archive: " . $share->getError());
   }
   // Delete shares
   if ($aBlock['share_id'] < $iLastShareId && !$share->deleteAccountedShares($aBlock['share_id'], $iLastBlockShare)) {
-    $log->logFatal("Failed to delete accounted shares from " . $aBlock['share_id'] . " to " . $iLastBlockShare . ", aborting!");
-    $monitoring->setStatus($cron_name . "_active", "yesno", 0);
-    $monitoring->setStatus($cron_name . "_message", "message", "Failed to delete accounted shares from " . $aBlock['share_id'] . " to " . $iLastBlockShare);
-    $monitoring->setStatus($cron_name . "_status", "okerror", 1);
-    exit(1);
+    $log->logFatal("Failed to delete accounted shares from " . $aBlock['share_id'] . " to " . $iLastBlockShare . ", aborting! Error: " . $share->getError());
+    $monitoring->endCronjob($cron_name, 'E0016', 1, true);
   }
   // Mark this block as accounted for
   if (!$block->setAccounted($aBlock['id'])) {
-    $log->logFatal("Failed to mark block as accounted! Aborting!");
-    $monitoring->setStatus($cron_name . "_active", "yesno", 0);
-    $monitoring->setStatus($cron_name . "_message", "message", "Failed to mark block " . $aBlock['height'] . " as accounted");
-    $monitoring->setStatus($cron_name . "_status", "okerror", 1);
-    exit(1);
+    $log->logFatal("Failed to mark block as accounted! Aborting! Error: " . $block->getError());
+    $monitoring->endCronjob($cron_name, 'E0014', 1, true);
   }
 }
 

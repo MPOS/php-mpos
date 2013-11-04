@@ -209,15 +209,15 @@ foreach ($aAllBlocks as $iIndex => $aBlock) {
 
     // Move counted shares to archive before this blockhash upstream share
     if (!$share->moveArchive($iCurrentUpstreamId, $aBlock['id'], $iPreviousShareId))
-      $log->logError('Failed to copy shares to archive table');
+      $log->logError('Failed to copy shares to archive table: ' . $share->getError());
     // Delete all accounted shares
     if (!$share->deleteAccountedShares($iCurrentUpstreamId, $iPreviousShareId)) {
-      $log->logFatal("Failed to delete accounted shares from $iPreviousShareId to $iCurrentUpstreamId, aborting!");
+      $log->logFatal("Failed to delete accounted shares from $iPreviousShareId to $iCurrentUpstreamId, aborting! Error: " . $share->getError());
       $monitoring->endCronjob($cron_name, 'E0016', 1, true);
     }
     // Mark this block as accounted for
     if (!$block->setAccounted($aBlock['id'])) {
-      $log->logFatal("Failed to mark block as accounted! Aborting!");
+      $log->logFatal("Failed to mark block as accounted! Aborting! Error: " . $block->getError());
       $monitoring->endCronjob($cron_name, 'E0014', 1, true);
     }
   } else {
