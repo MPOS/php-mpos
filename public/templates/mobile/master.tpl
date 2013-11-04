@@ -28,6 +28,11 @@
 {/literal}
     </script>
 {/if}
+  
+    {if $GLOBAL.statistics.analytics.enabled}
+      {$GLOBAL.statistics.analytics.code}
+    {/if}
+    
   </head>
   <body>
     <div data-role="page" id="mpos-page" data-url="mpos-page">
