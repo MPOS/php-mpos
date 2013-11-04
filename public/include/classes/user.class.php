@@ -438,7 +438,8 @@ class User {
     // Enforce generation of a new Session ID and delete the old
     session_regenerate_id(true);
     // Enforce a page reload and point towards login with referrer included, if supplied
-    $location = @$_SERVER['HTTPS'] ? 'https://' . $_SERVER['SERVER_NAME'] . $_SERVER['PHP_SELF'] : 'http://' . $_SERVER['SERVER_NAME'] . $_SERVER['PHP_SELF'];
+    $port = ($_SERVER["SERVER_PORT"] == "80" or $_SERVER["SERVER_PORT"] == "443") ? "" : (":".$_SERVER["SERVER_PORT"]);
+    $location = @$_SERVER['HTTPS'] ? 'https://' . $_SERVER['SERVER_NAME'] . $port . $_SERVER['PHP_SELF'] : 'http://' . $_SERVER['SERVER_NAME'] . $port . $_SERVER['PHP_SELF'];
     if (!empty($from)) $location .= '?page=login&to=' . urlencode($from);
     // if (!headers_sent()) header('Location: ' . $location);
     exit('<meta http-equiv="refresh" content="0; url=' . $location . '"/>');
