@@ -210,7 +210,10 @@ class User {
 				header('Location: index.php?page=dashboard');
 			}
 		}
-  	  }
+  	}
+	catch(ErrorException $e) {
+		trigger_error($e->getMessage());
+	}
 }
 
   /**
