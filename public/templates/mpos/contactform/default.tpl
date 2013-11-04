@@ -10,7 +10,7 @@
       </fieldset>
       <fieldset>
         <label for="senderEmail">Your Email Address</label>
-        <input type="text" class="text tiny" name="senderEmail" value="{$smarty.request.senderEmail|escape|default:""}" placeholder="Please type your email" size="15"  maxlength="20" required />
+        <input type="text" class="text tiny" name="senderEmail" value="{$smarty.request.senderEmail|escape|default:""}" placeholder="Please type your email" size="50"  maxlength="20" required />
       </fieldset>
       <fieldset>
         <label for="senderEmail">Your Subject</label>
