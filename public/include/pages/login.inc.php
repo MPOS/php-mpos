@@ -7,7 +7,6 @@ if ($setting->getValue('maintenance') && !$user->isAdmin($user->getUserId($_POST
   $_SESSION['POPUP'][] = array('CONTENT' => 'You are not allowed to login during maintenace.', 'TYPE' => 'info');
 } 
 
-
 if ($user->loginUserOpenID(@$_POST['openid'])) {
   empty($_POST['to']) ? $to = $_SERVER['PHP_SELF'] : $to = $_POST['to'];
   $port = ($_SERVER["SERVER_PORT"] == "80" or $_SERVER["SERVER_PORT"] == "443") ? "" : (":".$_SERVER["SERVER_PORT"]);
