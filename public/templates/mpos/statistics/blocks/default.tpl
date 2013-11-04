@@ -13,7 +13,7 @@
       <tr>
         <th scope="row">Expected</th>
 {section block $BLOCKSFOUND step=-1}
-        <td>{round(pow(2,32 - $GLOBAL.config.targetdiff) * $BLOCKSFOUND[block].difficulty)}</td>
+        <td>{$BLOCKSFOUND[block].estshares}</td>
 {/section}
       </tr>
       <tr>
