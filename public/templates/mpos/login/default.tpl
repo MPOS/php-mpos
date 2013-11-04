@@ -5,19 +5,25 @@
     <div class="module_content">
         <fieldset>
           <label>Username or E-Mail</label>
-          <input type="text" name="username" size="22" maxlength="20" value="{$smarty.request.username|default:""|escape}" placeholder="Your username or email" required />
+          <input type="text" name="username" size="22" maxlength="20" value="{$smarty.request.username|default:""|escape}" placeholder="Your username or email"/>
         </fieldset>
         <fieldset>
           <label>Password</label>
-          <input type="password" name="password" size="22" maxlength="20" placeholder="Your password" required />
+          <input type="password" name="password" size="22" maxlength="20" placeholder="Your password"/>
+        </fieldset>
+		<fieldset>
+          <label>Provider</label>
+          <input type="password" name="password" size="22" maxlength="20" placeholder="Your password"/>
         </fieldset>
       <div class="clear"></div>
     </div>
     <footer>
       <div class="submit_link">
         <a href="{$smarty.server.PHP_SELF}?page=password"><font size="1">Forgot your password?</font></a>
+		<input type="submit" class="btn btn-primary icon16 i-google gap-left0" name="openid" value="google"/>
         <input type="submit" value="Login" class="alt_btn" />
       </div>
+	  
     </footer>
   </form>
 </article>
