@@ -27,19 +27,12 @@ require_once('shared.inc.php');
 
 if ($setting->getValue('disable_ap') == 1) {
   $log->logInfo(" auto payout disabled via admin panel");
-  $monitoring->setStatus($cron_name . "_active", "yesno", 0);
-  $monitoring->setStatus($cron_name . "_message", "message", "Auto-Payout disabled");
-  $monitoring->setStatus($cron_name . "_status", "okerror", 1);
-  $monitoring->setStatus($cron_name . "_endtime", "date", time());
-  exit(0);
+  $monitoring->endCronjob($cron_name, 'E0009', 0, true);
 }
 
 if ($bitcoin->can_connect() !== true) {
   $log->logFatal(" unable to connect to RPC server, exiting");
-  $monitoring->setStatus($cron_name . "_active", "yesno", 0);
-  $monitoring->setStatus($cron_name . "_message", "message", "Unable to connect to RPC server");
-  $monitoring->setStatus($cron_name . "_status", "okerror", 1);
-  exit(1);
+  $monitoring->endCronjob($cron_name, 'E0006', 1, true);
 }
 
 // Fetch all users with setup AP

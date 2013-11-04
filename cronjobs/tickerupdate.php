@@ -29,7 +29,7 @@ require_once('shared.inc.php');
 require_once(CLASS_DIR . '/tools.class.php');
 
 if ($price = $tools->getPrice()) {
-  $log->logInfo("Price update: found $price as price");
+  $log->logDebug("Price update: found $price as price");
   if (!$setting->setValue('price', $price))
     $log->logError("unable to update value in settings table");
 } else {
@@ -40,11 +40,11 @@ if ($setting->getValue('monitoring_uptimerobot_private_key')) {
   $monitoring->setTools($tools);
   if (!$monitoring->storeUptimeRobotStatus()) {
     $log->logError('Failed to update Uptime Robot Status: ' . $monitoring->getError());
+    $monitoring->endCronjob($cron_name, 'E0017', 1, true);
   }
 } else {
   $log->logDebug('Skipped Uptime Robot API update, missing private key');
 }
-
 
 require_once('cron_end.inc.php');
 ?>

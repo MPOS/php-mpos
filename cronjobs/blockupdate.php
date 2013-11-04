@@ -27,10 +27,7 @@ require_once('shared.inc.php');
 
 if ( $bitcoin->can_connect() !== true ) {
   $log->logFatal("Failed to connect to RPC server\n");
-  $monitoring->setStatus($cron_name . "_active", "yesno", 0); 
-  $monitoring->setStatus($cron_name . "_message", "message", "Unable to connect to RPC server");
-  $monitoring->setStatus($cron_name . "_status", "okerror", 1); 
-  exit(1);
+  $monitoring->endCronjob($cron_name, 'E0006', 1, true);
 }
 
 // Fetch all unconfirmed blocks

@@ -11,6 +11,7 @@ require_once(CLASS_DIR . '/debug.class.php');
 require_once(INCLUDE_DIR . '/lib/KLogger.php');
 require_once(INCLUDE_DIR . '/database.inc.php');
 require_once(INCLUDE_DIR . '/config/memcache_keys.inc.php');
+require_once(INCLUDE_DIR . '/config/error_codes.inc.php');
 
 // We need to load these two first
 require_once(CLASS_DIR . '/base.class.php');

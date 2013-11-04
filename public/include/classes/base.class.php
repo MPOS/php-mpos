@@ -32,6 +32,9 @@ class Base {
   public function setConfig($config) {
     $this->config = $config;
   }
+  public function setErrorCodes($aErrorCodes) {
+    $this->aErrorCodes = $aErrorCodes;
+  }
   public function setToken($token) {
     $this->token = $token;
   }
@@ -59,7 +62,11 @@ class Base {
   public function getError() {
     return $this->sError;
   }
-
+  public function getErrorMsg($errCode) {
+    if (!is_array($this->aErrorCodes)) return 'Error codes not loaded';
+    if (!array_key_exists($errCode, $this->aErrorCodes)) return 'Unknown Error: ' . $errCode;
+    return $this->aErrorCodes[$errCode];
+  }
   protected function getAllAssoc($value, $field='id', $type='i') {
     $this->debug->append("STA " . __METHOD__, 4);
     $stmt = $this->mysqli->prepare("SELECT * FROM $this->table WHERE $field = ? LIMIT 1");

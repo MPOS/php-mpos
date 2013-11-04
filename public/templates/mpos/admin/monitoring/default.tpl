@@ -3,6 +3,7 @@
     <table class="tablesorter" cellspacing="0">
       <thead>
         <th>Cronjob</th>
+        <th align="center">Disabled</th>
         <th align="center">Exit Code</th>
         <th align="center">Active</th>
         <th align="center">Runtime</th>

@@ -28,6 +28,7 @@ case 'prop':
 // Data array for template
 foreach ($aCrons as $strCron) {
   $aCronStatus[$strCron] = array(
+    'disabled' => $monitoring->getStatus($strCron . '_disabled'),
     'exit' => $monitoring->getStatus($strCron . '_status'),
     'active' => $monitoring->getStatus($strCron . '_active'),
     'runtime' => $monitoring->getStatus($strCron . '_runtime'),

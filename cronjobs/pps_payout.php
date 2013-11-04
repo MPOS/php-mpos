@@ -121,7 +121,10 @@ $setting->setValue('pps_last_share_id', $iLastShareId);
 
 // Fetch all unaccounted blocks
 $aAllBlocks = $block->getAllUnaccounted('ASC');
-if (empty($aAllBlocks)) $log->logDebug("No new unaccounted blocks found");
+if (empty($aAllBlocks)) {
+  $log->logDebug("No new unaccounted blocks found");
+  // No monitoring event here, not fatal for PPS
+}
 
 // Go through blocks and archive/delete shares that have been accounted for
 foreach ($aAllBlocks as $iIndex => $aBlock) {
