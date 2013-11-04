@@ -61,7 +61,7 @@ $cron_start[$cron_name] = microtime(true);
 // Check if our cron is activated
 if ($monitoring->isDisabled($cron_name)) {
   $log->logFatal('Cronjob is currently disabled due to errors, use -f option to force running cron.');
-  $monitoring->endCronjob($cron_name, 'E0018', 1, true, true);
+  $monitoring->endCronjob($cron_name, 'E0018', 1, true, false);
 }
 
 // Mark cron as running for monitoring
