@@ -65,6 +65,7 @@ $aGlobal = array(
   'price' => $setting->getValue('price'),
   'disable_mp' => $setting->getValue('disable_mp'),
   'config' => array(
+    'target_bits' => $config['target_bits'],
     'accounts' => $config['accounts'],
     'disable_invitations' => $setting->getValue('disable_invitations'),
     'disable_notifications' => $setting->getValue('disable_notifications'),

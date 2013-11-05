@@ -759,7 +759,7 @@ class Statistics {
       SELECT 
       IFNULL(COUNT(id), 0) as count, 
       IFNULL(AVG(difficulty), 0) as average,
-      IFNULL(ROUND(SUM((difficulty * 65536) / POW(2, (" . $this->config['difficulty'] . " -16))), 0), 0) AS expected,
+      IFNULL(ROUND(SUM((POW(2, ( 32 - " . $this->config['target_bits'] . " )) * difficulty) / POW(2, (" . $this->config['difficulty'] . " -16))), 0), 0) AS expected,
       IFNULL(ROUND(SUM(shares)), 0) as shares,
       IFNULL(SUM(amount), 0) as rewards 
       FROM " . $this->block->getTableName() . "
@@ -772,6 +772,14 @@ class Statistics {
     return false;
   }
 
+  /**
+   * Caclulate estimated shares based on network difficulty and pool difficulty
+   * @param dDiff double Network difficulty
+   * @return shares integer Share count
+   **/
+  public function getEstimatedShares($dDiff) {
+    return round((POW(2, (32 - $this->config['target_bits'])) * $dDiff) / pow(2, ($this->config['difficulty'] - 16)));
+  }
 }
 
 

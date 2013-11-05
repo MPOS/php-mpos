@@ -44,7 +44,7 @@ if ($iTotalRoundShares > 0) {
 }
 
 // Round progress
-$iEstShares = round((65536 * $dDifficulty) / pow(2, ($config['difficulty'] - 16)));
+$iEstShares = $statistics->getEstimatedShares($dDifficulty);
 $dEstPercent = round(100 / $iEstShares * $aRoundShares['valid'], 2);
 
 // Output JSON format

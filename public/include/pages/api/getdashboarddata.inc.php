@@ -80,7 +80,7 @@ $aWorkers = $worker->getWorkers($user_id, $interval);
 $aPrice = $setting->getValue('price');
 
 // Round progress
-$iEstShares = round((65536 * $dDifficulty) / pow(2, ($config['difficulty'] - 16)));
+$iEstShares = $statistics->getEstimatedShares($dDifficulty);
 $dEstPercent = round(100 / $iEstShares * $aRoundShares['valid'], 2);
 
 // Output JSON format
