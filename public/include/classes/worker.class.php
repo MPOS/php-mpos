@@ -277,3 +277,4 @@ $worker->setDebug($debug);
 $worker->setMysql($mysqli);
 $worker->setShare($share);
 $worker->setConfig($config);
+$worker->setUser($user);
