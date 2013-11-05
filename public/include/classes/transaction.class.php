@@ -5,7 +5,6 @@ if (!defined('SECURITY'))
   die('Hacking attempt');
 
 class Transaction extends Base {
-  private $sError = '';
   protected $table = 'transactions';
   public $num_rows = 0, $insert_id = 0;
 
@@ -25,8 +24,7 @@ class Transaction extends Base {
       $this->insert_id = $stmt->insert_id;
       return true;
     }
-    $this->setErrorMessage("Failed to store transaction");
-    return false;
+    return $this->sqlError();
   }
 
   /*
@@ -45,7 +43,7 @@ class Transaction extends Base {
       OR ( t.account_id = ? AND t.id <= ? AND t.type IN ( 'Credit_PPS', 'Donation_PPS', 'Fee_PPS', 'TXFee', 'Debit_MP', 'Debit_AP' ) )");
     if ($this->checkStmt($stmt) && $stmt->bind_param('iiiii', $account_id, $txid, $this->config['confirmations'], $account_id, $txid) && $stmt->execute())
       return true;
-    return false;
+    return $this->sqlError();
   }
 
   /**
@@ -60,8 +58,7 @@ class Transaction extends Base {
       FROM transactions AS t
       LEFT OUTER JOIN blocks AS b
       ON b.id = t.block_id
-      WHERE ( b.confirmations > 0 OR b.id IS NULL )
-    ";
+      WHERE ( b.confirmations > 0 OR b.id IS NULL )";
     if (!empty($account_id)) {
       $sql .= " AND t.account_id = ? ";
       $this->addParam('i', $account_id);
@@ -84,7 +81,7 @@ class Transaction extends Base {
       }
       return $aData;
     }
-    return false;
+    return $this->sqlError();
   }
 
   /**
@@ -152,7 +149,7 @@ class Transaction extends Base {
         }
       }
       if (!empty($aFilter)) {
-	empty($account_id) ? $sql .= " WHERE " : $sql .= " AND ";
+      	empty($account_id) ? $sql .= " WHERE " : $sql .= " AND ";
         $sql .= implode(' AND ', $aFilter);
       }
     }
@@ -171,8 +168,7 @@ class Transaction extends Base {
         $this->num_rows = $row_count;
       return $result->fetch_all(MYSQLI_ASSOC);
     }
-    $this->debug->append('Failed to fetch transactions: ' . $this->mysqli->error);
-    return false;
+    return $this->sqlError();
   }
 
   /**
@@ -188,8 +184,7 @@ class Transaction extends Base {
       }
       return $aData;
     }
-    $this->debug->append('Failed to fetch transaction types: ' . $this->mysqli->error);
-    return false;
+    return $this->sqlError();
   }
 
   /**
@@ -220,8 +215,7 @@ class Transaction extends Base {
       ");
     if ($this->checkStmt($stmt) && $stmt->execute() && $result = $stmt->get_result())
       return $result->fetch_all(MYSQLI_ASSOC);
-    $this->debug->append("Failed to fetch website donors: " . $this->mysqli->error);
-    return false;
+    return $this->sqlError();
   }
 
   /**
@@ -245,10 +239,7 @@ class Transaction extends Base {
       WHERE archived = 0");
     if ($this->checkStmt($stmt) && $stmt->bind_param('ii', $this->config['confirmations'], $this->config['confirmations']) && $stmt->execute() && $stmt->bind_result($dBalance) && $stmt->fetch())
       return $dBalance;
-    // Catchall
-    $this->setErrorMessage('Unable to find locked credits for all users');
-    $this->debug->append('MySQL query failed : ' . $this->mysqli->error);
-    return false;
+    return $this->sqlError();
   }
 
   /**
@@ -281,8 +272,7 @@ class Transaction extends Base {
       ");
     if ($this->checkStmt($stmt) && $stmt->bind_param("iiiii", $this->config['confirmations'], $this->config['confirmations'], $this->config['confirmations'], $this->config['confirmations'], $account_id) && $stmt->execute() && $result = $stmt->get_result())
       return $result->fetch_assoc();
-    $this->debug->append('Failed to fetch users balance: ' . $this->mysqli->error);
-    return false;
+    return $this->sqlError();
   }
 }
 
@@ -292,3 +282,6 @@ $transaction->setMysql($mysqli);
 $transaction->setConfig($config);
 $transaction->setBlock($block);
 $transaction->setUser($user);
+$transaction->setErrorCodes($aErrorCodes);
+
+?>

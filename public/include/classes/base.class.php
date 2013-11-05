@@ -4,10 +4,15 @@
 if (!defined('SECURITY'))
   die('Hacking attempt');
 
-// Our base class that defines
-// some cross-class functions.
+/**
+ * Our base class that we extend our other classes from
+ *
+ * It supplies some basic features as cross-linking with other classes
+ * after loading a newly created class.
+ **/
 class Base {
   private $sError = '';
+  private $sCronError = '';
   protected $table = '';
   private $values = array(), $types = ''; 
 
@@ -23,6 +28,9 @@ class Base {
   public function setMail($mail) {
     $this->mail = $mail;
   }
+  public function setSalt($salt) {
+    $this->salt = $salt;
+  }
   public function setSmarty($smarty) {
     $this->smarty = $smarty;
   }
@@ -32,14 +40,23 @@ class Base {
   public function setConfig($config) {
     $this->config = $config;
   }
-  public function setErrorCodes($aErrorCodes) {
-    $this->aErrorCodes = $aErrorCodes;
+  public function setErrorCodes(&$aErrorCodes) {
+    $this->aErrorCodes =& $aErrorCodes;
   }
   public function setToken($token) {
     $this->token = $token;
   }
   public function setBlock($block) {
     $this->block = $block;
+  }
+  public function setTransaction($transaction) {
+    $this->transaction = $transaction;
+  }
+  public function setMemcache($memcache) {
+    $this->memcache = $memcache;
+  }
+  public function setStatistics($statistics) {
+    $this->statistics = $statistics;
   }
   public function setSetting($setting) {
     $this->setting = $setting;
@@ -58,23 +75,49 @@ class Base {
   }
   public function setErrorMessage($msg) {
     $this->sError = $msg;
+    // Default to same error for crons
+    $this->sCronError = $msg;
+  }
+  public function setCronMessage($msg) {
+    // Used to overwrite any errors with a custom cron one
+    $this->sCronError = $msg;
   }
   public function getError() {
     return $this->sError;
   }
-  public function getErrorMsg($errCode) {
+  /**
+   * Additional information in error string for cronjobs logging
+   **/
+  public function getCronError() {
+    return $this->sCronError;
+  }
+
+  /**
+   * Get error message from error code array
+   * @param errCode string Error code string
+   * @param optional string Optional addtitional error strings to append
+   * @retrun string Error Message
+   **/
+  public function getErrorMsg($errCode='') {
     if (!is_array($this->aErrorCodes)) return 'Error codes not loaded';
-    if (!array_key_exists($errCode, $this->aErrorCodes)) return 'Unknown Error: ' . $errCode;
+    if (!array_key_exists($errCode, $this->aErrorCodes)) return 'Unknown Error Code: ' . $errCode;
     if (func_num_args() > 1) {
-      $sOutput = "";
-      for ($i = 1; $i < func_num_args(); $i++) {
-        $sOutput .= sprintf(" %s", func_get_arg($i));
+      $args = func_get_args();
+      array_shift($args);
+      $param_count = substr_count($this->aErrorCodes[$errCode], '%s');
+      if ($param_count == count($args)) {
+        return vsprintf($this->aErrorCodes[$errCode], $args);
+      } else {
+        return $this->aErrorCodes[$errCode] . ' (missing information to complete string)';
       }
-      return sprintf($this->aErrorCodes[$errCode], $sOutput);
     } else {
       return $this->aErrorCodes[$errCode];
     }
   }
+
+  /**
+   * Get an element as an associated array
+   **/
   protected function getAllAssoc($value, $field='id', $type='i') {
     $this->debug->append("STA " . __METHOD__, 4);
     $stmt = $this->mysqli->prepare("SELECT * FROM $this->table WHERE $field = ? LIMIT 1");
@@ -88,11 +131,15 @@ class Base {
    * @param search Return column to search for
    * @param field string Search column
    * @param type string Type of value
+   * @param lower bool try with LOWER comparision
    * @return array Return result
    **/
-  protected function getSingle($value, $search='id', $field='id', $type="i") {
+  protected function getSingle($value, $search='id', $field='id', $type="i", $lower=false) {
     $this->debug->append("STA " . __METHOD__, 4); 
-    $stmt = $this->mysqli->prepare("SELECT $search FROM $this->table WHERE $field = ? LIMIT 1");
+    $sql = "SELECT $search FROM $this->table WHERE";
+    $lower ? $sql .= " LOWER($field) = LOWER(?)" : $sql .= " $field = ?";
+    $sql .= " LIMIT 1";
+    $stmt = $this->mysqli->prepare($sql);
     if ($this->checkStmt($stmt)) {
       $stmt->bind_param($type, $value);
       $stmt->execute();
@@ -104,28 +151,38 @@ class Base {
     return false;
   }
 
+  /**
+   * Check if the prepared statement is valid
+   * @param $bState Statement return value
+   * @return bool true or false
+   **/
   function checkStmt($bState) {
     $this->debug->append("STA " . __METHOD__, 4);
-    if ($bState ===! true) {
-      $this->debug->append("Failed to prepare statement: " . $this->mysqli->error);
-      $this->setErrorMessage('Internal application Error');
-      return false;
-    }
+    if ($bState ===! true)
+      return $this->sqlError();
     return true;
   }
 
   /**
    * Catch SQL errors with this method
+   * @param error_code string Error code to read
    **/
-  protected function sqlError() {
+  protected function sqlError($error_code='E0020') {
+    // More human-readable error for UI
+    if (func_num_args() == 0) {
+      $this->setErrorMessage($this->getErrorMsg($error_code));
+    } else {
+      $this->setErrorMessage(call_user_func_array(array($this, 'getErrorMsg'), func_get_args()));
+    }
+    // Default to SQL error for debug and cron errors
     $this->debug->append($this->getErrorMsg('E0019', $this->mysqli->error));
-    $this->setErrorMessage($this->getErrorMsg('E0019', $this->mysqli->error));
+    $this->setCronMessage($this->getErrorMsg('E0019', $this->mysqli->error));
     return false;
   }
 
   /**
-   * Update a single row in a table
    * @param userID int Account ID
+   * Update a single row in a table
    * @param field string Field to update
    * @return bool
    **/

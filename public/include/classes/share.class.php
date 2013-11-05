@@ -6,20 +6,11 @@ if (!defined('SECURITY'))
 
 class Share Extends Base {
   protected $table = 'shares';
-  private $tableArchive = 'shares_archive';
+  protected $tableArchive = 'shares_archive';
   private $oUpstream;
   private $iLastUpstreamId;
   // This defines each share
   public $rem_host, $username, $our_result, $upstream_result, $reason, $solution, $time, $difficulty;
-
-  public function __construct($debug, $mysqli, $user, $block, $config) {
-    $this->debug = $debug;
-    $this->mysqli = $mysqli;
-    $this->user = $user;
-    $this->config = $config;
-    $this->block = $block;
-    $this->debug->append("Instantiated Share class", 2);
-  }
 
   /**
    * Fetch archive tables name for this class
@@ -65,7 +56,7 @@ class Share Extends Base {
     $stmt = $this->mysqli->prepare($sql);
     if ($this->checkStmt($stmt) && call_user_func_array( array($stmt, 'bind_param'), $this->getParam()) && $stmt->execute())
       return true;
-    return false;
+    return $this->sqlError();
   }
 
   /**
@@ -73,14 +64,10 @@ class Share Extends Base {
    * Used for PPS calculations without moving to archive
    **/
   public function getLastInsertedShareId() {
-    $stmt = $this->mysqli->prepare("
-      SELECT MAX(id) AS id FROM $this->table
-      ");
+    $stmt = $this->mysqli->prepare("SELECT MAX(id) AS id FROM $this->table");
     if ($this->checkStmt($stmt) && $stmt->execute() && $result = $stmt->get_result())
       return $result->fetch_object()->id;
-    // Catchall
-    $this->setErrorMessage('Failed to fetch last inserted share ID');
-    return false;
+    return $this->sqlError();
   }
 
   /**
@@ -96,14 +83,9 @@ class Share Extends Base {
       WHERE our_result = 'Y'
       AND id > ? AND id <= ?
       ");
-    if ($this->checkStmt($stmt)) {
-      $stmt->bind_param('ii', $previous_upstream, $current_upstream);
-      $stmt->execute();
-      $result = $stmt->get_result();
-      $stmt->close();
+    if ($this->checkStmt($stmt) && $stmt->bind_param('ii', $previous_upstream, $current_upstream) && $stmt->execute() && $result = $stmt->get_result())
       return $result->fetch_object()->total;
-    }
-    return false;
+    return $this->sqlError();
   }
 
   /**
@@ -129,7 +111,7 @@ class Share Extends Base {
       ");
     if ($this->checkStmt($stmt) && $stmt->bind_param('ii', $previous_upstream, $current_upstream) && $stmt->execute() && $result = $stmt->get_result())
       return $result->fetch_all(MYSQLI_ASSOC);
-    return false;
+    return $this->sqlError();
   }
 
   /**
@@ -139,19 +121,17 @@ class Share Extends Base {
     $stmt = $this->mysqli->prepare("SELECT MAX(id) AS id FROM $this->table");
     if ($this->checkStmt($stmt) && $stmt->execute() && $result = $stmt->get_result())
       return $result->fetch_object()->id;
-    return false;
+    return $this->sqlError();
   }
 
   /**
    * Fetch the highest available share ID from archive
    **/
   function getMaxArchiveShareId() {
-    $stmt = $this->mysqli->prepare("
-      SELECT MAX(share_id) AS share_id FROM $this->tableArchive
-      ");
+    $stmt = $this->mysqli->prepare("SELECT MAX(share_id) AS share_id FROM $this->tableArchive");
     if ($this->checkStmt($stmt) && $stmt->execute() && $result = $stmt->get_result())
       return $result->fetch_object()->share_id;
-    return false;
+    return $this->sqlError();
   }
 
   /**
@@ -182,7 +162,7 @@ class Share Extends Base {
       }
       if (is_array($aData)) return $aData;
     }
-    return false;
+    return $this->sqlError();
   }
 
   /**
@@ -206,8 +186,7 @@ class Share Extends Base {
       if ($this->checkStmt($stmt) && $stmt->bind_param('i', $this->config['archive']['maxage']) && $stmt->execute())
       return true;
     }
-    // Catchall
-    return false;
+    return $this->sqlError();
   }
 
   /**
@@ -223,22 +202,22 @@ class Share Extends Base {
         SELECT id, username, our_result, upstream_result, ?, time, IF(difficulty=0, pow(2, (" . $this->config['difficulty'] . " - 16)), difficulty) AS difficulty
         FROM $this->table
         WHERE id > ? AND id <= ?");
-    if ($this->checkStmt($archive_stmt) && $archive_stmt->bind_param('iii', $block_id, $previous_upstream, $current_upstream) && $archive_stmt->execute()) {
-      $archive_stmt->close();
+    if ($this->checkStmt($archive_stmt) && $archive_stmt->bind_param('iii', $block_id, $previous_upstream, $current_upstream) && $archive_stmt->execute())
       return true;
-    }
-    // Catchall
-    $this->setErrorMessage('Archiving shares failed: ' . $this->mysqli->error);
-    return false;
+    return $this->sqlError();
   }
 
+  /**
+   * Delete accounted shares from shares table
+   * @param current_upstream int Current highest upstream ID
+   * @param previous_upstream int Previous upstream ID
+   * @return bool true or false
+   **/
   public function deleteAccountedShares($current_upstream, $previous_upstream=0) {
     $stmt = $this->mysqli->prepare("DELETE FROM $this->table WHERE id > ? AND id <= ?");
     if ($this->checkStmt($stmt) && $stmt->bind_param('ii', $previous_upstream, $current_upstream) && $stmt->execute())
       return true;
-    // Catchall
-    $this->setErrorMessage('Deleting shares failed: ' . $this->mysqli->error);
-    return false;
+    return $this->sqlError();
   }
   /**
    * Set/get last found share accepted by upstream: id and accounts
@@ -336,8 +315,7 @@ class Share Extends Base {
       if (!empty($this->oUpstream->account) && is_int($this->oUpstream->id))
         return true;
     }
-    // Catchall
-    return false;
+    return $this->getErrorMsg('E0052', $aBlock['height']);
   }
 
   /**
@@ -355,11 +333,10 @@ class Share Extends Base {
         AND id <= ? AND @total < ?
         ORDER BY id DESC
       ) AS b
-      WHERE total <= ?
-      ");
+      WHERE total <= ?");
     if ($this->checkStmt($stmt) && $stmt->bind_param('iii', $current_upstream, $iCount, $iCount) && $stmt->execute() && $result = $stmt->get_result())
       return $result->fetch_object()->id;
-    return false;
+    return $this->sqlError();
   }
 
   /**
@@ -381,13 +358,14 @@ class Share Extends Base {
       ");
     if ($this->checkStmt($stmt) && $stmt->bind_param('ii', $iCount, $iCount) && $stmt->execute() && $result = $stmt->get_result())
       return $result->fetch_object()->share_id;
-    $this->setErrorMessage("Failed fetching additional shares from archive: " . $this->mysqli->error);
-    return false;
+    return $this->sqlError();
   }
 }
 
-$share = new Share($debug, $mysqli, $user, $block, $config);
+$share = new Share();
+$share->setDebug($debug);
 $share->setMysql($mysqli);
 $share->setConfig($config);
 $share->setUser($user);
 $share->setBlock($block);
+$share->setErrorCodes($aErrorCodes);

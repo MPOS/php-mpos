@@ -1,13 +1,10 @@
 <?php
 
 // Make sure we are called from index.php
-if (!defined('SECURITY'))
-  die('Hacking attempt');
+if (!defined('SECURITY')) die('Hacking attempt');
 
 class Monitoring extends Base {
-  public function __construct() {
-    $this->table = 'monitoring';
-  }
+   protected $table = 'monitoring';
 
   /**
    * Store Uptime Robot status information as JSON in settings table
@@ -27,9 +24,9 @@ class Monitoring extends Base {
         $aMonitorStatus = $this->tools->getApi($url, $target);
         if (!$aMonitorStatus || @$aMonitorStatus['stat'] == 'fail') {
           if (is_array($aMonitorStatus) && array_key_exists('message', @$aMonitorStatus)) {
-            $this->setErrorMessage('Failed to run API call: ' . $aMonitorStatus['message']);
+            $this->setErrorMessage($this->getErrorMsg('E0032', $aMonitorStatus['message']));
           } else {
-            $this->setErrorMessage('Failed to run API call: ' . $this->tools->getError());
+            $this->setErrorMessage($this->getErrorMsg('E0032', $this->tools->getError()));
           }
           return false;
         }
@@ -37,7 +34,7 @@ class Monitoring extends Base {
         $aAllMonitorsStatus[] = $aMonitorStatus['monitors']['monitor'][0];
       }
       if (!$this->setting->setValue('monitoring_uptimerobot_status', json_encode($aAllMonitorsStatus)) || !$this->setting->setValue('monitoring_uptimerobot_lastcheck', time())) {
-        $this->setErrorMessage('Failed to store uptime status: ' . $setting->getError());
+        $this->setErrorMessage($this->getErrorMsg('E0033'), $setting->getError());
         return false;
       }
     }
@@ -75,8 +72,7 @@ class Monitoring extends Base {
     if ($query && $query->bind_param('s', $name) && $query->execute() && $result = $query->get_result()) {
       return $result->fetch_assoc();
     } else {
-      $this->debug->append("Failed to fetch variable $name from $this->table");
-      return false;
+      $this->sqlError();
     }
     return $value;
   }

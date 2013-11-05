@@ -44,7 +44,7 @@ if (empty($aWorkers)) {
     $aData['email'] = $user->getUserEmail($aData['username']);
     $log->logDebug("    " . $aWorker['username'] . "...");
     if (!$notification->sendNotification($aWorker['account_id'], 'idle_worker', $aData))
-      $log->logError("    Failed sending notifications: " . $notification->getError() . "\n");
+      $log->logError("    Failed sending notifications: " . $notification->getCronError() . "\n");
   }
 }
 

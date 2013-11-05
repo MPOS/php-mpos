@@ -33,13 +33,13 @@ if ($price = $tools->getPrice()) {
   if (!$setting->setValue('price', $price))
     $log->logError("unable to update value in settings table");
 } else {
-  $log->logError("failed to fetch API data: " . $tools->getError());
+  $log->logError("failed to fetch API data: " . $tools->getCronError());
 }
 
 if ($setting->getValue('monitoring_uptimerobot_private_key')) {
   $monitoring->setTools($tools);
   if (!$monitoring->storeUptimeRobotStatus()) {
-    $log->logError('Failed to update Uptime Robot Status: ' . $monitoring->getError());
+    $log->logError($monitoring->getCronError());
     $monitoring->endCronjob($cron_name, 'E0017', 1, true);
   }
 } else {

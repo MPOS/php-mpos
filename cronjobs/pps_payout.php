@@ -146,16 +146,16 @@ foreach ($aAllBlocks as $iIndex => $aBlock) {
   // Move shares to archive
   if ($aBlock['share_id'] < $iLastShareId) {
     if (!$share->moveArchive($aBlock['share_id'], $aBlock['id'], @$iLastBlockShare))
-      $log->logError("Failed to copy shares to archive: " . $share->getError());
+      $log->logError("Failed to copy shares to archive: " . $share->getCronError());
   }
   // Delete shares
   if ($aBlock['share_id'] < $iLastShareId && !$share->deleteAccountedShares($aBlock['share_id'], $iLastBlockShare)) {
-    $log->logFatal("Failed to delete accounted shares from " . $aBlock['share_id'] . " to " . $iLastBlockShare . ", aborting! Error: " . $share->getError());
+    $log->logFatal("Failed to delete accounted shares from " . $aBlock['share_id'] . " to " . $iLastBlockShare . ", aborting! Error: " . $share->getCronError());
     $monitoring->endCronjob($cron_name, 'E0016', 1, true);
   }
   // Mark this block as accounted for
   if (!$block->setAccounted($aBlock['id'])) {
-    $log->logFatal("Failed to mark block as accounted! Aborting! Error: " . $block->getError());
+    $log->logFatal("Failed to mark block as accounted! Aborting! Error: " . $block->getCronError());
     $monitoring->endCronjob($cron_name, 'E0014', 1, true);
   }
 }

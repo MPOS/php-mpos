@@ -4,39 +4,12 @@
 if (!defined('SECURITY'))
   die('Hacking attempt');
 
-class User {
-  private $sError = '';
+class User extends Base {
+  protected $table = 'accounts';
   private $userID = false;
-  private $table = 'accounts';
   private $user = array();
 
-  public function __construct($debug, $mysqli, $salt, $config) {
-    $this->debug = $debug;
-    $this->mysqli = $mysqli;
-    $this->salt = $salt;
-    $this->config = $config;
-    $this->debug->append("Instantiated User class", 2);
-  }
-
   // get and set methods
-  public function setMail($mail) {
-    $this->mail = $mail;
-  }
-  public function setToken($token) {
-    $this->token = $token;
-  }
-  public function setBitcoin($bitcoin) {
-    $this->bitcoin = $bitcoin;
-  }
-  public function setSetting($setting) {
-    $this->setting = $setting;
-  }
-  private function setErrorMessage($msg) {
-    $this->sError = $msg;
-  }
-  public function getError() {
-    return $this->sError;
-  }
   private function getHash($string) {
     return hash('sha256', $string.$this->salt);
   }
@@ -175,31 +148,6 @@ class User {
   }
 
   /**
-   * Get a single row from the table
-   * @param value string Value to search for
-   * @param search Return column to search for
-   * @param field string Search column
-   * @param type string Type of value
-   * @return array Return result
-   **/
-  private function getSingle($value, $search='id', $field='id', $type="i", $lower=false) {
-    $this->debug->append("STA " . __METHOD__, 4);
-    $sql = "SELECT $search FROM $this->table WHERE";
-    $lower ? $sql .= " LOWER($field) = LOWER(?)" : $sql .= " $field = ?";
-    $sql .= " LIMIT 1";
-    $stmt = $this->mysqli->prepare($sql);
-    if ($this->checkStmt($stmt)) {
-      $stmt->bind_param($type, $value);
-      $stmt->execute();
-      $stmt->bind_result($retval);
-      $stmt->fetch();
-      $stmt->close();
-      return $retval;
-    }
-    return false;
-  }
-
-  /**
    * Get all users that have auto payout setup
    * @param none
    * @return data array All users with payout setup
@@ -241,31 +189,6 @@ class User {
     if ($dPercent > 100) $dPercent = 100;
     if ($dPercent < 0) $dPercent = 0;
     return $dPercent;
-  }
-
-  /**
-   * Update a single row in a table
-   * @param userID int Account ID
-   * @param field string Field to update
-   * @return bool
-   **/
-  private function updateSingle($id, $field) {
-    $this->debug->append("STA " . __METHOD__, 4);
-    $stmt = $this->mysqli->prepare("UPDATE $this->table SET `" . $field['name'] . "` = ? WHERE id = ? LIMIT 1");
-    if ($this->checkStmt($stmt) && $stmt->bind_param($field['type'].'i', $field['value'], $id) && $stmt->execute())
-      return true;
-    $this->debug->append("Unable to update " . $field['name'] . " with " . $field['value'] . " for ID $id");
-    return false;
-  }
-
-  private function checkStmt($bState) {
-    $this->debug->append("STA " . __METHOD__, 4);
-    if ($bState ===! true) {
-      $this->debug->append("Failed to prepare statement: " . $this->mysqli->error);
-      $this->setErrorMessage('Internal application Error');
-      return false;
-    }
-    return true;
   }
 
   /**
@@ -443,6 +366,27 @@ class User {
     if (!empty($from)) $location .= '?page=login&to=' . urlencode($from);
     // if (!headers_sent()) header('Location: ' . $location);
     exit('<meta http-equiv="refresh" content="0; url=' . $location . '"/>');
+  }
+
+  /**
+   * Get all users for admin panel
+   **/
+  public function getAllUsers($filter='%') {
+    $this->debug->append("STA " . __METHOD__, 4);
+    $stmt = $this->mysqli->prepare("
+      SELECT
+      a.id AS id,
+      a.username AS username
+      FROM " . $this->getTableName() . " AS a
+      WHERE a.username LIKE ?
+      GROUP BY username");
+    if ($this->checkStmt($stmt) && $stmt->bind_param('s', $filter) && $stmt->execute() && $result = $stmt->get_result()) {
+      while ($row = $result->fetch_assoc()) {
+        $aData[$row['id']] = $row['username'];
+      }
+      return $aData;
+    }
+    return false;
   }
 
   /**
@@ -688,7 +632,11 @@ class User {
 }
 
 // Make our class available automatically
-$user = new User($debug, $mysqli, SALT, $config);
+$user = new User();
+$user->setDebug($debug);
+$user->setMysql($mysqli);
+$user->setSalt(SALT);
+$user->setConfig($config);
 $user->setMail($mail);
 $user->setToken($oToken);
 $user->setBitcoin($bitcoin);

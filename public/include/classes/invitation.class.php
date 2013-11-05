@@ -16,9 +16,7 @@ class Invitation extends Base {
     $stmt = $this->mysqli->prepare("SELECT * FROM $this->table WHERE account_id = ?");
     if ($stmt && $stmt->bind_param('i', $account_id) && $stmt->execute() && $result = $stmt->get_result())
       return $result->fetch_all(MYSQLI_ASSOC);
-    $this->setErrorMessage('Unable to fetch invitiations send from your account');
-    $this->debug->append('Failed to fetch invitations from database: ' . $this->mysqli->errro);
-    return false;
+    $this->sqlError('E0021');
   }
 
   /**
@@ -31,9 +29,7 @@ class Invitation extends Base {
     $stmt = $this->mysqli->prepare("SELECT count(id) AS total FROM $this->table WHERE account_id = ?");
     if ($stmt && $stmt->bind_param('i', $account_id) && $stmt->execute() && $stmt->bind_result($total) && $stmt->fetch())
       return $total;
-    $this->setErrorMessage('Unable to fetch invitiations send from your account');
-    $this->debug->append('Failed to fetch invitations from database: ' . $this->mysqli->errro);
-    return false;
+    $this->sqlError('E0021');
   }
 
   /**
@@ -65,7 +61,7 @@ class Invitation extends Base {
    **/
   public function setActivated($token_id) {
     if (!$iInvitationId = $this->getByTokenId($token_id)) {
-      $this->setErrorMessage('Unable to convert token ID to invitation ID');
+      $this->setErrorMessage($this->getErrorMsg('E0030'));
       return false;
     }
     $field = array('name' => 'is_activated', 'type' => 'i', 'value' => 1);
@@ -84,8 +80,9 @@ class Invitation extends Base {
     $stmt = $this->mysqli->prepare("INSERT INTO $this->table ( account_id, email, token_id ) VALUES ( ?, ?, ?)");
     if ($stmt && $stmt->bind_param('isi', $account_id, $email, $token_id) && $stmt->execute())
       return true;
-    return false;
+    $this->sqlError('E0022');
   }
+
   /**
    * Send an invitation out to a user
    * Uses the mail class to send mails
@@ -97,39 +94,37 @@ class Invitation extends Base {
     $this->debug->append("STA " . __METHOD__, 4);
     // Check data input
     if (empty($aData['email']) || !filter_var($aData['email'], FILTER_VALIDATE_EMAIL)) {
-      $this->setErrorMessage( 'Invalid e-mail address' );
+      $this->setErrorMessage($this->getErrorMsg('E0023'));
       return false;
     }
     if (preg_match('/[^a-z_\.\!\?\-0-9 ]/i', $aData['message'])) {
-      $this->setErrorMessage('Message may only contain alphanumeric characters');
+      $this->setErrorMessage($this->getErrorMsg('E0024'));
       return false;
     }
     // Ensure this invitation does not exist yet nor do we have an account with that email
     if ($this->user->getEmail($aData['email'])) {
-      $this->setErrorMessage('This email is already registered as an account');
+      $this->setErrorMessage($this->getErrorMsg('E0025'));
       return false;
     }
     if ($this->getByEmail($aData['email'])) {
-      $this->setErrorMessage('A pending invitation for this address already exists');
+      $this->setErrorMessage($this->getErrorMsg('E0026'));
       return false;
     }
     if (!$aData['token'] = $this->token->createToken('invitation', $account_id)) {
-      $this->setErrorMessage('Unable to generate invitation token: ' . $this->token->getError());
+      $this->setErrorMessage($this->getErrorMsg('E0027', $this->token->getError()));
       return false;
     }
     $aData['username'] = $this->user->getUserName($account_id);
     $aData['subject'] = 'Pending Invitation';
     if ($this->mail->sendMail('invitations/body', $aData)) {
       $aToken = $this->token->getToken($aData['token']);
-      if (!$this->createInvitation($account_id, $aData['email'], $aToken['id'])) {
-        $this->setErrorMessage('Unable to create invitation record');
+      if (!$this->createInvitation($account_id, $aData['email'], $aToken['id']))
         return false;
-      }
       return true;
     } else {
-      $this->setErrorMessage('Unable to send email to recipient');
+      $this->setErrorMessage($this->getErrorMsg('E0028'));
     }
-    $this->setErrorMessage('Unable to send invitation');
+    $this->setErrorMessage($this->getErrorMsg('E0029'));
     return false;
   }
 }
@@ -142,5 +137,5 @@ $invitation->setMail($mail);
 $invitation->setUser($user);
 $invitation->setToken($oToken);
 $invitation->setConfig($config);
-
+$invitation->setErrorCodes($aErrorCodes);
 ?>

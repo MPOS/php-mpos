@@ -114,7 +114,7 @@ if (empty($aAllBlocks)) {
           $iAccountId = $user->getUserId($share->getUpstreamFinder());
         }
       } else {
-        $log->logFatal('E0005: Unable to fetch blocks upstream share, aborted:' . $share->getError());
+        $log->logFatal('E0005: Unable to fetch blocks upstream share, aborted:' . $share->getCronError());
         $monitoring->endCronjob($cron_name, 'E0005', 1, true);
       }
 
@@ -130,13 +130,13 @@ if (empty($aAllBlocks)) {
 
       // Store new information
       if (!$block->setShareId($aBlock['id'], $iCurrentUpstreamId))
-        $log->logError('Failed to update share ID in database for block ' . $aBlock['height']);
+        $log->logError('Failed to update share ID in database for block ' . $aBlock['height'] . ': ' . $block->getCronError());
       if (!$block->setFinder($aBlock['id'], $iAccountId))
-        $log->logError('Failed to update finder account ID in database for block ' . $aBlock['height']);
+        $log->logError('Failed to update finder account ID in database for block ' . $aBlock['height'] . ': ' . $block->getCronError());
       if (!$block->setShares($aBlock['id'], $iRoundShares))
-        $log->logError('Failed to update share count in database for block ' . $aBlock['height']);
+        $log->logError('Failed to update share count in database for block ' . $aBlock['height'] . ': ' . $block->getCronError());
       if ($config['block_bonus'] > 0 && !$transaction->addTransaction($iAccountId, $config['block_bonus'], 'Bonus', $aBlock['id'])) {
-        $log->logError('Failed to create Bonus transaction in database for user ' . $user->getUserName($iAccountId) . ' for block ' . $aBlock['height']);
+        $log->logError('Failed to create Bonus transaction in database for user ' . $user->getUserName($iAccountId) . ' for block ' . $aBlock['height'] . ': ' . $transaction->getCronError());
       }
 
       if ($setting->getValue('disable_notifications') != 1) {

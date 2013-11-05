@@ -51,7 +51,7 @@ foreach ($aAllBlocks as $iIndex => $aBlock) {
   if ($aBlock['confirmations'] == $aBlockInfo['confirmations']) {
     $log->logDebug('    No update needed');
   } else if (!$block->setConfirmations($aBlock['id'], $aBlockInfo['confirmations'])) {
-    $log->logError('    Failed to update block confirmations');
+    $log->logError('    Failed to update block confirmations: ' . $block->getCronMessage());
   }
 }
 
