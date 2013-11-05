@@ -22,4 +22,7 @@ $aErrorCodes['E0015'] = 'Potential Double Payout detected';
 $aErrorCodes['E0016'] = 'Failed to delete accounted shares';
 $aErrorCodes['E0017'] = 'Failed to update Uptime Robot status';
 $aErrorCodes['E0018'] = 'Cron disbaled due to errors';
+$aErrorCodes['E0019'] = "SQL Query failed: %s";
+$aErrorCodes[''] = '';
+$aErrorCodes[''] = '';
 ?>

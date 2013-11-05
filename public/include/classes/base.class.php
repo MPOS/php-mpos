@@ -65,7 +65,15 @@ class Base {
   public function getErrorMsg($errCode) {
     if (!is_array($this->aErrorCodes)) return 'Error codes not loaded';
     if (!array_key_exists($errCode, $this->aErrorCodes)) return 'Unknown Error: ' . $errCode;
-    return $this->aErrorCodes[$errCode];
+    if (func_num_args() > 1) {
+      $sOutput = "";
+      for ($i = 1; $i < func_num_args(); $i++) {
+        $sOutput .= sprintf(" %s", func_get_arg($i));
+      }
+      return sprintf($this->aErrorCodes[$errCode], $sOutput);
+    } else {
+      return $this->aErrorCodes[$errCode];
+    }
   }
   protected function getAllAssoc($value, $field='id', $type='i') {
     $this->debug->append("STA " . __METHOD__, 4);
@@ -105,6 +113,16 @@ class Base {
     }
     return true;
   }
+
+  /**
+   * Catch SQL errors with this method
+   **/
+  protected function sqlError() {
+    $this->debug->append($this->getErrorMsg('E0019', $this->mysqli->error));
+    $this->setErrorMessage($this->getErrorMsg('E0019', $this->mysqli->error));
+    return false;
+  }
+
   /**
    * Update a single row in a table
    * @param userID int Account ID
@@ -118,7 +136,7 @@ class Base {
     if ($this->checkStmt($stmt) && $stmt->bind_param($field['type'].'i', $field['value'], $id) && $stmt->execute())
       return true;
     $this->debug->append("Unable to update " . $field['name'] . " with " . $field['value'] . " for ID $id");
-    return false;
+    $this->sqlError();
   }
 
   /**
