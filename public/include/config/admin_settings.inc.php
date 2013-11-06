@@ -127,7 +127,7 @@ $aSettings['statistics'][] = array(
   'display' => 'Show block average', 'type' => 'select',
   'options' => array( 0 => 'No', 1 => 'Yes' ),
   'default' => 0,
-  'name' => 'statistics_show_block_average', 'value' => $setting->getValue('show_block_average'),
+  'name' => 'statistics_show_block_average', 'value' => $setting->getValue('statistics_show_block_average'),
   'tooltip' => 'Show block average in block statistics page.'
 );
 $aSettings['statistics'][] = array(
