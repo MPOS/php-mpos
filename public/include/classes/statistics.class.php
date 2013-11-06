@@ -25,35 +25,29 @@ class Statistics extends Base {
   /**
    * Fetch last found blocks by time
    **/
-  function getLastValidBlocksbyTime($aTimeFrame) {
+  function getLastBlocksbyTime() {
     $this->debug->append("STA " . __METHOD__, 4);
-    if ($data = $this->memcache->get(__FUNCTION__ . $aTimeFrame)) return $data;
-  	$date = new DateTime();
-  	$actualTime = $date->getTimestamp();
-  	$aTimeDiff = $actualTime - $aTimeFrame;
-  	if ($aTimeFrame == 0) $aTimeDiff = 0;
+    if ($data = $this->memcache->get(__FUNCTION__)) return $data;
     $stmt = $this->mysqli->prepare("
-      SELECT COUNT(id) AS count FROM " . $this->block->getTableName() . "
-      WHERE confirmations > 0
-      AND time >= ?");
-    if ($this->checkStmt($stmt) && $stmt->bind_param('i', $aTimeDiff) && $stmt->execute() && $result = $stmt->get_result())
-    	return $this->memcache->setCache(__FUNCTION__ . $aTimeFrame, $result->fetch_object()->count);
-    return $this->sqlError();
-  }
-
-  function getLastOrphanBlocksbyTime($aTimeFrame) {
-    $this->debug->append("STA " . __METHOD__, 4);
-    if ($data = $this->memcache->get(__FUNCTION__ . $aTimeFrame)) return $data;
-  	$date = new DateTime();
-  	$actualTime = $date->getTimestamp();
-  	$aTimeDiff = $actualTime - $aTimeFrame;
-  	if ($aTimeFrame == 0) $aTimeDiff = 0;
-    $stmt = $this->mysqli->prepare("
-      SELECT COUNT(id) AS count FROM " . $this->block->getTableName() . "
-      WHERE confirmations = -1
-      AND time >= ?");
-    if ($this->checkStmt($stmt) && $stmt->bind_param('i', $aTimeDiff) && $stmt->execute() && $result = $stmt->get_result())
-    	return $this->memcache->setCache(__FUNCTION__ . $aTimeFrame, $result->fetch_object()->count);
+      SELECT
+        COUNT(id) AS Total,
+        IFNULL(SUM(IF(confirmations > 0, 1, 0)), 0) AS TotalValid,
+        IFNULL(SUM(IF(confirmations = -1, 1, 0)), 0) AS TotalOrphan,
+        IFNULL(SUM(IF(FROM_UNIXTIME(time) >= DATE_SUB(now(), INTERVAL 3600 SECOND), 1, 0)), 0) AS 1HourTotal,
+        IFNULL(SUM(IF(confirmations > 0 AND FROM_UNIXTIME(time) >= DATE_SUB(now(), INTERVAL 3600 SECOND), 1, 0)), 0) AS 1HourValid,
+        IFNULL(SUM(IF(confirmations = -1 AND FROM_UNIXTIME(time) >= DATE_SUB(now(), INTERVAL 3600 SECOND), 1, 0)), 0) AS 1HourOrphan,
+        IFNULL(SUM(IF(FROM_UNIXTIME(time)    >= DATE_SUB(now(), INTERVAL 86400 SECOND), 1, 0)), 0) AS 24HourTotal,
+        IFNULL(SUM(IF(confirmations > 0 AND FROM_UNIXTIME(time) >= DATE_SUB(now(), INTERVAL 86400 SECOND), 1, 0)), 0) AS 24HourValid,
+        IFNULL(SUM(IF(confirmations = -1 AND FROM_UNIXTIME(time) >= DATE_SUB(now(), INTERVAL 86400 SECOND), 1, 0)), 0) AS 24HourOrphan,
+        IFNULL(SUM(IF(FROM_UNIXTIME(time) >= DATE_SUB(now(), INTERVAL 604800 SECOND), 1, 0)), 0) AS 7DaysTotal,
+        IFNULL(SUM(IF(confirmations > 0 AND FROM_UNIXTIME(time) >= DATE_SUB(now(), INTERVAL 604800 SECOND), 1, 0)), 0) AS 7DaysValid,
+        IFNULL(SUM(IF(confirmations = -1 AND FROM_UNIXTIME(time) >= DATE_SUB(now(), INTERVAL 604800 SECOND), 1, 0)), 0) AS 7DaysOrphan,
+        IFNULL(SUM(IF(FROM_UNIXTIME(time) >= DATE_SUB(now(), INTERVAL 2419200 SECOND), 1, 0)), 0) AS 4WeeksTotal,
+        IFNULL(SUM(IF(confirmations > 0 AND FROM_UNIXTIME(time) >= DATE_SUB(now(), INTERVAL 2419200 SECOND), 1, 0)), 0) AS 4WeeksValid,
+        IFNULL(SUM(IF(confirmations = -1 AND FROM_UNIXTIME(time) >= DATE_SUB(now(), INTERVAL 2419200 SECOND), 1, 0)), 0) AS 4WeeksOrphan
+      FROM " . $this->block->getTableName());
+    if ($this->checkStmt($stmt) && $stmt->execute() && $result = $stmt->get_result())
+    	return $this->memcache->setCache(__FUNCTION__, $result->fetch_assoc());
     return $this->sqlError();
   }
 

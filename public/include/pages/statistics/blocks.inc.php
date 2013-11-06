@@ -72,7 +72,11 @@ if (!$smarty->isCached('master.tpl', $smarty_cache_key)) {
   $iHours = 24;
   $aPoolStatistics = $statistics->getPoolStatsHours($iHours);
 
+  // Past blocks found, max 4 weeks back
+  $iFoundBlocksByTime = $statistics->getLastBlocksbyTime();
+
   // Propagate content our template
+  $smarty->assign("LASTBLOCKSBYTIME", $iFoundBlocksByTime);
   $smarty->assign("BLOCKSFOUND", $aBlocksFoundData);
   $smarty->assign("BLOCKLIMIT", $iLimit);
   $smarty->assign("USEBLOCKAVERAGE", $use_average);
