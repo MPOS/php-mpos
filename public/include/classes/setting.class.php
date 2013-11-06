@@ -14,7 +14,8 @@ class Setting extends Base {
   public function getValue($name) {
     $stmt = $this->mysqli->prepare("SELECT value FROM $this->table WHERE name = ? LIMIT 1");
     if ($this->checkStmt($stmt) && $stmt->bind_param('s', $name) && $stmt->execute() && $result = $stmt->get_result())
-      return $result->fetch_object()->value;
+      if ($result->num_rows > 0)
+        return $result->fetch_object()->value;
     return $this->sqlError();
   }
 
