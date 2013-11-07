@@ -121,7 +121,10 @@ $setting->setValue('pps_last_share_id', $iLastShareId);
 
 // Fetch all unaccounted blocks
 $aAllBlocks = $block->getAllUnaccounted('ASC');
-if (empty($aAllBlocks)) $log->logDebug("No new unaccounted blocks found");
+if (empty($aAllBlocks)) {
+  $log->logDebug("No new unaccounted blocks found");
+  // No monitoring event here, not fatal for PPS
+}
 
 // Go through blocks and archive/delete shares that have been accounted for
 foreach ($aAllBlocks as $iIndex => $aBlock) {
@@ -143,23 +146,17 @@ foreach ($aAllBlocks as $iIndex => $aBlock) {
   // Move shares to archive
   if ($aBlock['share_id'] < $iLastShareId) {
     if (!$share->moveArchive($aBlock['share_id'], $aBlock['id'], @$iLastBlockShare))
-      $log->logError("Archving failed");
+      $log->logError("Failed to copy shares to archive: " . $share->getCronError());
   }
   // Delete shares
   if ($aBlock['share_id'] < $iLastShareId && !$share->deleteAccountedShares($aBlock['share_id'], $iLastBlockShare)) {
-    $log->logFatal("Failed to delete accounted shares from " . $aBlock['share_id'] . " to " . $iLastBlockShare . ", aborting!");
-    $monitoring->setStatus($cron_name . "_active", "yesno", 0);
-    $monitoring->setStatus($cron_name . "_message", "message", "Failed to delete accounted shares from " . $aBlock['share_id'] . " to " . $iLastBlockShare);
-    $monitoring->setStatus($cron_name . "_status", "okerror", 1);
-    exit(1);
+    $log->logFatal("Failed to delete accounted shares from " . $aBlock['share_id'] . " to " . $iLastBlockShare . ", aborting! Error: " . $share->getCronError());
+    $monitoring->endCronjob($cron_name, 'E0016', 1, true);
   }
   // Mark this block as accounted for
   if (!$block->setAccounted($aBlock['id'])) {
-    $log->logFatal("Failed to mark block as accounted! Aborting!");
-    $monitoring->setStatus($cron_name . "_active", "yesno", 0);
-    $monitoring->setStatus($cron_name . "_message", "message", "Failed to mark block " . $aBlock['height'] . " as accounted");
-    $monitoring->setStatus($cron_name . "_status", "okerror", 1);
-    exit(1);
+    $log->logFatal("Failed to mark block as accounted! Aborting! Error: " . $block->getCronError());
+    $monitoring->endCronjob($cron_name, 'E0014', 1, true);
   }
 }
 

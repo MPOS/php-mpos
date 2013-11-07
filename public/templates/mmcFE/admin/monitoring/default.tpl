@@ -1,6 +1,7 @@
 {include file="global/block_header.tpl" BLOCK_HEADER="Monitoring"}
     <table width="88%">
       <thead>
+        <th>Disabled</th>
         <th>Cronjob</th>
         <th>Exit Code</th>
         <th>Active</th>

@@ -27,9 +27,7 @@ class Notification extends Mail {
     $stmt = $this->mysqli->prepare("SELECT id FROM $this->table WHERE data = ? AND active = 1 LIMIT 1");
     if ($stmt && $stmt->bind_param('s', $data) && $stmt->execute() && $stmt->store_result() && $stmt->num_rows == 1)
       return true;
-    // Catchall
-    // Does not seem to have a notification set
-    return false;
+    return $this->sqlError('E0041');
   }
 
   /**
@@ -37,11 +35,10 @@ class Notification extends Mail {
    **/
   public function getAllActive($strType) {
     $this->debug->append("STA " . __METHOD__, 4);
-    $stmt =$this->mysqli->prepare("SELECT id, data FROM $this->table WHERE active = 1 AND type = ?");
+    $stmt =$this->mysqli->prepare("SELECT id2, data FROM $this->table WHERE active = 1 AND type = ?");
     if ($stmt && $stmt->bind_param('s', $strType) && $stmt->execute() && $result = $stmt->get_result())
       return $result->fetch_all(MYSQLI_ASSOC);
-    // Catchall
-    return false;
+    return $this->sqlError('E0042');
   }
 
   /**
@@ -56,9 +53,7 @@ class Notification extends Mail {
     $stmt = $this->mysqli->prepare("INSERT INTO $this->table (account_id, type, data, active) VALUES (?, ?,?,1)");
     if ($stmt && $stmt->bind_param('iss', $account_id, $type, $data) && $stmt->execute())
       return true;
-    $this->debug->append("Failed to add notification for $type with $data: " . $this->mysqli->error);
-    $this->setErrorMessage("Unable to add new notification " . $this->mysqli->error);
-    return false;
+    return $this->sqlError('E0043');
   }
 
   /**
@@ -71,8 +66,7 @@ class Notification extends Mail {
     $stmt = $this->mysqli->prepare("SELECT * FROM $this->table WHERE account_id = ? ORDER BY time DESC");
     if ($stmt && $stmt->bind_param('i', $account_id) && $stmt->execute() && $result = $stmt->get_result())
       return $result->fetch_all(MYSQLI_ASSOC);
-    // Catchall
-    return false;
+    return $this->getError();
   }
 
   /**
@@ -91,10 +85,7 @@ class Notification extends Mail {
         return $aData;
       }
     }
-    // Catchall
-    $this->setErrorMessage('Unable to fetch notification settings');
-    $this->debug->append('Failed fetching notification settings for ' . $account_id . ': ' . $this->mysqli->error);
-    return false;
+    return $this->sqlError('E0045');
   }
 
   /**
@@ -108,8 +99,7 @@ class Notification extends Mail {
     if ($stmt && $stmt->bind_param('s', $strType) && $stmt->execute() && $result = $stmt->get_result()) {
       return $result->fetch_all(MYSQLI_ASSOC);
     }
-    // Catchall
-    return false;
+    return $this->sqlError('E0046');
   }
 
   /**
@@ -142,7 +132,7 @@ class Notification extends Mail {
       }
     }
     if ($failed > 0) {
-      $this->setErrorMessage('Failed to update ' . $failed . ' settings');
+      $this->setErrorMessage($this->getErrorMsg('E0047', $failed));
       return false;
     }
     return true;
@@ -183,4 +173,5 @@ $notification->setMysql($mysqli);
 $notification->setSmarty($smarty);
 $notification->setConfig($config);
 $notification->setSetting($setting);
+$notification->setErrorCodes($aErrorCodes);
 ?>

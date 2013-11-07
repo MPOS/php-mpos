@@ -19,7 +19,7 @@
       <tr>
         <th scope="row">Actual</th>
 {section block $BLOCKSFOUND step=-1}
-        <td>{$BLOCKSFOUND[block].shares}</td>
+        <td>{$BLOCKSFOUND[block].shares|default:"0"}</td>
 {/section}
      </tr>
     {if $GLOBAL.config.payout_system == 'pplns'}<tr>
@@ -136,7 +136,7 @@
 {if $GLOBAL.config.payout_system == 'pplns'}<td align="right">{$BLOCKSFOUND[block].pplns_shares|number_format}</td>{/if}
         <td align="right">{$BLOCKSFOUND[block].shares|number_format}</td>
         <td align="right" style="padding-right: 25px;">
-{math assign="percentage" equation="shares / estshares * 100" shares=$BLOCKSFOUND[block].shares estshares=$BLOCKSFOUND[block].estshares}
+{math assign="percentage" equation="shares / estshares * 100" shares=$BLOCKSFOUND[block].shares|default:"0" estshares=$BLOCKSFOUND[block].estshares}
           <font color="{if ($percentage <= 100)}green{else}red{/if}">{$percentage|number_format:"2"}</font>
         </td>
       </tr>

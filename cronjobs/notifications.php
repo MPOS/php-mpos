@@ -26,10 +26,7 @@ chdir(dirname(__FILE__));
 require_once('shared.inc.php');
 
 if ($setting->getValue('disable_notifications') == 1) {
-  $monitoring->setStatus($cron_name . "_active", "yesno", 0);
-  $monitoring->setStatus($cron_name . "_message", "message", "Cron disabled by admin");
-  $monitoring->setStatus($cron_name . "_status", "okerror", 0);
-  exit(0);
+  $monitoring->endCronjob($cron_name, 'E0009', 0, true);
 }
 
 $log->logDebug("  IDLE Worker Notifications ...");
@@ -47,7 +44,7 @@ if (empty($aWorkers)) {
     $aData['email'] = $user->getUserEmail($aData['username']);
     $log->logDebug("    " . $aWorker['username'] . "...");
     if (!$notification->sendNotification($aWorker['account_id'], 'idle_worker', $aData))
-      $log->logError("    Failed sending notifications: " . $notification->getError() . "\n");
+      $log->logError("    Failed sending notifications: " . $notification->getCronError() . "\n");
   }
 }
 

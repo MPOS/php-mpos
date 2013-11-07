@@ -4,7 +4,7 @@
 if (!defined('SECURITY')) die('Hacking attempt');
 
 class Payout Extends Base {
-  var $table = 'payouts';
+  protected $table = 'payouts';
 
   /**
    * Check if the user has an active payout request already
@@ -15,7 +15,7 @@ class Payout Extends Base {
     $stmt = $this->mysqli->prepare("SELECT id FROM $this->table WHERE completed = 0 AND account_id = ? LIMIT 1");
     if ($stmt && $stmt->bind_param('i', $account_id) && $stmt->execute( )&& $stmt->store_result() && $stmt->num_rows > 0)
       return true;
-    return false;
+    return $this->sqlError('E0048');
   }
 
   /**
@@ -27,7 +27,7 @@ class Payout Extends Base {
     $stmt = $this->mysqli->prepare("SELECT * FROM $this->table WHERE completed = 0");
     if ($this->checkStmt($stmt) && $stmt->execute() && $result = $stmt->get_result())
       return $result->fetch_all(MYSQLI_ASSOC);
-    return false;
+    return $this->sqlError('E0050');
   }
 
   /**
@@ -40,9 +40,7 @@ class Payout Extends Base {
     if ($stmt && $stmt->bind_param('i', $account_id) && $stmt->execute()) {
       return $stmt->insert_id;
     }
-    $this->setErrorMessage('Unable to create new payout request');
-    $this->debug->append('Failed to create new payout request in database: ' . $this->mysqli->error);
-    return false;
+    return $this->sqlError('E0049');
   }
 
   /**
@@ -54,10 +52,13 @@ class Payout Extends Base {
     $stmt = $this->mysqli->prepare("UPDATE $this->table SET completed = 1 WHERE id = ?");
     if ($stmt && $stmt->bind_param('i', $id) && $stmt->execute())
       return true;
-    return false;
+    return $this->sqlError('E0051');
   }
 }
 
 $oPayout = new Payout();
 $oPayout->setDebug($debug);
 $oPayout->setMysql($mysqli);
+$oPayout->setErrorCodes($aErrorCodes);
+
+?>

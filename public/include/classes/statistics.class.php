@@ -10,30 +10,9 @@ if (!defined('SECURITY'))
  * Statistics should be non-intrusive and not change any
  * rows in our database to ensure data integrity for the backend
  **/
-class Statistics {
-  private $sError = '';
-  private $table = 'statistics_shares';
+class Statistics extends Base {
+  protected $table = 'statistics_shares';
   private $getcache = true;
-
-  public function __construct($debug, $mysqli, $config, $share, $user, $block, $memcache) {
-    $this->debug = $debug;
-    $this->mysqli = $mysqli;
-    $this->share = $share;
-    $this->config = $config;
-    $this->user = $user;
-    $this->block = $block;
-    $this->memcache = $memcache;
-    $this->debug->append("Instantiated Share class", 2);
-  }
-
-  /* Some basic get and set methods
-   **/
-  private function setErrorMessage($msg) {
-    $this->sError = $msg;
-  }
-  public function getError() {
-    return $this->sError;
-  }
 
   // Disable fetching values from cache
   public function setGetCache($set=false) {
@@ -41,15 +20,6 @@ class Statistics {
   }
   public function getGetCache() {
     return $this->getcache;
-  }
-
-  private function checkStmt($bState) {
-    if ($bState ===! true) {
-      $this->debug->append("Failed to prepare statement: " . $this->mysqli->error);
-      $this->setErrorMessage('Failed to prepare statement');
-      return false;
-    }
-    return true;
   }
 
   /**
@@ -64,17 +34,12 @@ class Statistics {
   	if ($aTimeFrame == 0) $aTimeDiff = 0;
     $stmt = $this->mysqli->prepare("
       SELECT COUNT(id) AS count FROM " . $this->block->getTableName() . "
-      WHERE confirmations > 0 
-      AND time >= ?
-      ");
-      
+      WHERE confirmations > 0
+      AND time >= ?");
     if ($this->checkStmt($stmt) && $stmt->bind_param('i', $aTimeDiff) && $stmt->execute() && $result = $stmt->get_result())
     	return $this->memcache->setCache(__FUNCTION__ . $aTimeFrame, $result->fetch_object()->count);
-    $this->debug->append("Failed to get valid Blocks by time: ". $this->mysqli->error);
-    return false;
+    return $this->sqlError();
   }
-  
-  
 
   function getLastOrphanBlocksbyTime($aTimeFrame) {
     $this->debug->append("STA " . __METHOD__, 4);
@@ -85,16 +50,12 @@ class Statistics {
   	if ($aTimeFrame == 0) $aTimeDiff = 0;
     $stmt = $this->mysqli->prepare("
       SELECT COUNT(id) AS count FROM " . $this->block->getTableName() . "
-      WHERE confirmations = -1 
-      AND time >= ? 
-      ");
-      
+      WHERE confirmations = -1
+      AND time >= ?");
     if ($this->checkStmt($stmt) && $stmt->bind_param('i', $aTimeDiff) && $stmt->execute() && $result = $stmt->get_result())
     	return $this->memcache->setCache(__FUNCTION__ . $aTimeFrame, $result->fetch_object()->count);
-    $this->debug->append("Failed to get orphan Blocks by time: ". $this->mysqli->error);
-    return false;
+    return $this->sqlError();
   }
-  
 
   /**
    * Get our last $limit blocks found
@@ -116,9 +77,7 @@ class Statistics {
       ORDER BY height DESC LIMIT ?");
     if ($this->checkStmt($stmt) && $stmt->bind_param("i", $limit) && $stmt->execute() && $result = $stmt->get_result())
       return $this->memcache->setCache(__FUNCTION__ . $limit, $result->fetch_all(MYSQLI_ASSOC), 5);
-    // Catchall
-    $this->debug->append("Failed to find blocks:" . $this->mysqli->error);
-    return false;
+    return $this->sqlError();
   }
 
   /**
@@ -142,9 +101,7 @@ class Statistics {
       ORDER BY height DESC LIMIT ?");
     if ($this->checkStmt($stmt) && $stmt->bind_param("ii", $iHeight, $limit) && $stmt->execute() && $result = $stmt->get_result())
       return $this->memcache->setCache(__FUNCTION__ . $iHeight . $limit, $result->fetch_all(MYSQLI_ASSOC), 5);
-    // Catchall
-    $this->debug->append("Failed to find blocks:" . $this->mysqli->error);
-    return false;
+    return $this->sqlError();
   }
 
   /**
@@ -158,9 +115,7 @@ class Statistics {
     $this->debug->append("STA " . __METHOD__, 4);
     $stmt = $this->mysqli->prepare("INSERT INTO $this->table (account_id, valid, invalid, block_id) VALUES (?, ?, ?, ?)");
     if ($this->checkStmt($stmt) && $stmt->bind_param('iiii', $aStats['id'], $aStats['valid'], $aStats['invalid'], $iBlockId) && $stmt->execute()) return true;
-    // Catchall
-    $this->debug->append("Failed to update share stats: " . $this->mysqli->error);
-    return false;
+    return $this->sqlError();
   }
 
   /**
@@ -171,9 +126,7 @@ class Statistics {
     $stmt = $this->mysqli->prepare("
       UPDATE $this->table SET pplns_valid = ?, pplns_invalid = ? WHERE account_id = ? AND block_id = ?");
     if ($this->checkStmt($stmt) && $stmt->bind_param('iiii', $aStats['valid'], $aStats['invalid'], $aStats['id'], $iBlockId) && $stmt->execute()) return true;
-    // Catchall
-    $this->debug->append("Failed to update pplns share stats: " . $this->mysqli->error);
-    return false;
+    return $this->sqlError();
   }
 
   /**
@@ -183,9 +136,7 @@ class Statistics {
     $this->debug->append("STA " . __METHOD__, 4);
     $stmt = $this->mysqli->prepare("INSERT INTO $this->table (account_id, valid, invalid, pplns_valid, pplns_invalid, block_id) VALUES (?, 0, 0, ?, ?, ?)");
     if ($this->checkStmt($stmt) && $stmt->bind_param('iiii', $aStats['id'], $aStats['valid'], $aStats['invalid'], $iBlockId) && $stmt->execute()) return true;
-    // Catchall
-    $this->debug->append("Failed to insert pplns share stats: " . $this->mysqli->error);
-    return false;
+    return $this->sqlError();
   }
 
   /**
@@ -198,7 +149,7 @@ class Statistics {
       ");
     if ($this->checkStmt($stmt) && $stmt->bind_param('ii', $aStats['id'], $iBlockId) && $stmt->execute() && $result = $stmt->get_result())
       return $result->fetch_object()->id;
-    return false;
+    return $this->sqlError();
   }
 
   /**
@@ -226,10 +177,8 @@ class Statistics {
         )
       ) AS hashrate
       FROM DUAL");
-    // Catchall
     if ($this->checkStmt($stmt) && $stmt->bind_param('iiii', $interval, $interval, $interval, $interval) && $stmt->execute() && $result = $stmt->get_result() ) return $this->memcache->setCache(__FUNCTION__, $result->fetch_object()->hashrate);
-    $this->debug->append("Failed to get hashrate: " . $this->mysqli->error);
-    return false;
+    return $this->sqlError();
   }
 
   /**
@@ -257,9 +206,7 @@ class Statistics {
       ) AS sharerate
       FROM DUAL");
     if ($this->checkStmt($stmt) && $stmt->bind_param('iiii', $interval, $interval, $interval, $interval) && $stmt->execute() && $result = $stmt->get_result() ) return $this->memcache->setCache(__FUNCTION__, $result->fetch_object()->sharerate);
-    // Catchall
-    $this->debug->append("Failed to fetch share rate: " . $this->mysqli->error);
-    return false;
+    return $this->sqlError();
   }
 
   /**
@@ -291,9 +238,7 @@ class Statistics {
       WHERE UNIX_TIMESTAMP(time) > IFNULL((SELECT MAX(time) FROM " . $this->block->getTableName() . "), 0)");
     if ( $this->checkStmt($stmt) && $stmt->execute() && $result = $stmt->get_result() )
       return $this->memcache->setCache(STATISTICS_ROUND_SHARES, $result->fetch_assoc());
-    // Catchall
-    $this->debug->append("Failed to fetch round shares: " . $this->mysqli->error);
-    return false;
+    return $this->sqlError();
   }
 
   /**
@@ -341,9 +286,7 @@ class Statistics {
       $data['share_id'] = $this->share->getMaxShareId();
       return $this->memcache->setCache(STATISTICS_ALL_USER_SHARES, $data);
     }
-    // Catchall
-    $this->debug->append("Unable to fetch all users round shares: " . $this->mysqli->error);
-    return false;
+    return $this->sqlError();
   }
 
   /**
@@ -373,9 +316,7 @@ class Statistics {
         AND u.id = ?");
     if ($stmt && $stmt->bind_param("i", $account_id) && $stmt->execute() && $result = $stmt->get_result())
       return $this->memcache->setCache(__FUNCTION__ . $account_id, $result->fetch_assoc());
-    // Catchall
-    $this->debug->append("Unable to fetch user round shares: " . $this->mysqli->error);
-    return false;
+    return $this->sqlError();
   }
 
   /**
@@ -402,9 +343,9 @@ class Statistics {
       	a.username LIKE ?
       GROUP BY username
       ORDER BY username");
-    if ($this->checkStmt($stmt) && $stmt->bind_param('s', $filter) && $stmt->execute() && $result = $stmt->get_result()) {
+    if ($this->checkStmt($stmt) && $stmt->bind_param('s', $filter) && $stmt->execute() && $result = $stmt->get_result())
       return $this->memcache->setCache(__FUNCTION__ . $filter, $result->fetch_all(MYSQLI_ASSOC));
-    }
+    return $this->sqlError();
   }
 
   /**
@@ -437,9 +378,7 @@ class Statistics {
       FROM DUAL");
     if ($this->checkStmt($stmt) && $stmt->bind_param("iiiiii", $interval, $interval, $account_id, $interval, $interval, $account_id) && $stmt->execute() && $result = $stmt->get_result() )
       return $this->memcache->setCache(__FUNCTION__ . $account_id, $result->fetch_object()->hashrate);
-    // Catchall
-    $this->debug->append("Failed to fetch hashrate: " . $this->mysqli->error);
-    return false;
+    return $this->sqlError();
   }
 
   public function getUserUnpaidPPSShares($account_id, $last_paid_pps_id) {
@@ -456,8 +395,7 @@ class Statistics {
       WHERE our_result = 'Y'");
     if ($this->checkStmt($stmt) && $stmt->bind_param("ii", $account_id, $last_paid_pps_id) && $stmt->execute() && $result = $stmt->get_result() )
       return $this->memcache->setCache(__FUNCTION__ . $account_id, $result->fetch_object()->total);
-    $this->debug->append("Failed fetching average share dificulty: " . $this->mysqli->error, 3);
-    return 0;
+    return $this->sqlError();
   }
 
   /**
@@ -480,8 +418,7 @@ class Statistics {
       AND a.id = ?");
     if ($this->checkStmt($stmt) && $stmt->bind_param("ii", $interval, $account_id) && $stmt->execute() && $result = $stmt->get_result() )
       return $this->memcache->setCache(__FUNCTION__ . $account_id, $result->fetch_object()->avgsharediff);
-    $this->debug->append("Failed fetching average share dificulty: " . $this->mysqli->error, 3);
-    return 0;
+    return $this->sqlError();
   }
 
   /**
@@ -516,9 +453,7 @@ class Statistics {
       FROM DUAL");
     if ($this->checkStmt($stmt) && $stmt->bind_param("iiiiii", $interval, $interval, $account_id, $interval, $interval, $account_id) && $stmt->execute() && $result = $stmt->get_result() )
       return $this->memcache->setCache(__FUNCTION__ . $account_id, $result->fetch_object()->sharerate);
-    // Catchall
-    $this->debug->append("Failed to fetch sharerate: " . $this->mysqli->error);
-    return false;
+    return $this->sqlError();
   }
 
   /**
@@ -539,9 +474,7 @@ class Statistics {
         AND u.id = ?");
     if ($this->checkStmt($stmt) && $stmt->bind_param("i", $account_id) && $stmt->execute() && $result = $stmt->get_result() )
       return $this->memcache->setCache(__FUNCTION__ . $worker_id, $result->fetch_object()->hashrate);
-    // Catchall
-    $this->debug->append("Failed to fetch hashrate: " . $this->mysqli->error);
-    return false;
+    return $this->sqlError();
   }
 
   /**
@@ -591,8 +524,7 @@ class Statistics {
         LIMIT ?");
       if ($this->checkStmt($stmt) && $stmt->bind_param("i", $limit) && $stmt->execute() && $result = $stmt->get_result())
         return $this->memcache->setCache(__FUNCTION__ . $type . $limit, $result->fetch_all(MYSQLI_ASSOC));
-      $this->debug->append("Fetching shares failed: ");
-      return false;
+      return $this->sqlError();
       break;
 
     case 'hashes':
@@ -614,8 +546,7 @@ class Statistics {
         ORDER BY hashrate DESC LIMIT ?");
       if ($this->checkStmt($stmt) && $stmt->bind_param("i", $limit) && $stmt->execute() && $result = $stmt->get_result())
         return $this->memcache->setCache(__FUNCTION__ . $type . $limit, $result->fetch_all(MYSQLI_ASSOC));
-      $this->debug->append("Fetching shares failed: " . $this->mysqli->error);
-      return false;
+      return $this->sqlError();
       break;
     }
   }
@@ -658,9 +589,7 @@ class Statistics {
       while ($row = $result->fetch_assoc()) $aData[$row['hour']] = $row['hashrate'];
       return $this->memcache->setCache(__FUNCTION__ . $account_id, $aData);
     }
-    // Catchall
-    $this->debug->append("Failed to fetch hourly hashrate: " . $this->mysqli->error);
-    return false;
+    return $this->sqlError();
   }
 
   /**
@@ -697,9 +626,7 @@ class Statistics {
       while ($row = $result->fetch_assoc()) $aData[$row['hour']] = (int) $row['hashrate'];
       return $this->memcache->setCache(__FUNCTION__, $aData);
     }
-    // Catchall
-    $this->debug->append("Failed to fetch hourly hashrate: " . $this->mysqli->error);
-    return false;
+    return $this->sqlError();
   }
 
   /**
@@ -767,9 +694,7 @@ class Statistics {
       AND confirmations >= 1");
     if ($this->checkStmt($stmt) && $stmt->bind_param("i", $hour) && $stmt->execute() && $result = $stmt->get_result())
       return $this->memcache->setCache(__FUNCTION__ . $hour, $result->fetch_assoc());
-    // Catchall
-    $this->debug->append("Failed to get pool statistics:" . $this->mysqli->error);
-    return false;
+    return $this->sqlError();
   }
 
   /**
@@ -782,5 +707,14 @@ class Statistics {
   }
 }
 
+$statistics = new Statistics();
+$statistics->setDebug($debug);
+$statistics->setMysql($mysqli);
+$statistics->setShare($share);
+$statistics->setUser($user);
+$statistics->setBlock($block);
+$statistics->setMemcache($memcache);
+$statistics->setConfig($config);
+$statistics->setErrorCodes($aErrorCodes);
 
-$statistics = new Statistics($debug, $mysqli, $config, $share, $user, $block, $memcache);
+?>

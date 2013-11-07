@@ -1,13 +1,10 @@
 <?php
 
 // Make sure we are called from index.php
-if (!defined('SECURITY'))
-  die('Hacking attempt');
+if (!defined('SECURITY')) die('Hacking attempt');
 
 class Monitoring extends Base {
-  public function __construct() {
-    $this->table = 'monitoring';
-  }
+   protected $table = 'monitoring';
 
   /**
    * Store Uptime Robot status information as JSON in settings table
@@ -24,15 +21,20 @@ class Monitoring extends Base {
         $aMonitor['api_key'] = $temp[0];
         $aMonitor['monitor_id'] = $temp[1];
         $target = '/getMonitors?apiKey=' . $aMonitor['api_key'] . '&monitors=' . $aMonitor['monitor_id'] . '&format=json&noJsonCallback=1&customUptimeRatio=1-7-30&logs=1';
-        if (!$aMonitorStatus = $this->tools->getApi($url, $target)) {
-          $this->setErrorMessage('Failed to run API call: ' . $this->tools->getError());
+        $aMonitorStatus = $this->tools->getApi($url, $target);
+        if (!$aMonitorStatus || @$aMonitorStatus['stat'] == 'fail') {
+          if (is_array($aMonitorStatus) && array_key_exists('message', @$aMonitorStatus)) {
+            $this->setErrorMessage($this->getErrorMsg('E0032', $aMonitorStatus['message']));
+          } else {
+            $this->setErrorMessage($this->getErrorMsg('E0032', $this->tools->getError()));
+          }
           return false;
         }
         $aMonitorStatus['monitors']['monitor'][0]['customuptimeratio'] = explode('-', $aMonitorStatus['monitors']['monitor'][0]['customuptimeratio']);
         $aAllMonitorsStatus[] = $aMonitorStatus['monitors']['monitor'][0];
       }
       if (!$this->setting->setValue('monitoring_uptimerobot_status', json_encode($aAllMonitorsStatus)) || !$this->setting->setValue('monitoring_uptimerobot_lastcheck', time())) {
-        $this->setErrorMessage('Failed to store uptime status: ' . $setting->getError());
+        $this->setErrorMessage($this->getErrorMsg('E0033'), $setting->getError());
         return false;
       }
     }
@@ -51,6 +53,16 @@ class Monitoring extends Base {
   }
 
   /**
+   * Check that our cron is currently activated
+   * @param name string Cronjob name
+   * @return bool true or false
+   **/
+  public function isDisabled($name) {
+    $aStatus = $this->getStatus($name . '_disabled');
+    return $aStatus['value'];
+  }
+
+  /**
    * Fetch a value from our table
    * @param name string Setting name
    * @return value string Value
@@ -60,8 +72,7 @@ class Monitoring extends Base {
     if ($query && $query->bind_param('s', $name) && $query->execute() && $result = $query->get_result()) {
       return $result->fetch_assoc();
     } else {
-      $this->debug->append("Failed to fetch variable $name from $this->table");
-      return false;
+      $this->sqlError();
     }
     return $value;
   }
@@ -83,10 +94,41 @@ class Monitoring extends Base {
     $this->debug->append("Failed to set $name to $value");
     return false;
   }
+
+  /**
+   * End cronjob with an error message
+   * @param cron_name string Cronjob Name
+   * @param msgCode string Message code as stored in error_codes array
+   * @param exitCode int Exit code to pass on to exit function and monitor report
+   * @param fatal boolean Should we exit out entirely
+   * @return none
+   **/
+  public function endCronjob($cron_name, $msgCode, $exitCode=0, $fatal=false, $mail=true) {
+    $this->setStatus($cron_name . "_active", "yesno", 0);
+    $this->setStatus($cron_name . "_message", "message", $this->getErrorMsg($msgCode));
+    $this->setStatus($cron_name . "_status", "okerror", $exitCode);
+    $this->setStatus($cron_name . "_endtime", "date", time());
+    if ($mail) {
+      $aMailData = array(
+        'email' => $this->setting->getValue('system_error_email'),
+        'subject' => 'Cronjob Failure',
+        'Error Code' => $msgCode,
+        'Error Message' => $this->getErrorMsg($msgCode)
+      );
+      if (!$this->mail->sendMail('notifications/error', $aMailData))
+        $this->setErrorMessage('Failed to send mail notification');
+    }
+    if ($fatal) {
+      if ($exitCode != 0) $this->setStatus($cron_name . "_disabled", "yesno", 1);
+      exit($exitCode);
+    }
+  }
 }
 
 $monitoring = new Monitoring();
+$monitoring->setErrorCodes($aErrorCodes);
 $monitoring->setConfig($config);
 $monitoring->setDebug($debug);
+$monitoring->setMail($mail);
 $monitoring->setMysql($mysqli);
 $monitoring->setSetting($setting);

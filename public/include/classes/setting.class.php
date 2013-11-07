@@ -12,18 +12,11 @@ class Setting extends Base {
    * @return value string Value
    **/
   public function getValue($name) {
-    $query = $this->mysqli->prepare("SELECT value FROM $this->table WHERE name=? LIMIT 1");
-    if ($query) {
-      $query->bind_param('s', $name);
-      $query->execute();
-      $query->bind_result($value);
-      $query->fetch();
-      $query->close();
-    } else {
-      $this->debug->append("Failed to fetch variable $name from $this->table");
-      return false;
-    }
-    return $value;
+    $stmt = $this->mysqli->prepare("SELECT value FROM $this->table WHERE name = ? LIMIT 1");
+    if ($this->checkStmt($stmt) && $stmt->bind_param('s', $name) && $stmt->execute() && $result = $stmt->get_result())
+      if ($result->num_rows > 0)
+        return $result->fetch_object()->value;
+    return $this->sqlError();
   }
 
   /**
@@ -36,15 +29,14 @@ class Setting extends Base {
     $stmt = $this->mysqli->prepare("
       INSERT INTO $this->table (name, value)
       VALUES (?, ?)
-      ON DUPLICATE KEY UPDATE value = ?
-      ");
+      ON DUPLICATE KEY UPDATE value = ?");
     if ($stmt && $stmt->bind_param('sss', $name, $value, $value) && $stmt->execute())
       return true;
-    $this->debug->append("Failed to set $name to $value");
-    return false;
+    return $this->sqlError();
   }
 }
 
 $setting = new Setting($debug, $mysqli);
 $setting->setDebug($debug);
 $setting->setMysql($mysqli);
+$setting->setErrorCodes($aErrorCodes);

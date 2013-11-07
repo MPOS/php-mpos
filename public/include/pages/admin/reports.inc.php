@@ -12,7 +12,7 @@ if (!$user->isAuthenticated() || !$user->isAdmin($_SESSION['USERDATA']['id'])) {
 if (!$smarty->isCached('master.tpl', $smarty_cache_key)) {
   $debug->append('No cached version available, fetching from backend', 3);
 
-  $aUserList = $roundstats->getAllUsers('%');
+  $aUserList = $user->getAllUsers('%');
 
   $iHeight = 0;
   $iUserId = 0;

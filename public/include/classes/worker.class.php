@@ -26,16 +26,14 @@ class Worker extends Base {
       } else {
         // Prefix the WebUser to Worker name
         $value['username'] = "$username." . $value['username'];
-        $stmt = $this->mysqli->prepare("UPDATE $this->table SET password = ?, username = ?, monitor = ? WHERE account_id = ? AND id = ?");
+        $stmt = $this->mysqli->prepare("UPDATE $this->table SET password2 = ?, username = ?, monitor = ? WHERE account_id = ? AND id = ?");
         if ( ! ( $this->checkStmt($stmt) && $stmt->bind_param('ssiii', $value['password'], $value['username'], $value['monitor'], $account_id, $key) && $stmt->execute()) )
           $iFailed++;
       }
     }
     if ($iFailed == 0)
       return true;
-    // Catchall
-    $this->setErrorMessage('Failed to update ' . $iFailed . ' worker.');
-    return false;
+    return $this->sqlError('E0053', $iFailed);
   }
 
   /**
@@ -57,9 +55,7 @@ class Worker extends Base {
     ");
     if ($this->checkStmt($stmt) && $stmt->bind_param('i', $interval) && $stmt->execute() && $result = $stmt->get_result())
       return $result->fetch_all(MYSQLI_ASSOC);
-    // Catchall
-    $this->setErrorMessage("Unable to fetch IDLE, monitored workers");
-    return false;
+    return $this->sqlError('E0054');
   }
 
   /**
@@ -102,9 +98,7 @@ class Worker extends Base {
        ");
     if ($this->checkStmt($stmt) && $stmt->bind_param('iiiiiii', $interval, $interval, $interval, $interval, $interval, $interval, $id) && $stmt->execute() && $result = $stmt->get_result())
       return $result->fetch_assoc();
-    // Catchall
-    $this->serErrorMessage('Failed fetching worker details: '. $this->mysqli->error());
-    return false;
+    return $this->sqlError('E0055');
   }
 
   /**
@@ -146,10 +140,7 @@ class Worker extends Base {
       WHERE account_id = ?");
     if ($this->checkStmt($stmt) && $stmt->bind_param('iiiiiiiii', $interval, $interval, $interval, $interval, $interval, $interval, $interval, $interval, $account_id) && $stmt->execute() && $result = $stmt->get_result())
       return $result->fetch_all(MYSQLI_ASSOC);
-    // Catchall
-    $this->setErrorMessage('Failed to fetch workers for your account');
-    $this->debug->append('Fetching workers failed: ' . $this->mysqli->error);
-    return false;
+    return $this->sqlError('E0056');
   }
 
   /**
@@ -198,10 +189,7 @@ class Worker extends Base {
       ORDER BY hashrate DESC LIMIT ?");
     if ($this->checkStmt($stmt) && $stmt->bind_param('iiiiiiiii', $interval, $interval, $interval, $interval, $interval, $interval, $interval, $interval, $iLimit) && $stmt->execute() && $result = $stmt->get_result())
       return $result->fetch_all(MYSQLI_ASSOC);
-    // Catchall
-    $this->setErrorMessage('Failed to fetch workers');
-    $this->debug->append('Fetching workers failed: ' . $this->mysqli->error);
-    return false;
+    return $this->sqlError('E0057');
   }
 
   /**
@@ -215,11 +203,10 @@ class Worker extends Base {
       SELECT COUNT(DISTINCT(username)) AS total
       FROM "  . $this->share->getTableName() . "
       WHERE our_result = 'Y'
-      AND time > DATE_SUB(now(), INTERVAL 10 MINUTE)
-    ");
+      AND time > DATE_SUB(now(), INTERVAL 10 MINUTE)");
     if ($this->checkStmt($stmt) && $stmt->execute() && $result = $stmt->get_result())
       return $result->fetch_object()->total;
-    return false;
+    return $this->sqlError();
   }
 
   /**
@@ -234,22 +221,20 @@ class Worker extends Base {
   public function addWorker($account_id, $workerName, $workerPassword) {
     $this->debug->append("STA " . __METHOD__, 4);
     if ('' === $workerName || '' === $workerPassword) {
-      $this->setErrorMessage('Worker name and/or password may not be empty');
+      $this->setErrorMessage($this->getErrorMsg('E0058'));
       return false;
     }
     $username = $this->user->getUserName($account_id);
     $workerName = "$username.$workerName";
     $stmt = $this->mysqli->prepare("INSERT INTO $this->table (account_id, username, password) VALUES(?, ?, ?)");
-    if ($this->checkStmt($stmt)) {
-      $stmt->bind_param('iss', $account_id, $workerName, $workerPassword);
+    if ($this->checkStmt($stmt) && $stmt->bind_param('iss', $account_id, $workerName, $workerPassword)) {
       if (!$stmt->execute()) {
-        $this->setErrorMessage( 'Failed to add worker' );
-        if ($stmt->sqlstate == '23000') $this->setErrorMessage( 'Worker already exists' );
-        return false;
+        if ($stmt->sqlstate == '23000') return $this->sqlError('E0059');
+      } else {
+        return true;
       }
-      return true;
     }
-    return false;
+    return $this->sqlError('E0060');
   }
 
   /**
@@ -261,15 +246,9 @@ class Worker extends Base {
   public function deleteWorker($account_id, $id) {
     $this->debug->append("STA " . __METHOD__, 4);
     $stmt = $this->mysqli->prepare("DELETE FROM $this->table WHERE account_id = ? AND id = ?");
-    if ($this->checkStmt($stmt)) {
-      $stmt->bind_param('ii', $account_id, $id);
-      if ($stmt->execute() && $stmt->affected_rows == 1) {
+    if ($this->checkStmt($stmt) && $stmt->bind_param('ii', $account_id, $id) && $stmt->execute() && $stmt->affected_rows == 1)
         return true;
-      } else {
-        $this->setErrorMessage( 'Unable to delete worker' );
-      }
-    }
-    return false;
+    return $this->sqlError('E0061');
   }
 }
 
@@ -279,3 +258,6 @@ $worker->setMysql($mysqli);
 $worker->setShare($share);
 $worker->setConfig($config);
 $worker->setUser($user);
+$worker->setErrorCodes($aErrorCodes);
+
+?>

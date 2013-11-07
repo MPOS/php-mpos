@@ -5,7 +5,8 @@ if (!defined('SECURITY'))
   die('Hacking attempt');
 
 class Token_Type Extends Base {
-  var $table = 'token_types';
+  protected $table = 'token_types';
+
   /**
    * Return ID for specific token
    * @param strName string Token Name
@@ -19,3 +20,4 @@ class Token_Type Extends Base {
 $tokentype = new Token_Type();
 $tokentype->setDebug($debug);
 $tokentype->setMysql($mysqli);
+$tokentype->setErrorCodes($aErrorCodes);

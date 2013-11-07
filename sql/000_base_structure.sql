@@ -61,7 +61,7 @@ CREATE TABLE IF NOT EXISTS `monitoring` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(30) NOT NULL,
   `type` varchar(15) NOT NULL,
-  `value` varchar(25) NOT NULL,
+  `value` varchar(255) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `name` (`name`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='Monitoring events from cronjobs';

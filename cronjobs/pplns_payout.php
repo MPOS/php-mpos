@@ -35,10 +35,7 @@ if ($config['payout_system'] != 'pplns') {
 $aAllBlocks = $block->getAllUnaccounted('ASC');
 if (empty($aAllBlocks)) {
   $log->logDebug("No new unaccounted blocks found");
-  $monitoring->setStatus($cron_name . "_active", "yesno", 0); 
-  $monitoring->setStatus($cron_name . "_message", "message", "No new unaccounted blocks");
-  $monitoring->setStatus($cron_name . "_status", "okerror", 0); 
-  exit(0);
+  $monitoring->endCronjob($cron_name, 'E0011', 0, true, false);
 }
 
 $count = 0;
@@ -64,10 +61,7 @@ foreach ($aAllBlocks as $iIndex => $aBlock) {
     $iCurrentUpstreamId = $aBlock['share_id'];
     if (!is_numeric($iCurrentUpstreamId)) {
       $log->logFatal("Block " . $aBlock['height'] . " has no share_id associated with it, not going to continue");
-      $monitoring->setStatus($cron_name . "_active", "yesno", 0);
-      $monitoring->setStatus($cron_name . "_message", "message", "Block " . $aBlock['height'] . " has no share_id associated with it");
-      $monitoring->setStatus($cron_name . "_status", "okerror", 1);
-      exit(1);
+      $monitoring->endCronjob($cron_name, 'E0012', 1, true);
     }
     $iRoundShares = $share->getRoundShares($iPreviousShareId, $aBlock['share_id']);
     $iNewRoundShares = 0;
@@ -83,10 +77,7 @@ foreach ($aAllBlocks as $iIndex => $aBlock) {
       $aAccountShares = $share->getSharesForAccounts($iMinimumShareId - 1, $aBlock['share_id']);
       if (empty($aAccountShares)) {
         $log->logFatal("No shares found for this block, aborted! Block Height : " . $aBlock['height']);
-        $monitoring->setStatus($cron_name . "_active", "yesno", 0); 
-        $monitoring->setStatus($cron_name . "_message", "message", "No shares found for this block: " . $aBlock['height']);
-        $monitoring->setStatus($cron_name . "_status", "okerror", 1); 
-        exit(1);
+        $monitoring->endCronjob($cron_name, 'E0013', 1, true);
       }
       foreach($aAccountShares as $key => $aData) {
         $iNewRoundShares += $aData['valid'];
@@ -100,10 +91,7 @@ foreach ($aAllBlocks as $iIndex => $aBlock) {
       $aAccountShares = $aRoundAccountShares;
       if (empty($aAccountShares)) {
         $log->logFatal("No shares found for this block, aborted! Block height: " . $aBlock['height']);
-        $monitoring->setStatus($cron_name . "_active", "yesno", 0);
-        $monitoring->setStatus($cron_name . "_message", "message", "No shares found for this block: " . $aBlock['height']);
-        $monitoring->setStatus($cron_name . "_status", "okerror", 1);
-        exit(1);
+        $monitoring->endCronjob($cron_name, 'E0013', 1, true);
       }
 
       // Grab only the most recent shares from Archive that fill the missing shares
@@ -141,7 +129,7 @@ foreach ($aAllBlocks as $iIndex => $aBlock) {
                }
              }
           $aAccountShares = $aSharesData;
-          }  
+          }
         }
         // We tried to fill up to PPLNS target, now we need to check the actual shares to properly payout users
         foreach($aAccountShares as $key => $aData) {
@@ -221,21 +209,19 @@ foreach ($aAllBlocks as $iIndex => $aBlock) {
 
     // Move counted shares to archive before this blockhash upstream share
     if (!$share->moveArchive($iCurrentUpstreamId, $aBlock['id'], $iPreviousShareId))
-      $log->logError('Failed to copy shares to archive table');
+      $log->logError('Failed to copy shares to archive table: ' . $share->getCronError());
     // Delete all accounted shares
     if (!$share->deleteAccountedShares($iCurrentUpstreamId, $iPreviousShareId)) {
-      $log->logFatal("Failed to delete accounted shares from $iPreviousShareId to $iCurrentUpstreamId, aborting!");
-      exit(1);
+      $log->logFatal("Failed to delete accounted shares from $iPreviousShareId to $iCurrentUpstreamId, aborting! Error: " . $share->getCronError());
+      $monitoring->endCronjob($cron_name, 'E0016', 1, true);
     }
     // Mark this block as accounted for
     if (!$block->setAccounted($aBlock['id'])) {
-      $log->logFatal("Failed to mark block as accounted! Aborting!");
-      $monitoring->setStatus($cron_name . "_active", "yesno", 0); 
-      $monitoring->setStatus($cron_name . "_message", "message", "Failed to mark block " . $aBlock['height'] . " as accounted");
-      $monitoring->setStatus($cron_name . "_status", "okerror", 1); 
-      exit(1);
+      $log->logFatal("Failed to mark block as accounted! Aborting! Error: " . $block->getCronError());
+      $monitoring->endCronjob($cron_name, 'E0014', 1, true);
     }
   } else {
+    $log->logFatal('Potential double payout detected. Aborted.');
     $aMailData = array(
       'email' => $setting->getValue('system_error_email'),
       'subject' => 'Payout processing aborted',
@@ -245,12 +231,8 @@ foreach ($aAllBlocks as $iIndex => $aBlock) {
       'Block Share ID' => $aBlock['share_id']
     );
     if (!$mail->sendMail('notifications/error', $aMailData))
-      $log->logError("    Failed sending notifications: " . $notification->getError() . "\n");
-    $log->logFatal('Potential double payout detected. Aborted.');
-    $monitoring->setStatus($cron_name . "_active", "yesno", 0);
-    $monitoring->setStatus($cron_name . "_message", "message", "Block height for block too low! Potential double payout detected.");
-    $monitoring->setStatus($cron_name . "_status", "okerror", 1);
-    exit(1);
+      $log->logError("    Failed sending notifications: " . $notification->getCronError() . "\n");
+    $monitoring->endCronjob($cron_name, 'E0015', 1, true);
   }
 }
 

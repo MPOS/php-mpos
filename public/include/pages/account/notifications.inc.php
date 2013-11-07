@@ -11,7 +11,7 @@ if ($user->isAuthenticated()) {
       if ($notification->updateSettings($_SESSION['USERDATA']['id'], $_REQUEST['data'])) {
         $_SESSION['POPUP'][] = array('CONTENT' => 'Updated notification settings');
       } else {
-        $_SESSION['POPUP'][] = array('CONTENT' => 'Failed to update settings', 'TYPE' => 'errormsg');
+        $_SESSION['POPUP'][] = array('CONTENT' => $notification->getError(), 'TYPE' => 'errormsg');
       }
     }
 

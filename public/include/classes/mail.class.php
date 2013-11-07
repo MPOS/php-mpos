@@ -5,16 +5,6 @@ if (!defined('SECURITY'))
   die('Hacking attempt');
 
 class Mail extends Base {
-  function checkStmt($bState) {
-    $this->debug->append("STA " . __METHOD__, 4);
-    if ($bState ===! true) {
-      $this->debug->append("Failed to prepare statement: " . $this->mysqli->error);
-      $this->setErrorMessage('Internal application Error');
-      return false;
-    }
-    return true;
-  }
-
   /**
   * Mail form contact site admin
   * @param senderName string senderName
@@ -28,19 +18,19 @@ class Mail extends Base {
   public function contactform($senderName, $senderEmail, $senderSubject, $senderMessage) {
     $this->debug->append("STA " . __METHOD__, 4);
     if (preg_match('/[^a-z_\.\!\?\-0-9\\s ]/i', $senderName)) {
-      $this->setErrorMessage('Username may only contain alphanumeric characters');
+      $this->setErrorMessage($this->getErrorMsg('E0024'));
       return false;
     }
     if (empty($senderEmail) || !filter_var($senderEmail, FILTER_VALIDATE_EMAIL)) {
-      $this->setErrorMessage( 'Invalid e-mail address' );
+      $this->setErrorMessage($this->getErrorMsg('E0023'));
       return false;
     }
     if (preg_match('/[^a-z_\.\!\?\-0-9\\s ]/i', $senderSubject)) {
-      $this->setErrorMessage('Subject may only contain alphanumeric characters');
+      $this->setErrorMessage($this->getErrorMsg('E0034'));
       return false;
     }
     if (strlen(strip_tags($senderMessage)) < strlen($senderMessage)) {
-      $this->setErrorMessage('Your message may only contain alphanumeric characters');
+      $this->setErrorMessage($this->getErrorMsg('E0024'));
       return false;
     }
     $aData['senderName'] = $senderName;
@@ -58,6 +48,13 @@ class Mail extends Base {
     return false;
   }
 
+  /**
+   * Send a mail with templating via Smarty
+   * @param template string Template name within the mail folder, no extension
+   * @param aData array Data array with some required fields
+   *     SUBJECT : Mail Subject
+   *     email   : Destination address
+   **/
   public function sendMail($template, $aData) {
     $this->smarty->assign('WEBSITENAME', $this->setting->getValue('website_name'));
     $this->smarty->assign('SUBJECT', $aData['subject']);
@@ -67,7 +64,7 @@ class Mail extends Base {
     $headers .= "Content-Type: text/html; charset=ISO-8859-1\r\n";
     if (mail($aData['email'], $this->smarty->fetch(BASEPATH . 'templates/mail/subject.tpl'), $this->smarty->fetch(BASEPATH . 'templates/mail/' . $template  . '.tpl'), $headers))
       return true;
-    $this->setErrorMessage('Unable to send mail');
+    $this->setErrorMessage($this->sqlError('E0031'));
     return false;
   }
 }
@@ -79,4 +76,5 @@ $mail->setMysql($mysqli);
 $mail->setSmarty($smarty);
 $mail->setConfig($config);
 $mail->setSetting($setting);
+$mail->setErrorCodes($aErrorCodes);
 ?>

@@ -41,6 +41,16 @@ require_once(BASEPATH . 'include/config/global.inc.php');
 // We include all needed files here, even though our templates could load them themself
 require_once(INCLUDE_DIR . '/autoloader.inc.php');
 
+// Command line switches
+array_shift($argv);
+foreach ($argv as $option) {
+  switch ($option) {
+  case '-f':
+    $monitoring->setStatus($cron_name . "_disabled", "yesno", 0);
+    break;
+  }
+}
+
 // Load 3rd party logging library for running crons
 $log = new KLogger ( 'logs/' . $cron_name . '.txt' , KLogger::INFO );
 $log->LogDebug('Starting ' . $cron_name);
@@ -48,8 +58,13 @@ $log->LogDebug('Starting ' . $cron_name);
 // Load the start time for later runtime calculations for monitoring
 $cron_start[$cron_name] = microtime(true);
 
+// Check if our cron is activated
+if ($monitoring->isDisabled($cron_name)) {
+  $log->logFatal('Cronjob is currently disabled due to errors, use -f option to force running cron.');
+  $monitoring->endCronjob($cron_name, 'E0018', 1, true, false);
+}
+
 // Mark cron as running for monitoring
 $log->logDebug('Marking cronjob as running for monitoring');
-$monitoring->setStatus($cron_name . '_active', 'yesno', 1);
 $monitoring->setStatus($cron_name . '_starttime', 'date', time());
 ?>

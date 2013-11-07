@@ -35,10 +35,7 @@ if ( $bitcoin->can_connect() === true ){
   $aTransactions = $bitcoin->query('listsinceblock', $strLastBlockHash);
 } else {
   $log->logFatal('Unable to conenct to RPC server backend');
-  $monitoring->setStatus($cron_name . "_active", "yesno", 0); 
-  $monitoring->setStatus($cron_name . "_message", "message", "Unable to connect to RPC server");
-  $monitoring->setStatus($cron_name . "_status", "okerror", 1); 
-  exit(1);
+  $monitoring->endCronjob($cron_name, 'E0006', 1, true);
 }
 
 // Nothing to do so bail out
@@ -97,43 +94,28 @@ if (empty($aAllBlocks)) {
           if ( !$aShareError = $share->getShareById($aBlockError['share_id']) || !$aShareCurrent = $share->getShareById($iCurrentUpstreamId)) {
             // We were not able to fetch all shares that were causing this detection to trigger, bail out
             $log->logFatal('E0002: Failed to fetch both offending shares ' . $iCurrentUpstreamId . ' and ' . $iPreviousShareId . '. Block height: ' . $aBlock['height']);
-            $monitoring->setStatus($cron_name . "_active", "yesno", 0);
-            $monitoring->setStatus($cron_name . "_message", "message", "E0002: Upstream shares not found");
-            $monitoring->setStatus($cron_name . "_status", "okerror", 1);
-            exit(1);
+            $monitoring->endCronjob($cron_name, 'E0002', 1, true);
           }
           // Shares seem to be out of order, so lets change them
           if ( !$share->updateShareById($iCurrentUpstreamId, $aShareError) || !$share->updateShareById($iPreviousShareId, $aShareCurrent)) {
             // We couldn't update one of the shares! That might mean they have been deleted already
             $log->logFatal('E0003: Failed to change shares order!');
-            $monitoring->setStatus($cron_name . "_active", "yesno", 0);
-            $monitoring->setStatus($cron_name . "_message", "message", "E0003: Failed share update");
-            $monitoring->setStatus($cron_name . "_status", "okerror", 1);
-            exit(1);
+            $monitoring->endCronjob($cron_name, 'E0003', 1, true);
           }
           // Reset our offending block so the next run re-checks the shares
           if (!$block->setShareId($aBlockError['id'], NULL) && !$block->setFinder($aBlockError['id'], NULL) || !$block->setShares($aBlockError['id'], NULL)) {
             $log->logFatal('E0004: Failed to reset previous block: ' . $aBlockError['height']);
             $log->logError('Failed to reset block in database: ' . $aBlockError['height']);
-            $monitoring->setStatus($cron_name . "_active", "yesno", 0);
-            $monitoring->setStatus($cron_name . "_message", "message", "E0004: Failed to reset block");
-            $monitoring->setStatus($cron_name . "_status", "okerror", 1);
-            exit(1);
+            $monitoring->endCronjob($cron_name, 'E0004', 1, true);
           }
-          $monitoring->setStatus($cron_name . "_active", "yesno", 0);
-          $monitoring->setStatus($cron_name . "_message", "message", "Out of Order Share detected, autofixed");
-          $monitoring->setStatus($cron_name . "_status", "okerror", 1);
-          exit(0);
+          $monitoring->endCronjob($cron_name, 'E0007', 0, true);
         } else {
           $iRoundShares = $share->getRoundShares($iPreviousShareId, $iCurrentUpstreamId);
           $iAccountId = $user->getUserId($share->getUpstreamFinder());
         }
       } else {
-        $log->logFatal('E0005: Unable to fetch blocks upstream share, aborted:' . $share->getError());
-        $monitoring->setStatus($cron_name . "_active", "yesno", 0);
-        $monitoring->setStatus($cron_name . "_message", "message", "Unable to fetch blocks " . $aBlock['height'] . " upstream share: " . $share->getError());
-        $monitoring->setStatus($cron_name . "_status", "okerror", 1);
-        exit(1);
+        $log->logFatal('E0005: Unable to fetch blocks upstream share, aborted:' . $share->getCronError());
+        $monitoring->endCronjob($cron_name, 'E0005', 1, true);
       }
 
       $log->logInfo(
@@ -148,13 +130,13 @@ if (empty($aAllBlocks)) {
 
       // Store new information
       if (!$block->setShareId($aBlock['id'], $iCurrentUpstreamId))
-        $log->logError('Failed to update share ID in database for block ' . $aBlock['height']);
+        $log->logError('Failed to update share ID in database for block ' . $aBlock['height'] . ': ' . $block->getCronError());
       if (!$block->setFinder($aBlock['id'], $iAccountId))
-        $log->logError('Failed to update finder account ID in database for block ' . $aBlock['height']);
+        $log->logError('Failed to update finder account ID in database for block ' . $aBlock['height'] . ': ' . $block->getCronError());
       if (!$block->setShares($aBlock['id'], $iRoundShares))
-        $log->logError('Failed to update share count in database for block ' . $aBlock['height']);
+        $log->logError('Failed to update share count in database for block ' . $aBlock['height'] . ': ' . $block->getCronError());
       if ($config['block_bonus'] > 0 && !$transaction->addTransaction($iAccountId, $config['block_bonus'], 'Bonus', $aBlock['id'])) {
-        $log->logError('Failed to create Bonus transaction in database for user ' . $user->getUserName($iAccountId) . ' for block ' . $aBlock['height']);
+        $log->logError('Failed to create Bonus transaction in database for user ' . $user->getUserName($iAccountId) . ' for block ' . $aBlock['height'] . ': ' . $transaction->getCronError());
       }
 
       if ($setting->getValue('disable_notifications') != 1) {
