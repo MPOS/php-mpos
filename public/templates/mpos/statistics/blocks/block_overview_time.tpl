@@ -4,11 +4,11 @@
     <thead>
         <tr>
           <th align="left"></th>
-          <th align="center">Gen</th>
+          <th align="center">Gen Est.</th>
           <th align="center">Found</th>
           <th align="center">Valid</th>
           <th align="center">Orphan</th>
-          <th align="center">Rate</th>
+          <th align="center">Rate Est.</th>
         </tr>
     </thead>
     <tbody>
