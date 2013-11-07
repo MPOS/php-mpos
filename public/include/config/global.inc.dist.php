@@ -164,7 +164,7 @@ $config['currency'] = 'LTC';
  *   Bitcoin: 10 minutes = 600 seconds
  *
  **/
-$config['cointarget'] = '12';
+$config['cointarget'] = '150';
 
 /**
  * Default transaction fee to apply to user transactions

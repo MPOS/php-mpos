@@ -14,7 +14,7 @@
     <tbody>
         <tr>
           <th align="left" style="padding-left: 15px">All Time</td>
-          <td align="center">{($FIRSTBLOCKFOUND / $COINGENTIME)}</td>
+          <td align="center">{($FIRSTBLOCKFOUND / $COINGENTIME)|number_format:"0"}</td>
           <td align="center">{$LASTBLOCKSBYTIME.Total}</td>
           <td align="center">{$LASTBLOCKSBYTIME.TotalValid}</td>
           <td align="center">{$LASTBLOCKSBYTIME.TotalOrphan}</td>
