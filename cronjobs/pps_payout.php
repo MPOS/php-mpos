@@ -105,15 +105,15 @@ foreach ($aAccountShares as $aData) {
 
   // Add new credit transaction
   if (!$transaction->addTransaction($aData['id'], $aData['payout'], 'Credit_PPS'))
-    $log->logError('Failed to add Credit_PPS transaction in database');
+    $log->logError('Failed to add Credit_PPS transaction in database: ' . $transaction->getCronError());
   // Add new fee debit for this block
   if ($aData['fee'] > 0 && $config['fees'] > 0)
     if (!$transaction->addTransaction($aData['id'], $aData['fee'], 'Fee_PPS'))
-      $log->logError('Failed to add Fee_PPS transaction in database');
+      $log->logError('Failed to add Fee_PPS transaction in database: ' . $transaction->getCronError());
   // Add new donation debit
   if ($aData['donation'] > 0)
     if (!$transaction->addTransaction($aData['id'], $aData['donation'], 'Donation_PPS'))
-      $log->logError('Failed to add Donation_PPS transaction in database');
+      $log->logError('Failed to add Donation_PPS transaction in database: ' . $transaction->getCronError());
 }
 
 // Store our last inserted ID for the next run
@@ -141,12 +141,12 @@ foreach ($aAllBlocks as $iIndex => $aBlock) {
   $aAccountShares = $share->getSharesForAccounts(@$iLastBlockShare, $aBlock['share_id']);
   foreach ($aAccountShares as $key => $aData) {
     if (!$statistics->updateShareStatistics($aData, $aBlock['id']))
-      $log->logError("Failed to update stats for this block on : " . $aData['username']);
+      $log->logError("Failed to update stats for this block on : " . $aData['username'] . ': ' . $statistics->getCronError());
   }
   // Move shares to archive
   if ($aBlock['share_id'] < $iLastShareId) {
     if (!$share->moveArchive($aBlock['share_id'], $aBlock['id'], @$iLastBlockShare))
-      $log->logError("Failed to copy shares to archive: " . $share->getCronError());
+      $log->logError("Failed to copy shares to archive: " . $share->getCronError() . ': ' . $share->getCronError());
   }
   // Delete shares
   if ($aBlock['share_id'] < $iLastShareId && !$share->deleteAccountedShares($aBlock['share_id'], $iLastBlockShare)) {

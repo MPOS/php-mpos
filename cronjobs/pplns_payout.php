@@ -175,7 +175,7 @@ foreach ($aAllBlocks as $iIndex => $aBlock) {
       foreach ($aRoundAccountShares as $key => $aRoundData) {
         if ($aRoundData['username'] == $aData['username'])
           if (!$statistics->updateShareStatistics($aRoundData, $aBlock['id']))
-            $log->logError('Failed to update share statistics for ' . $aData['username']);
+            $log->logError('Failed to update share statistics for ' . $aData['username'] . ': ' . $statistics->getCronError());
       }
 
       // Add PPLNS share statistics
@@ -183,25 +183,25 @@ foreach ($aAllBlocks as $iIndex => $aBlock) {
         if ($aRoundData['username'] == $aData['username']){
           if (@$statistics->getIdShareStatistics($aRoundData, $aBlock['id'])){
             if (!$statistics->updatePPLNSShareStatistics($aRoundData, $aBlock['id']))
-            $log->logError('Failed to update pplns statistics for ' . $aData['username']);
+            $log->logError('Failed to update pplns statistics for ' . $aData['username'] . ': ' . $statistics->getCronError());
           } else {
           if (!$statistics->insertPPLNSShareStatistics($aRoundData, $aBlock['id']))
-            $log->logError('Failed to insert pplns statistics for ' . $aData['username']);
+            $log->logError('Failed to insert pplns statistics for ' . $aData['username'] . ': ' . $statistics->getCronError());
           }
         }
       }
 
       // Add new credit transaction
       if (!$transaction->addTransaction($aData['id'], $aData['payout'], 'Credit', $aBlock['id']))
-        $log->logFatal('Failed to insert new Credit transaction to database for ' . $aData['username']);
+        $log->logFatal('Failed to insert new Credit transaction to database for ' . $aData['username'] . ': ' . $transaction->getCronError());
       // Add new fee debit for this block
       if ($aData['fee'] > 0 && $config['fees'] > 0)
         if (!$transaction->addTransaction($aData['id'], $aData['fee'], 'Fee', $aBlock['id']))
-          $log->logFatal('Failed to insert new Fee transaction to database for ' . $aData['username']);
+          $log->logFatal('Failed to insert new Fee transaction to database for ' . $aData['username'] . ': ' . $transaction->getCronError());
       // Add new donation debit
       if ($aData['donation'] > 0)
         if (!$transaction->addTransaction($aData['id'], $aData['donation'], 'Donation', $aBlock['id']))
-          $log->logFatal('Failed to insert new Donation transaction to database for ' . $aData['username']);
+          $log->logFatal('Failed to insert new Donation transaction to database for ' . $aData['username'] . ': ' . $transaction->getCronError());
     }
 
     // Store this blocks height as last accounted for
@@ -209,7 +209,7 @@ foreach ($aAllBlocks as $iIndex => $aBlock) {
 
     // Move counted shares to archive before this blockhash upstream share
     if (!$share->moveArchive($iCurrentUpstreamId, $aBlock['id'], $iPreviousShareId))
-      $log->logError('Failed to copy shares to archive table: ' . $share->getCronError());
+      $log->logError('Failed to copy shares to archive table: ' . $share->getCronError() . ': ' . $share->getCronError());
     // Delete all accounted shares
     if (!$share->deleteAccountedShares($iCurrentUpstreamId, $iPreviousShareId)) {
       $log->logFatal("Failed to delete accounted shares from $iPreviousShareId to $iCurrentUpstreamId, aborting! Error: " . $share->getCronError());

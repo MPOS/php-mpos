@@ -86,18 +86,18 @@ foreach ($aAllBlocks as $iIndex => $aBlock) {
 
       // Update user share statistics
       if (!$statistics->updateShareStatistics($aData, $aBlock['id']))
-        $log->logFatal('Failed to update share statistics for ' . $aData['username']);
+        $log->logFatal('Failed to update share statistics for ' . $aData['username'] . ': ' . $statistics->getCronError());
       // Add new credit transaction
       if (!$transaction->addTransaction($aData['id'], $aData['payout'], 'Credit', $aBlock['id']))
-        $log->logFatal('Failed to insert new Credit transaction to database for ' . $aData['username']);
+        $log->logFatal('Failed to insert new Credit transaction to database for ' . $aData['username'] . ': ' . $transaction->getCronError());
       // Add new fee debit for this block
       if ($aData['fee'] > 0 && $config['fees'] > 0)
         if (!$transaction->addTransaction($aData['id'], $aData['fee'], 'Fee', $aBlock['id']))
-          $log->logFatal('Failed to insert new Fee transaction to database for ' . $aData['username']);
+          $log->logFatal('Failed to insert new Fee transaction to database for ' . $aData['username'] . ': ' . $transaction->getCronError());
       // Add new donation debit
       if ($aData['donation'] > 0)
         if (!$transaction->addTransaction($aData['id'], $aData['donation'], 'Donation', $aBlock['id']))
-          $log->logFatal('Failed to insert new Donation transaction to database for ' . $aData['username']);
+          $log->logFatal('Failed to insert new Donation transaction to database for ' . $aData['username'] . ': ' . $transaction->getCronError());
     }
 
     // Add block as accounted for into settings table
