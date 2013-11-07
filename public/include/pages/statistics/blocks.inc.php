@@ -70,10 +70,9 @@ if (!$smarty->isCached('master.tpl', $smarty_cache_key)) {
   }
 
   $iHours = 24;
-  $now = new DateTime( "now" );
   $aPoolStatistics = $statistics->getPoolStatsHours($iHours);
   $iFirstBlockFound = $statistics->getFirstBlockFound();
-  $iTimeSinceFirstBlockFound = ($now->getTimestamp() - $iFirstBlockFound);
+  $iTimeSinceFirstBlockFound = (time() - $iFirstBlockFound);
   
   // Past blocks found, max 4 weeks back
   $iFoundBlocksByTime = $statistics->getLastBlocksbyTime();
