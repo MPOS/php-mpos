@@ -18,7 +18,7 @@
           <td align="center">{$LASTBLOCKSBYTIME.Total}</td>
           <td align="center">{$LASTBLOCKSBYTIME.TotalValid}</td>
           <td align="center">{$LASTBLOCKSBYTIME.TotalOrphan}</td>
-          <td align="center">{($LASTBLOCKSBYTIME.Total|default:"0.00" / (3600 / $COINGENTIME)  * 100)|number_format:"2"} %</td>
+          <td align="center">{($LASTBLOCKSBYTIME.Total|default:"0.00" / ($FIRSTBLOCKFOUND / $COINGENTIME)  * 100)|number_format:"2"} %</td>
         </tr>
         <tr>
           <th align="left" style="padding-left: 15px">Last Hour</td>
