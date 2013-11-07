@@ -44,8 +44,11 @@ if (!$smarty->isCached('master.tpl', $smarty_cache_key)) {
 
   // Past blocks found, max 4 weeks back
   $iFoundBlocksByTime = $statistics->getLastBlocksbyTime();
+  $iFirstBlockFound = $statistics->getFirstBlockFound();
+  $iTimeSinceFirstBlockFound = ($now->getTimestamp() - $iFirstBlockFound);
 
   // Propagate content our template
+  $smarty->assign("FIRSTBLOCKFOUND", $iTimeSinceFirstBlockFound);
   $smarty->assign("LASTBLOCKSBYTIME", $iFoundBlocksByTime);
   $smarty->assign("ESTTIME", $iEstTime);
   $smarty->assign("TIMESINCELAST", $dTimeSinceLast);

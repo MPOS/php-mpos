@@ -31,15 +31,6 @@
           <th align="left">Est. Shares this Round</td>
           <td id="b-target"></td>
         </tr>
-
-      </tbody>
-    </table>
-  </div>
-
-  <header><h3>Block Statistics</h3></header>
-  <div class="module_content">
-    <table width="100%">
-      <tbody>
     {if ! $GLOBAL.website.blockexplorer.disabled}
         <tr>
           <th align="left" width="50%">Next Network Block</td>
@@ -59,41 +50,55 @@
           <th align="left">Time Since Last Block</td>
           <td colspan="3">{$TIMESINCELAST|seconds_to_words}</td>
         </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <header><h3>Pool Luck</h3></header>
+  <div class="module_content">
+    <table width="100%">
+      <tbody>
         <tr>
           <th align="left"></th>
-          <th align="center">Found</th>
-          <th align="center">Valid</th>
-          <th align="center">Orphan</th>
+          <th align="center">Est. Blocks</th>
+          <th align="center">Blocks found</th>
+          <th align="center">Luck</th>
         </tr>
         <tr>
-          <th align="left">All Time</td>
+          <th align="left">since 1st Block</td>
+          <td align="center">{($FIRSTBLOCKFOUND / $ESTTIME)|number_format:"2"}</td>
           <td align="center">{$LASTBLOCKSBYTIME.Total}</td>
-          <td align="center">{$LASTBLOCKSBYTIME.TotalValid}</td>
-          <td align="center">{$LASTBLOCKSBYTIME.TotalOrphan}</td>
+          <td align="center">{IF $ESTTIME > 0}{($LASTBLOCKSBYTIME.Total / ($FIRSTBLOCKFOUND / $ESTTIME) * 100)|number_format:"2"} %{else}{($LASTBLOCKSBYTIME.Total / ($FIRSTBLOCKFOUND / 0.00) * 100)|number_format:"2"} %{/if}</td>
         </tr>
         <tr>
-          <th align="left">Last Hour</td>
+          <th align="left">last hour</td>
+          <td align="center">{(3600 / $ESTTIME)|number_format:"2"}</td>
           <td align="center">{$LASTBLOCKSBYTIME.1HourTotal}</td>
-          <td align="center">{$LASTBLOCKSBYTIME.1HourValid}</td>
-          <td align="center">{$LASTBLOCKSBYTIME.1HourOrphan}</td>
+          <td align="center">{IF $ESTTIME > 0}{($LASTBLOCKSBYTIME.1HourTotal / (3600 / $ESTTIME) * 100)|number_format:"2"} %{else}{($LASTBLOCKSBYTIME.1HourTotal / (3600 / 0.00) * 100)|number_format:"2"} %{/if}</td>
         </tr>
         <tr>
-          <th align="left">Last 24 Hours</td>
+          <th align="left">last day</td>
+          <td align="center">{(86400 / $ESTTIME)|number_format:"2"}</td>
           <td align="center">{$LASTBLOCKSBYTIME.24HourTotal}</td>
-          <td align="center">{$LASTBLOCKSBYTIME.24HourValid}</td>
-          <td align="center">{$LASTBLOCKSBYTIME.24HourOrphan}</td>
+          <td align="center">{IF $ESTTIME > 0}{($LASTBLOCKSBYTIME.Total / (86400 / $ESTTIME) * 100)|number_format:"2"} %{else}{($LASTBLOCKSBYTIME.Total / (86400 / 0.00) * 100)|number_format:"2"} %{/if}</td>
         </tr>
         <tr>
-          <th align="left">Last 7 Days</td>
+          <th align="left">last week</td>
+          <td align="center">{(604800 / $ESTTIME)|number_format:"2"}</td>
           <td align="center">{$LASTBLOCKSBYTIME.7DaysTotal}</td>
-          <td align="center">{$LASTBLOCKSBYTIME.7DaysValid}</td>
-          <td align="center">{$LASTBLOCKSBYTIME.7DaysOrphan}</td>
+          <td align="center">{IF $ESTTIME > 0}{($LASTBLOCKSBYTIME.Total / (604800 / $ESTTIME) * 100)|number_format:"2"} %{else} {($LASTBLOCKSBYTIME.Total / (604800 / 0.00) * 100)|number_format:"2"} %{/if}</td>
         </tr>
         <tr>
-          <th align="left">Last 4 Weeks</td>
+          <th align="left">last month</td>
+          <td align="center">{(419200 / $ESTTIME)|number_format:"2"}</td>
           <td align="center">{$LASTBLOCKSBYTIME.4WeeksTotal}</td>
-          <td align="center">{$LASTBLOCKSBYTIME.4WeeksValid}</td>
-          <td align="center">{$LASTBLOCKSBYTIME.4WeeksOrphan}</td>
+          <td align="center">{IF $ESTTIME > 0}{($LASTBLOCKSBYTIME.Total / (2419200 / $ESTTIME) * 100)|number_format:"2"} %{else}{($LASTBLOCKSBYTIME.Total / (2419200 / 0.00) * 100)|number_format:"2"} %{/if}</td>
+        </tr>
+        <tr>
+          <th align="left">last year</td>
+          <td align="center">{(29030400 / $ESTTIME)|number_format:"2"}</td>
+          <td align="center">{$LASTBLOCKSBYTIME.12MonthTotal}</td>
+          <td align="center">{IF $ESTTIME > 0}{($LASTBLOCKSBYTIME.Total / (29030400 / $ESTTIME) * 100)|number_format:"2"} %{else}{($LASTBLOCKSBYTIME.Total / (29030400 / 0.00) * 100)|number_format:"2"} %{/if}</td>
         </tr>
       </tbody>
     </table>
