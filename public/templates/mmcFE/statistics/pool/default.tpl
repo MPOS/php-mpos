@@ -51,32 +51,50 @@
       {assign var=estshares value=(pow(2, (32 - $GLOBAL.config.target_bits)) * $DIFFICULTY) / pow(2, ($GLOBAL.config.targetdiff - 16))}
       <td>{$estshares|number_format:"0"} <font size="1">(done: {(100 / $estshares * $GLOBAL.roundshares.valid)|number_format:"2"} %)</td>
     </tr>
-    <tr>
-      <th align="left">All Blocks - Found / Valid / Orphan</td>
-      <td>{$FOUNDALLVALID + $FOUNDALLORPHAN} / {$FOUNDALLVALID} / {$FOUNDALLORPHAN}</td>
-    </tr>
-    <tr>
-      <th align="left">Blocks last hour - Found / Valid / Orphan</td>
-      <td>{$FOUNDLASTHOURVALID + $FOUNDLASTHOURORPHAN} / {$FOUNDLASTHOURVALID} / {$FOUNDLASTHOURORPHAN}</td>
-    </tr>
-	<tr>
-      <th align="left">Blocks last 24 hours - Found / Valid / Orphan</td>
-      <td>{$FOUNDLAST24HOURSVALID + $FOUNDLAST24HOURSORPHAN} / {$FOUNDLAST24HOURSVALID} / {$FOUNDLAST24HOURSORPHAN}</td>
-    </tr>
-	<tr>
-     <th align="left">Blocks last 7 days - Found / Valid / Orphan</td>
-      <td>{$FOUNDLAST7DAYSVALID + $FOUNDLAST7DAYSORPHAN} / {$FOUNDLAST7DAYSVALID} / {$FOUNDLAST7DAYSORPHAN}</td>
-    </tr>
-	<tr>
-      <th align="left">Blocks last 4 weeks - Found / Valid / Orphan</td>
-	  <td>{$FOUNDLAST4WEEKSVALID + $FOUNDLAST4WEEKSORPHAN} / {$FOUNDLAST4WEEKSVALID} / {$FOUNDLAST4WEEKSORPHAN}</td>
-    </tr>
-    <tr>
-      <td class="leftheader">Time Since Last Block</td>
-      <td>{$TIMESINCELAST|seconds_to_words}</td>
-    </tr>
-  </tbody>
-</table>
+
+        <tr>
+          <th align="left"></th>
+          <th align="center">Est. Shares</th>
+          <th align="center">Shares found</th>
+          <th align="center">Luck</th>
+        </tr>
+        <tr>
+          <th align="left">since Pool Start</td>
+          <td align="center">{($FIRSTBLOCKFOUND / $ESTTIME)|number_format:"2"}</td>
+          <td align="center">{$LASTBLOCKSBYTIME.Total}</td>
+          <td align="center">{($LASTBLOCKSBYTIME.Total / ($FIRSTBLOCKFOUND / $ESTTIME) * 100)|number_format:"2"} %</td>
+        </tr>
+        <tr>
+          <th align="left">last hour</td>
+          <td align="center">{(3600 / $ESTTIME)|number_format:"2"}</td>
+          <td align="center">{$LASTBLOCKSBYTIME.1HourTotal}</td>
+          <td align="center">{($LASTBLOCKSBYTIME.1HourTotal / (3600 / $ESTTIME) * 100)|number_format:"2"} %</td>
+        </tr>
+        <tr>
+          <th align="left">last day</td>
+          <td align="center">{(86400 / $ESTTIME)|number_format:"2"}</td>
+          <td align="center">{$LASTBLOCKSBYTIME.24HourTotal}</td>
+          <td align="center">{($LASTBLOCKSBYTIME.24HourTotal / (86400 / $ESTTIME) * 100)|number_format:"2"} %</td>
+        </tr>
+        <tr>
+          <th align="left">last week</td>
+          <td align="center">{(604800 / $ESTTIME)|number_format:"2"}</td>
+          <td align="center">{$LASTBLOCKSBYTIME.7DaysTotal}</td>
+          <td align="center">{($LASTBLOCKSBYTIME.7DaysTotal / (604800 / $ESTTIME) * 100)|number_format:"2"} %</td>
+        </tr>
+        <tr>
+          <th align="left">last month</td>
+          <td align="center">{(419200 / $ESTTIME)|number_format:"2"}</td>
+          <td align="center">{$LASTBLOCKSBYTIME.4WeeksTotal}</td>
+          <td align="center">{($LASTBLOCKSBYTIME.4WeeksTotal / (2419200 / $ESTTIME) * 100)|number_format:"2"} %</td>
+        </tr>
+        <tr>
+          <th align="left">last year</td>
+          <td align="center">{(29030400 / $ESTTIME)|number_format:"2"}</td>
+          <td align="center">{$LASTBLOCKSBYTIME.12MonthTotal}</td>
+          <td align="center">{($LASTBLOCKSBYTIME.12MonthTotal / (29030400 / $ESTTIME) * 100)|number_format:"2"} %</td>
+        </tr>
+    </table>
 {if !$GLOBAL.website.api.disabled}<li>These stats are also available in JSON format <a href="{$smarty.server.PHP_SELF}?page=api&action=getpoolstatus&api_key={$GLOBAL.userdata.api_key}">HERE</a></li>{/if}
 {include file="global/block_footer.tpl"}
 

@@ -23,6 +23,22 @@ class Statistics extends Base {
   }
 
   /**
+   * Get our first block found
+   *
+   **/
+  public function getFirstBlockFound() {
+    $this->debug->append("STA " . __METHOD__, 4);
+    if ($data = $this->memcache->get(__FUNCTION__)) return $data;
+    $stmt = $this->mysqli->prepare("
+      SELECT
+      time FROM " . $this->block->getTableName() . "
+      ORDER BY id ASC LIMIT 1");
+    if ($this->checkStmt($stmt) && $stmt->execute() && $result = $stmt->get_result())
+      return $result->fetch_object()->time;
+    return false;
+  }
+
+  /**
    * Fetch last found blocks by time
    **/
   function getLastBlocksbyTime() {
@@ -44,7 +60,10 @@ class Statistics extends Base {
         IFNULL(SUM(IF(confirmations = -1 AND FROM_UNIXTIME(time) >= DATE_SUB(now(), INTERVAL 604800 SECOND), 1, 0)), 0) AS 7DaysOrphan,
         IFNULL(SUM(IF(FROM_UNIXTIME(time) >= DATE_SUB(now(), INTERVAL 2419200 SECOND), 1, 0)), 0) AS 4WeeksTotal,
         IFNULL(SUM(IF(confirmations > 0 AND FROM_UNIXTIME(time) >= DATE_SUB(now(), INTERVAL 2419200 SECOND), 1, 0)), 0) AS 4WeeksValid,
-        IFNULL(SUM(IF(confirmations = -1 AND FROM_UNIXTIME(time) >= DATE_SUB(now(), INTERVAL 2419200 SECOND), 1, 0)), 0) AS 4WeeksOrphan
+        IFNULL(SUM(IF(confirmations = -1 AND FROM_UNIXTIME(time) >= DATE_SUB(now(), INTERVAL 2419200 SECOND), 1, 0)), 0) AS 4WeeksOrphan,
+        IFNULL(SUM(IF(FROM_UNIXTIME(time) >= DATE_SUB(now(), INTERVAL 29030400 SECOND), 1, 0)), 0) AS 12MonthTotal,
+        IFNULL(SUM(IF(confirmations > 0 AND FROM_UNIXTIME(time) >= DATE_SUB(now(), INTERVAL 29030400 SECOND), 1, 0)), 0) AS 12MonthValid,
+        IFNULL(SUM(IF(confirmations = -1 AND FROM_UNIXTIME(time) >= DATE_SUB(now(), INTERVAL 29030400 SECOND), 1, 0)), 0) AS 12MonthOrphan
       FROM " . $this->block->getTableName());
     if ($this->checkStmt($stmt) && $stmt->execute() && $result = $stmt->get_result())
     	return $this->memcache->setCache(__FUNCTION__, $result->fetch_assoc());
