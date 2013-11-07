@@ -153,6 +153,20 @@ $config['accounts']['invitations']['count'] = 5;
 $config['currency'] = 'LTC';
 
 /**
+ * Coin Target in seconds
+ *
+ * Explanation
+ *   Target time for coins to be generated
+ *
+ *   Fastcoin: 12 seconds
+ *   Litecoin: 2,5 minutes = 150 seconds
+ *   Feathercoin: 2,5 minutes = 150 seconds
+ *   Bitcoin: 10 minutes = 600 seconds
+ *
+ **/
+$config['cointarget'] = '150';
+
+/**
  * Default transaction fee to apply to user transactions
  *
  * Explanation

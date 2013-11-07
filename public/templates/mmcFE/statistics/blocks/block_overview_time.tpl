@@ -1,5 +1,4 @@
-<article class="module width_half">
-  <header><h3>Block Overview</h3></header>
+{include file="global/block_header.tpl" BLOCK_HEADER="Block Shares" BLOCK_STYLE="clear:none;"}
   <table width="100%" class="tablesorter" cellspacing="0">
     <thead>
         <tr>
@@ -62,4 +61,4 @@
         </tr>
     </tbody>
   </table>
-</article>
+{include file="global/block_footer.tpl"}

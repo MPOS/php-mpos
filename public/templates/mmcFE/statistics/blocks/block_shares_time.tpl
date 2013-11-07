@@ -1,6 +1,6 @@
-<article class="module width_half">
+{include file="global/block_header.tpl" BLOCK_HEADER="Block Shares" BLOCK_STYLE="clear:none;"}
   <header><h3>Last 24 hour totals</h3></header>
-  <table class="tablesorter" cellspacing="0">
+  <table width="100%" class="tablesorter" cellspacing="0">
     <thead>
       <tr style="background-color:#B6DAFF;">
         <th align="center">Blocks Found</th>
@@ -24,4 +24,4 @@
       </tr>
     </tbody>
   </table>
-</article>
+{include file="global/block_footer.tpl"}
