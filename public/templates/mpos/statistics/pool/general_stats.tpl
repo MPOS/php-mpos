@@ -67,33 +67,33 @@
         </tr>
         <tr>
           <th align="left">All Time</td>
-          <td align="center">{$FOUNDALLVALID + $FOUNDALLORPHAN}</td>
-          <td align="center">{$FOUNDALLVALID}</td>
-          <td align="center">{$FOUNDALLORPHAN}</td>
+          <td align="center">{$LASTBLOCKSBYTIME.Total}</td>
+          <td align="center">{$LASTBLOCKSBYTIME.TotalValid}</td>
+          <td align="center">{$LASTBLOCKSBYTIME.TotalOrphan}</td>
         </tr>
         <tr>
           <th align="left">Last Hour</td>
-          <td align="center">{$FOUNDLASTHOURVALID + $FOUNDLASTHOURORPHAN}</td>
-          <td align="center">{$FOUNDLASTHOURVALID}</td>
-          <td align="center">{$FOUNDLASTHOURORPHAN}</td>
+          <td align="center">{$LASTBLOCKSBYTIME.1HourTotal}</td>
+          <td align="center">{$LASTBLOCKSBYTIME.1HourValid}</td>
+          <td align="center">{$LASTBLOCKSBYTIME.1HourOrphan}</td>
         </tr>
         <tr>
           <th align="left">Last 24 Hours</td>
-          <td align="center">{$FOUNDLAST24HOURSVALID + $FOUNDLAST24HOURSORPHAN}
-          <td align="center">{$FOUNDLAST24HOURSVALID}</td>
-          <td align="center">{$FOUNDLAST24HOURSORPHAN}</td>
+          <td align="center">{$LASTBLOCKSBYTIME.24HourTotal}</td>
+          <td align="center">{$LASTBLOCKSBYTIME.24HourValid}</td>
+          <td align="center">{$LASTBLOCKSBYTIME.24HourOrphan}</td>
         </tr>
         <tr>
           <th align="left">Last 7 Days</td>
-          <td align="center">{$FOUNDLAST7DAYSVALID + $FOUNDLAST7DAYSORPHAN}</td>
-          <td align="center">{$FOUNDLAST7DAYSVALID}</td>
-          <td align="center">{$FOUNDLAST7DAYSORPHAN}</td>
+          <td align="center">{$LASTBLOCKSBYTIME.7DaysTotal}</td>
+          <td align="center">{$LASTBLOCKSBYTIME.7DaysValid}</td>
+          <td align="center">{$LASTBLOCKSBYTIME.7DaysOrphan}</td>
         </tr>
         <tr>
           <th align="left">Last 4 Weeks</td>
-          <td align="center">{$FOUNDLAST4WEEKSVALID + $FOUNDLAST4WEEKSORPHAN}</td>
-          <td align="center">{$FOUNDLAST4WEEKSVALID}</td>
-          <td align="center">{$FOUNDLAST4WEEKSORPHAN}</td>
+          <td align="center">{$LASTBLOCKSBYTIME.4WeeksTotal}</td>
+          <td align="center">{$LASTBLOCKSBYTIME.4WeeksValid}</td>
+          <td align="center">{$LASTBLOCKSBYTIME.4WeeksOrphan}</td>
         </tr>
       </tbody>
     </table>
