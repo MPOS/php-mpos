@@ -256,6 +256,7 @@ class Worker extends Base {
 $worker = new Worker();
 $worker->setDebug($debug);
 $worker->setMysql($mysqli);
+$worker->setMemcache($memcache);
 $worker->setShare($share);
 $worker->setConfig($config);
 $worker->setUser($user);
