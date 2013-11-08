@@ -73,12 +73,14 @@ if (!$smarty->isCached('master.tpl', $smarty_cache_key)) {
   $aPoolStatistics = $statistics->getPoolStatsHours($iHours);
   $iFirstBlockFound = $statistics->getFirstBlockFound();
   $iTimeSinceFirstBlockFound = (time() - $iFirstBlockFound);
-  
+
+  // Coin target block generation time, default to 150 (2.5 minutes)
+  @$config['cointarget'] ? $smarty->assign("COINGENTIME", $config['cointarget']) : $smarty->assign("COINGENTIME", 150);
+
   // Past blocks found, max 4 weeks back
   $iFoundBlocksByTime = $statistics->getLastBlocksbyTime();
   // Propagate content our template
   $smarty->assign("FIRSTBLOCKFOUND", $iTimeSinceFirstBlockFound);
-  $smarty->assign("COINGENTIME", $config['cointarget']);
   $smarty->assign("LASTBLOCKSBYTIME", $iFoundBlocksByTime);
   $smarty->assign("BLOCKSFOUND", $aBlocksFoundData);
   $smarty->assign("BLOCKLIMIT", $iLimit);
