@@ -199,13 +199,14 @@ class Worker extends Base {
    **/
   public function getCountAllActiveWorkers() {
     $this->debug->append("STA " . __METHOD__, 4);
+    if ($data = $this->memcache->get(__FUNCTION__)) return $data;
     $stmt = $this->mysqli->prepare("
       SELECT COUNT(DISTINCT(username)) AS total
       FROM "  . $this->share->getTableName() . "
       WHERE our_result = 'Y'
       AND time > DATE_SUB(now(), INTERVAL 10 MINUTE)");
     if ($this->checkStmt($stmt) && $stmt->execute() && $result = $stmt->get_result())
-      return $result->fetch_object()->total;
+      return $this->memcache->setCache(__FUNCTION__, $result->fetch_object()->total);
     return $this->sqlError();
   }
 
