@@ -26,7 +26,7 @@ class Worker extends Base {
       } else {
         // Prefix the WebUser to Worker name
         $value['username'] = "$username." . $value['username'];
-        $stmt = $this->mysqli->prepare("UPDATE $this->table SET password2 = ?, username = ?, monitor = ? WHERE account_id = ? AND id = ?");
+        $stmt = $this->mysqli->prepare("UPDATE $this->table SET password = ?, username = ?, monitor = ? WHERE account_id = ? AND id = ?");
         if ( ! ( $this->checkStmt($stmt) && $stmt->bind_param('ssiii', $value['password'], $value['username'], $value['monitor'], $account_id, $key) && $stmt->execute()) )
           $iFailed++;
       }
