@@ -50,13 +50,15 @@ foreach ($aAllBlocks as $iIndex => $aBlock) {
     $pplns_target = $config['pplns']['shares']['default'];
   }
 
-  if ($iLastBlockHeight = $setting->getValue('last_accounted_block_height')) {
-    $aLastAccountedBlock = $block->getBlock($iLastBlockHeight);
+  if ($iLastBlockId = $setting->getValue('last_accounted_block_id')) {
+    $aLastAccountedBlock = $block->getBlockById($iLastBlockId);
   } else {
-    $iLastBlockHeight = 0;
+    // A fake block to ensure payouts get started on first round
+    $iLastBlockId = 0;
+    $aLastAccountedBlock = array('height' => 0, 'confirmations' => 1);
   }
-  // Double payout detection
-  if ( @$aLastAccountedBlock['confirmations'] != -1 || ( !$aBlock['accounted'] && $aBlock['height'] > $iLastBlockHeight )) {
+  // Ensure we are not paying out twice, ignore if the previous paid block is orphaned (-1 confirmations) and payout anyway
+  if ((!$aBlock['accounted'] && $aBlock['height'] > $aLastAccountedBlock['height']) || (@$aLastAccountedBlock['confirmations'] == -1)) {
     $iPreviousShareId = @$aAllBlocks[$iIndex - 1]['share_id'] ? $aAllBlocks[$iIndex - 1]['share_id'] : 0;
     $iCurrentUpstreamId = $aBlock['share_id'];
     if (!is_numeric($iCurrentUpstreamId)) {
@@ -205,7 +207,7 @@ foreach ($aAllBlocks as $iIndex => $aBlock) {
     }
 
     // Store this blocks height as last accounted for
-    $setting->setValue('last_accounted_block_height', $aBlock['height']);
+    $setting->setValue('last_accounted_block_id', $aBlock['id']);
 
     // Move counted shares to archive before this blockhash upstream share
     if (!$share->moveArchive($iCurrentUpstreamId, $aBlock['id'], $iPreviousShareId))
