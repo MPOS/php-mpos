@@ -194,6 +194,20 @@ $aSettings['acl'][] = array(
   'name' => 'acl_uptime_statistics', 'value' => $setting->getValue('acl_uptime_statistics'),
   'tooltip' => 'Make the uptime statistics page private (users only) or public.'
 );
+$aSettings['acl'][] = array(
+  'display' => 'Donors Page', 'type' => 'select',
+  'options' => array( 0 => 'Hide', 1 => 'Show'),
+  'default' => 1,
+  'name' => 'acl_donors_page', 'value' => $setting->getValue('acl_donors_page'),
+  'tooltip' => 'Showing Donors page in Navigation.'
+);
+$aSettings['acl'][] = array(
+  'display' => 'About Page', 'type' => 'select',
+  'options' => array( 0 => 'Hide', 1 => 'Show'),
+  'default' => 1,
+  'name' => 'acl_about_page', 'value' => $setting->getValue('acl_about_page'),
+  'tooltip' => 'Showing About page in Navigation.'
+);
 $aSettings['system'][] = array(
   'display' => 'E-mail address for system error notifications', 'type' => 'text',
   'size' => 25,

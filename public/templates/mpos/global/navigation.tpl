@@ -57,8 +57,12 @@
     <h3>Help</h3>
     <ul class="toggle">
       <li class="icon-desktop"><a href="{$smarty.server.PHP_SELF}?page=gettingstarted">GettingStarted</a></li>
+      {if $GLOBAL.config.acl.navigation.about|default:"0" == 1}
       <li class="icon-doc"><a href="{$smarty.server.PHP_SELF}?page=about&action=pool">About</a></li>
+      {/if}
+      {if $GLOBAL.config.acl.navigation.donors|default:"0" == 1}
       <li class="icon-money"><a href="{$smarty.server.PHP_SELF}?page=about&action=donors">Donors</a></li>
+      {/if}
     </ul>
     <h3>Other</h3>
     <ul class="toggle">
