@@ -57,10 +57,10 @@
     <h3>Help</h3>
     <ul class="toggle">
       <li class="icon-desktop"><a href="{$smarty.server.PHP_SELF}?page=gettingstarted">GettingStarted</a></li>
-      {if $GLOBAL.acl.navigation.about}
+      {if !$GLOBAL.website.about.disabled}
       <li class="icon-doc"><a href="{$smarty.server.PHP_SELF}?page=about&action=pool">About</a></li>
       {/if}
-      {if $GLOBAL.acl.navigation.donors}
+      {if !$GLOBAL.website.donors.disabled}
       <li class="icon-money"><a href="{$smarty.server.PHP_SELF}?page=about&action=donors">Donors</a></li>
       {/if}
     </ul>
