@@ -148,7 +148,6 @@ foreach ($aAllBlocks as $iIndex => $aBlock) {
     $monitoring->setStatus($cron_name . "_status", "okerror", 1);
     exit(1);
   }
-  exit;
 }
 
 require_once('cron_end.inc.php');
