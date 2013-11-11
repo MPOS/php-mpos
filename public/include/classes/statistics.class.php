@@ -31,7 +31,7 @@ class Statistics extends Base {
     if ($data = $this->memcache->get(__FUNCTION__)) return $data;
     $stmt = $this->mysqli->prepare("
       SELECT
-      time FROM " . $this->block->getTableName() . "
+      IFNULL(time, 0) AS time FROM " . $this->block->getTableName() . "
       ORDER BY id ASC LIMIT 1");
     if ($this->checkStmt($stmt) && $stmt->execute() && $result = $stmt->get_result())
       return $result->fetch_object()->time;
