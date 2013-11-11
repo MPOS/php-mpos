@@ -42,6 +42,13 @@ $count = 0;
 // Table header for account shares
 $log->logInfo("ID\tUsername\tValid\tInvalid\tPercentage\tPayout\t\tDonation\tFee");
 foreach ($aAllBlocks as $iIndex => $aBlock) {
+  // If we have unaccounted blocks without share_ids, they might not have been inserted yet
+  if (!$aBlock['share_id']) {
+    $log->logError('E0062: Block has no share_id, not running payouts');
+    $monitoring->endCronjob($cron_name, 'E0062', 0, true);
+  }
+
+  // Fetch last paid block information
   if ($iLastBlockId = $setting->getValue('last_accounted_block_id')) {
     $aLastAccountedBlock = $block->getBlockById($iLastBlockId);
   } else {
