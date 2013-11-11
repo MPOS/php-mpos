@@ -65,4 +65,5 @@ $aErrorCodes['E0058'] = 'Worker name and/or password must not be empty';
 $aErrorCodes['E0059'] = 'Worker already exists';
 $aErrorCodes['E0060'] = 'Failed to add new worker';
 $aErrorCodes['E0061'] = 'Failed to delete worker';
+$aErrorCodes['E0062'] = 'Block has no share_id, not running payouts';
 ?>

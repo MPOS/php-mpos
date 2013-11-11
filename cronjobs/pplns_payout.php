@@ -40,6 +40,12 @@ if (empty($aAllBlocks)) {
 
 $count = 0;
 foreach ($aAllBlocks as $iIndex => $aBlock) {
+  // If we have unaccounted blocks without share_ids, they might not have been inserted yet
+  if (!$aBlock['share_id']) {
+    $log->logError('E0062: Block has no share_id, not running payouts');
+    $monitoring->endCronjob($cron_name, 'E0062', 0, true);
+  }
+
   // We support some dynamic share targets but fall back to our fixed value
   // Re-calculate after each run due to re-targets in this loop
   if ($config['pplns']['shares']['type'] == 'blockavg' && $block->getBlockCount() > 0) {
@@ -50,6 +56,7 @@ foreach ($aAllBlocks as $iIndex => $aBlock) {
     $pplns_target = $config['pplns']['shares']['default'];
   }
 
+  // Fetch our last paid block information
   if ($iLastBlockId = $setting->getValue('last_accounted_block_id')) {
     $aLastAccountedBlock = $block->getBlockById($iLastBlockId);
   } else {
