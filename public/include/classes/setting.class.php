@@ -16,7 +16,9 @@ class Setting extends Base {
     if ($this->checkStmt($stmt) && $stmt->bind_param('s', $name) && $stmt->execute() && $result = $stmt->get_result())
       if ($result->num_rows > 0)
         return $result->fetch_object()->value;
-    return $this->sqlError();
+    // Log error but return empty string
+    $this->sqlError();
+    return "";
   }
 
   /**
