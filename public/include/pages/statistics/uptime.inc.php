@@ -5,7 +5,7 @@ if (!defined('SECURITY')) die('Hacking attempt');
 
 if (!$smarty->isCached('master.tpl', $smarty_cache_key)) {
   $debug->append('No cached version available, fetching from backend', 3);
-  if ($setting->getValue('monitoring_uptimerobot_private_key')) {
+  if ($setting->getValue('monitoring_uptimerobot_api_keys')) {
     if ($aStatus = $monitoring->getUptimeRobotStatus()) {
       $smarty->assign("STATUS", $aStatus);
       $smarty->assign("UPDATED", $setting->getValue('monitoring_uptimerobot_lastcheck'));
