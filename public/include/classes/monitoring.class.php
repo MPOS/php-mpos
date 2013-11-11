@@ -12,7 +12,7 @@ class Monitoring extends Base {
    * @return bool true on success, false on error
    **/
   public function storeUptimeRobotStatus() {
-    if ($api_keys = $this->setting->getValue('monitoring_uptimerobot_private_key')) {
+    if ($api_keys = $this->setting->getValue('monitoring_uptimerobot_api_keys')) {
       $aJSONData = array();
       $url = 'http://api.uptimerobot.com';
       $aMonitors = explode(',', $api_keys);

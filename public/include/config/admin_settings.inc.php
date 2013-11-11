@@ -280,9 +280,9 @@ $aSettings['recaptcha'][] = array(
 );
 $aSettings['monitoring'][] = array(
   'display' => 'Uptime Robot Private API Key', 'type' => 'text',
-  'size' => 25,
+  'size' => 100,
   'default' => '<API KEY>|<MONITOR ID>,<API KEY>|<MONITOR ID>, ...',
-  'name' => 'monitoring_uptimerobot_private_key', 'value' => $setting->getValue('monitoring_uptimerobot_private_key'),
+  'name' => 'monitoring_uptimerobot_api_keys', 'value' => $setting->getValue('monitoring_uptimerobot_api_keys'),
   'tooltip' => 'Create per-monitor API keys and save them here to propagate your uptime statistics.'
 );
 
