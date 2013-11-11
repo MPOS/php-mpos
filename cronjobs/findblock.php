@@ -99,7 +99,7 @@ if (empty($aAllBlocks)) {
           // Shares seem to be out of order, so lets change them
           if ( !$share->updateShareById($iCurrentUpstreamId, $aShareError) || !$share->updateShareById($iPreviousShareId, $aShareCurrent)) {
             // We couldn't update one of the shares! That might mean they have been deleted already
-            $log->logFatal('E0003: Failed to change shares order!');
+            $log->logFatal('E0003: Failed to change shares order: ' . $share->getCronError());
             $monitoring->endCronjob($cron_name, 'E0003', 1, true);
           }
           // Reset our offending block so the next run re-checks the shares
