@@ -91,6 +91,7 @@ $data = array(
     'shares' => array('valid' => $aUserRoundShares['valid'], 'invalid' => $aUserRoundShares['invalid'], 'invalid_percent' => $dUserInvalidPercent, 'unpaid' => $dUnpaidShares ),
     'balance' => $transaction->getBalance($user_id), 'estimates' => $aEstimates, 'workers' => $aWorkers ),
   'pool' => array(
+    'name' => $setting->getValue('website_name'),
     'workers' => $worker->getCountAllActiveWorkers(), 'hashrate' => $dPoolHashrateAdjusted,
     'shares' => array( 'valid' => $aRoundShares['valid'], 'invalid' => $aRoundShares['invalid'], 'invalid_percent' => $dPoolInvalidPercent, 'estimated' => $iEstShares, 'progress' => $dEstPercent ),
     'price' => $aPrice,
