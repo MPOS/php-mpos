@@ -55,11 +55,13 @@
             {/if}
             <li><a href="{$smarty.server.PHP_SELF}?page=gettingstarted">Getting Started</a></li>
             <li><a href="{$smarty.server.PHP_SELF}?page=support">Support</a></li>
+            {if !$GLOBAL.website.about.disabled}
             <li><a href="{$smarty.server.PHP_SELF}?page=about&action=pool">About</a>
+            {/if}
               <ul>
                 <li><a href="{$smarty.server.PHP_SELF}?page=about&action=pool">This Pool</a></li>
                 {if !$GLOBAL.website.api.disabled}<li><a href="{$smarty.server.PHP_SELF}?page=about&action=api">API Reference</a></li>{/if}
-                <li><a href="{$smarty.server.PHP_SELF}?page=about&action=donors">Pool Donors</a></li>
+                {if !$GLOBAL.website.donors.disabled}<li><a href="{$smarty.server.PHP_SELF}?page=about&action=donors">Pool Donors</a></li>{/if}
               </ul>
             </li>
             {if $smarty.session.AUTHENTICATED|default == 1}<li><a href="{$smarty.server.PHP_SELF}?page=logout">Logout</a></li>{else}<li><a href="{$smarty.server.PHP_SELF}?page=register">Register</a></li>{/if}

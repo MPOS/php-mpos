@@ -257,6 +257,20 @@ $aSettings['system'][] = array(
   'name' => 'disable_contactform', 'value' => $setting->getValue('disable_contactform'),
   'tooltip' => 'Enable or Disable Contactform. Users will not be able to use the contact form.'
 );
+$aSettings['system'][] = array(
+  'display' => 'Disable Donors Page', 'type' => 'select',
+  'options' => array( 0 => 'No', 1 => 'Yes'),
+  'default' => 1,
+  'name' => 'disable_donors', 'value' => $setting->getValue('disable_donors'),
+  'tooltip' => 'Showing Donors page in Navigation.'
+);
+$aSettings['system'][] = array(
+  'display' => 'Disable About Page', 'type' => 'select',
+  'options' => array( 0 => 'No', 1 => 'Yes'),
+  'default' => 1,
+  'name' => 'disable_about', 'value' => $setting->getValue('disable_about'),
+  'tooltip' => 'Showing About page in Navigation.'
+);
 $aSettings['recaptcha'][] = array(
   'display' => 'Enable re-Captcha', 'type' => 'select',
   'options' => array( 0 => 'No', 1 => 'Yes' ),
