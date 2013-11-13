@@ -22,7 +22,7 @@ if (!$smarty->isCached('master.tpl', $smarty_cache_key)) {
   // Top hash contributors
   $aContributorsHashes = $statistics->getTopContributors('hashes', 15);
 
-  // Grab the last 10 blocks found
+  // Grab the last 5 blocks found as a quick overview
   $iLimit = 5;
   $aBlocksFoundData = $statistics->getBlocksFound($iLimit);
   count($aBlocksFoundData) > 0 ? $aBlockData = $aBlocksFoundData[0] : $aBlockData = array();
@@ -41,14 +41,7 @@ if (!$smarty->isCached('master.tpl', $smarty_cache_key)) {
     $dTimeSinceLast = 0;
   }
 
-  // Past blocks found, max 4 weeks back
-  $iFoundBlocksByTime = $statistics->getLastBlocksbyTime();
-  $iFirstBlockFound = $statistics->getFirstBlockFound();
-  $iTimeSinceFirstBlockFound = (time() - $iFirstBlockFound);
-
   // Propagate content our template
-  $smarty->assign("FIRSTBLOCKFOUND", $iTimeSinceFirstBlockFound);
-  $smarty->assign("LASTBLOCKSBYTIME", $iFoundBlocksByTime);
   $smarty->assign("ESTTIME", $iEstTime);
   $smarty->assign("TIMESINCELAST", $dTimeSinceLast);
   $smarty->assign("BLOCKSFOUND", $aBlocksFoundData);
