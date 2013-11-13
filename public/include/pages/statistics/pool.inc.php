@@ -34,9 +34,8 @@ if (!$smarty->isCached('master.tpl', $smarty_cache_key)) {
   $iCurrentPoolHashrate > 0 ? $iEstTime = $dDifficulty * pow(2,32) / ($iCurrentPoolHashrate * 1000) : $iEstTime = 0;
 
   // Time since last block
-  $now = new DateTime( "now" );
   if (!empty($aBlockData)) {
-    $dTimeSinceLast = ($now->getTimestamp() - $aBlockData['time']);
+    $dTimeSinceLast = (time() - $aBlockData['time']);
     if ($dTimeSinceLast < 0) $dTimeSinceLast = 0;
   } else {
     $dTimeSinceLast = 0;
@@ -45,7 +44,7 @@ if (!$smarty->isCached('master.tpl', $smarty_cache_key)) {
   // Past blocks found, max 4 weeks back
   $iFoundBlocksByTime = $statistics->getLastBlocksbyTime();
   $iFirstBlockFound = $statistics->getFirstBlockFound();
-  $iTimeSinceFirstBlockFound = ($now->getTimestamp() - $iFirstBlockFound);
+  $iTimeSinceFirstBlockFound = (time() - $iFirstBlockFound);
 
   // Propagate content our template
   $smarty->assign("FIRSTBLOCKFOUND", $iTimeSinceFirstBlockFound);
