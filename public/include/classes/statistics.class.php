@@ -369,17 +369,21 @@ class Statistics extends Base {
         a.no_fees as no_fees,
         a.username AS username,
         a.donate_percent AS donate_percent,
-        a.email AS email,
-        ROUND(IFNULL(SUM(IF(s.difficulty=0, POW(2, (" . $this->config['difficulty'] . " - 16)), s.difficulty)), 0) / POW(2, (" . $this->config['difficulty'] . " - 16)), 0) AS shares
+        a.email AS email
       FROM " . $this->user->getTableName() . " AS a
-      LEFT JOIN " . $this->share->getTableName() . " AS s
-      ON a.username = SUBSTRING_INDEX( s.username, '.', 1 )
       WHERE
       	a.username LIKE ?
       GROUP BY username
       ORDER BY username");
-    if ($this->checkStmt($stmt) && $stmt->bind_param('s', $filter) && $stmt->execute() && $result = $stmt->get_result())
-      return $this->memcache->setCache(__FUNCTION__ . $filter, $result->fetch_all(MYSQLI_ASSOC));
+    if ($this->checkStmt($stmt) && $stmt->bind_param('s', $filter) && $stmt->execute() && $result = $stmt->get_result()) {
+      // Add our cached shares to the users
+      while ($row = $result->fetch_assoc()) {
+        $row['shares'] = $this->getUserShares($row['id']);
+        $aUsers[] = $row;
+      }
+      // Also cache this
+      return $this->memcache->setCache(__FUNCTION__ . $filter, $aUsers);
+    }
     return $this->sqlError();
   }
 
