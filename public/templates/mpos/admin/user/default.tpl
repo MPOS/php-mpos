@@ -51,10 +51,10 @@
       <td align="center">{$USERS[user].id}</td>
       <td align="left">{$USERS[user].username|escape}</td>
       <td align="left">{$USERS[user].email|escape}</td>
-      <td align="right">{$USERS[user].shares}</td>
+      <td align="right">{$USERS[user].shares.valid}</td>
       <td align="right">{$USERS[user].hashrate}</td>
-      <td align="right">{$USERS[user].payout.est_donation|number_format:"8"}</td>
-      <td align="right">{$USERS[user].payout.est_payout|number_format:"8"}</td>
+      <td align="right">{$USERS[user].estimates.donation|number_format:"8"}</td>
+      <td align="right">{$USERS[user].estimates.payout|number_format:"8"}</td>
       <td align="right">{$USERS[user].balance|number_format:"8"}</td>
       <td align="center">
         <input type="hidden" name="admin[{$USERS[user].id}]" value="0"/>
