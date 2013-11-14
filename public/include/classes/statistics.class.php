@@ -356,11 +356,10 @@ class Statistics extends Base {
 
   /**
    * Admin panel specific query
-   * @return data array invlid and valid shares for all accounts
+   * @return data array User settings and shares
    **/
   public function getAllUserStats($filter='%') {
     $this->debug->append("STA " . __METHOD__, 4);
-    if ($this->getGetCache() && $data = $this->memcache->get(__FUNCTION__ . $filter)) return $data;
     $stmt = $this->mysqli->prepare("
       SELECT
         a.id AS id,
@@ -381,8 +380,7 @@ class Statistics extends Base {
         $row['shares'] = $this->getUserShares($row['id']);
         $aUsers[] = $row;
       }
-      // Also cache this
-      return $this->memcache->setCache(__FUNCTION__ . $filter, $aUsers);
+      return $aUsers;
     }
     return $this->sqlError();
   }
