@@ -48,15 +48,21 @@ class BitcoinWrapper extends BitcoinClient {
     if ($data = $this->memcache->get(__FUNCTION__)) return $data;
     try {
       $dNetworkHashrate = $this->query('getmininginfo');
-      if (is_array($dNetworkHashrate) && array_key_exists('networkhashps', $dNetworkHashrate)) {
-        $dNetworkHashrate = $dNetworkHashrate['networkhashps'];
-      } else if (is_array($dNetworkHashrate) && array_key_exists('hashespersec', $dNetworkHashrate)) {
-        $dNetworkHashrate = $dNetworkHashrate['hashespersec'];
-      } else if (is_array($dNetworkHashrate) && array_key_exists('netmhashps', $dNetworkHashrate)) {
-        $dNetworkHashrate = $dNetworkHashrate['netmhashps'] * 1000 * 1000;
+      if (is_array($dNetworkHashrate)) {
+        if (array_key_exists('networkhashps', $dNetworkHashrate)) {
+          $dNetworkHashrate = $dNetworkHashrate['networkhashps'];
+        } else if (array_key_exists('hashespersec', $dNetworkHashrate)) {
+          $dNetworkHashrate = $dNetworkHashrate['hashespersec'];
+        } else if (array_key_exists('netmhashps', $dNetworkHashrate)) {
+          $dNetworkHashrate = $dNetworkHashrate['netmhashps'] * 1000 * 1000;
+        } else {
+          // Unsupported implementation
+          $dNetworkHashrate = 0;
+        }
       }
     } catch (Exception $e) {
-      return false;
+      // getmininginfo does not exist, cache for an hour
+      return $this->memcache->setCache(__FUNCTION__, 0, 3600);
     }
     return $this->memcache->setCache(__FUNCTION__, $dNetworkHashrate, 30);
   }
