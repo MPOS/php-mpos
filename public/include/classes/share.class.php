@@ -315,7 +315,8 @@ class Share Extends Base {
       if (!empty($this->oUpstream->account) && is_int($this->oUpstream->id))
         return true;
     }
-    return $this->getErrorMsg('E0052', $aBlock['height']);
+    $this->setErrorMessage($this->getErrorMsg('E0052', $aBlock['height']));
+    return false;
   }
 
   /**

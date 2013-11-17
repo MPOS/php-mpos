@@ -86,6 +86,11 @@ if (empty($aAllBlocks)) {
       $aBlockRPCInfo = $bitcoin->query('getblock', $aBlock['blockhash']);
       if ($share->findUpstreamShare($aBlockRPCInfo, $iPreviousShareId)) {
         $iCurrentUpstreamId = $share->getUpstreamShareId();
+        // Rarely happens, but did happen once to me
+        if ($iCurrentUpstreamId == $iPreviousShareId) {
+          $log->logFatal($share->getErrorMsg('E0063'));
+          $monitoring->endCronjob($cron_name, 'E0063', 1, true);
+        }
         // Out of order share detection
         if ($iCurrentUpstreamId < $iPreviousShareId) {
           // Fetch our offending block
