@@ -40,6 +40,7 @@ CREATE TABLE IF NOT EXISTS `blocks` (
   `time` int(11) NOT NULL,
   `accounted` tinyint(1) NOT NULL DEFAULT '0',
   `account_id` int(255) unsigned DEFAULT NULL,
+  `worker_name` varchar(50) DEFAULT 'unknown',
   `shares` int(255) unsigned DEFAULT NULL,
   `share_id` int(255) DEFAULT NULL,
   PRIMARY KEY (`id`),

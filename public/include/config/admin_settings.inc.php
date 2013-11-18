@@ -188,6 +188,13 @@ $aSettings['acl'][] = array(
   'tooltip' => 'Make the round statistics page private (users only) or public.'
 );
 $aSettings['acl'][] = array(
+  'display' => 'Block Finder Statistics', 'type' => 'select',
+  'options' => array( 0 => 'Private', 1 => 'Public'),
+  'default' => 1,
+  'name' => 'acl_blockfinder_statistics', 'value' => $setting->getValue('acl_blockfinder_statistics'),
+  'tooltip' => 'Make the Block Finder Statistics page private (users only) or public.'
+);
+$aSettings['acl'][] = array(
   'display' => 'Uptime Statistics', 'type' => 'select',
   'options' => array( 0 => 'Private', 1 => 'Public'),
   'default' => 1,

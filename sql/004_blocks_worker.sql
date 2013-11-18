@@ -1,0 +1,1 @@
+ALTER TABLE  `blocks` ADD `worker_name` varchar(50) DEFAULT 'unknown' AFTER  `account_id`;
