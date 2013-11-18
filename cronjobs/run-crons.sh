@@ -13,7 +13,7 @@ PHP_BIN=$( which php )
 CRONS="findblock.php proportional_payout.php pplns_payout.php pps_payout.php blockupdate.php manual_payout.php auto_payout.php tickerupdate.php notifications.php statistics.php archive_cleanup.php"
 
 # Output additional runtime information
-VERBOSE="1"
+VERBOSE="0"
 
 # Base path for PIDFILE, (full path).
 BASEPATH="/tmp"
@@ -21,7 +21,7 @@ BASEPATH="/tmp"
 # Subfolder for PIDFILE, so it's path will be unique in a multipool server.
 # Path relative to BASEPATH.
 # Eg. SUBFOLDER="LTC"
-SUBFOLDER="test"
+SUBFOLDER=""
 
 ################################################################
 #                                                              #
