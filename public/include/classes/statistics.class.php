@@ -140,7 +140,7 @@ class Statistics extends Base {
   }
 
   /**
-   * Get SUM of blocks found and generated Coins for each account
+   * Get SUM of blocks found and generated Coins for each Account
    * @param limit int Last limit blocks
    * @return array
    **/

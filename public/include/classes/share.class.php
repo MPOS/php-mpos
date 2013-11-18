@@ -318,8 +318,6 @@ class Share Extends Base {
       if (!empty($this->oUpstream->account) && !empty($this->oUpstream->worker) && is_int($this->oUpstream->id))
         return true;
     }
-    //var_dump($this->oUpstream);
-    //var_dump($this->share_type);
     $this->setErrorMessage($this->getErrorMsg('E0052', $aBlock['height']));
     return false;
   }
