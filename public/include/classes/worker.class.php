@@ -251,7 +251,6 @@ class Worker extends Base {
         return true;
     return $this->sqlError('E0061');
   }
-
 }
 
 $worker = new Worker();

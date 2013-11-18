@@ -33,7 +33,7 @@
                 <li><a href="{$smarty.server.PHP_SELF}?page=statistics&action=blocks">Block Stats</a></li>
                 <li><a href="{$smarty.server.PHP_SELF}?page=statistics&action=graphs">Hashrate Graphs</a></li>
                 <li><a href="{$smarty.server.PHP_SELF}?page=statistics&action=round">Round Stats</a></li>
-                <li class="icon-search"><a href="{$smarty.server.PHP_SELF}?page=statistics&action=blockfinder">Block Finder Stats</a></li>
+                <li><a href="{$smarty.server.PHP_SELF}?page=statistics&action=blockfinder">Block Finder Stats</a></li>
                 {if $GLOBAL.config.monitoring_uptimerobot_api_keys|default:"0"}<li><a href="{$smarty.server.PHP_SELF}?page=statistics&action=uptime">Uptime Stats</a></li>{/if}
               </ul>
             </li>
@@ -50,7 +50,7 @@
                 <li><a href="{$smarty.server.PHP_SELF}?page=statistics&action=round">Round Stats</a></li>
             {/if}
      		{if $GLOBAL.acl.blockfinder.statistics}
-     			<li class="icon-search"><a href="{$smarty.server.PHP_SELF}?page=statistics&action=blockfinder">Block Finder Stats</a></li>
+     			<li><a href="{$smarty.server.PHP_SELF}?page=statistics&action=blockfinder">Block Finder Stats</a></li>
      		{/if}
             {if $GLOBAL.acl.uptime.statistics}
                 {if $GLOBAL.config.monitoring_uptimerobot_api_keys|default:"0"}<li><a href="{$smarty.server.PHP_SELF}?page=statistics&action=uptime">Uptime Stats</a></li>{/if}
