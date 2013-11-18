@@ -231,6 +231,9 @@ class Share Extends Base {
   public function getUpstreamFinder() {
     return @$this->oUpstream->account;
   }
+  public function getUpstreamWorker() {
+    return @$this->oUpstream->worker;
+  }
   public function getUpstreamShareId() {
     return @$this->oUpstream->id;
   }
@@ -254,39 +257,39 @@ class Share Extends Base {
     $header_hex = implode(unpack("H*", $header_bin));
 
     // Stratum supported blockhash solution entry
-    $stmt = $this->mysqli->prepare("SELECT SUBSTRING_INDEX( `username` , '.', 1 ) AS account, id FROM $this->table WHERE solution = ? LIMIT 1");
+    $stmt = $this->mysqli->prepare("SELECT SUBSTRING_INDEX( `username` , '.', 1 ) AS account, username as worker, id FROM $this->table WHERE solution = ? LIMIT 1");
     if ($this->checkStmt($stmt) && $stmt->bind_param('s', $aBlock['hash']) && $stmt->execute() && $result = $stmt->get_result()) {
       $this->oUpstream = $result->fetch_object();
       $this->share_type = 'stratum_blockhash';
-      if (!empty($this->oUpstream->account) && is_int($this->oUpstream->id))
+      if (!empty($this->oUpstream->account) && !empty($this->oUpstream->worker) && is_int($this->oUpstream->id))
         return true;
     }
 
     // Stratum scrypt hash check
     $scrypt_hash = swapEndian(bin2hex(Scrypt::calc($header_bin, $header_bin, 1024, 1, 1, 32)));
-    $stmt = $this->mysqli->prepare("SELECT SUBSTRING_INDEX( `username` , '.', 1 ) AS account, id FROM $this->table WHERE solution = ? LIMIT 1");
+    $stmt = $this->mysqli->prepare("SELECT SUBSTRING_INDEX( `username` , '.', 1 ) AS account, username as worker, id FROM $this->table WHERE solution = ? LIMIT 1");
     if ($this->checkStmt($stmt) && $stmt->bind_param('s', $scrypt_hash) && $stmt->execute() && $result = $stmt->get_result()) {
       $this->oUpstream = $result->fetch_object();
       $this->share_type = 'stratum_solution';
-      if (!empty($this->oUpstream->account) && is_int($this->oUpstream->id))
+      if (!empty($this->oUpstream->account) && !empty($this->oUpstream->worker) && is_int($this->oUpstream->id))
         return true;
     }
 
     // Failed to fetch via startum solution, try pushpoold
     // Fallback to pushpoold solution type
     $ppheader = sprintf('%08d', $aBlock['version']) . word_reverse($aBlock['previousblockhash']) . word_reverse($aBlock['merkleroot']) . dechex($aBlock['time']) . $aBlock['bits'] . dechex($aBlock['nonce']);
-    $stmt = $this->mysqli->prepare("SELECT SUBSTRING_INDEX( `username` , '.', 1 ) AS account, id FROM $this->table WHERE solution LIKE CONCAT(?, '%') LIMIT 1");
+    $stmt = $this->mysqli->prepare("SELECT SUBSTRING_INDEX( `username` , '.', 1 ) AS account, username as worker, id FROM $this->table WHERE solution LIKE CONCAT(?, '%') LIMIT 1");
     if ($this->checkStmt($stmt) && $stmt->bind_param('s', $ppheader) && $stmt->execute() && $result = $stmt->get_result()) {
       $this->oUpstream = $result->fetch_object();
       $this->share_type = 'pp_solution';
-      if (!empty($this->oUpstream->account) && is_int($this->oUpstream->id))
+      if (!empty($this->oUpstream->account) && !empty($this->oUpstream->worker) && is_int($this->oUpstream->id))
         return true;
     }
 
     // Still no match, try upstream result with timerange
     $stmt = $this->mysqli->prepare("
       SELECT
-      SUBSTRING_INDEX( `username` , '.', 1 ) AS account, id
+      SUBSTRING_INDEX( `username` , '.', 1 ) AS account, username as worker, id
       FROM $this->table
       WHERE upstream_result = 'Y'
       AND id > ?
@@ -296,14 +299,14 @@ class Share Extends Base {
     if ($this->checkStmt($stmt) && $stmt->bind_param('iii', $last, $aBlock['time'], $aBlock['time']) && $stmt->execute() && $result = $stmt->get_result()) {
       $this->oUpstream = $result->fetch_object();
       $this->share_type = 'upstream_share';
-      if (!empty($this->oUpstream->account) && is_int($this->oUpstream->id))
+      if (!empty($this->oUpstream->account) && !empty($this->oUpstream->worker) && is_int($this->oUpstream->id))
         return true;
     }
 
     // We failed again, now we take ANY result matching the timestamp
     $stmt = $this->mysqli->prepare("
       SELECT
-      SUBSTRING_INDEX( `username` , '.', 1 ) AS account, id
+      SUBSTRING_INDEX( `username` , '.', 1 ) AS account, username as worker, id
       FROM $this->table
       WHERE our_result = 'Y'
       AND id > ?
@@ -312,7 +315,7 @@ class Share Extends Base {
     if ($this->checkStmt($stmt) && $stmt->bind_param('ii', $last, $aBlock['time']) && $stmt->execute() && $result = $stmt->get_result()) {
       $this->oUpstream = $result->fetch_object();
       $this->share_type = 'any_share';
-      if (!empty($this->oUpstream->account) && is_int($this->oUpstream->id))
+      if (!empty($this->oUpstream->account) && !empty($this->oUpstream->worker) && is_int($this->oUpstream->id))
         return true;
     }
     $this->setErrorMessage($this->getErrorMsg('E0052', $aBlock['height']));

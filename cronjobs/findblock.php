@@ -75,13 +75,12 @@ if (empty($aAllBlocks)) {
   $log->logDebug('No new blocks without share_id found in database');
 } else {
   // Loop through our unaccounted blocks
-  $log->logInfo("Block ID\tHeight\t\tAmount\tShare ID\tShares\tFinder\t\tType");
+  $log->logInfo("Block ID\tHeight\t\tAmount\tShare ID\tShares\tFinder\tWorker\t\tType");
   foreach ($aAllBlocks as $iIndex => $aBlock) {
     if (empty($aBlock['share_id'])) {
       // Fetch share information
       if ( !$iPreviousShareId = $block->getLastShareId())
         $iPreviousShareId = 0;
-
       // Fetch this blocks upstream ID
       $aBlockRPCInfo = $bitcoin->query('getblock', $aBlock['blockhash']);
       if ($share->findUpstreamShare($aBlockRPCInfo, $iPreviousShareId)) {
@@ -117,6 +116,7 @@ if (empty($aAllBlocks)) {
         } else {
           $iRoundShares = $share->getRoundShares($iPreviousShareId, $iCurrentUpstreamId);
           $iAccountId = $user->getUserId($share->getUpstreamFinder());
+          $iWorker = $share->getUpstreamWorker();
         }
       } else {
         $log->logFatal('E0005: Unable to fetch blocks upstream share, aborted:' . $share->getCronError());
@@ -130,6 +130,7 @@ if (empty($aAllBlocks)) {
         . $iCurrentUpstreamId . "\t\t"
         . $iRoundShares . "\t"
         . "[$iAccountId] " . $user->getUserName($iAccountId) . "\t"
+        . $iWorker . "\t"
         . $share->share_type
       );
 
@@ -138,6 +139,8 @@ if (empty($aAllBlocks)) {
         $log->logError('Failed to update share ID in database for block ' . $aBlock['height'] . ': ' . $block->getCronError());
       if (!$block->setFinder($aBlock['id'], $iAccountId))
         $log->logError('Failed to update finder account ID in database for block ' . $aBlock['height'] . ': ' . $block->getCronError());
+      if (!$block->setFindingWorker($aBlock['id'], $iWorker))
+        $log->logError('Failed to update worker ID in database for block ' . $aBlock['height'] . ': ' . $block->getCronError());
       if (!$block->setShares($aBlock['id'], $iRoundShares))
         $log->logError('Failed to update share count in database for block ' . $aBlock['height'] . ': ' . $block->getCronError());
       if ($config['block_bonus'] > 0 && !$transaction->addTransaction($iAccountId, $config['block_bonus'], 'Bonus', $aBlock['id'])) {

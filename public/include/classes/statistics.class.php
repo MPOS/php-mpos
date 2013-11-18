@@ -122,7 +122,7 @@ class Statistics extends Base {
    **/
   public function getBlocksFoundHeight($iHeight=0, $limit=10) {
     $this->debug->append("STA " . __METHOD__, 4);
-    if ($data = $this->memcache->get(__FUNCTION__ . $iHeight  . $limit)) return $data;
+    if ($data = $this->memcache->get(__FUNCTION__ . $iHeight . $limit)) return $data;
     $stmt = $this->mysqli->prepare("
       SELECT
         b.*,
@@ -139,6 +139,54 @@ class Statistics extends Base {
     return $this->sqlError();
   }
 
+  /**
+   * Get SUM of blocks found and generated Coins for each Account
+   * @param limit int Last limit blocks
+   * @return array
+   **/
+  public function getBlocksSolvedbyAccount($limit=25) {
+    $this->debug->append("STA " . __METHOD__, 4);
+    if ($data = $this->memcache->get(__FUNCTION__ . $limit)) return $data;
+    $stmt = $this->mysqli->prepare("
+      SELECT
+        b.*,
+        a.username AS finder,
+        a.is_anonymous AS is_anonymous,
+        COUNT(b.id) AS solvedblocks, 
+        SUM(b.amount) AS generatedcoins
+      FROM " . $this->block->getTableName() . " AS b
+      LEFT JOIN " . $this->user->getTableName() . " AS a 
+      ON b.account_id = a.id
+      WHERE confirmations > 0
+      GROUP BY finder
+      ORDER BY solvedblocks DESC LIMIT ?");
+    if ($this->checkStmt($stmt) && $stmt->bind_param("i", $limit) && $stmt->execute() && $result = $stmt->get_result())
+      return $this->memcache->setCache(__FUNCTION__ . $limit, $result->fetch_all(MYSQLI_ASSOC), 5);
+    return $this->sqlError();
+  }
+  
+  /**
+   * Get SUM of blocks found and generated Coins for each worker
+   * @param limit int Last limit blocks
+   * @return array
+   **/
+  public function getBlocksSolvedbyWorker($account_id, $limit=25) {
+    $this->debug->append("STA " . __METHOD__, 4);
+    if ($data = $this->memcache->get(__FUNCTION__ . $account_id . $limit)) return $data;
+    $stmt = $this->mysqli->prepare("
+      SELECT
+      	worker_name AS finder,
+        COUNT(id) AS solvedblocks, 
+        SUM(amount) AS generatedcoins
+      FROM " . $this->block->getTableName() . "
+      WHERE account_id = ? AND worker_name != 'unknown'
+      GROUP BY finder
+      ORDER BY solvedblocks DESC LIMIT ?");
+    if ($this->checkStmt($stmt) && $stmt->bind_param("ii", $account_id, $limit) && $stmt->execute() && $result = $stmt->get_result())
+      return $this->memcache->setCache(__FUNCTION__ . $account_id . $limit, $result->fetch_all(MYSQLI_ASSOC), 5);
+    return $this->sqlError();
+  }
+  
   /**
    * Currently the only function writing to the database
    * Stored per block user statistics of valid and invalid shares

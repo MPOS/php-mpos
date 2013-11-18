@@ -1,6 +1,7 @@
 
 .icon-dollar:before { content: '\e818'; } /* '' */
 .icon-doc:before { content: '\e81b'; } /* '' */
+.icon-login:before { content: '\e81c'; } /* '' */
 .icon-exchange:before { content: '\e81a'; } /* '' */
 .icon-money:before { content: '\e819'; } /* '' */
 .icon-mail:before { content: '\e814'; } /* '' */
@@ -18,7 +19,7 @@
 .icon-bell:before { content: '\e817'; } /* '' */
 .icon-trash:before { content: '\e812'; } /* '' */
 .icon-cog:before { content: '\e810'; } /* '' */
-.icon-login:before { content: '\e81c'; } /* '' */
+.icon-search:before { content: '\e827'; } /* '' */
 .icon-resize-full-alt:before { content: '\e824'; } /* '' */
 .icon-down-open:before { content: '\e825'; } /* '' */
 .icon-left-open:before { content: '\e801'; } /* '' */

@@ -104,6 +104,7 @@ $aGlobal['statistics']['analytics']['code'] = $setting->getValue('statistics_ana
 $aGlobal['acl']['pool']['statistics'] = $setting->getValue('acl_pool_statistics');
 $aGlobal['acl']['block']['statistics'] = $setting->getValue('acl_block_statistics');
 $aGlobal['acl']['round']['statistics'] = $setting->getValue('acl_round_statistics');
+$aGlobal['acl']['blockfinder']['statistics'] = $setting->getValue('acl_blockfinder_statistics');
 $aGlobal['acl']['uptime']['statistics'] = $setting->getValue('acl_uptime_statistics');
 
 // We don't want these session infos cached

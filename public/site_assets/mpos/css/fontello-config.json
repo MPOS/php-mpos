@@ -13,6 +13,12 @@
       "src": "fontawesome"
     },
     {
+      "uid": "7222571caa5c15f83dcfd447c58d68d9",
+      "css": "search",
+      "code": 59431,
+      "src": "entypo"
+    },
+    {
       "uid": "a204f0fa972408eaae5a363c444991b2",
       "css": "login",
       "code": 59420,
