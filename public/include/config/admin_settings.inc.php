@@ -3,12 +3,7 @@
 // Make sure we are called from index.php
 if (!defined('SECURITY')) die('Hacking attempt');
 
-// Load a list of themes available
-$aTmpThemes = glob(THEME_DIR . '/*');
-$aThemes = array();
-foreach ($aTmpThemes as $dir) {
-  if (basename($dir) != 'cache' && basename($dir) != 'compile' && basename($dir) != 'mail') $aThemes[basename($dir)] = basename($dir);
-}
+$aThemes = $template->getThemes();
 
 // Load the settings available in this system
 $aSettings['website'][] = array(
