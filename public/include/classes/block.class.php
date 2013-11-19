@@ -197,6 +197,17 @@ class Block extends Base {
     $field = array( 'name' => 'account_id', 'value' => $account_id, 'type' => 'i' );
     return $this->updateSingle($block_id, $field);
   }
+  
+  /**
+   * Set finding worker of a block
+   * @param block_id int Block ID
+   * @param worker_id int Worker ID of finder
+   * @return bool
+   **/
+  public function setFindingWorker($block_id, $worker=NULL) {
+    $field = array( 'name' => 'worker_name', 'value' => $worker, 'type' => 's' );
+    return $this->updateSingle($block_id, $field);
+  }
 
   /**
    * Set finding share for a block

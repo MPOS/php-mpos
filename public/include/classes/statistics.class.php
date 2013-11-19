@@ -122,7 +122,7 @@ class Statistics extends Base {
    **/
   public function getBlocksFoundHeight($iHeight=0, $limit=10) {
     $this->debug->append("STA " . __METHOD__, 4);
-    if ($data = $this->memcache->get(__FUNCTION__ . $iHeight  . $limit)) return $data;
+    if ($data = $this->memcache->get(__FUNCTION__ . $iHeight . $limit)) return $data;
     $stmt = $this->mysqli->prepare("
       SELECT
         b.*,
@@ -139,6 +139,54 @@ class Statistics extends Base {
     return $this->sqlError();
   }
 
+  /**
+   * Get SUM of blocks found and generated Coins for each Account
+   * @param limit int Last limit blocks
+   * @return array
+   **/
+  public function getBlocksSolvedbyAccount($limit=25) {
+    $this->debug->append("STA " . __METHOD__, 4);
+    if ($data = $this->memcache->get(__FUNCTION__ . $limit)) return $data;
+    $stmt = $this->mysqli->prepare("
+      SELECT
+        b.*,
+        a.username AS finder,
+        a.is_anonymous AS is_anonymous,
+        COUNT(b.id) AS solvedblocks, 
+        SUM(b.amount) AS generatedcoins
+      FROM " . $this->block->getTableName() . " AS b
+      LEFT JOIN " . $this->user->getTableName() . " AS a 
+      ON b.account_id = a.id
+      WHERE confirmations > 0
+      GROUP BY finder
+      ORDER BY solvedblocks DESC LIMIT ?");
+    if ($this->checkStmt($stmt) && $stmt->bind_param("i", $limit) && $stmt->execute() && $result = $stmt->get_result())
+      return $this->memcache->setCache(__FUNCTION__ . $limit, $result->fetch_all(MYSQLI_ASSOC), 5);
+    return $this->sqlError();
+  }
+  
+  /**
+   * Get SUM of blocks found and generated Coins for each worker
+   * @param limit int Last limit blocks
+   * @return array
+   **/
+  public function getBlocksSolvedbyWorker($account_id, $limit=25) {
+    $this->debug->append("STA " . __METHOD__, 4);
+    if ($data = $this->memcache->get(__FUNCTION__ . $account_id . $limit)) return $data;
+    $stmt = $this->mysqli->prepare("
+      SELECT
+      	worker_name AS finder,
+        COUNT(id) AS solvedblocks, 
+        SUM(amount) AS generatedcoins
+      FROM " . $this->block->getTableName() . "
+      WHERE account_id = ? AND worker_name != 'unknown'
+      GROUP BY finder
+      ORDER BY solvedblocks DESC LIMIT ?");
+    if ($this->checkStmt($stmt) && $stmt->bind_param("ii", $account_id, $limit) && $stmt->execute() && $result = $stmt->get_result())
+      return $this->memcache->setCache(__FUNCTION__ . $account_id . $limit, $result->fetch_all(MYSQLI_ASSOC), 5);
+    return $this->sqlError();
+  }
+  
   /**
    * Currently the only function writing to the database
    * Stored per block user statistics of valid and invalid shares
@@ -356,11 +404,10 @@ class Statistics extends Base {
 
   /**
    * Admin panel specific query
-   * @return data array invlid and valid shares for all accounts
+   * @return data array User settings and shares
    **/
   public function getAllUserStats($filter='%') {
     $this->debug->append("STA " . __METHOD__, 4);
-    if ($this->getGetCache() && $data = $this->memcache->get(__FUNCTION__ . $filter)) return $data;
     $stmt = $this->mysqli->prepare("
       SELECT
         a.id AS id,
@@ -369,17 +416,20 @@ class Statistics extends Base {
         a.no_fees as no_fees,
         a.username AS username,
         a.donate_percent AS donate_percent,
-        a.email AS email,
-        ROUND(IFNULL(SUM(IF(s.difficulty=0, POW(2, (" . $this->config['difficulty'] . " - 16)), s.difficulty)), 0) / POW(2, (" . $this->config['difficulty'] . " - 16)), 0) AS shares
+        a.email AS email
       FROM " . $this->user->getTableName() . " AS a
-      LEFT JOIN " . $this->share->getTableName() . " AS s
-      ON a.username = SUBSTRING_INDEX( s.username, '.', 1 )
       WHERE
       	a.username LIKE ?
       GROUP BY username
       ORDER BY username");
-    if ($this->checkStmt($stmt) && $stmt->bind_param('s', $filter) && $stmt->execute() && $result = $stmt->get_result())
-      return $this->memcache->setCache(__FUNCTION__ . $filter, $result->fetch_all(MYSQLI_ASSOC));
+    if ($this->checkStmt($stmt) && $stmt->bind_param('s', $filter) && $stmt->execute() && $result = $stmt->get_result()) {
+      // Add our cached shares to the users
+      while ($row = $result->fetch_assoc()) {
+        $row['shares'] = $this->getUserShares($row['id']);
+        $aUsers[] = $row;
+      }
+      return $aUsers;
+    }
     return $this->sqlError();
   }
 

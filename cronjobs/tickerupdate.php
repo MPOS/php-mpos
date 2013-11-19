@@ -38,11 +38,13 @@ if ($price = $tools->getPrice()) {
 }
 
 // Update Uptime Robot status in Settings table via API call
-if ($api_keys = $setting->getValue('monitoring_uptimerobot_api_keys') && strstr($api_keys, '<API KEY>|<MONITOR ID>')) {
-  $monitoring->setTools($tools);
-  if (!$monitoring->storeUptimeRobotStatus()) {
-    $log->logError($monitoring->getCronError());
-    $monitoring->endCronjob($cron_name, 'E0017', 1, false);
+if ($api_keys = $setting->getValue('monitoring_uptimerobot_api_keys')) {
+  if (!strstr($api_keys, '<API KEY>|<MONITOR ID>')) {
+    $monitoring->setTools($tools);
+    if (!$monitoring->storeUptimeRobotStatus()) {
+      $log->logError($monitoring->getCronError());
+      $monitoring->endCronjob($cron_name, 'E0017', 1, false);
+    }
   }
 } else {
   $log->logDebug('Skipped Uptime Robot API update, missing api keys');

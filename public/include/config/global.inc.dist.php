@@ -69,9 +69,6 @@ $config['wallet']['host'] = 'localhost:19334';
 $config['wallet']['username'] = 'testnet';
 $config['wallet']['password'] = 'testnet';
 
-
-
-
 /**
  * Getting Started Config
  *
@@ -83,9 +80,6 @@ $config['wallet']['password'] = 'testnet';
 $config['gettingstarted']['coinname'] = 'Litecoin';
 $config['gettingstarted']['coinurl'] = 'http://www.litecoin.org';
 $config['gettingstarted']['stratumport'] = '3333';
- 
- 
- 
 
 /**
  * API configuration to fetch prices for set currency
@@ -114,7 +108,6 @@ $config['gettingstarted']['stratumport'] = '3333';
 $config['price']['url'] = 'https://btc-e.com';
 $config['price']['target'] = '/api/2/ltc_usd/ticker';
 $config['price']['currency'] = 'USD';
-
 
 /**
  * Automatic payout thresholds

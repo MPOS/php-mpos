@@ -140,7 +140,7 @@ $(document).ready(function(){
   function refreshStaticData(data) {
     $('#b-confirmed').html(data.getdashboarddata.data.personal.balance.confirmed);
     $('#b-unconfirmed').html(data.getdashboarddata.data.personal.balance.unconfirmed);
-    $('#b-price').html((parseFloat(data.getdashboarddata.data.pool.price).toFixed(4)));
+    $('#b-price').html((parseFloat(data.getdashboarddata.data.pool.price).toFixed(8)));
     $('#b-dworkers').html(data.getdashboarddata.data.pool.workers);
     $('#b-hashrate').html((parseFloat(data.getdashboarddata.data.personal.hashrate).toFixed(2)));
     $('#b-sharerate').html((parseFloat(data.getdashboarddata.data.personal.sharerate).toFixed(2)));

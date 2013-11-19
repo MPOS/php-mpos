@@ -44,7 +44,7 @@ if (empty($aWorkers)) {
     $aData['email'] = $user->getUserEmail($aData['username']);
     $log->logDebug("    " . $aWorker['username'] . "...");
     if (!$notification->sendNotification($aWorker['account_id'], 'idle_worker', $aData))
-      $log->logError("    Failed sending notifications: " . $notification->getCronError() . "\n");
+      $log->logDebug("    Failed sending notifications: " . $notification->getCronError() . "\n");
   }
 }
 
@@ -62,7 +62,7 @@ if (!empty($aNotifications)) {
       if ($notification->setInactive($aNotification['id'])) {
         $log->logDebug(" updated #" . $aNotification['id'] . " for " . $aWorker['username'] . " as inactive\n");
       } else {
-        $log->logInfo(" failed to update #" . $aNotification['id'] . " for " . $aWorker['username'] . "\n");
+        $log->logError(" failed to update #" . $aNotification['id'] . " for " . $aWorker['username'] . "\n");
       }
     } else {
       $log->logDebug(" still inactive\n");

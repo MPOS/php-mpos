@@ -33,6 +33,7 @@
                 <li><a href="{$smarty.server.PHP_SELF}?page=statistics&action=blocks">Block Stats</a></li>
                 <li><a href="{$smarty.server.PHP_SELF}?page=statistics&action=graphs">Hashrate Graphs</a></li>
                 <li><a href="{$smarty.server.PHP_SELF}?page=statistics&action=round">Round Stats</a></li>
+                <li><a href="{$smarty.server.PHP_SELF}?page=statistics&action=blockfinder">Block Finder Stats</a></li>
                 {if $GLOBAL.config.monitoring_uptimerobot_api_keys|default:"0"}<li><a href="{$smarty.server.PHP_SELF}?page=statistics&action=uptime">Uptime Stats</a></li>{/if}
               </ul>
             </li>
@@ -48,6 +49,9 @@
             {if $GLOBAL.acl.round.statistics}
                 <li><a href="{$smarty.server.PHP_SELF}?page=statistics&action=round">Round Stats</a></li>
             {/if}
+     		{if $GLOBAL.acl.blockfinder.statistics}
+     			<li><a href="{$smarty.server.PHP_SELF}?page=statistics&action=blockfinder">Block Finder Stats</a></li>
+     		{/if}
             {if $GLOBAL.acl.uptime.statistics}
                 {if $GLOBAL.config.monitoring_uptimerobot_api_keys|default:"0"}<li><a href="{$smarty.server.PHP_SELF}?page=statistics&action=uptime">Uptime Stats</a></li>{/if}
             {/if}
@@ -55,11 +59,13 @@
             {/if}
             <li><a href="{$smarty.server.PHP_SELF}?page=gettingstarted">Getting Started</a></li>
             <li><a href="{$smarty.server.PHP_SELF}?page=support">Support</a></li>
+            {if !$GLOBAL.website.about.disabled}
             <li><a href="{$smarty.server.PHP_SELF}?page=about&action=pool">About</a>
+            {/if}
               <ul>
                 <li><a href="{$smarty.server.PHP_SELF}?page=about&action=pool">This Pool</a></li>
                 {if !$GLOBAL.website.api.disabled}<li><a href="{$smarty.server.PHP_SELF}?page=about&action=api">API Reference</a></li>{/if}
-                <li><a href="{$smarty.server.PHP_SELF}?page=about&action=donors">Pool Donors</a></li>
+                {if !$GLOBAL.website.donors.disabled}<li><a href="{$smarty.server.PHP_SELF}?page=about&action=donors">Pool Donors</a></li>{/if}
               </ul>
             </li>
             {if $smarty.session.AUTHENTICATED|default == 1}<li><a href="{$smarty.server.PHP_SELF}?page=logout">Logout</a></li>{else}<li><a href="{$smarty.server.PHP_SELF}?page=register">Register</a></li>{/if}
