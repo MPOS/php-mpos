@@ -155,14 +155,14 @@ class Worker extends Base {
       IFNULL(IF(difficulty=0, pow(2, (" . $this->config['difficulty'] . " - 16)), difficulty), 0) AS difficulty,
        (
          SELECT
-          IFNULL(IF(our_result='Y', ROUND(SUM(IF(difficulty=0, pow(2, (" . $this->config['difficulty'] . " - 16)), difficulty)) * 65536 / ? / 1000), 0), 0) AS hashrate
+          IFNULL(IF(our_result='Y', ROUND(SUM(IF(difficulty=0, pow(2, (" . $this->config['difficulty'] . " - 16)), difficulty)) * POW(2, " . $this->config['target_bits'] . ") / ? / 1000), 0), 0) AS hashrate
           FROM " . $this->share->getTableName() . "
           WHERE
             username = w.username
           AND time > DATE_SUB(now(), INTERVAL ? SECOND)
       ) + (
         SELECT
-          IFNULL(IF(our_result='Y', ROUND(SUM(IF(difficulty=0, pow(2, (" . $this->config['difficulty'] . " - 16)), difficulty)) * 65536 / ? / 1000), 0), 0) AS hashrate
+          IFNULL(IF(our_result='Y', ROUND(SUM(IF(difficulty=0, pow(2, (" . $this->config['difficulty'] . " - 16)), difficulty)) * POW(2, " . $this->config['target_bits'] . ") / ? / 1000), 0), 0) AS hashrate
           FROM " . $this->share->getArchiveTableName() . "
           WHERE
             username = w.username
