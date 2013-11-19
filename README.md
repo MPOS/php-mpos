@@ -4,7 +4,9 @@ Description
 MPOS is a web based Mining Portal for various crypto currencies. A few pools using this interface are running at:
 
 * http://ltc.pool.grewe.ca
+* http://btc.pool.grewe.ca
 * http://fst.pool.grewe.ca
+* http://ftc.pool.grewe.ca
 * http://nvc.pool.grewe.ca
 
 **NOTE**: This project is still under development and commits are happening on a daily basis.
