@@ -23,6 +23,7 @@
                 <li><a href="{$smarty.server.PHP_SELF}?page=admin&action=news">News</a></li>
                 <li><a href="{$smarty.server.PHP_SELF}?page=admin&action=reports">Reports</a></li>
                 <li><a href="{$smarty.server.PHP_SELF}?page=admin&action=poolworkers">Pool Workers</a></li>
+                <li><a href="{$smarty.server.PHP_SELF}?page=admin&action=pages">Pages</a></li>
               </ul>
             </li>
             {/if}
