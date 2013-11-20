@@ -40,8 +40,15 @@ class Transaction extends Base {
       $last_id = $result->fetch_object()->id;
     $this->debug->append('Found last archived transaction: ' . $last_id);
     // Update all transactions, mark as archived for user previous to $txid and higher than last archived transaction
-    $stmt = $this->mysqli->prepare("UPDATE $this->table SET archived = 1 WHERE archived = 0 AND account_id = ? AND id <= ? AND id > ?");
-    if ($this->checkStmt($stmt) && $stmt->bind_param('iii', $account_id, $txid, $last_id) && $stmt->execute())
+    $stmt = $this->mysqli->prepare("
+      UPDATE $this->table AS t
+      LEFT JOIN " . $this->block->getTableName() . " AS b
+      ON b.id = t.block_id
+      SET archived = 1
+      WHERE t.archived = 0 AND t.account_id = ? AND t.id <= ? AND t.id > ? AND (b.confirmations >= ? OR b.confirmations IS NULL)
+      ");
+    if ($this->checkStmt($stmt) && $stmt->bind_param('iiii', $account_id, $txid, $last_id, $this->config['confirmations']) && $stmt->execute())
+      var_dump($stmt);
       return true;
     return $this->sqlError();
   }
