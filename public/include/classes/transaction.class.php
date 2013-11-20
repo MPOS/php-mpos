@@ -36,8 +36,6 @@ class Transaction extends Base {
   public function setArchived($account_id, $txid) {
     $stmt = $this->mysqli->prepare("
       UPDATE $this->table AS t
-      LEFT JOIN " . $this->block->getTableName() . " AS b
-      ON b.id = t.block_id
       SET t.archived = 1
       WHERE archived = 0 AND t.account_id = ? AND t.id <= ?
       ");
