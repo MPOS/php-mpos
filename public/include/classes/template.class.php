@@ -6,6 +6,17 @@ if (!defined('SECURITY'))
 
 class Template extends Base {
   protected $table = 'templates';
+  /**
+   * Get filepath for template name based on current PAGE and ACTION
+   */
+  public function getFullpath($name) {
+    $chunks = array(PAGE);
+    if( ACTION )
+      $chunks[] = ACTION;
+    $chunks[] = $name;
+
+    return join('/', $chunks);
+  }
 
   /**
    * Get all available themes
@@ -21,6 +32,41 @@ class Template extends Base {
       if (basename($dir) != 'cache' && basename($dir) != 'compile' && basename($dir) != 'mail') $aThemes[basename($dir)] = basename($dir);
     }
     return $aThemes;
+  }
+
+  /**
+   * Cached getActiveTemplates method
+   *
+   * @see getActiveTemplates
+   */
+  private static $active_templates;
+  public function cachedGetActiveTemplates() {
+      if ( is_null(self::$active_templates) ) {
+          self::$active_templates = $this->getActiveTemplates();
+      }
+      return self::$active_templates;
+  }
+  /**
+   * Return the all active templates as hash,
+   * where key is template and value is modified_at
+   *
+   * @return array - list of active templates
+   */
+  public function getActiveTemplates() {
+    $this->debug->append("STA " . __METHOD__, 4);
+    $stmt = $this->mysqli->prepare("SELECT template, modified_at FROM $this->table WHERE active = 1");
+    if ($stmt && $stmt->execute() && $result = $stmt->get_result()) {
+      $rows = $result->fetch_all(MYSQLI_ASSOC);
+      $hash = array();
+      foreach($rows as $row) {
+          $hash[$row['template']] = strtotime($row['modified_at']);
+      }
+      return $hash;
+    }
+
+    $this->setErrorMessage('Failed to get active templates');
+    $this->debug->append('Template::getActiveTemplates failed: ' . $this->mysqli->error);
+    return false;
   }
 
   /**
@@ -57,20 +103,36 @@ class Template extends Base {
   }
 
   /**
-   * Return specific template form database
+   * Return specific template from database
    *
    * @param $template - name (filepath) of the template
    * @return array - result from database
    */
-  public function getEntry($template) {
+  public function getEntry($template, $columns = "*") {
     $this->debug->append("STA " . __METHOD__, 4);
 
-    $stmt = $this->mysqli->prepare("SELECT * FROM $this->table WHERE template = ?");
+    $stmt = $this->mysqli->prepare("SELECT $columns FROM $this->table WHERE template = ?");
     if ($stmt && $stmt->bind_param('s', $template) && $stmt->execute() && $result = $stmt->get_result())
       return $result->fetch_assoc();
 
     $this->setErrorMessage('Failed to get the template');
     $this->debug->append('Template::getEntry failed: ' . $this->mysqli->error);
+    return false;
+  }
+
+  /**
+   * Return last modified time of specific template from database
+   *
+   * @param $template - name (filepath) of the template
+   * @return timestamp - last modified time of template
+   */
+  public function getEntryMTime($template) {
+    $this->debug->append("STA " . __METHOD__, 4);
+
+    $entry = $this->getEntry($template, "modified_at, active");
+    if ( $entry && $entry['active'])
+        return strtotime($entry['modified_at']);
+
     return false;
   }
 
