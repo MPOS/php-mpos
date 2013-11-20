@@ -34,12 +34,14 @@ class Transaction extends Base {
    * @param bool boolean True or False
    **/
   public function setArchived($account_id, $txid) {
-    $stmt = $this->mysqli->prepare("
-      UPDATE $this->table AS t
-      SET t.archived = 1
-      WHERE archived = 0 AND t.account_id = ? AND t.id <= ?
-      ");
-    if ($this->checkStmt($stmt) && $stmt->bind_param('ii', $account_id, $txid) && $stmt->execute())
+    // Fetch last archived transaction for user
+    $stmt = $this->mysqli->prepare("SELECT IFNULL(MAX(id), 0) AS id FROM $this->table WHERE archived = 1 AND account_id = ?");
+    if ($this->checkStmt($stmt) && $stmt->bind_param('i', $account_id) && $stmt->execute() && $result = $stmt->get_result())
+      $last_id = $result->fetch_object()->id;
+    $this->debug->append('Found last archived transaction: ' . $last_id);
+    // Update all transactions, mark as archived for user previous to $txid and higher than last archived transaction
+    $stmt = $this->mysqli->prepare("UPDATE $this->table SET archived = 1 WHERE archived = 0 AND account_id = ? AND id <= ? AND id > ?");
+    if ($this->checkStmt($stmt) && $stmt->bind_param('iii', $account_id, $txid, $last_id) && $stmt->execute())
       return true;
     return $this->sqlError();
   }
