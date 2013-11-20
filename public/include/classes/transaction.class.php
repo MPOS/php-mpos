@@ -48,7 +48,6 @@ class Transaction extends Base {
       WHERE t.archived = 0 AND t.account_id = ? AND t.id <= ? AND t.id > ? AND (b.confirmations >= ? OR b.confirmations IS NULL)
       ");
     if ($this->checkStmt($stmt) && $stmt->bind_param('iiii', $account_id, $txid, $last_id, $this->config['confirmations']) && $stmt->execute())
-      var_dump($stmt);
       return true;
     return $this->sqlError();
   }
