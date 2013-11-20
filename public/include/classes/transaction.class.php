@@ -52,9 +52,10 @@ class Transaction extends Base {
    * @return data array type and total
    **/
   public function getTransactionSummary($account_id=NULL) {
+    if ($data = $this->memcache->get(__FUNCTION__ . $account_id)) return $data;
     $sql = "
       SELECT
-                    SUM(t.amount) AS total, t.type AS type
+        SUM(t.amount) AS total, t.type AS type
       FROM transactions AS t
       LEFT OUTER JOIN blocks AS b
       ON b.id = t.block_id
@@ -79,7 +80,8 @@ class Transaction extends Base {
       while ($row = $result->fetch_assoc()) {
         $aData[$row['type']] = $row['total'];
       }
-      return $aData;
+      // Cache data for a while, query takes long on many rows
+      return $this->memcache->setCache(__FUNCTION__ . $account_id, $aData, 60);
     }
     return $this->sqlError();
   }
@@ -277,6 +279,7 @@ class Transaction extends Base {
 }
 
 $transaction = new Transaction();
+$transaction->setMemcache($memcache);
 $transaction->setDebug($debug);
 $transaction->setMysql($mysqli);
 $transaction->setConfig($config);
