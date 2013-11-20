@@ -50,7 +50,7 @@
         <h4 class="{$smarty.session.POPUP[popup].TYPE|default:"info"}">{$smarty.session.POPUP[popup].CONTENT}</h4>
       {/section}
     {/if}
-    {if $CONTENT != "empty" or $CONTENT != ""}{if file_exists($smarty.current_dir|cat:"/$PAGE/$ACTION/$CONTENT")}{include file="$PAGE/$ACTION/$CONTENT"}{else}Missing template for this page{/if}{/if}
+    {include file="hybrid:$CONTENT"}
 		<div class="spacer"></div>
 	</section>
   <footer class="footer">

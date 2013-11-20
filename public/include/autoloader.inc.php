@@ -30,6 +30,8 @@ if ($detect->isMobile() && $setting->getValue('website_mobile_theme')) {
 }
 define('THEME', $theme);
 
+//Required for Smarty
+require_once(CLASS_DIR . '/page.class.php');
 // Load smarty now that we have our theme defined
 require_once(INCLUDE_DIR . '/smarty.inc.php');
 
@@ -56,7 +58,6 @@ require_once(CLASS_DIR . '/roundstats.class.php');
 require_once(CLASS_DIR . '/notification.class.php');
 require_once(CLASS_DIR . '/news.class.php');
 require_once(CLASS_DIR . '/api.class.php');
-require_once(CLASS_DIR . '/page.class.php');
 require_once(INCLUDE_DIR . '/lib/Michelf/Markdown.php');
 require_once(INCLUDE_DIR . '/lib/scrypt.php');
 

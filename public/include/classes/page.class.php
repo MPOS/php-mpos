@@ -10,6 +10,24 @@ class Page extends Base {
   protected $templates_table = 'page_templates';
 
   /**
+   * Get active template content by slug and current template
+   * If there isn't active template - returns null
+   */
+  public function getActiveTemplate($slug, $template = null) {
+    $this->debug->append("STA " . __METHOD__, 4);
+    if ( !$template )
+      $template = $this->setting->getValue('website_theme');
+    //Get latest modified_at attribute to avoid cache issues
+    //When you disable template-specific page, the common template has early modified_at,
+    //And smarty use last cached version
+    $subquery = "SELECT MAX(modified_at) FROM $this->templates_table WHERE (template = ? OR template = '') AND slug = ?";
+    $stmt = $this->mysqli->prepare("SELECT slug, template, content, ($subquery) AS modified_at FROM $this->templates_table WHERE (template = ? OR template = '') AND active = 1 AND slug = ? ORDER BY template DESC LIMIT 1");
+    if ($stmt && $stmt->bind_param('ssss', $template, $slug, $template, $slug) && $stmt->execute() && $result = $stmt->get_result())
+      return $result->fetch_assoc();
+    return null;
+  }
+
+  /**
    * Get all pages
    **/
   public function getAll() {
@@ -65,4 +83,5 @@ class Page extends Base {
 $pageModel = new Page();
 $pageModel->setDebug($debug);
 $pageModel->setMysql($mysqli);
+$pageModel->setSetting($setting);
 ?>
