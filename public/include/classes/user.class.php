@@ -438,7 +438,7 @@ class User extends Base {
    **/
   public function register($username, $password1, $password2, $pin, $email1='', $email2='', $strToken='') {
     $this->debug->append("STA " . __METHOD__, 4);
-    if (strlen($username > 40)) {
+    if (strlen($username) > 40) {
       $this->setErrorMessage('Username exceeding character limit');
       return false;
     }
