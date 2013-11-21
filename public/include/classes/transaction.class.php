@@ -34,14 +34,21 @@ class Transaction extends Base {
    * @param bool boolean True or False
    **/
   public function setArchived($account_id, $txid) {
+    // Fetch last archived transaction for user, we must exclude our Debits though! There might be unarchived/archived
+    // records before our last payout
+    $stmt = $this->mysqli->prepare("SELECT IFNULL(MAX(id), 0) AS id FROM $this->table WHERE archived = 1 AND account_id = ? AND type NOT IN ('Debit_MP','Debit_AP','TXFee')");
+    if ($this->checkStmt($stmt) && $stmt->bind_param('i', $account_id) && $stmt->execute() && $result = $stmt->get_result())
+      $last_id = $result->fetch_object()->id;
+    $this->debug->append('Found last archived transaction: ' . $last_id);
+    // Update all transactions, mark as archived for user previous to $txid and higher than last archived transaction
     $stmt = $this->mysqli->prepare("
       UPDATE $this->table AS t
       LEFT JOIN " . $this->block->getTableName() . " AS b
       ON b.id = t.block_id
-      SET t.archived = 1
-      WHERE ( t.account_id = ? AND t.id <= ? AND b.confirmations >= ? )
-      OR ( t.account_id = ? AND t.id <= ? AND t.type IN ( 'Credit_PPS', 'Donation_PPS', 'Fee_PPS', 'TXFee', 'Debit_MP', 'Debit_AP' ) )");
-    if ($this->checkStmt($stmt) && $stmt->bind_param('iiiii', $account_id, $txid, $this->config['confirmations'], $account_id, $txid) && $stmt->execute())
+      SET archived = 1
+      WHERE t.archived = 0 AND t.account_id = ? AND t.id <= ? AND t.id > ? AND (b.confirmations >= ? OR b.confirmations IS NULL)
+      ");
+    if ($this->checkStmt($stmt) && $stmt->bind_param('iiii', $account_id, $txid, $last_id, $this->config['confirmations']) && $stmt->execute())
       return true;
     return $this->sqlError();
   }
@@ -52,9 +59,10 @@ class Transaction extends Base {
    * @return data array type and total
    **/
   public function getTransactionSummary($account_id=NULL) {
+    if ($data = $this->memcache->get(__FUNCTION__ . $account_id)) return $data;
     $sql = "
       SELECT
-                    SUM(t.amount) AS total, t.type AS type
+        SUM(t.amount) AS total, t.type AS type
       FROM transactions AS t
       LEFT OUTER JOIN blocks AS b
       ON b.id = t.block_id
@@ -79,7 +87,8 @@ class Transaction extends Base {
       while ($row = $result->fetch_assoc()) {
         $aData[$row['type']] = $row['total'];
       }
-      return $aData;
+      // Cache data for a while, query takes long on many rows
+      return $this->memcache->setCache(__FUNCTION__ . $account_id, $aData, 60);
     }
     return $this->sqlError();
   }
@@ -277,6 +286,7 @@ class Transaction extends Base {
 }
 
 $transaction = new Transaction();
+$transaction->setMemcache($memcache);
 $transaction->setDebug($debug);
 $transaction->setMysql($mysqli);
 $transaction->setConfig($config);
