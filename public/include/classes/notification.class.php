@@ -35,7 +35,7 @@ class Notification extends Mail {
    **/
   public function getAllActive($strType) {
     $this->debug->append("STA " . __METHOD__, 4);
-    $stmt =$this->mysqli->prepare("SELECT id2, data FROM $this->table WHERE active = 1 AND type = ?");
+    $stmt =$this->mysqli->prepare("SELECT id, data FROM $this->table WHERE active = 1 AND type = ?");
     if ($stmt && $stmt->bind_param('s', $strType) && $stmt->execute() && $result = $stmt->get_result())
       return $result->fetch_all(MYSQLI_ASSOC);
     return $this->sqlError('E0042');
