@@ -63,7 +63,7 @@ if (empty($aTransactions['transactions'])) {
         continue;
       }
       if (!$block->addBlock($aData) ) {
-        $log->logFatal('Unable to add this block to database: ' . $aData['height']);
+        $log->logFatal('Unable to add block: ' . $aData['height'] . ': ' . $block->getCronError());
       }
     }
   }
