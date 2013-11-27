@@ -24,7 +24,7 @@
       <tr>
         <td align="center">n/a</td>
         <td align="right">{if $GLOBAL.userdata.donate_percent > 0}<i class="icon-star-empty"></i>{/if}</td>
-        <td>{if $GLOBAL.userdata.username > 0}<i class="icon-star-empty"></i>{/if}</td>
+        <td>{$GLOBAL.userdata.username|escape}</td>
         <td align="right" style="padding-right: 25px;">{$GLOBAL.userdata.shares.valid|number_format}</td>
       </tr>
 {/if}
