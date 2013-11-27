@@ -26,13 +26,13 @@
         {if $GLOBAL.config.price.currency}<td align="right" style="padding-right: 25px;">{($estday * $GLOBAL.price)|default:"n/a"|number_format:"4"}</td>{/if}
       </tr>
 {/section}
-{if $listed != 1 && $GLOBAL.userdata.username|default:"" && $GLOBAL.userdata.hashrate|default:"0" > 0}
-      {if $GLOBAL.userdata.hashrate > 0}{math assign="myestday" equation="round(reward / ( diff * pow(2,32) / ( hashrate * 1000 ) / 3600 / 24), 3)" diff=$DIFFICULTY reward=$REWARD hashrate=$GLOBAL.userdata.hashrate}{/if}
+{if $listed != 1 && $GLOBAL.userdata.username|default:"" && $GLOBAL.userdata.rawhashrate|default:"0" > 0}
+      {math assign="myestday" equation="round(reward / ( diff * pow(2,32) / ( hashrate * 1000 ) / 3600 / 24), 3)" diff=$DIFFICULTY reward=$REWARD hashrate=$GLOBAL.userdata.rawhashrate}
       <tr>
         <td align="center">n/a</td>
         <td align="right">{if $GLOBAL.userdata.donate_percent > 0}<i class="icon-star-empty"></i>{/if}</td>
         <td>{$GLOBAL.userdata.username|escape}</td>
-        <td align="right">{$GLOBAL.userdata.hashrate}</td>
+        <td align="right">{$GLOBAL.userdata.rawhashrate|number_format}</td>
         <td align="right">{$myestday|number_format:"3"|default:"n/a"}</td>
         {if $GLOBAL.config.price.currency}<td align="right" style="padding-right: 25px;">{($myestday * $GLOBAL.price)|default:"n/a"|number_format:"4"}</td>{/if}
       </tr>
