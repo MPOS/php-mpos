@@ -112,6 +112,7 @@ class Transaction extends Base {
         t.amount AS amount,
         t.coin_address AS coin_address,
         t.timestamp AS timestamp,
+        t.txid AS txid,
         b.height AS height,
         b.blockhash AS blockhash,
         b.confirmations AS confirmations
