@@ -62,6 +62,7 @@ $aGlobal = array(
   'fees' => $config['fees'],
   'confirmations' => $config['confirmations'],
   'reward' => $config['reward'],
+  'algorithm' => $config['algorithm'],
   'price' => $setting->getValue('price'),
   'disable_mp' => $setting->getValue('disable_mp'),
   'config' => array(
