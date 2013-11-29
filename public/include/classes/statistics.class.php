@@ -652,7 +652,7 @@ class Statistics extends Base {
     if ($data = $this->memcache->get(__FUNCTION__ . $account_id)) return $data;
     $stmt = $this->mysqli->prepare("
       SELECT
-        id,
+        a.id,
         IFNULL(ROUND(SUM(IF(s.difficulty=0, pow(2, (" . $this->config['difficulty'] . " - 16)), s.difficulty)) * POW(2, " . $this->config['target_bits'] . ") / 3600 / 1000), 0) AS hashrate,
         HOUR(s.time) AS hour
       FROM " . $this->share->getTableName() . " AS s, accounts AS a
