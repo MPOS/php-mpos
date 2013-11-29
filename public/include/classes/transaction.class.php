@@ -34,9 +34,8 @@ class Transaction extends Base {
    * @param bool boolean True or False
    **/
   public function setArchived($account_id, $txid) {
-    // Fetch last archived transaction for user, we must exclude our Debits though! There might be unarchived/archived
-    // records before our last payout
-    $stmt = $this->mysqli->prepare("SELECT IFNULL(MAX(id), 0) AS id FROM $this->table WHERE archived = 1 AND account_id = ? AND type NOT IN ('Debit_MP','Debit_AP','TXFee')");
+    // Fetch last archived transaction for user, we use the last archived credit transaction which should be close enough
+    $stmt = $this->mysqli->prepare("SELECT IFNULL(MAX(id), 0) AS id FROM $this->table WHERE archived = 1 AND account_id = ? AND type IN ('Credit','Credit_PPS')");
     if ($this->checkStmt($stmt) && $stmt->bind_param('i', $account_id) && $stmt->execute() && $result = $stmt->get_result())
       $last_id = $result->fetch_object()->id;
     $this->debug->append('Found last archived transaction: ' . $last_id);
