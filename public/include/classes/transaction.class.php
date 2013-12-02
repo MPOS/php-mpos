@@ -34,20 +34,18 @@ class Transaction extends Base {
    * @param bool boolean True or False
    **/
   public function setArchived($account_id, $txid) {
-    // Fetch last archived transaction for user, we use the last archived credit transaction which should be close enough
-    $stmt = $this->mysqli->prepare("SELECT IFNULL(MAX(id), 0) AS id FROM $this->table WHERE archived = 1 AND account_id = ? AND type IN ('Credit','Credit_PPS')");
-    if ($this->checkStmt($stmt) && $stmt->bind_param('i', $account_id) && $stmt->execute() && $result = $stmt->get_result())
-      $last_id = $result->fetch_object()->id;
-    $this->debug->append('Found last archived transaction: ' . $last_id);
-    // Update all transactions, mark as archived for user previous to $txid and higher than last archived transaction
+    // Update all paid out transactions as archived
     $stmt = $this->mysqli->prepare("
       UPDATE $this->table AS t
       LEFT JOIN " . $this->block->getTableName() . " AS b
       ON b.id = t.block_id
-      SET archived = 1
-      WHERE t.archived = 0 AND t.account_id = ? AND t.id <= ? AND t.id > ? AND (b.confirmations >= ? OR b.confirmations IS NULL)
-      ");
-    if ($this->checkStmt($stmt) && $stmt->bind_param('iiii', $account_id, $txid, $last_id, $this->config['confirmations']) && $stmt->execute())
+      SET t.archived = 1
+      WHERE t.archived = 0
+      AND (
+           ( t.account_id = ? AND t.id <= ? AND b.confirmations >= ? )
+        OR ( t.account_id = ? AND t.id <= ? AND t.type IN ( 'Credit_PPS', 'Donation_PPS', 'Fee_PPS', 'TXFee', 'Debit_MP', 'Debit_AP' ) )
+      )");
+     if ($this->checkStmt($stmt) && $stmt->bind_param('iiiii', $account_id, $txid, $this->config['confirmations'], $account_id, $txid) && $stmt->execute())
       return true;
     return $this->sqlError();
   }
