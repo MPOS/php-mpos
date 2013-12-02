@@ -81,7 +81,11 @@ $aPrice = $setting->getValue('price');
 
 // Round progress
 $iEstShares = $statistics->getEstimatedShares($dDifficulty);
-$dEstPercent = round(100 / $iEstShares * $aRoundShares['valid'], 2);
+if ($iEstShares > 0 && $aRoundShares['valid'] > 0) {
+  $dEstPercent = round(100 / $iEstShares * $aRoundShares['valid'], 2);
+} else {
+  $dEstPercent = 0;
+}
 
 // Output JSON format
 $data = array(
