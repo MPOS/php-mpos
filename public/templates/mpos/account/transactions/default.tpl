@@ -68,14 +68,15 @@
     <table cellspacing="0" class="tablesorter" width="100%">
       <thead>
         <tr>
-          <th align="center">TX #</th>
-          <th >Account</th>
-          <th >Date</th>
-          <th >TX Type</th>
+          <th align="center">ID</th>
+          <th>Account</th>
+          <th>Date</th>
+          <th>TX Type</th>
           <th align="center">Status</th>
-          <th >Payment Address</th>
-          <th >Block #</th>
-          <th >Amount</th>
+          <th>Payment Address</th>
+          <th>TX #</th>
+          <th>Block #</th>
+          <th>Amount</th>
         </tr>
       </thead>
       <tbody style="font-size:12px;">
@@ -97,7 +98,8 @@
             {else if $TRANSACTIONS[transaction].confirmations == -1}<span class="orphan">Orphaned</span>
             {else}<span class="unconfirmed">Unconfirmed</span>{/if}
           </td>
-          <td>{$TRANSACTIONS[transaction].coin_address}</td>
+          <td>{$TRANSACTIONS[transaction].coin_address|truncate:20:"...":true:true}</td>
+          <td>{$TRANSACTIONS[transaction].txid|truncate:20:"...":true:true}</td>
           <td>{if $TRANSACTIONS[transaction].height == 0}n/a{else}<a href="{$smarty.server.PHP_SELF}?page=statistics&action=round&height={$TRANSACTIONS[transaction].height}">{$TRANSACTIONS[transaction].height}</a>{/if}</td>
           <td><font color="{if $TRANSACTIONS[transaction].type == 'Credit' or $TRANSACTIONS[transaction].type == 'Credit_PPS' or $TRANSACTIONS[transaction].type == 'Bonus'}green{else}red{/if}">{$TRANSACTIONS[transaction].amount|number_format:"8"}</td>
         </tr>

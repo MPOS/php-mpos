@@ -18,9 +18,9 @@ class Transaction extends Base {
    * @param coin_address string Coin address for this transaction [optional]
    * @return bool
    **/
-  public function addTransaction($account_id, $amount, $type='Credit', $block_id=NULL, $coin_address=NULL) {
-    $stmt = $this->mysqli->prepare("INSERT INTO $this->table (account_id, amount, block_id, type, coin_address) VALUES (?, ?, ?, ?, ?)");
-    if ($this->checkStmt($stmt) && $stmt->bind_param("idiss", $account_id, $amount, $block_id, $type, $coin_address) && $stmt->execute()) {
+  public function addTransaction($account_id, $amount, $type='Credit', $block_id=NULL, $coin_address=NULL, $txid=NULL) {
+    $stmt = $this->mysqli->prepare("INSERT INTO $this->table (account_id, amount, block_id, type, coin_address, txid) VALUES (?, ?, ?, ?, ?, ?)");
+    if ($this->checkStmt($stmt) && $stmt->bind_param("idisss", $account_id, $amount, $block_id, $type, $coin_address, $txid) && $stmt->execute()) {
       $this->insert_id = $stmt->insert_id;
       return true;
     }
@@ -109,6 +109,7 @@ class Transaction extends Base {
         t.amount AS amount,
         t.coin_address AS coin_address,
         t.timestamp AS timestamp,
+        t.txid AS txid,
         b.height AS height,
         b.blockhash AS blockhash,
         b.confirmations AS confirmations
