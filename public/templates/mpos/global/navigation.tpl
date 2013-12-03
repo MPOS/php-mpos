@@ -60,7 +60,7 @@
     {/if}
     <h3>Help</h3>
     <ul class="toggle">
-      <li class="icon-desktop"><a href="{$smarty.server.PHP_SELF}?page=gettingstarted">GettingStarted</a></li>
+      <li class="icon-desktop"><a href="{$smarty.server.PHP_SELF}?page=gettingstarted">Getting Started</a></li>
       {if !$GLOBAL.website.about.disabled}
       <li class="icon-doc"><a href="{$smarty.server.PHP_SELF}?page=about&action=pool">About</a></li>
       {/if}
