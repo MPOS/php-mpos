@@ -172,8 +172,8 @@ class Share Extends Base {
    **/
   public function purgeArchive() {
     // Fallbacks if unset
-    if (!isset($this->config['purge']['shares'])) $this->config['purge']['shares'] = 500000;
-    if (!isset($this->config['purge']['sleep'])) $this->config['purge']['sleep'] = 5;
+    if (!isset($this->config['purge']['shares'])) $this->config['purge']['shares'] = 25000;
+    if (!isset($this->config['purge']['sleep'])) $this->config['purge']['sleep'] = 1;
 
     if ($this->config['payout_system'] == 'pplns') {
       // Fetch our last block so we can go back configured rounds
@@ -246,14 +246,15 @@ class Share Extends Base {
    **/
   public function deleteAccountedShares($current_upstream, $previous_upstream=0) {
     // Fallbacks if unset
-    if (!isset($this->config['purge']['shares'])) $this->config['purge']['shares'] = 500000;
-    if (!isset($this->config['purge']['sleep'])) $this->config['purge']['sleep'] = 5;
+    if (!isset($this->config['purge']['shares'])) $this->config['purge']['shares'] = 25000;
+    if (!isset($this->config['purge']['sleep'])) $this->config['purge']['sleep'] = 1;
 
     $affected = 1;
     while ($affected > 0) {
       // Sleep first to allow any IO to cleanup
       sleep($this->config['purge']['sleep']);
       $stmt = $this->mysqli->prepare("DELETE FROM $this->table WHERE id > ? AND id <= ? LIMIT " . $this->config['purge']['shares']);
+      $start = microtime(true);
       if ($this->checkStmt($stmt) && $stmt->bind_param('ii', $previous_upstream, $current_upstream) && $stmt->execute()) {
         $affected = $stmt->affected_rows;
       } else {

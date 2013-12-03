@@ -241,8 +241,8 @@ $config['payout_system'] = 'prop';
  *   sleep   :  5 seconds
  *   shares  :  500000
  **/
-$config['purge']['sleep'] = 5;
-$config['purge']['shares'] = 500000;
+$config['purge']['sleep'] = 1;
+$config['purge']['shares'] = 25000;
 
 /**
  * Archiving configuration for debugging
