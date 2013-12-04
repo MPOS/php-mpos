@@ -56,6 +56,9 @@ class Mail extends Base {
    *     email   : Destination address
    **/
   public function sendMail($template, $aData) {
+    // Make sure we don't load a cached filed
+    $this->smarty->clearCache(BASEPATH . 'templates/mail/' . $template  . '.tpl');
+    $this->smarty->clearCache(BASEPATH . 'templates/mail/subject.tpl');
     $this->smarty->assign('WEBSITENAME', $this->setting->getValue('website_name'));
     $this->smarty->assign('SUBJECT', $aData['subject']);
     $this->smarty->assign('DATA', $aData);
