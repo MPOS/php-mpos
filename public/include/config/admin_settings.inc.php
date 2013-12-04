@@ -278,6 +278,20 @@ $aSettings['system'][] = array(
   'name' => 'disable_about', 'value' => $setting->getValue('disable_about'),
   'tooltip' => 'Showing About page in Navigation.'
 );
+$aSettings['system'][] = array(
+  'display' => 'Disable Live Dashboard', 'type' => 'select',
+  'options' => array( 0 => 'No', 1 => 'Yes'),
+  'default' => 0,
+  'name' => 'disable_dashboard', 'value' => $setting->getValue('disable_dashboard'),
+  'tooltip' => 'Disable live updates on the dashboard to reduce server load.'
+);
+$aSettings['system'][] = array(
+  'display' => 'Disable Dashboard API', 'type' => 'select',
+  'options' => array( 0 => 'No', 1 => 'Yes'),
+  'default' => 0,
+  'name' => 'disable_dashboard_api', 'value' => $setting->getValue('disable_dashboard_api'),
+  'tooltip' => 'Disable dashboard API entirely to reduce server load.'
+);
 $aSettings['recaptcha'][] = array(
   'display' => 'Enable re-Captcha', 'type' => 'select',
   'options' => array( 0 => 'No', 1 => 'Yes' ),

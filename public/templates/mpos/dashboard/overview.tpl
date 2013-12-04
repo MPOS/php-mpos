@@ -14,9 +14,11 @@
       <div id="querytime" style="width:120px; height:90px;"></div>
     </div>
     </center>
+    {if !$DISABLED_DASHBOARD and !$DISABLED_DASHBOARD_API}
     <div style="margin-left: 16px; display: inline-block; width: 100%;">
       <div id="hashrategraph" style="height: 160px; width: 100%;"></div>
     </div>
+    {/if}
   </div>
   <footer>
     <p style="margin-left: 25px">Refresh interval: {$GLOBAL.config.statistics_ajax_refresh_interval|default:"10"} seconds. Hashrate based on shares submitted in the past {$INTERVAL|default:"5"} minutes.</p>
