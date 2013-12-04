@@ -203,6 +203,7 @@ CREATE TABLE IF NOT EXISTS `transactions` (
   `amount` double DEFAULT '0',
   `block_id` int(255) DEFAULT NULL,
   `timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `txid` varchar(256) DEFAULT NULL,
   `archived` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   KEY `block_id` (`block_id`),
