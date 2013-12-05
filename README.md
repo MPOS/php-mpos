@@ -20,11 +20,7 @@ I was hoping to keep this out of the README but apparently people remove or chan
 at the bottom of the page. For those of you finding my project and are willing to appreciate the work
 with some hard earned coins feel free to donate:
 
-* BTC address: `1HuYK6WPU8o3yWCrAaADDZPRpL5QiXitfv`
 * LTC address: `Lge95QR2frp9y1wJufjUPCycVsg5gLJPW8`
-* FTC address: `6jDgGaUzMVyac5uqBhJCMiFMKCtH1LagTA`
-* NVC address: `4Guct6z7NVPVALHRAVn517TTmvqQve4WYr`
-* FST address: `g17CfFHqNqR5JnUjtG8RNBYh2WrhEirV67`
 
 Website Footer
 ==============
