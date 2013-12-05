@@ -1,7 +1,7 @@
 <html>
 <body>
 <p>An automated payout completed.</p>
-<p>Amount: {$DATA.amount}</p>
+<p>Amount: {nocache}{$DATA.amount}{/nocache}</p>
 <br/>
 <br/>
 </body>

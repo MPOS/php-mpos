@@ -1,1 +1,1 @@
-[ {$WEBSITENAME} ] {$SUBJECT}
+[ {$WEBSITENAME} ] {nocache}{$SUBJECT}{/nocache}
