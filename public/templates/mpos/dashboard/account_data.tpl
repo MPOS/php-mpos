@@ -24,13 +24,14 @@
       </thead>
       <tr>
         <td align="left" style="font-weight: bold;">Confirmed</td>
-        <td align="right"><span id="b-confirmed" class="confirmed" style="width: calc(80px); font-size: 12px;"></span></td>
+        <td align="right"><span id="b-confirmed" class="confirmed" style="width: calc(80px); font-size: 12px;">{$GLOBAL.userdata.balance.confirmed}</span></td>
       </tr>
       <tr>
         <td align="left" style="font-weight: bold;">Unconfirmed</td>
-        <td align="right"><span id="b-unconfirmed" class="unconfirmed" style="width: calc(80px); font-size: 12px;"></span></td>
+        <td align="right"><span id="b-unconfirmed" class="unconfirmed" style="width: calc(80px); font-size: 12px;">{$GLOBAL.userdata.balance.unconfirmed}</span></td>
       </tr>
     </table>
+    {if !$DISABLED_DASHBOARD and !$DISABLED_DASHBOARD_API}
     <table class="tablesorter" cellspacing="0">
      <thead>
       <tr>
@@ -40,8 +41,9 @@
       </tr>
       </thead>
       <tbody id="b-workers">
-        <td colspan="3" align="center">Loading worker information</td>
+        <td colspan="3" align="center">No worker information available</td>
       </tbody>
       </tr>
     </table>
+    {/if}
 </article>

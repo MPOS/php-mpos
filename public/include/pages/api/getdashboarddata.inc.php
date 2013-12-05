@@ -3,6 +3,15 @@
 // Make sure we are called from index.php
 if (!defined('SECURITY')) die('Hacking attempt');
 
+// Supress master template
+$supress_master = 1;
+
+// Check if the system is enabled
+if ($setting->getValue('disable_dashboard_api')) {
+  echo $api->get_json(array('error' => 'disabled'));
+  die();
+}
+
 // Check user token and access level permissions
 $user_id = $api->checkAccess($user->checkApiKey($_REQUEST['api_key']), @$_REQUEST['id']);
 
@@ -107,8 +116,6 @@ $data = array(
   ),
   'network' => array( 'hashrate' => $dNetworkHashrateAdjusted, 'difficulty' => $dDifficulty, 'block' => $iBlock ),
 );
-echo $api->get_json($data);
 
-// Supress master template
-$supress_master = 1;
+echo $api->get_json($data);
 ?>
