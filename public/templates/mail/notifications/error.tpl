@@ -5,6 +5,7 @@
   <tr>
     <td>
     <table cellpadding="0" cellspacing="1" border="0" align="left" width="800px">
+{nocache}
 {foreach from=$DATA key=text item=message}
   {if $text != 'email' && $text != 'subject'}
       <tr>
@@ -13,6 +14,7 @@
       </tr>
   {/if}
 {/foreach}
+{/nocache}
     </table>
     </td>
   </tr>
