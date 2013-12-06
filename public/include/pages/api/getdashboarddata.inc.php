@@ -3,6 +3,12 @@
 // Make sure we are called from index.php
 if (!defined('SECURITY')) die('Hacking attempt');
 
+// Check if the system is enabled
+if ($setting->getValue('disable_dashboard_api')) {
+  echo $api->get_json(array('error' => 'disabled'));
+  die();
+}
+
 // System load check
 if ($load = @sys_getloadavg()) {
   if (isset($config['system']['load']['max']) && $load[0] > $config['system']['load']['max']) {
@@ -10,6 +16,9 @@ if ($load = @sys_getloadavg()) {
     die('Server too busy. Please try again later.');
   }
 }
+
+// Supress master template
+$supress_master = 1;
 
 // Check user token and access level permissions
 $user_id = $api->checkAccess($user->checkApiKey($_REQUEST['api_key']), @$_REQUEST['id']);
@@ -116,8 +125,6 @@ $data = array(
   'system' => array( 'load' => sys_getloadavg() ),
   'network' => array( 'hashrate' => $dNetworkHashrateAdjusted, 'difficulty' => $dDifficulty, 'block' => $iBlock ),
 );
-echo $api->get_json($data);
 
-// Supress master template
-$supress_master = 1;
+echo $api->get_json($data);
 ?>

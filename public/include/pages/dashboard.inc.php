@@ -10,14 +10,24 @@ if ($user->isAuthenticated()) {
   $dDifficulty = 1;
   $aRoundShares = 1;
 
-  // Only run these if the user is logged in
   $aRoundShares = $statistics->getRoundShares();
+  $dDifficulty = 1;
+  $dNetworkHashrate = 1;
+  $iBlock = 0;
   if ($bitcoin->can_connect() === true) {
     $dDifficulty = $bitcoin->getdifficulty();
     $dNetworkHashrate = $bitcoin->getnetworkhashps();
+    $iBlock = $bitcoin->getblockcount();
   }
 
   // Fetch some data
+  // Round progress
+  $iEstShares = $statistics->getEstimatedShares($dDifficulty);
+  if ($iEstShares > 0 && $aRoundShares['valid'] > 0) {
+    $dEstPercent = round(100 / $iEstShares * $aRoundShares['valid'], 2);
+  } else {
+    $dEstPercent = 0;
+  }
   if (!$iCurrentActiveWorkers = $worker->getCountAllActiveWorkers()) $iCurrentActiveWorkers = 0;
   $iCurrentPoolHashrate =  $statistics->getCurrentHashrate();
   $iCurrentPoolShareRate = $statistics->getCurrentShareRate();
@@ -26,6 +36,10 @@ if ($user->isAuthenticated()) {
   if ($iCurrentPoolHashrate > $dNetworkHashrate) $dNetworkHashrate = $iCurrentPoolHashrate;
 
   // Make it available in Smarty
+  $smarty->assign('DISABLED_DASHBOARD', $setting->getValue('disable_dashboard'));
+  $smarty->assign('DISABLED_DASHBOARD_API', $setting->getValue('disable_dashboard_api'));
+  $smarty->assign('ESTIMATES', array('shares' => $iEstShares, 'percent' => $dEstPercent));
+  $smarty->assign('NETWORK', array('difficulty' => $dDifficulty, 'block' => $iBlock));
   $smarty->assign('INTERVAL', $interval / 60);
   $smarty->assign('CONTENT', 'default.tpl');
 }

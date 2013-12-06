@@ -3,9 +3,9 @@
          </tr>
          <tr>
            <td><b>Difficulty</b></td>
-           <td id="b-diff" class="right"></td>
+           <td id="b-diff" class="right">{$NETWORK.difficulty}</td>
          </tr>
          <tr>
            <td><b>Current Block</b></td>
-           <td id="b-nblock" class="right"></td>
+           <td id="b-nblock" class="right">{$NETWORK.block}</td>
          </tr>
