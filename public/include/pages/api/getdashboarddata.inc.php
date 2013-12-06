@@ -3,6 +3,14 @@
 // Make sure we are called from index.php
 if (!defined('SECURITY')) die('Hacking attempt');
 
+// System load check
+if ($load = @sys_getloadavg()) {
+  if (isset($config['system']['load']['max']) && $load[0] > $config['system']['load']['max']) {
+    header('HTTP/1.1 503 Too busy, try again later');
+    die('Server too busy. Please try again later.');
+  }
+}
+
 // Check user token and access level permissions
 $user_id = $api->checkAccess($user->checkApiKey($_REQUEST['api_key']), @$_REQUEST['id']);
 

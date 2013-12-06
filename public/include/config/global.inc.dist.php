@@ -456,4 +456,19 @@ $config['cookie']['secure'] = false;
  **/
 $config['smarty']['cache'] = 0;
 $config['smarty']['cache_lifetime'] = 30;
+
+/**
+ * System load setting
+ *
+ * This will disable loading of some API calls in case the system
+ * loads exceeds the defined max setting. Useful to temporaily suspend
+ * live statistics on a server that is too busy to deal with requests.
+ *
+ * Options
+ *   max    =  float, maximum system load
+ *
+ * Defaults:
+ *   max    =  10.0
+ **/
+$config['system']['load']['max'] = 10.0;
 ?>
