@@ -96,10 +96,52 @@ class Template extends Base {
     $files = new RegexIterator($ite, '!'.preg_quote($folder, '!').'/(.*\.tpl$)!', RegexIterator::GET_MATCH);
     $fileList = array();
     foreach($files as $file) {
-        $fileList[] = $file[1];
+        $fileList[] = $theme . '/' . $file[1];
     }
 
     return $fileList;
+  }
+
+  /**
+   * Get tree of all possible templates, where key is filename
+   * and value is whether array of subfiles if filename is directory
+   * or true, if filename is file
+   *
+   * @param $themes - optional, themes array
+   * @return array - tree of all templates
+   */
+  public function getTemplatesTree($themes = null) {
+    if( is_null($themes) )
+      $themes = $this->getThemes();
+
+    $templates = array();
+    foreach($themes as $theme) {
+      $templates[$theme] = $this->_getTemplatesTreeRecursive(THEME_DIR . '/' . $theme);
+    }
+
+    return $templates;
+
+  }
+
+  private function _getTemplatesTreeRecursive($path) {
+    if( !is_dir($path) ) {
+      return preg_match("/\.tpl$/", $path);
+    } else {
+      $subfiles = scandir($path);
+      if ( $subfiles === false )
+        return false;
+
+      $files = array();
+      foreach($subfiles as $subfile) {
+        if($subfile == ".." || $subfile == ".") continue;
+        $subpath = $path . '/' . $subfile;
+        $subsubfiles = $this->_getTemplatesTreeRecursive($subpath);
+        if ( !$subsubfiles ) continue;
+        $files[$subfile] = $subsubfiles;
+      }
+      return $files;
+    }
+    return array();
   }
 
   /**

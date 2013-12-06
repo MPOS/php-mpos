@@ -10,23 +10,19 @@ if (!$user->isAuthenticated() || !$user->isAdmin($_SESSION['USERDATA']['id'])) {
 }
 
 $aThemes = $template->getThemes();
-$aTemplates = $aFlatTemplatesList = array();
+$aTemplates = $template->getTemplatesTree($aThemes);
+$aActiveTemplates = $template->cachedGetActiveTemplates();
+
+$aFlatTemplatesList = array();
 foreach($aThemes as $sTheme) {
   $templates = $template->getTemplateFiles($sTheme);
-  $templatesWithTheme = array();
-  foreach($templates as $tpl_name) {
-    $templatesWithTheme[] = $sTheme."/".$tpl_name;
-  }
-  $aFlatTemplatesList = array_merge($aFlatTemplatesList, $templatesWithTheme);
-  $aTemplates[$sTheme] = array_combine($templatesWithTheme, $templates);
+  $aFlatTemplatesList = array_merge($aFlatTemplatesList, $templates);
 }
 
 //Fetch current slug and template
 $sTemplate = @$_REQUEST['template'];
 if(!in_array($sTemplate, $aFlatTemplatesList)) {
-  $aThemeTemplates = $aTemplates[THEME];
-  $sTemplate = array_keys($aThemeTemplates);
-  $sTemplate = $sTemplate[0];
+  $sTemplate = $aFlatTemplatesList[0];
 }
 
 $sOriginalTemplate = $template->getTemplateContent($sTemplate);
@@ -46,6 +42,7 @@ if ( $oDatabaseTemplate === false ) {
 }
 
 $smarty->assign("TEMPLATES", $aTemplates);
+$smarty->assign("ACTIVE_TEMPLATES", $aActiveTemplates);
 $smarty->assign("CURRENT_TEMPLATE", $sTemplate);
 $smarty->assign("ORIGINAL_TEMPLATE", $sOriginalTemplate);
 $smarty->assign("DATABASE_TEMPLATE", $oDatabaseTemplate);
