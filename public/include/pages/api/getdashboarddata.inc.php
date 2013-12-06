@@ -105,6 +105,7 @@ $data = array(
     'difficulty' => pow(2, $config['difficulty'] - 16),
     'target_bits' => $config['difficulty']
   ),
+  'system' => array( 'load' => sys_getloadavg() ),
   'network' => array( 'hashrate' => $dNetworkHashrateAdjusted, 'difficulty' => $dDifficulty, 'block' => $iBlock ),
 );
 echo $api->get_json($data);
