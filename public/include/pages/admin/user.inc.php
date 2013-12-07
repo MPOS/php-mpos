@@ -14,7 +14,12 @@ $aRoundShares = $statistics->getRoundShares();
 switch (@$_POST['do']) {
 case 'lock':
   $supress_master = 1;
+  // Reset user account
   $user->changeLocked($_POST['account_id']);
+  if ($user->isLocked($_POST['account_id']) == 0) {
+    $user->setUserFailed($_POST['account_id'], 0);
+    $user->setUserPinFailed($_POST['account_id'], 0);
+  }
   break;
 case 'fee':
   $supress_master = 1;
