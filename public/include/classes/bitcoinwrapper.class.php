@@ -22,6 +22,12 @@ class BitcoinWrapper extends BitcoinClient {
   /**
    * Wrap variouns methods to add caching
    **/
+  // Caching this, used for each can_connect call
+  public function getinfo() {
+    $this->oDebug->append("STA " . __METHOD__, 4);
+    if ($data = $this->memcache->get(__FUNCTION__)) return $data;
+    return $this->memcache->setCache(__FUNCTION__, parent::getinfo(), 30);
+  }
   public function getblockcount() {
     $this->oDebug->append("STA " . __METHOD__, 4);
     if ($data = $this->memcache->get(__FUNCTION__)) return $data;
