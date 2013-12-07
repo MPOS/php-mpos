@@ -43,7 +43,7 @@ if ($api_keys = $setting->getValue('monitoring_uptimerobot_api_keys')) {
     $monitoring->setTools($tools);
     if (!$monitoring->storeUptimeRobotStatus()) {
       $log->logError($monitoring->getCronError());
-      $monitoring->endCronjob($cron_name, 'E0017', 1, false);
+      $monitoring->endCronjob($cron_name, 'E0017', 1, false, false);
     }
   }
 } else {
