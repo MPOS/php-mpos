@@ -167,6 +167,13 @@ $aSettings['statistics'][] = array(
   'tooltip' => '.'
 );
 $aSettings['acl'][] = array(
+  'display' => 'Hide news post author', 'type' => 'select',
+  'options' => array( 0 => 'No', 1 => 'Yes' ),
+  'default' => 0,
+  'name' => 'acl_hide_news_author', 'value' => $setting->getValue('acl_hide_news_author'),
+  'tooltip' => 'Should the news author username be hidden.'
+);
+$aSettings['acl'][] = array(
   'display' => 'Pool Statistics', 'type' => 'select',
   'options' => array( 0 => 'Private', 1 => 'Public'),
   'default' => 1,
