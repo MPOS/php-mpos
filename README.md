@@ -5,7 +5,7 @@ MPOS is a web based Mining Portal for various crypto currencies. A few pools usi
 
 * http://ltc.pool.grewe.ca
 * http://fst.pool.grewe.ca
-* http://nvc.pool.grewe.ca
+* http://ftc.pool.grewe.ca
 
 **NOTE**: This project is still under development and commits are happening on a daily basis.
 I do not recommend using this for a live setup as of yet. Wait for the later Release Candidate
@@ -18,11 +18,7 @@ I was hoping to keep this out of the README but apparently people remove or chan
 at the bottom of the page. For those of you finding my project and are willing to appreciate the work
 with some hard earned coins feel free to donate:
 
-* BTC address: `1HuYK6WPU8o3yWCrAaADDZPRpL5QiXitfv`
 * LTC address: `Lge95QR2frp9y1wJufjUPCycVsg5gLJPW8`
-* FTC address: `6jDgGaUzMVyac5uqBhJCMiFMKCtH1LagTA`
-* NVC address: `4Guct6z7NVPVALHRAVn517TTmvqQve4WYr`
-* FST address: `g17CfFHqNqR5JnUjtG8RNBYh2WrhEirV67`
 
 Website Footer
 ==============
@@ -50,8 +46,6 @@ Requirements
 
 This setup has been tested on Ubuntu 12.04, Ubuntu 13.04 and CentOS.
 It should also work on any related distribution (RHEL, Debian).
-For support on how to get `litecoind` or `pushpoold` to work, please ask
-in the appropriate forums.
 
 Be aware that `MPOS` is **only** for pooled mining. Solo Mining is not
 supported. They will never match an upstream share, solo miners do not create
@@ -77,16 +71,16 @@ The following feature have been implemented so far:
 
 * Fully re-written GUI with [Smarty][2] templates
 * Mobile WebUI
-* **NEW** VARDIFF Support
+* Scrypt, **NEW** SHA256, VARDIFF Support
 * Reward Systems
  * Propotional
  * PPS
  * PPLNS
 * Statistics are cached in Memcache by Cronjob for quick data access
-* **NEW** New Theme
- * **NEW** Live Dashboard
- * **NEW** AJAX Support
- * **NEW** Overhauled API
+* New Theme
+ * Live Dashboard
+ * AJAX Support
+ * Overhauled API
 * Web User accounts
  * Re-Captcha protected registration form
 * Worker accounts
@@ -143,6 +137,15 @@ Other customizations are also possible but will require merging changes together
 on non-existing features in `MPOS`. For the vast majority, adjusting themes should be enough to highlight your pool from others.
 
 In all that, I humbly ask to keep the `MPOS` author reference and Github URL intact.
+
+Related Software
+================
+
+There are a few other projects out there that take advantage of MPOS and it's included API. Here a quick list that you can check out for yourself:
+
+* [MPOS IRC Bot](https://github.com/WKNiGHT-/mpos-bot) written in Python, standlone bot, using the MPOS API
+* [MPOS Eggdrop Module](https://github.com/iAmShorty/mpos-eggdrop-tcl) written in TCL, adding MPOS commands to this bot, using the MPOS API
+
 Contributing
 ============
 

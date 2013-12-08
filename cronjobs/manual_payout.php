@@ -26,20 +26,13 @@ chdir(dirname(__FILE__));
 require_once('shared.inc.php');
 
 if ($setting->getValue('disable_mp') == 1) {
-  $log->logInfo(" auto payout disabled via admin panel");
-  $monitoring->setStatus($cron_name . "_active", "yesno", 0); 
-  $monitoring->setStatus($cron_name . "_message", "message", "Auto-Payout disabled");
-  $monitoring->setStatus($cron_name . "_status", "okerror", 1); 
-  $monitoring->setStatus($cron_name . "_endtime", "date", time());
-  exit(0);
+  $log->logInfo(" manual payout disabled via admin panel");
+  $monitoring->endCronjob($cron_name, 'E0009', 0, true);
 }
 
 if ($bitcoin->can_connect() !== true) {
   $log->logFatal(" unable to connect to RPC server, exiting");
-  $monitoring->setStatus($cron_name . "_active", "yesno", 0); 
-  $monitoring->setStatus($cron_name . "_message", "message", "Unable to connect to RPC server");
-  $monitoring->setStatus($cron_name . "_status", "okerror", 1); 
-  exit(1);
+  $monitoring->endCronjob($cron_name, 'E0006', 1, true);
 }
 
 // Fetch outstanding payout requests
@@ -53,6 +46,12 @@ if (count($aPayouts) > 0) {
     $aData['coin_address'] = $user->getCoinAddress($aData['account_id']);
     $aData['username'] = $user->getUserName($aData['account_id']);
     if ($dBalance > $config['txfee']) {
+      // To ensure we don't run this transaction again, lets mark it completed
+      if (!$oPayout->setProcessed($aData['id'])) {
+        $log->logFatal('unable to mark transactions ' . $aData['id'] . ' as processed.');
+        $monitoring->endCronjob($cron_name, 'E0010', 1, true);
+      }
+
       $log->logInfo("\t" . $aData['account_id'] . "\t\t" . $aData['username'] . "\t" . $dBalance . "\t\t" . $aData['coin_address']);
       try {
         $aStatus = $bitcoin->validateaddress($aData['coin_address']);
@@ -65,21 +64,13 @@ if (count($aPayouts) > 0) {
         continue;
       }
       try {
-        $bitcoin->sendtoaddress($aData['coin_address'], $dBalance - $config['txfee']);
+        $txid = $bitcoin->sendtoaddress($aData['coin_address'], $dBalance - $config['txfee']);
       } catch (BitcoinClientException $e) {
         $log->logError('Failed to send requested balance to coin address, please check payout process');
         continue;
       }
-      // To ensure we don't run this transaction again, lets mark it completed
-      if (!$oPayout->setProcessed($aData['id'])) {
-        $log->logFatal('unable to mark transactions ' . $aData['id'] . ' as processed.');
-        $monitoring->setStatus($cron_name . "_active", "yesno", 0);
-        $monitoring->setStatus($cron_name . "_message", "message", "Unable set payout as processed");
-        $monitoring->setStatus($cron_name . "_status", "okerror", 1);
-        exit(1);
-      }
 
-      if ($transaction->addTransaction($aData['account_id'], $dBalance - $config['txfee'], 'Debit_MP', NULL, $aData['coin_address']) && $transaction->addTransaction($aData['account_id'], $config['txfee'], 'TXFee', NULL, $aData['coin_address'])) {
+      if ($transaction->addTransaction($aData['account_id'], $dBalance - $config['txfee'], 'Debit_MP', NULL, $aData['coin_address'], $txid) && $transaction->addTransaction($aData['account_id'], $config['txfee'], 'TXFee', NULL, $aData['coin_address'])) {
         // Mark all older transactions as archived
         if (!$transaction->setArchived($aData['account_id'], $transaction->insert_id))
           $log->logError('Failed to mark transactions for #' . $aData['account_id'] . ' prior to #' . $transaction->insert_id . ' as archived');
@@ -91,7 +82,8 @@ if (count($aPayouts) > 0) {
         if (!$notification->sendNotification($aData['account_id'], 'manual_payout', $aMailData))
           $log->logError('Failed to send notification email to users address: ' . $aMailData['email']);
       } else {
-        $log->logError('Failed to add new Debit_MP transaction in database for user ' . $user->getUserName($aData['account_id']));
+        $log->logFatal('Failed to add new Debit_MP transaction in database for user ' . $user->getUserName($aData['account_id']));
+        $monitoring->endCronjob($cron_name, 'E0064', 1, true);
       }
     }
 

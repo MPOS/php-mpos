@@ -29,17 +29,32 @@ SUBFOLDER=""
 #                                                              #
 ################################################################
 
+# Mac OS detection
+OS=`uname`
+
+
+case "$OS" in
+  Darwin) READLINK=$( which greadlink ) ;;
+  *) READLINK=$( which readlink ) ;;
+esac
+
+if [[ ! -x $READLINK ]]; then
+  echo "readlink not found, please install first";
+  exit 1;
+fi
+
 # My own name
 ME=$( basename $0 )
 
 # Overwrite some settings via command line arguments
-while getopts "hvp:d:" opt; do
+while getopts "hfvp:d:" opt; do
   case "$opt" in
     h|\?)
       echo "Usage: $0 [-v] [-p PHP_BINARY] [-d SUBFOLDER]";
       exit 0
       ;;
     v) VERBOSE=1 ;;
+    f) PHP_OPTS="$PHP_OPTS -f";;
     p) PHP_BIN=$OPTARG ;;
     d) SUBFOLDER=$OPTARG ;;
     :)
@@ -52,7 +67,7 @@ done
 # Path to PID file, needs to be writable by user running this
 PIDFILE="${BASEPATH}/${SUBFOLDER}/${ME}.pid"
 # Clean PIDFILE path
-PIDFILE=$(readlink -m "$PIDFILE")
+PIDFILE=$($READLINK -m "$PIDFILE")
 
 # Create folders recursively if necessary
 if ! $(mkdir -p $( dirname $PIDFILE)); then
@@ -62,7 +77,7 @@ fi
 
 # Find scripts path
 if [[ -L $0 ]]; then
-  CRONHOME=$( dirname $( readlink $0 ) )
+  CRONHOME=$( dirname $( $READLINK $0 ) )
 else
   CRONHOME=$( dirname $0 )
 fi
@@ -104,7 +119,7 @@ echo $PID > $PIDFILE
 
 for cron in $CRONS; do
   [[ $VERBOSE == 1 ]] && echo "Running $cron, check logfile for details"
-  $PHP_BIN $cron
+  $PHP_BIN $cron $PHP_OPTS
 done
 
 # Remove pidfile

@@ -22,6 +22,8 @@
       <li class="icon-exchange"><a href="{$smarty.server.PHP_SELF}?page=admin&action=transactions">Transactions</a></li>
       <li class="icon-cog"><a href="{$smarty.server.PHP_SELF}?page=admin&action=settings">Settings</a></li>
       <li class="icon-doc"><a href="{$smarty.server.PHP_SELF}?page=admin&action=news">News</a></li>
+      <li class="icon-chart"><a href="{$smarty.server.PHP_SELF}?page=admin&action=reports">Reports</a></li>
+      <li class="icon-photo"><a href="{$smarty.server.PHP_SELF}?page=admin&action=poolworkers">Pool Workers</a></li>
     </ul>
     {/if}
     {if $smarty.session.AUTHENTICATED|default}
@@ -31,6 +33,8 @@
       <li class="icon-th-large"><a href="{$smarty.server.PHP_SELF}?page=statistics&action=blocks">Blocks</a></li>
       <li class="icon-chart"><a href="{$smarty.server.PHP_SELF}?page=statistics&action=graphs">Graphs</a></li>
       <li class="icon-record"><a href="{$smarty.server.PHP_SELF}?page=statistics&action=round">Round</a></li>
+      <li class="icon-search"><a href="{$smarty.server.PHP_SELF}?page=statistics&action=blockfinder">Finder</a></li>
+      {if $GLOBAL.config.monitoring_uptimerobot_api_keys|default:"0"}<li class="icon-bell"><a href="{$smarty.server.PHP_SELF}?page=statistics&action=uptime">Uptime</a></li>{/if}
     </ul>
     {else}
     <h3>Statistics</h3>
@@ -45,14 +49,24 @@
      {/if}
      {if $GLOBAL.acl.round.statistics}
      <li class="icon-chart"><a href="{$smarty.server.PHP_SELF}?page=statistics&action=round">Round</a></li>
-    {/if}
+     {/if}
+     {if $GLOBAL.acl.blockfinder.statistics}
+     <li class="icon-search"><a href="{$smarty.server.PHP_SELF}?page=statistics&action=blockfinder">Finder</a></li>
+     {/if}
+     {if $GLOBAL.acl.uptime.statistics}
+     {if $GLOBAL.config.monitoring_uptimerobot_api_keys|default:"0"}<li class="icon-bell"><a href="{$smarty.server.PHP_SELF}?page=statistics&action=uptime">Uptime</a></li>{/if}
+     {/if}
     </ul>
     {/if}
     <h3>Help</h3>
     <ul class="toggle">
-      <li class="icon-desktop"><a href="{$smarty.server.PHP_SELF}?page=gettingstarted">GettingStarted</a></li>
+      <li class="icon-desktop"><a href="{$smarty.server.PHP_SELF}?page=gettingstarted">Getting Started</a></li>
+      {if !$GLOBAL.website.about.disabled}
       <li class="icon-doc"><a href="{$smarty.server.PHP_SELF}?page=about&action=pool">About</a></li>
+      {/if}
+      {if !$GLOBAL.website.donors.disabled}
       <li class="icon-money"><a href="{$smarty.server.PHP_SELF}?page=about&action=donors">Donors</a></li>
+      {/if}
     </ul>
     <h3>Other</h3>
     <ul class="toggle">
@@ -67,4 +81,21 @@
       <li class="icon-mail"><a href="{$smarty.server.PHP_SELF}?page=support">Support</a></li>
       {/if}
     </ul>
-
+    <ul>
+      <hr/>
+    </ul>
+    {if $smarty.session.AUTHENTICATED|default:"0" == 1}
+     <br />
+    {else}
+    <ul>
+     <center>
+      <div style="display: inline-block;">
+      <i><u><b><font size="2">LIVE STATS</font></b></u></i>
+      <div id="mr" style="width:180px; height:120px;"></div>
+      <div id="hr" style="width:180px; height:120px;"></div>
+      </div>
+     </center>
+    </ul>
+      <hr/>
+    {include file="global/navjs.tpl"}
+    {/if}

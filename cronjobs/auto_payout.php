@@ -27,19 +27,12 @@ require_once('shared.inc.php');
 
 if ($setting->getValue('disable_ap') == 1) {
   $log->logInfo(" auto payout disabled via admin panel");
-  $monitoring->setStatus($cron_name . "_active", "yesno", 0);
-  $monitoring->setStatus($cron_name . "_message", "message", "Auto-Payout disabled");
-  $monitoring->setStatus($cron_name . "_status", "okerror", 1);
-  $monitoring->setStatus($cron_name . "_endtime", "date", time());
-  exit(0);
+  $monitoring->endCronjob($cron_name, 'E0009', 0, true);
 }
 
 if ($bitcoin->can_connect() !== true) {
   $log->logFatal(" unable to connect to RPC server, exiting");
-  $monitoring->setStatus($cron_name . "_active", "yesno", 0);
-  $monitoring->setStatus($cron_name . "_message", "message", "Unable to connect to RPC server");
-  $monitoring->setStatus($cron_name . "_status", "okerror", 1);
-  exit(1);
+  $monitoring->endCronjob($cron_name, 'E0006', 1, true);
 }
 
 // Fetch all users with setup AP
@@ -73,14 +66,14 @@ if (! empty($users)) {
 
       // Send balance, fees are reduced later by RPC Server
       try {
-        $bitcoin->sendtoaddress($aUserData['coin_address'], $dBalance - $config['txfee']);
+        $txid = $bitcoin->sendtoaddress($aUserData['coin_address'], $dBalance - $config['txfee']);
       } catch (BitcoinClientException $e) {
         $log->logError('Failed to send requested balance to coin address, please check payout process');
         continue;
       }
 
       // Create transaction record
-      if ($transaction->addTransaction($aUserData['id'], $dBalance - $config['txfee'], 'Debit_AP', NULL, $aUserData['coin_address']) && $transaction->addTransaction($aUserData['id'], $config['txfee'], 'TXFee', NULL, $aUserData['coin_address'])) {
+      if ($transaction->addTransaction($aUserData['id'], $dBalance - $config['txfee'], 'Debit_AP', NULL, $aUserData['coin_address'], $txid) && $transaction->addTransaction($aUserData['id'], $config['txfee'], 'TXFee', NULL, $aUserData['coin_address'])) {
         // Mark all older transactions as archived
         if (!$transaction->setArchived($aUserData['id'], $transaction->insert_id))
           $log->logError('Failed to mark transactions for user #' . $aUserData['id'] . ' prior to #' . $transaction->insert_id . ' as archived');

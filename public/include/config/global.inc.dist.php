@@ -21,6 +21,17 @@ define('DEBUG', 0);
 define('SALT', 'PLEASEMAKEMESOMETHINGRANDOM');
 
 /**
+  * Underlying coin algorithm that you are mining on. Set this to whatever your coin needs:
+  *
+  * Options:
+  *   sha256d    :  SHA coins like Bitcoin
+  *   scrypt     :  Scrypt based coins like Litecoin
+  * Default:
+  *   scrypt   :  Scrypt is default
+  **/
+$config['algorithm'] = 'scrypt';
+
+/**
  * Database configuration
  *
  * A MySQL database backend is required for MPOS.
@@ -59,6 +70,18 @@ $config['wallet']['username'] = 'testnet';
 $config['wallet']['password'] = 'testnet';
 
 /**
+ * Getting Started Config
+ *
+ * This is displayed on GettingStarted Page
+ * to make it more dynamic
+ *
+ *
+ **/
+$config['gettingstarted']['coinname'] = 'Litecoin';
+$config['gettingstarted']['coinurl'] = 'http://www.litecoin.org';
+$config['gettingstarted']['stratumport'] = '3333';
+
+/**
  * API configuration to fetch prices for set currency
  *
  * Explanation:
@@ -85,7 +108,6 @@ $config['wallet']['password'] = 'testnet';
 $config['price']['url'] = 'https://btc-e.com';
 $config['price']['target'] = '/api/2/ltc_usd/ticker';
 $config['price']['currency'] = 'USD';
-
 
 /**
  * Automatic payout thresholds
@@ -122,6 +144,20 @@ $config['accounts']['invitations']['count'] = 5;
 
 // Currency system used in this pool, default: `LTC`
 $config['currency'] = 'LTC';
+
+/**
+ * Coin Target in seconds
+ *
+ * Explanation
+ *   Target time for coins to be generated
+ *
+ *   Fastcoin: 12 seconds
+ *   Litecoin: 2,5 minutes = 150 seconds
+ *   Feathercoin: 2,5 minutes = 150 seconds
+ *   Bitcoin: 10 minutes = 600 seconds
+ *
+ **/
+$config['cointarget'] = '150';
 
 /**
  * Default transaction fee to apply to user transactions
@@ -231,9 +267,20 @@ $config['fees'] = 0;
   *   type        =  `blockavg`
   *   blockcount  =  10
   **/
+/**
+ * $config['pplns']['shares']['type'] = 'dynamic';
+ * Dynamic target adjustment allows the blockavg target to adjust faster to share counts
+ * while still tracking round share averages by using a percentage of the current round shares
+ * to alter the pplns blockavg target this is useful with the nature of many alt coins low and fast 
+ * adjusting difficulties and quick round times 
+ * reverse_payout is useful to even out payouts for fast round times when even steady miners 
+ * are missing share submissions for the current round
+**/
 $config['pplns']['shares']['default'] = 4000000;
 $config['pplns']['shares']['type'] = 'blockavg';
 $config['pplns']['blockavg']['blockcount'] = 10;
+$config['pplns']['reverse_payout'] = false;  // add user shares from archive even if user not in current round
+$config['pplns']['dynamic']['percent'] = 30; // percentage of round shares factored into block average when using dynamic type
 
 // Pool target difficulty as set in pushpoold configuration file
 // Please also read this for stratum: https://github.com/TheSerapher/php-mpos/wiki/FAQ
@@ -296,10 +343,6 @@ $config['network_confirmations'] = 120;
 $config['pps']['reward']['default'] = 50;
 $config['pps']['reward']['type'] = 'blockavg';
 $config['pps']['blockavg']['blockcount'] = 10;
-
-// pps base payout target, default 16 = difficulty 1 shares for vardiff
-// (1/(65536 * difficulty) * reward) = (reward / (pow(2,32) * difficulty) * pow(2, 16))
-$config['pps_target'] = 16; // do not change unless you know what it does
 
 /**
  * Memcache configuration
@@ -413,4 +456,19 @@ $config['cookie']['secure'] = false;
  **/
 $config['smarty']['cache'] = 0;
 $config['smarty']['cache_lifetime'] = 30;
+
+/**
+ * System load setting
+ *
+ * This will disable loading of some API calls in case the system
+ * loads exceeds the defined max setting. Useful to temporaily suspend
+ * live statistics on a server that is too busy to deal with requests.
+ *
+ * Options
+ *   max    =  float, maximum system load
+ *
+ * Defaults:
+ *   max    =  10.0
+ **/
+$config['system']['load']['max'] = 10.0;
 ?>

@@ -19,10 +19,7 @@ limitations under the License.
  */
 
 // Monitoring cleanup and status update
-$monitoring->setStatus($cron_name . "_message", "message", "OK");
-$monitoring->setStatus($cron_name . "_status", "okerror", 0);
+$monitoring->endCronjob($cron_name, 'OK', 0, false, false);
 $monitoring->setStatus($cron_name . "_runtime", "time", microtime(true) - $cron_start[$cron_name]);
 $monitoring->setStatus($cron_name . "_endtime", "date", time());
-// Mark cron as running for monitoring
-$monitoring->setStatus($cron_name . '_active', "yesno", 0);
 ?>

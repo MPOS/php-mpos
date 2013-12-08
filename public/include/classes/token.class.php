@@ -4,7 +4,7 @@
 if (!defined('SECURITY')) die('Hacking attempt');
 
 class Token Extends Base {
-  var $table = 'tokens';
+  protected $table = 'tokens';
 
   /**
    * Fetch a token from our table
@@ -15,7 +15,7 @@ class Token Extends Base {
     $stmt = $this->mysqli->prepare("SELECT * FROM $this->table WHERE token = ? LIMIT 1");
     if ($stmt && $stmt->bind_param('s', $strToken) && $stmt->execute() && $result = $stmt->get_result())
       return $result->fetch_assoc();
-    return false;
+    return $this->sqlError();
   }
 
   /**
@@ -36,9 +36,7 @@ class Token Extends Base {
       ");
     if ($stmt && $stmt->bind_param('sii', $strToken, $iToken_id, $account_id) && $stmt->execute())
       return $strToken;
-    $this->setErrorMessage('Unable to create new token');
-    $this->debug->append('Failed to create new token in database: ' . $this->mysqli->error);
-    return false;
+    return $this->sqlError();
   }
 
  /**
@@ -50,7 +48,7 @@ class Token Extends Base {
     $stmt = $this->mysqli->prepare("DELETE FROM $this->table WHERE token = ? LIMIT 1");
     if ($stmt && $stmt->bind_param('s', $token) && $stmt->execute())
       return true;
-    return false;
+    return $this->sqlError();
   }
 }
 
@@ -58,3 +56,4 @@ $oToken = new Token();
 $oToken->setDebug($debug);
 $oToken->setMysql($mysqli);
 $oToken->setTokenType($tokentype);
+$oToken->setErrorCodes($aErrorCodes);

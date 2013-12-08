@@ -3,12 +3,20 @@
   "css_prefix_text": "icon-",
   "css_use_suffix": false,
   "hinting": true,
+  "units_per_em": 1000,
+  "ascent": 850,
   "glyphs": [
     {
       "uid": "026007bd17bfc67f3fe013199676f620",
       "css": "dollar",
       "code": 59416,
       "src": "fontawesome"
+    },
+    {
+      "uid": "7222571caa5c15f83dcfd447c58d68d9",
+      "css": "search",
+      "code": 59431,
+      "src": "entypo"
     },
     {
       "uid": "a204f0fa972408eaae5a363c444991b2",
@@ -77,6 +85,12 @@
       "src": "elusive"
     },
     {
+      "uid": "fd32deda7b2f5b8cad46d13897c19ae8",
+      "css": "cancel-circled",
+      "code": 59427,
+      "src": "elusive"
+    },
+    {
       "uid": "55e2ff85b1c459c383f46da6e96014b0",
       "css": "plus",
       "code": 59404,
@@ -119,6 +133,18 @@
       "src": "elusive"
     },
     {
+      "uid": "6707ea950c24c5b01625f7ea73b2172e",
+      "css": "resize-full-alt",
+      "code": 59428,
+      "src": "elusive"
+    },
+    {
+      "uid": "616b755d0f4c7d2dc7a1dcc2e5427039",
+      "css": "down-open",
+      "code": 59429,
+      "src": "elusive"
+    },
+    {
       "uid": "c0a07aca383ff2a164a4d691fa46e35c",
       "css": "left-open",
       "code": 59393,
@@ -128,6 +154,12 @@
       "uid": "dc4a03854ef986d64565143bea4241aa",
       "css": "right-open",
       "code": 59392,
+      "src": "elusive"
+    },
+    {
+      "uid": "b91c0e6aaab5e3146732b69dd418e120",
+      "css": "up-open",
+      "code": 59430,
       "src": "elusive"
     },
     {

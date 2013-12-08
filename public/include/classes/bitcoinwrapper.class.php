@@ -22,6 +22,12 @@ class BitcoinWrapper extends BitcoinClient {
   /**
    * Wrap variouns methods to add caching
    **/
+  // Caching this, used for each can_connect call
+  public function getinfo() {
+    $this->oDebug->append("STA " . __METHOD__, 4);
+    if ($data = $this->memcache->get(__FUNCTION__)) return $data;
+    return $this->memcache->setCache(__FUNCTION__, parent::getinfo(), 30);
+  }
   public function getblockcount() {
     $this->oDebug->append("STA " . __METHOD__, 4);
     if ($data = $this->memcache->get(__FUNCTION__)) return $data;
@@ -48,15 +54,21 @@ class BitcoinWrapper extends BitcoinClient {
     if ($data = $this->memcache->get(__FUNCTION__)) return $data;
     try {
       $dNetworkHashrate = $this->query('getmininginfo');
-      if (is_array($dNetworkHashrate) && array_key_exists('networkhashps', $dNetworkHashrate)) {
-        $dNetworkHashrate = $dNetworkHashrate['networkhashps'];
-      } else if (is_array($dNetworkHashrate) && array_key_exists('hashespersec', $dNetworkHashrate)) {
-        $dNetworkHashrate = $dNetworkHashrate['hashespersec'];
-      } else if (is_array($dNetworkHashrate) && array_key_exists('netmhashps', $dNetworkHashrate)) {
-        $dNetworkHashrate = $dNetworkHashrate['netmhashps'] * 1000 * 1000;
+      if (is_array($dNetworkHashrate)) {
+        if (array_key_exists('networkhashps', $dNetworkHashrate)) {
+          $dNetworkHashrate = $dNetworkHashrate['networkhashps'];
+        } else if (array_key_exists('hashespersec', $dNetworkHashrate)) {
+          $dNetworkHashrate = $dNetworkHashrate['hashespersec'];
+        } else if (array_key_exists('netmhashps', $dNetworkHashrate)) {
+          $dNetworkHashrate = $dNetworkHashrate['netmhashps'] * 1000 * 1000;
+        } else {
+          // Unsupported implementation
+          $dNetworkHashrate = 0;
+        }
       }
     } catch (Exception $e) {
-      return false;
+      // getmininginfo does not exist, cache for an hour
+      return $this->memcache->setCache(__FUNCTION__, 0, 3600);
     }
     return $this->memcache->setCache(__FUNCTION__, $dNetworkHashrate, 30);
   }

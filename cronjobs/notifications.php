@@ -26,10 +26,7 @@ chdir(dirname(__FILE__));
 require_once('shared.inc.php');
 
 if ($setting->getValue('disable_notifications') == 1) {
-  $monitoring->setStatus($cron_name . "_active", "yesno", 0);
-  $monitoring->setStatus($cron_name . "_message", "message", "Cron disabled by admin");
-  $monitoring->setStatus($cron_name . "_status", "okerror", 0);
-  exit(0);
+  $monitoring->endCronjob($cron_name, 'E0009', 0, true);
 }
 
 $log->logDebug("  IDLE Worker Notifications ...");
@@ -45,9 +42,9 @@ if (empty($aWorkers)) {
     $aData['subject'] = 'IDLE Worker : ' . $aWorker['username'];
     $aData['worker'] = $aWorker['username'];
     $aData['email'] = $user->getUserEmail($aData['username']);
-    $log->logInfo("    " . $aWorker['username'] . "...");
+    $log->logDebug("    " . $aWorker['username'] . "...");
     if (!$notification->sendNotification($aWorker['account_id'], 'idle_worker', $aData))
-      $log->logError("    Failed sending notifications: " . $notification->getError() . "\n");
+      $log->logDebug("    Failed sending notifications: " . $notification->getCronError() . "\n");
   }
 }
 
@@ -60,15 +57,15 @@ if (!empty($aNotifications)) {
   foreach ($aNotifications as $aNotification) {
     $aData = json_decode($aNotification['data'], true);
     $aWorker = $worker->getWorker($aData['id']);
-    $log->logInfo("    " . $aWorker['username'] . " ...");
+    $log->logDebug("    " . $aWorker['username'] . " ...");
     if ($aWorker['hashrate'] > 0) {
       if ($notification->setInactive($aNotification['id'])) {
-        $log->logInfo(" updated #" . $aNotification['id'] . " for " . $aWorker['username'] . " as inactive\n");
+        $log->logDebug(" updated #" . $aNotification['id'] . " for " . $aWorker['username'] . " as inactive\n");
       } else {
-        $log->logInfo(" failed to update #" . $aNotification['id'] . " for " . $aWorker['username'] . "\n");
+        $log->logError(" failed to update #" . $aNotification['id'] . " for " . $aWorker['username'] . "\n");
       }
     } else {
-      $log->logInfo(" still inactive\n");
+      $log->logDebug(" still inactive\n");
     }
   }
 } else {

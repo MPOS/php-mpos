@@ -35,17 +35,30 @@ if ($config['payout_system'] != 'prop') {
 $aAllBlocks = $block->getAllUnaccounted('ASC');
 if (empty($aAllBlocks)) {
   $log->logDebug('No new unaccounted blocks found in database');
-  $monitoring->setStatus($cron_name . "_active", "yesno", 0);
-  $monitoring->setStatus($cron_name . "_message", "message", "No new unaccounted blocks");
-  $monitoring->setStatus($cron_name . "_status", "okerror", 0);
-  exit(0);
+  $monitoring->endCronjob($cron_name, 'E0011', 0, true, false);
 }
 
 $count = 0;
 // Table header for account shares
 $log->logInfo("ID\tUsername\tValid\tInvalid\tPercentage\tPayout\t\tDonation\tFee");
 foreach ($aAllBlocks as $iIndex => $aBlock) {
-  if (!$aBlock['accounted'] && $aBlock['height'] > $setting->getValue('last_accounted_block_height')) {
+  // If we have unaccounted blocks without share_ids, they might not have been inserted yet
+  if (!$aBlock['share_id']) {
+    $log->logError('E0062: Block has no share_id, not running payouts');
+    $monitoring->endCronjob($cron_name, 'E0062', 0, true);
+  }
+
+  // Fetch last paid block information
+  if ($iLastBlockId = $setting->getValue('last_accounted_block_id')) {
+    $aLastAccountedBlock = $block->getBlockById($iLastBlockId);
+  } else {
+    // A fake block to ensure payouts get started on first round
+    $iLastBlockId = 0;
+    $aLastAccountedBlock = array('height' => 0, 'confirmations' => 1);
+  }
+
+  // Ensure we are not paying out twice, ignore if the previous paid block is orphaned (-1 confirmations) and payout anyway
+  if ((!$aBlock['accounted'] && $aBlock['height'] > $aLastAccountedBlock['height']) || (@$aLastAccountedBlock['confirmations'] == -1)) {
     $iPreviousShareId = @$aAllBlocks[$iIndex - 1]['share_id'] ? $aAllBlocks[$iIndex - 1]['share_id'] : 0;
     $iCurrentUpstreamId = $aBlock['share_id'];
     $aAccountShares = $share->getSharesForAccounts($iPreviousShareId, $aBlock['share_id']);
@@ -54,10 +67,7 @@ foreach ($aAllBlocks as $iIndex => $aBlock) {
 
     if (empty($aAccountShares)) {
       $log->logFatal('No shares found for this block, aborted: ' . $aBlock['height']);
-      $monitoring->setStatus($cron_name . "_active", "yesno", 0); 
-      $monitoring->setStatus($cron_name . "_message", "message", "No shares found for this block, aborted: " . $aBlock['height']);
-      $monitoring->setStatus($cron_name . "_status", "okerror", 1); 
-      exit(1);
+      $monitoring->endCronjob($cron_name, 'E0013', 1, true);
     }
 
     // Loop through all accounts that have found shares for this round
@@ -86,46 +96,40 @@ foreach ($aAllBlocks as $iIndex => $aBlock) {
 
       // Update user share statistics
       if (!$statistics->updateShareStatistics($aData, $aBlock['id']))
-        $log->logFatal('Failed to update share statistics for ' . $aData['username']);
+        $log->logFatal('Failed to update share statistics for ' . $aData['username'] . ': ' . $statistics->getCronError());
       // Add new credit transaction
       if (!$transaction->addTransaction($aData['id'], $aData['payout'], 'Credit', $aBlock['id']))
-        $log->logFatal('Failed to insert new Credit transaction to database for ' . $aData['username']);
+        $log->logFatal('Failed to insert new Credit transaction to database for ' . $aData['username'] . ': ' . $transaction->getCronError());
       // Add new fee debit for this block
       if ($aData['fee'] > 0 && $config['fees'] > 0)
         if (!$transaction->addTransaction($aData['id'], $aData['fee'], 'Fee', $aBlock['id']))
-          $log->logFatal('Failed to insert new Fee transaction to database for ' . $aData['username']);
+          $log->logFatal('Failed to insert new Fee transaction to database for ' . $aData['username'] . ': ' . $transaction->getCronError());
       // Add new donation debit
       if ($aData['donation'] > 0)
         if (!$transaction->addTransaction($aData['id'], $aData['donation'], 'Donation', $aBlock['id']))
-          $log->logFatal('Failed to insert new Donation transaction to database for ' . $aData['username']);
+          $log->logFatal('Failed to insert new Donation transaction to database for ' . $aData['username'] . ': ' . $transaction->getCronError());
     }
 
     // Add block as accounted for into settings table
-    $setting->setValue('last_accounted_block_height', $aBlock['height']);
+    $setting->setValue('last_accounted_block_id', $aBlock['id']);
 
     // Move counted shares to archive before this blockhash upstream share
     if (!$share->moveArchive($iCurrentUpstreamId, $aBlock['id'], $iPreviousShareId))
-      $log->logError('Failed to copy shares to archive');
+      $log->logError('Failed to copy shares to archive: ' . $share->getCronError());
     // Delete all accounted shares
     if (!$share->deleteAccountedShares($iCurrentUpstreamId, $iPreviousShareId)) {
-      $log->logFatal('Failed to delete accounted shares from ' . $iPreviousShareId . ' to ' . $iCurrentUpstreamId . ', aborted');
-      $monitoring->setStatus($cron_name . "_active", "yesno", 0); 
-      $monitoring->setStatus($cron_name . "_message", "message", "Failed to delete accounted shares from " . $iPreviousShareId . " to " . $iCurrentUpstreamId);
-      $monitoring->setStatus($cron_name . "_status", "okerror", 1); 
-      exit(1);
+      $log->logFatal('Failed to delete accounted shares from ' . $iPreviousShareId . ' to ' . $iCurrentUpstreamId . ', aborted! Error: ' . $share->getCronError());
+      $monitoring->endCronjob($cron_name, 'E0016', 1, true);
     }
     // Mark this block as accounted for
     if (!$block->setAccounted($aBlock['id'])) {
-      $log->logFatal('Failed to mark block as accounted! Aborted.');
-      $monitoring->setStatus($cron_name . "_active", "yesno", 0); 
-      $monitoring->setStatus($cron_name . "_message", "message", "Failed to mark block " . $aBlock['height'] . " as accounted");
-      $monitoring->setStatus($cron_name . "_status", "okerror", 1); 
-      exit(1);
+      $log->logFatal('Failed to mark block as accounted! Aborted! Error: ' . $block->getCronError());
+      $monitoring->endCronjob($cron_name, 'E0014', 1, true);
     }
   } else {
-    $log->logFatal('Possible double payout detected. Aborted.');
+    $log->logFatal('Potential double payout detected. Aborted.');
     $aMailData = array(
-      'email' => $setting->getValue('website_email'),
+      'email' => $setting->getValue('system_error_email'),
       'subject' => 'Payout Failure: Double Payout',
       'Error' => 'Possible double payout detected',
       'BlockID' => $aBlock['id'],
@@ -133,11 +137,8 @@ foreach ($aAllBlocks as $iIndex => $aBlock) {
       'Block Share ID' => $aBlock['share_id']
     );
     if (!$mail->sendMail('notifications/error', $aMailData))
-      $log->logError("    Failed sending notifications: " . $notification->getError() . "\n");
-    $monitoring->setStatus($cron_name . "_active", "yesno", 0);
-    $monitoring->setStatus($cron_name . "_message", "message", 'Possible double payout detected. Aborted.');
-    $monitoring->setStatus($cron_name . "_status", "okerror", 1);
-    exit(1);
+    $log->logFatal('Potential double payout detected. Aborted.');
+    $monitoring->endCronjob($cron_name, 'E0015', 1, true);
   }
 }
 

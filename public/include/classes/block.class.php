@@ -1,32 +1,10 @@
 <?php
 
 // Make sure we are called from index.php
-if (!defined('SECURITY'))
-  die('Hacking attempt');
+if (!defined('SECURITY')) die('Hacking attempt');
 
-class Block {
-  private $sError = '';
-  private $table = 'blocks';
-  // This defines each block
-  public $height, $blockhash, $confirmations, $time, $accounted;
-
-  public function __construct($debug, $mysqli, $config) {
-    $this->debug = $debug;
-    $this->mysqli = $mysqli;
-    $this->config = $config;
-    $this->debug->append("Instantiated Block class", 2);
-  }
-
-  // get and set methods
-  private function setErrorMessage($msg) {
-    $this->sError = $msg;
-  }
-  public function getError() {
-    return $this->sError;
-  }
-  public function getTableName() {
-    return $this->table;
-  }
+class Block extends Base {
+  protected $table = 'blocks';
 
   /**
    * Specific method to fetch the latest block found
@@ -35,13 +13,9 @@ class Block {
    **/
   public function getLast() {
     $stmt = $this->mysqli->prepare("SELECT * FROM $this->table ORDER BY height DESC LIMIT 1");
-    if ($this->checkStmt($stmt)) {
-      $stmt->execute();
-      $result = $stmt->get_result();
-      $stmt->close();
+    if ($this->checkStmt($stmt) && $stmt->execute() && $result = $stmt->get_result())
       return $result->fetch_assoc();
-    }
-    return false;
+    return $this->sqlError();
   }
 
   /**
@@ -53,7 +27,31 @@ class Block {
     $stmt = $this->mysqli->prepare("SELECT * FROM $this->table WHERE height = ? LIMIT 1");
     if ($this->checkStmt($stmt) && $stmt->bind_param('i', $height) && $stmt->execute() && $result = $stmt->get_result())
       return $result->fetch_assoc();
-    return false;
+    return $this->sqlError();
+  }
+
+  /**
+   * Get a specific block, by share_id
+   * @param share_id int Blocks share_id
+   * @return data array Block information from DB
+   **/
+  public function getBlockByShareId($share_id) {
+    $stmt = $this->mysqli->prepare("SELECT * FROM $this->table WHERE share_id = ? LIMIT 1");
+    if ($this->checkStmt($stmt) && $stmt->bind_param('i', $share_id) && $stmt->execute() && $result = $stmt->get_result())
+      return $result->fetch_assoc();
+    return $this->sqlError();
+  }
+
+  /**
+   * Get a specific block, by id
+   * @param share_id int Blocks share_id
+   * @return data array Block information from DB
+   **/
+  public function getBlockById($id) {
+    $stmt = $this->mysqli->prepare("SELECT * FROM $this->table WHERE id = ? LIMIT 1");
+    if ($this->checkStmt($stmt) && $stmt->bind_param('i', $id) && $stmt->execute() && $result = $stmt->get_result())
+      return $result->fetch_assoc();
+    return $this->sqlError();
   }
 
   /**
@@ -65,7 +63,7 @@ class Block {
     $stmt = $this->mysqli->prepare("SELECT MAX(share_id) AS share_id FROM $this->table LIMIT 1");
     if ($this->checkStmt($stmt) && $stmt->execute() && $result = $stmt->get_result())
       return $result->fetch_object()->share_id;
-    return false;
+    return $this->sqlError();
   }
 
   /**
@@ -77,7 +75,7 @@ class Block {
     $stmt = $this->mysqli->prepare("SELECT * FROM $this->table WHERE ISNULL(share_id) ORDER BY height $order");
     if ($this->checkStmt($stmt) && $stmt->execute() && $result = $stmt->get_result())
       return $result->fetch_all(MYSQLI_ASSOC);
-    return false;
+    return $this->sqlError(); 
   }
 
   /**
@@ -89,7 +87,7 @@ class Block {
     $stmt = $this->mysqli->prepare("SELECT * FROM $this->table WHERE accounted = 0 ORDER BY height $order");
     if ($this->checkStmt($stmt) && $stmt->execute() && $result = $stmt->get_result())
       return $result->fetch_all(MYSQLI_ASSOC);
-    return false;
+    return $this->sqlError();
   }
 
   /**
@@ -101,7 +99,7 @@ class Block {
     $stmt = $this->mysqli->prepare("SELECT COUNT(id) AS blocks FROM $this->table");
     if ($this->checkStmt($stmt) && $stmt->execute() && $result = $stmt->get_result())
       return (int)$result->fetch_object()->blocks;
-    return false;
+    return $this->sqlError();
   }
 
   /**
@@ -113,7 +111,7 @@ class Block {
     $stmt = $this->mysqli->prepare("SELECT AVG(x.shares) AS average FROM (SELECT shares FROM $this->table WHERE height <= ? ORDER BY height DESC LIMIT ?) AS x");
     if ($this->checkStmt($stmt) && $stmt->bind_param('ii', $height, $limit) && $stmt->execute() && $result = $stmt->get_result())
       return (float)$result->fetch_object()->average;
-    return false;
+    return $this->sqlError();
   }
 
   /**
@@ -125,7 +123,7 @@ class Block {
     $stmt = $this->mysqli->prepare("SELECT AVG(x.amount) AS average FROM (SELECT amount FROM $this->table ORDER BY height DESC LIMIT ?) AS x");
     if ($this->checkStmt($stmt) && $stmt->bind_param('i', $limit) && $stmt->execute() && $result = $stmt->get_result())
       return (float)$result->fetch_object()->average;
-    return false;
+    return $this->sqlError();
   }
 
   /**
@@ -137,7 +135,7 @@ class Block {
     $stmt = $this->mysqli->prepare("SELECT * FROM $this->table WHERE confirmations < ? AND confirmations > -1");
     if ($this->checkStmt($stmt) && $stmt->bind_param("i", $confirmations) && $stmt->execute() && $result = $stmt->get_result())
       return $result->fetch_all(MYSQLI_ASSOC);
-    return false;
+    return $this->sqlError();
   }
 
   /**
@@ -148,13 +146,9 @@ class Block {
    **/
   public function setConfirmations($block_id, $confirmations) {
     $stmt = $this->mysqli->prepare("UPDATE $this->table SET confirmations = ? WHERE id = ?");
-    if ($this->checkStmt($stmt)) {
-      $stmt->bind_param("ii", $confirmations, $block_id) or die($stmt->error);
-      $stmt->execute() or die("Failed");
-      $stmt->close();
+    if ($this->checkStmt($stmt) && $stmt->bind_param("ii", $confirmations, $block_id) && $stmt->execute())
       return true;
-    }
-    return false;
+    return $this->sqlError();
   }
 
   /**
@@ -164,13 +158,9 @@ class Block {
    **/
   public function getAll($order='DESC') {
     $stmt = $this->mysqli->prepare("SELECT * FROM $this->table ORDER BY height $order");
-    if ($this->checkStmt($stmt)) {
-      $stmt->execute();
-      $result = $stmt->get_result();
-      $stmt->close();
+    if ($this->checkStmt($stmt) && $stmt->execute() && $result = $stmt->get_result())
       return $result->fetch_all(MYSQLI_ASSOC);
-    }
-    return false;
+    return $this->sqlError();
   }
 
   /**
@@ -180,50 +170,21 @@ class Block {
    **/
   public function addBlock($block) {
     $stmt = $this->mysqli->prepare("INSERT INTO $this->table (height, blockhash, confirmations, amount, difficulty, time) VALUES (?, ?, ?, ?, ?, ?)");
-    if ($this->checkStmt($stmt)) {
-      $stmt->bind_param('isiddi', $block['height'], $block['blockhash'], $block['confirmations'], $block['amount'], $block['difficulty'], $block['time']);
-      if (!$stmt->execute()) {
-        $this->debug->append("Failed to execute statement: " . $stmt->error);
-        $this->setErrorMessage($stmt->error);
-        $stmt->close();
-        return false;
-      }
-      $stmt->close();
+    if ($this->checkStmt($stmt) && $stmt->bind_param('isiddi', $block['height'], $block['blockhash'], $block['confirmations'], $block['amount'], $block['difficulty'], $block['time']) && $stmt->execute())
       return true;
-    }
-    return false;
-  }
-
-  public function getLastUpstreamId() {
-    $stmt = $this->mysqli->prepare("
-      SELECT MAX(share_id) AS share_id FROM $this->table
-      ");
-    if ($this->checkStmt($stmt) && $stmt->execute() && $stmt->bind_result($share_id) && $stmt->fetch())
-      return $share_id ? $share_id : 0;
-    // Catchall
-    return false;
+    return $this->sqlError();
   }
 
   /**
-   * Update a single column within a single row
-   * @param block_id int Block ID to update
-   * @param field string Column name to update
-   * @param value string Value to insert
-   * @return bool
+   * Get our last inserted upstream ID from table
+   * @param none
+   * @return mixed upstream ID or 0, false on error
    **/
-  private function updateSingle($block_id, $field, $value) {
-    $stmt = $this->mysqli->prepare("UPDATE $this->table SET $field = ? WHERE id = ?");
-    if ($this->checkStmt($stmt)) {
-      $stmt->bind_param('ii', $value, $block_id);
-      if (!$stmt->execute()) {
-        $this->debug->append("Failed to update block ID $block_id with finder ID $account_id");
-        $stmt->close();
-        return false;
-      }
-      $stmt->close();
-      return true;
-    }
-    return false;
+  public function getLastUpstreamId() {
+    $stmt = $this->mysqli->prepare("SELECT MAX(share_id) AS share_id FROM $this->table");
+    if ($this->checkStmt($stmt) && $stmt->execute() && $stmt->bind_result($share_id) && $stmt->fetch())
+      return $share_id ? $share_id : 0;
+    return $this->sqlError();
   }
 
   /**
@@ -233,7 +194,19 @@ class Block {
    * @return bool
    **/
   public function setFinder($block_id, $account_id=NULL) {
-    return $this->updateSingle($block_id, 'account_id', $account_id);
+    $field = array( 'name' => 'account_id', 'value' => $account_id, 'type' => 'i' );
+    return $this->updateSingle($block_id, $field);
+  }
+  
+  /**
+   * Set finding worker of a block
+   * @param block_id int Block ID
+   * @param worker_id int Worker ID of finder
+   * @return bool
+   **/
+  public function setFindingWorker($block_id, $worker=NULL) {
+    $field = array( 'name' => 'worker_name', 'value' => $worker, 'type' => 's' );
+    return $this->updateSingle($block_id, $field);
   }
 
   /**
@@ -243,7 +216,8 @@ class Block {
    * @return bool
    **/
   public function setShareId($block_id, $share_id) {
-    return $this->updateSingle($block_id, 'share_id', $share_id);
+    $field = array( 'name' => 'share_id', 'value' => $share_id, 'type' => 'i');
+    return $this->updateSingle($block_id, $field);
   }
 
   /**
@@ -253,7 +227,8 @@ class Block {
    * @return bool
    **/
   public function setShares($block_id, $shares=NULL) {
-    return $this->updateSingle($block_id, 'shares', $shares);
+    $field = array( 'name' => 'shares', 'value' => $shares, 'type' => 'i');
+    return $this->updateSingle($block_id, $field);
   }
 
   /**
@@ -263,21 +238,14 @@ class Block {
    **/
   public function setAccounted($block_id=NULL) {
     if (empty($block_id)) return false;
-    return $this->updateSingle($block_id, 'accounted', 1);
-  }
-
-  /**
-   * Helper function
-   **/
-  private function checkStmt($bState) {
-    if ($bState ===! true) {
-      $this->debug->append("Failed to prepare statement: " . $this->mysqli->error);
-      $this->setErrorMessage('Internal application Error');
-      return false;
-    }
-    return true;
+    $field = array( 'name' => 'accounted', 'value' => 1, 'type' => 'i');
+    return $this->updateSingle($block_id, $field);
   }
 }
 
 // Automatically load our class for furhter usage
-$block = new Block($debug, $mysqli, $config);
+$block = new Block();
+$block->setDebug($debug);
+$block->setMysql($mysqli);
+$block->setConfig($config);
+$block->setErrorCodes($aErrorCodes);

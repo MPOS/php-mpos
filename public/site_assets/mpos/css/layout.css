@@ -787,7 +787,7 @@ line-height: 150%;
 #main h4.info {
 display: block;
 width: 95%;
-margin: 20px 3% 0 3%;
+margin: 20px 30px 0 30px;
 margin-top: 20px;
 -webkit-border-radius: 5px;
 -moz-border-radius: 5px;
@@ -803,7 +803,7 @@ font-size: 14px;}
 #main h4.warning {
 display: block;
 width: 95%;
-margin: 20px 3% 0 3%;
+margin: 20px 30px 0 30px;
 margin-top: 20px;
 -webkit-border-radius: 5px;
 -moz-border-radius: 5px;
@@ -819,7 +819,7 @@ font-size: 14px;}
 #main h4.errormsg {
 display: block;
 width: 95%;
-margin: 20px 3% 0 3%;
+margin: 20px 30px 0 30px;
 margin-top: 20px;
 -webkit-border-radius: 5px;
 -moz-border-radius: 5px;
@@ -835,7 +835,7 @@ font-size: 14px;}
 #main h4.success {
 display: block;
 width: 95%;
-margin: 20px 3% 0 3%;
+margin: 20px 30px 0 30px;
 margin-top: 20px;
 -webkit-border-radius: 5px;
 -moz-border-radius: 5px;

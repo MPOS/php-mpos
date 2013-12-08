@@ -6,26 +6,40 @@ if (!defined('SECURITY')) die('Hacking attempt');
 if (!$smarty->isCached('master.tpl', $smarty_cache_key)) {
   $debug->append('No cached version available, fetching from backend', 3);
 
-  if (@$_REQUEST['next'] && !empty($_REQUEST['height'])) {
-    $iKey = $roundstats->getNextBlock($_REQUEST['height']);
-  } else if (@$_REQUEST['prev'] && !empty($_REQUEST['height'])) {
-    $iKey = $roundstats->getPreviousBlock($_REQUEST['height']);
-  } else {  
-
-    if (empty($_REQUEST['height'])) {
-      $iBlock = $block->getLast();
-      $iKey = $iBlock['height'];
-    } else {
-      $iKey = $_REQUEST['height'];
-    }
+  if (@$_REQUEST['search']) {
+    $_REQUEST['height'] = $roundstats->searchForBlockHeight($_REQUEST['search']);
   }
-  $aDetailsForBlockHeight = $roundstats->getDetailsForBlockHeight($iKey, $user->isAdmin(@$_SESSION['USERDATA']['id']));
-  $aRoundShareStats = $roundstats->getRoundStatsForAccounts($iKey, $user->isAdmin(@$_SESSION['USERDATA']['id']));
-
-  if ($user->isAdmin(@$_SESSION['USERDATA']['id']) || $setting->getValue('acl_round_transactions')) {
-    $aUserRoundTransactions = $roundstats->getAllRoundTransactions($iKey, @$_SESSION['USERDATA']['id']);
+  if (@$_REQUEST['next'] && !empty($_REQUEST['height'])) {
+    $iHeight = @$roundstats->getNextBlock($_REQUEST['height']);
+      if (!$iHeight) {
+        $iBlock = $block->getLast();
+        $iHeight = $iBlock['height']; 
+      }
+  } else if (@$_REQUEST['prev'] && !empty($_REQUEST['height'])) {
+    $iHeight = $roundstats->getPreviousBlock($_REQUEST['height']);
+  } else if (empty($_REQUEST['height'])) {
+      $iBlock = $block->getLast();
+      $iHeight = $iBlock['height'];  
   } else {
-    $aUserRoundTransactions = $roundstats->getUserRoundTransactions($iKey, @$_SESSION['USERDATA']['id']);
+      $iHeight = $_REQUEST['height'];
+  }
+  $_REQUEST['height'] = $iHeight;
+
+  $iPPLNSShares = 0;
+  $aDetailsForBlockHeight = $roundstats->getDetailsForBlockHeight($iHeight);
+  $aRoundShareStats = $roundstats->getRoundStatsForAccounts($iHeight);
+  $aUserRoundTransactions = $roundstats->getAllRoundTransactions($iHeight);
+
+  if ($config['payout_system'] == 'pplns') {
+    $aPPLNSRoundShares = $roundstats->getPPLNSRoundStatsForAccounts($iHeight);
+    foreach($aPPLNSRoundShares as $aData) {
+      $iPPLNSShares += $aData['pplns_valid'];
+    }
+    $block_avg = $block->getAvgBlockShares($iHeight, $config['pplns']['blockavg']['blockcount']);
+    $smarty->assign('PPLNSROUNDSHARES', $aPPLNSRoundShares);
+    $smarty->assign("PPLNSSHARES", $iPPLNSShares);
+    $smarty->assign("BLOCKAVGCOUNT", $config['pplns']['blockavg']['blockcount']);
+    $smarty->assign("BLOCKAVERAGE", $block_avg );
   }
 
   // Propagate content our template

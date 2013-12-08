@@ -54,19 +54,17 @@ if ($config['pps']['reward']['type'] == 'blockavg' && $block->getBlockCount() > 
   if ($config['pps']['reward']['type'] == 'block') {
      if ($aLastBlock = $block->getLast()) {
         $pps_reward = $aLastBlock['amount'];
-        $log->logInfo("PPS reward using last block, amount: " . $pps_reward . "\tdifficulty: " . $dDifficulty);
      } else {
        $pps_reward = $config['pps']['reward']['default'];
-       $log->logInfo("PPS reward using default, amount: " . $pps_reward . "\tdifficulty: " . $dDifficulty);
      }
   } else {
      $pps_reward = $config['pps']['reward']['default'];
-     $log->logInfo("PPS reward fixed default, amount: " . $pps_reward . "\tdifficulty: " . $dDifficulty);
   }
 }
 
 // Per-share value to be paid out to users
-$pps_value = round($pps_reward / (pow(2,32) * $dDifficulty) * pow(2, $config['pps_target']), 12);
+$pps_value = round($pps_reward / (pow(2, $config['target_bits']) * $dDifficulty), 12);
+
 
 // Find our last share accounted and last inserted share for PPS calculations
 $iPreviousShareId = $setting->getValue('pps_last_share_id');
@@ -75,11 +73,16 @@ $iLastShareId = $share->getLastInsertedShareId();
 // Check for all new shares, we start one higher as our last accounted share to avoid duplicates
 $aAccountShares = $share->getSharesForAccounts($iPreviousShareId + 1, $iLastShareId);
 
-$log->logInfo("ID\tUsername\tInvalid\tValid\t\tPPS Value\t\tPayout\t\tDonation\tFee");
+if (!empty($aAccountShares)) {
+  // Info for this payout
+  $log->logInfo("PPS reward type: " . $config['pps']['reward']['type'] . ", amount: " . $pps_reward . "\tdifficulty: " . $dDifficulty . "\tPPS value: " . $pps_value);
+  $log->logInfo("ID\tUsername\tInvalid\tValid\t\tPPS Value\t\tPayout\t\tDonation\tFee");
+}
 
 foreach ($aAccountShares as $aData) {
-  // Take our valid shares and multiply by per share value
-  $aData['payout'] = round($aData['valid'] * $pps_value, 8);
+  // MPOS uses a base difficulty setting to avoid showing weightened shares
+  // Since we need weightened shares here, we go back to the proper value for payouts
+  $aData['payout'] = round($aData['valid'] * pow(2, ($config['difficulty'] - 16)) * $pps_value, 8);
 
   // Defaults
   $aData['fee' ] = 0;
@@ -94,7 +97,7 @@ foreach ($aAccountShares as $aData) {
   $log->logInfo($aData['id'] . "\t" .
     $aData['username'] . "\t" .
     $aData['invalid'] . "\t" .
-    $aData['valid'] . "\t*\t" .
+    $aData['valid'] * pow(2, ($config['difficulty'] - 16)) . "\t*\t" .
     number_format($pps_value, 12) . "\t=\t" .
     number_format($aData['payout'], 8) . "\t" .
     number_format($aData['donation'], 8) . "\t" .
@@ -102,15 +105,15 @@ foreach ($aAccountShares as $aData) {
 
   // Add new credit transaction
   if (!$transaction->addTransaction($aData['id'], $aData['payout'], 'Credit_PPS'))
-    $log->logError('Failed to add Credit_PPS transaction in database');
+    $log->logError('Failed to add Credit_PPS transaction in database: ' . $transaction->getCronError());
   // Add new fee debit for this block
   if ($aData['fee'] > 0 && $config['fees'] > 0)
     if (!$transaction->addTransaction($aData['id'], $aData['fee'], 'Fee_PPS'))
-      $log->logError('Failed to add Fee_PPS transaction in database');
+      $log->logError('Failed to add Fee_PPS transaction in database: ' . $transaction->getCronError());
   // Add new donation debit
   if ($aData['donation'] > 0)
     if (!$transaction->addTransaction($aData['id'], $aData['donation'], 'Donation_PPS'))
-      $log->logError('Failed to add Donation_PPS transaction in database');
+      $log->logError('Failed to add Donation_PPS transaction in database: ' . $transaction->getCronError());
 }
 
 // Store our last inserted ID for the next run
@@ -118,7 +121,10 @@ $setting->setValue('pps_last_share_id', $iLastShareId);
 
 // Fetch all unaccounted blocks
 $aAllBlocks = $block->getAllUnaccounted('ASC');
-if (empty($aAllBlocks)) $log->logDebug("No new unaccounted blocks found");
+if (empty($aAllBlocks)) {
+  $log->logDebug("No new unaccounted blocks found");
+  // No monitoring event here, not fatal for PPS
+}
 
 // Go through blocks and archive/delete shares that have been accounted for
 foreach ($aAllBlocks as $iIndex => $aBlock) {
@@ -135,28 +141,22 @@ foreach ($aAllBlocks as $iIndex => $aBlock) {
   $aAccountShares = $share->getSharesForAccounts(@$iLastBlockShare, $aBlock['share_id']);
   foreach ($aAccountShares as $key => $aData) {
     if (!$statistics->updateShareStatistics($aData, $aBlock['id']))
-      $log->logError("Failed to update stats for this block on : " . $aData['username']);
+      $log->logError("Failed to update stats for this block on : " . $aData['username'] . ': ' . $statistics->getCronError());
   }
   // Move shares to archive
   if ($aBlock['share_id'] < $iLastShareId) {
     if (!$share->moveArchive($aBlock['share_id'], $aBlock['id'], @$iLastBlockShare))
-      $log->logError("Archving failed");
+      $log->logError("Failed to copy shares to archive: " . $share->getCronError() . ': ' . $share->getCronError());
   }
   // Delete shares
   if ($aBlock['share_id'] < $iLastShareId && !$share->deleteAccountedShares($aBlock['share_id'], $iLastBlockShare)) {
-    $log->logFatal("Failed to delete accounted shares from " . $aBlock['share_id'] . " to " . $iLastBlockShare . ", aborting!");
-    $monitoring->setStatus($cron_name . "_active", "yesno", 0);
-    $monitoring->setStatus($cron_name . "_message", "message", "Failed to delete accounted shares from " . $aBlock['share_id'] . " to " . $iLastBlockShare);
-    $monitoring->setStatus($cron_name . "_status", "okerror", 1);
-    exit(1);
+    $log->logFatal("Failed to delete accounted shares from " . $aBlock['share_id'] . " to " . $iLastBlockShare . ", aborting! Error: " . $share->getCronError());
+    $monitoring->endCronjob($cron_name, 'E0016', 1, true);
   }
   // Mark this block as accounted for
   if (!$block->setAccounted($aBlock['id'])) {
-    $log->logFatal("Failed to mark block as accounted! Aborting!");
-    $monitoring->setStatus($cron_name . "_active", "yesno", 0);
-    $monitoring->setStatus($cron_name . "_message", "message", "Failed to mark block " . $aBlock['height'] . " as accounted");
-    $monitoring->setStatus($cron_name . "_status", "okerror", 1);
-    exit(1);
+    $log->logFatal("Failed to mark block as accounted! Aborting! Error: " . $block->getCronError());
+    $monitoring->endCronjob($cron_name, 'E0014', 1, true);
   }
 }
 

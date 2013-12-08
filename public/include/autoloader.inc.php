@@ -1,10 +1,17 @@
 <?php
+// SHA/Scrypt check
 
+if (empty($config['algorithm']) || $config['algorithm'] == 'scrypt') {
+  $config['target_bits'] = 16;
+} else {
+  $config['target_bits'] = 32;
+}
 // Default classes
 require_once(CLASS_DIR . '/debug.class.php');
 require_once(INCLUDE_DIR . '/lib/KLogger.php');
 require_once(INCLUDE_DIR . '/database.inc.php');
 require_once(INCLUDE_DIR . '/config/memcache_keys.inc.php');
+require_once(INCLUDE_DIR . '/config/error_codes.inc.php');
 
 // We need to load these two first
 require_once(CLASS_DIR . '/base.class.php');
@@ -44,8 +51,8 @@ require_once(CLASS_DIR . '/invitation.class.php');
 require_once(CLASS_DIR . '/share.class.php');
 require_once(CLASS_DIR . '/worker.class.php');
 require_once(CLASS_DIR . '/statistics.class.php');
-require_once(CLASS_DIR . '/roundstats.class.php');
 require_once(CLASS_DIR . '/transaction.class.php');
+require_once(CLASS_DIR . '/roundstats.class.php');
 require_once(CLASS_DIR . '/notification.class.php');
 require_once(CLASS_DIR . '/news.class.php');
 require_once(CLASS_DIR . '/api.class.php');

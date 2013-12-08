@@ -1,4 +1,4 @@
-<article class="module width_3_quarter">
+<article class="module width_full">
   <form method="POST">
     <input type="hidden" name="page" value="{$smarty.request.page}" />
     <input type="hidden" name="action" value="{$smarty.request.action}" />
@@ -22,6 +22,8 @@
             {html_options name="data[{$SETTINGS.$TAB[setting].name}]" options=$SETTINGS.$TAB[setting].options selected=$SETTINGS.$TAB[setting].value|default:$SETTINGS.$TAB[setting].default}
           {else if $SETTINGS.$TAB[setting].type == 'text'}
             <input type="text" size="{$SETTINGS.$TAB[setting].size}" name="data[{$SETTINGS.$TAB[setting].name}]" value="{$SETTINGS.$TAB[setting].value|default:$SETTINGS.$TAB[setting].default}" />
+          {else if $SETTINGS.$TAB[setting].type == 'textarea'}
+          	<textarea name="data[{$SETTINGS.$TAB[setting].name}]" cols="{$SETTINGS.$TAB[setting].size|default:"1"}" rows="{$SETTINGS.$TAB[setting].height|default:"1"}">{$SETTINGS.$TAB[setting].value|default:$SETTINGS.$TAB[setting].default}</textarea>
           {else}
             Unknown option type: {$SETTINGS.$TAB[setting].type}
           {/if}

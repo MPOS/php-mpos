@@ -1,38 +1,10 @@
 <?php
 
 // Make sure we are called from index.php
-if (!defined('SECURITY'))
-  die('Hacking attempt');
+if (!defined('SECURITY')) die('Hacking attempt');
 
-class Worker {
-  private $sError = '';
-  private $table = 'pool_worker';
-
-  public function __construct($debug, $mysqli, $user, $share, $config) {
-    $this->debug = $debug;
-    $this->mysqli = $mysqli;
-    $this->user = $user;
-    $this->share = $share;
-    $this->config = $config;
-    $this->debug->append("Instantiated Worker class", 2);
-  }
-
-  // get and set methods
-  private function setErrorMessage($msg) {
-    $this->sError = $msg;
-  }
-  public function getError() {
-    return $this->sError;
-  }
-
-  private function checkStmt($bState) {
-    if ($bState ===! true) {
-      $this->debug->append("Failed to prepare statement: " . $this->mysqli->error);
-      $this->setErrorMessage('Internal application Error');
-      return false;
-    }
-    return true;
-  }
+class Worker extends Base {
+  protected $table = 'pool_worker';
 
   /**
    * Update worker list for a user
@@ -61,9 +33,7 @@ class Worker {
     }
     if ($iFailed == 0)
       return true;
-    // Catchall
-    $this->setErrorMessage('Failed to update ' . $iFailed . ' worker.');
-    return false;
+    return $this->sqlError('E0053', $iFailed);
   }
 
   /**
@@ -71,20 +41,21 @@ class Worker {
    * @param none
    * @return data array Workers in IDLE state and monitoring enabled
    **/
-  public function getAllIdleWorkers() {
+  public function getAllIdleWorkers($interval=600) {
     $this->debug->append("STA " . __METHOD__, 4);
     $stmt = $this->mysqli->prepare("
-      SELECT account_id, id, username
-      FROM " . $this->table . " AS w
-      WHERE monitor = 1
-      AND (
-        SELECT IFNULL(SUM(IF(our_result = 'Y', 1, 0)), 0) FROM " . $this->share->getTableName() . " WHERE username = w.username AND time > DATE_SUB(now(), INTERVAL 10 MINUTE)
-      ) = 0");
-    if ($this->checkStmt($stmt) && $stmt->execute() && $result = $stmt->get_result())
+      SELECT w.account_id AS account_id, w.id AS id, w.username AS username
+      FROM " . $this->share->getTableName() . " AS s
+      RIGHT JOIN " . $this->getTableName() . " AS w
+      ON w.username = s.username
+      AND s.time > DATE_SUB(now(), INTERVAL ? SECOND)
+      AND our_result = 'Y'
+      WHERE w.monitor = 1
+      AND s.id IS NULL
+    ");
+    if ($this->checkStmt($stmt) && $stmt->bind_param('i', $interval) && $stmt->execute() && $result = $stmt->get_result())
       return $result->fetch_all(MYSQLI_ASSOC);
-    // Catchall
-    $this->setErrorMessage("Unable to fetch IDLE, monitored workers");
-    return false;
+    return $this->sqlError('E0054');
   }
 
   /**
@@ -92,7 +63,7 @@ class Worker {
    * @param id int Worker ID
    * @return mixed array Worker details
    **/
-  public function getWorker($id) {
+  public function getWorker($id, $interval=600) {
     $this->debug->append("STA " . __METHOD__, 4);
     $stmt = $this->mysqli->prepare("
        SELECT id, username, password, monitor,
@@ -100,35 +71,34 @@ class Worker {
        ( SELECT COUNT(id) FROM " . $this->share->getArchiveTableName() . " WHERE username = w.username AND time > DATE_SUB(now(), INTERVAL 10 MINUTE)) AS count_all_archive,
        (
          SELECT
-          IFNULL(IF(our_result='Y', ROUND(SUM(IF(difficulty=0, pow(2, (" . $this->config['difficulty'] . " - 16)), difficulty)) * 65536/600/1000), 0), 0) AS hashrate
+          IFNULL(IF(our_result='Y', ROUND(SUM(IF(difficulty=0, pow(2, (" . $this->config['difficulty'] . " - 16)), difficulty)) * POW(2, " . $this->config['target_bits'] . ") / ? / 1000), 0), 0) AS hashrate
           FROM " . $this->share->getTableName() . "
           WHERE
             username = w.username
-          AND time > DATE_SUB(now(), INTERVAL 10 MINUTE)
+          AND time > DATE_SUB(now(), INTERVAL ? SECOND)
         ) + (
          SELECT
-          IFNULL(IF(our_result='Y', ROUND(SUM(IF(difficulty=0, pow(2, (" . $this->config['difficulty'] . " - 16)), difficulty)) * 65536/600/1000), 0), 0) AS hashrate
+          IFNULL(IF(our_result='Y', ROUND(SUM(IF(difficulty=0, pow(2, (" . $this->config['difficulty'] . " - 16)), difficulty)) * POW(2, " . $this->config['target_bits'] . ") / ? / 1000), 0), 0) AS hashrate
           FROM " . $this->share->getArchiveTableName() . "
           WHERE
             username = w.username
-          AND time > DATE_SUB(now(), INTERVAL 10 MINUTE)
+          AND time > DATE_SUB(now(), INTERVAL ? SECOND)
        ) AS hashrate,
        (
          SELECT IFNULL(ROUND(SUM(IF(difficulty=0, pow(2, (" . $this->config['difficulty'] . " - 16)), difficulty)) / count_all, 2), 0)
          FROM " . $this->share->getTableName() . "
-         WHERE username = w.username AND time > DATE_SUB(now(), INTERVAL 10 MINUTE)
+         WHERE username = w.username AND time > DATE_SUB(now(), INTERVAL ? SECOND)
        ) + (
          SELECT IFNULL(ROUND(SUM(IF(difficulty=0, pow(2, (" . $this->config['difficulty'] . " - 16)), difficulty)) / count_all_archive, 2), 0)
          FROM " . $this->share->getArchiveTableName() . "
-         WHERE username = w.username AND time > DATE_SUB(now(), INTERVAL 10 MINUTE)
+         WHERE username = w.username AND time > DATE_SUB(now(), INTERVAL ? SECOND)
        ) AS difficulty
        FROM $this->table AS w
        WHERE id = ?
        ");
-    if ($this->checkStmt($stmt) && $stmt->bind_param('i', $id) && $stmt->execute() && $result = $stmt->get_result())
+    if ($this->checkStmt($stmt) && $stmt->bind_param('iiiiiii', $interval, $interval, $interval, $interval, $interval, $interval, $id) && $stmt->execute() && $result = $stmt->get_result())
       return $result->fetch_assoc();
-    // Catchall
-    return false;
+    return $this->sqlError('E0055');
   }
 
   /**
@@ -136,44 +106,90 @@ class Worker {
    * @param account_id int User ID
    * @return mixed array Workers and their settings or false
    **/
-  public function getWorkers($account_id) {
+  public function getWorkers($account_id, $interval=600) {
     $this->debug->append("STA " . __METHOD__, 4);
     $stmt = $this->mysqli->prepare("
       SELECT id, username, password, monitor,
-       ( SELECT COUNT(id) FROM " . $this->share->getTableName() . " WHERE username = w.username AND time > DATE_SUB(now(), INTERVAL 10 MINUTE)) AS count_all,
-       ( SELECT COUNT(id) FROM " . $this->share->getArchiveTableName() . " WHERE username = w.username AND time > DATE_SUB(now(), INTERVAL 10 MINUTE)) AS count_all_archive,
+       ( SELECT COUNT(id) FROM " . $this->share->getTableName() . " WHERE username = w.username AND time > DATE_SUB(now(), INTERVAL ? SECOND)) AS count_all,
+       ( SELECT COUNT(id) FROM " . $this->share->getArchiveTableName() . " WHERE username = w.username AND time > DATE_SUB(now(), INTERVAL ? SECOND)) AS count_all_archive,
        (
          SELECT
-          IFNULL(IF(our_result='Y', ROUND(SUM(IF(difficulty=0, pow(2, (" . $this->config['difficulty'] . " - 16)), difficulty)) * 65536/600/1000), 0), 0) AS hashrate
+          IFNULL(IF(our_result='Y', ROUND(SUM(IF(difficulty=0, pow(2, (" . $this->config['difficulty'] . " - 16)), difficulty)) * POW(2, " . $this->config['target_bits'] . ") / ? / 1000), 0), 0) AS hashrate
           FROM " . $this->share->getTableName() . "
           WHERE
             username = w.username
-          AND time > DATE_SUB(now(), INTERVAL 10 MINUTE)
+          AND time > DATE_SUB(now(), INTERVAL ? SECOND)
       ) + (
         SELECT
-          IFNULL(IF(our_result='Y', ROUND(SUM(IF(difficulty=0, pow(2, (" . $this->config['difficulty'] . " - 16)), difficulty)) * 65536/600/1000), 0), 0) AS hashrate
+          IFNULL(IF(our_result='Y', ROUND(SUM(IF(difficulty=0, pow(2, (" . $this->config['difficulty'] . " - 16)), difficulty)) * POW(2, " . $this->config['target_bits'] . ") / ? / 1000), 0), 0) AS hashrate
           FROM " . $this->share->getArchiveTableName() . "
           WHERE
             username = w.username
-          AND time > DATE_SUB(now(), INTERVAL 10 MINUTE)
+          AND time > DATE_SUB(now(), INTERVAL ? SECOND)
       ) AS hashrate,
       (
         SELECT IFNULL(ROUND(SUM(IF(difficulty=0, pow(2, (" . $this->config['difficulty'] . " - 16)), difficulty)) / count_all, 2), 0)
         FROM " . $this->share->getTableName() . "
-        WHERE username = w.username AND time > DATE_SUB(now(), INTERVAL 10 MINUTE)
+        WHERE username = w.username AND time > DATE_SUB(now(), INTERVAL ? SECOND)
       ) + (
         SELECT IFNULL(ROUND(SUM(IF(difficulty=0, pow(2, (" . $this->config['difficulty'] . " - 16)), difficulty)) / count_all_archive, 2), 0)
         FROM " . $this->share->getArchiveTableName() . "
-        WHERE username = w.username AND time > DATE_SUB(now(), INTERVAL 10 MINUTE)
+        WHERE username = w.username AND time > DATE_SUB(now(), INTERVAL ? SECOND)
       ) AS difficulty
       FROM $this->table AS w
       WHERE account_id = ?");
-    if ($this->checkStmt($stmt) && $stmt->bind_param('i', $account_id) && $stmt->execute() && $result = $stmt->get_result())
+    if ($this->checkStmt($stmt) && $stmt->bind_param('iiiiiiiii', $interval, $interval, $interval, $interval, $interval, $interval, $interval, $interval, $account_id) && $stmt->execute() && $result = $stmt->get_result())
       return $result->fetch_all(MYSQLI_ASSOC);
-    // Catchall
-    $this->setErrorMessage('Failed to fetch workers for your account');
-    $this->debug->append('Fetching workers failed: ' . $this->mysqli->error);
-    return false;
+    return $this->sqlError('E0056');
+  }
+
+  /**
+   * Fetch all workers for admin panel
+   * @param limit int 
+   * @return mixed array Workers and their settings or false
+   **/
+  public function getAllWorkers($iLimit=0, $interval=600) {
+    $this->debug->append("STA " . __METHOD__, 4);
+    $stmt = $this->mysqli->prepare("
+      SELECT id, username, password, monitor,
+      IFNULL(IF(difficulty=0, pow(2, (" . $this->config['difficulty'] . " - 16)), difficulty), 0) AS difficulty,
+       (
+         SELECT
+          IFNULL(IF(our_result='Y', ROUND(SUM(IF(difficulty=0, pow(2, (" . $this->config['difficulty'] . " - 16)), difficulty)) * POW(2, " . $this->config['target_bits'] . ") / ? / 1000), 0), 0) AS hashrate
+          FROM " . $this->share->getTableName() . "
+          WHERE
+            username = w.username
+          AND time > DATE_SUB(now(), INTERVAL ? SECOND)
+      ) + (
+        SELECT
+          IFNULL(IF(our_result='Y', ROUND(SUM(IF(difficulty=0, pow(2, (" . $this->config['difficulty'] . " - 16)), difficulty)) * POW(2, " . $this->config['target_bits'] . ") / ? / 1000), 0), 0) AS hashrate
+          FROM " . $this->share->getArchiveTableName() . "
+          WHERE
+            username = w.username
+          AND time > DATE_SUB(now(), INTERVAL ? SECOND)
+      ) AS hashrate,
+      ((
+        SELECT IFNULL(ROUND(SUM(IF(difficulty=0, pow(2, (" . $this->config['difficulty'] . " - 16)), difficulty)), 2), 0)
+        FROM " . $this->share->getTableName() . "
+        WHERE username = w.username AND time > DATE_SUB(now(), INTERVAL ? SECOND)
+      ) + (
+        SELECT IFNULL(ROUND(SUM(IF(difficulty=0, pow(2, (" . $this->config['difficulty'] . " - 16)), difficulty)), 2), 0)
+        FROM " . $this->share->getArchiveTableName() . "
+        WHERE username = w.username AND time > DATE_SUB(now(), INTERVAL ? SECOND)
+      )) / ((
+        SELECT COUNT(id) 
+        FROM " . $this->share->getTableName() . " 
+        WHERE username = w.username AND time > DATE_SUB(now(), INTERVAL ? SECOND)
+      ) + ( 
+        SELECT COUNT(id) 
+        FROM " . $this->share->getArchiveTableName() . " 
+        WHERE username = w.username AND time > DATE_SUB(now(), INTERVAL ? SECOND)
+      )) AS avg_difficulty
+      FROM $this->table AS w
+      ORDER BY hashrate DESC LIMIT ?");
+    if ($this->checkStmt($stmt) && $stmt->bind_param('iiiiiiiii', $interval, $interval, $interval, $interval, $interval, $interval, $interval, $interval, $iLimit) && $stmt->execute() && $result = $stmt->get_result())
+      return $result->fetch_all(MYSQLI_ASSOC);
+    return $this->sqlError('E0057');
   }
 
   /**
@@ -183,10 +199,15 @@ class Worker {
    **/
   public function getCountAllActiveWorkers() {
     $this->debug->append("STA " . __METHOD__, 4);
-    $stmt = $this->mysqli->prepare("SELECT IFNULL(IF(our_result='Y', COUNT(DISTINCT username), 0), 0) AS total FROM "  . $this->share->getTableName() . " WHERE time > DATE_SUB(now(), INTERVAL 10 MINUTE)");
+    if ($data = $this->memcache->get(__FUNCTION__)) return $data;
+    $stmt = $this->mysqli->prepare("
+      SELECT COUNT(DISTINCT(username)) AS total
+      FROM "  . $this->share->getTableName() . "
+      WHERE our_result = 'Y'
+      AND time > DATE_SUB(now(), INTERVAL 10 MINUTE)");
     if ($this->checkStmt($stmt) && $stmt->execute() && $result = $stmt->get_result())
-      return $result->fetch_object()->total;
-    return false;
+      return $this->memcache->setCache(__FUNCTION__, $result->fetch_object()->total);
+    return $this->sqlError();
   }
 
   /**
@@ -201,22 +222,20 @@ class Worker {
   public function addWorker($account_id, $workerName, $workerPassword) {
     $this->debug->append("STA " . __METHOD__, 4);
     if ('' === $workerName || '' === $workerPassword) {
-      $this->setErrorMessage('Worker name and/or password may not be empty');
+      $this->setErrorMessage($this->getErrorMsg('E0058'));
       return false;
     }
     $username = $this->user->getUserName($account_id);
     $workerName = "$username.$workerName";
     $stmt = $this->mysqli->prepare("INSERT INTO $this->table (account_id, username, password) VALUES(?, ?, ?)");
-    if ($this->checkStmt($stmt)) {
-      $stmt->bind_param('iss', $account_id, $workerName, $workerPassword);
+    if ($this->checkStmt($stmt) && $stmt->bind_param('iss', $account_id, $workerName, $workerPassword)) {
       if (!$stmt->execute()) {
-        $this->setErrorMessage( 'Failed to add worker' );
-        if ($stmt->sqlstate == '23000') $this->setErrorMessage( 'Worker already exists' );
-        return false;
+        if ($stmt->sqlstate == '23000') return $this->sqlError('E0059');
+      } else {
+        return true;
       }
-      return true;
     }
-    return false;
+    return $this->sqlError('E0060');
   }
 
   /**
@@ -228,16 +247,19 @@ class Worker {
   public function deleteWorker($account_id, $id) {
     $this->debug->append("STA " . __METHOD__, 4);
     $stmt = $this->mysqli->prepare("DELETE FROM $this->table WHERE account_id = ? AND id = ?");
-    if ($this->checkStmt($stmt)) {
-      $stmt->bind_param('ii', $account_id, $id);
-      if ($stmt->execute() && $stmt->affected_rows == 1) {
+    if ($this->checkStmt($stmt) && $stmt->bind_param('ii', $account_id, $id) && $stmt->execute() && $stmt->affected_rows == 1)
         return true;
-      } else {
-        $this->setErrorMessage( 'Unable to delete worker' );
-      }
-    }
-    return false;
+    return $this->sqlError('E0061');
   }
 }
 
-$worker = new Worker($debug, $mysqli, $user, $share, $config);
+$worker = new Worker();
+$worker->setDebug($debug);
+$worker->setMysql($mysqli);
+$worker->setMemcache($memcache);
+$worker->setShare($share);
+$worker->setConfig($config);
+$worker->setUser($user);
+$worker->setErrorCodes($aErrorCodes);
+
+?>

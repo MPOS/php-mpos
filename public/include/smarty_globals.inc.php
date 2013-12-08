@@ -65,9 +65,12 @@ $aGlobal = array(
   'price' => $setting->getValue('price'),
   'disable_mp' => $setting->getValue('disable_mp'),
   'config' => array(
+    'algorithm' => $config['algorithm'],
+    'target_bits' => $config['target_bits'],
     'accounts' => $config['accounts'],
     'disable_invitations' => $setting->getValue('disable_invitations'),
     'disable_notifications' => $setting->getValue('disable_notifications'),
+    'monitoring_uptimerobot_api_keys' => $setting->getValue('monitoring_uptimerobot_api_keys'),
     'statistics_ajax_refresh_interval' => $statistics_ajax_refresh_interval,
     'price' => array( 'currency' => $config['price']['currency'] ),
     'targetdiff' => $config['difficulty'],
@@ -89,31 +92,21 @@ $aGlobal['website']['email'] = $setting->getValue('website_email');
 $aGlobal['website']['api']['disabled'] = $setting->getValue('disable_api');
 $aGlobal['website']['blockexplorer']['disabled'] = $setting->getValue('website_blockexplorer_disabled');
 $aGlobal['website']['chaininfo']['disabled'] = $setting->getValue('website_chaininfo_disabled');
+$aGlobal['website']['donors']['disabled'] = $setting->getValue('disable_donors');
+$aGlobal['website']['about']['disabled'] = $setting->getValue('disable_about');
 $setting->getValue('website_blockexplorer_url') ? $aGlobal['website']['blockexplorer']['url'] = $setting->getValue('website_blockexplorer_url') : $aGlobal['website']['blockexplorer']['url'] = 'http://explorer.litecoin.net/block/';
 $setting->getValue('website_chaininfo_url') ? $aGlobal['website']['chaininfo']['url'] = $setting->getValue('website_chaininfo_url') : $aGlobal['website']['chaininfo']['url'] = 'http://allchains.info';
+
+// Google Analytics
+$aGlobal['statistics']['analytics']['enabled'] = $setting->getValue('statistics_analytics_enabled');
+$aGlobal['statistics']['analytics']['code'] = $setting->getValue('statistics_analytics_code');
 
 // ACLs
 $aGlobal['acl']['pool']['statistics'] = $setting->getValue('acl_pool_statistics');
 $aGlobal['acl']['block']['statistics'] = $setting->getValue('acl_block_statistics');
 $aGlobal['acl']['round']['statistics'] = $setting->getValue('acl_round_statistics');
-
-// We support some dynamic reward targets but fall back to our fixed value
-// Special calculations for PPS Values based on reward_type setting and/or available blocks
-if ($config['pps']['reward']['type'] == 'blockavg' && $block->getBlockCount() > 0) {
-  $pps_reward = round($block->getAvgBlockReward($config['pps']['blockavg']['blockcount']));
-} else {
-  if ($config['pps']['reward']['type'] == 'block') {
-     if ($aLastBlock = $block->getLast()) {
-        $pps_reward = $aLastBlock['amount'];
-     } else {
-     $pps_reward = $config['pps']['reward']['default'];
-     }
-  } else {
-     $pps_reward = $config['pps']['reward']['default'];
-  }
-}
-
-$aGlobal['ppsvalue'] = number_format(round($pps_reward / (pow(2,32) * $dDifficulty) * pow(2, $config['pps_target']), 12) ,12);
+$aGlobal['acl']['blockfinder']['statistics'] = $setting->getValue('acl_blockfinder_statistics');
+$aGlobal['acl']['uptime']['statistics'] = $setting->getValue('acl_uptime_statistics');
 
 // We don't want these session infos cached
 if (@$_SESSION['USERDATA']['id']) {
@@ -122,17 +115,16 @@ if (@$_SESSION['USERDATA']['id']) {
 
   // Other userdata that we can cache savely
   $aGlobal['userdata']['shares'] = $statistics->getUserShares($_SESSION['USERDATA']['id']);
-  $aGlobal['userdata']['hashrate'] = $statistics->getUserHashrate($_SESSION['USERDATA']['id']) * $dPersonalHashrateModifier;
+  $aGlobal['userdata']['rawhashrate'] = $statistics->getUserHashrate($_SESSION['USERDATA']['id']);
+  $aGlobal['userdata']['hashrate'] = $aGlobal['userdata']['rawhashrate'] * $dPersonalHashrateModifier;
   $aGlobal['userdata']['sharerate'] = $statistics->getUserSharerate($_SESSION['USERDATA']['id']);
 
   switch ($config['payout_system']) {
-  case 'prop' || 'pplns':
+  case 'prop':
     // Some estimations
     $aEstimates = $statistics->getUserEstimates($aRoundShares, $aGlobal['userdata']['shares'], $aGlobal['userdata']['donate_percent'], $aGlobal['userdata']['no_fees']);
-    $aGlobal['userdata']['est_block'] = $aEstimates['block'];
-    $aGlobal['userdata']['est_fee'] = $aEstimates['fee'];
-    $aGlobal['userdata']['est_donation'] = $aEstimates['donation'];
-    $aGlobal['userdata']['est_payout'] = $aEstimates['payout'];
+    $aGlobal['userdata']['estimates'] = $aEstimates;
+    break;
   case 'pplns':
     $aGlobal['pplns']['target'] = $config['pplns']['shares']['default'];
     if ($aLastBlock = $block->getLast()) {
@@ -140,8 +132,31 @@ if (@$_SESSION['USERDATA']['id']) {
         $aGlobal['pplns']['target'] = $iAvgBlockShares;
       }
     }
+    $aEstimates = $statistics->getUserEstimates($aRoundShares, $aGlobal['userdata']['shares'], $aGlobal['userdata']['donate_percent'], $aGlobal['userdata']['no_fees']);
+    $aGlobal['userdata']['estimates'] = $aEstimates;
     break;
   case 'pps':
+    // We support some dynamic reward targets but fall back to our fixed value
+    // Special calculations for PPS Values based on reward_type setting and/or available blocks
+    if ($config['pps']['reward']['type'] == 'blockavg' && $block->getBlockCount() > 0) {
+      $pps_reward = round($block->getAvgBlockReward($config['pps']['blockavg']['blockcount']));
+    } else {
+      if ($config['pps']['reward']['type'] == 'block') {
+        if ($aLastBlock = $block->getLast()) {
+          $pps_reward = $aLastBlock['amount'];
+        } else {
+          $pps_reward = $config['pps']['reward']['default'];
+        }
+      } else {
+        $pps_reward = $config['pps']['reward']['default'];
+      }
+    }
+
+    $aGlobal['userdata']['pps']['unpaidshares'] = $statistics->getUserUnpaidPPSShares($_SESSION['USERDATA']['id'], $setting->getValue('pps_last_share_id'));
+    $aGlobal['ppsvalue'] = number_format(round($pps_reward / (pow(2, $config['target_bits']) * $dDifficulty), 12) ,12);
+    $aGlobal['poolppsvalue'] = $aGlobal['ppsvalue'] * pow(2, $config['difficulty'] - 16);
+    $aGlobal['userdata']['sharedifficulty'] = $statistics->getUserShareDifficulty($_SESSION['USERDATA']['id']);
+    $aGlobal['userdata']['estimates'] = $statistics->getUserEstimates($aGlobal['userdata']['sharerate'], $aGlobal['userdata']['sharedifficulty'], $aGlobal['userdata']['donate_percent'], $aGlobal['userdata']['no_fees'], $aGlobal['ppsvalue']);
     break;
   }
 
@@ -162,5 +177,6 @@ $smarty->assign('DEBUG', DEBUG);
 
 // Make it available in Smarty
 $smarty->assign('PATH', 'site_assets/' . THEME);
+$smarty->assign('GLOBALASSETS', 'site_assets/global');
 $smarty->assign('GLOBAL', $aGlobal);
 ?>

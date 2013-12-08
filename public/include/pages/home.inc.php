@@ -16,6 +16,8 @@ if (!$smarty->isCached('master.tpl', $smarty_cache_key)) {
       $aNews[$key]['content'] = Markdown::defaultTransform($aData['content']);
     }
   }
+
+  $smarty->assign("HIDEAUTHOR", $setting->getValue('acl_hide_news_author'));
   $smarty->assign("NEWS", $aNews);
 } else {
   $debug->append('Using cached page', 3);

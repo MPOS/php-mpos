@@ -6,15 +6,15 @@
     <div class="module_content">
       <fieldset>
         <label for="senderName">Your Name</label>
-        <input type="text" class="text tiny" name="senderName" value="{$smarty.request.senderName|escape|default:""}" placeholder="Please type your name" size="15" maxlength="20" required />
+        <input type="text" class="text tiny" name="senderName" value="{$smarty.request.senderName|escape|default:""}" placeholder="Please type your name" size="15" maxlength="100" required />
       </fieldset>
       <fieldset>
         <label for="senderEmail">Your Email Address</label>
-        <input type="text" class="text tiny" name="senderEmail" value="{$smarty.request.senderEmail|escape|default:""}" placeholder="Please type your email" size="15"  maxlength="20" required />
+        <input type="text" class="text tiny" name="senderEmail" value="{$smarty.request.senderEmail|escape|default:""}" placeholder="Please type your email" size="50"  maxlength="100" required />
       </fieldset>
       <fieldset>
         <label for="senderEmail">Your Subject</label>
-        <input type="text" class="text tiny" name="senderSubject" value="{$smarty.request.senderSubject|escape|default:""}" placeholder="Please type your subject" size="15" maxlength="20" required />
+        <input type="text" class="text tiny" name="senderSubject" value="{$smarty.request.senderSubject|escape|default:""}" placeholder="Please type your subject" size="15" maxlength="100" required />
       </fieldset>
       <fieldset>
         <label for="message">Your Message</label>

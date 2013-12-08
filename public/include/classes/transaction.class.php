@@ -5,7 +5,7 @@ if (!defined('SECURITY'))
   die('Hacking attempt');
 
 class Transaction extends Base {
-  private $sError = '', $table = 'transactions';
+  protected $table = 'transactions';
   public $num_rows = 0, $insert_id = 0;
 
   /**
@@ -18,14 +18,13 @@ class Transaction extends Base {
    * @param coin_address string Coin address for this transaction [optional]
    * @return bool
    **/
-  public function addTransaction($account_id, $amount, $type='Credit', $block_id=NULL, $coin_address=NULL) {
-    $stmt = $this->mysqli->prepare("INSERT INTO $this->table (account_id, amount, block_id, type, coin_address) VALUES (?, ?, ?, ?, ?)");
-    if ($this->checkStmt($stmt) && $stmt->bind_param("idiss", $account_id, $amount, $block_id, $type, $coin_address) && $stmt->execute()) {
+  public function addTransaction($account_id, $amount, $type='Credit', $block_id=NULL, $coin_address=NULL, $txid=NULL) {
+    $stmt = $this->mysqli->prepare("INSERT INTO $this->table (account_id, amount, block_id, type, coin_address, txid) VALUES (?, ?, ?, ?, ?, ?)");
+    if ($this->checkStmt($stmt) && $stmt->bind_param("idisss", $account_id, $amount, $block_id, $type, $coin_address, $txid) && $stmt->execute()) {
       $this->insert_id = $stmt->insert_id;
       return true;
     }
-    $this->setErrorMessage("Failed to store transaction");
-    return false;
+    return $this->sqlError();
   }
 
   /*
@@ -35,16 +34,20 @@ class Transaction extends Base {
    * @param bool boolean True or False
    **/
   public function setArchived($account_id, $txid) {
+    // Update all paid out transactions as archived
     $stmt = $this->mysqli->prepare("
       UPDATE $this->table AS t
       LEFT JOIN " . $this->block->getTableName() . " AS b
       ON b.id = t.block_id
       SET t.archived = 1
-      WHERE ( t.account_id = ? AND t.id <= ? AND b.confirmations >= ? )
-      OR ( t.account_id = ? AND t.id <= ? AND t.type IN ( 'Credit_PPS', 'Donation_PPS', 'Fee_PPS', 'TXFee', 'Debit_MP', 'Debit_AP' ) )");
-    if ($this->checkStmt($stmt) && $stmt->bind_param('iiiii', $account_id, $txid, $this->config['confirmations'], $account_id, $txid) && $stmt->execute())
+      WHERE t.archived = 0
+      AND (
+           ( t.account_id = ? AND t.id <= ? AND b.confirmations >= ? )
+        OR ( t.account_id = ? AND t.id <= ? AND t.type IN ( 'Credit_PPS', 'Donation_PPS', 'Fee_PPS', 'TXFee', 'Debit_MP', 'Debit_AP' ) )
+      )");
+     if ($this->checkStmt($stmt) && $stmt->bind_param('iiiii', $account_id, $txid, $this->config['confirmations'], $account_id, $txid) && $stmt->execute())
       return true;
-    return false;
+    return $this->sqlError();
   }
 
   /**
@@ -53,9 +56,16 @@ class Transaction extends Base {
    * @return data array type and total
    **/
   public function getTransactionSummary($account_id=NULL) {
-    $sql = "SELECT SUM(t.amount) AS total, t.type AS type FROM $this->table AS t";
+    if ($data = $this->memcache->get(__FUNCTION__ . $account_id)) return $data;
+    $sql = "
+      SELECT
+        SUM(t.amount) AS total, t.type AS type
+      FROM transactions AS t
+      LEFT OUTER JOIN blocks AS b
+      ON b.id = t.block_id
+      WHERE ( b.confirmations > 0 OR b.id IS NULL )";
     if (!empty($account_id)) {
-      $sql .= " WHERE t.account_id = ? ";
+      $sql .= " AND t.account_id = ? ";
       $this->addParam('i', $account_id);
     }
     $sql .= " GROUP BY t.type";
@@ -74,9 +84,10 @@ class Transaction extends Base {
       while ($row = $result->fetch_assoc()) {
         $aData[$row['type']] = $row['total'];
       }
-      return $aData;
+      // Cache data for a while, query takes long on many rows
+      return $this->memcache->setCache(__FUNCTION__ . $account_id, $aData, 60);
     }
-    return false;
+    return $this->sqlError();
   }
 
   /**
@@ -98,6 +109,7 @@ class Transaction extends Base {
         t.amount AS amount,
         t.coin_address AS coin_address,
         t.timestamp AS timestamp,
+        t.txid AS txid,
         b.height AS height,
         b.blockhash AS blockhash,
         b.confirmations AS confirmations
@@ -144,7 +156,7 @@ class Transaction extends Base {
         }
       }
       if (!empty($aFilter)) {
-	empty($account_id) ? $sql .= " WHERE " : $sql .= " AND ";
+      	empty($account_id) ? $sql .= " WHERE " : $sql .= " AND ";
         $sql .= implode(' AND ', $aFilter);
       }
     }
@@ -163,8 +175,7 @@ class Transaction extends Base {
         $this->num_rows = $row_count;
       return $result->fetch_all(MYSQLI_ASSOC);
     }
-    $this->debug->append('Failed to fetch transactions: ' . $this->mysqli->error);
-    return false;
+    return $this->sqlError();
   }
 
   /**
@@ -180,8 +191,7 @@ class Transaction extends Base {
       }
       return $aData;
     }
-    $this->debug->append('Failed to fetch transaction types: ' . $this->mysqli->error);
-    return false;
+    return $this->sqlError();
   }
 
   /**
@@ -208,11 +218,11 @@ class Transaction extends Base {
         t.type = 'Donation_PPS'
       )
       GROUP BY a.username
+      ORDER BY donation DESC
       ");
     if ($this->checkStmt($stmt) && $stmt->execute() && $result = $stmt->get_result())
       return $result->fetch_all(MYSQLI_ASSOC);
-    $this->debug->append("Failed to fetch website donors: " . $this->mysqli->error);
-    return false;
+    return $this->sqlError();
   }
 
   /**
@@ -236,10 +246,7 @@ class Transaction extends Base {
       WHERE archived = 0");
     if ($this->checkStmt($stmt) && $stmt->bind_param('ii', $this->config['confirmations'], $this->config['confirmations']) && $stmt->execute() && $stmt->bind_result($dBalance) && $stmt->fetch())
       return $dBalance;
-    // Catchall
-    $this->setErrorMessage('Unable to find locked credits for all users');
-    $this->debug->append('MySQL query failed : ' . $this->mysqli->error);
-    return false;
+    return $this->sqlError();
   }
 
   /**
@@ -272,14 +279,17 @@ class Transaction extends Base {
       ");
     if ($this->checkStmt($stmt) && $stmt->bind_param("iiiii", $this->config['confirmations'], $this->config['confirmations'], $this->config['confirmations'], $this->config['confirmations'], $account_id) && $stmt->execute() && $result = $stmt->get_result())
       return $result->fetch_assoc();
-    $this->debug->append('Failed to fetch users balance: ' . $this->mysqli->error);
-    return false;
+    return $this->sqlError();
   }
 }
 
 $transaction = new Transaction();
+$transaction->setMemcache($memcache);
 $transaction->setDebug($debug);
 $transaction->setMysql($mysqli);
 $transaction->setConfig($config);
 $transaction->setBlock($block);
 $transaction->setUser($user);
+$transaction->setErrorCodes($aErrorCodes);
+
+?>

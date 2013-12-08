@@ -51,7 +51,13 @@ if (is_dir(INCLUDE_DIR . '/pages/')) {
 }
 
 // Set a default action here if no page has been requested
-$page = isset($_REQUEST['page']) && isset($arrPages[$_REQUEST['page']]) ? $_REQUEST['page'] : 'home';
+if (isset($_REQUEST['page']) && isset($arrPages[$_REQUEST['page']])) {
+  $page = $_REQUEST['page'];
+} else if (isset($_REQUEST['page']) && ! isset($arrPages[$_REQUEST['page']])) {
+  $page = 'error';
+} else {
+  $page = 'home';
+}
 
 // Create our pages array from existing files
 if (is_dir(INCLUDE_DIR . '/pages/' . $page)) {

@@ -4,31 +4,13 @@
 if (!defined('SECURITY'))
   die('Hacking attempt');
 
-class Share {
-  private $sError = '';
-  private $table = 'shares';
-  private $tableArchive = 'shares_archive';
+class Share Extends Base {
+  protected $table = 'shares';
+  protected $tableArchive = 'shares_archive';
   private $oUpstream;
   private $iLastUpstreamId;
   // This defines each share
   public $rem_host, $username, $our_result, $upstream_result, $reason, $solution, $time, $difficulty;
-
-  public function __construct($debug, $mysqli, $user, $block, $config) {
-    $this->debug = $debug;
-    $this->mysqli = $mysqli;
-    $this->user = $user;
-    $this->config = $config;
-    $this->block = $block;
-    $this->debug->append("Instantiated Share class", 2);
-  }
-
-  // get and set methods
-  private function setErrorMessage($msg) {
-    $this->sError = $msg;
-  }
-  public function getError() {
-    return $this->sError;
-  }
 
   /**
    * Fetch archive tables name for this class
@@ -38,13 +20,43 @@ class Share {
   public function getArchiveTableName() {
     return $this->tableArchive;
   }
+
   /**
-   * Fetch normal table name for this class
-   * @param none
-   * @return data string Table name
+   * Fetch a single share by ID
+   * @param id int Share ID
+   * @return array Share data
    **/
-  public function getTableName() {
-    return $this->table;
+  public function getShareById($id) {
+    return $this->getAllAssoc($id);
+  }
+
+  /**
+   * Update an entire shares data
+   **/
+  public function updateShareById($id, $data) {
+    $this->debug->append("STA " . __METHOD__, 4);
+    $sql = "UPDATE $this->table SET";
+    $start = true;
+    // Remove ID column
+    unset($data['id']);
+    foreach ($data as $column => $value) {
+      $start == true ? $sql .= " $column = ? " : $sql .= ", $column = ?";
+      $start = false;
+      switch($column) {
+      case 'difficulty':
+        $this->addParam('d', $value);
+        break;
+      default:
+        $this->addParam('s', $value);
+        break;
+      }
+    }
+    $sql .= " WHERE id = ? LIMIT 1";
+    $this->addParam('i', $id);
+    $stmt = $this->mysqli->prepare($sql);
+    if ($this->checkStmt($stmt) && call_user_func_array( array($stmt, 'bind_param'), $this->getParam()) && $stmt->execute())
+      return true;
+    return $this->sqlError();
   }
 
   /**
@@ -52,14 +64,10 @@ class Share {
    * Used for PPS calculations without moving to archive
    **/
   public function getLastInsertedShareId() {
-    $stmt = $this->mysqli->prepare("
-      SELECT MAX(id) AS id FROM $this->table
-      ");
+    $stmt = $this->mysqli->prepare("SELECT MAX(id) AS id FROM $this->table");
     if ($this->checkStmt($stmt) && $stmt->execute() && $result = $stmt->get_result())
       return $result->fetch_object()->id;
-    // Catchall
-    $this->setErrorMessage('Failed to fetch last inserted share ID');
-    return false;
+    return $this->sqlError();
   }
 
   /**
@@ -75,14 +83,9 @@ class Share {
       WHERE our_result = 'Y'
       AND id > ? AND id <= ?
       ");
-    if ($this->checkStmt($stmt)) {
-      $stmt->bind_param('ii', $previous_upstream, $current_upstream);
-      $stmt->execute();
-      $result = $stmt->get_result();
-      $stmt->close();
+    if ($this->checkStmt($stmt) && $stmt->bind_param('ii', $previous_upstream, $current_upstream) && $stmt->execute() && $result = $stmt->get_result())
       return $result->fetch_object()->total;
-    }
-    return false;
+    return $this->sqlError();
   }
 
   /**
@@ -108,7 +111,7 @@ class Share {
       ");
     if ($this->checkStmt($stmt) && $stmt->bind_param('ii', $previous_upstream, $current_upstream) && $stmt->execute() && $result = $stmt->get_result())
       return $result->fetch_all(MYSQLI_ASSOC);
-    return false;
+    return $this->sqlError();
   }
 
   /**
@@ -118,19 +121,17 @@ class Share {
     $stmt = $this->mysqli->prepare("SELECT MAX(id) AS id FROM $this->table");
     if ($this->checkStmt($stmt) && $stmt->execute() && $result = $stmt->get_result())
       return $result->fetch_object()->id;
-    return false;
+    return $this->sqlError();
   }
 
   /**
    * Fetch the highest available share ID from archive
    **/
   function getMaxArchiveShareId() {
-    $stmt = $this->mysqli->prepare("
-      SELECT MAX(share_id) AS share_id FROM $this->tableArchive
-      ");
+    $stmt = $this->mysqli->prepare("SELECT MAX(share_id) AS share_id FROM $this->tableArchive");
     if ($this->checkStmt($stmt) && $stmt->execute() && $result = $stmt->get_result())
       return $result->fetch_object()->share_id;
-    return false;
+    return $this->sqlError();
   }
 
   /**
@@ -161,7 +162,7 @@ class Share {
       }
       if (is_array($aData)) return $aData;
     }
-    return false;
+    return $this->sqlError();
   }
 
   /**
@@ -185,8 +186,7 @@ class Share {
       if ($this->checkStmt($stmt) && $stmt->bind_param('i', $this->config['archive']['maxage']) && $stmt->execute())
       return true;
     }
-    // Catchall
-    return false;
+    return $this->sqlError();
   }
 
   /**
@@ -202,20 +202,22 @@ class Share {
         SELECT id, username, our_result, upstream_result, ?, time, IF(difficulty=0, pow(2, (" . $this->config['difficulty'] . " - 16)), difficulty) AS difficulty
         FROM $this->table
         WHERE id > ? AND id <= ?");
-    if ($this->checkStmt($archive_stmt) && $archive_stmt->bind_param('iii', $block_id, $previous_upstream, $current_upstream) && $archive_stmt->execute()) {
-      $archive_stmt->close();
+    if ($this->checkStmt($archive_stmt) && $archive_stmt->bind_param('iii', $block_id, $previous_upstream, $current_upstream) && $archive_stmt->execute())
       return true;
-    }
-    // Catchall
-    return false;
+    return $this->sqlError();
   }
 
+  /**
+   * Delete accounted shares from shares table
+   * @param current_upstream int Current highest upstream ID
+   * @param previous_upstream int Previous upstream ID
+   * @return bool true or false
+   **/
   public function deleteAccountedShares($current_upstream, $previous_upstream=0) {
     $stmt = $this->mysqli->prepare("DELETE FROM $this->table WHERE id > ? AND id <= ?");
     if ($this->checkStmt($stmt) && $stmt->bind_param('ii', $previous_upstream, $current_upstream) && $stmt->execute())
       return true;
-    // Catchall
-    return false;
+    return $this->sqlError();
   }
   /**
    * Set/get last found share accepted by upstream: id and accounts
@@ -229,7 +231,10 @@ class Share {
   public function getUpstreamFinder() {
     return @$this->oUpstream->account;
   }
-  public function getUpstreamId() {
+  public function getUpstreamWorker() {
+    return @$this->oUpstream->worker;
+  }
+  public function getUpstreamShareId() {
     return @$this->oUpstream->id;
   }
   /**
@@ -240,7 +245,7 @@ class Share {
    * @param last int Skips all shares up to last to find new share
    * @return bool
    **/
-  public function setUpstream($aBlock, $last=0) {
+  public function findUpstreamShare($aBlock, $last=0) {
     // Many use stratum, so we create our stratum check first
     $version = pack("I*", sprintf('%08d', $aBlock['version']));
     $previousblockhash = pack("H*", swapEndian($aBlock['previousblockhash']));
@@ -252,39 +257,39 @@ class Share {
     $header_hex = implode(unpack("H*", $header_bin));
 
     // Stratum supported blockhash solution entry
-    $stmt = $this->mysqli->prepare("SELECT SUBSTRING_INDEX( `username` , '.', 1 ) AS account, id FROM $this->table WHERE solution = ? LIMIT 1");
+    $stmt = $this->mysqli->prepare("SELECT SUBSTRING_INDEX( `username` , '.', 1 ) AS account, username as worker, id FROM $this->table WHERE solution = ? LIMIT 1");
     if ($this->checkStmt($stmt) && $stmt->bind_param('s', $aBlock['hash']) && $stmt->execute() && $result = $stmt->get_result()) {
       $this->oUpstream = $result->fetch_object();
-      $this->share_type = 'startum_blockhash';
-      if (!empty($this->oUpstream->account) && is_int($this->oUpstream->id))
+      $this->share_type = 'stratum_blockhash';
+      if (!empty($this->oUpstream->account) && !empty($this->oUpstream->worker) && is_int($this->oUpstream->id))
         return true;
     }
 
     // Stratum scrypt hash check
     $scrypt_hash = swapEndian(bin2hex(Scrypt::calc($header_bin, $header_bin, 1024, 1, 1, 32)));
-    $stmt = $this->mysqli->prepare("SELECT SUBSTRING_INDEX( `username` , '.', 1 ) AS account, id FROM $this->table WHERE solution = ? LIMIT 1");
+    $stmt = $this->mysqli->prepare("SELECT SUBSTRING_INDEX( `username` , '.', 1 ) AS account, username as worker, id FROM $this->table WHERE solution = ? LIMIT 1");
     if ($this->checkStmt($stmt) && $stmt->bind_param('s', $scrypt_hash) && $stmt->execute() && $result = $stmt->get_result()) {
       $this->oUpstream = $result->fetch_object();
-      $this->share_type = 'startum_solution';
-      if (!empty($this->oUpstream->account) && is_int($this->oUpstream->id))
+      $this->share_type = 'stratum_solution';
+      if (!empty($this->oUpstream->account) && !empty($this->oUpstream->worker) && is_int($this->oUpstream->id))
         return true;
     }
 
     // Failed to fetch via startum solution, try pushpoold
     // Fallback to pushpoold solution type
     $ppheader = sprintf('%08d', $aBlock['version']) . word_reverse($aBlock['previousblockhash']) . word_reverse($aBlock['merkleroot']) . dechex($aBlock['time']) . $aBlock['bits'] . dechex($aBlock['nonce']);
-    $stmt = $this->mysqli->prepare("SELECT SUBSTRING_INDEX( `username` , '.', 1 ) AS account, id FROM $this->table WHERE solution LIKE CONCAT(?, '%') LIMIT 1");
+    $stmt = $this->mysqli->prepare("SELECT SUBSTRING_INDEX( `username` , '.', 1 ) AS account, username as worker, id FROM $this->table WHERE solution LIKE CONCAT(?, '%') LIMIT 1");
     if ($this->checkStmt($stmt) && $stmt->bind_param('s', $ppheader) && $stmt->execute() && $result = $stmt->get_result()) {
       $this->oUpstream = $result->fetch_object();
       $this->share_type = 'pp_solution';
-      if (!empty($this->oUpstream->account) && is_int($this->oUpstream->id))
+      if (!empty($this->oUpstream->account) && !empty($this->oUpstream->worker) && is_int($this->oUpstream->id))
         return true;
     }
 
     // Still no match, try upstream result with timerange
     $stmt = $this->mysqli->prepare("
       SELECT
-      SUBSTRING_INDEX( `username` , '.', 1 ) AS account, id
+      SUBSTRING_INDEX( `username` , '.', 1 ) AS account, username as worker, id
       FROM $this->table
       WHERE upstream_result = 'Y'
       AND id > ?
@@ -294,14 +299,14 @@ class Share {
     if ($this->checkStmt($stmt) && $stmt->bind_param('iii', $last, $aBlock['time'], $aBlock['time']) && $stmt->execute() && $result = $stmt->get_result()) {
       $this->oUpstream = $result->fetch_object();
       $this->share_type = 'upstream_share';
-      if (!empty($this->oUpstream->account) && is_int($this->oUpstream->id))
+      if (!empty($this->oUpstream->account) && !empty($this->oUpstream->worker) && is_int($this->oUpstream->id))
         return true;
     }
 
     // We failed again, now we take ANY result matching the timestamp
     $stmt = $this->mysqli->prepare("
       SELECT
-      SUBSTRING_INDEX( `username` , '.', 1 ) AS account, id
+      SUBSTRING_INDEX( `username` , '.', 1 ) AS account, username as worker, id
       FROM $this->table
       WHERE our_result = 'Y'
       AND id > ?
@@ -310,10 +315,10 @@ class Share {
     if ($this->checkStmt($stmt) && $stmt->bind_param('ii', $last, $aBlock['time']) && $stmt->execute() && $result = $stmt->get_result()) {
       $this->oUpstream = $result->fetch_object();
       $this->share_type = 'any_share';
-      if (!empty($this->oUpstream->account) && is_int($this->oUpstream->id))
+      if (!empty($this->oUpstream->account) && !empty($this->oUpstream->worker) && is_int($this->oUpstream->id))
         return true;
     }
-    // Catchall
+    $this->setErrorMessage($this->getErrorMsg('E0052', $aBlock['height']));
     return false;
   }
 
@@ -332,21 +337,22 @@ class Share {
         AND id <= ? AND @total < ?
         ORDER BY id DESC
       ) AS b
-      WHERE total <= ?
-      ");
+      WHERE total <= ?");
     if ($this->checkStmt($stmt) && $stmt->bind_param('iii', $current_upstream, $iCount, $iCount) && $stmt->execute() && $result = $stmt->get_result())
       return $result->fetch_object()->id;
-    return false;
+    return $this->sqlError();
   }
 
   /**
    * Fetch the lowest needed share ID from archive
    **/
   function getMinArchiveShareId($iCount) {
+    // We don't use baseline here to be more accurate
+    $iCount = $iCount * pow(2, ($this->config['difficulty'] - 16));
     $stmt = $this->mysqli->prepare("
       SELECT MIN(b.share_id) AS share_id FROM
       (
-        SELECT share_id, @total := @total + (IF(difficulty=0, POW(2, (" . $this->config['difficulty'] . " - 16)), difficulty) / POW(2, (" . $this->config['difficulty'] . " - 16))) AS total
+        SELECT share_id, @total := @total + IF(difficulty=0, POW(2, (" . $this->config['difficulty'] . " - 16)), difficulty) AS total
         FROM $this->tableArchive, (SELECT @total := 0) AS a
         WHERE our_result = 'Y'
         AND @total < ?
@@ -356,20 +362,14 @@ class Share {
       ");
     if ($this->checkStmt($stmt) && $stmt->bind_param('ii', $iCount, $iCount) && $stmt->execute() && $result = $stmt->get_result())
       return $result->fetch_object()->share_id;
-    return false;
-  }
-
-  /**
-   * Helper function
-   **/
-  private function checkStmt($bState) {
-    if ($bState ===! true) {
-      $this->debug->append("Failed to prepare statement: " . $this->mysqli->error);
-      $this->setErrorMessage('Internal application Error');
-      return false;
-    }
-    return true;
+    return $this->sqlError();
   }
 }
 
-$share = new Share($debug, $mysqli, $user, $block, $config);
+$share = new Share();
+$share->setDebug($debug);
+$share->setMysql($mysqli);
+$share->setConfig($config);
+$share->setUser($user);
+$share->setBlock($block);
+$share->setErrorCodes($aErrorCodes);
