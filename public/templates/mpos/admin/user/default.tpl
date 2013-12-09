@@ -3,21 +3,21 @@
       $.ajax({
        type: "POST",
        url: "{$smarty.server.PHP_SELF}",
-       data: "page={$smarty.request.page}&action={$smarty.request.action}&do=fee&account_id=" + id,
+       data: "page={$smarty.request.page|escape}&action={$smarty.request.action|escape}&do=fee&account_id=" + id,
      });
     }
     function storeLock(id) {
       $.ajax({
        type: "POST",
        url: "{$smarty.server.PHP_SELF}",
-       data: "page={$smarty.request.page}&action={$smarty.request.action}&do=lock&account_id=" + id,
+       data: "page={$smarty.request.page|escape}&action={$smarty.request.action|escape}&do=lock&account_id=" + id,
      });
     }
     function storeAdmin(id) {
       $.ajax({
        type: "POST",
        url: "{$smarty.server.PHP_SELF}",
-       data: "page={$smarty.request.page}&action={$smarty.request.action}&do=admin&account_id=" + id,
+       data: "page={$smarty.request.page|escape}&action={$smarty.request.action|escape}&do=admin&account_id=" + id,
      });
     }
 </script>

@@ -1,7 +1,7 @@
 <article class="module width_full">
   <form method="POST">
-    <input type="hidden" name="page" value="{$smarty.request.page}" />
-    <input type="hidden" name="action" value="{$smarty.request.action}" />
+    <input type="hidden" name="page" value="{$smarty.request.page|escape}" />
+    <input type="hidden" name="action" value="{$smarty.request.action|escape}" />
     <input type="hidden" name="do" value="save" />
     <header>
       <h3 class="tabs_involved">Settings</h3>
