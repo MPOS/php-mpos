@@ -27,7 +27,7 @@ require_once('shared.inc.php');
 
 if ($setting->getValue('disable_mp') == 1) {
   $log->logInfo(" manual payout disabled via admin panel");
-  $monitoring->endCronjob($cron_name, 'E0009', 0, true);
+  $monitoring->endCronjob($cron_name, 'E0009', 0, true, false);
 }
 
 if ($bitcoin->can_connect() !== true) {
