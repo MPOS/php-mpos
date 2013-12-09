@@ -72,6 +72,7 @@ class Base {
   }
   public function setShare($share) {
     $this->share = $share;
+  }
   public function setTeamsAccounts($teamsaccounts) {
     $this->teamsaccounts = $teamsaccounts;
   }
@@ -127,6 +128,7 @@ class Base {
       return $result->fetch_assoc();
     return false;
   }
+
   /**
    * Get a single row from the table
    * @param value string Value to search for
@@ -149,19 +151,8 @@ class Base {
       $stmt->fetch();
       $stmt->close();
       return $retval;
-    return false;
-  }
-
-  /**
-   * Check if the prepared statement is valid
-   * @param $bState Statement return value
-   * @return bool true or false
-   **/
-  function checkStmt($bState) {
-    $this->debug->append("STA " . __METHOD__, 4);
-    if ($bState ===! true)
-      return $this->sqlError();
-    return true;
+      return false;
+    }
   }
 
   /**
@@ -241,8 +232,7 @@ class Base {
       return $result->fetch_object()->id;
     return false;
   }
-
-  function checkStmt($bState) {
+  public function checkStmt($bState) {
     $this->debug->append("STA " . __METHOD__, 4);
     if ($bState ===! true) {
       $this->debug->append("Failed to prepare statement: " . $this->mysqli->error);
@@ -250,28 +240,6 @@ class Base {
       return false;
     }
     return true;
-  }
-
-  /**
-   * We may need to generate our bind_param list
-   **/
-  public function addParam($type, &$value) {
-    $this->values[] = $value;
-    $this->types .= $type;
-  }
-  public function getParam() {
-    $array = array_merge(array($this->types), $this->values);
-    // Clear the data
-    $this->values = NULL;
-    $this->types = NULL;
-    // See here why we need this: http://stackoverflow.com/questions/16120822/mysqli-bind-param-expected-to-be-a-reference-value-given
-    if (strnatcmp(phpversion(),'5.3') >= 0) {
-      $refs = array();
-      foreach($array as $key => $value)
-        $refs[$key] = &$array[$key];
-      return $refs;
-    }
-    return $array;
   }
 }
 ?>
