@@ -70,6 +70,25 @@ $config['wallet']['username'] = 'testnet';
 $config['wallet']['password'] = 'testnet';
 
 /**
+ * Lock account after maximum failed logins
+ *
+ * Explanation:
+ *   To avoid accounts being hacked by brute force attacks,
+ *   set a maximum amount of failed login or pin entry attempts before locking
+ *   the account. They will need to contact site support to re-enable the account.
+ *
+ *   This also applies for invalid PIN entries, which is covered by the pin option.
+ *
+ *   Workers are not affected by this lockout, mining will continue as usual.
+ *
+ * Default:
+ *   login  =  3
+ *   pin    =  3
+ **/
+$config['maxfailed']['login'] = 3;
+$config['maxfailed']['pin'] = 3;
+
+/**
  * Getting Started Config
  *
  * This is displayed on GettingStarted Page

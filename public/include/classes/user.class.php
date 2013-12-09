@@ -46,6 +46,9 @@ class User extends Base {
   public function getUserFailed($id) {
    return $this->getSingle($id, 'failed_logins', 'id');
   }
+  public function getUserPinFailed($id) {
+   return $this->getSingle($id, 'failed_pins', 'id');
+  }
   public function isNoFee($id) {
     return $this->getUserNoFee($id);
   }
@@ -71,8 +74,16 @@ class User extends Base {
     $field = array( 'name' => 'failed_logins', 'type' => 'i', 'value' => $value);
     return $this->updateSingle($id, $field);
   }
+  public function setUserPinFailed($id, $value) {
+    $field = array( 'name' => 'failed_pins', 'type' => 'i', 'value' => $value);
+    return $this->updateSingle($id, $field);
+  }
   private function incUserFailed($id) {
     $field = array( 'name' => 'failed_logins', 'type' => 'i', 'value' => $this->getUserFailed($id) + 1);
+    return $this->updateSingle($id, $field);
+  }
+  private function incUserPinFailed($id) {
+    $field = array( 'name' => 'failed_pins', 'type' => 'i', 'value' => $this->getUserPinFailed($id) + 1);
     return $this->updateSingle($id, $field);
   }
   private function setUserIp($id, $ip) {
@@ -122,8 +133,12 @@ class User extends Base {
         return true;
     }
     $this->setErrorMessage("Invalid username or password");
-    if ($id = $this->getUserId($username))
+    if ($id = $this->getUserId($username)) {
       $this->incUserFailed($id);
+      // Check if this account should be locked
+      if (isset($this->config['maxfailed']['login']) && $this->getUserFailed($id) >= $this->config['maxfailed']['login'])
+        $this->changeLocked($id);
+    }
 
     return false;
   }
@@ -139,12 +154,17 @@ class User extends Base {
     $this->debug->append("Confirming PIN for $userId and pin $pin", 2);
     $stmt = $this->mysqli->prepare("SELECT pin FROM $this->table WHERE id=? AND pin=? LIMIT 1");
     $pin_hash = $this->getHash($pin);
-    $stmt->bind_param('is', $userId, $pin_hash);
-    $stmt->execute();
-    $stmt->bind_result($row_pin);
-    $stmt->fetch();
-    $stmt->close();
-    return $pin_hash === $row_pin;
+    if ($stmt->bind_param('is', $userId, $pin_hash) && $stmt->execute() && $stmt->bind_result($row_pin) && $stmt->fetch()) {
+      $this->setUserPinFailed($userId, 0);
+      return $pin_hash === $row_pin;
+    }
+    $this->incUserPinFailed($userId);
+    // Check if this account should be locked
+    if (isset($this->config['maxfailed']['pin']) && $this->getUserPinFailed($userId) >= $this->config['maxfailed']['pin']) {
+      $this->changeLocked($userId);
+      $this->logoutUser();
+    }
+    return false;
   }
 
   /**
@@ -641,3 +661,4 @@ $user->setMail($mail);
 $user->setToken($oToken);
 $user->setBitcoin($bitcoin);
 $user->setSetting($setting);
+$user->setErrorCodes($aErrorCodes);
