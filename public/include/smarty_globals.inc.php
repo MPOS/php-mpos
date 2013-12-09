@@ -35,7 +35,7 @@ if ( ! $dPersonalHashrateModifier = $setting->getValue('statistics_personal_hash
 if ( ! $dNetworkHashrateModifier = $setting->getValue('statistics_network_hashrate_modifier') ) $dNetworkHashrateModifier = 1;
 
 // Apply modifier now
-$dNetworkHashrate = $dNetworkHashrate * $dNetworkHashrateModifier;
+$dNetworkHashrate = $dNetworkHashrate / 1000 * $dNetworkHashrateModifier;
 $iCurrentPoolHashrate = $iCurrentPoolHashrate * $dPoolHashrateModifier;
 
 // Share rate of the entire pool

@@ -41,6 +41,14 @@ if (!$smarty->isCached('master.tpl', $smarty_cache_key)) {
     $dTimeSinceLast = 0;
   }
 
+    // Round progress
+  $iEstShares = $statistics->getEstimatedShares($dDifficulty);
+  if ($iEstShares > 0 && $aRoundShares['valid'] > 0) {
+    $dEstPercent = round(100 / $iEstShares * $aRoundShares['valid'], 2);
+  } else {
+    $dEstPercent = 0;
+  }
+
   // Propagate content our template
   $smarty->assign("ESTTIME", $iEstTime);
   $smarty->assign("TIMESINCELAST", $dTimeSinceLast);
@@ -50,6 +58,8 @@ if (!$smarty->isCached('master.tpl', $smarty_cache_key)) {
   $smarty->assign("CONTRIBHASHES", $aContributorsHashes);
   $smarty->assign("CURRENTBLOCK", $iBlock);
   $smarty->assign("CURRENTBLOCKHASH", @$sBlockHash);
+  $smarty->assign('NETWORK', array('difficulty' => $dDifficulty, 'block' => $iBlock));
+  $smarty->assign('ESTIMATES', array('shares' => $iEstShares, 'percent' => $dEstPercent));
   if (count($aBlockData) > 0) {
     $smarty->assign("LASTBLOCK", $aBlockData['height']);
     $smarty->assign("LASTBLOCKHASH", $aBlockData['blockhash']);
