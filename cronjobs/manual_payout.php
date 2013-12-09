@@ -82,7 +82,7 @@ if (count($aPayouts) > 0) {
         if (!$notification->sendNotification($aData['account_id'], 'manual_payout', $aMailData))
           $log->logError('Failed to send notification email to users address: ' . $aMailData['email']);
         // Recheck the users balance to make sure it is now 0
-        $aBalance = $transaction->getBalance($aUserData['id']);
+        $aBalance = $transaction->getBalance($aData['id']);
         if ($aBalance['confirmed'] > 0) {
           $log->logFatal('User has a remaining balance of ' . $aBalance['confirmed'] . ' after a successful payout!');
           $monitoring->endCronjob($cron_name, 'E0065', 1, true);
