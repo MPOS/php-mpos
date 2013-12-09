@@ -83,8 +83,15 @@ if (! empty($users)) {
         $aMailData['amount'] = $dBalance;
         if (!$notification->sendNotification($aUserData['id'], 'auto_payout', $aMailData))
           $log->logError('Failed to send notification email to users address: ' . $aMailData['email']);
+        // Recheck the users balance to make sure it is now 0
+        $aBalance = $transaction->getBalance($aUserData['id']);
+        if ($aBalance['confirmed'] > 0) {
+          $log->logFatal('User has a remaining balance of ' . $aBalance['confirmed'] . ' after a successful payout!');
+          $monitoring->endCronjob($cron_name, 'E0065', 1, true);
+        }
       } else {
-        $log->logError('Failed to add new Debit_AP transaction in database for user ' . $user->getUserName($aUserData['id']));
+        $log->logFatal('Failed to add new Debit_AP transaction in database for user ' . $user->getUserName($aUserData['id']));
+        $monitoring->endCronjob($cron_name, 'E0064', 1, true);
       }
     }
   }
