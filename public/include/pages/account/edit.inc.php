@@ -5,7 +5,7 @@ if (!defined('SECURITY'))
   die('Hacking attempt');
 
 if ($user->isAuthenticated()) {
-  if ( ! $user->checkPin($_SESSION['USERDATA']['id'], @$_POST['authPin']) && @$_POST['do']) {
+  if ( @$_POST['do'] && (! $user->checkPin($_SESSION['USERDATA']['id'], @$_POST['authPin']))) {
     $_SESSION['POPUP'][] = array('CONTENT' => 'Invalid PIN. ' . ($config['maxfailed']['pin'] - $user->getUserPinFailed($_SESSION['USERDATA']['id'])) . ' attempts remaining.', 'TYPE' => 'errormsg');
   } else {
     switch (@$_POST['do']) {
