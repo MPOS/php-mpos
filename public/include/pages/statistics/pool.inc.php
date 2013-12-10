@@ -43,6 +43,7 @@ if (!$smarty->isCached('master.tpl', $smarty_cache_key)) {
 
     // Round progress
   $iEstShares = $statistics->getEstimatedShares($dDifficulty);
+  $aRoundShares = $statistics->getRoundShares();
   if ($iEstShares > 0 && $aRoundShares['valid'] > 0) {
     $dEstPercent = round(100 / $iEstShares * $aRoundShares['valid'], 2);
   } else {
