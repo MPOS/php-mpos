@@ -2,10 +2,8 @@
 <?php
 // Change to working directory
 chdir(dirname(__FILE__));
-
 // Include all settings and classes
 require_once('shared.inc.php');
-
 if ($bitcoin->can_connect() === true){
 $dBalance = $bitcoin->query('getbalance');
 echo("The Wallet Balance is " .$dBalance. "\n");
@@ -26,9 +24,9 @@ empty($config['network_confirmations']) ? $confirmations = 120 : $confirmations 
 $aBlocksUnconfirmed = $block->getAllUnconfirmed($confirmations);
 $dBlocksUnconfirmedBalance = 0;
 if (!empty($aBlocksUnconfirmed))
-   foreach ($aBlocksUnconfirmed as $aData) $dBlocksUnconfirmedBalance += $aData['amount'];
+foreach ($aBlocksUnconfirmed as $aData) $dBlocksUnconfirmedBalance += $aData['amount'];
 // Fetch locked balance from transactions
-  $dLockedBalance = $transaction->getLockedBalance();
+$dLockedBalance = $transaction->getLockedBalance();
 echo("The Locked Wallet Balance for Users is: " .$dLockedBalance. "\n");
 $aFloat = $dLockedBalance + $config['coldwallet']['float'];
 echo("The Locked Wallet Balance & Float amounts to: " .$aFloat. "\n");
