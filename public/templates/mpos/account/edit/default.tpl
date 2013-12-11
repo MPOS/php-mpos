@@ -71,7 +71,7 @@
     </header>
     <div class="module_content">
       <p style="padding-left:30px; padding-redight:30px; font-size:10px;">
-        Please note: a {$GLOBAL.config.txfee} {$GLOBAL.config.currency} transaction will apply when processing "On-Demand" manual payments
+        Please note: a {$GLOBAL.config.txfee_manual} {$GLOBAL.config.currency} transaction will apply when processing "On-Demand" manual payments
       </p>
       <fieldset>
         <label>Account Balance</label>

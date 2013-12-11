@@ -75,7 +75,8 @@ $aGlobal = array(
     'price' => array( 'currency' => $config['price']['currency'] ),
     'targetdiff' => $config['difficulty'],
     'currency' => $config['currency'],
-    'txfee' => $config['txfee'],
+    'txfee_manual' => $config['txfee_manual'],
+    'txfee_auto' => $config['txfee_auto'],
     'payout_system' => $config['payout_system'],
     'ap_threshold' => array(
       'min' => $config['ap_threshold']['min'],
