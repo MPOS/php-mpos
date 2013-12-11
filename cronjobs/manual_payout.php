@@ -27,7 +27,7 @@ require_once('shared.inc.php');
 
 if ($setting->getValue('disable_mp') == 1) {
   $log->logInfo(" manual payout disabled via admin panel");
-  $monitoring->endCronjob($cron_name, 'E0009', 0, true);
+  $monitoring->endCronjob($cron_name, 'E0009', 0, true, false);
 }
 
 if ($bitcoin->can_connect() !== true) {
@@ -81,6 +81,12 @@ if (count($aPayouts) > 0) {
         $aMailData['payout_id'] = $aData['id'];
         if (!$notification->sendNotification($aData['account_id'], 'manual_payout', $aMailData))
           $log->logError('Failed to send notification email to users address: ' . $aMailData['email']);
+        // Recheck the users balance to make sure it is now 0
+        $aBalance = $transaction->getBalance($aData['account_id']);
+        if ($aBalance['confirmed'] > 0) {
+          $log->logFatal('User has a remaining balance of ' . $aBalance['confirmed'] . ' after a successful payout!');
+          $monitoring->endCronjob($cron_name, 'E0065', 1, true);
+        }
       } else {
         $log->logFatal('Failed to add new Debit_MP transaction in database for user ' . $user->getUserName($aData['account_id']));
         $monitoring->endCronjob($cron_name, 'E0064', 1, true);

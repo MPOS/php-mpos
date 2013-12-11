@@ -6,4 +6,6 @@
 
 {include file="statistics/blocks/small_table.tpl" ALIGN="right" SHORT=true}
 
+{if !$GLOBAL.website.api.disabled}
 {include file="statistics/js.tpl"}
+{/if}

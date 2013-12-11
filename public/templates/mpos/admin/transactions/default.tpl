@@ -22,22 +22,22 @@
   <header><h3>Transaction Filter</h3></header>
   <div class="module_content">
   <form action="{$smarty.server.PHP_SELF}">
-    <input type="hidden" name="page" value="{$smarty.request.page}" />
-    <input type="hidden" name="action" value="{$smarty.request.action}" />
+    <input type="hidden" name="page" value="{$smarty.request.page|escape}" />
+    <input type="hidden" name="action" value="{$smarty.request.action|escape}" />
     <table cellspacing="0" class="tablesorter">
     <tbody>
       <tr>
 {if $COUNTTRANSACTIONS / $LIMIT > 1}
         <td align="left">
   {if $smarty.request.start|default:"0" > 0}
-          <a href="{$smarty.server.PHP_SELF}?page={$smarty.request.page}&action={$smarty.request.action}&start={$smarty.request.start|default:"0" - $LIMIT}{if $FILTERS|default:""}{$FILTERS}{/if}"><i class="icon-left-open"></i></a>
+          <a href="{$smarty.server.PHP_SELF}?page={$smarty.request.page|escape}&action={$smarty.request.action|escape}&start={$smarty.request.start|default:"0" - $LIMIT}{if $FILTERS|default:""}{$FILTERS}{/if}"><i class="icon-left-open"></i></a>
   {else}
           <i class="icon-left-open"></i>
   {/if}
         </td>
         <td align="right">
   {if $COUNTTRANSACTIONS - $smarty.request.start|default:"0" - $LIMIT > 0}
-          <a href="{$smarty.server.PHP_SELF}?page={$smarty.request.page}&action={$smarty.request.action}&start={$smarty.request.start|default:"0" + $LIMIT}{if $FILTERS|default:""}{$FILTERS}{/if}"><i class="icon-right-open"></i></a>
+          <a href="{$smarty.server.PHP_SELF}?page={$smarty.request.page|escape}&action={$smarty.request.action|escape}&start={$smarty.request.start|default:"0" + $LIMIT}{if $FILTERS|default:""}{$FILTERS}{/if}"><i class="icon-right-open"></i></a>
   {else}
           <i class="icon-right-open"></i>
   {/if}

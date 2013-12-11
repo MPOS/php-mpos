@@ -8,8 +8,8 @@
     </ul>
   </header>
   <div class="tab_container">
-{include file="{$smarty.request.page}/{$smarty.request.action}/mine.tpl"}
-{include file="{$smarty.request.page}/{$smarty.request.action}/pool.tpl"}
-{include file="{$smarty.request.page}/{$smarty.request.action}/both.tpl"}
+{include file="{$smarty.request.page|escape}/{$smarty.request.action|escape}/mine.tpl"}
+{include file="{$smarty.request.page|escape}/{$smarty.request.action|escape}/pool.tpl"}
+{include file="{$smarty.request.page|escape}/{$smarty.request.action|escape}/both.tpl"}
   </div>
 </article>

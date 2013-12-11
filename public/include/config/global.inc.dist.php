@@ -70,6 +70,25 @@ $config['wallet']['username'] = 'testnet';
 $config['wallet']['password'] = 'testnet';
 
 /**
+ * Lock account after maximum failed logins
+ *
+ * Explanation:
+ *   To avoid accounts being hacked by brute force attacks,
+ *   set a maximum amount of failed login or pin entry attempts before locking
+ *   the account. They will need to contact site support to re-enable the account.
+ *
+ *   This also applies for invalid PIN entries, which is covered by the pin option.
+ *
+ *   Workers are not affected by this lockout, mining will continue as usual.
+ *
+ * Default:
+ *   login  =  3
+ *   pin    =  3
+ **/
+$config['maxfailed']['login'] = 3;
+$config['maxfailed']['pin'] = 3;
+
+/**
  * Getting Started Config
  *
  * This is displayed on GettingStarted Page
@@ -195,6 +214,35 @@ $config['block_bonus'] = 0;
  *   prop
 **/
 $config['payout_system'] = 'prop';
+
+/**
+ * Round purging
+ *
+ * Explanation:
+ *   As soon as a round is finished, shares of that rate are archived (see below)
+ *   and deleted from the `shares` table. Due to a large amount of shares in a
+ *   single round, this can take a very long time. To reduce server load and allow
+ *   other systems to access the DB during this high-load time, the DELETE
+ *   calls are being limited to a number of rows. Then the process sleeps and
+ *   continues to delete shares until all shares have been purged.
+ *
+ *   You can adjust some purging settings here in order to improve your overall
+ *   site performance during round ends. Keep in mind that drecreasing shares/time
+ *   will make the cron run longer but at least keeps your site active. Vice versa
+ *   higher numbers allow for a faster deletion but might affect the live site.
+ *
+ *   This system is also used when purging archived shares.
+ *
+ * Available Options:
+ *   sleep   :  Time to sleep between delete calls
+ *   shares  :  How many shares to delete at one time
+ *
+ * Default:
+ *   sleep   :  5 seconds
+ *   shares  :  500000
+ **/
+$config['purge']['sleep'] = 1;
+$config['purge']['shares'] = 25000;
 
 /**
  * Archiving configuration for debugging
