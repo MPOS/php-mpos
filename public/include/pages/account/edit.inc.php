@@ -10,7 +10,7 @@ if ($user->isAuthenticated()) {
   } else {
     switch (@$_POST['do']) {
     case 'cashOut':
-      if ($setting->getValue('disable_mp') == 1) {
+      if ($setting->getValue('disable_payouts') == 1) {
         $_SESSION['POPUP'][] = array('CONTENT' => 'Manual payouts are disabled.', 'TYPE' => 'info');
       } else {
         $aBalance = $transaction->getBalance($_SESSION['USERDATA']['id']);

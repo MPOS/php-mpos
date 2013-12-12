@@ -60,7 +60,7 @@
   </article>
 </form>
 
-{if !$GLOBAL.disable_mp}
+{if !$GLOBAL.disable_payouts}
 <form action="{$smarty.server.PHP_SELF}" method="post">
   <input type="hidden" name="page" value="{$smarty.request.page|escape}">
   <input type="hidden" name="action" value="{$smarty.request.action|escape}">
