@@ -17,7 +17,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 
  */
-
+ 
 // Used for performance calculations
 $dStartTime = microtime(true);
 
@@ -29,6 +29,14 @@ define("SECURITY", 1);
 
 // Include our configuration (holding defines for the requires)
 if (!include_once(BASEPATH . 'include/config/global.inc.php')) die('Unable to load site configuration');
+
+// set locale
+$locale = $config['locale'];
+putenv("LANG=$locale");
+setlocale(LC_ALL, $locale);
+$directory = dirname(__FILE__).'/../../locale';
+$domain = 'messages';
+bindtextdomain($domain, $directory);
 
 // Start a session
 session_set_cookie_params(time()+$config['cookie']['duration'], $config['cookie']['path'], $config['cookie']['domain'], $config['cookie']['secure'], $config['cookie']['httponly']);
@@ -89,7 +97,7 @@ if ($page != 'api') require_once(INCLUDE_DIR . '/smarty_globals.inc.php');
 
 // Load debug information into template
 $debug->append("Loading debug information into template", 4);
-$smarty->assign('DebuggerInfo', $debug->getDebugInfo());
+//$smarty->assign('DebuggerInfo', $debug->getDebugInfo());
 $smarty->assign('RUNTIME', (microtime(true) - $dStartTime) * 1000);
 
 // Display our page

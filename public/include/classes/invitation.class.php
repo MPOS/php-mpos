@@ -130,7 +130,7 @@ class Invitation extends Base {
 }
 
 // Instantiate class
-$invitation = new invitation();
+$invitation = new Invitation();
 $invitation->setDebug($debug);
 $invitation->setMysql($mysqli);
 $invitation->setMail($mail);
