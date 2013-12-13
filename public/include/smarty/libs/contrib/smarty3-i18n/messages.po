@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-12-13 14:00+0000\n"
+"POT-Creation-Date: 2013-12-13 19:32+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,5 +18,9 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 
 #: php-mpos.c:2
+msgid "Home"
+msgstr ""
+
+#: php-mpos.c:5
 msgid "Dashboard"
 msgstr ""

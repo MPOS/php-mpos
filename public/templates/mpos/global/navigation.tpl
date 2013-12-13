@@ -1,5 +1,5 @@
     <hr/>
-    <li class="icon-home"><a href="{$smarty.server.PHP_SELF}">Home</a></li>
+    <li class="icon-home"><a href="{$smarty.server.PHP_SELF}">{t}Home{/t}</a></li>
     {if $smarty.session.AUTHENTICATED|default:"0" == 1}
     <h3>My Account</h3>
     <ul class="toggle">

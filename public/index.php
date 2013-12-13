@@ -30,14 +30,6 @@ define("SECURITY", 1);
 // Include our configuration (holding defines for the requires)
 if (!include_once(BASEPATH . 'include/config/global.inc.php')) die('Unable to load site configuration');
 
-// set locale
-$locale = $config['locale'];
-putenv("LANG=$locale");
-setlocale(LC_ALL, $locale);
-$directory = dirname(__FILE__).'/../../locale';
-$domain = 'messages';
-bindtextdomain($domain, $directory);
-
 // Start a session
 session_set_cookie_params(time()+$config['cookie']['duration'], $config['cookie']['path'], $config['cookie']['domain'], $config['cookie']['secure'], $config['cookie']['httponly']);
 session_start();
@@ -97,7 +89,9 @@ if ($page != 'api') require_once(INCLUDE_DIR . '/smarty_globals.inc.php');
 
 // Load debug information into template
 $debug->append("Loading debug information into template", 4);
-//$smarty->assign('DebuggerInfo', $debug->getDebugInfo());
+if($config['locale']!='tr_TR.utf8') { // locale hack for tr_TR.
+	$smarty->assign('DebuggerInfo', $debug->getDebugInfo()); 
+}
 $smarty->assign('RUNTIME', (microtime(true) - $dStartTime) * 1000);
 
 // Display our page
