@@ -1,0 +1,42 @@
+=head1 NAME
+
+tsmarty2c - Rip translation strings from smarty template files and convert them to gettext calls in C.
+
+=head1 SYNOPSIS
+
+tsmarty2c <templ-file1-or-dir1> [<templ-file2-or-dir2>] [... <templ-fileN-or-dirN>]
+
+=head1 DESCRIPTION
+
+tsmarty2c rips the translation strings from smarty template files, and converts them to gettext calls in C.
+
+The C output may later be used with the standard gettext tools (see xgettext).
+
+If one of the parameters is a directory, the template files within will be parsed, recursively.
+
+The output also contains comments that point to the location of the file that the string has been ripped from.
+
+You can use the '--add-comments' parameter of xgettext to make it include these comments inside the PO file (suggested by Mike van Lammeren).
+
+=head1 SEE ALSO
+
+xgettext(1)
+
+=head1 BUGS
+
+Please report any bugs, or post any suggestions, to the fusiondirectory mailing list fusiondirectory-users or to <https://forge.fusiondirectory.org/projects/smarty3-i18n/issues/new>
+
+=head1 LICENCE AND COPYRIGHT
+
+This code is part of FusionDirectory <http://www.fusiondirectory.org>
+
+=over 2
+
+=item Copyright (C) 2004-2005 Sagi Bashari 
+
+=item Copyright (C) 2013 FusionDirectory project
+
+=back
+
+This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+
