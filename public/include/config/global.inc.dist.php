@@ -523,7 +523,7 @@ $config['system']['load']['max'] = 10.0;
 /**
  * Enable locales
  **/
-$config['locale'] = 'tr_TR.utf8';
+$config['locale'] = 'en_US.utf8';
 
 // set locale below
 $locale = $config['locale'];
