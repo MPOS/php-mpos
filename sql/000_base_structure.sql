@@ -157,7 +157,9 @@ CREATE TABLE IF NOT EXISTS `shares_archive` (
   `time` datetime NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `share_id` (`share_id`),
-  KEY `time` (`time`)
+  KEY `time` (`time`),
+  KEY `our_result` (`our_result`),
+  KEY `username` (`username`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='Archive shares for potential later debugging purposes';
 
 CREATE TABLE IF NOT EXISTS `statistics_shares` (
