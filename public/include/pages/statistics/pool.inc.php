@@ -8,10 +8,12 @@ if (!$smarty->isCached('master.tpl', $smarty_cache_key)) {
   // Fetch data from wallet
   if ($bitcoin->can_connect() === true){
     $dDifficulty = $bitcoin->getdifficulty();
+    $dNetworkHashrate = $bitcoin->getnetworkhashps();
     $iBlock = $bitcoin->getblockcount();
     is_int($iBlock) && $iBlock > 0 ? $sBlockHash = $bitcoin->query('getblockhash', $iBlock) : $sBlockHash = '';
   } else {
     $dDifficulty = 1;
+    $dNetworkHashrate = 1;
     $iBlock = 0;
     $_SESSION['POPUP'][] = array('CONTENT' => 'Unable to connect to wallet RPC service: ' . $bitcoin->can_connect(), 'TYPE' => 'errormsg');
   }
@@ -50,6 +52,9 @@ if (!$smarty->isCached('master.tpl', $smarty_cache_key)) {
     $dEstPercent = 0;
   }
 
+  $dExpectedTimePerBlock = pow(2,32) * $dDifficulty / $dNetworkHashrate;
+  $dEstNextDifficulty = round($dDifficulty * 60 / $dExpectedTimePerBlock, 8);
+
   // Propagate content our template
   $smarty->assign("ESTTIME", $iEstTime);
   $smarty->assign("TIMESINCELAST", $dTimeSinceLast);
@@ -59,7 +64,7 @@ if (!$smarty->isCached('master.tpl', $smarty_cache_key)) {
   $smarty->assign("CONTRIBHASHES", $aContributorsHashes);
   $smarty->assign("CURRENTBLOCK", $iBlock);
   $smarty->assign("CURRENTBLOCKHASH", @$sBlockHash);
-  $smarty->assign('NETWORK', array('difficulty' => $dDifficulty, 'block' => $iBlock));
+  $smarty->assign('NETWORK', array('difficulty' => $dDifficulty, 'block' => $iBlock, 'EstNextDifficulty' => $dEstNextDifficulty, 'ExpectedTimePerBlock' => $dExpectedTimePerBlock));
   $smarty->assign('ESTIMATES', array('shares' => $iEstShares, 'percent' => $dEstPercent));
   if (count($aBlockData) > 0) {
     $smarty->assign("LASTBLOCK", $aBlockData['height']);
