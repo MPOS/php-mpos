@@ -80,6 +80,9 @@ if (!empty($action)) {
     require_once(PAGES_DIR . '/' . $arrPages[$page]);
 }
 
+define('PAGE', $page);
+define('ACTION', $action);
+
 // For our content inclusion
 $smarty->assign("PAGE", $page);
 $smarty->assign("ACTION", $action);
