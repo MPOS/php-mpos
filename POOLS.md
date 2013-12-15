@@ -138,3 +138,16 @@ Small Time Miners are running various stratum only pools for different coins.
 | Pool URL | Coin | Avg. Hashrate | Avg. Active Workers | Notes |
 | -------- | ---- | ------------: | ------------------: | ----- |
 | http://magic.port-x.de/ | LTC | 0.5 Mhs | 2 | Prop |
+
+### Coinz
+
+| Pool URL | Coin | Avg. Hashrate | Avg. Active Workers | Notes |
+| -------- | ---- | ------------: | ------------------: | ----- |
+| http://asc.coinz.pw | Asiccoin | 2-4Ghs | 2-4 workers | Prop |
+| http://dem.coinz.pw | Deutch eMark | 0Ghs | 0 workers | Prop |
+| http://fst.coinz.pw | Fastcoin | 15-25Mhs | 20-30 workers | Prop |
+| http://glx.coinz.pw | Galaxycoin | 0Mhs | 0 workers | Prop |
+| http://ltc.coinz.pw | Litecoin | 0Mhs | 0 workers | Prop |
+| http://sxc.coinz.pw | Sexcoin | 10-20Mhs | 15-25 workers | Prop |
+| http://tgc.coinz.pw | Tigercoin | 2-4Ghs | 2-4 workers | Prop |
+| http://zet.coinz.pw | Zetacoin | 5-10Ghs | 2-3 workers | Prop |
