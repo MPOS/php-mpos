@@ -24,7 +24,7 @@
 	<script type="text/javascript" src="{$PATH}/js/jquery.tablesorter.pager.js" type="text/javascript"></script>
 	<script type="text/javascript" src="{$PATH}/js/jquery.equalHeight.js"></script>
   <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/raphael/2.1.2/raphael-min.js"></script>
-  <script type="text/javascript" src="//raw.github.com/toorshia/justgage/master/justgage.js"></script>
+  <script type="text/javascript" src="{$PATH}/js/justgage.1.0.1.min.js"></script>
 	<script type="text/javascript" src="{$PATH}/js/custom.js"></script>
   <!--[if IE]><script type="text/javascript" src="{$PATH}/js/excanvas.js"></script><![endif]-->
   
