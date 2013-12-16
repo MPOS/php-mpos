@@ -137,7 +137,11 @@ Small Time Miners are running various stratum only pools for different coins.
 
 | Pool URL | Coin | Avg. Hashrate | Avg. Active Workers | Notes |
 | -------- | ---- | ------------: | ------------------: | ----- |
-| http://magic.port-x.de/ | LTC | 0.5 Mhs | 2 | Prop |
+| http://magic.port-x.de/ | LiteCoin | 0.x Mhs | x | Prop | 
+|     cross-platform      | FeatherCoin | 0.x Mhs | x | Prop |
+|     cross-platform      | PhoenixCoin | 0.x Mhs | x | Prop |
+|     cross-platform      | BetaCoin | 0.x Mhs | x | Prop |
+|     cross-platform      | AnonCoin | 0.x Mhs | x | Prop |
 
 ### Coinz
 
