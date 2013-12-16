@@ -4,7 +4,10 @@
 /cronjobs/logs/*.txt.*.gz
 /public/templates/cache/*.php
 /public/templates/compile/*
+
 # Test configs
 public/include/config/global.inc.scrypt.php
 public/include/config/global.inc.sha.php
 
+# IDE Settings
+/.idea/*
