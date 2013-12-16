@@ -52,8 +52,8 @@ if (!$smarty->isCached('master.tpl', $smarty_cache_key)) {
     $dEstPercent = 0;
   }
 
-  $dExpectedTimePerBlock = pow(2,32) * $dDifficulty / $dNetworkHashrate;
-  $dEstNextDifficulty = round($dDifficulty * 60 / $dExpectedTimePerBlock, 8);
+  $dExpectedTimePerBlock = pow(2, $config['target_bits']) * $dDifficulty / $dNetworkHashrate;
+  $dEstNextDifficulty = round($dDifficulty * $config['cointarget'] / $dExpectedTimePerBlock, 8);
 
   // Propagate content our template
   $smarty->assign("ESTTIME", $iEstTime);
@@ -64,7 +64,7 @@ if (!$smarty->isCached('master.tpl', $smarty_cache_key)) {
   $smarty->assign("CONTRIBHASHES", $aContributorsHashes);
   $smarty->assign("CURRENTBLOCK", $iBlock);
   $smarty->assign("CURRENTBLOCKHASH", @$sBlockHash);
-  $smarty->assign('NETWORK', array('difficulty' => $dDifficulty, 'block' => $iBlock, 'EstNextDifficulty' => $dEstNextDifficulty, 'ExpectedTimePerBlock' => $dExpectedTimePerBlock));
+  $smarty->assign('NETWORK', array('difficulty' => $dDifficulty, 'block' => $iBlock, 'EstNextDifficulty' => $dEstNextDifficulty, 'EstTimePerBlock' => $dExpectedTimePerBlock));
   $smarty->assign('ESTIMATES', array('shares' => $iEstShares, 'percent' => $dEstPercent));
   if (count($aBlockData) > 0) {
     $smarty->assign("LASTBLOCK", $aBlockData['height']);

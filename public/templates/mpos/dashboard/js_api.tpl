@@ -140,6 +140,8 @@ $(document).ready(function(){
     $('#b-pvalid').html(data.getdashboarddata.data.pool.shares.valid);
     $('#b-pivalid').html(data.getdashboarddata.data.pool.shares.invalid + " (" + data.getdashboarddata.data.pool.shares.invalid_percent + "%)" );
     $('#b-diff').html(data.getdashboarddata.data.network.difficulty);
+    $('#b-nextdiff').html(data.getdashboarddata.data.network.nextdifficulty);
+    $('#b-esttimeperblock').html(data.getdashboarddata.data.network.esttimeperblock + " seconds"); // <- this needs some nicer format
     $('#b-nblock').html(data.getdashboarddata.data.network.block);
     $('#b-target').html(data.getdashboarddata.data.pool.shares.estimated + " (done: " + data.getdashboarddata.data.pool.shares.progress + "%)" );
     {/literal}{if $GLOBAL.config.payout_system != 'pps'}{literal }

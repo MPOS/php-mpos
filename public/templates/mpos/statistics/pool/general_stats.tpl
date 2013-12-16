@@ -33,7 +33,7 @@
         </tr>
         <tr>
           <th align="left">Est. Avg. Time per Round (Network)</td>
-          <td><font size="2"><span id="b-diff">{$NETWORK.ExpectedTimePerBlock|seconds_to_words}</span></font></td>
+          <td><font size="2"><span id="b-diff">{$NETWORK.EstTimePerBlock|seconds_to_words}</span></font></td>
         </tr>
         <tr>
           <th align="left">Est. Avg. Time per Round (Pool)</td>

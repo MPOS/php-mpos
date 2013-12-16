@@ -104,9 +104,12 @@ if ($iEstShares > 0 && $aRoundShares['valid'] > 0) {
   $dEstPercent = 0;
 }
 
+$dExpectedTimePerBlock = pow(2, $config['target_bits']) * $dDifficulty / $dNetworkHashrate;
+$dEstNextDifficulty = round($dDifficulty * $config['cointarget'] / $dExpectedTimePerBlock, 8);
+
 // Output JSON format
 $data = array(
-  'raw' => array( 'personal' => array( 'hashrate' => $dPersonalHashrate ), 'pool' => array( 'hashrate' => $dPoolHashrate ), 'network' => array( 'hashrate' => $dNetworkHashrate / 1000 ) ),
+  'raw' => array( 'personal' => array( 'hashrate' => $dPersonalHashrate ), 'pool' => array( 'hashrate' => $dPoolHashrate ), 'network' => array( 'hashrate' => $dNetworkHashrate / 1000, 'esttimeperblock' => $dExpectedTimePerBlock, 'nextdifficulty' => $dEstNextDifficulty ) ),
   'personal' => array (
     'hashrate' => $dPersonalHashrateAdjusted, 'sharerate' => $dPersonalSharerate, 'sharedifficulty' => $dPersonalShareDifficulty,
     'shares' => array('valid' => $aUserRoundShares['valid'], 'invalid' => $aUserRoundShares['invalid'], 'invalid_percent' => $dUserInvalidPercent, 'unpaid' => $dUnpaidShares ),
