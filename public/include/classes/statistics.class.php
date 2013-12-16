@@ -800,6 +800,41 @@ class Statistics extends Base {
   public function getEstimatedShares($dDiff) {
     return round((POW(2, (32 - $this->config['target_bits'])) * $dDiff) / pow(2, ($this->config['difficulty'] - 16)));
   }
+
+  /**
+   * Get the Expected Time per Block in the whole Network in seconde
+   * @return seconds double Seconds per Block
+   */
+  public function getNetworkExpectedTimePerBlock(){
+    if ($data = $this->memcache->get(__FUNCTION__)) return $data;
+
+    if ($this->bitcoin->can_connect() === true) {
+      $dNetworkHashrate = $this->bitcoin->getnetworkhashps();
+      $dDifficulty = $this->bitcoin->getdifficulty();
+    } else {
+      $dNetworkHashrate = 0;
+      $dDifficulty = 1;
+    }
+
+    return pow(2, 32) * $dDifficulty / $dNetworkHashrate;
+  }
+
+  /**
+   * Get the Expected next Difficulty
+   * @return difficulty double Next difficulty
+   */
+  public function getExpectedNextDifficulty(){
+    if ($data = $this->memcache->get(__FUNCTION__)) return $data;
+
+    if ($this->bitcoin->can_connect() === true) {
+      $dDifficulty = $this->bitcoin->getdifficulty();
+    } else {
+      $dDifficulty = 1;
+    }
+
+    return round($dDifficulty * $this->config['cointarget'] / $this->getNetworkExpectedTimePerBlock(), 8);
+  }
+
 }
 
 $statistics = new Statistics();
@@ -810,6 +845,7 @@ $statistics->setUser($user);
 $statistics->setBlock($block);
 $statistics->setMemcache($memcache);
 $statistics->setConfig($config);
+$statistics->setBitcoin($bitcoin);
 $statistics->setErrorCodes($aErrorCodes);
 
 ?>

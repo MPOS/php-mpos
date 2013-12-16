@@ -104,8 +104,8 @@ if ($iEstShares > 0 && $aRoundShares['valid'] > 0) {
   $dEstPercent = 0;
 }
 
-$dExpectedTimePerBlock = pow(2, $config['target_bits']) * $dDifficulty / $dNetworkHashrate;
-$dEstNextDifficulty = round($dDifficulty * $config['cointarget'] / $dExpectedTimePerBlock, 8);
+$dExpectedTimePerBlock = $statistics->getNetworkExpectedTimePerBlock();
+$dEstNextDifficulty = $statistics->getExpectedNextDifficulty();
 
 // Output JSON format
 $data = array(
@@ -126,7 +126,7 @@ $data = array(
     'target_bits' => $config['difficulty']
   ),
   'system' => array( 'load' => sys_getloadavg() ),
-  'network' => array( 'hashrate' => $dNetworkHashrateAdjusted, 'difficulty' => $dDifficulty, 'block' => $iBlock ),
+  'network' => array( 'hashrate' => $dNetworkHashrateAdjusted, 'difficulty' => $dDifficulty, 'block' => $iBlock, 'esttimeperblock' => round($dExpectedTimePerBlock ,2), 'nextdifficulty' => $dEstNextDifficulty ),
 );
 
 echo $api->get_json($data);

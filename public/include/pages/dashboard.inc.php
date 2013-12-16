@@ -35,8 +35,8 @@ if ($user->isAuthenticated()) {
   // Avoid confusion, ensure our nethash isn't higher than poolhash
   if ($iCurrentPoolHashrate > $dNetworkHashrate) $dNetworkHashrate = $iCurrentPoolHashrate;
 
-  $dExpectedTimePerBlock = pow(2, $config['target_bits']) * $dDifficulty / $dNetworkHashrate;
-  $dEstNextDifficulty = round($dDifficulty * $config['cointarget'] / $dExpectedTimePerBlock, 8);
+  $dExpectedTimePerBlock = $statistics->getNetworkExpectedTimePerBlock();
+  $dEstNextDifficulty = $statistics->getExpectedNextDifficulty();
 
   // Make it available in Smarty
   $smarty->assign('DISABLED_DASHBOARD', $setting->getValue('disable_dashboard'));

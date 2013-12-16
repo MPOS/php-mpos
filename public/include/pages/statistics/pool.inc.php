@@ -52,8 +52,8 @@ if (!$smarty->isCached('master.tpl', $smarty_cache_key)) {
     $dEstPercent = 0;
   }
 
-  $dExpectedTimePerBlock = pow(2, $config['target_bits']) * $dDifficulty / $dNetworkHashrate;
-  $dEstNextDifficulty = round($dDifficulty * $config['cointarget'] / $dExpectedTimePerBlock, 8);
+  $dExpectedTimePerBlock = $statistics->getNetworkExpectedTimePerBlock();
+  $dEstNextDifficulty = $statistics->getExpectedNextDifficulty();
 
   // Propagate content our template
   $smarty->assign("ESTTIME", $iEstTime);
