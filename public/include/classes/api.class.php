@@ -60,6 +60,7 @@ class Api extends Base {
 }
 
 $api = new Api();
+header("Access-Control-Allow-Origin: *");
 $api->setConfig($config);
 $api->setUser($user);
 $api->setSetting($setting);
