@@ -15,15 +15,15 @@
 	<link rel="stylesheet" href="{$PATH}/css/ie.css" type="text/css" media="screen" />
 	<script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
 	<![endif]-->
-	<script type="text/javascript" src="{$PATH}/js/jquery-2.0.3.min.js" type="text/javascript"></script>
-	<script type="text/javascript" src="{$PATH}/js/jquery-migrate-1.2.1.min.js" type="text/javascript"></script>
+	<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js" type="text/javascript"></script>
+	<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery-migrate/1.2.1/jquery-migrate.min.js" type="text/javascript"></script>
 	<script type="text/javascript" src="{$PATH}/js/hideshow.js" type="text/javascript"></script>
   <script type="text/javascript" src="{$PATH}/js/jquery.visualize.js"></script>
   <script type="text/javascript" src="{$PATH}/js/jquery.jqplot.min.js"></script>
 	<script type="text/javascript" src="{$PATH}/js/jquery.tablesorter.min.js" type="text/javascript"></script>
 	<script type="text/javascript" src="{$PATH}/js/jquery.tablesorter.pager.js" type="text/javascript"></script>
 	<script type="text/javascript" src="{$PATH}/js/jquery.equalHeight.js"></script>
-  <script type="text/javascript" src="{$PATH}/js/raphael.2.1.0.min.js"></script>
+  <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/raphael/2.1.2/raphael-min.js"></script>
   <script type="text/javascript" src="{$PATH}/js/justgage.1.0.1.min.js"></script>
 	<script type="text/javascript" src="{$PATH}/js/custom.js"></script>
   <!--[if IE]><script type="text/javascript" src="{$PATH}/js/excanvas.js"></script><![endif]-->
