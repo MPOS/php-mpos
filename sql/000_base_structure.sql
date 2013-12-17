@@ -26,6 +26,7 @@ CREATE TABLE IF NOT EXISTS `accounts` (
   `donate_percent` float DEFAULT '0',
   `ap_threshold` float DEFAULT '0',
   `coin_address` varchar(255) DEFAULT NULL,
+  `send_notices_to_inbox` tinyint(1) DEFAULT '0',
   PRIMARY KEY (`id`),
   UNIQUE KEY `username` (`username`),
   UNIQUE KEY `email` (`email`)
