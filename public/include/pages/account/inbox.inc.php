@@ -21,6 +21,19 @@ if ($user->isAuthenticated()) {
       $smarty->assign('MESSAGE', $aMessage);
       $smarty->assign('CONTENT', 'reply.tpl');
     }
+  } else if (@$_REQUEST['do'] == 'send') {
+    if (!$user->isAdmin($_SESSION['USERDATA']['id'])) {
+      $_SESSION['POPUP'][] = array('CONTENT' => 'Only admins can send messages to users', 'TYPE' => 'errormsg');
+      $smarty->assign('CONTENT', '');
+    } else {
+      $aUser = $user->getUserData((int)@$_REQUEST['account_id']);
+      if ($aUser) {
+        $smarty->assign('USER', $aUser);
+        $smarty->assign('CONTENT', 'send.tpl');
+      } else {
+        $_SESSION['POPUP'][] = array('CONTENT' => 'Unknown user', 'TYPE' => 'errormsg');
+      }
+    }
   } else if (@$_REQUEST['do'] == 'Delete') {
     if ($inbox->deleteMessage((int)$_REQUEST['message_id'], (int)$_SESSION['USERDATA']['id'])) {
       $_SESSION['POPUP'][] = array('CONTENT' => 'Successfully deleted message', 'TYPE' => 'success');
@@ -28,6 +41,17 @@ if ($user->isAuthenticated()) {
       $_SESSION['POPUP'][] = array('CONTENT' => 'Failed to delete entry: ' . $inbox->getError(), 'TYPE' => 'errormsg');
     }
   } else if (@$_REQUEST['do'] == 'save') {
+    if (!$user->isAdmin($_SESSION['USERDATA']['id'])) {
+      $_SESSION['POPUP'][] = array('CONTENT' => 'Only admins can send messages to users', 'TYPE' => 'errormsg');
+      $smarty->assign('CONTENT', '');
+    } else {
+      if ($inbox->addMessage((int)$_SESSION['USERDATA']['id'], $_POST)) {
+        $_SESSION['POPUP'][] = array('CONTENT' => 'Your message has been sent', 'TYPE' => 'success');
+      } else {
+        $_SESSION['POPUP'][] = array('CONTENT' => 'Failed to send reply: ' . $inbox->getError(), 'TYPE' => 'errormsg');
+      }
+    }
+  } else if (@$_REQUEST['do'] == 'save_reply') {
     if ($inbox->addReply((int)$_SESSION['USERDATA']['id'], $_POST)) {
       $_SESSION['POPUP'][] = array('CONTENT' => 'Reply has been sent', 'TYPE' => 'success');
     } else {
