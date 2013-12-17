@@ -410,6 +410,29 @@ class User extends Base {
   }
 
   /**
+   * Get all the site admins
+   * @param bool $include_locked Include admins that are locked
+   * @return array The site admins
+   */
+  public function getAllAdmins($include_locked = false) {
+    $this->debug->append("STA " . __METHOD__, 4);
+    $sql = "
+      SELECT
+        *
+      FROM " . $this->getTableName() . "
+      WHERE ( is_admin = 1 )";
+    if (!$include_locked) {
+      $sql .= " AND ( is_locked = 0 )";
+    }
+
+    $stmt = $this->mysqli->prepare($sql);
+    if ($this->checkStmt($stmt) && $stmt->execute() && $result = $stmt->get_result()) {
+      return $result->fetch_all(MYSQLI_ASSOC);
+    }
+    return false;
+  }
+
+  /**
    * Fetch this classes table name
    * @return table string This classes table name
    **/
