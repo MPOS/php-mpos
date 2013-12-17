@@ -32,7 +32,7 @@ if ($user->isAuthenticated()) {
       break;
 
     case 'updateAccount':
-      if ($user->updateAccount($_SESSION['USERDATA']['id'], $_POST['paymentAddress'], $_POST['payoutThreshold'], $_POST['donatePercent'], $_POST['email'], $_POST['is_anonymous'])) {
+      if ($user->updateAccount($_SESSION['USERDATA']['id'], $_POST['paymentAddress'], $_POST['payoutThreshold'], $_POST['donatePercent'], $_POST['email'], $_POST['send_notices_to_inbox'], $_POST['is_anonymous'])) {
         $_SESSION['POPUP'][] = array('CONTENT' => 'Account details updated', 'TYPE' => 'success');
       } else {
         $_SESSION['POPUP'][] = array('CONTENT' => 'Failed to update your account: ' . $user->getError(), 'TYPE' => 'errormsg');
@@ -51,5 +51,6 @@ if ($user->isAuthenticated()) {
 }
 
 // Tempalte specifics
+$smarty->assign("NOTICES_OPTIONS", array(0 => 'Email', 1 => 'Inbox'));
 $smarty->assign("CONTENT", "default.tpl");
 ?>
