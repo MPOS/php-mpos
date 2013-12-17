@@ -124,8 +124,8 @@ Small Time Miners are running various stratum only pools for different coins.
 ### CaptainAK
 
 
-| Pool URL | Coin | Avg. Hashrate | Avg. Active Workers | Notes |
-| -------- | ---- | ------------: | ------------------: | ----- |
+| Pool URL                | Coin | Avg. Hashrate | Avg. Active Workers | Notes |
+| ----------------------- | ---- | ------------: | ------------------: | ----- |
 | http://btb.pnwminer.com | Bitbar | 5-10 Mhs | 5 workers | PPLNS |
 | http://dgc.pnwminer.com | DigitalCoin | 0 Mhs | 0 workers | PPLNS |
 | http://btg.pnwminer.com | BitGem | .5-2 Mhs | 1 workers | PPLNS |
@@ -151,3 +151,9 @@ Small Time Miners are running various stratum only pools for different coins.
 | http://sxc.coinz.pw | Sexcoin | 10-20Mhs | 15-25 workers | Prop |
 | http://tgc.coinz.pw | Tigercoin | 2-4Ghs | 2-4 workers | Prop |
 | http://zet.coinz.pw | Zetacoin | 5-10Ghs | 2-3 workers | Prop |
+
+### ckoeber
+
+| Pool URL                         | Coin  | Avg. Hashrate | Avg. Active Workers | Notes |
+| -------------------------------- | ----- | ------------: | ------------------: | ----- |
+| http://spotspool.chriskoeber.com | Spots | 37 Mhs        | 55 workers          | Prop  |

@@ -35,11 +35,14 @@ if ($user->isAuthenticated()) {
   // Avoid confusion, ensure our nethash isn't higher than poolhash
   if ($iCurrentPoolHashrate > $dNetworkHashrate) $dNetworkHashrate = $iCurrentPoolHashrate;
 
+  $dExpectedTimePerBlock = $statistics->getNetworkExpectedTimePerBlock();
+  $dEstNextDifficulty = $statistics->getExpectedNextDifficulty();
+
   // Make it available in Smarty
   $smarty->assign('DISABLED_DASHBOARD', $setting->getValue('disable_dashboard'));
   $smarty->assign('DISABLED_DASHBOARD_API', $setting->getValue('disable_dashboard_api'));
   $smarty->assign('ESTIMATES', array('shares' => $iEstShares, 'percent' => $dEstPercent));
-  $smarty->assign('NETWORK', array('difficulty' => $dDifficulty, 'block' => $iBlock));
+  $smarty->assign('NETWORK', array('difficulty' => $dDifficulty, 'block' => $iBlock, 'EstNextDifficulty' => $dEstNextDifficulty, 'EstTimePerBlock' => $dExpectedTimePerBlock));
   $smarty->assign('INTERVAL', $interval / 60);
   $smarty->assign('CONTENT', 'default.tpl');
 }

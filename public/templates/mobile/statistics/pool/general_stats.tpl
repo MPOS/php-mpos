@@ -30,11 +30,19 @@
     {if ! $GLOBAL.website.chaininfo.disabled}
     <tr>
       <td class="leftheader">Current Difficulty</td>
-      <td colspan="4"><a href="{$GLOBAL.website.chaininfo.url}" target="_new"><font size="2">{$DIFFICULTY}</font></a></td>
+      <td colspan="4"><a href="{$GLOBAL.website.chaininfo.url}" target="_new">{$DIFFICULTY}</a></td>
+    </tr>
+    <tr>
+      <td class="leftheader">Est. Next Difficulty</td>
+      <td colspan="4"><a href="{$GLOBAL.website.chaininfo.url}" target="_new">{$NETWORK.EstNextDifficulty}</a></td>
     </tr>
     {/if}
     <tr>
-      <td class="leftheader">Est. Avg. Time per Round</td>
+      <td class="leftheader">Est. Avg. Time per Round (Network)</td>
+      <td colspan="4">{$NETWORK.ExpectedTimePerBlock|seconds_to_words}</td>
+    </tr>
+    <tr>
+      <td class="leftheader">Est. Avg. Time per Round (Pool)</td>
       <td colspan="4">{$ESTTIME|seconds_to_words}</td>
     </tr>
     <tr>

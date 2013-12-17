@@ -18,6 +18,9 @@ class StatsCache {
     if (! $config['memcache']['enabled'] ) {
       $this->debug->append("Not storing any values in memcache");
     } else {
+      if (PHP_OS == 'WINNT') {
+        require_once(CLASS_DIR . '/memcached.class.php');
+      }
       $this->cache = new Memcached();
     }
   }
