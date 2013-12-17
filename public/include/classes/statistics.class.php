@@ -822,7 +822,7 @@ class Statistics extends Base {
   /**
    * Get the Expected next Difficulty
    * @return difficulty double Next difficulty
-   */
+   **/
   public function getExpectedNextDifficulty(){
     if ($data = $this->memcache->get(__FUNCTION__)) return $data;
 
@@ -835,6 +835,34 @@ class Statistics extends Base {
     return round($dDifficulty * $this->config['cointarget'] / $this->getNetworkExpectedTimePerBlock(), 8);
   }
 
+  /**
+   * Get current PPS value
+   * @return value double PPS Value
+   **/
+
+  public function getPPSValue() {
+    // Fetch RPC difficulty
+    if ($this->bitcoin->can_connect() === true) {
+      $dDifficulty = $this->bitcoin->getdifficulty();
+    } else {
+      $dDifficulty = 1;
+    }
+
+    if ($this->config['pps']['reward']['type'] == 'blockavg' && $this->block->getBlockCount() > 0) {
+      $pps_reward = round($this->block->getAvgBlockReward($this->config['pps']['blockavg']['blockcount']));
+    } else {
+      if ($this->config['pps']['reward']['type'] == 'block') {
+        if ($aLastBlock = $this->block->getLast()) {
+          $pps_reward = $aLastBlock['amount'];
+        } else {
+          $pps_reward = $this->config['pps']['reward']['default'];
+        }
+      } else {
+        $pps_reward = $this->config['pps']['reward']['default'];
+      }
+    }
+    return round($pps_reward / (pow(2, $this->config['target_bits']) * $dDifficulty), 12);
+  }
 }
 
 $statistics = new Statistics();
