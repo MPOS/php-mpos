@@ -43,6 +43,9 @@ class User extends Base {
   public function getEmail($email) {
     return $this->getSingle($email, 'email', 'email', 's');
   }
+  public function getSendNoticesToInbox($id) {
+    return $this->getSingle($id, 'send_notices_to_inbox', 'id');
+  }
   public function getUserFailed($id) {
    return $this->getSingle($id, 'failed_logins', 'id');
   }
