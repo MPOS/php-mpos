@@ -252,7 +252,7 @@ class User extends Base {
    * @param donat float donation % of income
    * @return bool
    **/
-  public function updateAccount($userID, $address, $threshold, $donate, $email, $is_anonymous) {
+  public function updateAccount($userID, $address, $threshold, $donate, $email, $send_notices_to_inbox, $is_anonymous) {
     $this->debug->append("STA " . __METHOD__, 4);
     $bUser = false;
 
@@ -302,8 +302,8 @@ class User extends Base {
     $donate = min(100, max(0, floatval($donate)));
 
     // We passed all validation checks so update the account
-    $stmt = $this->mysqli->prepare("UPDATE $this->table SET coin_address = ?, ap_threshold = ?, donate_percent = ?, email = ?, is_anonymous = ? WHERE id = ?");
-    if ($this->checkStmt($stmt) && $stmt->bind_param('sddsii', $address, $threshold, $donate, $email, $is_anonymous, $userID) && $stmt->execute())
+    $stmt = $this->mysqli->prepare("UPDATE $this->table SET coin_address = ?, ap_threshold = ?, donate_percent = ?, email = ?, send_notices_to_inbox = ?, is_anonymous = ? WHERE id = ?");
+    if ($this->checkStmt($stmt) && $stmt->bind_param('sddsiii', $address, $threshold, $donate, $email, $send_notices_to_inbox, $is_anonymous, $userID) && $stmt->execute())
       return true;
     // Catchall
     $this->setErrorMessage('Failed to update your account');
