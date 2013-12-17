@@ -13,7 +13,7 @@ PHP_BIN=$( which php )
 CRONS="tickerupdate.php notifications.php archive_cleanup.php"
 
 # Output additional runtime information
-VERBOSE="1"
+VERBOSE="0"
 
 # Base path for PIDFILE, (full path).
 BASEPATH="/tmp"
