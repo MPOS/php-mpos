@@ -1,7 +1,7 @@
 <form action="{$smarty.server.PHP_SELF}" method="post">
     <input type="hidden" name="page" value="{$smarty.request.page|escape}">
     <input type="hidden" name="action" value="inbox">
-    <input type="hidden" name="do" value="save">
+    <input type="hidden" name="do" value="save_reply">
     <input type="hidden" name="message_id" value="{$MESSAGE.id|escape}">
     <article class="module width_3_quarter">
         <header><h3>Replying to {$MESSAGE.username}</h3></header>
