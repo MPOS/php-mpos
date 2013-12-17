@@ -23,6 +23,14 @@
         <label>E-Mail</label>
         <input type="text" name="email" value="{nocache}{$GLOBAL.userdata.email|escape}{/nocache}" size="20" />
       </fieldset>
+      {if !$GLOBAL.config.disable_inbox }
+          <fieldset>
+              <label>Send Notices To</label>
+              {nocache}
+              {html_options name="send_notices_to_inbox" options=$NOTICES_OPTIONS selected=$GLOBAL.userdata.send_notices_to_inbox}
+              {/nocache}
+          </fieldset>
+      {/if}
       <fieldset>
         <label>Payment Address</label>
         <input type="text" name="paymentAddress" value="{nocache}{$smarty.request.paymentAddress|default:$GLOBAL.userdata.coin_address|escape}{nocache}" size="40" />
