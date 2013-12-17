@@ -192,7 +192,7 @@ class Share Extends Base {
         // Sleep first to allow any IO to cleanup
         sleep($this->config['purge']['sleep']);
         $stmt = $this->mysqli->prepare("DELETE FROM $this->tableArchive WHERE block_id < ? AND time < DATE_SUB(now(), INTERVAL ? MINUTE) AND id <= ? LIMIT " . $this->config['purge']['shares']);
-        if ($this->checkStmt($stmt) && $stmt->bind_param('ii', $aBlock['id'], $this->config['archive']['maxage'], $max_id) && $stmt->execute()) {
+        if ($this->checkStmt($stmt) && $stmt->bind_param('iii', $aBlock['id'], $this->config['archive']['maxage'], $max_id) && $stmt->execute()) {
           $affected = $stmt->affected_rows;
         } else {
           return $this->sqlError();
