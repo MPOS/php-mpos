@@ -452,7 +452,8 @@ class User extends Base {
     $stmt = $this->mysqli->prepare("
       SELECT
       id, username, pin, api_key, is_admin, is_anonymous, email, no_fees,
-      IFNULL(donate_percent, '0') as donate_percent, coin_address, ap_threshold
+      IFNULL(donate_percent, '0') as donate_percent, coin_address, ap_threshold,
+      send_notices_to_inbox
       FROM $this->table
       WHERE id = ? LIMIT 0,1");
     if ($this->checkStmt($stmt)) {
