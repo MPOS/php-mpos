@@ -48,6 +48,7 @@ require_once(CLASS_DIR . '/statscache.class.php');
 require_once(CLASS_DIR . '/bitcoin.class.php');
 require_once(CLASS_DIR . '/bitcoinwrapper.class.php');
 require_once(CLASS_DIR . '/monitoring.class.php');
+require_once(CLASS_DIR . '/inbox.class.php');
 require_once(CLASS_DIR . '/notification.class.php');
 require_once(CLASS_DIR . '/user.class.php');
 require_once(CLASS_DIR . '/invitation.class.php');
@@ -58,7 +59,6 @@ require_once(CLASS_DIR . '/transaction.class.php');
 require_once(CLASS_DIR . '/roundstats.class.php');
 require_once(CLASS_DIR . '/news.class.php');
 require_once(CLASS_DIR . '/api.class.php');
-require_once(CLASS_DIR . '/inbox.class.php');
 require_once(INCLUDE_DIR . '/lib/Michelf/Markdown.php');
 require_once(INCLUDE_DIR . '/lib/scrypt.php');
 
