@@ -73,6 +73,9 @@ class Base {
   public function setShare($share) {
     $this->share = $share;
   }
+  public function setInbox($inbox) {
+    $this->inbox = $inbox;
+  }
   public function setErrorMessage($msg) {
     $this->sError = $msg;
     // Default to same error for crons
