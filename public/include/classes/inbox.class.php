@@ -113,8 +113,31 @@ class Inbox extends Base {
 
   /**
    * Add a new message entry to the table
+   * @param $account_id int The ID of the member sending the message
+   * @param $aData array The message data
+   */
+  public function addMessage($account_id, $aData) {
+    if (!is_array($aData)) return false;
+    if (empty($aData['account_id_to'])) return false;
+    if (empty($aData['subject']) || trim($aData['subject']) == '') {
+      $this->setErrorMessage($this->getErrorMsg('E0067'));
+      return false;
+    }
+    if (empty($aData['content']) || trim($aData['content']) == '') {
+      $this->setErrorMessage($this->getErrorMsg('E0068'));
+      return false;
+    }
+
+    $stmt = $this->mysqli->prepare("INSERT INTO $this->table (account_id_to, account_id_from, subject, content) VALUES (?,?,?,?)");
+    if ($this->checkStmt($stmt) && $stmt->bind_param('iiss', $aData['account_id_to'], $account_id, $aData['subject'], $aData['content']) && $stmt->execute())
+      return true;
+    return $this->sqlError('E0069');
+  }
+
+  /**
+   * Add a new message entry to the table
    * @param $account_id int The ID of the member writing the reply
-   * @param $aData string The message data
+   * @param $aData array The message data
    * @return bool
    **/
   public function addReply($account_id, $aData) {
