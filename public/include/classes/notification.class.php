@@ -146,9 +146,10 @@ class Notification extends Mail {
   public function sendNotification($account_id, $strType, $aMailData) {
     // Check if we notified for this event already
     if ( $this->isNotified($aMailData) ) {
-      //$this->setErrorMessage('A notification for this event has been sent already');
-      //return false;
+      $this->setErrorMessage('A notification for this event has been sent already');
+      return false;
     }
+
     // Check if this user wants strType notifications
     $stmt = $this->mysqli->prepare("SELECT account_id FROM $this->tableSettings WHERE type = ? AND active = 1 AND account_id = ?");
     if ($stmt && $stmt->bind_param('si', $strType, $account_id) && $stmt->execute() && $stmt->bind_result($id) && $stmt->fetch() && $stmt->close()) {
@@ -165,12 +166,8 @@ class Notification extends Mail {
         $this->setErrorMessage('Send notification failed: ' . $error);
         return false;
       }
-    } else {
-      $this->setErrorMessage('User disabled ' . $strType . ' notifications');
-      return false;
     }
 
-    die("here");
     $this->setErrorMessage('Error sending mail notification');
     return false;
   }
