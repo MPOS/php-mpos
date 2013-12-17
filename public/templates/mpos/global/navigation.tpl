@@ -10,6 +10,13 @@
     {if !$GLOBAL.config.disable_notifications}<li class="icon-megaphone"><a href="{$smarty.server.PHP_SELF}?page=account&action=notifications">Notifications</a></li>{/if}
     {if !$GLOBAL.config.disable_invitations}<li class="icon-plus"><a href="{$smarty.server.PHP_SELF}?page=account&action=invitations">Invitations</a></li>{/if}
       <li class="icon-barcode"><a href="{$smarty.server.PHP_SELF}?page=account&action=qrcode">QR Codes</a></li>
+    {if !$GLOBAL.config.disable_inbox}
+        <li class="icon-inbox">
+            <a href="{$smarty.server.PHP_SELF}?page=account&action=inbox">
+                Inbox {if $GLOBAL.userdata.inbox_unread}({$GLOBAL.userdata.inbox_unread}){/if}
+            </a>
+        </li>
+    {/if}
     </ul>
     </li>
     {/if}
