@@ -117,6 +117,7 @@ class Inbox extends Base {
    * @param $aData array The message data
    */
   public function addMessage($account_id, $aData) {
+    $this->debug->append("STA " . __METHOD__, 4);
     if (!is_array($aData)) return false;
     if (empty($aData['account_id_to'])) return false;
     if (empty($aData['subject']) || trim($aData['subject']) == '') {
@@ -132,6 +133,28 @@ class Inbox extends Base {
     if ($this->checkStmt($stmt) && $stmt->bind_param('iiss', $aData['account_id_to'], $account_id, $aData['subject'], $aData['content']) && $stmt->execute())
       return true;
     return $this->sqlError('E0069');
+  }
+
+  /**
+   * Sends a notice to the user inbox
+   * @param $account_id int The ID of the user getting the notice
+   * @param $template string The template file
+   * @param $aData array The template data
+   * @return bool
+   */
+  public function addNotice($account_id, $template, $aData) {
+    $this->debug->append("STA " . __METHOD__, 4);
+    $this->smarty->clearCache(BASEPATH . 'templates/mail/' . $template  . '_inbox.tpl');
+
+    $this->smarty->assign('DATA', $aData);
+    $content = $this->smarty->fetch(BASEPATH . 'templates/mail/' . $template  . '_inbox.tpl');
+    $aData = array(
+      'account_id_to' => $account_id,
+      'account_id_from' => 0,
+      'subject' => 'NOTICE: ' . $aData['subject'],
+      'content' => $content
+    );
+    return $this->addMessage(0, $aData);
   }
 
   /**
@@ -220,5 +243,6 @@ $inbox->setDebug($debug);
 $inbox->setMysql($mysqli);
 $inbox->setConfig($config);
 $inbox->setUser($user);
+$inbox->setSmarty($smarty);
 $inbox->setErrorCodes($aErrorCodes);
 ?>
