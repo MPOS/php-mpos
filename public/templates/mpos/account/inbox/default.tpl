@@ -1,0 +1,20 @@
+{section name=messages loop=$MESSAGES}
+    <article class="module width_full">
+        <header><h3>{$MESSAGES[messages].subject}, <font size=\"1px\">sent {$MESSAGES[messages].time|date_format:"%b %e, %Y at %H:%M"} by <b>{$MESSAGES[messages].username}</b></font></h3></header>
+        <div class="module_content">
+            {$MESSAGES[messages].content}
+            <div class="clear"></div>
+        </div>
+        <form action="{$smarty.server.PHP_SELF}" method="get">
+            <input type="hidden" name="page" value="{$smarty.request.page|escape}">
+            <input type="hidden" name="action" value="inbox">
+            <input type="hidden" name="message_id" value="{$MESSAGES[messages].id}">
+            <footer>
+                <div class="submit_link">
+                    <input type="submit" name="do" value="Delete" class="alt_btn">
+                    <input type="submit" name="do" value="Reply" class="alt_btn">
+                </div>
+            </footer>
+        </form>
+    </article>
+{/section}
