@@ -1,6 +1,16 @@
 {section name=messages loop=$MESSAGES}
     <article class="module width_full">
-        <header><h3>{$MESSAGES[messages].subject}, <font size=\"1px\">sent {$MESSAGES[messages].time|date_format:"%b %e, %Y at %H:%M"} by <b>{$MESSAGES[messages].username}</b></font></h3></header>
+        <header>
+            <h3>
+                {$MESSAGES[messages].subject},
+                <font size=\"1px\">
+                    sent {$MESSAGES[messages].time|date_format:"%b %e, %Y at %H:%M"}
+                    {if $MESSAGES[messages].account_id_from != 0}
+                    by <b>{$MESSAGES[messages].username}</b>
+                    {/if}
+                </font>
+            </h3>
+        </header>
         <div class="module_content">
             {$MESSAGES[messages].content}
             <div class="clear"></div>
