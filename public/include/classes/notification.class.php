@@ -153,7 +153,7 @@ class Notification extends Mail {
     // Check if this user wants strType notifications
     $stmt = $this->mysqli->prepare("SELECT account_id FROM $this->tableSettings WHERE type = ? AND active = 1 AND account_id = ?");
     if ($stmt && $stmt->bind_param('si', $strType, $account_id) && $stmt->execute() && $stmt->bind_result($id) && $stmt->fetch() && $stmt->close()) {
-      if ($this->user->getSendNoticesToInbox($account_id)) {
+      if ($this->user->getSendNoticesToInbox($account_id) && !$this->setting->getValue('disable_inbox')) {
         $sent = $this->inbox->addNotice($account_id, 'notifications/' . $strType, $aMailData);
         $error = $this->inbox->getError();
       } else {
