@@ -260,6 +260,20 @@ $aSettings['system'][] = array(
   'tooltip' => 'Enable or Disable Contactform. Users will not be able to use the contact form.'
 );
 $aSettings['system'][] = array(
+  'display' => 'Disable Inbox', 'type' => 'select',
+  'options' => array( 0 => 'No', 1 => 'Yes'),
+  'default' => 0,
+  'name' => 'disable_inbox', 'value' => $setting->getValue('disable_inbox'),
+  'tooltip' => 'Enable or disable the site inbox.'
+);
+$aSettings['system'][] = array(
+  'display' => 'Send Contactform To', 'type' => 'select',
+  'options' => array( 0 => 'Email', 1 => 'Inbox'),
+  'default' => 1,
+  'name' => 'send_contactform', 'value' => $setting->getValue('send_contactform'),
+  'tooltip' => 'Where contactform messages are sent. You must enable the site inbox to receive messages there.'
+);
+$aSettings['system'][] = array(
   'display' => 'Disable Donors Page', 'type' => 'select',
   'options' => array( 0 => 'No', 1 => 'Yes'),
   'default' => 1,
