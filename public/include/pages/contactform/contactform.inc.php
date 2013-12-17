@@ -37,11 +37,16 @@ if ($setting->getValue('disable_contactform')) {
     $_SESSION['POPUP'][] = array('CONTENT' => 'Empty Captcha, please try again.', 'TYPE' => 'errormsg');
     // Captcha disabled
   } else {
-      if ($mail->contactform($_POST['senderName'], $_POST['senderEmail'], $_POST['senderSubject'], $_POST['senderMessage'])) {
-      $_SESSION['POPUP'][] = array('CONTENT' => 'Thanks for sending your message! We will get back to you shortly');
+      if ($setting->getValue('send_contactform_to_inbox', 1) && !$setting->getValue('disable_inbox')) {
+        $sent = $inbox->contactform((int)$_SESSION['USERDATA']['id'], $_POST['senderSubject'], $_POST['senderMessage']);
       } else {
-      $_SESSION['POPUP'][] = array('CONTENT' => 'There was a problem sending your message. Please try again. ' . $user->getError(), 'TYPE' => 'errormsg');
-    }
+        $sent = $mail->contactform($_POST['senderName'], $_POST['senderEmail'], $_POST['senderSubject'], $_POST['senderMessage']);
+      }
+      if ($sent) {
+        $_SESSION['POPUP'][] = array('CONTENT' => 'Thanks for sending your message! We will get back to you shortly');
+      } else {
+        $_SESSION['POPUP'][] = array('CONTENT' => 'There was a problem sending your message. Please try again. ' . $user->getError(), 'TYPE' => 'errormsg');
+      }
   }
 }
 
