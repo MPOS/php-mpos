@@ -211,7 +211,7 @@ class Bitcoin {
    * @access public
    */
   public static function pubKeyToAddress($pubkey) {
-    return self::hash160ToAddress($this->hash160($pubkey));
+    return self::hash160ToAddress(self::hash160($pubkey));
   }
 
   /**
