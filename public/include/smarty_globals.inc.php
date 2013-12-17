@@ -120,6 +120,7 @@ if (@$_SESSION['USERDATA']['id']) {
   $aGlobal['userdata']['rawhashrate'] = $statistics->getUserHashrate($_SESSION['USERDATA']['id']);
   $aGlobal['userdata']['hashrate'] = $aGlobal['userdata']['rawhashrate'] * $dPersonalHashrateModifier;
   $aGlobal['userdata']['sharerate'] = $statistics->getUserSharerate($_SESSION['USERDATA']['id']);
+  $aGlobal['userdata']['inbox_unread'] = $inbox->getUnreadCount($_SESSION['USERDATA']['id']);
 
   switch ($config['payout_system']) {
   case 'prop':
