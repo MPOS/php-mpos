@@ -215,7 +215,7 @@ CREATE TABLE IF NOT EXISTS `transactions` (
   KEY `archived` (`archived`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
-CREATE TABLE `templates` (
+CREATE TABLE IF NOT EXISTS `templates` (
   `template` varchar(255) NOT NULL,
   `active` tinyint(1) NOT NULL DEFAULT 0,
   `content` mediumtext,
