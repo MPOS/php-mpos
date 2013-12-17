@@ -495,17 +495,23 @@ class Statistics extends Base {
    **/
   public function getUserShareDifficulty($account_id, $interval=600) {
     $this->debug->append("STA " . __METHOD__, 4);
+    $stmt = $this->mysqli->prepare("SELECT @usernames := `username` FROM pool_worker WHERE account_id = ?");
+    $this->checkStmt($stmt);
+    $stmt->bind_param('i', $account_id);
+    $stmt->execute();
+    $stmt->get_result();
+
     if ($this->getGetCache() && $data = $this->memcache->get(__FUNCTION__ . $account_id)) return $data;
     $stmt = $this->mysqli->prepare("
       SELECT
         IFNULL(AVG(IF(difficulty=0, pow(2, (" . $this->config['difficulty'] . " - 16)), difficulty)), 0) AS avgsharediff,
         COUNT(s.id) AS total
-      FROM " . $this->share->getTableName() . " AS s JOIN " . $this->user->getTableName() . " AS a
-      ON a.username = SUBSTRING_INDEX( s.username, '.', 1 )
+      FROM " . $this->share->getTableName() . " AS s 
       WHERE s.time > DATE_SUB(now(), INTERVAL ? SECOND)
+      AND username IN (@usernames)
       AND our_result = 'Y'
-      AND a.id = ?");
-    if ($this->checkStmt($stmt) && $stmt->bind_param("ii", $interval, $account_id) && $stmt->execute() && $result = $stmt->get_result() )
+      ");
+    if ($this->checkStmt($stmt) && $stmt->bind_param("i", $interval, $account_id) && $stmt->execute() && $result = $stmt->get_result() )
       return $this->memcache->setCache(__FUNCTION__ . $account_id, $result->fetch_object()->avgsharediff);
     return $this->sqlError();
   }
