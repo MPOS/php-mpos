@@ -49,7 +49,7 @@
 {section name=user loop=$USERS|default}
     <tr>
       <td align="center">{$USERS[user].id}</td>
-      <td align="left">{$USERS[user].username|escape}</td>
+      <td align="left"><a href="/index.php?page=account&action=inbox&account_id={$USERS[user].id}&do=send" title="Send Message">{$USERS[user].username|escape}</a></td>
       <td align="left">{$USERS[user].email|escape}</td>
       <td align="right">{$USERS[user].shares.valid}</td>
       <td align="right">{$USERS[user].hashrate}</td>
