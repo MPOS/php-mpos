@@ -74,4 +74,5 @@ $aErrorCodes['E0067'] = 'Subject cannot be empty';
 $aErrorCodes['E0068'] = 'Message cannot be empty';
 $aErrorCodes['E0069'] = 'Unable to send reply';
 $aErrorCodes['E0070'] = 'Failed to delete message record';
+$aErrorCodes['E0071'] = 'Failed to send message';
 ?>
