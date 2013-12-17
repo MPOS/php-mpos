@@ -31,6 +31,7 @@
 .icon-fast-forward:before { content: '\e820'; } /* '' */
 .icon-forward:before { content: '\e81d'; } /* '' */
 .icon-desktop:before { content: '\e806'; } /* '' */
+.icon-inbox:before { content: '\e828'; } /* '' */
 .icon-align-left:before { content: '\e807'; } /* '' */
 .icon-indent-left:before { content: '\e80d'; } /* '' */
 .icon-off:before { content: '\e811'; } /* '' */

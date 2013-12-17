@@ -38,6 +38,7 @@
 <glyph glyph-name="fast-forward" unicode="&#xe820;" d="m0 6l0 688l313-313l0 313l312-313l0 344l125 0l0-750l-125 0l0 344l-312-313l0 313z" horiz-adv-x="750" />
 <glyph glyph-name="forward" unicode="&#xe81d;" d="m0 6l0 688l313-313l0 313l343-344l-343-344l0 313z" horiz-adv-x="656" />
 <glyph glyph-name="desktop" unicode="&#xe806;" d="m0 104l0 660l1000 0l0-660l-363 0l0-96l88 0l0-72l-450 0l0 72l88 0l0 96l-363 0z m123 125l754 0l0 410l-754 0l0-410z" horiz-adv-x="1000" />
+<glyph glyph-name="inbox" unicode="&#xe828;" d="m0-150l0 483l328 0q0-73 51-123t121-49t121 49t51 123l328 0l0-483l-1000 0z m279 768l119 0l0 232l204 0l0-232l119 0l-221-332z" horiz-adv-x="1000" />
 <glyph glyph-name="align-left" unicode="&#xe807;" d="m0-89l0 156l1000 0l0-156l-1000 0z m0 240l0 156l609 0l0-156l-609 0z m0 242l0 156l789 0l0-156l-789 0z m0 240l0 157l516 0l0-157l-516 0z" horiz-adv-x="1000" />
 <glyph glyph-name="indent-left" unicode="&#xe80d;" d="m0-66l0 147l1000 0l0-147l-1000 0z m0 229l0 375l281-188z m0 457l0 146l1000 0l0-146l-1000 0z m422-457l0 146l578 0l0-146l-578 0z m0 228l0 147l578 0l0-147l-578 0z" horiz-adv-x="1000" />
 <glyph glyph-name="off" unicode="&#xe811;" d="m0 350q0 207 147 354l101-102q-105-103-105-252t104-253t253-104t253 104t104 253t-105 252l102 102q146-147 146-354t-146-354t-354-146t-353 146t-147 354z m428-78l0 578l144 0l0-578l-144 0z" horiz-adv-x="1000" />
