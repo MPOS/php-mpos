@@ -36,7 +36,7 @@ $(document).ready(function(){
             value: parseFloat(data.getnavbardata.data.pool.hashrate).toFixed(2),
             min: 0,
             max: Math.round(data.getnavbardata.data.pool.hashrate * 4),
-            title: "Pool Hasrate",
+            title: "Pool Hashrate",
             gaugeColor: '#6f7a8a',
             labelFontColor: '#555',
             titleFontColor: '#555',
