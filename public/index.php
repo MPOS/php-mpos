@@ -30,6 +30,8 @@ define("SECURITY", 1);
 // Include our configuration (holding defines for the requires)
 if (!include_once(BASEPATH . 'include/config/global.inc.php')) die('Unable to load site configuration');
 
+header('content-type: text/html;charset=utf-8');
+
 // Start a session
 session_set_cookie_params(time()+$config['cookie']['duration'], $config['cookie']['path'], $config['cookie']['domain'], $config['cookie']['secure'], $config['cookie']['httponly']);
 session_start();
