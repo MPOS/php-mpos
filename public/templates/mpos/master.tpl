@@ -17,7 +17,7 @@
 	<![endif]-->
 	<script type="text/javascript" src="{$PATH}/js/jquery-2.0.3.min.js"></script>
 	<script type="text/javascript" src="{$PATH}/js/jquery-migrate-1.2.1.min.js"></script>
-	<script type="text/javascript" src="{$PATH}/js/hideshow.js" type="text/javascript"></script>
+	<script type="text/javascript" src="{$PATH}/js/hideshow.js"></script>
         <script type="text/javascript" src="{$PATH}/js/jquery.visualize.js"></script>
         <script type="text/javascript" src="{$PATH}/js/jquery.jqplot.min.js"></script>
 	<script type="text/javascript" src="{$PATH}/js/jquery.tablesorter.min.js"></script>
