@@ -1,3 +1,14 @@
+{if $SHOW_BROADCAST}
+    <form method="get" action="{$smarty.server.PHP_SELF}">
+        <input type="hidden" name="page" value="account">
+        <input type="hidden" name="action" value="inbox">
+        <input type="hidden" name="do" value="send">
+        <input type="hidden" name="account_id" value="0">
+        <div class="submit_link">
+            <input type="submit" value="Broadcast Message" class="alt_btn" title="Send a message to all users.">
+        </div>
+    </form>
+{/if}
 {section name=messages loop=$MESSAGES}
     <article class="module width_full">
         <header>
