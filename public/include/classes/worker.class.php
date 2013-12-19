@@ -21,14 +21,19 @@ class Worker extends Base {
     $username = $this->user->getUserName($account_id);
     $iFailed = 0;
     foreach ($data as $key => $value) {
-      if ('' === $value['username'] || '' === $value['password']) {
+    if ('' === $value['username'] || '' === $value['password']) {
+      $iFailed++;
+    } else {
+      // Check worker name first
+      if (! preg_match("/^[0-9a-zA-Z_\-]*$/", $value['username'])) {
         $iFailed++;
-      } else {
-        // Prefix the WebUser to Worker name
-        $value['username'] = "$username." . $value['username'];
-        $stmt = $this->mysqli->prepare("UPDATE $this->table SET password = ?, username = ?, monitor = ? WHERE account_id = ? AND id = ?");
-        if ( ! ( $this->checkStmt($stmt) && $stmt->bind_param('ssiii', $value['password'], $value['username'], $value['monitor'], $account_id, $key) && $stmt->execute()) )
-          $iFailed++;
+        continue;
+      }
+      // Prefix the WebUser to Worker name
+      $value['username'] = "$username." . $value['username'];
+      $stmt = $this->mysqli->prepare("UPDATE $this->table SET password = ?, username = ?, monitor = ? WHERE account_id = ? AND id = ?");
+      if ( ! ( $this->checkStmt($stmt) && $stmt->bind_param('ssiii', $value['password'], $value['username'], $value['monitor'], $account_id, $key) && $stmt->execute()) )
+        $iFailed++;
       }
     }
     if ($iFailed == 0)
@@ -225,8 +230,16 @@ class Worker extends Base {
       $this->setErrorMessage($this->getErrorMsg('E0058'));
       return false;
     }
+    if (!preg_match("/^[0-9a-zA-Z_\-]*$/", $workerName)) {
+      $this->setErrorMessage($this->getErrorMsg('E0072'));
+      return false;
+    }
     $username = $this->user->getUserName($account_id);
     $workerName = "$username.$workerName";
+    if (strlen($workerName) > 50) {
+      $this->setErrorMessage($this->getErrorMsg('E0073'));
+      return false;
+    }
     $stmt = $this->mysqli->prepare("INSERT INTO $this->table (account_id, username, password) VALUES(?, ?, ?)");
     if ($this->checkStmt($stmt) && $stmt->bind_param('iss', $account_id, $workerName, $workerPassword)) {
       if (!$stmt->execute()) {
