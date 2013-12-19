@@ -236,7 +236,7 @@ class Worker extends Base {
       $this->setErrorMessage($this->getErrorMsg('E0058'));
       return false;
     }
-    $validName = (bool) preg_match("/^[0-9a-zA-Z_\-]*$/", $wData[1]);
+    $validName = (bool) preg_match("/^[0-9a-zA-Z_\-]*$/", $workerName);
     if ($validName === false) {
       $this->setErrorMessage($this->getErrorMsg('E0072'));
       return false;
