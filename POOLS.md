@@ -157,3 +157,10 @@ Small Time Miners are running various stratum only pools for different coins.
 | Pool URL                         | Coin  | Avg. Hashrate | Avg. Active Workers | Notes |
 | -------------------------------- | ----- | ------------: | ------------------: | ----- |
 | http://spotspool.chriskoeber.com | Spots | 37 Mhs        | 55 workers          | Prop  |
+
+### Coinium
+
+| Pool URL                         | Coin  | Avg. Hashrate | Avg. Active Workers | Notes |
+| -------------------------------- | ----- | ------------: | ------------------: | ----- |
+| http://doge.coinium.org          | DOGE  | 30 Mhs        | 60 workers          | PPLNS |
+| http://emd.coinium.org           | EMD   |  1 Mhs        |  3 workers          | PPLNS |
