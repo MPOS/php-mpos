@@ -69,4 +69,6 @@ $aErrorCodes['E0062'] = 'Block has no share_id, not running payouts';
 $aErrorCodes['E0063'] = 'Upstream share already assigned to previous block';
 $aErrorCodes['E0064'] = 'Failed to create transaction record';
 $aErrorCodes['E0065'] = 'Remaining balance is greater than 0';
+$aErrorCodes['E0072'] = 'Worker names must be alphanumeric';
+$aErrorCodes['E0073'] = 'Worker name is too long; try entering a shorter name'
 ?>
