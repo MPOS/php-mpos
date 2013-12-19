@@ -29,7 +29,8 @@ class Worker extends Base {
         $value['username'] = "$username." . $value['username'];
         // Ensure we have a sane worker name
         $wData = explode('.', $value['username']);
-        if (!preg_match('/[a-z_\-0-9]/i', $wData[1]) || strlen($value['username']) > 50) {
+        $validName = (bool) preg_match("/^[0-9a-zA-Z_\-]*$/", $wData[1]);
+        if ($validName === false || strlen($value['username']) > 50) {
           $validWorker = 0;
         }
         if ($validWorker) {
@@ -235,7 +236,8 @@ class Worker extends Base {
       $this->setErrorMessage($this->getErrorMsg('E0058'));
       return false;
     }
-    if (!preg_match('/[a-z_\-0-9]i/', $workerName)) {
+    $validName = (bool) preg_match("/^[0-9a-zA-Z_\-]*$/", $wData[1]);
+    if ($validName === false) {
       $this->setErrorMessage($this->getErrorMsg('E0072'));
       return false;
     }
