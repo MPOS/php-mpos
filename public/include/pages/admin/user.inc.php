@@ -40,7 +40,14 @@ if (@$_POST['query']) {
     $aBalance = $transaction->getBalance($aUser['id']);
     $aUser['balance'] = $aBalance['confirmed'];
     $aUser['hashrate'] = $statistics->getUserHashrate($aUser['id']);
-    $aUser['estimates'] = $statistics->getUserEstimates($aRoundShares, $aUser['shares'], $aUser['donate_percent'], $aUser['no_fees']);
+
+    if ($config['payout_system'] == 'pps') {
+      $aUser['sharerate'] = $statistics->getUserSharerate($aUser['id']);
+      $aUser['difficulty'] = $statistics->getUserShareDifficulty($aUser['id']);
+      $aUser['estimates'] = $statistics->getUserEstimates($aUser['sharerate'], $aUser['difficulty'], $user->getUserDonatePercent($aUser['id']), $user->getUserNoFee($aUser['id']), $statistics->getPPSValue());
+    } else {
+      $aUser['estimates'] = $statistics->getUserEstimates($aRoundShares, $aUser['shares'], $aUser['donate_percent'], $aUser['no_fees']);
+    }
     $aUsers[$iKey] = $aUser;
   }
   // Assign our variables

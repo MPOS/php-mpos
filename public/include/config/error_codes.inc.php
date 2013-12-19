@@ -72,7 +72,8 @@ $aErrorCodes['E0065'] = 'Remaining balance is greater than 0';
 $aErrorCodes['E0066'] = 'Cannot find message';
 $aErrorCodes['E0067'] = 'Subject cannot be empty';
 $aErrorCodes['E0068'] = 'Message cannot be empty';
-$aErrorCodes['E0069'] = 'Unable to send reply';
+$aErrorCodes['E0069'] = 'Failed to send message';
 $aErrorCodes['E0070'] = 'Failed to delete message record';
-$aErrorCodes['E0071'] = 'Failed to send message';
+$aErrorCodes['E0072'] = 'Worker names must be alphanumeric';
+$aErrorCodes['E0073'] = 'Worker name is too long; try entering a shorter name'
 ?>

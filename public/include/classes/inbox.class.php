@@ -203,14 +203,14 @@ class Inbox extends Base {
       foreach($admins as $admin) {
         $stmt->bind_param('iiss', $admin['id'], $account_id, $subject, $message);
         if (!$stmt->execute()) {
-          return $this->sqlError('E0071');
+          return $this->sqlError('E0069');
         }
       }
       $stmt->close();
       return true;
     }
 
-    $this->setErrorMessage($this->getErrorMsg('E0071'));
+    $this->setErrorMessage($this->getErrorMsg('E0069'));
     return false;
   }
 
