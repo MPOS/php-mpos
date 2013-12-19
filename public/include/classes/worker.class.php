@@ -21,25 +21,19 @@ class Worker extends Base {
     $username = $this->user->getUserName($account_id);
     $iFailed = 0;
     foreach ($data as $key => $value) {
-      $validWorker = 1;
-      if ('' === $value['username'] || '' === $value['password']) {
+    if ('' === $value['username'] || '' === $value['password']) {
+      $iFailed++;
+    } else {
+      // Check worker name first
+      if (! preg_match("/^[0-9a-zA-Z_\-]*$/", $value['username'])) {
         $iFailed++;
-      } else {
-        // Prefix the WebUser to Worker name
-        $value['username'] = "$username." . $value['username'];
-        // Ensure we have a sane worker name
-        $wData = explode('.', $value['username']);
-        $validName = (bool) preg_match("/^[0-9a-zA-Z_\-]*$/", $wData[1]);
-        if ($validName === false || strlen($value['username']) > 50) {
-          $validWorker = 0;
-        }
-        if ($validWorker) {
-          $stmt = $this->mysqli->prepare("UPDATE $this->table SET password = ?, username = ?, monitor = ? WHERE account_id = ? AND id = ?");
-          if ( ! ( $this->checkStmt($stmt) && $stmt->bind_param('ssiii', $value['password'], $value['username'], $value['monitor'], $account_id, $key) && $stmt->execute()) )
-            $iFailed++;
-        } else {
-          $iFailed++;
-        }
+        continue;
+      }
+      // Prefix the WebUser to Worker name
+      $value['username'] = "$username." . $value['username'];
+      $stmt = $this->mysqli->prepare("UPDATE $this->table SET password = ?, username = ?, monitor = ? WHERE account_id = ? AND id = ?");
+      if ( ! ( $this->checkStmt($stmt) && $stmt->bind_param('ssiii', $value['password'], $value['username'], $value['monitor'], $account_id, $key) && $stmt->execute()) )
+        $iFailed++;
       }
     }
     if ($iFailed == 0)
@@ -236,15 +230,14 @@ class Worker extends Base {
       $this->setErrorMessage($this->getErrorMsg('E0058'));
       return false;
     }
-    $validName = (bool) preg_match("/^[0-9a-zA-Z_\-]*$/", $workerName);
-    if ($validName === false) {
+    if (!preg_match("/^[0-9a-zA-Z_\-]*$/", $workerName)) {
       $this->setErrorMessage($this->getErrorMsg('E0072'));
       return false;
     }
     $username = $this->user->getUserName($account_id);
     $workerName = "$username.$workerName";
     if (strlen($workerName) > 50) {
-      $this->setErrorMessage($this->getErrorMessage('E0073'));
+      $this->setErrorMessage($this->getErrorMsg('E0073'));
       return false;
     }
     $stmt = $this->mysqli->prepare("INSERT INTO $this->table (account_id, username, password) VALUES(?, ?, ?)");
