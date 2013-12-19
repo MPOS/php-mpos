@@ -2,9 +2,9 @@
   <input type="hidden" name="page" value="{$smarty.request.page|escape}">
   <input type="hidden" name="action" value="inbox">
   <input type="hidden" name="do" value="save">
-  <input type="hidden" name="account_id_to" value="{$USER.id}">
+  <input type="hidden" name="account_id_to" value="{$ACCOUNT_ID|escape}">
   <article class="module width_3_quarter">
-    <header><h3>Sending Message to {$USER.username}</h3></header>
+    <header><h3>{$SEND_TITLE|escape}</h3></header>
     <div class="module_content">
       <fieldset>
         <label for="senderEmail">Your Subject</label>
