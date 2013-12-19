@@ -14,6 +14,8 @@ class Worker extends Base {
    **/
   public function updateWorkers($account_id, $data) {
     $this->debug->append("STA " . __METHOD__, 4);
+    if (!public function updateWorkers($account_id, $data) {
+    $this->debug->append("STA " . __METHOD__, 4);
     if (!is_array($data)) {
       $this->setErrorMessage('No workers to update');
       return false;
