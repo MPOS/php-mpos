@@ -58,22 +58,7 @@ if ($config['payout_system'] != 'pps') {
   $dUnpaidShares = 0;
 } else {
   $dUnpaidShares = $statistics->getUserUnpaidPPSShares($user_id, $setting->getValue('pps_last_share_id'));
-  if ($config['pps']['reward']['type'] == 'blockavg' && $block->getBlockCount() > 0) {
-    $pps_reward = round($block->getAvgBlockReward($config['pps']['blockavg']['blockcount']));
-  } else {
-    if ($config['pps']['reward']['type'] == 'block') {
-      if ($aLastBlock = $block->getLast()) {
-        $pps_reward = $aLastBlock['amount'];
-      } else {
-        $pps_reward = $config['pps']['reward']['default'];
-      }
-    } else {
-      $pps_reward = $config['pps']['reward']['default'];
-    }
-  }
-
-  $ppsvalue = round($pps_reward / (pow(2,32) * $dDifficulty) * pow(2, $config['target_bits']), 12);
-  $aEstimates = $statistics->getUserEstimates($dPersonalSharerate, $dPersonalShareDifficulty, $user->getUserDonatePercent($user_id), $user->getUserNoFee($user_id), $ppsvalue);
+  $aEstimates = $statistics->getUserEstimates($dPersonalSharerate, $dPersonalShareDifficulty, $user->getUserDonatePercent($user_id), $user->getUserNoFee($user_id), $statistics->getPPSValue());
 }
 
 $iTotalRoundShares = $aRoundShares['valid'] + $aRoundShares['invalid'];
