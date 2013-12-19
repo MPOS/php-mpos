@@ -113,13 +113,13 @@ class Inbox extends Base {
 
   /**
    * Add a new message entry to the table
-   * @param $account_id int The ID of the member sending the message
+   * @param $account_id int The ID of the member sending the message, or 0 to broadcast the message
    * @param $aData array The message data
    */
   public function addMessage($account_id, $aData) {
     $this->debug->append("STA " . __METHOD__, 4);
     if (!is_array($aData)) return false;
-    if (empty($aData['account_id_to'])) return false;
+    if (empty($aData['account_id_to']) && $aData['account_id_to'] !== 0 && $aData['account_id_to'] !== "0") return false;
     if (empty($aData['subject']) || trim($aData['subject']) == '') {
       $this->setErrorMessage($this->getErrorMsg('E0067'));
       return false;
@@ -130,8 +130,27 @@ class Inbox extends Base {
     }
 
     $stmt = $this->mysqli->prepare("INSERT INTO $this->table (account_id_to, account_id_from, subject, content) VALUES (?,?,?,?)");
-    if ($this->checkStmt($stmt) && $stmt->bind_param('iiss', $aData['account_id_to'], $account_id, $aData['subject'], $aData['content']) && $stmt->execute())
+    if ($aData['account_id_to'] === 0 || $aData['account_id_to'] === "0") {
+      $users = $this->user->getUsers();
+      foreach($users as $user) {
+        if ($user['id'] != $account_id) {
+          $stmt->bind_param('iiss', $user['id'], $account_id, $aData['subject'], $aData['content']);
+          if ($this->checkStmt($stmt) && !$stmt->execute()) {
+            $stmt->close();
+            return $this->sqlError('E0069');
+          }
+        }
+      }
+
+      $stmt->close();
       return true;
+    } else {
+      if ($this->checkStmt($stmt) && $stmt->bind_param('iiss', $aData['account_id_to'], $account_id, $aData['subject'], $aData['content']) && $stmt->execute()) {
+        $stmt->close();
+        return true;
+      }
+    }
+
     return $this->sqlError('E0069');
   }
 
