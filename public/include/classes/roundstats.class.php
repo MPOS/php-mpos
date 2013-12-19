@@ -112,6 +112,7 @@ class RoundStats extends Base {
         ORDER BY valid DESC
         ");
     if ($this->checkStmt($stmt) && $stmt->bind_param('i', $iHeight) && $stmt->execute() && $result = $stmt->get_result()) {
+      $aData = null;
       while ($row = $result->fetch_assoc()) {
         $aData[$row['id']] = $row;
       }
