@@ -26,12 +26,20 @@ if ($user->isAuthenticated()) {
       $_SESSION['POPUP'][] = array('CONTENT' => 'Only admins can send messages to users', 'TYPE' => 'errormsg');
       $smarty->assign('CONTENT', '');
     } else {
-      $aUser = $user->getUserData((int)@$_REQUEST['account_id']);
-      if ($aUser) {
-        $smarty->assign('USER', $aUser);
-        $smarty->assign('CONTENT', 'send.tpl');
+      $smarty->assign('ACCOUNT_ID', $_REQUEST['account_id']);
+      $smarty->assign('CONTENT', 'send.tpl');
+
+      if ($_REQUEST["account_id"] !== '0') {
+        $aUser = $user->getUserData((int)@$_REQUEST['account_id']);
+        if ($aUser) {
+          $smarty->assign('ACCOUNT_ID', $_REQUEST['account_id']);
+          $smarty->assign('SEND_TITLE', 'Sending Message to ' . $aUser['username']);
+        } else {
+          $_SESSION['POPUP'][] = array('CONTENT' => 'Unknown user', 'TYPE' => 'errormsg');
+          $smarty->assign('CONTENT', '');
+        }
       } else {
-        $_SESSION['POPUP'][] = array('CONTENT' => 'Unknown user', 'TYPE' => 'errormsg');
+        $smarty->assign('SEND_TITLE', 'Broadcasting Message to Everyone');
       }
     }
   } else if (@$_REQUEST['do'] == 'Delete') {
@@ -70,6 +78,7 @@ if ($user->isAuthenticated()) {
       }
     }
 
+    $smarty->assign("SHOW_BROADCAST", $user->isAdmin($_SESSION['USERDATA']['id']));
     $smarty->assign('MESSAGES', $aMessages);
     $smarty->assign('CONTENT', 'default.tpl');
   }
