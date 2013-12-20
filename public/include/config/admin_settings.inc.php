@@ -106,7 +106,7 @@ $aSettings['statistics'][] = array(
 );
 $aSettings['statistics'][] = array(
   'display' => 'Ajax Data Interval', 'type' => 'select',
-  'options' => array('60' => '1', '300' => '5', '600' => '10'),
+  'options' => array('60' => '1', '180' => '3', '300' => '5', '600' => '10'),
   'default' => 300,
   'name' => 'statistics_ajax_data_interval', 'value' => $setting->getValue('statistics_ajax_data_interval'),
   'tooltip' => 'Time in minutes, interval for hashrate and sharerate calculations. Higher intervals allow for better accuracy at a higer server load.'
