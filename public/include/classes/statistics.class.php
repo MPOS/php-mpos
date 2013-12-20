@@ -816,7 +816,7 @@ class Statistics extends Base {
       $dDifficulty = 1;
     }
 
-    return pow(2, 32) * $dDifficulty / $dNetworkHashrate;
+    return $this->memcache->setCache(__FUNCTION__, pow(2, 32) * $dDifficulty / $dNetworkHashrate);
   }
 
   /**
@@ -832,7 +832,7 @@ class Statistics extends Base {
       $dDifficulty = 1;
     }
 
-    return round($dDifficulty * $this->config['cointarget'] / $this->getNetworkExpectedTimePerBlock(), 8);
+    return $this->memcache->setCache(__FUNCTION__, round($dDifficulty * $this->config['cointarget'] / $this->getNetworkExpectedTimePerBlock(), 8));
   }
 
   /**
