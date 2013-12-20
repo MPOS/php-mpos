@@ -7,7 +7,7 @@
          </tr>
          <tr>
            <td><b>Est Next Difficulty</b></td>
-           <td id="b-nextdiff" class="right">{$NETWORK.EstNextDifficulty}</td>
+           <td id="b-nextdiff" class="right">{$NETWORK.EstNextDifficulty} (Change in {$NETWORK.BlocksUntilDiffChange} Blocks)</td>
          </tr>
          <tr>
            <td><b>Est. Avg. Time per Block</b></td>

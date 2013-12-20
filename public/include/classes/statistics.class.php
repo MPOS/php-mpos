@@ -835,6 +835,23 @@ class Statistics extends Base {
     return round($dDifficulty * $this->config['cointarget'] / $this->getNetworkExpectedTimePerBlock(), 8);
   }
 
+
+  /**
+   * Get Number of blocks until next difficulty change
+   * @return blocks int blocks until difficulty change
+   **/
+  public function getBlocksUntilDiffChange(){
+    if ($data = $this->memcache->get(__FUNCTION__)) return $data;
+
+    if ($this->bitcoin->can_connect() === true) {
+      $iBlockcount = $this->bitcoin->getblockcount();
+    } else {
+      $iBlockcount = 1;
+    }
+
+    return $this->memcache->setCache(__FUNCTION__, $iBlockcount % $this->config['coindiffchangetarget']);
+  }
+
   /**
    * Get current PPS value
    * @return value double PPS Value
