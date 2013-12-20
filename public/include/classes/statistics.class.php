@@ -835,7 +835,6 @@ class Statistics extends Base {
     return round($dDifficulty * $this->config['cointarget'] / $this->getNetworkExpectedTimePerBlock(), 8);
   }
 
-
   /**
    * Get Number of blocks until next difficulty change
    * @return blocks int blocks until difficulty change
@@ -849,7 +848,7 @@ class Statistics extends Base {
       $iBlockcount = 1;
     }
 
-    return $this->memcache->setCache(__FUNCTION__, $iBlockcount % $this->config['coindiffchangetarget']);
+    return $this->memcache->setCache(__FUNCTION__, $this->config['coindiffchangetarget'] - ($iBlockcount % $this->config['coindiffchangetarget']));
   }
 
   /**
