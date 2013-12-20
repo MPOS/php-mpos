@@ -91,10 +91,11 @@ if ($iEstShares > 0 && $aRoundShares['valid'] > 0) {
 
 $dExpectedTimePerBlock = $statistics->getNetworkExpectedTimePerBlock();
 $dEstNextDifficulty = $statistics->getExpectedNextDifficulty();
+$iBlocksUntilDiffChange = $statistics->getBlocksUntilDiffChange();
 
 // Output JSON format
 $data = array(
-  'raw' => array( 'personal' => array( 'hashrate' => $dPersonalHashrate ), 'pool' => array( 'hashrate' => $dPoolHashrate ), 'network' => array( 'hashrate' => $dNetworkHashrate / 1000, 'esttimeperblock' => $dExpectedTimePerBlock, 'nextdifficulty' => $dEstNextDifficulty ) ),
+  'raw' => array( 'personal' => array( 'hashrate' => $dPersonalHashrate ), 'pool' => array( 'hashrate' => $dPoolHashrate ), 'network' => array( 'hashrate' => $dNetworkHashrate / 1000, 'esttimeperblock' => $dExpectedTimePerBlock, 'nextdifficulty' => $dEstNextDifficulty, 'blocksuntildiffchange' => $iBlocksUntilDiffChange ) ),
   'personal' => array (
     'hashrate' => $dPersonalHashrateAdjusted, 'sharerate' => $dPersonalSharerate, 'sharedifficulty' => $dPersonalShareDifficulty,
     'shares' => array('valid' => $aUserRoundShares['valid'], 'invalid' => $aUserRoundShares['invalid'], 'invalid_percent' => $dUserInvalidPercent, 'unpaid' => $dUnpaidShares ),
@@ -111,7 +112,7 @@ $data = array(
     'target_bits' => $config['difficulty']
   ),
   'system' => array( 'load' => sys_getloadavg() ),
-  'network' => array( 'hashrate' => $dNetworkHashrateAdjusted, 'difficulty' => $dDifficulty, 'block' => $iBlock, 'esttimeperblock' => round($dExpectedTimePerBlock ,2), 'nextdifficulty' => $dEstNextDifficulty ),
+  'network' => array( 'hashrate' => $dNetworkHashrateAdjusted, 'difficulty' => $dDifficulty, 'block' => $iBlock, 'esttimeperblock' => round($dExpectedTimePerBlock ,2), 'nextdifficulty' => $dEstNextDifficulty, 'blocksuntildiffchange' => $iBlocksUntilDiffChange ),
 );
 
 echo $api->get_json($data);

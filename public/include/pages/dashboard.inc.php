@@ -37,12 +37,13 @@ if ($user->isAuthenticated()) {
 
   $dExpectedTimePerBlock = $statistics->getNetworkExpectedTimePerBlock();
   $dEstNextDifficulty = $statistics->getExpectedNextDifficulty();
+  $iBlocksUntilDiffChange = $statistics->getBlocksUntilDiffChange();
 
   // Make it available in Smarty
   $smarty->assign('DISABLED_DASHBOARD', $setting->getValue('disable_dashboard'));
   $smarty->assign('DISABLED_DASHBOARD_API', $setting->getValue('disable_dashboard_api'));
   $smarty->assign('ESTIMATES', array('shares' => $iEstShares, 'percent' => $dEstPercent));
-  $smarty->assign('NETWORK', array('difficulty' => $dDifficulty, 'block' => $iBlock, 'EstNextDifficulty' => $dEstNextDifficulty, 'EstTimePerBlock' => $dExpectedTimePerBlock));
+  $smarty->assign('NETWORK', array('difficulty' => $dDifficulty, 'block' => $iBlock, 'EstNextDifficulty' => $dEstNextDifficulty, 'EstTimePerBlock' => $dExpectedTimePerBlock, 'BlocksUntilDiffChange' => $iBlocksUntilDiffChange));
   $smarty->assign('INTERVAL', $interval / 60);
   $smarty->assign('CONTENT', 'default.tpl');
 }

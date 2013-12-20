@@ -179,6 +179,19 @@ $config['currency'] = 'LTC';
 $config['cointarget'] = '150';
 
 /**
+ * Diff change every X Blocks
+ *
+ * Explanation
+ *   Amount of Blocks until Difficulty change
+ *
+ *   Fastcoin: 300 Blocks
+ *   Litecoin: 2016 Blocks
+ *   Bitcoin: 2016 Blocks
+ *
+ **/
+$config['coindiffchangetarget'] = 2016;
+
+/**
  * Default transaction fee to apply to user transactions
  *
  * Explanation

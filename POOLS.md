@@ -95,7 +95,6 @@ Small Time Miners are running various stratum only pools for different coins.
 
 ### nutnut
 
-
 | Pool URL | Coin | Avg. Hashrate | Avg. Active Workers | Notes |
 | -------- | ---- | ------------: | ------------------: | ----- |
 | http://ftc.nut2pools.com | Feathercoin | 45-50Mhs | 25 workers | New style, PPLNS |
@@ -103,7 +102,6 @@ Small Time Miners are running various stratum only pools for different coins.
 | http://pxc.nut2pools.com | Phenixcoin | 0 | 0 | New style | PPLNS |
 
 ### ahmedbodi
-
 
 | Pool URL | Coin | Avg. Hashrate | Avg. Active Workers | Notes |
 | -------- | ---- | ------------: | ------------------: | ----- |
@@ -116,13 +114,11 @@ Small Time Miners are running various stratum only pools for different coins.
 
 ### Neozonz
 
-
 | Pool URL | Coin | Avg. Hashrate | Avg. Active Workers | Notes |
 | -------- | ---- | ------------: | ------------------: | ----- |
 | https://www.mine-litecoin.com | Litecoin | 10Mhs | 75 workers | Custom Template, Prop |
 
 ### CaptainAK
-
 
 | Pool URL                | Coin | Avg. Hashrate | Avg. Active Workers | Notes |
 | ----------------------- | ---- | ------------: | ------------------: | ----- |
@@ -157,3 +153,11 @@ Small Time Miners are running various stratum only pools for different coins.
 | Pool URL                         | Coin  | Avg. Hashrate | Avg. Active Workers | Notes |
 | -------------------------------- | ----- | ------------: | ------------------: | ----- |
 | http://spotspool.chriskoeber.com | Spots | 37 Mhs        | 55 workers          | Prop  |
+
+### [Poolerino.com](http://poolerino.com/ "Poolerino.com") ([@Fredyy90](https://github.com/Fredyy90/ "Fredyy90 on GitHub"))
+
+[Poolerino.com](http://poolerino.com/ "Poolerino.com")  is going to build up a network of first-class, high performance pools on highend enterprise server hardware
+
+| Pool URL | Coin | Avg. Hashrate | Avg. Active Workers | Notes |
+| -------- | ---- | ------------: | ------------------: | ----- |
+| http://doge.poolerino.com | Doge | 300 MH/s | 600 | PROP + VARDIFF + 0% Fee |
