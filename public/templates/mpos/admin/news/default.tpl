@@ -1,5 +1,6 @@
 <article class="module width_full">
   <header><h3>News Posts</h3></header>
+  <ul><li>News posts support the Markdown syntax</li></ul>
   <form method="POST" action="{$smarty.server.PHP_SELF}">
     <input type="hidden" name="page" value="{$smarty.request.page|escape}">
     <input type="hidden" name="action" value="{$smarty.request.action|escape}">
