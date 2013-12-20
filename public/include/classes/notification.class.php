@@ -158,7 +158,7 @@ class Notification extends Mail {
         $error = $this->inbox->getError();
       } else {
         $sent = $this->sendMail('notifications/' . $strType, $aMailData);
-        $error = $this->mail->getError();
+        $error = $this->getError();
       }
       if ($sent && $this->addNotification($account_id, $strType, $aMailData)) {
         return true;
