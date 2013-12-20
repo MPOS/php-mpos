@@ -154,9 +154,9 @@ Small Time Miners are running various stratum only pools for different coins.
 | -------------------------------- | ----- | ------------: | ------------------: | ----- |
 | http://spotspool.chriskoeber.com | Spots | 37 Mhs        | 55 workers          | Prop  |
 
-### Poolerino.com (@Fredyy90)
+### [Poolerino.com](http://poolerino.com/ "Poolerino.com") ([@Fredyy90](https://github.com/Fredyy90/ "Fredyy90 on GitHub"))
 
-Poolerino.com is going to build up a network of first-class, high performance pools on highend enterprise server hardware
+[Poolerino.com](http://poolerino.com/ "Poolerino.com")  is going to build up a network of first-class, high performance pools on highend enterprise server hardware
 
 | Pool URL | Coin | Avg. Hashrate | Avg. Active Workers | Notes |
 | -------- | ---- | ------------: | ------------------: | ----- |
