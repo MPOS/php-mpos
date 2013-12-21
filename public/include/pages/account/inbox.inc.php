@@ -70,7 +70,11 @@ if ($user->isAuthenticated()) {
   if ($smarty->getTemplateVars('CONTENT') === null) {
     $aMessages = $inbox->getAllMessages((int)$_SESSION['USERDATA']['id']);
     if (!$aMessages) {
-      $_SESSION['POPUP'][] = array('CONTENT' => 'You have no messages', 'TYPE' => 'errormsg');
+      if ($error = $inbox->getError()) {
+        $_SESSION['POPUP'][] = array('CONTENT' => 'There was an error fetching your messages: ' . $error, 'TYPE' => 'errormsg');
+      } else {
+        $_SESSION['POPUP'][] = array('CONTENT' => 'You have no messages', 'TYPE' => 'errormsg');
+      }
     } else if (is_array($aMessages)) {
       foreach ($aMessages as &$aData) {
         // Transform Markdown content to HTML

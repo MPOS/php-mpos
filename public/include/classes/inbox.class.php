@@ -52,7 +52,8 @@ class Inbox extends Base {
       $stmt->close();
       return $rows;
     }
-    return $this->sqlError();
+
+    return $this->setErrorMessage($this->mysqli->error);
   }
 
   /**
