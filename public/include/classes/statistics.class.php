@@ -812,7 +812,7 @@ class Statistics extends Base {
       $dNetworkHashrate = $this->bitcoin->getnetworkhashps();
       $dDifficulty = $this->bitcoin->getdifficulty();
     } else {
-      $dNetworkHashrate = 0;
+      $dNetworkHashrate = 1;
       $dDifficulty = 1;
     }
 
