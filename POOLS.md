@@ -154,6 +154,7 @@ Small Time Miners are running various stratum only pools for different coins.
 | -------------------------------- | ----- | ------------: | ------------------: | ----- |
 | http://spotspool.chriskoeber.com | Spots | 37 Mhs        | 55 workers          | Prop  |
 
+
 ### [Poolerino.com](http://poolerino.com/ "Poolerino.com") ([@Fredyy90](https://github.com/Fredyy90/ "Fredyy90 on GitHub"))
 
 [Poolerino.com](http://poolerino.com/ "Poolerino.com")  is going to build up a network of first-class, high performance pools on highend enterprise server hardware
@@ -161,3 +162,13 @@ Small Time Miners are running various stratum only pools for different coins.
 | Pool URL | Coin | Avg. Hashrate | Avg. Active Workers | Notes |
 | -------- | ---- | ------------: | ------------------: | ----- |
 | http://doge.poolerino.com | Doge | 300 MH/s | 600 | PROP + VARDIFF + 0% Fee |
+
+### [Coinium.org](http://www.coinium.org/ "Coinium.org") ([@raistlinthewiz](https://github.com/raistlinthewiz/ "raistlinthewiz on GitHub"))
+
+[Coinium.org](http://coinium.org/ "Coinium.org") - high performance pool network that is hosted in UK.
+
+| Pool URL                         | Coin  | Avg. Hashrate | Avg. Active Workers | Notes |
+| -------------------------------- | ----- | ------------: | ------------------: | ----- |
+| http://doge.coinium.org          | DOGE  | 50 Mhs        | ~100 workers          | PPLNS |
+| http://emd.coinium.org           | EMD   | 10 Mhs        |  ~10 workers          | PPLNS |
+| http://earth.coinium.org         | EAC   | 15 Mhs        |  ~30 workers          | PPLNS |
