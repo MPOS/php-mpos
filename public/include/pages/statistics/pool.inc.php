@@ -54,6 +54,7 @@ if (!$smarty->isCached('master.tpl', $smarty_cache_key)) {
 
   $dExpectedTimePerBlock = $statistics->getNetworkExpectedTimePerBlock();
   $dEstNextDifficulty = $statistics->getExpectedNextDifficulty();
+  $iBlocksUntilDiffChange = $statistics->getBlocksUntilDiffChange();
 
   // Propagate content our template
   $smarty->assign("ESTTIME", $iEstTime);
@@ -64,7 +65,7 @@ if (!$smarty->isCached('master.tpl', $smarty_cache_key)) {
   $smarty->assign("CONTRIBHASHES", $aContributorsHashes);
   $smarty->assign("CURRENTBLOCK", $iBlock);
   $smarty->assign("CURRENTBLOCKHASH", @$sBlockHash);
-  $smarty->assign('NETWORK', array('difficulty' => $dDifficulty, 'block' => $iBlock, 'EstNextDifficulty' => $dEstNextDifficulty, 'EstTimePerBlock' => $dExpectedTimePerBlock));
+  $smarty->assign('NETWORK', array('difficulty' => $dDifficulty, 'block' => $iBlock, 'EstNextDifficulty' => $dEstNextDifficulty, 'EstTimePerBlock' => $dExpectedTimePerBlock, 'BlocksUntilDiffChange' => $iBlocksUntilDiffChange));
   $smarty->assign('ESTIMATES', array('shares' => $iEstShares, 'percent' => $dEstPercent));
   if (count($aBlockData) > 0) {
     $smarty->assign("LASTBLOCK", $aBlockData['height']);

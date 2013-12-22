@@ -172,50 +172,31 @@ class Share Extends Base {
    **/
   public function purgeArchive() {
     // Fallbacks if unset
-    if (!isset($this->config['purge']['shares'])) $this->config['purge']['shares'] = 25000;
-    if (!isset($this->config['purge']['sleep'])) $this->config['purge']['sleep'] = 1;
+    if (!isset($this->config['archive']['purge'])) $this->config['archive']['purge'] = 5;
 
-    // TODO: This could need some cleanup work somtime but works
-    if ($this->config['payout_system'] == 'pplns') {
-      // Fetch our last block so we can go back configured rounds
-      $aLastBlock = $this->block->getLast();
-      // Fetch the block we need to find the share_id
-      $aBlock = $this->block->getBlock($aLastBlock['height'] - $this->config['archive']['maxrounds']);
-
-      // We need to find a hard limit id so we don't run into an infinite loop, skip process if we can't find a limit
-      $stmt = $this->mysqli->prepare("SELECT MAX(id) AS id FROM $this->tableArchive WHERE block_id < ? AND time < DATE_SUB(now(), INTERVAL ? MINUTE)");
-      if ($this->checkStmt($stmt) && $stmt->bind_param('ii', $aBlock['id'], $this->config['archive']['maxage']) && $stmt->execute() && $result = $stmt->get_result())
-        if ( ! $max_id = $result->fetch_object()->id ) return true;
-      // Now that we know our block, remove those shares
-      $affected = 1;
-      while ($affected > 0) {
-        // Sleep first to allow any IO to cleanup
-        sleep($this->config['purge']['sleep']);
-        $stmt = $this->mysqli->prepare("DELETE FROM $this->tableArchive WHERE block_id < ? AND time < DATE_SUB(now(), INTERVAL ? MINUTE) AND id <= ? LIMIT " . $this->config['purge']['shares']);
-        if ($this->checkStmt($stmt) && $stmt->bind_param('iii', $aBlock['id'], $this->config['archive']['maxage'], $max_id) && $stmt->execute()) {
-          $affected = $stmt->affected_rows;
-        } else {
-          return $this->sqlError();
-        }
-      }
+    $stmt = $this->mysqli->prepare("SELECT CEIL(COUNT(id) / 100 * ?) AS count FROM $this->tableArchive");
+    if ($this->checkStmt($stmt) && $stmt->bind_param('i', $this->config['archive']['purge']) && $stmt->execute() && $result = $stmt->get_result()) {
+      $limit = $result->fetch_object()->count;
     } else {
-      // We need to find a hard limit id so we don't run into an infinite loop, skip process if we can't find a limit
-      $stmt = $this->mysqli->prepare("SELECT MAX(id) AS id FROM $this->tableArchive WHERE time < DATE_SUB(now(), INTERVAL ? MINUTE)");
-      if ($this->checkStmt($stmt) && $stmt->bind_param('i', $this->config['archive']['maxage']) && $stmt->execute() && $result = $stmt->get_result())
-        if ( ! $max_id = $result->fetch_object()->id ) return true;
-      $affected = 1;
-      while ($affected > 0) {
-        // Sleep first to allow any IO to cleanup
-        sleep($this->config['purge']['sleep']);
-        $stmt = $this->mysqli->prepare("DELETE FROM $this->tableArchive WHERE time < DATE_SUB(now(), INTERVAL ? MINUTE) AND id <= ? LIMIT " . $this->config['purge']['shares']);
-        if ($this->checkStmt($stmt) && $stmt->bind_param('ii', $this->config['archive']['maxage'], $max_id) && $stmt->execute()) {
-          $affected = $stmt->affected_rows;
-        } else {
-          return $this->sqlError();
-        }
-      }
+      return $this->sqlError();
     }
-    return true;
+    $stmt->close();
+    $stmt = $this->mysqli->prepare("
+      DELETE FROM $this->tableArchive WHERE time < (
+        SELECT MIN(time) FROM (
+          SELECT MIN(time) AS time
+          FROM $this->tableArchive
+          WHERE block_id = (
+            SELECT MIN(id) AS minid FROM (
+              SELECT id FROM " . $this->block->getTableName() . " ORDER BY height DESC LIMIT ?
+            ) AS minheight
+          ) UNION SELECT DATE_SUB(now(), INTERVAL ? MINUTE) AS time
+        ) AS mintime
+      ) LIMIT $limit
+    ");
+    if ($this->checkStmt($stmt) && $stmt->bind_param('ii', $this->config['archive']['maxrounds'], $this->config['archive']['maxage']) && $stmt->execute())
+      return $stmt->affected_rows;
+    return $this->sqlError();
   }
 
   /**

@@ -26,14 +26,14 @@
         <tr>
           <th align="left">Est. Next Difficulty</td>
       {if ! $GLOBAL.website.chaininfo.disabled}
-          <td><a href="{$GLOBAL.website.chaininfo.url}" target="_new"><font size="2"><span id="b-diff">{$NETWORK.EstNextDifficulty}</span></font></a></td>
+          <td><a href="{$GLOBAL.website.chaininfo.url}" target="_new"><font size="2">{$NETWORK.EstNextDifficulty}  (Change in {$NETWORK.BlocksUntilDiffChange} Blocks)</font></a></td>
       {else}
-          <td><font size="2"><span id="b-diff">{$NETWORK.EstNextDifficulty}</span></font></td>
+          <td><font size="2">{$NETWORK.EstNextDifficulty} (Change in {$NETWORK.EstNextDifficulty} Blocks)</font></td>
       {/if}
         </tr>
         <tr>
           <th align="left">Est. Avg. Time per Round (Network)</td>
-          <td><font size="2"><span id="b-diff">{$NETWORK.EstTimePerBlock|seconds_to_words}</span></font></td>
+          <td><font size="2">{$NETWORK.EstTimePerBlock|seconds_to_words}</font></td>
         </tr>
         <tr>
           <th align="left">Est. Avg. Time per Round (Pool)</td>
