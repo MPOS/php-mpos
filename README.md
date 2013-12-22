@@ -70,13 +70,12 @@ Features
 The following feature have been implemented so far:
 
 * Fully re-written GUI with [Smarty][2] templates
+ * Full file based template support
+ * **NEW** SQL based templates
 * Mobile WebUI
-* Scrypt, **NEW** SHA256, VARDIFF Support
+* Scrypt, SHA256, VARDIFF Support
 * Reward Systems
- * Propotional
- * PPS
- * PPLNS
-* Statistics are cached in Memcache by Cronjob for quick data access
+ * Propotional, PPS and PPLNS
 * New Theme
  * Live Dashboard
  * AJAX Support
@@ -87,12 +86,9 @@ The following feature have been implemented so far:
  * Worker activity
  * Worker hashrates
 * Pool statistics
-* Minimal Block statistics
-* Pool donations
-* Pool fees
-* Block Bonus Payouts
-* Manual payout
-* Auto payout
+* Block statistics
+* Pool donations, fees and block bonuses
+* Manual and auto payout
 * Transaction list
 * Admin Panel
  * Cron Monitoring Overview
@@ -101,22 +97,24 @@ The following feature have been implemented so far:
  * User Transactions
  * News Posts
  * Pool Settings
+ * Templates
+ * Pool Workers
+ * User Reports
+ * Template Overwrite
 * Notification system
  * IDLE Workers
  * New blocks found in pool
  * Auto Payout
  * Manual Payout
 * User-to-user Invitation System
-* Support for various Scrypt based coins via config
- * MNC
- * LTC
- * ...
+* Support for various coins via config
+ * All scrypt coins
+ * All sha256d coins
 
 Installation
 ============
 
-Please take a look at the [Quick Start Guide](https://github.com/TheSerapher/php-mpos/wiki/Quick-Start-Guide). This will give you
-an idea how to setup `MPOS`.
+Please take a look at the [Quick Start Guide](https://github.com/TheSerapher/php-mpos/wiki/Quick-Start-Guide). This will give you an idea how to setup `MPOS`.
 
 Customization
 =============
