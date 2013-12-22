@@ -163,10 +163,12 @@ Small Time Miners are running various stratum only pools for different coins.
 | -------- | ---- | ------------: | ------------------: | ----- |
 | http://doge.poolerino.com | Doge | 300 MH/s | 600 | PROP + VARDIFF + 0% Fee |
 
-### Coinium (http://www.coinium.org/ "Coinium.org") ([@raistlinthewiz](https://github.com/raistlinthewþz/ "raistlinthewiz on GitHub"))
+### [Coinium.org](http://www.coinium.org/ "Coinium.org") ([@raistlinthewiz](https://github.com/raistlinthewiz/ "raistlinthewiz on GitHub"))
+
+[Coinium.org](http://coinium.org/ "Coinium.org") - high performance pool network that is hosted in UK.
 
 | Pool URL                         | Coin  | Avg. Hashrate | Avg. Active Workers | Notes |
 | -------------------------------- | ----- | ------------: | ------------------: | ----- |
-| http://doge.coinium.org          | DOGE  | 30 Mhs        | 60 workers          | PPLNS |
-| http://emd.coinium.org           | EMD   | 10 Mhs        | 10 workers          | PPLNS |
-| http://earth.coinium.org         | EAC   | 10 Mhs        | 30 workers          |
+| http://doge.coinium.org          | DOGE  | 50 Mhs        | ~100 workers          | PPLNS |
+| http://emd.coinium.org           | EMD   | 10 Mhs        |  ~10 workers          | PPLNS |
+| http://earth.coinium.org         | EAC   | 15 Mhs        |  ~30 workers          | PPLNS |
