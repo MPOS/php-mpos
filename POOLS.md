@@ -160,4 +160,6 @@ Small Time Miners are running various stratum only pools for different coins.
 
 | Pool URL | Coin | Avg. Hashrate | Avg. Active Workers | Notes |
 | -------- | ---- | ------------: | ------------------: | ----- |
-| http://doge.poolerino.com | Doge | 300 MH/s | 600 | PROP + VARDIFF + 0% Fee |
+| http://doge.poolerino.com | Dogecoin | 550 MH/s | 1200 | PROP + VARDIFF + 0% Fee |
+| http://eac.poolerino.com | Earthcoin | 230 MH/s | 300 | PROP + VARDIFF + 0% Fee |
+| http://glb.poolerino.com | Globe | 75 GH/s | 3 | PROP + VARDIFF + 0% Fee |
