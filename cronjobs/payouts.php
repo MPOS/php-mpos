@@ -120,7 +120,7 @@ if (! empty($users)) {
           continue;
         }
       } catch (BitcoinClientException $e) {
-        $log->logError('Failed to verifu this users coin address, skipping payout');
+        $log->logError('Failed to verify this users coin address, skipping payout');
         continue;
       }
 
