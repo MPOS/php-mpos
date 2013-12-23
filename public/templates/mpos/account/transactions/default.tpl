@@ -1,3 +1,4 @@
+{if $DISABLE_TRANSACTIONSUMMARY|default:"0" != 1}
 <article class="module width_full">
   <header><h3>Transaction Summary</h3></header>
   <table class="tablesorter" cellspacing="0">
@@ -17,6 +18,7 @@
     </tbody>
   </table>
 </article>
+{/if}
 
 <article class="module width_quarter">
   <header><h3>Transaction Filter</h3></header>
@@ -27,21 +29,15 @@
     <table cellspacing="0" class="tablesorter">
     <tbody>
       <tr>
-{if $COUNTTRANSACTIONS / $LIMIT > 1}
         <td align="left">
-  {if $smarty.request.start|default:"0" > 0}
+{if $smarty.request.start|default:"0" > 0}
           <a href="{$smarty.server.PHP_SELF}?page={$smarty.request.page|escape}&action={$smarty.request.action|escape}&start={$smarty.request.start|escape|default:"0" - $LIMIT}{if $FILTERS|default:""}{$FILTERS}{/if}"><i class="icon-left-open"></i></a>
-  {else}
+{else}
           <i class="icon-left-open"></i>
-  {/if}
+{/if}
         </td>
         <td align="right">
-  {if $COUNTTRANSACTIONS - $smarty.request.start|default:"0" - $LIMIT > 0}
           <a href="{$smarty.server.PHP_SELF}?page={$smarty.request.page|escape}&action={$smarty.request.action|escape}&start={$smarty.request.start|escape|default:"0" + $LIMIT}{if $FILTERS|default:""}{$FILTERS}{/if}"><i class="icon-right-open"></i></a>
-  {else}
-          <i class="icon-right-open"></i>
-  {/if}
-{/if}
         </td>
       </tr>
     </tbody>

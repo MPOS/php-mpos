@@ -287,6 +287,13 @@ $aSettings['system'][] = array(
   'name' => 'disable_dashboard_api', 'value' => $setting->getValue('disable_dashboard_api'),
   'tooltip' => 'Disable dashboard API entirely to reduce server load.'
 );
+$aSettings['system'][] = array(
+  'display' => 'Disable TX Summaries', 'type' => 'select',
+  'options' => array( 0 => 'No', 1 => 'Yes'),
+  'default' => 0,
+  'name' => 'disable_transactionsummary', 'value' => $setting->getValue('disable_transactionsummary'),
+  'tooltip' => 'Disable transaction summaries. Helpful with large transaction tables.'
+);
 $aSettings['recaptcha'][] = array(
   'display' => 'Enable re-Captcha', 'type' => 'select',
   'options' => array( 0 => 'No', 1 => 'Yes' ),

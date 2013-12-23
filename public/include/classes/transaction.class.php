@@ -102,7 +102,6 @@ class Transaction extends Base {
     $this->debug->append("STA " . __METHOD__, 4);
     $sql = "
       SELECT
-        SQL_CALC_FOUND_ROWS
         t.id AS id,
         a.username as username,
         t.type AS type,
@@ -160,21 +159,13 @@ class Transaction extends Base {
         $sql .= implode(' AND ', $aFilter);
       }
     }
-    $sql .= "
-      ORDER BY id DESC
-      LIMIT ?,?
-      ";
+    $sql .= " ORDER BY id DESC LIMIT ?,?";
     // Add some other params to query
     $this->addParam('i', $start);
     $this->addParam('i', $limit);
     $stmt = $this->mysqli->prepare($sql);
-    if ($this->checkStmt($stmt) && call_user_func_array( array($stmt, 'bind_param'), $this->getParam()) && $stmt->execute() && $result = $stmt->get_result()) {
-      // Fetch matching row count
-      $num_rows = $this->mysqli->prepare("SELECT FOUND_ROWS() AS num_rows");
-      if ($num_rows->execute() && $row_count = $num_rows->get_result()->fetch_object()->num_rows)
-        $this->num_rows = $row_count;
+    if ($this->checkStmt($stmt) && call_user_func_array( array($stmt, 'bind_param'), $this->getParam()) && $stmt->execute() && $result = $stmt->get_result())
       return $result->fetch_all(MYSQLI_ASSOC);
-    }
     return $this->sqlError();
   }
 
