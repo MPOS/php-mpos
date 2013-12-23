@@ -22,6 +22,59 @@
     }
 </script>
 
+<article class="module width_full">
+  <header><h3>User Search</h3></header>
+  <div class="module_content">
+  <form action="{$smarty.server.PHP_SELF}">
+    <input type="hidden" name="page" value="{$smarty.request.page|escape}" />
+    <input type="hidden" name="action" value="{$smarty.request.action|escape}" />
+    <input type="hidden" name="do" value="query" />
+    <table cellspacing="0" class="tablesorter">
+    <tbody>
+      <tr>
+        <td align="left">
+{if $smarty.request.start|default:"0" > 0}
+          <a href="{$smarty.server.PHP_SELF}?page={$smarty.request.page|escape}&action={$smarty.request.action|escape}&start={$smarty.request.start|escape|default:"0" - $LIMIT}{if $FILTERS|default:""}{$FILTERS}{/if}"><i class="icon-left-open"></i></a>
+{else}
+          <i class="icon-left-open"></i>
+{/if}
+        </td>
+        <td align="right">
+          <a href="{$smarty.server.PHP_SELF}?page={$smarty.request.page|escape}&action={$smarty.request.action|escape}&start={$smarty.request.start|escape|default:"0" + $LIMIT}{if $FILTERS|default:""}{$FILTERS}{/if}"><i class="icon-right-open"></i></a>
+        </td>
+    </tbody>
+  </table>
+    <fieldset>
+      <label>Account</label>
+      <input size="20" type="text" name="filter[account]" value="{$smarty.request.filter.account|default:""}" />
+    </fieldset>
+    <fieldset>
+      <label>E-Mail</label>
+      <input size="20" type="text" name="filter[email]" value="{$smarty.request.filter.email|default:""}" />
+    </fieldset>
+    <fieldset>
+      <label>Is Admin</label>
+      {html_options name="filter[is_admin]" options=$ADMIN selected=$smarty.request.filter.is_admin|default:""}
+    </fieldset>
+    <fieldset>
+      <label>Is Locked</label>
+      {html_options name="filter[is_locked]" options=$LOCKED selected=$smarty.request.filter.is_locked|default:""}
+    </fieldset>
+    <fieldset>
+      <label>No Fees</label>
+      {html_options name="filter[no_fees]" options=$NOFEE selected=$smarty.request.filter.no_fees|default:""}
+    </fieldset>
+    <ul>
+      <li>Note: Text search fields support '%' as wildcard.</li>
+    </ul>
+  </div>
+  <footer>
+    <div class="submit_link">
+      <input type="submit" value="Search" class="alt_btn">
+    </div>
+  </footer>
+</form>
+</article>
 
 <article class="module width_full">
   <header>
@@ -108,13 +161,5 @@
   </tfoot>
 </table>
   <footer>
-    <div class="submit_link">
-    <form action="{$smarty.server.PHP_SELF}" method="POST" id='query'>
-      <input type="hidden" name="page" value="{$smarty.request.page|escape}">
-      <input type="hidden" name="action" value="{$smarty.request.action|escape}">
-      <input type="text" class="pin" name="query" value="{$smarty.request.query|default:"%"|escape}">
-      <input type="submit" value="Query" class="alt_btn">
-    </form>
-    </div>
   </footer>
 </article>
