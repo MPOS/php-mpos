@@ -383,8 +383,12 @@ $config['reward_type'] = 'fixed';
 $config['reward'] = 50;
 
 // Confirmations per block required to credit transactions, default: 120
+// Do NOT touch this unless you know what you are doing! Please check your coin for the
+// appropriate value here, but most should work with this.
 $config['confirmations'] = 120;
 // Confirmations per block required in network to confirm its transactions, default: 120
+// Do NOT touch this unless you know what you are doing! Please check your coin for the
+// appropriate value here, but most should work with this.
 $config['network_confirmations'] = 120;
 
  /**
