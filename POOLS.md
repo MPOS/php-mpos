@@ -161,3 +161,9 @@ Small Time Miners are running various stratum only pools for different coins.
 | Pool URL | Coin | Avg. Hashrate | Avg. Active Workers | Notes |
 | -------- | ---- | ------------: | ------------------: | ----- |
 | http://doge.poolerino.com | Doge | 300 MH/s | 600 | PROP + VARDIFF + 0% Fee |
+
+### t3chie
+
+| Pool URL                         | Coin  | Avg. Hashrate | Avg. Active Workers | Notes |
+| -------------------------------- | ----- | ------------: | ------------------: | ----- |
+| https://gdcpool.us               | Grandcoin | 2-10 Mhs  | 15 workers          | SSL + Stratum/Getwork  |
