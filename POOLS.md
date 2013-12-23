@@ -172,7 +172,9 @@ Small Time Miners are running various stratum only pools for different coins.
 | http://doge.coinium.org          | DOGE  | 50 Mhs        | ~100 workers          | PPLNS |
 | http://emd.coinium.org           | EMD   | 10 Mhs        |  ~10 workers          | PPLNS |
 | http://earth.coinium.org         | EAC   | 15 Mhs        |  ~30 workers          | PPLNS |
-=======
-| http://doge.poolerino.com | Dogecoin | 550 MH/s | 1200 | PROP + VARDIFF + 0% Fee |
-| http://eac.poolerino.com | Earthcoin | 230 MH/s | 300 | PROP + VARDIFF + 0% Fee |
-| http://glb.poolerino.com | Globe | 75 GH/s | 3 | PROP + VARDIFF + 0% Fee |
+
+### t3chie
+
+| Pool URL                         | Coin  | Avg. Hashrate | Avg. Active Workers | Notes |
+| -------------------------------- | ----- | ------------: | ------------------: | ----- |
+| https://gdcpool.us               | Grandcoin | 2-10 Mhs  | 15 workers          | SSL + Stratum/Getwork  |
