@@ -17,8 +17,7 @@ $data = array(
   'username' => $user->getUsername($user_id),
   'shares' =>  $statistics->getUserShares($user_id),
   'hashrate' => $statistics->getUserHashrate($user_id),
-  'sharerate' => $statistics->getUserSharerate($user_id),
-  'transactions' => $aTransactionSummary
+  'sharerate' => $statistics->getUserSharerate($user_id)
 );
 echo $api->get_json($data);
 
