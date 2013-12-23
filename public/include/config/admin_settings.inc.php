@@ -288,6 +288,20 @@ $aSettings['system'][] = array(
   'tooltip' => 'Disable dashboard API entirely to reduce server load.'
 );
 $aSettings['system'][] = array(
+  'display' => 'Disable Live Navbar', 'type' => 'select',
+  'options' => array( 0 => 'No', 1 => 'Yes'),
+  'default' => 0,
+  'name' => 'disable_navbar', 'value' => $setting->getValue('disable_navbar'),
+  'tooltip' => 'Disable live updates on the navbar to reduce server load.'
+);
+$aSettings['system'][] = array(
+  'display' => 'Disable Navbar API', 'type' => 'select',
+  'options' => array( 0 => 'No', 1 => 'Yes'),
+  'default' => 0,
+  'name' => 'disable_navbar_api', 'value' => $setting->getValue('disable_navbar_api'),
+  'tooltip' => 'Disable navbar API entirely to reduce server load. Used in pool stats and navbar mini stats.'
+);
+$aSettings['system'][] = array(
   'display' => 'Disable TX Summaries', 'type' => 'select',
   'options' => array( 0 => 'No', 1 => 'Yes'),
   'default' => 0,
