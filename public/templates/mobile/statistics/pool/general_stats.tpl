@@ -39,7 +39,7 @@
     {/if}
     <tr>
       <td class="leftheader">Est. Avg. Time per Round (Network)</td>
-      <td colspan="4">{$NETWORK.ExpectedTimePerBlock|seconds_to_words}</td>
+      <td colspan="4">{$NETWORK.EstTimePerBlock|seconds_to_words}</td>
     </tr>
     <tr>
       <td class="leftheader">Est. Avg. Time per Round (Pool)</td>
