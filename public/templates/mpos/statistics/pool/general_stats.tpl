@@ -28,7 +28,7 @@
       {if ! $GLOBAL.website.chaininfo.disabled}
           <td><a href="{$GLOBAL.website.chaininfo.url}" target="_new"><font size="2">{$NETWORK.EstNextDifficulty}  (Change in {$NETWORK.BlocksUntilDiffChange} Blocks)</font></a></td>
       {else}
-          <td><font size="2">{$NETWORK.EstNextDifficulty} (Change in {$NETWORK.EstNextDifficulty} Blocks)</font></td>
+          <td><font size="2">{$NETWORK.EstNextDifficulty} (Change in {$NETWORK.BlocksUntilDiffChange} Blocks)</font></td>
       {/if}
         </tr>
         <tr>
