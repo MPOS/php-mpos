@@ -79,9 +79,8 @@
 <article class="module width_full">
   <header>
     <h3>User Information</h3>
-    <div class="submit_link">{include file="global/pagination.tpl"}</div>
   </header>
-<table width="100%" class="tablesorterpager">
+<table cellspacing="0" width="100%" class="tablesorter">
   <thead>
     <tr>
       <th align="center">ID</th>
@@ -140,26 +139,5 @@
 {/section}
 {/nocache}
   </tbody>
-  <tfoot>
-    <tr>
-      <th align="center">ID</th>
-      <th align="left">Username</th>
-      <th align="left">E-Mail</th>
-      <th align="right">Shares&nbsp;&nbsp;</th>
-      <th align="right">Hashrate&nbsp;&nbsp;</th>
-{if $GLOBAL.config.payout_system != 'pps'}
-      <th align="right">Est. Donation&nbsp;&nbsp;</th>
-      <th align="right">Est. Payout&nbsp;&nbsp;&nbsp;</th>
-{else}
-      <th align="right" colspan="2">Est. 24 Hours&nbsp;&nbsp;&nbsp;</th>
-{/if}
-      <th align="right">Balance&nbsp;&nbsp;&nbsp;</th>
-      <th align="center">Admin</th>
-      <th align="center">Locked</th>
-      <th align="center">No Fees</th>
-    </tr>
-  </tfoot>
 </table>
-  <footer>
-  </footer>
 </article>
