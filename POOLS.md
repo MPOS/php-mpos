@@ -161,7 +161,10 @@ Small Time Miners are running various stratum only pools for different coins.
 
 | Pool URL | Coin | Avg. Hashrate | Avg. Active Workers | Notes |
 | -------- | ---- | ------------: | ------------------: | ----- |
-| http://doge.poolerino.com | Doge | 300 MH/s | 600 | PROP + VARDIFF + 0% Fee |
+| http://doge.poolerino.com | Dogecoin | 950 MH/s | 1600 | PROP + VARDIFF + 0% Fee |
+| http://cat.poolerino.com | Catcoin | 550 MH/s | 520 | PROP + VARDIFF + 0% Fee |
+| http://eac.poolerino.com | Earthcoin | 110 MH/s |130 | PROP + VARDIFF + 0% Fee |
+| http://glb.poolerino.com | Globe | 125 GH/s | 8 | PROP + VARDIFF + 0% Fee |
 
 ### [Coinium.org](http://www.coinium.org/ "Coinium.org") ([@raistlinthewiz](https://github.com/raistlinthewiz/ "raistlinthewiz on GitHub"))
 
