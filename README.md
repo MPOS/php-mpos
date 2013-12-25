@@ -35,6 +35,7 @@ These people have supported this project with a donation:
 * [WKNiGHT](https://github.com/WKNiGHT-)
 * [ZC](https://github.com/zccopwrx)
 * Nutnut
+* Caberhagen (http://litecoin-pool.ch)
 
 Pools running MPOS
 ==================
