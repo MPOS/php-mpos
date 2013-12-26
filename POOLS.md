@@ -187,3 +187,11 @@ Small Time Miners are running various stratum only pools for different coins.
 | Pool URL                         | Coin     | Avg. Hashrate | Avg. Active Workers |          Notes            |
 | -------------------------------- | -------- | ------------- | ------------------: | ------------------------- |
 | http://litecoin-pool.ch          | Litecoin |    5-10 Mhs   | 15 workers          | PPLNS + VARDIFF + 0% Fee  |
+
+### CryptoCult Pools (@educatedwarrior)
+
+| Pool URL | Coin | Avg. Hashrate | Avg. Active Workers | Notes |
+| -------- | ---- | ------------: | ------------------: | ----- |
+| http://nrb.cryptoculture.net | Noirbits | 50 Mhs | 60 workers | PROP + VARDIFF + 2% Fee |
+| http://sbc.cryptoculture.net | StableCoin | 70 Mhs | 80 workers | PROP + VARDIFF + 2% Fee |
+| http://doge.cryptoculture.net | DogeCoin | 600 Mhs | 700 workers |  PROP + VARDIFF + 2% Fee |
