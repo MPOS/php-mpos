@@ -491,7 +491,10 @@ class User extends Base {
       return false;
     }
     if (isset($strToken) && !empty($strToken)) {
-      $aToken = $this->token->getToken($strToken);
+      if ( ! $aToken = $this->token->getToken($strToken, 'invitation')) {
+        $this->setErrorMessage('Unable to find token');
+        return false;
+      }
       // Circle dependency, so we create our own object here
       $invitation = new Invitation();
       $invitation->setMysql($this->mysqli);
@@ -567,7 +570,7 @@ class User extends Base {
    **/
   public function resetPassword($token, $new1, $new2) {
     $this->debug->append("STA " . __METHOD__, 4);
-    if ($aToken = $this->token->getToken($token)) {
+    if ($aToken = $this->token->getToken($token, 'password_reset')) {
       if ($new1 !== $new2) {
         $this->setErrorMessage( 'New passwords do not match' );
         return false;
@@ -588,7 +591,7 @@ class User extends Base {
         $this->setErrorMessage('Unable to set new password');
       }
     } else {
-      $this->setErrorMessage('Invalid token');
+      $this->setErrorMessage('Invalid token: ' . $this->token->getError());
     }
     $this->debug->append('Failed to update password:' . $this->mysqli->error);
     return false;
