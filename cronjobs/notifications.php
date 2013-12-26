@@ -26,7 +26,7 @@ chdir(dirname(__FILE__));
 require_once('shared.inc.php');
 
 if ($setting->getValue('disable_notifications') == 1) {
-  $monitoring->endCronjob($cron_name, 'E0009', 0, true);
+  $monitoring->endCronjob($cron_name, 'E0009', 0, true, false);
 }
 
 $log->logDebug("  IDLE Worker Notifications ...");
