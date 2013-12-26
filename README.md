@@ -62,7 +62,7 @@ for full information.
 * MySQL Server
  * mysql-server
 * memcached
-* pushpoold
+* stratum-mining
 * litecoind
 
 Features
