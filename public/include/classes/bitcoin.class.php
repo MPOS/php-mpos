@@ -774,7 +774,7 @@ class BitcoinClient extends jsonrpc_client {
   public function gettransaction($txid) {
     if (!$txid || empty($txid) || strlen($txid) != 64 || !preg_match('/^[0-9a-fA-F]+$/', $txid))
       throw new BitcoinClientException("gettransaction requires a valid hexadecimal transaction ID");
-    return $this->query("getttransaction", $txid);
+    return $this->query("gettransaction", $txid);
   }
 
   /**
