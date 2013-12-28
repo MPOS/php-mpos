@@ -153,7 +153,7 @@ class Worker extends Base {
    * @param limit int 
    * @return mixed array Workers and their settings or false
    **/
-  public function getAllWorkers($iLimit=0, $interval=600) {
+  public function getAllWorkers($iLimit=0, $interval=600, $start=0) {
     $this->debug->append("STA " . __METHOD__, 4);
     $stmt = $this->mysqli->prepare("
       SELECT id, username, password, monitor,
@@ -191,8 +191,8 @@ class Worker extends Base {
         WHERE username = w.username AND time > DATE_SUB(now(), INTERVAL ? SECOND)
       )) AS avg_difficulty
       FROM $this->table AS w
-      ORDER BY hashrate DESC LIMIT ?");
-    if ($this->checkStmt($stmt) && $stmt->bind_param('iiiiiiiii', $interval, $interval, $interval, $interval, $interval, $interval, $interval, $interval, $iLimit) && $stmt->execute() && $result = $stmt->get_result())
+      ORDER BY hashrate DESC LIMIT ?,?");
+    if ($this->checkStmt($stmt) && $stmt->bind_param('iiiiiiiiii', $interval, $interval, $interval, $interval, $interval, $interval, $interval, $interval, $start, $iLimit) && $stmt->execute() && $result = $stmt->get_result())
       return $result->fetch_all(MYSQLI_ASSOC);
     return $this->sqlError('E0057');
   }
