@@ -1,6 +1,6 @@
 <form action="{$smarty.server.PHP_SELF}" method="POST">
-  <input type="hidden" name="page" value="{$smarty.request.page}">
-  <input type="hidden" name="action" value="{$smarty.request.action}">
+  <input type="hidden" name="page" value="{$smarty.request.page|escape}">
+  <input type="hidden" name="action" value="{$smarty.request.action|escape}">
   <input type="hidden" name="do" value="sendInvitation">
   <article class="module width_quarter">
     <header><h3>Invitation</h3></header>

@@ -9,6 +9,9 @@ $api->isActive();
 // Check user token
 $user_id = $api->checkAccess($user->checkApiKey($_REQUEST['api_key']), @$_REQUEST['id']);
 
+// Fetch transaction summary
+$aTransactionSummary = $transaction->getTransactionSummary($user_id);
+
 // Output JSON format
 $data = array(
   'username' => $user->getUsername($user_id),

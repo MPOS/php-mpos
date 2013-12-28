@@ -24,6 +24,7 @@
       <li class="icon-doc"><a href="{$smarty.server.PHP_SELF}?page=admin&action=news">News</a></li>
       <li class="icon-chart"><a href="{$smarty.server.PHP_SELF}?page=admin&action=reports">Reports</a></li>
       <li class="icon-photo"><a href="{$smarty.server.PHP_SELF}?page=admin&action=poolworkers">Pool Workers</a></li>
+      <li class="icon-pencil"><a href="{$smarty.server.PHP_SELF}?page=admin&action=templates">Templates</a></li>
     </ul>
     {/if}
     {if $smarty.session.AUTHENTICATED|default}
@@ -60,7 +61,7 @@
     {/if}
     <h3>Help</h3>
     <ul class="toggle">
-      <li class="icon-desktop"><a href="{$smarty.server.PHP_SELF}?page=gettingstarted">GettingStarted</a></li>
+      <li class="icon-desktop"><a href="{$smarty.server.PHP_SELF}?page=gettingstarted">Getting Started</a></li>
       {if !$GLOBAL.website.about.disabled}
       <li class="icon-doc"><a href="{$smarty.server.PHP_SELF}?page=about&action=pool">About</a></li>
       {/if}
@@ -87,6 +88,7 @@
     {if $smarty.session.AUTHENTICATED|default:"0" == 1}
      <br />
     {else}
+    {if !$GLOBAL.website.api.disabled && !$GLOBAL.config.disable_navbar && !$GLOBAL.config.disable_navbar_api}
     <ul>
      <center>
       <div style="display: inline-block;">
@@ -98,4 +100,5 @@
     </ul>
       <hr/>
     {include file="global/navjs.tpl"}
+    {/if}
     {/if}

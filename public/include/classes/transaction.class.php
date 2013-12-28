@@ -18,9 +18,9 @@ class Transaction extends Base {
    * @param coin_address string Coin address for this transaction [optional]
    * @return bool
    **/
-  public function addTransaction($account_id, $amount, $type='Credit', $block_id=NULL, $coin_address=NULL) {
-    $stmt = $this->mysqli->prepare("INSERT INTO $this->table (account_id, amount, block_id, type, coin_address) VALUES (?, ?, ?, ?, ?)");
-    if ($this->checkStmt($stmt) && $stmt->bind_param("idiss", $account_id, $amount, $block_id, $type, $coin_address) && $stmt->execute()) {
+  public function addTransaction($account_id, $amount, $type='Credit', $block_id=NULL, $coin_address=NULL, $txid=NULL) {
+    $stmt = $this->mysqli->prepare("INSERT INTO $this->table (account_id, amount, block_id, type, coin_address, txid) VALUES (?, ?, ?, ?, ?, ?)");
+    if ($this->checkStmt($stmt) && $stmt->bind_param("idisss", $account_id, $amount, $block_id, $type, $coin_address, $txid) && $stmt->execute()) {
       $this->insert_id = $stmt->insert_id;
       return true;
     }
@@ -34,21 +34,18 @@ class Transaction extends Base {
    * @param bool boolean True or False
    **/
   public function setArchived($account_id, $txid) {
-    // Fetch last archived transaction for user, we must exclude our Debits though! There might be unarchived/archived
-    // records before our last payout
-    $stmt = $this->mysqli->prepare("SELECT IFNULL(MAX(id), 0) AS id FROM $this->table WHERE archived = 1 AND account_id = ? AND type NOT IN ('Debit_MP','Debit_AP','TXFee')");
-    if ($this->checkStmt($stmt) && $stmt->bind_param('i', $account_id) && $stmt->execute() && $result = $stmt->get_result())
-      $last_id = $result->fetch_object()->id;
-    $this->debug->append('Found last archived transaction: ' . $last_id);
-    // Update all transactions, mark as archived for user previous to $txid and higher than last archived transaction
+    // Update all paid out transactions as archived
     $stmt = $this->mysqli->prepare("
       UPDATE $this->table AS t
       LEFT JOIN " . $this->block->getTableName() . " AS b
       ON b.id = t.block_id
-      SET archived = 1
-      WHERE t.archived = 0 AND t.account_id = ? AND t.id <= ? AND t.id > ? AND (b.confirmations >= ? OR b.confirmations IS NULL)
-      ");
-    if ($this->checkStmt($stmt) && $stmt->bind_param('iiii', $account_id, $txid, $last_id, $this->config['confirmations']) && $stmt->execute())
+      SET t.archived = 1
+      WHERE t.archived = 0
+      AND (
+           ( t.account_id = ? AND t.id <= ? AND b.confirmations >= ? )
+        OR ( t.account_id = ? AND t.id <= ? AND t.type IN ( 'Credit_PPS', 'Donation_PPS', 'Fee_PPS', 'TXFee', 'Debit_MP', 'Debit_AP' ) )
+      )");
+     if ($this->checkStmt($stmt) && $stmt->bind_param('iiiii', $account_id, $txid, $this->config['confirmations'], $account_id, $txid) && $stmt->execute())
       return true;
     return $this->sqlError();
   }
@@ -105,13 +102,13 @@ class Transaction extends Base {
     $this->debug->append("STA " . __METHOD__, 4);
     $sql = "
       SELECT
-        SQL_CALC_FOUND_ROWS
         t.id AS id,
         a.username as username,
         t.type AS type,
         t.amount AS amount,
         t.coin_address AS coin_address,
         t.timestamp AS timestamp,
+        t.txid AS txid,
         b.height AS height,
         b.blockhash AS blockhash,
         b.confirmations AS confirmations
@@ -162,21 +159,13 @@ class Transaction extends Base {
         $sql .= implode(' AND ', $aFilter);
       }
     }
-    $sql .= "
-      ORDER BY id DESC
-      LIMIT ?,?
-      ";
+    $sql .= " ORDER BY id DESC LIMIT ?,?";
     // Add some other params to query
     $this->addParam('i', $start);
     $this->addParam('i', $limit);
     $stmt = $this->mysqli->prepare($sql);
-    if ($this->checkStmt($stmt) && call_user_func_array( array($stmt, 'bind_param'), $this->getParam()) && $stmt->execute() && $result = $stmt->get_result()) {
-      // Fetch matching row count
-      $num_rows = $this->mysqli->prepare("SELECT FOUND_ROWS() AS num_rows");
-      if ($num_rows->execute() && $row_count = $num_rows->get_result()->fetch_object()->num_rows)
-        $this->num_rows = $row_count;
+    if ($this->checkStmt($stmt) && call_user_func_array( array($stmt, 'bind_param'), $this->getParam()) && $stmt->execute() && $result = $stmt->get_result())
       return $result->fetch_all(MYSQLI_ASSOC);
-    }
     return $this->sqlError();
   }
 

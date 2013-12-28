@@ -5,12 +5,12 @@ if (!defined('SECURITY'))
   die('Hacking attempt');
 
 if ($user->isAuthenticated()) {
-  if ( ! $user->checkPin($_SESSION['USERDATA']['id'], @$_POST['authPin']) && @$_POST['do']) {
-    $_SESSION['POPUP'][] = array('CONTENT' => 'Invalid PIN','TYPE' => 'errormsg');
+  if ( @$_POST['do'] && (! $user->checkPin($_SESSION['USERDATA']['id'], @$_POST['authPin']))) {
+    $_SESSION['POPUP'][] = array('CONTENT' => 'Invalid PIN. ' . ($config['maxfailed']['pin'] - $user->getUserPinFailed($_SESSION['USERDATA']['id'])) . ' attempts remaining.', 'TYPE' => 'errormsg');
   } else {
     switch (@$_POST['do']) {
     case 'cashOut':
-      if ($setting->getValue('disable_mp') == 1) {
+      if ($setting->getValue('disable_payouts') == 1) {
         $_SESSION['POPUP'][] = array('CONTENT' => 'Manual payouts are disabled.', 'TYPE' => 'info');
       } else {
         $aBalance = $transaction->getBalance($_SESSION['USERDATA']['id']);

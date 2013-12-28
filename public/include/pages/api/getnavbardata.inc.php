@@ -3,8 +3,19 @@
 // Make sure we are called from index.php
 if (!defined('SECURITY')) die('Hacking attempt');
 
-// Check if the API is activated
-$api->isActive();
+// Check if the system is enabled
+if ($setting->getValue('disable_navbar_api')) {
+  echo $api->get_json(array('error' => 'disabled'));
+  die();
+}
+
+// System load check
+if ($load = @sys_getloadavg()) {
+  if (isset($config['system']['load']['max']) && $load[0] > $config['system']['load']['max']) {
+    header('HTTP/1.1 503 Too busy, try again later');
+    die('Server too busy. Please try again later.');
+  }
+}
 
 // Fetch RPC information
 if ($bitcoin->can_connect() === true) {
@@ -45,7 +56,11 @@ if ($iTotalRoundShares > 0) {
 
 // Round progress
 $iEstShares = $statistics->getEstimatedShares($dDifficulty);
-$dEstPercent = round(100 / $iEstShares * $aRoundShares['valid'], 2);
+if ($iEstShares > 0 && $aRoundShares['valid'] > 0) {
+    $dEstPercent = round(100 / $iEstShares * $aRoundShares['valid'], 2);
+} else {
+    $dEstPercent = 0;
+}
 
 // Output JSON format
 $data = array(

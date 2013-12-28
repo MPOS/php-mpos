@@ -3,12 +3,7 @@
 // Make sure we are called from index.php
 if (!defined('SECURITY')) die('Hacking attempt');
 
-// Load a list of themes available
-$aTmpThemes = glob(THEME_DIR . '/*');
-$aThemes = array();
-foreach ($aTmpThemes as $dir) {
-  if (basename($dir) != 'cache' && basename($dir) != 'compile' && basename($dir) != 'mail') $aThemes[basename($dir)] = basename($dir);
-}
+$aThemes = $template->getThemes();
 
 // Load the settings available in this system
 $aSettings['website'][] = array(
@@ -111,7 +106,7 @@ $aSettings['statistics'][] = array(
 );
 $aSettings['statistics'][] = array(
   'display' => 'Ajax Data Interval', 'type' => 'select',
-  'options' => array('60' => '1', '300' => '5', '600' => '10'),
+  'options' => array('60' => '1', '180' => '3', '300' => '5', '600' => '10'),
   'default' => 300,
   'name' => 'statistics_ajax_data_interval', 'value' => $setting->getValue('statistics_ajax_data_interval'),
   'tooltip' => 'Time in minutes, interval for hashrate and sharerate calculations. Higher intervals allow for better accuracy at a higer server load.'
@@ -165,6 +160,13 @@ $aSettings['statistics'][] = array(
   'default' => 'Code from Google Analytics',
   'name' => 'statistics_analytics_code', 'value' => $setting->getValue('statistics_analytics_code'),
   'tooltip' => '.'
+);
+$aSettings['acl'][] = array(
+  'display' => 'Hide news post author', 'type' => 'select',
+  'options' => array( 0 => 'No', 1 => 'Yes' ),
+  'default' => 0,
+  'name' => 'acl_hide_news_author', 'value' => $setting->getValue('acl_hide_news_author'),
+  'tooltip' => 'Should the news author username be hidden.'
 );
 $aSettings['acl'][] = array(
   'display' => 'Pool Statistics', 'type' => 'select',
@@ -230,18 +232,11 @@ $aSettings['system'][] = array(
   'tooltip' => 'Enable or Disable invitations. Users will not be able to invite new users via email if disabled.'
 );
 $aSettings['system'][] = array(
-  'display' => 'Disable Manual Payouts', 'type' => 'select',
+  'display' => 'Disable Payouts', 'type' => 'select',
   'options' => array( 0 => 'No', 1 => 'Yes' ),
   'default' => 0,
-  'name' => 'disable_mp', 'value' => $setting->getValue('disable_mp'),
-  'tooltip' => 'Enable or Disable the manual payout processing. Users will not be able to withdraw any funds if disabled.'
-);
-$aSettings['system'][] = array(
-  'display' => 'Disable Automatic Payouts', 'type' => 'select',
-  'options' => array( 0 => 'No', 1 => 'Yes' ),
-  'default' => 0,
-  'name' => 'disable_ap', 'value' => $setting->getValue('disable_ap'),
-  'tooltip' => 'Enable or Disable the automatic payout processing. Users exceeding their thresholds will not be paid out if disabled.'
+  'name' => 'disable_payouts', 'value' => $setting->getValue('disable_payouts'),
+  'tooltip' => 'Enable or Disable the payout processing. Users will not be able to withdraw any funds if disabled.'
 );
 $aSettings['system'][] = array(
   'display' => 'Disable notifications', 'type' => 'select',
@@ -277,6 +272,41 @@ $aSettings['system'][] = array(
   'default' => 1,
   'name' => 'disable_about', 'value' => $setting->getValue('disable_about'),
   'tooltip' => 'Showing About page in Navigation.'
+);
+$aSettings['system'][] = array(
+  'display' => 'Disable Live Dashboard', 'type' => 'select',
+  'options' => array( 0 => 'No', 1 => 'Yes'),
+  'default' => 0,
+  'name' => 'disable_dashboard', 'value' => $setting->getValue('disable_dashboard'),
+  'tooltip' => 'Disable live updates on the dashboard to reduce server load.'
+);
+$aSettings['system'][] = array(
+  'display' => 'Disable Dashboard API', 'type' => 'select',
+  'options' => array( 0 => 'No', 1 => 'Yes'),
+  'default' => 0,
+  'name' => 'disable_dashboard_api', 'value' => $setting->getValue('disable_dashboard_api'),
+  'tooltip' => 'Disable dashboard API entirely to reduce server load.'
+);
+$aSettings['system'][] = array(
+  'display' => 'Disable Live Navbar', 'type' => 'select',
+  'options' => array( 0 => 'No', 1 => 'Yes'),
+  'default' => 0,
+  'name' => 'disable_navbar', 'value' => $setting->getValue('disable_navbar'),
+  'tooltip' => 'Disable live updates on the navbar to reduce server load.'
+);
+$aSettings['system'][] = array(
+  'display' => 'Disable Navbar API', 'type' => 'select',
+  'options' => array( 0 => 'No', 1 => 'Yes'),
+  'default' => 0,
+  'name' => 'disable_navbar_api', 'value' => $setting->getValue('disable_navbar_api'),
+  'tooltip' => 'Disable navbar API entirely to reduce server load. Used in pool stats and navbar mini stats.'
+);
+$aSettings['system'][] = array(
+  'display' => 'Disable TX Summaries', 'type' => 'select',
+  'options' => array( 0 => 'No', 1 => 'Yes'),
+  'default' => 0,
+  'name' => 'disable_transactionsummary', 'value' => $setting->getValue('disable_transactionsummary'),
+  'tooltip' => 'Disable transaction summaries. Helpful with large transaction tables.'
 );
 $aSettings['recaptcha'][] = array(
   'display' => 'Enable re-Captcha', 'type' => 'select',

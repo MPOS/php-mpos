@@ -3,6 +3,23 @@
 // Make sure we are called from index.php
 if (!defined('SECURITY')) die('Hacking attempt');
 
+// Check if the system is enabled
+if ($setting->getValue('disable_dashboard_api')) {
+  echo $api->get_json(array('error' => 'disabled'));
+  die();
+}
+
+// System load check
+if ($load = @sys_getloadavg()) {
+  if (isset($config['system']['load']['max']) && $load[0] > $config['system']['load']['max']) {
+    header('HTTP/1.1 503 Too busy, try again later');
+    die('Server too busy. Please try again later.');
+  }
+}
+
+// Supress master template
+$supress_master = 1;
+
 // Check user token and access level permissions
 $user_id = $api->checkAccess($user->checkApiKey($_REQUEST['api_key']), @$_REQUEST['id']);
 
@@ -41,22 +58,7 @@ if ($config['payout_system'] != 'pps') {
   $dUnpaidShares = 0;
 } else {
   $dUnpaidShares = $statistics->getUserUnpaidPPSShares($user_id, $setting->getValue('pps_last_share_id'));
-  if ($config['pps']['reward']['type'] == 'blockavg' && $block->getBlockCount() > 0) {
-    $pps_reward = round($block->getAvgBlockReward($config['pps']['blockavg']['blockcount']));
-  } else {
-    if ($config['pps']['reward']['type'] == 'block') {
-      if ($aLastBlock = $block->getLast()) {
-        $pps_reward = $aLastBlock['amount'];
-      } else {
-        $pps_reward = $config['pps']['reward']['default'];
-      }
-    } else {
-      $pps_reward = $config['pps']['reward']['default'];
-    }
-  }
-
-  $ppsvalue = round($pps_reward / (pow(2,32) * $dDifficulty) * pow(2, $config['target_bits']), 12);
-  $aEstimates = $statistics->getUserEstimates($dPersonalSharerate, $dPersonalShareDifficulty, $user->getUserDonatePercent($user_id), $user->getUserNoFee($user_id), $ppsvalue);
+  $aEstimates = $statistics->getUserEstimates($dPersonalSharerate, $dPersonalShareDifficulty, $user->getUserDonatePercent($user_id), $user->getUserNoFee($user_id), $statistics->getPPSValue());
 }
 
 $iTotalRoundShares = $aRoundShares['valid'] + $aRoundShares['invalid'];
@@ -81,11 +83,19 @@ $aPrice = $setting->getValue('price');
 
 // Round progress
 $iEstShares = $statistics->getEstimatedShares($dDifficulty);
-$dEstPercent = round(100 / $iEstShares * $aRoundShares['valid'], 2);
+if ($iEstShares > 0 && $aRoundShares['valid'] > 0) {
+  $dEstPercent = round(100 / $iEstShares * $aRoundShares['valid'], 2);
+} else {
+  $dEstPercent = 0;
+}
+
+$dExpectedTimePerBlock = $statistics->getNetworkExpectedTimePerBlock();
+$dEstNextDifficulty = $statistics->getExpectedNextDifficulty();
+$iBlocksUntilDiffChange = $statistics->getBlocksUntilDiffChange();
 
 // Output JSON format
 $data = array(
-  'raw' => array( 'personal' => array( 'hashrate' => $dPersonalHashrate ), 'pool' => array( 'hashrate' => $dPoolHashrate ), 'network' => array( 'hashrate' => $dNetworkHashrate / 1000 ) ),
+  'raw' => array( 'personal' => array( 'hashrate' => $dPersonalHashrate ), 'pool' => array( 'hashrate' => $dPoolHashrate ), 'network' => array( 'hashrate' => $dNetworkHashrate / 1000, 'esttimeperblock' => $dExpectedTimePerBlock, 'nextdifficulty' => $dEstNextDifficulty, 'blocksuntildiffchange' => $iBlocksUntilDiffChange ) ),
   'personal' => array (
     'hashrate' => $dPersonalHashrateAdjusted, 'sharerate' => $dPersonalSharerate, 'sharedifficulty' => $dPersonalShareDifficulty,
     'shares' => array('valid' => $aUserRoundShares['valid'], 'invalid' => $aUserRoundShares['invalid'], 'invalid_percent' => $dUserInvalidPercent, 'unpaid' => $dUnpaidShares ),
@@ -101,10 +111,9 @@ $data = array(
     'difficulty' => pow(2, $config['difficulty'] - 16),
     'target_bits' => $config['difficulty']
   ),
-  'network' => array( 'hashrate' => $dNetworkHashrateAdjusted, 'difficulty' => $dDifficulty, 'block' => $iBlock ),
+  'system' => array( 'load' => sys_getloadavg() ),
+  'network' => array( 'hashrate' => $dNetworkHashrateAdjusted, 'difficulty' => $dDifficulty, 'block' => $iBlock, 'esttimeperblock' => round($dExpectedTimePerBlock ,2), 'nextdifficulty' => $dEstNextDifficulty, 'blocksuntildiffchange' => $iBlocksUntilDiffChange ),
 );
-echo $api->get_json($data);
 
-// Supress master template
-$supress_master = 1;
+echo $api->get_json($data);
 ?>

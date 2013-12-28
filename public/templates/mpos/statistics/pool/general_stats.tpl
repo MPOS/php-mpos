@@ -5,7 +5,7 @@
       <tbody>
         <tr>
           <th align="left" width="50%">Pool Hash Rate</th>
-          <td width="70%"><span id="b-hashrate"></span> {$GLOBAL.hashunits.pool}</td>
+          <td width="70%"><span id="b-hashrate">{$GLOBAL.hashrate|number_format:"3"}</span> {$GLOBAL.hashunits.pool}</td>
         </tr>
         <tr>
           <th align="left">Pool Efficiency</td>
@@ -13,23 +13,35 @@
         </tr>
         <tr>
           <th align="left">Current Active Workers</td>
-          <td id="b-workers"></td>
+          <td id="b-workers">{$GLOBAL.workers}</td>
         </tr>
         <tr>
           <th align="left">Current Difficulty</td>
       {if ! $GLOBAL.website.chaininfo.disabled}
-          <td><a href="{$GLOBAL.website.chaininfo.url}" target="_new"><font size="2"><span id="b-diff"></span></font></a></td>
+          <td><a href="{$GLOBAL.website.chaininfo.url}" target="_new"><font size="2"><span id="b-diff">{$NETWORK.difficulty}</span></font></a></td>
       {else}
-          <td><font size="2"><span id="b-diff"></span></font></td>
+          <td><font size="2"><span id="b-diff">{$NETWORK.difficulty}</span></font></td>
       {/if}
         </tr>
         <tr>
-          <th align="left">Est. Avg. Time per Round</td>
+          <th align="left">Est. Next Difficulty</td>
+      {if ! $GLOBAL.website.chaininfo.disabled}
+          <td><a href="{$GLOBAL.website.chaininfo.url}" target="_new"><font size="2">{$NETWORK.EstNextDifficulty}  (Change in {$NETWORK.BlocksUntilDiffChange} Blocks)</font></a></td>
+      {else}
+          <td><font size="2">{$NETWORK.EstNextDifficulty} (Change in {$NETWORK.BlocksUntilDiffChange} Blocks)</font></td>
+      {/if}
+        </tr>
+        <tr>
+          <th align="left">Est. Avg. Time per Round (Network)</td>
+          <td><font size="2">{$NETWORK.EstTimePerBlock|seconds_to_words}</font></td>
+        </tr>
+        <tr>
+          <th align="left">Est. Avg. Time per Round (Pool)</td>
           <td>{$ESTTIME|seconds_to_words}</td>
         </tr>
         <tr>
           <th align="left">Est. Shares this Round</td>
-          <td id="b-target"></td>
+          <td id="b-target">{$ESTIMATES.shares} (done: {$ESTIMATES.percent}%)</td>
         </tr>
     {if ! $GLOBAL.website.blockexplorer.disabled}
         <tr>

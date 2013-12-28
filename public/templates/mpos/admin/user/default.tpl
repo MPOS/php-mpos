@@ -3,21 +3,21 @@
       $.ajax({
        type: "POST",
        url: "{$smarty.server.PHP_SELF}",
-       data: "page={$smarty.request.page}&action={$smarty.request.action}&do=fee&account_id=" + id,
+       data: "page={$smarty.request.page|escape}&action={$smarty.request.action|escape}&do=fee&account_id=" + id,
      });
     }
     function storeLock(id) {
       $.ajax({
        type: "POST",
        url: "{$smarty.server.PHP_SELF}",
-       data: "page={$smarty.request.page}&action={$smarty.request.action}&do=lock&account_id=" + id,
+       data: "page={$smarty.request.page|escape}&action={$smarty.request.action|escape}&do=lock&account_id=" + id,
      });
     }
     function storeAdmin(id) {
       $.ajax({
        type: "POST",
        url: "{$smarty.server.PHP_SELF}",
-       data: "page={$smarty.request.page}&action={$smarty.request.action}&do=admin&account_id=" + id,
+       data: "page={$smarty.request.page|escape}&action={$smarty.request.action|escape}&do=admin&account_id=" + id,
      });
     }
 </script>
@@ -36,8 +36,12 @@
       <th align="left">E-Mail</th>
       <th align="right">Shares&nbsp;&nbsp;</th>
       <th align="right">Hashrate&nbsp;&nbsp;</th>
+{if $GLOBAL.config.payout_system != 'pps'}
       <th align="right">Est. Donation&nbsp;&nbsp;</th>
       <th align="right">Est. Payout&nbsp;&nbsp;&nbsp;</th>
+{else}
+      <th align="right" colspan="2">Est. 24 Hours&nbsp;&nbsp;&nbsp;</th>
+{/if}
       <th align="right">Balance&nbsp;&nbsp;&nbsp;</th>
       <th align="center">Admin</th>
       <th align="center">Locked</th>
@@ -53,8 +57,12 @@
       <td align="left">{$USERS[user].email|escape}</td>
       <td align="right">{$USERS[user].shares.valid}</td>
       <td align="right">{$USERS[user].hashrate}</td>
+{if $GLOBAL.config.payout_system != 'pps'}
       <td align="right">{$USERS[user].estimates.donation|number_format:"8"}</td>
       <td align="right">{$USERS[user].estimates.payout|number_format:"8"}</td>
+{else}
+      <td align="right" colspan="2">{$USERS[user].estimates.hours24|number_format:"8"}</td>
+{/if}
       <td align="right">{$USERS[user].balance|number_format:"8"}</td>
       <td align="center">
         <input type="hidden" name="admin[{$USERS[user].id}]" value="0"/>
@@ -86,8 +94,12 @@
       <th align="left">E-Mail</th>
       <th align="right">Shares&nbsp;&nbsp;</th>
       <th align="right">Hashrate&nbsp;&nbsp;</th>
+{if $GLOBAL.config.payout_system != 'pps'}
       <th align="right">Est. Donation&nbsp;&nbsp;</th>
       <th align="right">Est. Payout&nbsp;&nbsp;&nbsp;</th>
+{else}
+      <th align="right" colspan="2">Est. 24 Hours&nbsp;&nbsp;&nbsp;</th>
+{/if}
       <th align="right">Balance&nbsp;&nbsp;&nbsp;</th>
       <th align="center">Admin</th>
       <th align="center">Locked</th>

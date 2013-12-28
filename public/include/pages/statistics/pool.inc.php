@@ -8,10 +8,12 @@ if (!$smarty->isCached('master.tpl', $smarty_cache_key)) {
   // Fetch data from wallet
   if ($bitcoin->can_connect() === true){
     $dDifficulty = $bitcoin->getdifficulty();
+    $dNetworkHashrate = $bitcoin->getnetworkhashps();
     $iBlock = $bitcoin->getblockcount();
     is_int($iBlock) && $iBlock > 0 ? $sBlockHash = $bitcoin->query('getblockhash', $iBlock) : $sBlockHash = '';
   } else {
     $dDifficulty = 1;
+    $dNetworkHashrate = 1;
     $iBlock = 0;
     $_SESSION['POPUP'][] = array('CONTENT' => 'Unable to connect to wallet RPC service: ' . $bitcoin->can_connect(), 'TYPE' => 'errormsg');
   }
@@ -41,6 +43,19 @@ if (!$smarty->isCached('master.tpl', $smarty_cache_key)) {
     $dTimeSinceLast = 0;
   }
 
+    // Round progress
+  $iEstShares = $statistics->getEstimatedShares($dDifficulty);
+  $aRoundShares = $statistics->getRoundShares();
+  if ($iEstShares > 0 && $aRoundShares['valid'] > 0) {
+    $dEstPercent = round(100 / $iEstShares * $aRoundShares['valid'], 2);
+  } else {
+    $dEstPercent = 0;
+  }
+
+  $dExpectedTimePerBlock = $statistics->getNetworkExpectedTimePerBlock();
+  $dEstNextDifficulty = $statistics->getExpectedNextDifficulty();
+  $iBlocksUntilDiffChange = $statistics->getBlocksUntilDiffChange();
+
   // Propagate content our template
   $smarty->assign("ESTTIME", $iEstTime);
   $smarty->assign("TIMESINCELAST", $dTimeSinceLast);
@@ -50,6 +65,8 @@ if (!$smarty->isCached('master.tpl', $smarty_cache_key)) {
   $smarty->assign("CONTRIBHASHES", $aContributorsHashes);
   $smarty->assign("CURRENTBLOCK", $iBlock);
   $smarty->assign("CURRENTBLOCKHASH", @$sBlockHash);
+  $smarty->assign('NETWORK', array('difficulty' => $dDifficulty, 'block' => $iBlock, 'EstNextDifficulty' => $dEstNextDifficulty, 'EstTimePerBlock' => $dExpectedTimePerBlock, 'BlocksUntilDiffChange' => $iBlocksUntilDiffChange));
+  $smarty->assign('ESTIMATES', array('shares' => $iEstShares, 'percent' => $dEstPercent));
   if (count($aBlockData) > 0) {
     $smarty->assign("LASTBLOCK", $aBlockData['height']);
     $smarty->assign("LASTBLOCKHASH", $aBlockData['blockhash']);

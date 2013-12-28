@@ -13,13 +13,14 @@ if (!$smarty->isCached('master.tpl', $smarty_cache_key)) {
   $debug->append('No cached version available, fetching from backend', 3);
   if ($bitcoin->can_connect() === true){
     $dBalance = $bitcoin->query('getbalance');
-    $dGetInfo = $bitcoin->query('getinfo');
-    if (is_array($dGetInfo) && array_key_exists('newmint', $dGetInfo)) {
-      $dNewmint = $dGetInfo['newmint'];
+    $aGetInfo = $bitcoin->query('getinfo');
+    if (is_array($aGetInfo) && array_key_exists('newmint', $aGetInfo)) {
+      $dNewmint = $aGetInfo['newmint'];
     } else {
       $dNewmint = -1;
     }
   } else {
+    $aGetInfo = array('errors' => 'Unable to connect');
     $dBalance = 0;
     $dNewmint = -1;
     $_SESSION['POPUP'][] = array('CONTENT' => 'Unable to connect to wallet RPC service: ' . $bitcoin->can_connect(), 'TYPE' => 'errormsg');
@@ -45,6 +46,7 @@ $smarty->assign("BALANCE", $dBalance);
 $smarty->assign("COLDCOINS", $dColdCoins);
 $smarty->assign("LOCKED", $dLockedBalance);
 $smarty->assign("NEWMINT", $dNewmint);
+$smarty->assign("COININFO", $aGetInfo);
 
 // Tempalte specifics
 $smarty->assign("CONTENT", "default.tpl");

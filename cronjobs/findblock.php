@@ -34,7 +34,7 @@ if (!$strLastBlockHash) $strLastBlockHash = '';
 if ( $bitcoin->can_connect() === true ){
   $aTransactions = $bitcoin->query('listsinceblock', $strLastBlockHash);
 } else {
-  $log->logFatal('Unable to conenct to RPC server backend');
+  $log->logFatal('Unable to connect to RPC server backend');
   $monitoring->endCronjob($cron_name, 'E0006', 1, true);
 }
 
@@ -95,7 +95,7 @@ if (empty($aAllBlocks)) {
           // Fetch our offending block
           $aBlockError = $block->getBlockByShareId($iPreviousShareId);
           $log->logError('E0001: The block with height ' . $aBlock['height'] . ' found share ' . $iCurrentUpstreamId . ' which is < than ' . $iPreviousShareId . ' of block ' . $aBlockError['height'] . '.');
-          if ( !$aShareError = $share->getShareById($aBlockError['share_id']) || !$aShareCurrent = $share->getShareById($iCurrentUpstreamId)) {
+          if ( !($aShareError = $share->getShareById($aBlockError['share_id'])) || !($aShareCurrent = $share->getShareById($iCurrentUpstreamId))) {
             // We were not able to fetch all shares that were causing this detection to trigger, bail out
             $log->logFatal('E0002: Failed to fetch both offending shares ' . $iCurrentUpstreamId . ' and ' . $iPreviousShareId . '. Block height: ' . $aBlock['height']);
             $monitoring->endCronjob($cron_name, 'E0002', 1, true);

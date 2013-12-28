@@ -26,9 +26,12 @@ chdir(dirname(__FILE__));
 require_once('shared.inc.php');
 
 // If we don't keep archives, delete some now to release disk space
-if (!$share->purgeArchive()) {
-  $log->logError("Failed to delete archived shares, not critical but should be checked!");
+$affected_rows = $share->purgeArchive();
+if ($affected_rows === false) {
+  $log->logError("Failed to delete archived shares, not critical but should be checked: " . $share->getCronError());
   $monitoring->endCronjob($cron_name, 'E0008', 1, true);
+} else {
+  $log->logDebug("Deleted $affected_rows archived shares this run");
 }
 
 // Cron cleanup and monitoring

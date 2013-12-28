@@ -171,21 +171,31 @@ class Share Extends Base {
    * @return return bool true or false
    **/
   public function purgeArchive() {
-    if ($this->config['payout_system'] == 'pplns') {
-      // Fetch our last block so we can go back configured rounds
-      $aLastBlock = $this->block->getLast();
-      // Fetch the block we need to find the share_id
-      $aBlock = $this->block->getBlock($aLastBlock['height'] - $this->config['archive']['maxrounds']);
-      // Now that we know our block, remove those shares
-      $stmt = $this->mysqli->prepare("DELETE FROM $this->tableArchive WHERE block_id < ? AND time < DATE_SUB(now(), INTERVAL ? MINUTE)");
-      if ($this->checkStmt($stmt) && $stmt->bind_param('ii', $aBlock['id'], $this->config['archive']['maxage']) && $stmt->execute())
-        return true;
+    // Fallbacks if unset
+    if (!isset($this->config['archive']['purge'])) $this->config['archive']['purge'] = 5;
+
+    $stmt = $this->mysqli->prepare("SELECT CEIL(COUNT(id) / 100 * ?) AS count FROM $this->tableArchive");
+    if ($this->checkStmt($stmt) && $stmt->bind_param('i', $this->config['archive']['purge']) && $stmt->execute() && $result = $stmt->get_result()) {
+      $limit = $result->fetch_object()->count;
     } else {
-      // We are not running pplns, so we just need to keep shares of the past <interval> minutes
-      $stmt = $this->mysqli->prepare("DELETE FROM $this->tableArchive WHERE time < DATE_SUB(now(), INTERVAL ? MINUTE)");
-      if ($this->checkStmt($stmt) && $stmt->bind_param('i', $this->config['archive']['maxage']) && $stmt->execute())
-      return true;
+      return $this->sqlError();
     }
+    $stmt->close();
+    $stmt = $this->mysqli->prepare("
+      DELETE FROM $this->tableArchive WHERE time < (
+        SELECT MIN(time) FROM (
+          SELECT MIN(time) AS time
+          FROM $this->tableArchive
+          WHERE block_id = (
+            SELECT MIN(id) AS minid FROM (
+              SELECT id FROM " . $this->block->getTableName() . " ORDER BY height DESC LIMIT ?
+            ) AS minheight
+          ) UNION SELECT DATE_SUB(now(), INTERVAL ? MINUTE) AS time
+        ) AS mintime
+      ) LIMIT $limit
+    ");
+    if ($this->checkStmt($stmt) && $stmt->bind_param('ii', $this->config['archive']['maxrounds'], $this->config['archive']['maxage']) && $stmt->execute())
+      return $stmt->affected_rows;
     return $this->sqlError();
   }
 
@@ -197,11 +207,23 @@ class Share Extends Base {
    * @return bool
    **/
   public function moveArchive($current_upstream, $block_id, $previous_upstream=0) {
-    $archive_stmt = $this->mysqli->prepare("
-      INSERT INTO $this->tableArchive (share_id, username, our_result, upstream_result, block_id, time, difficulty)
-        SELECT id, username, our_result, upstream_result, ?, time, IF(difficulty=0, pow(2, (" . $this->config['difficulty'] . " - 16)), difficulty) AS difficulty
-        FROM $this->table
-        WHERE id > ? AND id <= ?");
+    if ($this->config['payout_system'] != 'pplns') {
+      // We don't need archived shares that much, so only archive as much as configured
+      $sql = "
+        INSERT INTO $this->tableArchive (share_id, username, our_result, upstream_result, block_id, time, difficulty)
+          SELECT id, username, our_result, upstream_result, ?, time, IF(difficulty=0, pow(2, (" . $this->config['difficulty'] . " - 16)), difficulty) AS difficulty
+          FROM $this->table
+          WHERE id > ? AND id <= ?
+            AND time >= DATE_SUB(now(), INTERVAL " . $this->config['archive']['maxage'] . " MINUTE)";
+    } else {
+      // PPLNS needs archived shares for later rounds, so we have to copy them all
+      $sql = "
+        INSERT INTO $this->tableArchive (share_id, username, our_result, upstream_result, block_id, time, difficulty)
+          SELECT id, username, our_result, upstream_result, ?, time, IF(difficulty=0, pow(2, (" . $this->config['difficulty'] . " - 16)), difficulty) AS difficulty
+          FROM $this->table
+          WHERE id > ? AND id <= ?";
+    }
+    $archive_stmt = $this->mysqli->prepare($sql);
     if ($this->checkStmt($archive_stmt) && $archive_stmt->bind_param('iii', $block_id, $previous_upstream, $current_upstream) && $archive_stmt->execute())
       return true;
     return $this->sqlError();
@@ -214,11 +236,25 @@ class Share Extends Base {
    * @return bool true or false
    **/
   public function deleteAccountedShares($current_upstream, $previous_upstream=0) {
-    $stmt = $this->mysqli->prepare("DELETE FROM $this->table WHERE id > ? AND id <= ?");
-    if ($this->checkStmt($stmt) && $stmt->bind_param('ii', $previous_upstream, $current_upstream) && $stmt->execute())
-      return true;
-    return $this->sqlError();
+    // Fallbacks if unset
+    if (!isset($this->config['purge']['shares'])) $this->config['purge']['shares'] = 25000;
+    if (!isset($this->config['purge']['sleep'])) $this->config['purge']['sleep'] = 1;
+
+    $affected = 1;
+    while ($affected > 0) {
+      // Sleep first to allow any IO to cleanup
+      sleep($this->config['purge']['sleep']);
+      $stmt = $this->mysqli->prepare("DELETE FROM $this->table WHERE id > ? AND id <= ? LIMIT " . $this->config['purge']['shares']);
+      $start = microtime(true);
+      if ($this->checkStmt($stmt) && $stmt->bind_param('ii', $previous_upstream, $current_upstream) && $stmt->execute()) {
+        $affected = $stmt->affected_rows;
+      } else {
+        return $this->sqlError();
+      }
+    }
+    return true;
   }
+
   /**
    * Set/get last found share accepted by upstream: id and accounts
    **/

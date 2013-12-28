@@ -6,7 +6,7 @@
 {if $GLOBAL.config.payout_system == 'pplns'}
          <tr>
            <td><b>PPLNS Target</b></td>
-           <td id="b-pplns" class="right"></td>
+           <td id="b-pplns" class="right">{$GLOBAL.pplns.target}</td>
          </tr>
 {elseif $GLOBAL.config.payout_system == 'pps'}
         <tr>

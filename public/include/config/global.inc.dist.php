@@ -70,6 +70,25 @@ $config['wallet']['username'] = 'testnet';
 $config['wallet']['password'] = 'testnet';
 
 /**
+ * Lock account after maximum failed logins
+ *
+ * Explanation:
+ *   To avoid accounts being hacked by brute force attacks,
+ *   set a maximum amount of failed login or pin entry attempts before locking
+ *   the account. They will need to contact site support to re-enable the account.
+ *
+ *   This also applies for invalid PIN entries, which is covered by the pin option.
+ *
+ *   Workers are not affected by this lockout, mining will continue as usual.
+ *
+ * Default:
+ *   login  =  3
+ *   pin    =  3
+ **/
+$config['maxfailed']['login'] = 3;
+$config['maxfailed']['pin'] = 3;
+
+/**
  * Getting Started Config
  *
  * This is displayed on GettingStarted Page
@@ -160,6 +179,19 @@ $config['currency'] = 'LTC';
 $config['cointarget'] = '150';
 
 /**
+ * Diff change every X Blocks
+ *
+ * Explanation
+ *   Amount of Blocks until Difficulty change
+ *
+ *   Fastcoin: 300 Blocks
+ *   Litecoin: 2016 Blocks
+ *   Bitcoin: 2016 Blocks
+ *
+ **/
+$config['coindiffchangetarget'] = 2016;
+
+/**
  * Default transaction fee to apply to user transactions
  *
  * Explanation
@@ -195,6 +227,35 @@ $config['block_bonus'] = 0;
  *   prop
 **/
 $config['payout_system'] = 'prop';
+
+/**
+ * Round purging
+ *
+ * Explanation:
+ *   As soon as a round is finished, shares of that rate are archived (see below)
+ *   and deleted from the `shares` table. Due to a large amount of shares in a
+ *   single round, this can take a very long time. To reduce server load and allow
+ *   other systems to access the DB during this high-load time, the DELETE
+ *   calls are being limited to a number of rows. Then the process sleeps and
+ *   continues to delete shares until all shares have been purged.
+ *
+ *   You can adjust some purging settings here in order to improve your overall
+ *   site performance during round ends. Keep in mind that drecreasing shares/time
+ *   will make the cron run longer but at least keeps your site active. Vice versa
+ *   higher numbers allow for a faster deletion but might affect the live site.
+ *
+ *   This system is also used when purging archived shares.
+ *
+ * Available Options:
+ *   sleep   :  Time to sleep between delete calls
+ *   shares  :  How many shares to delete at one time
+ *
+ * Default:
+ *   sleep   :  5 seconds
+ *   shares  :  500000
+ **/
+$config['purge']['sleep'] = 1;
+$config['purge']['shares'] = 25000;
 
 /**
  * Archiving configuration for debugging
@@ -322,8 +383,12 @@ $config['reward_type'] = 'fixed';
 $config['reward'] = 50;
 
 // Confirmations per block required to credit transactions, default: 120
+// Do NOT touch this unless you know what you are doing! Please check your coin for the
+// appropriate value here, but most should work with this.
 $config['confirmations'] = 120;
 // Confirmations per block required in network to confirm its transactions, default: 120
+// Do NOT touch this unless you know what you are doing! Please check your coin for the
+// appropriate value here, but most should work with this.
 $config['network_confirmations'] = 120;
 
  /**
@@ -456,4 +521,19 @@ $config['cookie']['secure'] = false;
  **/
 $config['smarty']['cache'] = 0;
 $config['smarty']['cache_lifetime'] = 30;
+
+/**
+ * System load setting
+ *
+ * This will disable loading of some API calls in case the system
+ * loads exceeds the defined max setting. Useful to temporaily suspend
+ * live statistics on a server that is too busy to deal with requests.
+ *
+ * Options
+ *   max    =  float, maximum system load
+ *
+ * Defaults:
+ *   max    =  10.0
+ **/
+$config['system']['load']['max'] = 10.0;
 ?>

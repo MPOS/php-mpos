@@ -1,8 +1,8 @@
 <article class="module width_full">
   <header><h3>Edit news entry #{$NEWS.id}</h3></header>
 <form method="POST" action="{$smarty.server.PHP_SELF}">
-  <input type="hidden" name="page" value="{$smarty.request.page}">
-  <input type="hidden" name="action" value="{$smarty.request.action}">
+  <input type="hidden" name="page" value="{$smarty.request.page|escape}">
+  <input type="hidden" name="action" value="{$smarty.request.action|escape}">
   <input type="hidden" name="id" value="{$NEWS.id}">
   <input type="hidden" name="do" value="save">
   <table class="tablesorter" cellspacing="0">

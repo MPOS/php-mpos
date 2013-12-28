@@ -4,10 +4,8 @@ Description
 MPOS is a web based Mining Portal for various crypto currencies. A few pools using this interface are running at:
 
 * http://ltc.pool.grewe.ca
-* http://btc.pool.grewe.ca
 * http://fst.pool.grewe.ca
 * http://ftc.pool.grewe.ca
-* http://nvc.pool.grewe.ca
 
 **NOTE**: This project is still under development and commits are happening on a daily basis.
 I do not recommend using this for a live setup as of yet. Wait for the later Release Candidate
@@ -20,11 +18,7 @@ I was hoping to keep this out of the README but apparently people remove or chan
 at the bottom of the page. For those of you finding my project and are willing to appreciate the work
 with some hard earned coins feel free to donate:
 
-* BTC address: `1HuYK6WPU8o3yWCrAaADDZPRpL5QiXitfv`
 * LTC address: `Lge95QR2frp9y1wJufjUPCycVsg5gLJPW8`
-* FTC address: `6jDgGaUzMVyac5uqBhJCMiFMKCtH1LagTA`
-* NVC address: `4Guct6z7NVPVALHRAVn517TTmvqQve4WYr`
-* FST address: `g17CfFHqNqR5JnUjtG8RNBYh2WrhEirV67`
 
 Website Footer
 ==============
@@ -41,6 +35,7 @@ These people have supported this project with a donation:
 * [WKNiGHT](https://github.com/WKNiGHT-)
 * [ZC](https://github.com/zccopwrx)
 * Nutnut
+* Caberhagen (http://litecoin-pool.ch)
 
 Pools running MPOS
 ==================
@@ -67,7 +62,7 @@ for full information.
 * MySQL Server
  * mysql-server
 * memcached
-* pushpoold
+* stratum-mining
 * litecoind
 
 Features
@@ -76,13 +71,12 @@ Features
 The following feature have been implemented so far:
 
 * Fully re-written GUI with [Smarty][2] templates
+ * Full file based template support
+ * **NEW** SQL based templates
 * Mobile WebUI
-* Scrypt, **NEW** SHA256, VARDIFF Support
+* Scrypt, SHA256, VARDIFF Support
 * Reward Systems
- * Propotional
- * PPS
- * PPLNS
-* Statistics are cached in Memcache by Cronjob for quick data access
+ * Propotional, PPS and PPLNS
 * New Theme
  * Live Dashboard
  * AJAX Support
@@ -93,12 +87,9 @@ The following feature have been implemented so far:
  * Worker activity
  * Worker hashrates
 * Pool statistics
-* Minimal Block statistics
-* Pool donations
-* Pool fees
-* Block Bonus Payouts
-* Manual payout
-* Auto payout
+* Block statistics
+* Pool donations, fees and block bonuses
+* Manual and auto payout
 * Transaction list
 * Admin Panel
  * Cron Monitoring Overview
@@ -107,22 +98,24 @@ The following feature have been implemented so far:
  * User Transactions
  * News Posts
  * Pool Settings
+ * Templates
+ * Pool Workers
+ * User Reports
+ * Template Overwrite
 * Notification system
  * IDLE Workers
  * New blocks found in pool
  * Auto Payout
  * Manual Payout
 * User-to-user Invitation System
-* Support for various Scrypt based coins via config
- * MNC
- * LTC
- * ...
+* Support for various coins via config
+ * All scrypt coins
+ * All sha256d coins
 
 Installation
 ============
 
-Please take a look at the [Quick Start Guide](https://github.com/TheSerapher/php-mpos/wiki/Quick-Start-Guide). This will give you
-an idea how to setup `MPOS`.
+Please take a look at the [Quick Start Guide](https://github.com/TheSerapher/php-mpos/wiki/Quick-Start-Guide). This will give you an idea how to setup `MPOS`.
 
 Customization
 =============

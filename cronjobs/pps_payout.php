@@ -47,6 +47,7 @@ if ( $bitcoin->can_connect() === true ){
 
 // We support some dynamic reward targets but fall back to our fixed value
 // Re-calculate after each run due to re-targets in this loop
+// We don't use the classes implementation just in case people start mucking around with it
 if ($config['pps']['reward']['type'] == 'blockavg' && $block->getBlockCount() > 0) {
   $pps_reward = round($block->getAvgBlockReward($config['pps']['blockavg']['blockcount']));
   $log->logInfo("PPS reward using block average, amount: " . $pps_reward . "\tdifficulty: " . $dDifficulty);
@@ -64,7 +65,6 @@ if ($config['pps']['reward']['type'] == 'blockavg' && $block->getBlockCount() > 
 
 // Per-share value to be paid out to users
 $pps_value = round($pps_reward / (pow(2, $config['target_bits']) * $dDifficulty), 12);
-
 
 // Find our last share accounted and last inserted share for PPS calculations
 $iPreviousShareId = $setting->getValue('pps_last_share_id');

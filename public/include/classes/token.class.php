@@ -11,7 +11,11 @@ class Token Extends Base {
    * @param name string Setting name
    * @return value string Value
    **/
-  public function getToken($strToken) {
+  public function getToken($strToken, $strType=NULL) {
+    if (empty($strType) || ! $iToken_id = $this->tokentype->getTypeId($strType)) {
+      $this->setErrorMessage('Invalid token type: ' . $strType);
+      return false;
+    }
     $stmt = $this->mysqli->prepare("SELECT * FROM $this->table WHERE token = ? LIMIT 1");
     if ($stmt && $stmt->bind_param('s', $strToken) && $stmt->execute() && $result = $stmt->get_result())
       return $result->fetch_assoc();

@@ -10,7 +10,7 @@ if (!$user->isAuthenticated() || !$user->isAdmin($_SESSION['USERDATA']['id'])) {
 }
 
 // Default crons to monitor
-$aCrons = array('statistics','auto_payout','manual_payout','archive_cleanup','blockupdate','findblock','notifications','tickerupdate');
+$aCrons = array('statistics','payouts','archive_cleanup','blockupdate','findblock','notifications','tickerupdate');
 
 // Special cases, only add them if activated
 switch ($config['payout_system']) {

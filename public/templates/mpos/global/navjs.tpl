@@ -10,46 +10,43 @@ $(document).ready(function(){
   var storedHashrate=[];
   var storedWorkers=[];
 
-  // Helper to initilize gauges
-  function initGauges(data) {
+  g1 = new JustGage({
+    id: "mr",
+    value: parseFloat({/literal}{$GLOBAL.workers}{literal}).toFixed(0),
+    min: 0,
+    max: Math.round({/literal}{$GLOBAL.workers}{literal} * 2),
+    title: "Miners",
+    gaugeColor: '#6f7a8a',
+    labelFontColor: '#555',
+    titleFontColor: '#555',
+    valueFontColor: '#555',
+    label: "Active Miners",
+    relativeGaugeSize: true,
+    showMinMax: true,
+    shadowOpacity : 0.8,
+    shadowSize : 0,
+    shadowVerticalOffset : 10
+  });
 
-        g1 = new JustGage({
-            id: "mr",
-            value: parseFloat(data.getnavbardata.data.pool.workers).toFixed(0),
-            min: 0,
-            max: Math.round(data.getnavbardata.data.pool.workers * 4),
-            title: "Miners",
-            gaugeColor: '#6f7a8a',
-            labelFontColor: '#555',
-            titleFontColor: '#555',
-            valueFontColor: '#555',
-            label: "Active Miners",
-            relativeGaugeSize: true,
-            showMinMax: true,
-            shadowOpacity : 0.8,
-            shadowSize : 0,
-            shadowVerticalOffset : 10
-         });
+  g2 = new JustGage({
+    id: "hr",
+    value: parseFloat({/literal}{$GLOBAL.hashrate}{literal}).toFixed(2),
+    min: 0,
+    max: Math.round({/literal}{$GLOBAL.hashrate}{literal} * 2),
+    title: "Pool Hashrate",
+    gaugeColor: '#6f7a8a',
+    labelFontColor: '#555',
+    titleFontColor: '#555',
+    valueFontColor: '#555',
+    label: "{/literal}{$GLOBAL.hashunits.pool}{literal}",
+    relativeGaugeSize: true,
+    showMinMax: true,
+    shadowOpacity : 0.8,
+    shadowSize : 0,
+    shadowVerticalOffset : 10
+  });
 
-        g2 = new JustGage({
-            id: "hr",
-            value: parseFloat(data.getnavbardata.data.pool.hashrate).toFixed(2),
-            min: 0,
-            max: Math.round(data.getnavbardata.data.pool.hashrate * 4),
-            title: "Pool Hasrate",
-            gaugeColor: '#6f7a8a',
-            labelFontColor: '#555',
-            titleFontColor: '#555',
-            valueFontColor: '#555',
-            label: "{/literal}{$GLOBAL.hashunits.pool}{literal}",
-            relativeGaugeSize: true,
-            showMinMax: true,
-            shadowOpacity : 0.8,
-            shadowSize : 0,
-            shadowVerticalOffset : 10
-         });
-  }
-
+  {/literal}{if $GLOBAL.config.disable_navbar|default:"0" != 1 && $GLOBAL.config.disable_navbar_api|default:"0" != 1}{literal}
   // Helper to refresh graphs
   function refreshInformation(data) {
     g1.refresh(parseFloat(data.getnavbardata.data.pool.workers).toFixed(0));
@@ -60,14 +57,6 @@ $(document).ready(function(){
     storedWorkers[storedWorkers.length] = [timeNow, data.getnavbardata.data.raw.pool.workers];
     storedHashrate[storedHashrate.length] = [timeNow, data.getnavbardata.data.raw.pool.hashrate];
   }
-
-  // Fetch initial data via Ajax, starts proper gauges to display
-  $.ajax({
-    url: url,
-    async: false, // Run all others requests after this only if it's done
-    dataType: 'json',
-    success: function (data) { initGauges(data); }
-  });
 
   // Our worker process to keep gauges and graph updated
   (function worker() {
@@ -81,6 +70,7 @@ $(document).ready(function(){
         setTimeout(worker, {/literal}{($GLOBAL.config.statistics_ajax_refresh_interval * 1000)|default:"1000"}{literal})
       }
   });
+  {/literal}{/if}{literal}
  })();
 });
 {/literal}
