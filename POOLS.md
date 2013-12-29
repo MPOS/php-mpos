@@ -195,3 +195,10 @@ Small Time Miners are running various stratum only pools for different coins.
 | http://nrb.cryptoculture.net | Noirbits | 50 Mhs | 60 workers | PROP + VARDIFF + 2% Fee |
 | http://sbc.cryptoculture.net | StableCoin | 70 Mhs | 80 workers | PROP + VARDIFF + 2% Fee |
 | http://doge.cryptoculture.net | DogeCoin | 600 Mhs | 700 workers |  PROP + VARDIFF + 2% Fee |
+
+### Crypto-Com
+# All funds received will be donated to help children to cancer patients. And also in other funds and orphanages.
+
+| Pool URL                       | Coin       | Avg. Hashrate | Avg. Active Workers |          Notes             |
+| ------------------------------ | ---------- | ------------- | ------------------- | -------------------------- |
+| http://frk.crypto-com.com      | FrankoCoin |    0.5 Mhs    | 1 workers           | PPLNS + VARDIFF + 1.5% Fee |
