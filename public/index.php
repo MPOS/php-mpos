@@ -17,7 +17,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 
  */
-
+ 
 // Used for performance calculations
 $dStartTime = microtime(true);
 
@@ -92,7 +92,9 @@ if ($page != 'api') require_once(INCLUDE_DIR . '/smarty_globals.inc.php');
 
 // Load debug information into template
 $debug->append("Loading debug information into template", 4);
-$smarty->assign('DebuggerInfo', $debug->getDebugInfo());
+if($config['locale']!='tr_TR.utf8') { // locale hack for tr_TR.
+	$smarty->assign('DebuggerInfo', $debug->getDebugInfo()); 
+}
 $smarty->assign('RUNTIME', (microtime(true) - $dStartTime) * 1000);
 
 // Display our page

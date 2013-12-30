@@ -1,0 +1,26 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: tr_TR\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2013-12-13 19:32+0000\n"
+"PO-Revision-Date: 2013-12-13 21:37+0200\n"
+"Last-Translator: Hüseyin Uslu <shalafiraistlin@gmail.com>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 1.6.2\n"
+"Language: tr\n"
+
+#: php-mpos.c:2
+msgid "Home"
+msgstr "Ana Sayfa"
+
+#: php-mpos.c:5
+msgid "Dashboard"
+msgstr "Kontrol Paneli"

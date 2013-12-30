@@ -1,9 +1,9 @@
     <hr/>
-    <li class="icon-home"><a href="{$smarty.server.PHP_SELF}">Home</a></li>
+    <li class="icon-home"><a href="{$smarty.server.PHP_SELF}">{t}Home{/t}</a></li>
     {if $smarty.session.AUTHENTICATED|default:"0" == 1}
     <h3>My Account</h3>
     <ul class="toggle">
-      <li class="icon-gauge"><a href="{$smarty.server.PHP_SELF}?page=dashboard">Dashboard</a></li>
+      <li class="icon-gauge"><a href="{$smarty.server.PHP_SELF}?page=dashboard">{t}Dashboard{/t}</a></li>
       <li class="icon-user"><a href="{$smarty.server.PHP_SELF}?page=account&action=edit">Edit Account</a></li>
       <li class="icon-photo"><a href="{$smarty.server.PHP_SELF}?page=account&action=workers">My Workers</a></li>
       <li class="icon-indent-left"><a href="{$smarty.server.PHP_SELF}?page=account&action=transactions">Transactions</a></li>

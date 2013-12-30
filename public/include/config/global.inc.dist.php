@@ -536,4 +536,17 @@ $config['smarty']['cache_lifetime'] = 30;
  *   max    =  10.0
  **/
 $config['system']['load']['max'] = 10.0;
+
+/**
+ * Enable locales
+ **/
+$config['locale'] = 'en_US.utf8';
+
+// set locale below
+$locale = $config['locale'];
+putenv("LANG=$locale");
+setlocale(LC_ALL, $locale);
+$directory = dirname(__FILE__).'/../../locale';
+$domain = 'messages';
+bindtextdomain($domain, $directory);
 ?>
