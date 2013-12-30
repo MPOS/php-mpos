@@ -232,11 +232,25 @@ $aSettings['system'][] = array(
   'tooltip' => 'Enable or Disable invitations. Users will not be able to invite new users via email if disabled.'
 );
 $aSettings['system'][] = array(
-  'display' => 'Disable Payouts', 'type' => 'select',
+  'display' => 'Disable Payout Cron', 'type' => 'select',
   'options' => array( 0 => 'No', 1 => 'Yes' ),
   'default' => 0,
   'name' => 'disable_payouts', 'value' => $setting->getValue('disable_payouts'),
-  'tooltip' => 'Enable or Disable the payout processing. Users will not be able to withdraw any funds if disabled.'
+  'tooltip' => 'Enable or Disable the payout cronjob. Users will not be able to withdraw any funds if disabled. Will be logged in monitoring page.'
+);
+$aSettings['system'][] = array(
+  'display' => 'Disable Manual Payouts', 'type' => 'select',
+  'options' => array( 0 => 'No', 1 => 'Yes' ),
+  'default' => 0,
+  'name' => 'disable_manual_payouts', 'value' => $setting->getValue('disable_manual_payouts'),
+  'tooltip' => 'Enable or Disable manual payouts. Users will not be able to withdraw any funds manually if disabled. Will NOT be logged in monitoring page.'
+);
+$aSettings['system'][] = array(
+  'display' => 'Disable Auto Payout', 'type' => 'select',
+  'options' => array( 0 => 'No', 1 => 'Yes' ),
+  'default' => 0,
+  'name' => 'disable_auto_payouts', 'value' => $setting->getValue('disable_auto_payouts'),
+  'tooltip' => 'Enable or Disable the payout cronjob. Users will not be able to withdraw any funds automatically if disabled. Will NOT be logged in monitoring page.'
 );
 $aSettings['system'][] = array(
   'display' => 'Disable notifications', 'type' => 'select',
