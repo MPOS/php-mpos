@@ -105,6 +105,13 @@ $aSettings['statistics'][] = array(
   'tooltip' => 'How often to refresh data via ajax in seconds.'
 );
 $aSettings['statistics'][] = array(
+  'display' => 'Ajax Long Refresh Interval', 'type' => 'select',
+  'options' => array('5' => '5', '10' => '10', '15' => '15', '30' => '30', '60' => '60', '600' => '600', '1800' => '1800', '3600' => '3600' ),
+  'default' => 10,
+  'name' => 'statistics_ajax_long_refresh_interval', 'value' => $setting->getValue('statistics_ajax_long_refresh_interval'),
+  'tooltip' => 'How often to refresh data via ajax in seconds. User for SQL costly queries like getBalance and getWorkers.'
+);
+$aSettings['statistics'][] = array(
   'display' => 'Ajax Data Interval', 'type' => 'select',
   'options' => array('60' => '1', '180' => '3', '300' => '5', '600' => '10'),
   'default' => 300,

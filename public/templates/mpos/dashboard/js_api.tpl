@@ -17,7 +17,9 @@ $(document).ready(function(){
   var g1, g2, g3, g4, g5;
 
   // Ajax API URL
-  var url = "{/literal}{$smarty.server.PHP_SELF}?page=api&action=getdashboarddata&api_key={$GLOBAL.userdata.api_key}&id={$GLOBAL.userdata.id}{literal}";
+  var url_dashboard = "{/literal}{$smarty.server.PHP_SELF}?page=api&action=getdashboarddata&api_key={$GLOBAL.userdata.api_key}&id={$GLOBAL.userdata.id}{literal}";
+  var url_worker = "{/literal}{$smarty.server.PHP_SELF}?page=api&action=getuserworkers&api_key={$GLOBAL.userdata.api_key}&id={$GLOBAL.userdata.id}{literal}";
+  var url_balance = "{/literal}{$smarty.server.PHP_SELF}?page=api&action=getuserbalance&api_key={$GLOBAL.userdata.api_key}&id={$GLOBAL.userdata.id}{literal}";
 
   // Enable all included plugins
   //  $.jqplot.config.enablePlugins = true;
@@ -128,9 +130,15 @@ $(document).ready(function(){
     if (typeof(plot2) != "undefined") plot2.replot(replotShareinfoOptions);
   }
 
+  // Refresh balance information
+  function refreshBalanceData(data) {
+    balance = data.getuserbalance.data
+    $('#b-confirmed').html(balance.confirmed);
+    $('#b-unconfirmed').html(balance.unconfirmed);
+  }
+
+  // Refresh other static numbers on the template
   function refreshStaticData(data) {
-    $('#b-confirmed').html(data.getdashboarddata.data.personal.balance.confirmed);
-    $('#b-unconfirmed').html(data.getdashboarddata.data.personal.balance.unconfirmed);
     $('#b-price').html((parseFloat(data.getdashboarddata.data.pool.price).toFixed(8)));
     $('#b-dworkers').html(data.getdashboarddata.data.pool.workers);
     $('#b-hashrate').html((parseFloat(data.getdashboarddata.data.personal.hashrate).toFixed(2)));
@@ -165,8 +173,7 @@ $(document).ready(function(){
 
   // Refresh worker information
   function refreshWorkerData(data) {
-    data = data.getdashboarddata.data;
-    workers = data.personal.workers;
+    workers = data.getuserworkers.data;
     length = workers.length;
     $('#b-workers').html('');
     for (var i = j = 0; i < length; i++) {
@@ -179,17 +186,44 @@ $(document).ready(function(){
   }
 
   // Our worker process to keep gauges and graph updated
-  (function worker() {
+  (function worker1() {
     $.ajax({
-      url: url,
+      url: url_dashboard,
       dataType: 'json',
       success: function(data) {
         refreshInformation(data);
         refreshStaticData(data);
+      },
+      complete: function() {
+        setTimeout(worker1, {/literal}{($GLOBAL.config.statistics_ajax_refresh_interval * 1000)|default:"10000"}{literal})
+      }
+    });
+  })();
+
+  // Our worker process to keep worker information updated
+  (function worker3() {
+    $.ajax({
+      url: url_balance,
+      dataType: 'json',
+      success: function(data) {
+        refreshBalanceData(data);
+      },
+      complete: function() {
+        setTimeout(worker3, {/literal}{($GLOBAL.config.statistics_ajax_long_refresh_interval * 1000)|default:"10000"}{literal})
+      }
+    });
+  })();
+
+  // Our worker process to keep gauges and graph updated
+  (function worker2() {
+    $.ajax({
+      url: url_worker,
+      dataType: 'json',
+      success: function(data) {
         refreshWorkerData(data);
       },
       complete: function() {
-        setTimeout(worker, {/literal}{($GLOBAL.config.statistics_ajax_refresh_interval * 1000)|default:"10000"}{literal})
+        setTimeout(worker2, {/literal}{($GLOBAL.config.statistics_ajax_long_refresh_interval * 1000)|default:"10000"}{literal})
       }
     });
   })();
