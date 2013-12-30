@@ -29,11 +29,11 @@ class Token Extends Base {
    * @return mixed Token string on success, false on failure
    **/
   public function createToken($strType, $account_id=NULL) {
-    $strToken = hash('sha256', $account_id.$strType.microtime());
     if (!$iToken_id = $this->tokentype->getTypeId($strType)) {
       $this->setErrorMessage('Invalid token type: ' . $strType);
       return false;
     }
+    $strToken = bin2hex(openssl_random_pseudo_bytes(32));
     $stmt = $this->mysqli->prepare("
       INSERT INTO $this->table (token, type, account_id)
       VALUES (?, ?, ?)
