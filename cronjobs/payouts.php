@@ -102,8 +102,8 @@ if ($setting->getValue('disable_manual_payouts') != 1) {
 }
 
 if ($setting->getValue('disable_auto_payouts') != 1) {
-  // Fetch all users with setup AP
-  $users = $user->getAllAutoPayout();
+  // Fetch all users balances
+  $users = $transaction->getAPQueue();
   if (count($users) > 0) $log->logDebug(" found " . count($users) . " queued payout(s)");
 
   // Go through users and run transactions
@@ -111,8 +111,7 @@ if ($setting->getValue('disable_auto_payouts') != 1) {
     $log->logInfo("\tUserID\tUsername\tBalance\tThreshold\tAddress");
 
     foreach ($users as $aUserData) {
-      $aBalance = $transaction->getBalance($aUserData['id']);
-      $dBalance = $aBalance['confirmed'];
+      $dBalance = $aUserData['confirmed'];
       $log->logInfo("\t" . $aUserData['id'] . "\t" . $aUserData['username'] . "\t" . $dBalance . "\t" . $aUserData['ap_threshold'] . "\t\t" . $aUserData['coin_address']);
 
       // Only run if balance meets threshold and can pay the potential transaction fee
