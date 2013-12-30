@@ -301,6 +301,7 @@ class Transaction extends Base {
       LEFT JOIN accounts AS a
       ON t.account_id = a.id
       WHERE t.archived = 0 AND a.ap_threshold > 0
+      GROUP BY t.account_id
       HAVING confirmed > a.ap_threshold
       ");
     if ($this->checkStmt($stmt) && $stmt->execute() && $result = $stmt->get_result())
