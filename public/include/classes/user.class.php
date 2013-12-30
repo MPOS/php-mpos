@@ -176,7 +176,7 @@ public function generatePin($userID, $current) {
     $aData['username'] = $username;
     $aData['email'] = $email;
     $aData['pin'] = $newpin;
-	$newpin = $this->getHash($newpin);
+    $newpin = $this->getHash($newpin);
     $aData['subject'] = 'PIN Reset Request';
     $stmt = $this->mysqli->prepare("UPDATE $this->table SET pin = ? WHERE ( id = ? AND pass = ? )");
 
