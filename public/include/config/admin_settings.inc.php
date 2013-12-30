@@ -253,7 +253,7 @@ $aSettings['system'][] = array(
   'tooltip' => 'Enable or Disable the payout cronjob. Users will not be able to withdraw any funds automatically if disabled. Will NOT be logged in monitoring page.'
 );
 $aSettings['system'][] = array(
-  'display' => 'Disable notifications', 'type' => 'select',
+  'display' => 'Disable Notifications', 'type' => 'select',
   'options' => array( 0 => 'No', 1 => 'Yes' ),
   'default' => 0,
   'name' => 'disable_notifications', 'value' => $setting->getValue('disable_notifications'),
@@ -272,6 +272,20 @@ $aSettings['system'][] = array(
   'default' => 0,
   'name' => 'disable_contactform', 'value' => $setting->getValue('disable_contactform'),
   'tooltip' => 'Enable or Disable Contactform. Users will not be able to use the contact form.'
+);
+$aSettings['system'][] = array(
+  'display' => 'Disable Inbox', 'type' => 'select',
+  'options' => array( 0 => 'No', 1 => 'Yes'),
+  'default' => 0,
+  'name' => 'disable_inbox', 'value' => $setting->getValue('disable_inbox'),
+  'tooltip' => 'Enable or disable the site inbox.'
+);
+$aSettings['system'][] = array(
+  'display' => 'Send Contactform To', 'type' => 'select',
+  'options' => array( 0 => 'Email', 1 => 'Inbox'),
+  'default' => 1,
+  'name' => 'send_contactform_to_inbox', 'value' => $setting->getValue('send_contactform_to_inbox'),
+  'tooltip' => 'Where contactform messages are sent. You must enable the site inbox to receive messages there.'
 );
 $aSettings['system'][] = array(
   'display' => 'Disable Donors Page', 'type' => 'select',

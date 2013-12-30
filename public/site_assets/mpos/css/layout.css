@@ -373,6 +373,11 @@ background: #F1F1F4 url(../images/module_footer_bg.png) repeat-x;
 .module_content {
 margin: 10px 20px;
 color: #666;}
+.module_content blockquote {
+    border-left: 4px solid #dddddd;
+    padding: 0 15px;
+    margin: 15px;
+}
 
 /* Module Widths */
 

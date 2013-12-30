@@ -74,6 +74,8 @@ $aGlobal = array(
     'accounts' => $config['accounts'],
     'disable_invitations' => $setting->getValue('disable_invitations'),
     'disable_notifications' => $setting->getValue('disable_notifications'),
+    'disable_inbox' => $setting->getValue('disable_inbox'),
+    'send_contactform_to_inbox' => $setting->getValue('send_contactform_to_inbox'),
     'monitoring_uptimerobot_api_keys' => $setting->getValue('monitoring_uptimerobot_api_keys'),
     'statistics_ajax_refresh_interval' => $statistics_ajax_refresh_interval,
     'price' => array( 'currency' => $config['price']['currency'] ),
@@ -122,6 +124,7 @@ if (@$_SESSION['USERDATA']['id']) {
   $aGlobal['userdata']['rawhashrate'] = $statistics->getUserHashrate($_SESSION['USERDATA']['id']);
   $aGlobal['userdata']['hashrate'] = $aGlobal['userdata']['rawhashrate'] * $dPersonalHashrateModifier;
   $aGlobal['userdata']['sharerate'] = $statistics->getUserSharerate($_SESSION['USERDATA']['id']);
+  $aGlobal['userdata']['inbox_unread'] = $inbox->getUnreadCount($_SESSION['USERDATA']['id']);
 
   switch ($config['payout_system']) {
   case 'prop':

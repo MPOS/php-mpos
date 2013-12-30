@@ -4,6 +4,7 @@
     <article class="module width_3_quarter">
     <header><h3>Contact Us</h3></header>
     <div class="module_content">
+      {if $GLOBAL.config.disable_inbox|default:"0"}
       <fieldset>
         <label for="senderName">Your Name</label>
         <input type="text" class="text tiny" name="senderName" value="{$smarty.request.senderName|escape|default:""}" placeholder="Please type your name" size="15" maxlength="100" required />
@@ -12,6 +13,7 @@
         <label for="senderEmail">Your Email Address</label>
         <input type="text" class="text tiny" name="senderEmail" value="{$smarty.request.senderEmail|escape|default:""}" placeholder="Please type your email" size="50"  maxlength="100" required />
       </fieldset>
+      {/if}
       <fieldset>
         <label for="senderEmail">Your Subject</label>
         <input type="text" class="text tiny" name="senderSubject" value="{$smarty.request.senderSubject|escape|default:""}" placeholder="Please type your subject" size="15" maxlength="100" required />

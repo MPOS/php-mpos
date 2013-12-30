@@ -43,6 +43,9 @@ class User extends Base {
   public function getEmail($email) {
     return $this->getSingle($email, 'email', 'email', 's');
   }
+  public function getSendNoticesToInbox($id) {
+    return $this->getSingle($id, 'send_notices_to_inbox', 'id');
+  }
   public function getUserFailed($id) {
    return $this->getSingle($id, 'failed_logins', 'id');
   }
@@ -252,7 +255,7 @@ class User extends Base {
    * @param donat float donation % of income
    * @return bool
    **/
-  public function updateAccount($userID, $address, $threshold, $donate, $email, $is_anonymous) {
+  public function updateAccount($userID, $address, $threshold, $donate, $email, $send_notices_to_inbox, $is_anonymous) {
     $this->debug->append("STA " . __METHOD__, 4);
     $bUser = false;
 
@@ -304,8 +307,8 @@ class User extends Base {
     $donate = min(100, max(0, floatval($donate)));
 
     // We passed all validation checks so update the account
-    $stmt = $this->mysqli->prepare("UPDATE $this->table SET coin_address = ?, ap_threshold = ?, donate_percent = ?, email = ?, is_anonymous = ? WHERE id = ?");
-    if ($this->checkStmt($stmt) && $stmt->bind_param('sddsii', $address, $threshold, $donate, $email, $is_anonymous, $userID) && $stmt->execute())
+    $stmt = $this->mysqli->prepare("UPDATE $this->table SET coin_address = ?, ap_threshold = ?, donate_percent = ?, email = ?, send_notices_to_inbox = ?, is_anonymous = ? WHERE id = ?");
+    if ($this->checkStmt($stmt) && $stmt->bind_param('sddsiii', $address, $threshold, $donate, $email, $send_notices_to_inbox, $is_anonymous, $userID) && $stmt->execute())
       return true;
     // Catchall
     $this->setErrorMessage('Failed to update your account');
@@ -412,6 +415,29 @@ class User extends Base {
   }
 
   /**
+   * Get all the site admins
+   * @param bool $include_locked Include admins that are locked
+   * @return array The site admins
+   */
+  public function getAllAdmins($include_locked = false) {
+    $this->debug->append("STA " . __METHOD__, 4);
+    $sql = "
+      SELECT
+        *
+      FROM " . $this->getTableName() . "
+      WHERE ( is_admin = 1 )";
+    if (!$include_locked) {
+      $sql .= " AND ( is_locked = 0 )";
+    }
+
+    $stmt = $this->mysqli->prepare($sql);
+    if ($this->checkStmt($stmt) && $stmt->execute() && $result = $stmt->get_result()) {
+      return $result->fetch_all(MYSQLI_ASSOC);
+    }
+    return false;
+  }
+
+  /**
    * Fetch this classes table name
    * @return table string This classes table name
    **/
@@ -431,7 +457,8 @@ class User extends Base {
     $stmt = $this->mysqli->prepare("
       SELECT
       id, username, pin, api_key, is_admin, is_anonymous, email, no_fees,
-      IFNULL(donate_percent, '0') as donate_percent, coin_address, ap_threshold
+      IFNULL(donate_percent, '0') as donate_percent, coin_address, ap_threshold,
+      send_notices_to_inbox
       FROM $this->table
       WHERE id = ? LIMIT 0,1");
     if ($this->checkStmt($stmt)) {

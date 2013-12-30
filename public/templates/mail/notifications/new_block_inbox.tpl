@@ -1,0 +1,1 @@
+A new block has been discovered!
