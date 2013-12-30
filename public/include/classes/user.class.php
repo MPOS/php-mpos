@@ -109,7 +109,7 @@ class User extends Base {
    * @param password string Password
    * @return bool
    **/
-  public function checkLogin($username, $password) {
+  public function loginUserMPOS($username, $password) {
     $this->debug->append("STA " . __METHOD__, 4);
     $this->debug->append("Checking login for $username with password $password", 2);
     if (empty($username) || empty($password)) {
