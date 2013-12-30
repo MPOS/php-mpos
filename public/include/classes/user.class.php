@@ -167,6 +167,35 @@ class User extends Base {
     return false;
   }
 
+public function generatePin($userID, $current) {
+    $this->debug->append("STA " . __METHOD__, 4);
+    $username = $this->getUserName($userID);
+    $email = $this->getUserEmail($username);
+    $current = $this->getHash($current);
+    $newpin = intval( "0" . rand(1,9) . rand(0,9) . rand(0,9) . rand(0,9) );
+    $aData['username'] = $username;
+    $aData['email'] = $email;
+    $aData['pin'] = $newpin;
+	$newpin = $this->getHash($newpin);
+    $aData['subject'] = 'PIN Reset Request';
+    $stmt = $this->mysqli->prepare("UPDATE $this->table SET pin = ? WHERE ( id = ? AND pass = ? )");
+
+    if ($this->checkStmt($stmt) && $stmt->bind_param('sis', $newpin, $userID, $current) && $stmt->execute())
+    {
+        if ($stmt->errno == 0 && $stmt->affected_rows === 1) {
+            if ($this->mail->sendMail('pin/reset', $aData)) {
+            return true;
+            } else {
+            $this->setErrorMessage('Unable to send mail to your address');
+            return false;
+            }
+        }
+        $stmt->close();
+    }
+    $this->setErrorMessage( 'Unable to generate PIN, current password incorrect?' );
+    return false;
+}
+
   /**
    * Get all users that have auto payout setup
    * @param none
