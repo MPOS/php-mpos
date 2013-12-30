@@ -70,33 +70,40 @@ class Worker extends Base {
    **/
   public function getWorker($id, $interval=600) {
     $this->debug->append("STA " . __METHOD__, 4);
+        
+	$stmt = $this->mysqli->prepare("SELECT @usernames := `username` FROM pool_worker WHERE account_id = ?");
+	$this->checkStmt($stmt);
+	$stmt->bind_param('i', $id);
+	$stmt->execute();
+	$result = $stmt->get_result();
+
     $stmt = $this->mysqli->prepare("
        SELECT id, username, password, monitor,
-       ( SELECT COUNT(id) FROM " . $this->share->getTableName() . " WHERE username = w.username AND time > DATE_SUB(now(), INTERVAL 10 MINUTE)) AS count_all,
-       ( SELECT COUNT(id) FROM " . $this->share->getArchiveTableName() . " WHERE username = w.username AND time > DATE_SUB(now(), INTERVAL 10 MINUTE)) AS count_all_archive,
+       ( SELECT COUNT(id) FROM " . $this->share->getTableName() . " WHERE username IN (@usernames) AND time > DATE_SUB(now(), INTERVAL 10 MINUTE)) AS count_all,
+       ( SELECT COUNT(id) FROM " . $this->share->getArchiveTableName() . " WHERE username IN (@usernames) AND time > DATE_SUB(now(), INTERVAL 10 MINUTE)) AS count_all_archive,
        (
          SELECT
           IFNULL(IF(our_result='Y', ROUND(SUM(IF(difficulty=0, pow(2, (" . $this->config['difficulty'] . " - 16)), difficulty)) * POW(2, " . $this->config['target_bits'] . ") / ? / 1000), 0), 0) AS hashrate
           FROM " . $this->share->getTableName() . "
           WHERE
-            username = w.username
+            username IN (@usernames)
           AND time > DATE_SUB(now(), INTERVAL ? SECOND)
         ) + (
          SELECT
           IFNULL(IF(our_result='Y', ROUND(SUM(IF(difficulty=0, pow(2, (" . $this->config['difficulty'] . " - 16)), difficulty)) * POW(2, " . $this->config['target_bits'] . ") / ? / 1000), 0), 0) AS hashrate
           FROM " . $this->share->getArchiveTableName() . "
           WHERE
-            username = w.username
+            username IN (@usernames)
           AND time > DATE_SUB(now(), INTERVAL ? SECOND)
        ) AS hashrate,
        (
          SELECT IFNULL(ROUND(SUM(IF(difficulty=0, pow(2, (" . $this->config['difficulty'] . " - 16)), difficulty)) / count_all, 2), 0)
          FROM " . $this->share->getTableName() . "
-         WHERE username = w.username AND time > DATE_SUB(now(), INTERVAL ? SECOND)
+         WHERE username IN (@usernames) AND time > DATE_SUB(now(), INTERVAL ? SECOND)
        ) + (
          SELECT IFNULL(ROUND(SUM(IF(difficulty=0, pow(2, (" . $this->config['difficulty'] . " - 16)), difficulty)) / count_all_archive, 2), 0)
          FROM " . $this->share->getArchiveTableName() . "
-         WHERE username = w.username AND time > DATE_SUB(now(), INTERVAL ? SECOND)
+         WHERE username IN (@usernames) AND time > DATE_SUB(now(), INTERVAL ? SECOND)
        ) AS difficulty
        FROM $this->table AS w
        WHERE id = ?
@@ -113,33 +120,38 @@ class Worker extends Base {
    **/
   public function getWorkers($account_id, $interval=600) {
     $this->debug->append("STA " . __METHOD__, 4);
+	$stmt = $this->mysqli->prepare("SELECT @usernames := `username` FROM pool_worker WHERE account_id = ?");
+	$this->checkStmt($stmt);
+	$stmt->bind_param('i', $account_id);
+	$stmt->execute();
+	$result = $stmt->get_result();
     $stmt = $this->mysqli->prepare("
       SELECT id, username, password, monitor,
-       ( SELECT COUNT(id) FROM " . $this->share->getTableName() . " WHERE username = w.username AND time > DATE_SUB(now(), INTERVAL ? SECOND)) AS count_all,
-       ( SELECT COUNT(id) FROM " . $this->share->getArchiveTableName() . " WHERE username = w.username AND time > DATE_SUB(now(), INTERVAL ? SECOND)) AS count_all_archive,
+       ( SELECT COUNT(id) FROM " . $this->share->getTableName() . " WHERE username IN (@usernames) AND time > DATE_SUB(now(), INTERVAL ? SECOND)) AS count_all,
+       ( SELECT COUNT(id) FROM " . $this->share->getArchiveTableName() . " WHERE username IN (@usernames) AND time > DATE_SUB(now(), INTERVAL ? SECOND)) AS count_all_archive,
        (
          SELECT
           IFNULL(IF(our_result='Y', ROUND(SUM(IF(difficulty=0, pow(2, (" . $this->config['difficulty'] . " - 16)), difficulty)) * POW(2, " . $this->config['target_bits'] . ") / ? / 1000), 0), 0) AS hashrate
           FROM " . $this->share->getTableName() . "
           WHERE
-            username = w.username
+            username IN (@usernames)
           AND time > DATE_SUB(now(), INTERVAL ? SECOND)
       ) + (
         SELECT
           IFNULL(IF(our_result='Y', ROUND(SUM(IF(difficulty=0, pow(2, (" . $this->config['difficulty'] . " - 16)), difficulty)) * POW(2, " . $this->config['target_bits'] . ") / ? / 1000), 0), 0) AS hashrate
           FROM " . $this->share->getArchiveTableName() . "
           WHERE
-            username = w.username
+            username IN (@usernames)
           AND time > DATE_SUB(now(), INTERVAL ? SECOND)
       ) AS hashrate,
       (
         SELECT IFNULL(ROUND(SUM(IF(difficulty=0, pow(2, (" . $this->config['difficulty'] . " - 16)), difficulty)) / count_all, 2), 0)
         FROM " . $this->share->getTableName() . "
-        WHERE username = w.username AND time > DATE_SUB(now(), INTERVAL ? SECOND)
+        WHERE username IN (@usernames) AND time > DATE_SUB(now(), INTERVAL ? SECOND)
       ) + (
         SELECT IFNULL(ROUND(SUM(IF(difficulty=0, pow(2, (" . $this->config['difficulty'] . " - 16)), difficulty)) / count_all_archive, 2), 0)
         FROM " . $this->share->getArchiveTableName() . "
-        WHERE username = w.username AND time > DATE_SUB(now(), INTERVAL ? SECOND)
+        WHERE username IN (@usernames) AND time > DATE_SUB(now(), INTERVAL ? SECOND)
       ) AS difficulty
       FROM $this->table AS w
       WHERE account_id = ?");
