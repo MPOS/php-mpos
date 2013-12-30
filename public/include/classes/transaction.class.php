@@ -289,9 +289,9 @@ class Transaction extends Base {
         IFNULL(
           ROUND(
             (
-              SUM( IF( ( t.type IN ('Credit','Bonus') AND b.confirmations >= 120 ) OR t.type = 'Credit_PPS', t.amount, 0 ) ) -
+              SUM( IF( ( t.type IN ('Credit','Bonus') AND b.confirmations >= " . $this->config['confirmations'] . ") OR t.type = 'Credit_PPS', t.amount, 0 ) ) -
               SUM( IF( t.type IN ('Debit_MP', 'Debit_AP'), t.amount, 0 ) ) -
-              SUM( IF( ( t.type IN ('Donation','Fee') AND b.confirmations >= 120 ) OR ( t.type IN ('Donation_PPS', 'Fee_PPS', 'TXFee') ), t.amount, 0 ) )
+              SUM( IF( ( t.type IN ('Donation','Fee') AND b.confirmations >= " . $this->config['confirmations'] . ") OR ( t.type IN ('Donation_PPS', 'Fee_PPS', 'TXFee') ), t.amount, 0 ) )
             ), 8
           ), 0
         ) AS confirmed
