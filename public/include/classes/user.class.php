@@ -458,8 +458,12 @@ class User extends Base {
    * @param email2 string Email confirmation
    * @return bool
    **/
-  public function register($username, $password1, $password2, $pin, $email1='', $email2='', $strToken='') {
+  public function register($username, $password1, $password2, $pin, $email1='', $email2='', $tac='', $strToken='') {
     $this->debug->append("STA " . __METHOD__, 4);
+    if ($tac != 1) {
+      $this->setErrorMessage('You need to accept our <a href="'.$_SERVER['PHP_SELF'].'?page=tac" target="_blank">Terms and Conditions</a>');
+      return false;
+    }
     if (strlen($username) > 40) {
       $this->setErrorMessage('Username exceeding character limit');
       return false;

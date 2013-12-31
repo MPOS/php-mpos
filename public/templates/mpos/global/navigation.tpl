@@ -80,6 +80,7 @@
       <li class="icon-login"><a href="{$smarty.server.PHP_SELF}?page=login">Login</a></li>
       <li class="icon-pencil"><a href="{$smarty.server.PHP_SELF}?page=register">Sign Up</a></li>
       <li class="icon-mail"><a href="{$smarty.server.PHP_SELF}?page=support">Support</a></li>
+      <li class="icon-doc"><a href="{$smarty.server.PHP_SELF}?page=tac">Terms and Conditions</a></li>
       {/if}
     </ul>
     <ul>

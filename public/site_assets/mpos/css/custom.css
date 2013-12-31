@@ -249,7 +249,56 @@ footer.footer {
 footer.footer p {
   color:grey;
   margin: 0px 0 0 0;
- }
+}
+
 .DebuggerConsole {
   z-index:500;position:absolute;display:none
+}
+
+
+.tbox {
+  position:absolute; 
+  display:none; 
+  padding:14px 17px; 
+  z-index:900
+}
+
+.tinner {
+  padding:0px 30px 0px 0px; 
+  -moz-border-radius:5px; 
+  border-radius:5px; 
+  background:#fff 50% 50%; 
+  border-right:1px solid #333; 
+  border-bottom:1px solid #333
+}
+
+.tmask {
+  position:absolute; 
+  display:none; top:0px; 
+  left:0px; height:100%; 
+  width:100%; 
+  background:#000; 
+  z-index:800
+}
+
+.tclose {
+  position:absolute; 
+  top:0px; 
+  right:0px; 
+  width:30px; 
+  height:30px; 
+  cursor:pointer; 
+  background:url(../images/close.png) no-repeat
+}
+
+.tclose:hover {
+  background-position:0 -30px
+}
+
+#frameless {
+  padding:0
+}
+
+#frameless .tclose {
+  left:6px
 }
