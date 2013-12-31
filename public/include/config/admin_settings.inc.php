@@ -295,6 +295,13 @@ $aSettings['system'][] = array(
   'tooltip' => 'Enable or Disable Contactform. Users will not be able to use the contact form.'
 );
 $aSettings['system'][] = array(
+  'display' => 'Disable Contactform for Guests', 'type' => 'select',
+  'options' => array( 0 => 'No', 1 => 'Yes' ),
+  'default' => 0,
+  'name' => 'disable_contactform_guest', 'value' => $setting->getValue('disable_contactform_guest'),
+  'tooltip' => 'Enable or Disable Contactform for guests. Guests will not be able to use the contact form.'
+);
+$aSettings['system'][] = array(
   'display' => 'Disable Donors Page', 'type' => 'select',
   'options' => array( 0 => 'No', 1 => 'Yes'),
   'default' => 1,
