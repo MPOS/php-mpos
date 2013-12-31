@@ -6,7 +6,7 @@
 {if $GLOBAL.userdata.no_fees}
         You are mining without any pool fees applied and
 {else if $GLOBAL.fees > 0}
-        You are mining at <font color="orange">{$GLOBAL.fees|escape}%</font> pool fee and
+        You are mining at <font color="orange">{if $GLOBAL.fees < 0.0001}{$GLOBAL.fees|escape|number_format:"8"}{else}{$GLOBAL.fees|escape}{/if}%</font> pool fee and
 {else}
         This pool does not apply fees and
 {/if}
