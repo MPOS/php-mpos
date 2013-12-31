@@ -46,6 +46,7 @@ if (!$iCurrentActiveWorkers = $worker->getCountAllActiveWorkers()) $iCurrentActi
 
 // Some settings to propagate to template
 if (! $statistics_ajax_refresh_interval = $setting->getValue('statistics_ajax_refresh_interval')) $statistics_ajax_refresh_interval = 10;
+if (! $statistics_ajax_long_refresh_interval = $setting->getValue('statistics_ajax_long_refresh_interval')) $statistics_ajax_long_refresh_interval = 10;
 
 // Small helper array
 $aHashunits = array( '1' => 'KH/s', '0.001' => 'MH/s', '0.000001' => 'GH/s' );
@@ -76,6 +77,7 @@ $aGlobal = array(
     'disable_notifications' => $setting->getValue('disable_notifications'),
     'monitoring_uptimerobot_api_keys' => $setting->getValue('monitoring_uptimerobot_api_keys'),
     'statistics_ajax_refresh_interval' => $statistics_ajax_refresh_interval,
+    'statistics_ajax_long_refresh_interval' => $statistics_ajax_long_refresh_interval,
     'price' => array( 'currency' => $config['price']['currency'] ),
     'targetdiff' => $config['difficulty'],
     'currency' => $config['currency'],
