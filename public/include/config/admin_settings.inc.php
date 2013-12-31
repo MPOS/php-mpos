@@ -77,6 +77,20 @@ $aSettings['website'][] = array(
   'tooltip' => 'Enabled or disable the blockexplorer URL feature. Will remove any links using the blockexplorer URL.'
 );
 $aSettings['website'][] = array(
+  'display' => 'Transactionexplorer URL', 'type' => 'text',
+  'size' => 50,
+  'default' => 'http://explorer.litecoin.net/tx/',
+  'name' => 'website_transactionexplorer_url', 'value' => $setting->getValue('website_transactionexplorer_url'),
+  'tooltip' => 'URL to the transactionexplorer website for your blockchain. Will append the transactionid to the URL. Leave empty to disabled this.'
+);
+$aSettings['website'][] = array(
+  'display' => 'Disable Transactionexplorer', 'type' => 'select',
+  'options' => array( 0 => 'No', 1 => 'Yes' ),
+  'default' => 0,
+  'name' => 'website_transactionexplorer_disabled', 'value' => $setting->getValue('website_transactionexplorer_disabled'),
+  'tooltip' => 'Enabled or disable the transactionexplorer URL feature. Will remove any links using the transactionexplorer URL.'
+);
+$aSettings['website'][] = array(
   'display' => 'Chaininfo URL', 'type' => 'text',
   'size' => 50,
   'default' => 'http://allchains.info',
@@ -351,4 +365,3 @@ $aSettings['monitoring'][] = array(
   'tooltip' => 'Create per-monitor API keys and save them here to propagate your uptime statistics.'
 );
 
-?>
