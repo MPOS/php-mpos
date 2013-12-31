@@ -26,7 +26,7 @@ chdir(dirname(__FILE__));
 require_once('shared.inc.php');
 
 // Cleanup old expired tokens
-if (!$oToken->cleanupTokens()) {
+if ($oToken->cleanupTokens()) {
   $oToken->deleted == 0 ? $log->logDebug('Did not find any expired tokens') : $log->logInfo('Deleted ' . $oToken->deleted . ' expired tokens');
 } else {
   $log->logError('Failed to delete expired tokens: ' . $oToken->getCronError());
