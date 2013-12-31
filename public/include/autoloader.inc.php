@@ -60,5 +60,7 @@ require_once(CLASS_DIR . '/news.class.php');
 require_once(CLASS_DIR . '/api.class.php');
 require_once(INCLUDE_DIR . '/lib/Michelf/Markdown.php');
 require_once(INCLUDE_DIR . '/lib/scrypt.php');
+require_once(INCLUDE_DIR . '/lib/openid.php');
+
 
 ?>
