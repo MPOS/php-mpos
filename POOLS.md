@@ -197,8 +197,15 @@ Small Time Miners are running various stratum only pools for different coins.
 | http://doge.cryptoculture.net | DogeCoin | 600 Mhs | 700 workers |  PROP + VARDIFF + 2% Fee |
 
 ### Crypto-Com
-# All funds received will be donated to help children to cancer patients. And also in other funds and orphanages.
+#### All funds received will be donated to help children to cancer patients. And also in other funds and orphanages.
 
 | Pool URL                       | Coin       | Avg. Hashrate | Avg. Active Workers |          Notes             |
 | ------------------------------ | ---------- | ------------- | ------------------- | -------------------------- |
 | http://frk.crypto-com.com      | FrankoCoin |    0.5 Mhs    | 1 workers           | PPLNS + VARDIFF + 1.5% Fee |
+
+### nevrending
+#### Indonesian Mining Pool
+
+| Pool URL                         | Coin     | Avg. Hashrate | Avg. Active Workers |          Notes            |
+| -------------------------------- | -------- | ------------- | ------------------: | ------------------------- |
+| http://ltc.garudapool.com        | Litecoin |    1-5 Mhs    | 21 workers          | PPLNS + VARDIFF + 0% Fee  |
