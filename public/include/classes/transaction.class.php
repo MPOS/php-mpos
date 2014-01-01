@@ -272,6 +272,43 @@ class Transaction extends Base {
       return $result->fetch_assoc();
     return $this->sqlError();
   }
+
+  /**
+   * Get our Auto Payout queue
+   * @param none
+   * @return data array Account settings and confirmed balances
+   **/
+  public function getAPQueue() {
+    $this->debug->append("STA " . __METHOD__, 4);
+    $stmt = $this->mysqli->prepare("
+      SELECT
+        a.id,
+        a.username,
+        a.ap_threshold,
+        a.coin_address,
+        IFNULL(
+          ROUND(
+            (
+              SUM( IF( ( t.type IN ('Credit','Bonus') AND b.confirmations >= " . $this->config['confirmations'] . ") OR t.type = 'Credit_PPS', t.amount, 0 ) ) -
+              SUM( IF( t.type IN ('Debit_MP', 'Debit_AP'), t.amount, 0 ) ) -
+              SUM( IF( ( t.type IN ('Donation','Fee') AND b.confirmations >= " . $this->config['confirmations'] . ") OR ( t.type IN ('Donation_PPS', 'Fee_PPS', 'TXFee') ), t.amount, 0 ) )
+            ), 8
+          ), 0
+        ) AS confirmed
+      FROM transactions AS t
+      LEFT JOIN blocks AS b
+      ON t.block_id = b.id
+      LEFT JOIN accounts AS a
+      ON t.account_id = a.id
+      WHERE t.archived = 0 AND a.ap_threshold > 0
+      GROUP BY t.account_id
+      HAVING confirmed > a.ap_threshold
+      ");
+    if ($this->checkStmt($stmt) && $stmt->execute() && $result = $stmt->get_result())
+      return $result->fetch_all(MYSQLI_ASSOC);
+    echo $this->mysqli->error;
+    return $this->sqlError();
+  }
 }
 
 $transaction = new Transaction();
