@@ -13,7 +13,7 @@
         </tr>
         <tr>
           <td class="leftheader">Current Block</td>
-          <td><a href="http://explorer.litecoin.net/search?q={$CURRENTBLOCK}" target="_new">{$CURRENTBLOCK}</a></td>
+          <td><a href="{$GLOBAL.website.blockexplorer.url}{$CURRENTBLOCK}" target="_new">{$CURRENTBLOCK}</a></td>
         </tr>
         <tr>
           <td class="leftheader">Current Difficulty</td>
