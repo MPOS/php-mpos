@@ -189,14 +189,15 @@ CREATE TABLE IF NOT EXISTS `tokens` (
 CREATE TABLE IF NOT EXISTS `token_types` (
   `id` tinyint(4) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(25) NOT NULL,
+  `expiration` INT NULL DEFAULT  '0',
   PRIMARY KEY (`id`),
   UNIQUE KEY `name` (`name`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
-INSERT INTO `token_types` (`id`, `name`) VALUES
-(1, 'password_reset'),
-(2, 'confirm_email'),
-(3, 'invitation');
+INSERT INTO `token_types` (`id`, `name`, `expiration`) VALUES
+(1, 'password_reset', 3600),
+(2, 'confirm_email', 0),
+(3, 'invitation', 0);
 
 CREATE TABLE IF NOT EXISTS `transactions` (
   `id` int(255) NOT NULL AUTO_INCREMENT,
