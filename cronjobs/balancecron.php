@@ -27,13 +27,6 @@ $log->logDebug("Current Mint is: " .$dNewmint);
   $log->logError('Unable to connect to wallet RPC service');
 }
 
-// Fetch unconfirmed amount from blocks table
-empty($config['network_confirmations']) ? $confirmations = 120 : $confirmations = $config['network_confirmations'];
-$aBlocksUnconfirmed = $block->getAllUnconfirmed($confirmations);
-$dBlocksUnconfirmedBalance = 0;
-if (!empty($aBlocksUnconfirmed))
-foreach ($aBlocksUnconfirmed as $aData) $dBlocksUnconfirmedBalance += $aData['amount'];
-
 // Fetch locked balance from transactions
 $dLockedBalance = $transaction->getLockedBalance();
 $log->logDebug("The Locked Wallet Balance for Users is: " .$dLockedBalance. "\n");
