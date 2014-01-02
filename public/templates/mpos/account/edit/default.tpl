@@ -133,24 +133,24 @@
 </form>
 
 
-	<form action="{$smarty.server.PHP_SELF}" method="post">
-            <input type="hidden" name="page" value="{$smarty.request.page|escape}">
-            <input type="hidden" name="action" value="{$smarty.request.action|escape}">
-            <input type="hidden" name="do" value="genPin">
-			<article class="module width_half">
-			 <header>
-				<h3>Reset PIN</h3>
-			</header>
-			<div class="module_content">
-         <fieldset>
-			<label>Current Password</label>
-			<input type="password" name="currentPassword" />
-		</fieldset>
+<form action="{$smarty.server.PHP_SELF}" method="post">
+  <input type="hidden" name="page" value="{$smarty.request.page|escape}">
+  <input type="hidden" name="action" value="{$smarty.request.action|escape}">
+  <input type="hidden" name="do" value="genPin">
+	<article class="module width_half">
+	  <header>
+		  <h3>Reset PIN</h3>
+		</header>
+		<div class="module_content">
+      <fieldset>
+		  <label>Current Password</label>
+		  <input type="password" name="currentPassword" />
+		  </fieldset>
 		</div>
-		    <footer>
-            <div class="submit_link">
-                        <button type="submit" class="alt_btn" value="Reset PIN">
-            </div>
-			</footer>
+		<footer>
+      <div class="submit_link">
+        <input type="submit" class="alt_btn" value="Reset PIN">
+      </div>
+    </footer>
   </article>
-        </form>
+</form>
