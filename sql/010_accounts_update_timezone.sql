@@ -1,2 +1,2 @@
-ALTER TABLE `accounts` ADD `failed_pins` VARCHAR(255);
+ALTER TABLE `accounts` ADD `timezone` VARCHAR(255);
 
