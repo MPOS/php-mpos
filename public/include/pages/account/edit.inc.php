@@ -5,6 +5,14 @@ if (!defined('SECURITY'))
   die('Hacking attempt');
 
 if ($user->isAuthenticated()) {
+if (isset($_POST['do']) && $_POST['do'] == 'genPin') {
+      if ($user->generatePin($_SESSION['USERDATA']['id'], $_POST['currentPassword'])) {
+        $_SESSION['POPUP'][] = array('CONTENT' => 'Your PIN # has been sent to your email.', 'TYPE' => 'success');
+      } else {
+        $_SESSION['POPUP'][] = array('CONTENT' => $user->getError(), 'TYPE' => 'errormsg');
+      }
+}
+else {
   if ( @$_POST['do'] && (! $user->checkPin($_SESSION['USERDATA']['id'], @$_POST['authPin']))) {
     $_SESSION['POPUP'][] = array('CONTENT' => 'Invalid PIN. ' . ($config['maxfailed']['pin'] - $user->getUserPinFailed($_SESSION['USERDATA']['id'])) . ' attempts remaining.', 'TYPE' => 'errormsg');
   } else {
@@ -49,7 +57,7 @@ if ($user->isAuthenticated()) {
     }
   }
 }
-
+}
 // Tempalte specifics
 $smarty->assign("CONTENT", "default.tpl");
 ?>
