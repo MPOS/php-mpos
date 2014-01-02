@@ -143,8 +143,7 @@ class User extends Base {
           $aData['username'] = $username;
           $aData['email'] = $this->getUserEmail($username);;
           $aData['subject'] = 'Account auto-locked';
-          if (!$this->mail->sendMail('notifications/locked', $aData))
-            return false;
+          $this->mail->sendMail('notifications/locked', $aData);
         }
       }
     }
@@ -171,12 +170,20 @@ class User extends Base {
     // Check if this account should be locked
     if (isset($this->config['maxfailed']['pin']) && $this->getUserPinFailed($userId) >= $this->config['maxfailed']['pin']) {
       $this->changeLocked($userId);
+      if ($token = $this->token->createToken('account_unlock', $userId)) {
+        $username = $this->getUserName($userId);
+        $aData['token'] = $token;
+        $aData['username'] = $username;
+        $aData['email'] = $this->getUserEmail($username);;
+        $aData['subject'] = 'Account auto-locked';
+        $this->mail->sendMail('notifications/locked', $aData);
+      }
       $this->logoutUser();
     }
     return false;
   }
 
-public function generatePin($userID, $current) {
+  public function generatePin($userID, $current) {
     $this->debug->append("STA " . __METHOD__, 4);
     $username = $this->getUserName($userID);
     $email = $this->getUserEmail($username);
