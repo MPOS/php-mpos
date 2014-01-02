@@ -306,7 +306,6 @@ class Transaction extends Base {
       ");
     if ($this->checkStmt($stmt) && $stmt->execute() && $result = $stmt->get_result())
       return $result->fetch_all(MYSQLI_ASSOC);
-    echo $this->mysqli->error;
     return $this->sqlError();
   }
 }
