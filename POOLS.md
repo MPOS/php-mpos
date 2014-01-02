@@ -129,6 +129,13 @@ Small Time Miners are running various stratum only pools for different coins.
 | http://nbl.pnwminer.com | Nibble | 0 Mhs | 0 workers | PPLNS |
 | http://mst.pnwminer.com | MasterCoin | 1-5 Mhs | 2 workers | PPLNS |
 
+### retal
+
+| Pool URL | Coin | Avg. Hashrate | Avg. Active Workers | Notes |
+| -------- | ---- | ------------: | ------------------: | ----- |
+| http://ld2k.com/ | LTC | n/a |   | Prop |
+
+
 ### 1xhabit
 
 | Pool URL | Coin | Avg. Hashrate | Avg. Active Workers | Notes |
