@@ -124,7 +124,7 @@ class User extends Base {
       }
     }
     if ($this->isLocked($this->getUserId($username))) {
-      $this->setErrorMessage("Account is locked. Please contact site support.");
+      $this->setErrorMessage('Account locked.');
       return false;
     }
     if ($this->checkUserPassword($username, $password)) {
@@ -136,8 +136,17 @@ class User extends Base {
     if ($id = $this->getUserId($username)) {
       $this->incUserFailed($id);
       // Check if this account should be locked
-      if (isset($this->config['maxfailed']['login']) && $this->getUserFailed($id) >= $this->config['maxfailed']['login'])
+      if (isset($this->config['maxfailed']['login']) && $this->getUserFailed($id) >= $this->config['maxfailed']['login']) {
         $this->changeLocked($id);
+        if ($token = $this->token->createToken('account_unlock', $id)) {
+          $aData['token'] = $token;
+          $aData['username'] = $username;
+          $aData['email'] = $this->getUserEmail($username);;
+          $aData['subject'] = 'Account auto-locked';
+          if (!$this->mail->sendMail('notifications/locked', $aData))
+            return false;
+        }
+      }
     }
 
     return false;
