@@ -216,3 +216,10 @@ Small Time Miners are running various stratum only pools for different coins.
 | Pool URL                         | Coin     | Avg. Hashrate | Avg. Active Workers |          Notes            |
 | -------------------------------- | -------- | ------------- | ------------------: | ------------------------- |
 | http://ltc.garudapool.com        | Litecoin |    1-5 Mhs    | 21 workers          | PPLNS + VARDIFF + 0% Fee  |
+
+### Multicoin
+### The first multi-coin environment using MPOS as a frontend.
+
+| Pool URL                         | Coin     | Avg. Hashrate | Avg. Active Workers |          Notes            |
+| -------------------------------- | -------- | ------------- | ------------------: | ------------------------- |
+| http://multicoin.zapto.org:8080 | Multicoin | Unknown   | Unknown workers| PROP + VARDIFF + 0% Fee  |
