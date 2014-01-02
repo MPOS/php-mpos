@@ -27,7 +27,7 @@ class Share Extends Base {
    * @return array Share data
    **/
   public function getShareById($id) {
-    return $this->getAllAssoc($id);
+    return $this->getSingleAssoc($id);
   }
 
   /**

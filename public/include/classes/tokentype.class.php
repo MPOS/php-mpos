@@ -15,6 +15,27 @@ class Token_Type Extends Base {
   public function getTypeId($strName) {
     return $this->getSingle($strName, 'id', 'name', 's');
   }
+
+  /**
+   * Return expiration time for token type
+   * @param id int Token ID
+   * @param time int Time in seconds for expiration
+   **/
+  public function getExpiration($id) {
+    return $this->getSingle($id, 'expiration', 'id', 'i');
+  }
+
+  /**
+   * Fetch all tokens that have an expiration set
+   * @param none
+   * @return array Tokens with expiration times set
+   **/
+  public function getAllExpirations() {
+    $stmt = $this->mysqli->prepare("SELECT * FROM $this->table WHERE expiration > 0");
+    if ($this->checkStmt($stmt) && $stmt->execute() && $result = $stmt->get_result())
+      return $result->fetch_all(MYSQLI_ASSOC);
+    return $this->sqlError();
+  }
 }
 
 $tokentype = new Token_Type();
