@@ -279,7 +279,7 @@ public function generatePin($userID, $current) {
    * @param donat float donation % of income
    * @return bool
    **/
-  public function updateAccount($userID, $address, $threshold, $donate, $email, $is_anonymous) {
+  public function updateAccount($userID, $address, $threshold, $donate, $email, $is_anonymous, $timezone) {
     $this->debug->append("STA " . __METHOD__, 4);
     $bUser = false;
 
@@ -331,8 +331,8 @@ public function generatePin($userID, $current) {
     $donate = min(100, max(0, floatval($donate)));
 
     // We passed all validation checks so update the account
-    $stmt = $this->mysqli->prepare("UPDATE $this->table SET coin_address = ?, ap_threshold = ?, donate_percent = ?, email = ?, is_anonymous = ? WHERE id = ?");
-    if ($this->checkStmt($stmt) && $stmt->bind_param('sddsii', $address, $threshold, $donate, $email, $is_anonymous, $userID) && $stmt->execute())
+    $stmt = $this->mysqli->prepare("UPDATE $this->table SET coin_address = ?, ap_threshold = ?, donate_percent = ?, email = ?, is_anonymous = ?, timezone = ? WHERE id = ?");
+    if ($this->checkStmt($stmt) && $stmt->bind_param('sddsisi', $address, $threshold, $donate, $email, $is_anonymous, $timezone, $userID) && $stmt->execute())
       return true;
     // Catchall
     $this->setErrorMessage('Failed to update your account');
@@ -458,7 +458,7 @@ public function generatePin($userID, $current) {
     $stmt = $this->mysqli->prepare("
       SELECT
       id, username, pin, api_key, is_admin, is_anonymous, email, no_fees,
-      IFNULL(donate_percent, '0') as donate_percent, coin_address, ap_threshold
+      IFNULL(donate_percent, '0') as donate_percent, coin_address, ap_threshold, timezone
       FROM $this->table
       WHERE id = ? LIMIT 0,1");
     if ($this->checkStmt($stmt)) {

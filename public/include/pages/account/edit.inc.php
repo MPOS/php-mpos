@@ -40,7 +40,7 @@ if ($user->isAuthenticated()) {
         break;
 
       case 'updateAccount':
-        if ($user->updateAccount($_SESSION['USERDATA']['id'], $_POST['paymentAddress'], $_POST['payoutThreshold'], $_POST['donatePercent'], $_POST['email'], $_POST['is_anonymous'])) {
+        if ($user->updateAccount($_SESSION['USERDATA']['id'], $_POST['paymentAddress'], $_POST['payoutThreshold'], $_POST['donatePercent'], $_POST['email'], $_POST['is_anonymous'], $_POST['timezone'])) {
           $_SESSION['POPUP'][] = array('CONTENT' => 'Account details updated', 'TYPE' => 'success');
         } else {
           $_SESSION['POPUP'][] = array('CONTENT' => 'Failed to update your account: ' . $user->getError(), 'TYPE' => 'errormsg');
@@ -58,6 +58,42 @@ if ($user->isAuthenticated()) {
     }
   }
 }
-// Tempalte specifics
+
+// Timezone array for select box on account edit page
+// Originial code from here: https://gist.github.com/Xeoncross/1204255
+$regions = array(
+    'Africa' => DateTimeZone::AFRICA,
+    'America' => DateTimeZone::AMERICA,
+    'Antarctica' => DateTimeZone::ANTARCTICA,
+    'Australia' => DateTimeZone::AUSTRALIA,
+    'Asia' => DateTimeZone::ASIA,
+    'Atlantic' => DateTimeZone::ATLANTIC,
+    'Europe' => DateTimeZone::EUROPE,
+    'Indian' => DateTimeZone::INDIAN,
+    'Pacific' => DateTimeZone::PACIFIC
+);
+
+$timezones = array();
+foreach ($regions as $name => $mask)
+{
+    $zones = DateTimeZone::listIdentifiers($mask);
+    foreach($zones as $timezone)
+    {
+                // Lets sample the time there right now
+                $time = new DateTime(NULL, new DateTimeZone($timezone));
+
+                // Us dumb Americans can't handle millitary time
+                $ampm = $time->format('g:i a');
+
+                // Remove region name and add a sample time
+                $timezones[$name][$timezone] = substr($timezone, strlen($name) + 1) . ' - ' . $ampm;
+//              $timezones[$name][$timezone] = substr($timezone, strlen($name) + 1) . ' - ' . $time->format('H:i');
+        }
+}
+
+$smarty->assign('timezones',$timezones);
+
+
+// Template specifics
 $smarty->assign("CONTENT", "default.tpl");
 ?>
