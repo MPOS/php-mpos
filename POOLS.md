@@ -223,3 +223,10 @@ Small Time Miners are running various stratum only pools for different coins.
 | Pool URL                         | Coin     | Avg. Hashrate | Avg. Active Workers |          Notes            |
 | -------------------------------- | -------- | ------------- | ------------------: | ------------------------- |
 | http://multicoin.zapto.org:8080 | Multicoin | Unknown   | Unknown workers| PROP + VARDIFF + 0% Fee  |
+
+### Newbiepool
+### The pool for newbies useing MPOS enviroment
+|            Pool URL          |  Coin   |Avg. Hashrate| Avg. Active Workers |          Notes          |
+| ---------------------------- | ------- |-----------: | ------------------: | ----------------------- |
+| http://newbiepool.szimre.net | Mincoin |   2-3 Mhs   |   1-5 workers       | PPLNS + VARDIFF + 1% Fee| |
+
