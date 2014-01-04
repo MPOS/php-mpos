@@ -197,7 +197,8 @@ CREATE TABLE IF NOT EXISTS `token_types` (
 INSERT INTO `token_types` (`id`, `name`, `expiration`) VALUES
 (1, 'password_reset', 3600),
 (2, 'confirm_email', 0),
-(3, 'invitation', 0);
+(3, 'invitation', 0),
+(4, 'account_unlock', 0);
 
 CREATE TABLE IF NOT EXISTS `transactions` (
   `id` int(255) NOT NULL AUTO_INCREMENT,
