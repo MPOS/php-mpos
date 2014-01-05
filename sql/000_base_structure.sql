@@ -14,7 +14,7 @@ CREATE TABLE IF NOT EXISTS `accounts` (
   `no_fees` tinyint(1) NOT NULL DEFAULT '0',
   `username` varchar(40) NOT NULL,
   `pass` varchar(255) NOT NULL,
-  `email` varchar(255) DEFAULT NULL COMMENT 'Assocaited email: used for validating users, and re-setting passwords',
+  `email` varchar(255) DEFAULT NULL COMMENT 'Associated email: used for validating users, and re-setting passwords',
   `loggedIp` varchar(255) DEFAULT NULL,
   `is_locked` tinyint(1) NOT NULL DEFAULT '0',
   `failed_logins` int(5) unsigned DEFAULT '0',
