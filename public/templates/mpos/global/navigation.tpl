@@ -16,6 +16,7 @@
     {if $smarty.session.AUTHENTICATED|default:"0" == 1 && $GLOBAL.userdata.is_admin == 1}
     <h3>Admin Panel</h3>
     <ul class="toggle">
+      <li class="icon-gauge"><a href="{$smarty.server.PHP_SELF}?page=admin&action=dashboard">Dashboard</a></li>
       <li class="icon-bell"><a href="{$smarty.server.PHP_SELF}?page=admin&action=monitoring">Monitoring</a></li>
       <li class="icon-torso"><a href="{$smarty.server.PHP_SELF}?page=admin&action=user">User Info</a></li>
       <li class="icon-money"><a href="{$smarty.server.PHP_SELF}?page=admin&action=wallet">Wallet Info</a></li>
