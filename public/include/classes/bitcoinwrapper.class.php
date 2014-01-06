@@ -53,7 +53,7 @@ class BitcoinWrapper extends BitcoinClient {
     $this->oDebug->append("STA " . __METHOD__, 4);
     if ($data = $this->memcache->get(__FUNCTION__)) return $data;
     try {
-      $dNetworkHashrate = $this->query('getmininginfo');
+      $dNetworkHashrate = $this->getmininginfo();
       if (is_array($dNetworkHashrate)) {
         if (array_key_exists('networkhashps', $dNetworkHashrate)) {
           $dNetworkHashrate = $dNetworkHashrate['networkhashps'];

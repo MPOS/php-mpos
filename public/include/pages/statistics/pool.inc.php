@@ -10,7 +10,7 @@ if (!$smarty->isCached('master.tpl', $smarty_cache_key)) {
     $dDifficulty = $bitcoin->getdifficulty();
     $dNetworkHashrate = $bitcoin->getnetworkhashps();
     $iBlock = $bitcoin->getblockcount();
-    is_int($iBlock) && $iBlock > 0 ? $sBlockHash = $bitcoin->query('getblockhash', $iBlock) : $sBlockHash = '';
+    is_int($iBlock) && $iBlock > 0 ? $sBlockHash = $bitcoin->getblockhash($iBlock) : $sBlockHash = '';
   } else {
     $dDifficulty = 1;
     $dNetworkHashrate = 1;
