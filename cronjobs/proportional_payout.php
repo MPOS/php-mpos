@@ -72,12 +72,17 @@ foreach ($aAllBlocks as $iIndex => $aBlock) {
 
     // Loop through all accounts that have found shares for this round
     foreach ($aAccountShares as $key => $aData) {
-      // Payout based on shares, PPS system
-      $aData['percentage'] = round(( 100 / $iRoundShares ) * $aData['valid'], 8);
-      $aData['payout'] = round(( $aData['percentage'] / 100 ) * $dReward, 8);
+      // Skip entries that have no account ID, user deleted?
+      if (empty($aData['id'])) {
+        $log->logInfo('User ' . $aData['username'] . ' does not have an associated account, skipping');
+        continue;
+      }
+
       // Defaults
       $aData['fee' ] = 0;
       $aData['donation'] = 0;
+      $aData['percentage'] = round(( 100 / $iRoundShares ) * $aData['valid'], 8);
+      $aData['payout'] = round(( $aData['percentage'] / 100 ) * $dReward, 8);
 
       if ($config['fees'] > 0 && $aData['no_fees'] == 0)
         $aData['fee'] = round($config['fees'] / 100 * $aData['payout'], 8);

@@ -158,6 +158,12 @@ foreach ($aAllBlocks as $iIndex => $aBlock) {
 
     // Loop through all accounts that have found shares for this round
     foreach ($aAccountShares as $key => $aData) {
+      // Skip entries that have no account ID, user deleted?
+      if (empty($aData['id'])) {
+        $log->logInfo('User ' . $aData['username'] . ' does not have an associated account, skipping');
+        continue;
+      }
+
       // Payout based on PPLNS target shares, proportional payout for all users
       $aData['percentage'] = round(( 100 / $iRoundShares) * $aData['valid'], 8);
       $aData['payout'] = round(( $aData['percentage'] / 100 ) * $dReward, 8);

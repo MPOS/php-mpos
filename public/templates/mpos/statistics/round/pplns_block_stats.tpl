@@ -76,7 +76,7 @@
       </tr>
       <tr class="even">
         <td>Finder</td>
-        <td>{$BLOCKDETAILS.finder|default:"0"}</td>
+        <td>{$BLOCKDETAILS.finder|default:"unknown"}</td>
         <td>Round Variance</td>
         <td>{if $PPLNSSHARES > 0}{math assign="percentage1" equation=(($BLOCKDETAILS.shares / $PPLNSSHARES) * 100)}{/if}<font color="{if ($percentage1 >= 100)}green{else}red{/if}">{$percentage1|number_format:"2"} %</font></td>
       </tr>
