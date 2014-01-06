@@ -250,7 +250,7 @@ class User extends Base {
     $this->debug->append("STA " . __METHOD__, 4);
     $dPercent = $this->getSingle($userID, 'donate_percent', 'id');
     if ($dPercent > 100) $dPercent = 100;
-    if ($dPercent < 0) $dPercent = 0;
+    if ($dPercent < 0.01) $dPercent = 0;
     return $dPercent;
   }
 
@@ -313,8 +313,8 @@ class User extends Base {
     if (!is_numeric($donate)) {
       $this->setErrorMessage('Invalid input for donation');
       return false;
-    } else if ($donate < 0) {
-      $this->setErrorMessage('Donation below allowed 0% limit');
+    } else if ($donate < 0.01) {
+      $this->setErrorMessage('Donation below allowed 0.01% limit');
       return false;
     } else if ($donate > 100) {
       $this->setErrorMessage('Donation above allowed 100% limit');
