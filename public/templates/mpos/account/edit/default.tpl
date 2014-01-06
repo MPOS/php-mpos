@@ -25,12 +25,12 @@
       </fieldset>
       <fieldset>
         <label>Payment Address</label>
-        <input type="text" name="paymentAddress" value="{nocache}{$smarty.request.paymentAddress|default:$GLOBAL.userdata.coin_address|escape}{nocache}" size="40" />
+        <input type="text" name="paymentAddress" value="{nocache}{$smarty.request.paymentAddress|default:$GLOBAL.userdata.coin_address|escape}{/nocache}" size="40" />
       </fieldset>
       <fieldset>
         <label>Donation Percentage</label>
         <font size="1"> Donation amount in percent (example: 0.5)</font>
-        <input type="text" name="donatePercent" value="{nocache}{$smarty.request.donatePercent|default:$GLOBAL.userdata.donate_percent|escape}{nocache}" size="4" />
+        <input type="text" name="donatePercent" value="{nocache}{$smarty.request.donatePercent|default:$GLOBAL.userdata.donate_percent|escape}{/nocache}" size="4" />
       </fieldset>
       <fieldset>
         <label>Automatic Payout Threshold</label>
