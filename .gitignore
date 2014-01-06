@@ -3,7 +3,9 @@
 
 # Templates
 /public/templates/compile/*.php
+/public/templates/compile/**
 /public/templates/cache/*.php
+/public/templates/cache/**
 
 # Logs
 /cronjobs/logs/*.txt

@@ -156,7 +156,7 @@ $smarty = new Smarty;
 // Assign our local paths
 $debug->append('Define Smarty Paths', 3);
 $smarty->template_dir = BASEPATH . 'templates/' . THEME . '/';
-$smarty->compile_dir = BASEPATH . 'templates/compile/';
+$smarty->compile_dir = BASEPATH . 'templates/compile/' . THEME . '/';
 $smarty->registerResource('hybrid', new Smarty_Resource_Hybrid(
   new Smarty_Resource_Database($template),
   new Smarty_Internal_Resource_File()
@@ -169,7 +169,7 @@ if ($config['smarty']['cache']) {
   $debug->append('Enable smarty cache');
   $smarty->setCaching(Smarty::CACHING_LIFETIME_SAVED);
   $smarty->cache_lifetime = $config['smarty']['cache_lifetime'];
-  $smarty->cache_dir = BASEPATH . "templates/cache";
+  $smarty->cache_dir = BASEPATH . "templates/cache/" . THEME;
   $smarty->use_sub_dirs = true;
 }
 ?>
