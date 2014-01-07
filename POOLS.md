@@ -129,6 +129,13 @@ Small Time Miners are running various stratum only pools for different coins.
 | http://nbl.pnwminer.com | Nibble | 0 Mhs | 0 workers | PPLNS |
 | http://mst.pnwminer.com | MasterCoin | 1-5 Mhs | 2 workers | PPLNS |
 
+### LD2K
+
+| Pool URL | Coin | Avg. Hashrate | Avg. Active Workers | Notes |
+| -------- | ---- | ------------: | ------------------: | ----- |
+| http://ld2k.com/ | LTC | 5Mhs |  7 | Prop |
+
+
 ### 1xhabit
 
 | Pool URL | Coin | Avg. Hashrate | Avg. Active Workers | Notes |
@@ -139,14 +146,15 @@ Small Time Miners are running various stratum only pools for different coins.
 
 | Pool URL | Coin | Avg. Hashrate | Avg. Active Workers | Notes |
 | -------- | ---- | ------------: | ------------------: | ----- |
-| http://asc.coinz.pw | Asiccoin | 2-4Ghs | 2-4 workers | Prop |
-| http://dem.coinz.pw | Deutch eMark | 0Ghs | 0 workers | Prop |
-| http://fst.coinz.pw | Fastcoin | 15-25Mhs | 20-30 workers | Prop |
-| http://glx.coinz.pw | Galaxycoin | 0Mhs | 0 workers | Prop |
-| http://ltc.coinz.pw | Litecoin | 0Mhs | 0 workers | Prop |
-| http://sxc.coinz.pw | Sexcoin | 10-20Mhs | 15-25 workers | Prop |
-| http://tgc.coinz.pw | Tigercoin | 2-4Ghs | 2-4 workers | Prop |
-| http://zet.coinz.pw | Zetacoin | 5-10Ghs | 2-3 workers | Prop |
+| http://asc.coinz.pw | Asiccoin | 150-500Ghs | 5-15 workers | Prop |
+| http://ffc.coinz.pw | FireFlyCoin | 5-15Ghs | 2-6 workers | Prop |
+| http://fst.coinz.pw | Fastcoin | 5-15Mhs | 15-30 workers | Prop |
+| http://xjo.coinz.pw | Joulecoin | 10-60Ghs | 2-10 workers | Prop |
+| http://sxc.coinz.pw | Sexcoin | 1-2Mhs | 2-6 workers | Prop |
+| http://tgc.coinz.pw | Tigercoin | 10-400Ghs | 4-10 workers | Prop |
+| http://uno.coinz.pw | Unobtanium | 10-60Ghs | 2-10 workers | Prop |
+| http://wdc.coinz.pw | Worldcoin | 1-2Mhs | 1-2 workers | Prop |
+| http://zet.coinz.pw | Zetacoin | 20-60Ghs | 5-20 workers | Prop |
 
 ### ckoeber
 
@@ -195,3 +203,31 @@ Small Time Miners are running various stratum only pools for different coins.
 | http://nrb.cryptoculture.net | Noirbits | 50 Mhs | 60 workers | PROP + VARDIFF + 2% Fee |
 | http://sbc.cryptoculture.net | StableCoin | 70 Mhs | 80 workers | PROP + VARDIFF + 2% Fee |
 | http://doge.cryptoculture.net | DogeCoin | 600 Mhs | 700 workers |  PROP + VARDIFF + 2% Fee |
+
+### Crypto-Com
+#### All funds received will be donated to help children to cancer patients. And also in other funds and orphanages.
+
+| Pool URL                       | Coin       | Avg. Hashrate | Avg. Active Workers |          Notes             |
+| ------------------------------ | ---------- | ------------- | ------------------- | -------------------------- |
+| http://frk.crypto-com.com      | FrankoCoin |    0.5 Mhs    | 1 workers           | PPLNS + VARDIFF + 1.5% Fee |
+
+### nevrending
+#### Indonesian Mining Pool
+
+| Pool URL                         | Coin     | Avg. Hashrate | Avg. Active Workers |          Notes            |
+| -------------------------------- | -------- | ------------- | ------------------: | ------------------------- |
+| http://ltc.garudapool.com        | Litecoin |    1-5 Mhs    | 21 workers          | PPLNS + VARDIFF + 0% Fee  |
+
+### Multicoin
+### The first multi-coin environment using MPOS as a frontend.
+
+| Pool URL                         | Coin     | Avg. Hashrate | Avg. Active Workers |          Notes            |
+| -------------------------------- | -------- | ------------- | ------------------: | ------------------------- |
+| http://multicoin.zapto.org:8080 | Multicoin | Unknown   | Unknown workers| PROP + VARDIFF + 0% Fee  |
+
+### Newbiepool
+### Pool for newbies using MPOS.
+
+| Pool URL                         | Coin     | Avg. Hashrate | Avg. Active Workers |          Notes            |
+| -------------------------------- | -------- | ------------- | ------------------: | ------------------------- |
+| http://newbiepool.szimre.net | Mincoin | Low   | 1-20 workers| PPLNS + VARDIFF + 1% Fee  |

@@ -75,9 +75,6 @@ $dPersonalHashrateAdjusted = $dPersonalHashrate * $dPersonalHashrateModifier;
 $dPoolHashrateAdjusted = $dPoolHashrate * $dPoolHashrateModifier;
 $dNetworkHashrateAdjusted = $dNetworkHashrate / 1000 * $dNetworkHashrateModifier;
 
-// Worker information
-$aWorkers = $worker->getWorkers($user_id, $interval);
-
 // Coin price
 $aPrice = $setting->getValue('price');
 
@@ -99,7 +96,7 @@ $data = array(
   'personal' => array (
     'hashrate' => $dPersonalHashrateAdjusted, 'sharerate' => $dPersonalSharerate, 'sharedifficulty' => $dPersonalShareDifficulty,
     'shares' => array('valid' => $aUserRoundShares['valid'], 'invalid' => $aUserRoundShares['invalid'], 'invalid_percent' => $dUserInvalidPercent, 'unpaid' => $dUnpaidShares ),
-    'balance' => $transaction->getBalance($user_id), 'estimates' => $aEstimates, 'workers' => $aWorkers ),
+    'estimates' => $aEstimates),
   'pool' => array(
     'info' => array(
       'name' => $setting->getValue('website_name'),

@@ -53,6 +53,8 @@ supported. They will never match an upstream share, solo miners do not create
 any shares, only blocks. Expect weird behavior if trying to mix them. See #299
 for full information.
 
+* 64 bit system
+ * Otherwise some coins will display wrong network hashrates
 * Apache2
  * libapache2-mod-php5
 * PHP 5.4+

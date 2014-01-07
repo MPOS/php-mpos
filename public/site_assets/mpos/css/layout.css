@@ -28,6 +28,7 @@ text-decoration: none;
 
 a:hover {
 text-decoration: underline;
+cursor:pointer
 }
 
 
@@ -661,7 +662,7 @@ margin: 0 10px;
 fieldset label {
 display: block;
 float: left;
-width: 200px;
+width: 250px;
 height: 25px;
 line-height: 25px;
 text-shadow: 0 1px 0 #fff;

@@ -29,7 +29,7 @@ require_once('shared.inc.php');
 $affected_rows = $share->purgeArchive();
 if ($affected_rows === false) {
   $log->logError("Failed to delete archived shares, not critical but should be checked: " . $share->getCronError());
-  $monitoring->endCronjob($cron_name, 'E0008', 1, true);
+  $monitoring->endCronjob($cron_name, 'E0008', 0, false, false);
 } else {
   $log->logDebug("Deleted $affected_rows archived shares this run");
 }

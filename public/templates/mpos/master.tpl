@@ -11,27 +11,28 @@
 	<link rel="stylesheet" href="{$PATH}/css/visualize.css" type="text/css" media="screen" />
 	<link rel="stylesheet" href="{$PATH}/css/custom.css" type="text/css" media="screen" />
 	<link rel="stylesheet" href="{$PATH}/css/jquery.jqplot.min.css" type="text/css" media="screen" />
-	<!--[if lt IE 9]>
+  <!--[if lt IE 9]>
 	<link rel="stylesheet" href="{$PATH}/css/ie.css" type="text/css" media="screen" />
 	<script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
 	<![endif]-->
-	<script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js" type="text/javascript"></script>
-	<script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery-migrate/1.2.1/jquery-migrate.min.js" type="text/javascript"></script>
+	<script type="text/javascript" src="{$PATH}/js/jquery-2.0.3.min.js"></script>
+	<script type="text/javascript" src="{$PATH}/js/jquery-migrate-1.2.1.min.js"></script>
 	<script type="text/javascript" src="{$PATH}/js/hideshow.js" type="text/javascript"></script>
   <script type="text/javascript" src="{$PATH}/js/jquery.visualize.js"></script>
   <script type="text/javascript" src="{$PATH}/js/jquery.jqplot.min.js"></script>
 	<script type="text/javascript" src="{$PATH}/js/jquery.tablesorter.min.js" type="text/javascript"></script>
 	<script type="text/javascript" src="{$PATH}/js/jquery.tablesorter.pager.js" type="text/javascript"></script>
 	<script type="text/javascript" src="{$PATH}/js/jquery.equalHeight.js"></script>
-  <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/raphael/2.1.2/raphael-min.js"></script>
+  <script type="text/javascript" src="{$PATH}/js/raphael.2.1.2.min.js"></script>
   <script type="text/javascript" src="{$PATH}/js/justgage.1.0.1.min.js"></script>
 	<script type="text/javascript" src="{$PATH}/js/custom.js"></script>
+	<script type="text/javascript" src="{$PATH}/js/tinybox.js"></script>
   <!--[if IE]><script type="text/javascript" src="{$PATH}/js/excanvas.js"></script><![endif]-->
-  
+
     {if $GLOBAL.statistics.analytics.enabled}
       {$GLOBAL.statistics.analytics.code}
     {/if}
-    
+
 </head>
 <body>
 	<header id="header">
@@ -50,7 +51,13 @@
         <h4 class="{$smarty.session.POPUP[popup].TYPE|default:"info"}">{$smarty.session.POPUP[popup].CONTENT}</h4>
       {/section}
     {/if}
-    {if $CONTENT != "empty" or $CONTENT != ""}{if file_exists($smarty.current_dir|cat:"/$PAGE/$ACTION/$CONTENT")}{include file="$PAGE/$ACTION/$CONTENT"}{else}Missing template for this page{/if}{/if}
+    {if $CONTENT != "empty" && $CONTENT != ""}
+      {if file_exists($smarty.current_dir|cat:"/$PAGE/$ACTION/$CONTENT")}
+        {include file="$PAGE/$ACTION/$CONTENT"}
+      {else}
+        Missing template for this page
+      {/if}
+    {/if}
 		<div class="spacer"></div>
 	</section>
   <footer class="footer">

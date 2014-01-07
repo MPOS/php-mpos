@@ -1,6 +1,25 @@
 <article class="module width_3_quarter">
-  <header><h3>{count($WORKERS)} Current Active Pool Workers</h3></header>
-    <table class="tablesorter" cellspacing="0">
+  <header><h3>{$GLOBAL.workers} Current Active Pool Workers</h3></header>
+  <form action="{$smarty.server.PHP_SELF}">
+    <input type="hidden" name="page" value="{$smarty.request.page|escape}" />
+    <input type="hidden" name="action" value="{$smarty.request.action|escape}" />
+    <table cellspacing="0" class="tablesorter">
+    <tbody>
+      <tr>
+        <td align="left">
+{if $smarty.request.start|default:"0" > 0}
+          <a href="{$smarty.server.PHP_SELF}?page={$smarty.request.page|escape}&action={$smarty.request.action|escape}&start={$smarty.request.start|escape|default:"0" - $LIMIT}{if $FILTERS|default:""}{$FILTERS}{/if}"><i class="icon-left-open"></i></a>
+{else}
+          <i class="icon-left-open"></i>
+{/if}
+        </td>
+        <td align="right">
+          <a href="{$smarty.server.PHP_SELF}?page={$smarty.request.page|escape}&action={$smarty.request.action|escape}&start={$smarty.request.start|escape|default:"0" + $LIMIT}{if $FILTERS|default:""}{$FILTERS}{/if}"><i class="icon-right-open"></i></a>
+        </td>
+    </tbody>
+  </form>
+  </table>
+  <table class="tablesorter" cellspacing="0">
     <thead>
       <tr>
         <th align="left">Worker Name</th>
@@ -14,7 +33,7 @@
     </thead>
       {nocache}
       {section worker $WORKERS}
-      <tbody>
+    <tbody>
       <tr>
         <td align="left">{$WORKERS[worker].username|escape}</td>
         <td align="left">{$WORKERS[worker].password|escape}</td>
@@ -28,6 +47,6 @@
       </tr>
       {/section}
       {/nocache}
-      </tbody>
-    </table>
+    </tbody>
+  </table>
 </article>

@@ -17,6 +17,8 @@ if ($setting->getValue('recaptcha_enabled')) {
 
 if ($setting->getValue('disable_contactform')) {
   $_SESSION['POPUP'][] = array('CONTENT' => 'Contactform is currently disabled. Please try again later.', 'TYPE' => 'errormsg');
+} else if ($setting->getValue('disable_contactform') && !$user->isAuthenticated(false)) {
+  $_SESSION['POPUP'][] = array('CONTENT' => 'Contactform is disabled for guests.', 'TYPE' => 'errormsg');
 } else {
   // Check if recaptcha is enabled, process form data if valid
   if($setting->getValue('recaptcha_enabled') && $_POST["recaptcha_response_field"] && $_POST["recaptcha_response_field"]!=''){

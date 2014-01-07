@@ -124,7 +124,7 @@ class User extends Base {
       }
     }
     if ($this->isLocked($this->getUserId($username))) {
-      $this->setErrorMessage("Account is locked. Please contact site support.");
+      $this->setErrorMessage('Account locked.');
       return false;
     }
     if ($this->checkUserPassword($username, $password)) {
@@ -136,8 +136,16 @@ class User extends Base {
     if ($id = $this->getUserId($username)) {
       $this->incUserFailed($id);
       // Check if this account should be locked
-      if (isset($this->config['maxfailed']['login']) && $this->getUserFailed($id) >= $this->config['maxfailed']['login'])
+      if (isset($this->config['maxfailed']['login']) && $this->getUserFailed($id) >= $this->config['maxfailed']['login']) {
         $this->changeLocked($id);
+        if ($token = $this->token->createToken('account_unlock', $id)) {
+          $aData['token'] = $token;
+          $aData['username'] = $username;
+          $aData['email'] = $this->getUserEmail($username);;
+          $aData['subject'] = 'Account auto-locked';
+          $this->mail->sendMail('notifications/locked', $aData);
+        }
+      }
     }
 
     return false;
@@ -162,10 +170,45 @@ class User extends Base {
     // Check if this account should be locked
     if (isset($this->config['maxfailed']['pin']) && $this->getUserPinFailed($userId) >= $this->config['maxfailed']['pin']) {
       $this->changeLocked($userId);
+      if ($token = $this->token->createToken('account_unlock', $userId)) {
+        $username = $this->getUserName($userId);
+        $aData['token'] = $token;
+        $aData['username'] = $username;
+        $aData['email'] = $this->getUserEmail($username);;
+        $aData['subject'] = 'Account auto-locked';
+        $this->mail->sendMail('notifications/locked', $aData);
+      }
       $this->logoutUser();
     }
     return false;
   }
+
+  public function generatePin($userID, $current) {
+    $this->debug->append("STA " . __METHOD__, 4);
+    $username = $this->getUserName($userID);
+    $email = $this->getUserEmail($username);
+    $current = $this->getHash($current);
+    $newpin = intval( '0' . rand(1,9) . rand(0,9) . rand(0,9) . rand(0,9) );
+    $aData['username'] = $username;
+    $aData['email'] = $email;
+    $aData['pin'] = $newpin;
+    $newpin = $this->getHash($newpin);
+    $aData['subject'] = 'PIN Reset Request';
+    $stmt = $this->mysqli->prepare("UPDATE $this->table SET pin = ? WHERE ( id = ? AND pass = ? )");
+
+    if ($this->checkStmt($stmt) && $stmt->bind_param('sis', $newpin, $userID, $current) && $stmt->execute()) {
+      if ($stmt->errno == 0 && $stmt->affected_rows === 1) {
+        if ($this->mail->sendMail('pin/reset', $aData)) {
+          return true;
+        } else {
+          $this->setErrorMessage('Unable to send mail to your address');
+          return false;
+        }
+      }
+    }
+    $this->setErrorMessage( 'Unable to generate PIN, current password incorrect?' );
+    return false;
+}
 
   /**
    * Get all users that have auto payout setup
@@ -281,20 +324,22 @@ class User extends Base {
       $this->setErrorMessage('Invalid email address');
       return false;
     }
-    if ($this->bitcoin->can_connect() === true && !empty($address)) {
-      try {
-        $aStatus = $this->bitcoin->validateaddress($address);
-        if (!$aStatus['isvalid']) {
-          $this->setErrorMessage('Invalid coin address');
+    if (!empty($address)) {
+      if ($this->bitcoin->can_connect() === true) {
+        try {
+          $aStatus = $this->bitcoin->validateaddress($address);
+          if (!$aStatus['isvalid']) {
+            $this->setErrorMessage('Invalid coin address');
+            return false;
+          }
+        } catch (BitcoinClientException $e) {
+          $this->setErrorMessage('Unable to verify coin address');
           return false;
         }
-      } catch (BitcoinClientException $e) {
-        $this->setErrorMessage('Unable to verify coin address');
+      } else {
+        $this->setErrorMessage('Unable to connect to RPC server for coin address validation');
         return false;
       }
-    } else {
-      $this->setErrorMessage('Unable to connect to RPC server for coin address validation');
-      return false;
     }
 
     // Number sanitizer, just in case we fall through above
@@ -456,8 +501,12 @@ class User extends Base {
    * @param email2 string Email confirmation
    * @return bool
    **/
-  public function register($username, $password1, $password2, $pin, $email1='', $email2='', $strToken='') {
+  public function register($username, $password1, $password2, $pin, $email1='', $email2='', $tac='', $strToken='') {
     $this->debug->append("STA " . __METHOD__, 4);
+    if ($tac != 1) {
+      $this->setErrorMessage('You need to accept our <a href="'.$_SERVER['PHP_SELF'].'?page=tac" target="_blank">Terms and Conditions</a>');
+      return false;
+    }
     if (strlen($username) > 40) {
       $this->setErrorMessage('Username exceeding character limit');
       return false;

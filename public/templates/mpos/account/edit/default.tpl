@@ -25,12 +25,12 @@
       </fieldset>
       <fieldset>
         <label>Payment Address</label>
-        <input type="text" name="paymentAddress" value="{nocache}{$smarty.request.paymentAddress|default:$GLOBAL.userdata.coin_address|escape}{nocache}" size="40" />
+        <input type="text" name="paymentAddress" value="{nocache}{$smarty.request.paymentAddress|default:$GLOBAL.userdata.coin_address|escape}{/nocache}" size="40" />
       </fieldset>
       <fieldset>
         <label>Donation Percentage</label>
         <font size="1"> Donation amount in percent (example: 0.5)</font>
-        <input type="text" name="donatePercent" value="{nocache}{$smarty.request.donatePercent|default:$GLOBAL.userdata.donate_percent|escape}{nocache}" size="4" />
+        <input type="text" name="donatePercent" value="{nocache}{$smarty.request.donatePercent|default:$GLOBAL.userdata.donate_percent|escape}{/nocache}" size="4" />
       </fieldset>
       <fieldset>
         <label>Automatic Payout Threshold</label>
@@ -60,7 +60,7 @@
   </article>
 </form>
 
-{if !$GLOBAL.disable_payouts}
+{if !$GLOBAL.config.disable_payouts && !$GLOBAL.config.disable_manual_payouts}
 <form action="{$smarty.server.PHP_SELF}" method="post">
   <input type="hidden" name="page" value="{$smarty.request.page|escape}">
   <input type="hidden" name="action" value="{$smarty.request.action|escape}">
@@ -71,7 +71,7 @@
     </header>
     <div class="module_content">
       <p style="padding-left:30px; padding-redight:30px; font-size:10px;">
-        Please note: a {$GLOBAL.config.txfee} {$GLOBAL.config.currency} transaction will apply when processing "On-Demand" manual payments
+        Please note: a {if $GLOBAL.config.txfee > 0.00001}{$GLOBAL.config.txfee}{else}{$GLOBAL.config.txfee|number_format:"8"}{/if} {$GLOBAL.config.currency} transaction will apply when processing "On-Demand" manual payments
       </p>
       <fieldset>
         <label>Account Balance</label>
@@ -127,6 +127,29 @@
     <footer>
       <div class="submit_link">
         <input type="submit" value="Change Password" class="alt_btn">
+      </div>
+    </footer>
+  </article>
+</form>
+
+
+<form action="{$smarty.server.PHP_SELF}" method="post">
+  <input type="hidden" name="page" value="{$smarty.request.page|escape}">
+  <input type="hidden" name="action" value="{$smarty.request.action|escape}">
+  <input type="hidden" name="do" value="genPin">
+	<article class="module width_half">
+	  <header>
+		  <h3>Reset PIN</h3>
+		</header>
+		<div class="module_content">
+      <fieldset>
+		  <label>Current Password</label>
+		  <input type="password" name="currentPassword" />
+		  </fieldset>
+		</div>
+		<footer>
+      <div class="submit_link">
+        <input type="submit" class="alt_btn" value="Reset PIN">
       </div>
     </footer>
   </article>

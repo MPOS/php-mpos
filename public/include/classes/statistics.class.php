@@ -406,9 +406,9 @@ class Statistics extends Base {
    * Admin panel specific query
    * @return data array User settings and shares
    **/
-  public function getAllUserStats($filter='%') {
+  public function getAllUserStats($filter='%',$limit=1,$start=0) {
     $this->debug->append("STA " . __METHOD__, 4);
-    $stmt = $this->mysqli->prepare("
+    $sql = "
       SELECT
         a.id AS id,
         a.is_admin as is_admin,
@@ -417,18 +417,56 @@ class Statistics extends Base {
         a.username AS username,
         a.donate_percent AS donate_percent,
         a.email AS email
-      FROM " . $this->user->getTableName() . " AS a
-      WHERE
-      	a.username LIKE ?
-      GROUP BY username
-      ORDER BY username");
-    if ($this->checkStmt($stmt) && $stmt->bind_param('s', $filter) && $stmt->execute() && $result = $stmt->get_result()) {
+      FROM " . $this->user->getTableName() . " AS a";
+    if (is_array($filter)) {
+      $aFilter = array();
+      foreach ($filter as $key => $value) {
+        if (isset($value) && $value != "" ) {
+          switch ($key) {
+          case 'account':
+            $aFilter[] = "a.username LIKE ?";
+            $this->addParam('s', $value);
+            break;
+          case 'email':
+              $aFilter[] = "a.email LIKE ?";
+              $this->addParam('s', $value);
+            break;
+          case 'is_admin':
+              $aFilter[] = "a.is_admin = ?";
+              $this->addParam('i', $value);
+            break;
+          case 'is_locked':
+              $aFilter[] = "a.is_locked = ?";
+              $this->addParam('i', $value);
+            break;
+          case 'no_fees':
+              $aFilter[] = "a.no_fees = ?";
+              $this->addParam('i', $value);
+            break;
+          }
+        }
+      }
+    }
+    if (!empty($aFilter)) {
+      $sql .= " WHERE ";
+      $sql .= implode(' AND ', $aFilter);
+    }
+    $sql .= "
+      ORDER BY username
+      LIMIT ?,?";
+    $this->addParam('i', $start);
+    $this->addParam('i', $limit);
+    $stmt = $this->mysqli->prepare($sql);
+    if ($this->checkStmt($stmt) && call_user_func_array( array($stmt, 'bind_param'), $this->getParam()) && $stmt->execute() && $result = $stmt->get_result()) {
       // Add our cached shares to the users
+      $aUsers = array();
       while ($row = $result->fetch_assoc()) {
         $row['shares'] = $this->getUserShares($row['id']);
         $aUsers[] = $row;
       }
-      return $aUsers;
+      if (count($aUsers) > 0) {
+        return $aUsers;
+      }
     }
     return $this->sqlError();
   }

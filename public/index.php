@@ -30,6 +30,9 @@ define("SECURITY", 1);
 // Include our configuration (holding defines for the requires)
 if (!include_once(BASEPATH . 'include/config/global.inc.php')) die('Unable to load site configuration');
 
+// Our default template to load, pages can overwrite this later
+$master_template = 'master.tpl';
+
 // Start a session
 session_set_cookie_params(time()+$config['cookie']['duration'], $config['cookie']['path'], $config['cookie']['domain'], $config['cookie']['secure'], $config['cookie']['httponly']);
 session_start();
@@ -96,7 +99,7 @@ $smarty->assign('DebuggerInfo', $debug->getDebugInfo());
 $smarty->assign('RUNTIME', (microtime(true) - $dStartTime) * 1000);
 
 // Display our page
-if (!@$supress_master) $smarty->display("master.tpl", $smarty_cache_key);
+if (!@$supress_master) $smarty->display($master_template, $smarty_cache_key);
 
 // Unset any temporary values here
 unset($_SESSION['POPUP']);

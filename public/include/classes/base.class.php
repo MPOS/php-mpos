@@ -116,17 +116,36 @@ class Base {
   }
 
   /**
-   * Get an element as an associated array
+   * Fetch all entries as an assoc array from a table
+   * This should, in general, not be used but sometimes it's just easier
+   * @param none
+   * @return array Assoc array of all rows found in table
    **/
-  protected function getAllAssoc($value, $field='id', $type='i') {
+  public function getAllAssoc() {
+    $this->debug->append("STA " . __METHOD__, 4);
+    $stmt = $this->mysqli->prepare("SELECT * FROM $this->table");
+    if ($this->checkStmt($stmt) && $stmt->execute() && $result = $stmt->get_result())
+      return $result->fetch_all(MYSQLI_ASSOC);
+    return $this->sqlError();
+  }
+
+  /**
+   * Get a single row as an assoc array
+   * @param value string Value to search for
+   * @param field string Column to search for
+   * @param type string Type of value
+   * @return array Resulting row
+   **/
+  protected function getSingleAssoc($value, $field='id', $type='i') {
     $this->debug->append("STA " . __METHOD__, 4);
     $stmt = $this->mysqli->prepare("SELECT * FROM $this->table WHERE $field = ? LIMIT 1");
     if ($this->checkStmt($stmt) && $stmt->bind_param($type, $value) && $stmt->execute() && $result = $stmt->get_result())
       return $result->fetch_assoc();
     return false;
   }
+
   /**
-   * Get a single row from the table
+   * Get a single value from a row matching the query specified
    * @param value string Value to search for
    * @param search Return column to search for
    * @param field string Search column

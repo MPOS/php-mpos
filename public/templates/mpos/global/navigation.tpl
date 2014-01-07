@@ -16,6 +16,7 @@
     {if $smarty.session.AUTHENTICATED|default:"0" == 1 && $GLOBAL.userdata.is_admin == 1}
     <h3>Admin Panel</h3>
     <ul class="toggle">
+      <li class="icon-gauge"><a href="{$smarty.server.PHP_SELF}?page=admin&action=dashboard">Dashboard</a></li>
       <li class="icon-bell"><a href="{$smarty.server.PHP_SELF}?page=admin&action=monitoring">Monitoring</a></li>
       <li class="icon-torso"><a href="{$smarty.server.PHP_SELF}?page=admin&action=user">User Info</a></li>
       <li class="icon-money"><a href="{$smarty.server.PHP_SELF}?page=admin&action=wallet">Wallet Info</a></li>
@@ -72,14 +73,21 @@
     <h3>Other</h3>
     <ul class="toggle">
       {if $smarty.session.AUTHENTICATED|default:"0" == 1}
-      {if !$GLOBAL.config.disable_contactform|default:"0" == 1}
+      {if $GLOBAL.config.disable_contactform|default:"0" != 1}
       <li class="icon-mail"><a href="{$smarty.server.PHP_SELF}?page=contactform">Support</a></li>
+      {else}
+      <li class="icon-mail"><a href="{$smarty.server.PHP_SELF}?page=support">Support</a></li>
       {/if}
       <li class="icon-off"><a href="{$smarty.server.PHP_SELF}?page=logout">Logout</a></li>
       {else}
       <li class="icon-login"><a href="{$smarty.server.PHP_SELF}?page=login">Login</a></li>
       <li class="icon-pencil"><a href="{$smarty.server.PHP_SELF}?page=register">Sign Up</a></li>
-      <li class="icon-mail"><a href="{$smarty.server.PHP_SELF}?page=support">Support</a></li>
+      {if $GLOBAL.config.disable_contactform_guest|default:"0" == 1 || $GLOBAL.config.disable_contactform|default:"0" == 1}
+        <li class="icon-mail"><a href="{$smarty.server.PHP_SELF}?page=support">Support</a></li>
+      {else}
+        <li class="icon-mail"><a href="{$smarty.server.PHP_SELF}?page=contactform">Support</a></li>
+      {/if}
+      <li class="icon-doc"><a href="{$smarty.server.PHP_SELF}?page=tac">Terms and Conditions</a></li>
       {/if}
     </ul>
     <ul>
