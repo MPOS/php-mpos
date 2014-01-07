@@ -36,6 +36,15 @@ foreach ($aCrons as $strCron) {
 $smarty->assign('CRON_ERROR', $cron_errors);
 $smarty->assign('CRON_DISABLED', $cron_disabled);
 
+// Fetch user information
+$aUserInfo = array(
+  'total' => $user->getCount(),
+  'locked' => $user->getCountFiltered('is_locked', 1),
+  'admins' => $user->getCountFiltered('is_admin', 1),
+  'nofees' => $user->getCountFiltered('no_fees', 1)
+);
+$smarty->assign('USER_INFO', $aUserInfo);
+
 // Wallet status
 $smarty->assign('WALLET_ERROR', $aGetInfo['errors']);
 
