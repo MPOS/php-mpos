@@ -41,12 +41,13 @@ printf($mask, 'Username', 'E-Mail', 'Address', 'Status');
 foreach ($users as $aData) {
   if (empty($aData['coin_address'])) {
     $status = 'UNSET';
-  }
-  $ret = $bitcoin->validateaddress($aData['coin_address']);
-  if ($ret['isvalid']) {
-    $status = 'VALID';
   } else {
-    $status = 'INVALID';
+    $ret = $bitcoin->validateaddress($aData['coin_address']);
+    if ($ret['isvalid']) {
+      $status = 'VALID';
+    } else {
+      $status = 'INVALID';
+    }
   }
   printf($mask, $aData['username'], $aData['email'], $aData['coin_address'], $status);
 }
