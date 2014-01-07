@@ -116,6 +116,32 @@ class Base {
   }
 
   /**
+   * Fetch count of all entries in table
+   * @param none
+   * @param data mixed Count or false
+   **/
+  public function getCount() {
+    $this->debug->append("STA " . __METHOD__, 4);
+    $stmt = $this->mysqli->prepare("SELECT COUNT(id) AS count FROM $this->table");
+    if ($this->checkStmt($stmt) && $stmt->execute() && $result = $stmt->get_result())
+      return $result->fetch_object()->count;
+    return $this->sqlError();
+  }
+
+  /**
+   * Fetch count of all entries in table filtered by a column/value
+   * @param none
+   * @param data mixed Count or false
+   **/
+  public function getCountFiltered($column='id', $value=NULL, $type='i') {
+    $this->debug->append("STA " . __METHOD__, 4);
+    $stmt = $this->mysqli->prepare("SELECT COUNT(id) AS count FROM $this->table WHERE $column = ?");
+    if ($this->checkStmt($stmt) && $stmt->bind_param($type, $value) && $stmt->execute() && $result = $stmt->get_result())
+      return $result->fetch_object()->count;
+    return $this->sqlError();
+  }
+
+  /**
    * Fetch all entries as an assoc array from a table
    * This should, in general, not be used but sometimes it's just easier
    * @param none
