@@ -257,7 +257,7 @@ require_once(INCLUDE_DIR . "/jsonRPCClient.php");
  * @author Mike Gogulski
  * 	http://www.gogulski.com/ http://www.nostate.com/
  */
-class BitcoinClient extends jsonrpc_client {
+class BitcoinClient extends jsonRPCClient {
 
   /**
    * Create a jsonrpc_client object to talk to the bitcoin server and return it,
