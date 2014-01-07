@@ -39,8 +39,10 @@ echo 'Validating all coin addresses. This may take some time.' . PHP_EOL . PHP_E
 
 printf($mask, 'Username', 'E-Mail', 'Address', 'Status');
 foreach ($users as $aData) {
-  if (empty($aData['coin_address'])) {
+  if (empty($aData['coin_address']) && $aData['is_locked'] == 0) {
     $status = 'UNSET';
+  } else if ($aData['is_locked'] == 1) {
+    $status = 'LOCKED';
   } else {
     $ret = $bitcoin->validateaddress($aData['coin_address']);
     if ($ret['isvalid']) {
