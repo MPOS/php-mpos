@@ -61,4 +61,7 @@ require_once(CLASS_DIR . '/api.class.php');
 require_once(INCLUDE_DIR . '/lib/Michelf/Markdown.php');
 require_once(INCLUDE_DIR . '/lib/scrypt.php');
 
+// Include our versions
+require_once(INCLUDE_DIR . '/version.inc.php');
+
 ?>
