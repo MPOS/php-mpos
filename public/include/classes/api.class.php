@@ -63,4 +63,4 @@ $api = new Api();
 $api->setConfig($config);
 $api->setUser($user);
 $api->setSetting($setting);
-$api->setStartTime($dStartTime);
+$api->setStartTime($dStartTime=microtime(true));

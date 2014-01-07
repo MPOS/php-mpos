@@ -13,9 +13,9 @@
     </fieldset>
     <fieldset>
       <label>Password</label>
-      <input type="password" class="text tiny" name="password1" value="" size="15" maxlength="20" required>
+      <input type="password" class="text tiny" name="password1" value="" size="15" maxlength="100" required>
       <label>Repeat Password</label>
-      <input type="password" class="text tiny" name="password2" value="" size="15" maxlength="20" required>
+      <input type="password" class="text tiny" name="password2" value="" size="15" maxlength="100" required>
     </fieldset>
     <fieldset>
       <label>Email</label>
