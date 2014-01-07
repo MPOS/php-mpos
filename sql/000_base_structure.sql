@@ -99,8 +99,6 @@ CREATE TABLE IF NOT EXISTS `notification_settings` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
-INSERT INTO `settings` (`name`, `value`) VALUES ('DB_VERSION', '0.0.1');
-
 CREATE TABLE IF NOT EXISTS `payouts` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `account_id` int(11) NOT NULL,
@@ -129,6 +127,8 @@ CREATE TABLE IF NOT EXISTS `settings` (
   PRIMARY KEY (`name`),
   UNIQUE KEY `setting` (`name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+INSERT INTO `settings` (`name`, `value`) VALUES ('DB_VERSION', '0.0.1');
 
 CREATE TABLE IF NOT EXISTS `shares` (
   `id` bigint(30) NOT NULL AUTO_INCREMENT,
