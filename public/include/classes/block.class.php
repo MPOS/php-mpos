@@ -201,7 +201,7 @@ class Block extends Base {
   /**
    * Set finding worker of a block
    * @param block_id int Block ID
-   * @param worker_id int Worker ID of finder
+   * @param worker string Worker Name of finder
    * @return bool
    **/
   public function setFindingWorker($block_id, $worker=NULL) {
