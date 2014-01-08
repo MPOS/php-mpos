@@ -238,3 +238,9 @@ Small Time Miners are running various stratum only pools for different coins.
 | Pool URL                         | Coin     | Avg. Hashrate | Avg. Active Workers |          Notes            |
 | -------------------------------- | -------- | ------------- | ------------------: | ------------------------- |
 | http://rpc.pooljunkie.nl | RonPaulCoin | 950 Mhs   | 450-500 workers| PROP + VARDIFF + 1% Fee  |
+
+### CRYPTOCOMI pool
+### + memecoin blockchain explorer
+| Pool URL                         | Coin     | Avg. Hashrate | Avg. Active Workers |          Notes            |
+| -------------------------------- | -------- | ------------- | ------------------: | ------------------------- |
+| http://mem.cryptocomi.com | MemeCoin | n/a   | n/a| PROP + VARDIFF + 0% Fee!  |
