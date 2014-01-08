@@ -470,12 +470,12 @@ class Statistics extends Base {
     }
     $sql .= "
       GROUP BY id
-      ORDER BY ? DESC
+      ORDER BY " . $order . " DESC
       LIMIT ?,?";
-    $this->addParam('s', $order);
     $this->addParam('i', $start);
     $this->addParam('i', $limit);
     $stmt = $this->mysqli->prepare($sql);
+    echo $sql;
     if ($this->checkStmt($stmt) && call_user_func_array( array($stmt, 'bind_param'), $this->getParam()) && $stmt->execute() && $result = $stmt->get_result()) {
       // Add our cached shares to the users
       $aUsers = array();
