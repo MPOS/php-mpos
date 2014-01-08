@@ -1,10 +1,11 @@
+
+<form action="{$smarty.server.PHP_SELF}" method="post">
 <article class="module width_half">
   <header><h3>Register new account</h3></header>
   <div class="module_content">
-  <form action="{$smarty.server.PHP_SELF}" method="post">
     <input type="hidden" name="page" value="{$smarty.request.page|escape}">
 {if $smarty.request.token|default:""}
- Â§  <input type="hidden" name="token" value="{$smarty.request.token|escape}" />
+    <input type="hidden" name="token" value="{$smarty.request.token|escape}" />
 {/if}
     <input type="hidden" name="action" value="register">
     <fieldset>
@@ -27,25 +28,17 @@
       <label>PIN</label>
       <input type="password" class="text pin" name="pin" value="" size="4" maxlength="4"><font size="1"> (4 digit number. <b>Remember this pin!</b>)</font>
     </fieldset>
-    <div id="testdiv">
     <fieldset>
       <label>Terms and Conditions</label><a style="width:152px;" onclick="TINY.box.show({literal}{url:'?page=tacpop',height:500}{/literal})"><font size="1">Accept Terms and Conditions</font></a>
       <input type="checkbox" value="1" name="tac" id="tac">
       <label for="tac" style="margin:1px 0px 0px -20px"></label>
     </fieldset>
-    </div>
-     <center>{nocache}{$RECAPTCHA|default:""}{/nocache}</center>
-    <footer>
-      <div class="submit_link">
-        <input type="submit" value="Register" class="alt_btn">
-      </div>
-    </footer>
-  </form>
+    <center>{nocache}{$RECAPTCHA|default:""}{/nocache}</center>
   </div>
+  <footer>
+    <div class="submit_link">
+      <input type="submit" value="Register" class="alt_btn">
+    </div>
+  </footer>
 </article>
-<script type="text/javascript">
-{literal}
-function openJS(){alert('loaded')}
-function closeJS(){alert('closed')}
-{/literal}
-</script>
+</form>
