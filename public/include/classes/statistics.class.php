@@ -428,7 +428,7 @@ class Statistics extends Base {
         ), 8), 0) AS unconfirmed
       FROM " . $this->user->getTableName() . " AS a
       JOIN transactions AS t
-      ON a.id = t.account_id
+      ON a.id = t.account_id AND t.archived = 0
       JOIN blocks AS b
       ON b.id = t.block_id";
     $this->addParam('i', $this->config['confirmations']);
