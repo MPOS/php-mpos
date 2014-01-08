@@ -128,6 +128,8 @@ CREATE TABLE IF NOT EXISTS `settings` (
   UNIQUE KEY `setting` (`name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+INSERT INTO `settings` (`name`, `value`) VALUES ('DB_VERSION', '0.0.1');
+
 CREATE TABLE IF NOT EXISTS `shares` (
   `id` bigint(30) NOT NULL AUTO_INCREMENT,
   `rem_host` varchar(255) NOT NULL,
@@ -197,7 +199,8 @@ CREATE TABLE IF NOT EXISTS `token_types` (
 INSERT INTO `token_types` (`id`, `name`, `expiration`) VALUES
 (1, 'password_reset', 3600),
 (2, 'confirm_email', 0),
-(3, 'invitation', 0);
+(3, 'invitation', 0),
+(4, 'account_unlock', 0);
 
 CREATE TABLE IF NOT EXISTS `transactions` (
   `id` int(255) NOT NULL AUTO_INCREMENT,

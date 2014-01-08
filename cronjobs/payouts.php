@@ -68,7 +68,7 @@ if ($setting->getValue('disable_manual_payouts') != 1) {
         try {
           $txid = $bitcoin->sendtoaddress($aData['coin_address'], $dBalance - $config['txfee']);
         } catch (BitcoinClientException $e) {
-          $log->logError('Failed to send requested balance to coin address, please check payout process');
+          $log->logError('Failed to send requested balance to coin address, please check payout process. Does the wallet cover the amount?');
           continue;
         }
 
@@ -132,7 +132,7 @@ if ($setting->getValue('disable_auto_payouts') != 1) {
         try {
           $txid = $bitcoin->sendtoaddress($aUserData['coin_address'], $dBalance - $config['txfee']);
         } catch (BitcoinClientException $e) {
-          $log->logError('Failed to send requested balance to coin address, please check payout process');
+          $log->logError('Failed to send requested balance to coin address, please check payout process. Does the wallet cover the amount?');
           continue;
         }
 

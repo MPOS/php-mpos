@@ -2,6 +2,13 @@
 // Make sure we are called from index.php
 if (!defined('SECURITY')) die('Hacking attempt');
 
+/**
+ * Do not edit this unless you have confirmed that your config has been updated!
+ * This is used in the version check to ensure you run the latest version of the configuration file.
+ * Once you upgraded your config, change the version here too.
+ **/
+$config['version'] = '0.0.1';
+
 // Our include directory for additional features
 define('INCLUDE_DIR', BASEPATH . 'include');
 

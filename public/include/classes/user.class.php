@@ -124,7 +124,7 @@ class User extends Base {
       }
     }
     if ($this->isLocked($this->getUserId($username))) {
-      $this->setErrorMessage("Account is locked. Please contact site support.");
+      $this->setErrorMessage('Account locked.');
       return false;
     }
     if ($this->checkUserPassword($username, $password)) {
@@ -136,8 +136,16 @@ class User extends Base {
     if ($id = $this->getUserId($username)) {
       $this->incUserFailed($id);
       // Check if this account should be locked
-      if (isset($this->config['maxfailed']['login']) && $this->getUserFailed($id) >= $this->config['maxfailed']['login'])
+      if (isset($this->config['maxfailed']['login']) && $this->getUserFailed($id) >= $this->config['maxfailed']['login']) {
         $this->changeLocked($id);
+        if ($token = $this->token->createToken('account_unlock', $id)) {
+          $aData['token'] = $token;
+          $aData['username'] = $username;
+          $aData['email'] = $this->getUserEmail($username);;
+          $aData['subject'] = 'Account auto-locked';
+          $this->mail->sendMail('notifications/locked', $aData);
+        }
+      }
     }
 
     return false;
@@ -162,12 +170,20 @@ class User extends Base {
     // Check if this account should be locked
     if (isset($this->config['maxfailed']['pin']) && $this->getUserPinFailed($userId) >= $this->config['maxfailed']['pin']) {
       $this->changeLocked($userId);
+      if ($token = $this->token->createToken('account_unlock', $userId)) {
+        $username = $this->getUserName($userId);
+        $aData['token'] = $token;
+        $aData['username'] = $username;
+        $aData['email'] = $this->getUserEmail($username);;
+        $aData['subject'] = 'Account auto-locked';
+        $this->mail->sendMail('notifications/locked', $aData);
+      }
       $this->logoutUser();
     }
     return false;
   }
 
-public function generatePin($userID, $current) {
+  public function generatePin($userID, $current) {
     $this->debug->append("STA " . __METHOD__, 4);
     $username = $this->getUserName($userID);
     $email = $this->getUserEmail($username);
