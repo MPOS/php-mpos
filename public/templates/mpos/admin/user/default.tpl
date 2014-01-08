@@ -45,6 +45,10 @@
     </tbody>
   </table>
     <fieldset>
+      <label>Sort order</label>
+      {html_options name="order" options=$SORTING selected=$smarty.request.order|default:""}
+    </fieldset>
+    <fieldset>
       <label>Account</label>
       <input size="20" type="text" name="filter[account]" value="{$smarty.request.filter.account|default:""}" />
     </fieldset>
@@ -115,7 +119,7 @@
 {else}
       <td align="right" colspan="2">{$USERS[user].estimates.hours24|number_format:"8"}</td>
 {/if}
-      <td align="right">{$USERS[user].balance|number_format:"8"}</td>
+      <td align="right">{$USERS[user].confirmed|number_format:"8"}</td>
       <td align="center">
         <input type="hidden" name="admin[{$USERS[user].id}]" value="0"/>
         <input type="checkbox" onclick="storeAdmin({$USERS[user].id})" name="admin[{$USERS[user].id}]" value="1" id="admin[{$USERS[user].id}]" {if $USERS[user].is_admin}checked{/if} />
