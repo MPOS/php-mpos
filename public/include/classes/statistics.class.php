@@ -406,7 +406,7 @@ class Statistics extends Base {
    * Admin panel specific query
    * @return data array User settings and shares
    **/
-  public function getAllUserStats($filter='%',$limit=1,$start=0) {
+  public function getAllUserStats($filter='%', $limit=1, $start=0, $order='username') {
     $this->debug->append("STA " . __METHOD__, 4);
     $sql = "
       SELECT
@@ -416,8 +416,25 @@ class Statistics extends Base {
         a.no_fees as no_fees,
         a.username AS username,
         a.donate_percent AS donate_percent,
-        a.email AS email
-      FROM " . $this->user->getTableName() . " AS a";
+        a.email AS email,
+        IFNULL(ROUND((
+          SUM( IF( ( t.type IN ('Credit','Bonus') AND b.confirmations >= ? ) OR t.type = 'Credit_PPS', t.amount, 0 ) ) -
+          SUM( IF( t.type IN ('Debit_MP', 'Debit_AP'), t.amount, 0 ) ) -
+          SUM( IF( ( t.type IN ('Donation','Fee') AND b.confirmations >= ? ) OR ( t.type IN ('Donation_PPS', 'Fee_PPS', 'TXFee') ), t.amount, 0 ) )
+        ), 8), 0) AS confirmed,
+        IFNULL(ROUND((
+          SUM( IF( t.type IN ('Credit','Bonus') AND b.confirmations < ? AND b.confirmations >= 0, t.amount, 0 ) ) -
+          SUM( IF( t.type IN ('Donation','Fee') AND b.confirmations < ? AND b.confirmations >= 0, t.amount, 0 ) )
+        ), 8), 0) AS unconfirmed
+      FROM " . $this->user->getTableName() . " AS a
+      JOIN transactions AS t
+      ON a.id = t.account_id
+      JOIN blocks AS b
+      ON b.id = t.block_id";
+    $this->addParam('i', $this->config['confirmations']);
+    $this->addParam('i', $this->config['confirmations']);
+    $this->addParam('i', $this->config['confirmations']);
+    $this->addParam('i', $this->config['confirmations']);
     if (is_array($filter)) {
       $aFilter = array();
       foreach ($filter as $key => $value) {
@@ -452,8 +469,9 @@ class Statistics extends Base {
       $sql .= implode(' AND ', $aFilter);
     }
     $sql .= "
-      ORDER BY username
+      ORDER BY ?
       LIMIT ?,?";
+    $this->addParam('s', $order);
     $this->addParam('i', $start);
     $this->addParam('i', $limit);
     $stmt = $this->mysqli->prepare($sql);
@@ -462,6 +480,14 @@ class Statistics extends Base {
       $aUsers = array();
       while ($row = $result->fetch_assoc()) {
         $row['shares'] = $this->getUserShares($row['id']);
+        $row['hashrate'] = $this->getUserHashrate($row['id']);
+        if ($this->config['payout_system'] == 'pps') {
+          $row['sharerate'] = $this->getUserSharerate($row['id']);
+          $row['difficulty'] = $this->getUserShareDifficulty($row['id']);
+          $row['estimates'] = $this->getUserEstimates($row['sharerate'], $row['difficulty'], $row['donate_percent'], $row['no_fees']);
+        } else {
+          $row['estimates'] = $this->getUserEstimates($this->getRoundShares(), $row['shares'], $row['donate_percent'], $row['no_fees']);
+        }
         $aUsers[] = $row;
       }
       if (count($aUsers) > 0) {
@@ -931,6 +957,7 @@ $statistics->setBlock($block);
 $statistics->setMemcache($memcache);
 $statistics->setConfig($config);
 $statistics->setBitcoin($bitcoin);
+$statistics->setTransaction($transaction);
 $statistics->setErrorCodes($aErrorCodes);
 
 ?>
