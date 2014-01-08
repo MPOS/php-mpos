@@ -427,9 +427,9 @@ class Statistics extends Base {
           SUM( IF( t.type IN ('Donation','Fee') AND b.confirmations < ? AND b.confirmations >= 0, t.amount, 0 ) )
         ), 8), 0) AS unconfirmed
       FROM " . $this->user->getTableName() . " AS a
-      JOIN transactions AS t
+      LEFT JOIN transactions AS t
       ON a.id = t.account_id AND t.archived = 0
-      JOIN blocks AS b
+      LEFT JOIN blocks AS b
       ON b.id = t.block_id";
     $this->addParam('i', $this->config['confirmations']);
     $this->addParam('i', $this->config['confirmations']);
@@ -469,7 +469,8 @@ class Statistics extends Base {
       $sql .= implode(' AND ', $aFilter);
     }
     $sql .= "
-      ORDER BY ?
+      GROUP BY id
+      ORDER BY ? DESC
       LIMIT ?,?";
     $this->addParam('s', $order);
     $this->addParam('i', $start);
