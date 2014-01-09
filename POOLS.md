@@ -146,11 +146,12 @@ Small Time Miners are running various stratum only pools for different coins.
 
 | Pool URL | Coin | Avg. Hashrate | Avg. Active Workers | Notes |
 | -------- | ---- | ------------: | ------------------: | ----- |
-| http://asc.coinz.pw | Asiccoin | 150-500Ghs | 5-15 workers | Prop |
+| http://asc.coinz.pw | Asiccoin | 500-1200Ghs | 8-20 workers | Prop |
 | http://ffc.coinz.pw | FireFlyCoin | 5-15Ghs | 2-6 workers | Prop |
 | http://fst.coinz.pw | Fastcoin | 5-15Mhs | 15-30 workers | Prop |
 | http://xjo.coinz.pw | Joulecoin | 10-60Ghs | 2-10 workers | Prop |
 | http://sxc.coinz.pw | Sexcoin | 1-2Mhs | 2-6 workers | Prop |
+| http://tag.coinz.pw | Tagcoin | 1-2Mhs | 1-2 workers | Prop |
 | http://tgc.coinz.pw | Tigercoin | 10-400Ghs | 4-10 workers | Prop |
 | http://uno.coinz.pw | Unobtanium | 10-60Ghs | 2-10 workers | Prop |
 | http://wdc.coinz.pw | Worldcoin | 1-2Mhs | 1-2 workers | Prop |
