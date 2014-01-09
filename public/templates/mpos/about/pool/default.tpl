@@ -22,9 +22,9 @@ Especially the difficulty adjustment would not have been possible (for me) if it
 for the pushpool tenebrix branch allowing a custom target bit and reducing difficulty per share.
 More adjustments in the PHP code were necessary to reflect those changes and, at least
 close enough, properly display hashrates on the pool site. It is running well right now but
-please keen in mind that <b>neither the code nor functionaliy are supported</b>.
+please keep in mind that <b>neither the code nor functionaliy are supported</b>.
 I am not responsible for lost coins due to a pool crash or other malfunctions which
-could be caused by by code or the tools used in this implementation.
+could be caused by code or the tools used in this implementation.
 </p>
 </tbody>
 </table>
