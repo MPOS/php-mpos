@@ -63,7 +63,7 @@
         <td>Shares</td>
         <td>{$BLOCKDETAILS.shares|number_format:"0"|default:"0"}</td>
         <td>Finder</td>
-        <td>{$BLOCKDETAILS.finder|default:"0"}</td>
+        <td>{$BLOCKDETAILS.finder|default:"unknown"}</td>
         <td>Seconds This Round</td>
         <td>{$BLOCKDETAILS.round_time|number_format:"0"|default:"0"}</td>
         <td>Round Variance</td>

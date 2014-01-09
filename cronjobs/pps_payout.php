@@ -80,6 +80,12 @@ if (!empty($aAccountShares)) {
 }
 
 foreach ($aAccountShares as $aData) {
+  // Skip entries that have no account ID, user deleted?
+  if (empty($aData['id'])) {
+    $log->logInfo('User ' . $aData['username'] . ' does not have an associated account, skipping');
+    continue;
+  }
+
   // MPOS uses a base difficulty setting to avoid showing weightened shares
   // Since we need weightened shares here, we go back to the proper value for payouts
   $aData['payout'] = round($aData['valid'] * pow(2, ($config['difficulty'] - 16)) * $pps_value, 8);

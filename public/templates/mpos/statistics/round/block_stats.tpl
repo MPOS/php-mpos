@@ -37,7 +37,7 @@
         <td>Shares</td>
         <td>{$BLOCKDETAILS.shares|number_format:"0"|default:"0"}</td>
         <td>Finder</td>
-        <td>{$BLOCKDETAILS.finder|default:"0"}</td>
+        <td>{$BLOCKDETAILS.finder|default:"unknown"}</td>
       </tr>
     </tbody>
   </table>
