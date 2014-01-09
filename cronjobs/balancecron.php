@@ -46,7 +46,7 @@ if($send > $dThreshold){
                 $bitcoin->query('sendtoaddress',$sendAddress, $send);
         }
         else {
-                $log->logInfo("No wallet address set"\n");
+                $log->logInfo("No wallet address set\n");
         }
 }
 else{
