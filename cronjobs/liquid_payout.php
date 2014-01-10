@@ -7,7 +7,7 @@ chdir(dirname(__FILE__));
 require_once('shared.inc.php');
 
 // Simple configuration check
-if (unset($config['coldwallet'])) {
+if (!is_array($config['coldwallet'])) {
   $log->logFatal('Missing config option: coldwallet');
   $monitoring->endCronjob($cron_name, 'E0075', 1, true);
 }
@@ -66,4 +66,3 @@ if($send > $dThreshold) {
   $log->logDebug('Final sending amount not exceeding threshold: ' . $send);
 }
 ?>
-
