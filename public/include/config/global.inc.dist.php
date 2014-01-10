@@ -7,7 +7,7 @@ if (!defined('SECURITY')) die('Hacking attempt');
  * This is used in the version check to ensure you run the latest version of the configuration file.
  * Once you upgraded your config, change the version here too.
  **/
-$config['version'] = '0.0.1';
+$config['version'] = '0.0.2';
 
 // Our include directory for additional features
 define('INCLUDE_DIR', BASEPATH . 'include');
@@ -75,6 +75,21 @@ $config['wallet']['type'] = 'http';
 $config['wallet']['host'] = 'localhost:19334';
 $config['wallet']['username'] = 'testnet';
 $config['wallet']['password'] = 'testnet';
+
+/**
+ * Added support for payout of liquid assets
+ * 
+ * address: the address of the wallet to the address you'd like to receive the coins in
+ *  * reserve: is the amount you'd like to remain in the wallet. Recommended is at least 1 block value
+ * threshold: is the amount of coins you'd like to send per batch minimum. once exceeded this is sent
+ * to the address  of the cold wallet.
+ * 
+ **/
+
+$config['coldwallet']['address'] = 'RPzoUrjk8eScysjrhrSJY9Bg4AgpwYDLiP';
+$config['coldwallet']['reserve'] = 1.1;
+$config['coldwallet']['threshold'] = 1;
+
 
 /**
  * Lock account after maximum failed logins
