@@ -95,7 +95,6 @@ $config['wallet']['password'] = 'testnet';
  *   reserve    :  50
  *   threshold  :  25
  **/
-
 $config['coldwallet']['address'] = '';
 $config['coldwallet']['reserve'] = 50;
 $config['coldwallet']['threshold'] = 5;
