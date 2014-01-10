@@ -1,7 +1,7 @@
 <?php
 
 define('DB_VERSION', '0.0.1');
-define('CONFIG_VERSION', '0.0.1');
+define('CONFIG_VERSION', '0.0.2');
 define('MPOS_VERSION', '0.0.1');
 
 // Fetch installed database version
