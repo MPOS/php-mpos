@@ -65,7 +65,6 @@
       <thead>
         <tr>
           <th align="center">ID</th>
-          <th>Account</th>
           <th>Date</th>
           <th>TX Type</th>
           <th align="center">Status</th>
@@ -79,7 +78,6 @@
 {section transaction $TRANSACTIONS}
         <tr class="{cycle values="odd,even"}">
           <td align="center">{$TRANSACTIONS[transaction].id}</td>
-          <td>{$TRANSACTIONS[transaction].username}</td>
           <td>{$TRANSACTIONS[transaction].timestamp}</td>
           <td>{$TRANSACTIONS[transaction].type}</td>
           <td align="center">
