@@ -245,3 +245,13 @@ Small Time Miners are running various stratum only pools for different coins.
 | Pool URL                         | Coin     | Avg. Hashrate | Avg. Active Workers |          Notes            |
 | -------------------------------- | -------- | ------------- | ------------------: | ------------------------- |
 | http://mem.cryptocomi.com | MemeCoin | n/a   | n/a| PROP + VARDIFF + 0% Fee!  |
+### HASH-TO-COINS
+###Stratum only pools for different coins.
+
+| Pool URL                     | Coin     | Avg. Hashrate | Avg. Active Workers | Notes |
+| ---------------------------- | -------- | ------------- | ------------------- | ----- |
+| http://anc.hash-to-coins.com | Anoncoin |  var          | var                 | PPLNS VARDIFF |
+| http://cin.hash-to-coins.com | Cinnamoncoin | 10 MHash/s | 10                 | PPLNS VARDIFF |
+| http://doge.hash-to-coins.com | Dogecoin | 100 MHash    | 130                 | PPLNS VARDIFF 0% FEE |
+| http://emd.hash-to-coins.com | Emerald   | var          | var                 | PPLNS VARDIFF |
+| http://glx.hash-to-coins.com | Galaxycoin | var         | var                 | PPLNS VARDIFF |
