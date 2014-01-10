@@ -313,7 +313,7 @@ class BitcoinClient extends jsonRPCClient {
   public function can_connect() {
     try {
       $r = $this->getinfo();
-    } catch (BitcoinClientException $e) {
+    } catch (Exception $e) {
       return $e->getMessage();
     }
     return true;
