@@ -65,4 +65,7 @@ if($send > $dThreshold) {
 } else {
   $log->logDebug('Final sending amount not exceeding threshold: ' . $send);
 }
+
+// Cron cleanup and monitoring
+require_once('cron_end.inc.php');
 ?>
