@@ -4,7 +4,7 @@
     <input type="hidden" name="page" value="login" />
     <input type="hidden" name="to" value="{$smarty.server.PHP_SELF}?page=dashboard" />
     <fieldset2 class="small">
-      <label>Username</label>
+      <label>E-Mail</label>
       <input type="text" name="username" size="22" maxlength="100" required />
       <fieldset2 class="small">
         <label>Password</label>
