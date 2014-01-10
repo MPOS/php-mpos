@@ -31,7 +31,7 @@
 <article class="module width_full">
   <header><h3>{$NEWS[news].header} posted {$NEWS[news].time} by {$NEWS[news].author}</h3>
 {if $NEWS[news].active == 0}<font size="2px"><font color="red"><b>inactive</b></font><br /><br />{/if}</header>
-  <div class="module_content">{$NEWS[news].content}</div>
+  <div class="module_content">{$NEWS[news].content nofilter}</div>
   <footer>
     <div class="submit_link">
       <a href='{$smarty.server.PHP_SELF}?page={$smarty.request.page|escape}&action=news_edit&id={$NEWS[news].id}'><i class="icon-wrench"></i></a>&nbsp;
