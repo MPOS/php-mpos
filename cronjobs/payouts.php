@@ -61,13 +61,13 @@ if ($setting->getValue('disable_manual_payouts') != 1) {
             $log->logError('Failed to verify this users coin address, skipping payout');
             continue;
           }
-        } catch (BitcoinClientException $e) {
+        } catch (Exception $e) {
           $log->logError('Failed to verify this users coin address, skipping payout');
           continue;
         }
         try {
           $txid = $bitcoin->sendtoaddress($aData['coin_address'], $dBalance - $config['txfee']);
-        } catch (BitcoinClientException $e) {
+        } catch (Exception $e) {
           $log->logError('Failed to send requested balance to coin address, please check payout process. Does the wallet cover the amount?');
           continue;
         }
@@ -123,7 +123,7 @@ if ($setting->getValue('disable_auto_payouts') != 1) {
             $log->logError('Failed to verify this users coin address, skipping payout');
             continue;
           }
-        } catch (BitcoinClientException $e) {
+        } catch (Exception $e) {
           $log->logError('Failed to verify this users coin address, skipping payout');
           continue;
         }
@@ -131,7 +131,7 @@ if ($setting->getValue('disable_auto_payouts') != 1) {
         // Send balance, fees are reduced later by RPC Server
         try {
           $txid = $bitcoin->sendtoaddress($aUserData['coin_address'], $dBalance - $config['txfee']);
-        } catch (BitcoinClientException $e) {
+        } catch (Exception $e) {
           $log->logError('Failed to send requested balance to coin address, please check payout process. Does the wallet cover the amount?');
           continue;
         }

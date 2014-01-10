@@ -332,7 +332,7 @@ class User extends Base {
             $this->setErrorMessage('Invalid coin address');
             return false;
           }
-        } catch (BitcoinClientException $e) {
+        } catch (Exception $e) {
           $this->setErrorMessage('Unable to verify coin address');
           return false;
         }
