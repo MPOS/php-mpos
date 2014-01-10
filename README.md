@@ -36,6 +36,7 @@ These people have supported this project with a donation:
 * [ZC](https://github.com/zccopwrx)
 * Nutnut
 * Caberhagen (http://litecoin-pool.ch)
+* Mining4All (https://www.mining4all.eu/)
 
 Pools running MPOS
 ==================
