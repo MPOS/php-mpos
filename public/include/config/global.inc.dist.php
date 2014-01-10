@@ -77,19 +77,28 @@ $config['wallet']['username'] = 'testnet';
 $config['wallet']['password'] = 'testnet';
 
 /**
- * Added support for payout of liquid assets
- * 
- * address: the address of the wallet to the address you'd like to receive the coins in
- *  * reserve: is the amount you'd like to remain in the wallet. Recommended is at least 1 block value
- * threshold: is the amount of coins you'd like to send per batch minimum. once exceeded this is sent
- * to the address  of the cold wallet.
- * 
+ * Payout of liquid assets
+ *
+ * Explanation:
+ *   Running pools, especially those with active fees, will build up a good
+ *   amount of liquid assets that can be used by pool operators. If you wish
+ *   to automaitcally send your assets to a offline wallet, set your account
+ *   address, reserves and thresholds here.
+ *
+ * Options:
+ *   address    :  The address of the wallet to the address you'd like to receive the coins in
+ *   reserve    :  The amount you'd like to remain in the wallet. Recommended is at least 1 block value
+ *   threshold  :  The amount of coins you'd like to send per batch minimum. Once exceeded, this is sent
+ *                 to the offline wallet address specified.
+ * Default:
+ *   addresss   :  empty
+ *   reserve    :  50
+ *   threshold  :  25
  **/
 
 $config['coldwallet']['address'] = '';
-$config['coldwallet']['reserve'] = 1.1;
-$config['coldwallet']['threshold'] = 1;
-
+$config['coldwallet']['reserve'] = 50;
+$config['coldwallet']['threshold'] = 5;
 
 /**
  * Lock account after maximum failed logins
