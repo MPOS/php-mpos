@@ -5,7 +5,7 @@
     <header><h3>Login with existing account</h3></header>
     <div class="module_content">
         <fieldset>
-          <label>Username or E-Mail</label>
+          <label>E-Mail</label>
           <input type="text" name="username" size="22" maxlength="100" value="{$smarty.request.username|default:""|escape}" placeholder="Your username or email" required />
         </fieldset>
         <fieldset>
