@@ -116,7 +116,11 @@ class User extends Base {
       $this->setErrorMessage("Invalid username or password.");
       return false;
     }
-    if (filter_var($username, FILTER_VALIDATE_EMAIL)) {
+    if (!filter_var($username, FILTER_VALIDATE_EMAIL)) {
+      $this->debug->append("Not an e-mail address, rejecting login", 2);
+      $this->setErrorMessage("Please login with your e-mail address");
+      return false;
+    } else {
       $this->debug->append("Username is an e-mail: $username", 2);
       if (!$username = $this->getUserNameByEmail($username)) {
         $this->setErrorMessage("Invalid username or password.");
