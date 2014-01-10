@@ -1,3 +1,8 @@
+<script src="{$PATH}/js/cleditor/jquery.cleditor.min.js"></script>
+<link rel="stylesheet" href="{$PATH}/js/cleditor/jquery.cleditor.css">
+<script type="text/javascript">
+  $(document).ready(function () { $(".cleditor").cleditor(); });
+</script>
 <article class="module width_full">
   <header><h3>Edit news entry #{$NEWS.id}</h3></header>
 <form method="POST" action="{$smarty.server.PHP_SELF}">
@@ -20,7 +25,7 @@
     </tr>
     <tr>
       <th>Content</th>
-      <td><textarea name="content" rows="15" cols="150" type="text" required>{nocache}{$NEWS.content}{/nocache}</textarea></td>
+      <td><textarea class="cleditor" name="content" rows="15" cols="150" type="text" required>{nocache}{$NEWS.content}{/nocache}</textarea></td>
     </tr>
   </table>
    <footer>
