@@ -31,7 +31,7 @@
   <!--[if IE]><script type="text/javascript" src="{$PATH}/js/excanvas.js"></script><![endif]-->
 
     {if $GLOBAL.statistics.analytics.enabled}
-      {$GLOBAL.statistics.analytics.code|escape:false}
+      {$GLOBAL.statistics.analytics.code nofilter}
     {/if}
 
 </head>
