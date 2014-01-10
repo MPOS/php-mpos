@@ -12,7 +12,7 @@
     <tbody>
       <tr>
     {foreach $SUMMARY as $type=>$total}
-        <td class="right">{$total}</td>
+        <td class="right">{$total|number_format:"8"}</td>
     {/foreach}
       </tr>
     </tbody>

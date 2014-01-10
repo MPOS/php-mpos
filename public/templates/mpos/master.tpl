@@ -27,6 +27,7 @@
   <script type="text/javascript" src="{$PATH}/js/justgage.1.0.1.min.js"></script>
 	<script type="text/javascript" src="{$PATH}/js/custom.js"></script>
 	<script type="text/javascript" src="{$PATH}/js/tinybox.js"></script>
+	<script type="text/javascript" src="{$PATH}/../global/js/number_format.js"></script>
   <!--[if IE]><script type="text/javascript" src="{$PATH}/js/excanvas.js"></script><![endif]-->
 
     {if $GLOBAL.statistics.analytics.enabled}

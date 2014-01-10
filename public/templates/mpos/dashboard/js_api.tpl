@@ -124,8 +124,8 @@ $(document).ready(function(){
   // Refresh balance information
   function refreshBalanceData(data) {
     balance = data.getuserbalance.data
-    $('#b-confirmed').html(balance.confirmed);
-    $('#b-unconfirmed').html(balance.unconfirmed);
+    $('#b-confirmed').html(number_format(balance.confirmed, 6));
+    $('#b-unconfirmed').html(number_format(balance.unconfirmed, 6));
   }
 
   // Refresh other static numbers on the template
@@ -134,28 +134,28 @@ $(document).ready(function(){
     $('#b-dworkers').html(data.getdashboarddata.data.pool.workers);
     $('#b-hashrate').html((parseFloat(data.getdashboarddata.data.personal.hashrate).toFixed(2)));
     $('#b-sharerate').html((parseFloat(data.getdashboarddata.data.personal.sharerate).toFixed(2)));
-    $('#b-yvalid').html(data.getdashboarddata.data.personal.shares.valid);
-    $('#b-yivalid').html(data.getdashboarddata.data.personal.shares.invalid + " (" + data.getdashboarddata.data.personal.shares.invalid_percent + "%)" );
-    $('#b-pvalid').html(data.getdashboarddata.data.pool.shares.valid);
-    $('#b-pivalid').html(data.getdashboarddata.data.pool.shares.invalid + " (" + data.getdashboarddata.data.pool.shares.invalid_percent + "%)" );
-    $('#b-diff').html(data.getdashboarddata.data.network.difficulty);
-    $('#b-nextdiff').html(data.getdashboarddata.data.network.nextdifficulty + " (Change in " + data.getdashboarddata.data.network.blocksuntildiffchange + " Blocks)");
+    $('#b-yvalid').html(number_format(data.getdashboarddata.data.personal.shares.valid));
+    $('#b-yivalid').html(number_format(data.getdashboarddata.data.personal.shares.invalid) + " (" + data.getdashboarddata.data.personal.shares.invalid_percent + "%)" );
+    $('#b-pvalid').html(number_format(data.getdashboarddata.data.pool.shares.valid));
+    $('#b-pivalid').html(number_format(data.getdashboarddata.data.pool.shares.invalid) + " (" + data.getdashboarddata.data.pool.shares.invalid_percent + "%)" );
+    $('#b-diff').html(number_format(data.getdashboarddata.data.network.difficulty, 8));
+    $('#b-nextdiff').html(number_format(data.getdashboarddata.data.network.nextdifficulty, 8) + " (Change in " + data.getdashboarddata.data.network.blocksuntildiffchange + " Blocks)");
     $('#b-esttimeperblock').html(data.getdashboarddata.data.network.esttimeperblock + " seconds"); // <- this needs some nicer format
     $('#b-nblock').html(data.getdashboarddata.data.network.block);
-    $('#b-target').html(data.getdashboarddata.data.pool.shares.estimated + " (done: " + data.getdashboarddata.data.pool.shares.progress + "%)" );
+    $('#b-target').html(number_format(data.getdashboarddata.data.pool.shares.estimated) + " (done: " + data.getdashboarddata.data.pool.shares.progress + "%)" );
     {/literal}{if $GLOBAL.config.payout_system != 'pps'}{literal }
-    $('#b-payout').html((parseFloat(data.getdashboarddata.data.personal.estimates.payout).toFixed(8)));
-    $('#b-block').html((parseFloat(data.getdashboarddata.data.personal.estimates.block).toFixed(8)));
-    $('#b-fee').html((parseFloat(data.getdashboarddata.data.personal.estimates.fee).toFixed(8)));
-    $('#b-donation').html((parseFloat(data.getdashboarddata.data.personal.estimates.donation).toFixed(8)));
+    $('#b-payout').html(number_format(data.getdashboarddata.data.personal.estimates.payout, 8));
+    $('#b-block').html(number_format(data.getdashboarddata.data.personal.estimates.block, 8));
+    $('#b-fee').html(number_format(data.getdashboarddata.data.personal.estimates.fee,8 ));
+    $('#b-donation').html(number_format(data.getdashboarddata.data.personal.estimates.donation, 8));
 {/literal}{else}{literal}
-    $('#b-ppsunpaid').html((parseFloat(data.getdashboarddata.data.personal.shares.unpaid).toFixed(0)));
-    $('#b-ppsdiff').html((parseFloat(data.getdashboarddata.data.personal.sharedifficulty).toFixed(2)));
-    $('#b-est1').html((parseFloat(data.getdashboarddata.data.personal.estimates.hours1).toFixed(8)));
-    $('#b-est24hours').html((parseFloat(data.getdashboarddata.data.personal.estimates.hours24).toFixed(8)));
-    $('#b-est7days').html((parseFloat(data.getdashboarddata.data.personal.estimates.days7).toFixed(8)));
-    $('#b-est14days').html((parseFloat(data.getdashboarddata.data.personal.estimates.days14).toFixed(8)));
-    $('#b-est30days').html((parseFloat(data.getdashboarddata.data.personal.estimates.days30).toFixed(8)));
+    $('#b-ppsunpaid').html(number_format(data.getdashboarddata.data.personal.shares.unpaid));
+    $('#b-ppsdiff').html(number_format(data.getdashboarddata.data.personal.sharedifficulty, 2));
+    $('#b-est1').html(number_format(data.getdashboarddata.data.personal.estimates.hours1, 8));
+    $('#b-est24hours').html(number_format(data.getdashboarddata.data.personal.estimates.hours24, 8));
+    $('#b-est7days').html(number_format(data.getdashboarddata.data.personal.estimates.days7, 8));
+    $('#b-est14days').html(number_format(data.getdashboarddata.data.personal.estimates.days14, 8));
+    $('#b-est30days').html(number_format(data.getdashboarddata.data.personal.estimates.days30, 8));
 {/literal}{/if}{literal}
 {/literal}{if $GLOBAL.config.payout_system == 'pplns'}{literal}
     $('#b-pplns').html({/literal}{$GLOBAL.pplns.target}{literal});
