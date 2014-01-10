@@ -19,6 +19,7 @@ at the bottom of the page. For those of you finding my project and are willing t
 with some hard earned coins feel free to donate:
 
 * LTC address: `Lge95QR2frp9y1wJufjUPCycVsg5gLJPW8`
+* BTC address: `1HuYK6WPU8o3yWCrAaADDZPRpL5QiXitfv`
 
 Website Footer
 ==============
