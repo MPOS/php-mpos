@@ -7,7 +7,7 @@ chdir(dirname(__FILE__));
 require_once('shared.inc.php');
 
 // Simple configuration check
-if (empty($config['coldwallet'])) {
+if (unset($config['coldwallet'])) {
   $log->logFatal('Missing config option: coldwallet');
   $monitoring->endCronjob($cron_name, 'E0075', 1, true);
 }
