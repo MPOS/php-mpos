@@ -55,7 +55,7 @@ if($send > $dThreshold) {
   if (!empty($sendAddress)) {
     try {
       $bitcoin->sendtoaddress($sendAddress, $send);
-    } catch (BitcoinClientException $e) {
+    } catch (Exception $e) {
       $log->logError('Failed to send coins to address, skipping liquid assets payout');
     }
     $log->logInfo('Sent out ' . $send . ' liquid assets');
