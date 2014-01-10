@@ -13,6 +13,8 @@ if (!$user->isAuthenticated() || !$user->isAdmin($_SESSION['USERDATA']['id'])) {
 $iLimit = 30;
 $smarty->assign('LIMIT', $iLimit);
 empty($_REQUEST['start']) ? $start = 0 : $start = $_REQUEST['start'];
+empty($_REQUEST['order']) ? $order = 'username' : $order = $_REQUEST['order'];
+$smarty->assign('SORTING', array('username' => 'Username', 'confirmed' => 'Balance'));
 $smarty->assign('ADMIN', array('' => '', '0' => 'No', '1' => 'Yes'));
 $smarty->assign('LOCKED', array('' => '', '0' => 'No', '1' => 'Yes'));
 $smarty->assign('NOFEE', array('' => '', '0' => 'No', '1' => 'Yes'));
@@ -40,9 +42,6 @@ case 'admin':
 
 // Gernerate the GET URL for filters
 if (isset($_REQUEST['filter'])) {
-  // Fetch round shares for estimates
-  $aRoundShares = $statistics->getRoundShares();
-
   // Create filter URL for pagination arrows
   $strFilters = '';
   foreach (@$_REQUEST['filter'] as $filter => $value) {
@@ -52,23 +51,7 @@ if (isset($_REQUEST['filter'])) {
   $smarty->assign('FILTERS', $strFilters);
 
   // Fetch requested users
-  if ($aUsers = $statistics->getAllUserStats($_REQUEST['filter'], $iLimit, $start)) {
-    // Add additional stats to each user
-    foreach ($aUsers as $iKey => $aUser) {
-      $aBalance = $transaction->getBalance($aUser['id']);
-      $aUser['balance'] = $aBalance['confirmed'];
-      $aUser['hashrate'] = $statistics->getUserHashrate($aUser['id']);
-
-      if ($config['payout_system'] == 'pps') {
-        $aUser['sharerate'] = $statistics->getUserSharerate($aUser['id']);
-        $aUser['difficulty'] = $statistics->getUserShareDifficulty($aUser['id']);
-        $aUser['estimates'] = $statistics->getUserEstimates($aUser['sharerate'], $aUser['difficulty'], $user->getUserDonatePercent($aUser['id']), $user->getUserNoFee($aUser['id']), $statistics->getPPSValue());
-      } else {
-        $aUser['estimates'] = $statistics->getUserEstimates($aRoundShares, $aUser['shares'], $aUser['donate_percent'], $aUser['no_fees']);
-      }
-      $aUsers[$iKey] = $aUser;
-    }
-
+  if ($aUsers = $statistics->getAllUserStats($_REQUEST['filter'], $iLimit, $start, $order)) {
     // Assign our variables
     $smarty->assign("USERS", $aUsers);
   } else {

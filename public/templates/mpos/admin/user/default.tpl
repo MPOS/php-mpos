@@ -34,16 +34,20 @@
       <tr>
         <td align="left">
 {if $smarty.request.start|default:"0" > 0}
-          <a href="{$smarty.server.PHP_SELF}?page={$smarty.request.page|escape}&action={$smarty.request.action|escape}&start={$smarty.request.start|escape|default:"0" - $LIMIT}{if $FILTERS|default:""}{$FILTERS}{/if}"><i class="icon-left-open"></i></a>
+          <a href="{$smarty.server.PHP_SELF}?page={$smarty.request.page|escape}&action={$smarty.request.action|escape}&start={$smarty.request.start|escape|default:"0" - $LIMIT}&order={$smarty.request.order|escape|default:"username"}{if $FILTERS|default:""}{$FILTERS}{/if}"><i class="icon-left-open"></i></a>
 {else}
           <i class="icon-left-open"></i>
 {/if}
         </td>
         <td align="right">
-          <a href="{$smarty.server.PHP_SELF}?page={$smarty.request.page|escape}&action={$smarty.request.action|escape}&start={$smarty.request.start|escape|default:"0" + $LIMIT}{if $FILTERS|default:""}{$FILTERS}{/if}"><i class="icon-right-open"></i></a>
+          <a href="{$smarty.server.PHP_SELF}?page={$smarty.request.page|escape}&action={$smarty.request.action|escape}&start={$smarty.request.start|escape|default:"0" + $LIMIT}&order={$smarty.request.order|escape|default:"username"}{if $FILTERS|default:""}{$FILTERS}{/if}"><i class="icon-right-open"></i></a>
         </td>
     </tbody>
   </table>
+    <fieldset>
+      <label>Sort order</label>
+      {html_options name="order" options=$SORTING selected=$smarty.request.order|default:""}
+    </fieldset>
     <fieldset>
       <label>Account</label>
       <input size="20" type="text" name="filter[account]" value="{$smarty.request.filter.account|default:""}" />
@@ -115,7 +119,7 @@
 {else}
       <td align="right" colspan="2">{$USERS[user].estimates.hours24|number_format:"8"}</td>
 {/if}
-      <td align="right">{$USERS[user].balance|number_format:"8"}</td>
+      <td align="right">{$USERS[user].confirmed|number_format:"8"}</td>
       <td align="center">
         <input type="hidden" name="admin[{$USERS[user].id}]" value="0"/>
         <input type="checkbox" onclick="storeAdmin({$USERS[user].id})" name="admin[{$USERS[user].id}]" value="1" id="admin[{$USERS[user].id}]" {if $USERS[user].is_admin}checked{/if} />
