@@ -430,7 +430,8 @@ class Statistics extends Base {
       LEFT JOIN transactions AS t
       ON a.id = t.account_id AND t.archived = 0
       LEFT JOIN blocks AS b
-      ON b.id = t.block_id";
+      ON b.id = t.block_id
+      WHERE t.archived = 0";
     $this->addParam('i', $this->config['confirmations']);
     $this->addParam('i', $this->config['confirmations']);
     $this->addParam('i', $this->config['confirmations']);
@@ -465,7 +466,6 @@ class Statistics extends Base {
       }
     }
     if (!empty($aFilter)) {
-      $sql .= " WHERE ";
       $sql .= implode(' AND ', $aFilter);
     }
     $sql .= "
