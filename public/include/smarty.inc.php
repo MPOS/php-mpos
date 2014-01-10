@@ -170,6 +170,7 @@ if ($config['smarty']['cache']) {
   $smarty->setCaching(Smarty::CACHING_LIFETIME_SAVED);
   $smarty->cache_lifetime = $config['smarty']['cache_lifetime'];
   $smarty->cache_dir = BASEPATH . "templates/cache/" . THEME;
+  $smarty->escape_html = true;
   $smarty->use_sub_dirs = true;
 }
 ?>
