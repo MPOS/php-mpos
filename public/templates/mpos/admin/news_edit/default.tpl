@@ -25,7 +25,7 @@
     </tr>
     <tr>
       <th>Content</th>
-      <td><textarea class="cleditor" name="content" rows="15" cols="150" type="text" required>{nocache}{$NEWS.content}{/nocache}</textarea></td>
+      <td><textarea class="cleditor" name="content" rows="15" cols="150" type="text" required>{nocache}{$NEWS.content nofilter}{/nocache}</textarea></td>
     </tr>
   </table>
    <footer>
