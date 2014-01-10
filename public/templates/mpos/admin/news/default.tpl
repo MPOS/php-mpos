@@ -1,3 +1,8 @@
+<script src="{$PATH}/js/cleditor/jquery.cleditor.min.js"></script>
+<link rel="stylesheet" href="{$PATH}/js/cleditor/jquery.cleditor.css">
+<script type="text/javascript">
+  $(document).ready(function () { $(".cleditor").cleditor(); });
+</script>
 <article class="module width_full">
   <header><h3>News Posts</h3></header>
   <ul><li>News posts support the Markdown syntax</li></ul>
@@ -10,10 +15,8 @@
         <label>Header</label>
         <input size="30" type="text" name="data[header]" required />
       </fieldset>
-      <fieldset>
-        <label>Content</label>
-        <textarea name="data[content]" rows="5" required></textarea>
-      </fieldset>
+      <label>Content</label>
+      <textarea class="cleditor" name="data[content]" rows="5" required></textarea>
     </div>
     <footer>
       <div class="submit_link">
