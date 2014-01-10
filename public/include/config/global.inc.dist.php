@@ -82,7 +82,7 @@ $config['wallet']['password'] = 'testnet';
  * Explanation:
  *   Running pools, especially those with active fees, will build up a good
  *   amount of liquid assets that can be used by pool operators. If you wish
- *   to automaitcally send your assets to a offline wallet, set your account
+ *   to automatically send your assets to a offline wallet, set your account
  *   address, reserves and thresholds here.
  *
  * Options:
@@ -225,7 +225,7 @@ $config['coindiffchangetarget'] = 2016;
  * Default transaction fee to apply to user transactions
  *
  * Explanation
- *   The coin daemon applies transcation fees to young coins.
+ *   The coin daemon applies transaction fees to young coins.
  *   Since we are unable to find out what the exact fee was we set
  *   a default value here which is applied to both manual and auto payouts.
  *   If this is not set, no fee is applied in the transactions history but
@@ -242,7 +242,7 @@ $config['block_bonus'] = 0;
 
 
 /**
- * Payout sytem in use
+ * Payout system in use
  *
  * This will modify some templates and activate the
  * appropriate crons. Only ONE payout system at a time
@@ -270,7 +270,7 @@ $config['payout_system'] = 'prop';
  *   continues to delete shares until all shares have been purged.
  *
  *   You can adjust some purging settings here in order to improve your overall
- *   site performance during round ends. Keep in mind that drecreasing shares/time
+ *   site performance during round ends. Keep in mind that decreasing shares/time
  *   will make the cron run longer but at least keeps your site active. Vice versa
  *   higher numbers allow for a faster deletion but might affect the live site.
  *
@@ -476,7 +476,7 @@ $config['memcache']['splay'] = 15;
 
 
 /**
- * Cookie configiration
+ * Cookie configuration
  *
  * You can configure the cookie behaviour to secure your cookies more than the PHP defaults
  *
@@ -503,7 +503,7 @@ $config['memcache']['splay'] = 15;
  *
  * secure:
  *   marks the cookie as accessible only through the HTTPS protocol. If you have a SSL
- *   certificate installed on your domain name then this will stop a user accidently
+ *   certificate installed on your domain name then this will stop a user accidentally
  *   accessing the site over a HTTP connection, without SSL, exposing their session cookie.
  *
  * Default:
@@ -533,7 +533,7 @@ $config['cookie']['secure'] = false;
  *   You can test this out and enable (1) this setting but it's not guaranteed to
  *   work with MPOS.
  *
- *   Ensure that the folder `templates/cache` is writable by the webserver!
+ *   Ensure that the folder `templates/cache` is writeable by the web server!
  *
  *   cache           =  Enable/Disable the cache
  *   cache_lifetime  =  Time to keep files in seconds before updating them
@@ -556,7 +556,7 @@ $config['smarty']['cache_lifetime'] = 30;
  * System load setting
  *
  * This will disable loading of some API calls in case the system
- * loads exceeds the defined max setting. Useful to temporaily suspend
+ * loads exceeds the defined max setting. Useful to temporarily suspend
  * live statistics on a server that is too busy to deal with requests.
  *
  * Options
