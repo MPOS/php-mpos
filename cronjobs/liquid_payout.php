@@ -56,7 +56,8 @@ if($send > $dThreshold) {
     try {
       $bitcoin->sendtoaddress($sendAddress, $send);
     } catch (Exception $e) {
-      $log->logError('Failed to send coins to address, skipping liquid assets payout');
+      $log->logFatal('Failed to send coins to address, skipping liquid assets payout:' . $e->getMessage());
+      $monitoring->endCronjob($cron_name, 'E0077', 1, true);
     }
     $log->logInfo('Sent out ' . $send . ' liquid assets');
   } else {

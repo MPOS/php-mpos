@@ -74,4 +74,5 @@ $aErrorCodes['E0073'] = 'Worker name is too long; try entering a shorter name';
 $aErrorCodes['E0074'] = 'Failed deleting expired tokens';
 $aErrorCodes['E0075'] = 'Upgrade required';
 $aErrorCodes['E0076'] = 'No coins in wallet available';
+$aErrorCodes['E0077'] = 'RPC method or connection failed';
 ?>
