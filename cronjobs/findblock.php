@@ -32,7 +32,7 @@ if (!$strLastBlockHash) $strLastBlockHash = '';
 
 // Fetch all transactions since our last block
 if ( $bitcoin->can_connect() === true ){
-  $aTransactions = $bitcoin->query('listsinceblock', $strLastBlockHash);
+  $aTransactions = $bitcoin->listsinceblock($strLastBlockHash);
 } else {
   $log->logFatal('Unable to connect to RPC server backend');
   $monitoring->endCronjob($cron_name, 'E0006', 1, true);
@@ -48,7 +48,7 @@ if (empty($aTransactions['transactions'])) {
   // Let us add those blocks as unaccounted
   foreach ($aTransactions['transactions'] as $iIndex => $aData) {
     if ( $aData['category'] == 'generate' || $aData['category'] == 'immature' ) {
-      $aBlockRPCInfo = $bitcoin->query('getblock', $aData['blockhash']);
+      $aBlockRPCInfo = $bitcoin->getblock($aData['blockhash']);
       $config['reward_type'] == 'block' ? $aData['amount'] = $aData['amount'] : $aData['amount'] = $config['reward'];
       $aData['height'] = $aBlockRPCInfo['height'];
       $aData['difficulty'] = $aBlockRPCInfo['difficulty'];
@@ -82,7 +82,7 @@ if (empty($aAllBlocks)) {
       if ( !$iPreviousShareId = $block->getLastShareId())
         $iPreviousShareId = 0;
       // Fetch this blocks upstream ID
-      $aBlockRPCInfo = $bitcoin->query('getblock', $aBlock['blockhash']);
+      $aBlockRPCInfo = $bitcoin->getblock($aBlock['blockhash']);
       if ($share->findUpstreamShare($aBlockRPCInfo, $iPreviousShareId)) {
         $iCurrentUpstreamId = $share->getUpstreamShareId();
         // Rarely happens, but did happen once to me
