@@ -21,7 +21,7 @@ if ($setting->getValue('disable_invitations') && $setting->getValue('lock_regist
   // Check if recaptcha is enabled, process form data if valid
   if($setting->getValue('recaptcha_enabled') && isset($_POST["recaptcha_response_field"]) && $_POST["recaptcha_response_field"]!=''){
     if ($rsp->is_valid) {
-      $smarty->assign("RECAPTCHA", recaptcha_get_html($setting->getValue('recaptcha_public_key')));
+      $smarty->assign("RECAPTCHA", recaptcha_get_html($setting->getValue('recaptcha_public_key'), null, true));
       isset($_POST['token']) ? $token = $_POST['token'] : $token = '';
       if ($user->register(@$_POST['username'], @$_POST['password1'], @$_POST['password2'], @$_POST['pin'], @$_POST['email1'], @$_POST['email2'], @$_POST['tac'], $token)) {
         ! $setting->getValue('accounts_confirm_email_disabled') ? $_SESSION['POPUP'][] = array('CONTENT' => 'Please check your mailbox to activate this account') : $_SESSION['POPUP'][] = array('CONTENT' => 'Account created, please login');
@@ -29,12 +29,12 @@ if ($setting->getValue('disable_invitations') && $setting->getValue('lock_regist
         $_SESSION['POPUP'][] = array('CONTENT' => 'Unable to create account: ' . $user->getError(), 'TYPE' => 'errormsg');
       }
     } else {
-      $smarty->assign("RECAPTCHA", recaptcha_get_html($setting->getValue('recaptcha_public_key'), $rsp->error));
+      $smarty->assign("RECAPTCHA", recaptcha_get_html($setting->getValue('recaptcha_public_key'), $rsp->error, true));
       $_SESSION['POPUP'][] = array('CONTENT' => 'Invalid Captcha, please try again. (' . $rsp->error . ')', 'TYPE' => 'errormsg');
     }
     // Empty captcha
   } else if ($setting->getValue('recaptcha_enabled')) {
-    $smarty->assign("RECAPTCHA", recaptcha_get_html($setting->getValue('recaptcha_public_key'), $rsp->error));
+    $smarty->assign("RECAPTCHA", recaptcha_get_html($setting->getValue('recaptcha_public_key'), $rsp->error, true));
     $_SESSION['POPUP'][] = array('CONTENT' => 'Empty Captcha, please try again.', 'TYPE' => 'errormsg');
     // Captcha disabled
   } else {
