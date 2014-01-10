@@ -86,7 +86,7 @@ $config['wallet']['password'] = 'testnet';
  * 
  **/
 
-$config['coldwallet']['address'] = 'RPzoUrjk8eScysjrhrSJY9Bg4AgpwYDLiP';
+$config['coldwallet']['address'] = '';
 $config['coldwallet']['reserve'] = 1.1;
 $config['coldwallet']['threshold'] = 1;
 
