@@ -61,14 +61,9 @@ if ($config['payout_system'] != 'pps') {
   $aEstimates = $statistics->getUserEstimates($dPersonalSharerate, $dPersonalShareDifficulty, $user->getUserDonatePercent($user_id), $user->getUserNoFee($user_id), $statistics->getPPSValue());
 }
 
-$iTotalRoundShares = $aRoundShares['valid'] + $aRoundShares['invalid'];
-if ($iTotalRoundShares > 0) {
-  $dUserInvalidPercent = round($aUserRoundShares['invalid'] / $iTotalRoundShares * 100, 2);
-  $dPoolInvalidPercent = round($aRoundShares['invalid'] / $iTotalRoundShares * 100, 2);
-} else {
-  $dUserInvalidPercent = 0;
-  $dPoolInvalidPercent = 0;
-}
+// Round/user percentages
+$aRoundShares['valid'] + $aRoundShares['invalid'] > 0 ? $dPoolInvalidPercent = round($aRoundShares['invalid'] / ($aRoundShares['valid'] + $aRoundShares['invalid']) * 100, 2) : $dPoolInvalidPercent = 0;
+$aUserRoundShares['valid'] + $aUserRoundShares['valid'] > 0 ? $dUserInvalidPercent = round($aUserRoundShares['invalid'] / ($aUserRoundShares['valid'] + $aUserRoundShares['valid']) * 100, 2) : $dUserInvalidPercent = 0;
 
 // Apply pool modifiers
 $dPersonalHashrateAdjusted = $dPersonalHashrate * $dPersonalHashrateModifier;
@@ -80,12 +75,9 @@ $aPrice = $setting->getValue('price');
 
 // Round progress
 $iEstShares = $statistics->getEstimatedShares($dDifficulty);
-if ($iEstShares > 0 && $aRoundShares['valid'] > 0) {
-  $dEstPercent = round(100 / $iEstShares * $aRoundShares['valid'], 2);
-} else {
-  $dEstPercent = 0;
-}
+$iEstShares > 0 && $aRoundShares['valid'] > 0 ? $dEstPercent = round(100 / $iEstShares * $aRoundShares['valid'], 2) : $dEstPercent = 0;
 
+// Some estimates
 $dExpectedTimePerBlock = $statistics->getNetworkExpectedTimePerBlock();
 $dEstNextDifficulty = $statistics->getExpectedNextDifficulty();
 $iBlocksUntilDiffChange = $statistics->getBlocksUntilDiffChange();

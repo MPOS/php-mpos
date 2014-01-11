@@ -135,12 +135,14 @@ $(document).ready(function(){
     $('#b-hashrate').html((parseFloat(data.getdashboarddata.data.personal.hashrate).toFixed(2)));
     $('#b-sharerate').html((parseFloat(data.getdashboarddata.data.personal.sharerate).toFixed(2)));
     $('#b-yvalid').html(number_format(data.getdashboarddata.data.personal.shares.valid));
-    $('#b-yivalid').html(number_format(data.getdashboarddata.data.personal.shares.invalid) + " (" + data.getdashboarddata.data.personal.shares.invalid_percent + "%)" );
+    $('#b-yivalid').html(number_format(data.getdashboarddata.data.personal.shares.invalid) + " (" + number_format(data.getdashboarddata.data.personal.shares.invalid_percent, 2) + "%)" );
     $('#b-pvalid').html(number_format(data.getdashboarddata.data.pool.shares.valid));
-    $('#b-pivalid').html(number_format(data.getdashboarddata.data.pool.shares.invalid) + " (" + data.getdashboarddata.data.pool.shares.invalid_percent + "%)" );
+    $('#b-pivalid').html(number_format(data.getdashboarddata.data.pool.shares.invalid) + " (" + number_format(data.getdashboarddata.data.pool.shares.invalid_percent, 2) + "%)" );
     $('#b-diff').html(number_format(data.getdashboarddata.data.network.difficulty, 8));
     $('#b-nextdiff').html(number_format(data.getdashboarddata.data.network.nextdifficulty, 8) + " (Change in " + data.getdashboarddata.data.network.blocksuntildiffchange + " Blocks)");
-    $('#b-esttimeperblock').html(data.getdashboarddata.data.network.esttimeperblock + " seconds"); // <- this needs some nicer format
+    var minutes = Math.floor(data.getdashboarddata.data.network.esttimeperblock / 60);
+    var seconds = Math.floor(data.getdashboarddata.data.network.esttimeperblock - minutes * 60);
+    $('#b-esttimeperblock').html(minutes + " minutes " + seconds + " seconds"); // <- this needs some nicer format
     $('#b-nblock').html(data.getdashboarddata.data.network.block);
     $('#b-target').html(number_format(data.getdashboarddata.data.pool.shares.estimated) + " (done: " + data.getdashboarddata.data.pool.shares.progress + "%)" );
     {/literal}{if $GLOBAL.config.payout_system != 'pps'}{literal }
