@@ -19,7 +19,7 @@ CREATE TABLE IF NOT EXISTS `accounts` (
   `is_locked` tinyint(1) NOT NULL DEFAULT '0',
   `failed_logins` int(5) unsigned DEFAULT '0',
   `failed_pins` int(5) unsigned DEFAULT '0',
-  `sessionTimeoutStamp` int(255) DEFAULT NULL,
+  `last_login` int(10) DEFAULT NULL,
   `pin` varchar(255) NOT NULL COMMENT 'four digit pin to allow account changes',
   `api_key` varchar(255) DEFAULT NULL,
   `token` varchar(65) DEFAULT NULL,
