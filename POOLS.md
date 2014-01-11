@@ -255,3 +255,9 @@ Small Time Miners are running various stratum only pools for different coins.
 | http://doge.hash-to-coins.com | Dogecoin | 100 MHash    | 130                 | PPLNS VARDIFF 0% FEE |
 | http://emd.hash-to-coins.com | Emerald   | var          | var                 | PPLNS VARDIFF |
 | http://glx.hash-to-coins.com | Galaxycoin | var         | var                 | PPLNS VARDIFF |
+
+### Drillbit.me pool
+### Stratum pool in the US
+| Pool URL                     | Coin     | Avg. Hashrate | Avg. Active Workers | Notes |
+| ---------------------------- | -------- | ------------- | ------------------- | ----- |
+| http://ltc.drillbit.me | Litecoin | 80-100 Mhash | ~250 | PROP VARDIFF 0% Fee |
