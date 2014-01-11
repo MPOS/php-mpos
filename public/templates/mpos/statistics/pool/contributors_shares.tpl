@@ -1,4 +1,4 @@
-<article class="module width_half" style="min-height: 350px;">
+<article class="module width_half">
   <header><h3>Contributor Shares</h3></header>
   <table class="tablesorter" cellspacing="0">
     <thead>
