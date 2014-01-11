@@ -41,7 +41,8 @@ class StatsCache {
     if (empty($expiration))
       $expiration = $this->config['memcache']['expiration'] + rand( -$this->config['memcache']['splay'], $this->config['memcache']['splay']);
     $this->debug->append("Storing " . $this->getRound() . '_' . $this->config['memcache']['keyprefix'] . "$key with expiration $expiration", 3);
-    return $this->cache->set($this->getRound() . '_' . $this->config['memcache']['keyprefix'] . $key, $value, $expiration);
+    $compress = is_bool($value) || is_int($value) || is_float($value) ? false : MEMCACHE_COMPRESSED;
+    return $this->cache->set($this->getRound() . '_' . $this->config['memcache']['keyprefix'] . $key, $value, $compress, $expiration);
   }
 
   /**
