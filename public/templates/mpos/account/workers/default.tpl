@@ -1,6 +1,6 @@
 <article class="module width_quarter">
   <header><h3 class="">Add New Worker</h3></header>
-  <form action="{$smarty.server.PHP_SELF}" method="post">
+  <form action="{$smarty.server.SCRIPT_NAME}" method="post">
     <input type="hidden" name="page" value="{$smarty.request.page|escape}">
     <input type="hidden" name="action" value="{$smarty.request.action|escape}">
     <input type="hidden" name="do" value="add">
@@ -25,7 +25,7 @@
 
 <article class="module width_3_quarter">
   <header><h3 class="">Worker Configuration</h3></header>
-  <form action="{$smarty.server.PHP_SELF}" method="post">
+  <form action="{$smarty.server.SCRIPT_NAME}" method="post">
     <input type="hidden" name="page" value="{$smarty.request.page|escape}">
     <input type="hidden" name="action" value="{$smarty.request.action|escape}">
     <input type="hidden" name="do" value="update">
@@ -61,7 +61,7 @@
           {/if}
           <td align="right">{$WORKERS[worker].hashrate|number_format}</td>
           <td align="right">{$WORKERS[worker].difficulty|number_format:"2"}</td>
-          <td align="center" style="padding-right: 25px;"><a href="{$smarty.server.PHP_SELF}?page={$smarty.request.page|escape}&action={$smarty.request.action|escape}&do=delete&id={$WORKERS[worker].id|escape}" class="icn_trash"><i class="icon-trash" /></a></td>
+          <td align="center" style="padding-right: 25px;"><a href="{$smarty.server.SCRIPT_NAME}?page={$smarty.request.page|escape}&action={$smarty.request.action|escape}&do=delete&id={$WORKERS[worker].id|escape}" class="icn_trash"><i class="icon-trash" /></a></td>
         </tr>
           {/section}
         {/nocache}

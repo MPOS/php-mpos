@@ -4,10 +4,10 @@
     <tbody>
       <tr>
         <td align="left">
-          <a href="{$smarty.server.PHP_SELF}?page={$smarty.request.page}&action={$smarty.request.action}&height={$BLOCKDETAILS.height}&prev=1"><i class="icon-left-open"></i></a>
+          <a href="{$smarty.server.SCRIPT_NAME}?page={$smarty.request.page}&action={$smarty.request.action}&height={$BLOCKDETAILS.height}&prev=1"><i class="icon-left-open"></i></a>
         </td>
         <td colspan="7" align="right">
-          <a href="{$smarty.server.PHP_SELF}?page={$smarty.request.page}&action={$smarty.request.action}&height={$BLOCKDETAILS.height}&next=1"><i class="icon-right-open"></i></a>
+          <a href="{$smarty.server.SCRIPT_NAME}?page={$smarty.request.page}&action={$smarty.request.action}&height={$BLOCKDETAILS.height}&next=1"><i class="icon-right-open"></i></a>
         </td>
       </tr>
       <tr class="odd">
@@ -43,7 +43,7 @@
   </table>
   <footer>
     <div class="submit_link">
-      <form action="{$smarty.server.PHP_SELF}" method="POST" id='search'>
+      <form action="{$smarty.server.SCRIPT_NAME}" method="POST" id='search'>
         <input type="hidden" name="page" value="{$smarty.request.page|escape}">
         <input type="hidden" name="action" value="{$smarty.request.action|escape}">
         <input type="text" class="pin" name="search" value="{$smarty.request.height|default:"%"|escape}">

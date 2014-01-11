@@ -3,8 +3,8 @@
   <div class="module_content">
     <li>1. <strong>Create account.</strong>
       <ul>
-        <li>Register <a href="{$smarty.server.PHP_SELF}?page=register">here</a>, or login if you already have account</li>
-        <li>Create a <a href="{$smarty.server.PHP_SELF}?page=account&action=workers">worker</a> that will be used by the miner to login</li>
+        <li>Register <a href="{$smarty.server.SCRIPT_NAME}?page=register">here</a>, or login if you already have account</li>
+        <li>Create a <a href="{$smarty.server.SCRIPT_NAME}?page=account&action=workers">worker</a> that will be used by the miner to login</li>
       </ul>
     </li>
     <li>2. <strong>Download a miner.</strong>
@@ -26,7 +26,7 @@
       </table>
       <p>If you use a command-line miner, type:</p>
       <pre>./cgminer {if $GLOBAL.config.algorithm == 'scrypt'}--scrypt {/if} -o stratum+tcp://{$SITESTRATUMURL|default:$smarty.server.SERVER_NAME}:{$SITESTRATUMPORT|default:"3333"} -u <em>Weblogin</em>.<em>Worker</em> -p <em>Worker password</em></pre>
-      <p>If you want, you can create additional workers with usernames and passwords of your choice <a href="{$smarty.server.PHP_SELF}?page=account&action=workers">Here</a></p>
+      <p>If you want, you can create additional workers with usernames and passwords of your choice <a href="{$smarty.server.SCRIPT_NAME}?page=account&action=workers">Here</a></p>
     </li>
     <li>4. <strong>Create a {$SITECOINNAME|default:"Litecoin"} address to recieve payments.</strong>
       <ul>

@@ -1,5 +1,5 @@
 
-<form action="{$smarty.server.PHP_SELF}" method="post">
+<form action="{$smarty.server.SCRIPT_NAME}" method="post">
 <article class="module width_half">
   <header><h3>Register new account</h3></header>
   <div class="module_content">

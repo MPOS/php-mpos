@@ -427,7 +427,7 @@ class User extends Base {
     session_regenerate_id(true);
     // Enforce a page reload and point towards login with referrer included, if supplied
     $port = ($_SERVER["SERVER_PORT"] == "80" or $_SERVER["SERVER_PORT"] == "443") ? "" : (":".$_SERVER["SERVER_PORT"]);
-    $location = @$_SERVER['HTTPS'] ? 'https://' . $_SERVER['SERVER_NAME'] . $port . $_SERVER['PHP_SELF'] : 'http://' . $_SERVER['SERVER_NAME'] . $port . $_SERVER['PHP_SELF'];
+    $location = @$_SERVER['HTTPS'] ? 'https://' . $_SERVER['SERVER_NAME'] . $port . $_SERVER['SCRIPT_NAME'] : 'http://' . $_SERVER['SERVER_NAME'] . $port . $_SERVER['SCRIPT_NAME'];
     if (!empty($from)) $location .= '?page=login&to=' . urlencode($from);
     // if (!headers_sent()) header('Location: ' . $location);
     exit('<meta http-equiv="refresh" content="0; url=' . $location . '"/>');
@@ -504,7 +504,7 @@ class User extends Base {
   public function register($username, $password1, $password2, $pin, $email1='', $email2='', $tac='', $strToken='') {
     $this->debug->append("STA " . __METHOD__, 4);
     if ($tac != 1) {
-      $this->setErrorMessage('You need to accept our <a href="'.$_SERVER['PHP_SELF'].'?page=tac" target="_blank">Terms and Conditions</a>');
+      $this->setErrorMessage('You need to accept our <a href="'.$_SERVER['SCRIPT_NAME'].'?page=tac" target="_blank">Terms and Conditions</a>');
       return false;
     }
     if (strlen($username) > 40) {

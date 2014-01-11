@@ -43,7 +43,7 @@
 
 <article class="module width_3_quarter">
   <header><h3> Edit template '{$CURRENT_TEMPLATE}' </h3></header>
-  <form method="POST" action="{$smarty.server.PHP_SELF}">
+  <form method="POST" action="{$smarty.server.SCRIPT_NAME}">
     <input type="hidden" name="page" value="{$smarty.request.page}">
     <input type="hidden" name="action" value="{$smarty.request.action}">
     <input type="hidden" name="template" value="{$CURRENT_TEMPLATE}">

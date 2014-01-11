@@ -18,7 +18,7 @@
     {/if}
     {assign var="classes" value=join(" ", $classes)}
     <li{if $classes} class="{$classes}" data="addClass:'{$classes}'{if strpos("dynatree-active", $classes) !== false}, activate: true{/if}"{/if}>
-      <a href="{$smarty.server.PHP_SELF}?page={$smarty.request.page}&action={$smarty.request.action}&template={$prefix}{$file}">{$file}</a>
+      <a href="{$smarty.server.SCRIPT_NAME}?page={$smarty.request.page}&action={$smarty.request.action}&template={$prefix}{$file}">{$file}</a>
     </li>
   {/if}
   {/foreach}

@@ -49,7 +49,7 @@
         {assign var="usertotalshares" value=$usertotalshares+$REPORTDATA[txs].shares}
       {/if}
       <tr>
-        <td><a href="{$smarty.server.PHP_SELF}?page=statistics&action=round&height={$REPORTDATA[txs].height}">{$REPORTDATA[txs].height|default:"0"}</a></td>
+        <td><a href="{$smarty.server.SCRIPT_NAME}?page=statistics&action=round&height={$REPORTDATA[txs].height}">{$REPORTDATA[txs].height|default:"0"}</a></td>
         <td align="right">{$REPORTDATA[txs].shares|default:"0"}</td>
         <td align="right">{$REPORTDATA[txs]['user'].valid|number_format|default:"0"}</td>
         <td align="right">{$REPORTDATA[txs]['user'].invalid|number_format|default:"0"}</td>
