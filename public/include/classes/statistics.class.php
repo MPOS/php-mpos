@@ -920,6 +920,24 @@ class Statistics extends Base {
     }
     return round($pps_reward / (pow(2, $this->config['target_bits']) * $dDifficulty), 12);
   }
+
+  /**
+   * Get all currently active users in the past 2 minutes
+   * @param interval int Time in seconds to fetch shares from
+   * @return data mixed int count if any users are active, false otherwise
+   **/
+  public function getCountAllActiveUsers($interval=120) {
+    $this->debug->append("STA " . __METHOD__, 4);
+    if ($data = $this->memcache->get(__FUNCTION__)) return $data;
+    $stmt = $this->mysqli->prepare("
+      SELECT COUNT(DISTINCT(SUBSTRING_INDEX( `username` , '.', 1 ))) AS total
+      FROM "  . $this->share->getTableName() . "
+      WHERE our_result = 'Y'
+      AND time > DATE_SUB(now(), INTERVAL ? SECOND)");
+    if ($this->checkStmt($stmt) && $stmt->bind_param('i', $interval) && $stmt->execute() && $result = $stmt->get_result())
+      return $this->memcache->setCache(__FUNCTION__, $result->fetch_object()->total);
+    return $this->sqlError();
+  }
 }
 
 $statistics = new Statistics();

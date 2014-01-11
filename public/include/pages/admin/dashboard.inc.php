@@ -39,6 +39,7 @@ $smarty->assign('CRON_DISABLED', $cron_disabled);
 // Fetch user information
 $aUserInfo = array(
   'total' => $user->getCount(),
+  'active' => $statistics->getCountAllActiveUsers(),
   'locked' => $user->getCountFiltered('is_locked', 1),
   'admins' => $user->getCountFiltered('is_admin', 1),
   'nofees' => $user->getCountFiltered('no_fees', 1)
