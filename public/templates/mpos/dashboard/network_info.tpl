@@ -3,11 +3,11 @@
          </tr>
          <tr>
            <td><b>Difficulty</b></td>
-           <td id="b-diff" class="right">{$NETWORK.difficulty}</td>
+           <td id="b-diff" class="right">{$NETWORK.difficulty|number_format:"8"}</td>
          </tr>
          <tr>
            <td><b>Est Next Difficulty</b></td>
-           <td id="b-nextdiff" class="right">{$NETWORK.EstNextDifficulty} (Change in {$NETWORK.BlocksUntilDiffChange} Blocks)</td>
+           <td id="b-nextdiff" class="right">{$NETWORK.EstNextDifficulty|numer_format:"8"} (Change in {$NETWORK.BlocksUntilDiffChange} Blocks)</td>
          </tr>
          <tr>
            <td><b>Est. Avg. Time per Block</b></td>
