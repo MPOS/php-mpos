@@ -390,7 +390,7 @@ class User extends Base {
       $this->user = array('username' => $row_username, 'id' => $row_id, 'is_admin' => $row_admin);
       return strtolower($username) === strtolower($row_username);
     }
-    return false;
+    return $this->sqlError();
   }
 
   /**
