@@ -46,6 +46,16 @@ $aUserInfo = array(
 );
 $smarty->assign('USER_INFO', $aUserInfo);
 
+// Fetch invitation information
+if (!$setting->getValue('disable_invitations')) {
+  $aInvitationInfo = array(
+    'total' => $invitation->getCount(),
+    'activated' => $invitation->getCountFiltered('is_activated', 1),
+    'outstanding' => $invitation->getCountFiltered('is_activated', 0)
+  );
+  $smarty->assign('INVITATION_INFO', $aInvitationInfo);
+}
+
 // Wallet status
 $smarty->assign('WALLET_ERROR', $aGetInfo['errors']);
 
