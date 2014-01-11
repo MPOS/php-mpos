@@ -63,7 +63,7 @@ if ($config['payout_system'] != 'pps') {
 
 // Round/user percentages
 $aRoundShares['valid'] + $aRoundShares['invalid'] > 0 ? $dPoolInvalidPercent = round($aRoundShares['invalid'] / ($aRoundShares['valid'] + $aRoundShares['invalid']) * 100, 2) : $dPoolInvalidPercent = 0;
-$aUserRoundShares['valid'] + $aUserRoundShares['valid'] > 0 ? $dUserInvalidPercent = round($aUserRoundShares['invalid'] / ($aUserRoundShares['valid'] + $aUserRoundShares['valid']) * 100, 2) : $dUserInvalidPercent = 0;
+$aUserRoundShares['valid'] + $aUserRoundShares['valid'] > 0 ? $dUserInvalidPercent = round($aUserRoundShares['invalid'] / ($aUserRoundShares['valid'] + $aUserRoundShares['invalid']) * 100, 2) : $dUserInvalidPercent = 0;
 
 // Apply pool modifiers
 $dPersonalHashrateAdjusted = $dPersonalHashrate * $dPersonalHashrateModifier;
