@@ -6,10 +6,6 @@ $(document).ready(function(){
   // Ajax API URL
   var url = "{/literal}{$smarty.server.PHP_SELF}?page=api&action=getnavbardata{literal}";
 
-  // Store our data globally
-  var storedHashrate=[];
-  var storedWorkers=[];
-
   g1 = new JustGage({
     id: "mr",
     value: parseFloat({/literal}{$GLOBAL.workers}{literal}).toFixed(0),
@@ -46,16 +42,10 @@ $(document).ready(function(){
     shadowVerticalOffset : 10
   });
 
-  {/literal}{if $GLOBAL.config.disable_navbar|default:"0" != 1 && $GLOBAL.config.disable_navbar_api|default:"0" != 1}{literal}
   // Helper to refresh graphs
   function refreshInformation(data) {
     g1.refresh(parseFloat(data.getnavbardata.data.pool.workers).toFixed(0));
     g2.refresh(parseFloat(data.getnavbardata.data.pool.hashrate).toFixed(2));
-    if (storedWorkers.length > 20) { storedWorkers.shift(); }
-    if (storedHashrate.length > 20) { storedHashrate.shift(); }
-    timeNow = new Date().getTime();
-    storedWorkers[storedWorkers.length] = [timeNow, data.getnavbardata.data.raw.pool.workers];
-    storedHashrate[storedHashrate.length] = [timeNow, data.getnavbardata.data.raw.pool.hashrate];
   }
 
   // Our worker process to keep gauges and graph updated
@@ -70,7 +60,6 @@ $(document).ready(function(){
         setTimeout(worker, {/literal}{($GLOBAL.config.statistics_ajax_refresh_interval * 1000)|default:"1000"}{literal})
       }
   });
-  {/literal}{/if}{literal}
  })();
 });
 {/literal}
