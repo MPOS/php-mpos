@@ -238,7 +238,7 @@ class Base {
     if ($this->checkStmt($stmt) && $stmt->bind_param($field['type'].'i', $field['value'], $id) && $stmt->execute())
       return true;
     $this->debug->append("Unable to update " . $field['name'] . " with " . $field['value'] . " for ID $id");
-    $this->sqlError();
+    return $this->sqlError();
   }
 
   /**
