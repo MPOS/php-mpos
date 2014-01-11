@@ -1,5 +1,5 @@
 <article class="module width_half">
-  <form action="{$smarty.server.PHP_SELF}" method="post">
+  <form action="{$smarty.server.SCRIPT_NAME}" method="post">
     <input type="hidden" name="token" value="{$smarty.request.token|escape}">
     <input type="hidden" name="page" value="{$smarty.request.page|escape}">
     <input type="hidden" name="action" value="{$smarty.request.action|escape}">

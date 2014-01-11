@@ -1,8 +1,8 @@
 {if $smarty.session.AUTHENTICATED|default:"0" == 0}
 <div class="login_small">
-  <form action="{$smarty.server.PHP_SELF}" method="post" id="loginForm">
+  <form action="{$smarty.server.SCRIPT_NAME}" method="post" id="loginForm">
     <input type="hidden" name="page" value="login" />
-    <input type="hidden" name="to" value="{$smarty.server.PHP_SELF}?page=dashboard" />
+    <input type="hidden" name="to" value="{$smarty.server.SCRIPT_NAME}?page=dashboard" />
     <fieldset2 class="small">
       <label>Username</label>
       <input type="text" name="username" size="22" maxlength="100" required />

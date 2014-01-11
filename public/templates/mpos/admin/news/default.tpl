@@ -6,7 +6,7 @@
 <article class="module width_full">
   <header><h3>News Posts</h3></header>
   <ul><li>News posts support the Markdown syntax</li></ul>
-  <form method="POST" action="{$smarty.server.PHP_SELF}">
+  <form method="POST" action="{$smarty.server.SCRIPT_NAME}">
     <input type="hidden" name="page" value="{$smarty.request.page|escape}">
     <input type="hidden" name="action" value="{$smarty.request.action|escape}">
     <input type="hidden" name="do" value="add">
@@ -34,8 +34,8 @@
   <div class="module_content">{$NEWS[news].content nofilter}</div>
   <footer>
     <div class="submit_link">
-      <a href='{$smarty.server.PHP_SELF}?page={$smarty.request.page|escape}&action=news_edit&id={$NEWS[news].id}'><i class="icon-wrench"></i></a>&nbsp;
-      <a href='{$smarty.server.PHP_SELF}?page={$smarty.request.page|escape}&action={$smarty.request.action|escape}&do=delete&id={$NEWS[news].id}'><i class="icon-trash"></i></a>
+      <a href='{$smarty.server.SCRIPT_NAME}?page={$smarty.request.page|escape}&action=news_edit&id={$NEWS[news].id}'><i class="icon-wrench"></i></a>&nbsp;
+      <a href='{$smarty.server.SCRIPT_NAME}?page={$smarty.request.page|escape}&action={$smarty.request.action|escape}&do=delete&id={$NEWS[news].id}'><i class="icon-trash"></i></a>
     </div>
   </footer>
 </article>

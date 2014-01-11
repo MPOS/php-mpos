@@ -26,7 +26,7 @@
       {if $GLOBAL.config.payout_system == 'pplns'}{assign var="pplnsshares" value=$pplnsshares+$BLOCKSFOUND[block].pplns_shares}{/if}
       <tr class="{cycle values="odd,even"}">
 {if ! $GLOBAL.website.blockexplorer.disabled}
-        <td align="center"><a href="{$smarty.server.PHP_SELF}?page=statistics&action=round&height={$BLOCKSFOUND[block].height}">{$BLOCKSFOUND[block].height}</a></td>
+        <td align="center"><a href="{$smarty.server.SCRIPT_NAME}?page=statistics&action=round&height={$BLOCKSFOUND[block].height}">{$BLOCKSFOUND[block].height}</a></td>
 {else}
         <td align="center">{$BLOCKSFOUND[block].height}</td>
 {/if}

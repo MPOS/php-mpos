@@ -4,7 +4,7 @@ $(document).ready(function(){
   var g1, g2, g3, g4, g5;
 
   // Ajax API URL
-  var url = "{/literal}{$smarty.server.PHP_SELF}?page=api&action=getdashboarddata&api_key={$GLOBAL.userdata.api_key}&id={$GLOBAL.userdata.id}{literal}";
+  var url = "{/literal}{$smarty.server.SCRIPT_NAME}?page=api&action=getdashboarddata&api_key={$GLOBAL.userdata.api_key}&id={$GLOBAL.userdata.id}{literal}";
 
   // Store our data globally
   var storedPersonalHashrate=[];

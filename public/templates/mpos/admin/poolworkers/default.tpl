@@ -1,6 +1,6 @@
 <article class="module width_3_quarter">
   <header><h3>{$GLOBAL.workers} Current Active Pool Workers</h3></header>
-  <form action="{$smarty.server.PHP_SELF}">
+  <form action="{$smarty.server.SCRIPT_NAME}">
     <input type="hidden" name="page" value="{$smarty.request.page|escape}" />
     <input type="hidden" name="action" value="{$smarty.request.action|escape}" />
     <table cellspacing="0" class="tablesorter">
@@ -8,13 +8,13 @@
       <tr>
         <td align="left">
 {if $smarty.request.start|default:"0" > 0}
-          <a href="{$smarty.server.PHP_SELF}?page={$smarty.request.page|escape}&action={$smarty.request.action|escape}&start={$smarty.request.start|escape|default:"0" - $LIMIT}{if $FILTERS|default:""}{$FILTERS}{/if}"><i class="icon-left-open"></i></a>
+          <a href="{$smarty.server.SCRIPT_NAME}?page={$smarty.request.page|escape}&action={$smarty.request.action|escape}&start={$smarty.request.start|escape|default:"0" - $LIMIT}{if $FILTERS|default:""}{$FILTERS}{/if}"><i class="icon-left-open"></i></a>
 {else}
           <i class="icon-left-open"></i>
 {/if}
         </td>
         <td align="right">
-          <a href="{$smarty.server.PHP_SELF}?page={$smarty.request.page|escape}&action={$smarty.request.action|escape}&start={$smarty.request.start|escape|default:"0" + $LIMIT}{if $FILTERS|default:""}{$FILTERS}{/if}"><i class="icon-right-open"></i></a>
+          <a href="{$smarty.server.SCRIPT_NAME}?page={$smarty.request.page|escape}&action={$smarty.request.action|escape}&start={$smarty.request.start|escape|default:"0" + $LIMIT}{if $FILTERS|default:""}{$FILTERS}{/if}"><i class="icon-right-open"></i></a>
         </td>
     </tbody>
   </form>

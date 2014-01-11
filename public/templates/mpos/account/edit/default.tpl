@@ -1,4 +1,4 @@
-<form action="{$smarty.server.PHP_SELF}" method="post">
+<form action="{$smarty.server.SCRIPT_NAME}" method="post">
   <input type="hidden" name="page" value="{$smarty.request.page|escape}">
   <input type="hidden" name="action" value="{$smarty.request.action|escape}">
   <input type="hidden" name="do" value="updateAccount">
@@ -16,7 +16,7 @@
       {if !$GLOBAL.website.api.disabled}
       <fieldset>
         <label>API Key</label>
-        <a href="{$smarty.server.PHP_SELF}?page=api&action=getuserstatus&api_key={$GLOBAL.userdata.api_key}&id={$GLOBAL.userdata.id}">{$GLOBAL.userdata.api_key}</a>
+        <a href="{$smarty.server.SCRIPT_NAME}?page=api&action=getuserstatus&api_key={$GLOBAL.userdata.api_key}&id={$GLOBAL.userdata.id}">{$GLOBAL.userdata.api_key}</a>
       </fieldset>
       {/if}
       <fieldset>
@@ -61,7 +61,7 @@
 </form>
 
 {if !$GLOBAL.config.disable_payouts && !$GLOBAL.config.disable_manual_payouts}
-<form action="{$smarty.server.PHP_SELF}" method="post">
+<form action="{$smarty.server.SCRIPT_NAME}" method="post">
   <input type="hidden" name="page" value="{$smarty.request.page|escape}">
   <input type="hidden" name="action" value="{$smarty.request.action|escape}">
   <input type="hidden" name="do" value="cashOut">
@@ -95,7 +95,7 @@
 </form>
 {/if}
 
-<form action="{$smarty.server.PHP_SELF}" method="post"><input type="hidden" name="act" value="updatePassword">
+<form action="{$smarty.server.SCRIPT_NAME}" method="post"><input type="hidden" name="act" value="updatePassword">
   <input type="hidden" name="page" value="{$smarty.request.page|escape}">
   <input type="hidden" name="action" value="{$smarty.request.action|escape}">
   <input type="hidden" name="do" value="updatePassword">
@@ -133,7 +133,7 @@
 </form>
 
 
-<form action="{$smarty.server.PHP_SELF}" method="post">
+<form action="{$smarty.server.SCRIPT_NAME}" method="post">
   <input type="hidden" name="page" value="{$smarty.request.page|escape}">
   <input type="hidden" name="action" value="{$smarty.request.action|escape}">
   <input type="hidden" name="do" value="genPin">

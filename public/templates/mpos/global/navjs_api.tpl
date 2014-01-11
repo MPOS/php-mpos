@@ -4,7 +4,7 @@ $(document).ready(function(){
   var g1, g2;
 
   // Ajax API URL
-  var url = "{/literal}{$smarty.server.PHP_SELF}?page=api&action=getnavbardata{literal}";
+  var url = "{/literal}{$smarty.server.SCRIPT_NAME}?page=api&action=getnavbardata{literal}";
 
   g1 = new JustGage({
     id: "mr",

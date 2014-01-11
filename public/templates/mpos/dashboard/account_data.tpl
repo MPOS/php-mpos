@@ -13,7 +13,7 @@
 {if $GLOBAL.userdata.donate_percent > 0}
         you donate <font color="green">{$GLOBAL.userdata.donate_percent|escape}%</font>.
 {else}
-        you are not <a href="{$smarty.server.PHP_SELF}?page=account&action=edit">donating</a>.
+        you are not <a href="{$smarty.server.SCRIPT_NAME}?page=account&action=edit">donating</a>.
 {/if}
         </td>
       </tr>

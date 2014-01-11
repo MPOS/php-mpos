@@ -1,4 +1,4 @@
-<form action="{$smarty.server.PHP_SELF}" method="post">
+<form action="{$smarty.server.SCRIPT_NAME}" method="post">
   <input type="hidden" name="page" value="{$smarty.request.page|escape|escape}">
   <input type="hidden" name="action" value="{$smarty.request.action|escape|escape}">
 <article class="module width_full">
@@ -6,10 +6,10 @@
 <table class="tablesorter">
     <tbody>
         <td align="left">
-          <a href="{$smarty.server.PHP_SELF}?page={$smarty.request.page|escape}&action={$smarty.request.action|escape}&height={if is_array($REPORTDATA) && count($REPORTDATA) > ($BLOCKLIMIT - 1)}{$REPORTDATA[$BLOCKLIMIT - 1].height}{/if}&prev=1&limit={$BLOCKLIMIT}&id={$USERID}&filter={$FILTER}"<i class="icon-left-open"></i></a>
+          <a href="{$smarty.server.SCRIPT_NAME}?page={$smarty.request.page|escape}&action={$smarty.request.action|escape}&height={if is_array($REPORTDATA) && count($REPORTDATA) > ($BLOCKLIMIT - 1)}{$REPORTDATA[$BLOCKLIMIT - 1].height}{/if}&prev=1&limit={$BLOCKLIMIT}&id={$USERID}&filter={$FILTER}"<i class="icon-left-open"></i></a>
         </td>
         <td align="right">
-          <a href="{$smarty.server.PHP_SELF}?page={$smarty.request.page|escape}&action={$smarty.request.action|escape}&height={if is_array($REPORTDATA) && count($REPORTDATA) > 0}{$REPORTDATA[0].height}{/if}&next=1&limit={$BLOCKLIMIT}&id={$USERID}&filter={$FILTER}"><i class="icon-right-open"></i></a>
+          <a href="{$smarty.server.SCRIPT_NAME}?page={$smarty.request.page|escape}&action={$smarty.request.action|escape}&height={if is_array($REPORTDATA) && count($REPORTDATA) > 0}{$REPORTDATA[0].height}{/if}&next=1&limit={$BLOCKLIMIT}&id={$USERID}&filter={$FILTER}"><i class="icon-right-open"></i></a>
         </td>
       </tr>
     </tbody>

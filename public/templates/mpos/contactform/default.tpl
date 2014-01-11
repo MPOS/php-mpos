@@ -1,4 +1,4 @@
-<form action="{$smarty.server.PHP_SELF}" method="post">
+<form action="{$smarty.server.SCRIPT_NAME}" method="post">
   <input type="hidden" name="page" value="{$smarty.request.page|escape}">
   <input type="hidden" name="action" value="contactform">
     <article class="module width_3_quarter">

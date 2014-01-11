@@ -3,7 +3,7 @@
 $(document).ready(function(){
 
   // Ajax API URL
-  var url = "{/literal}{$smarty.server.PHP_SELF}?page=api&action=getnavbardata{literal}";
+  var url = "{/literal}{$smarty.server.SCRIPT_NAME}?page=api&action=getnavbardata{literal}";
 
   function refreshStaticData(data) {
      $('#b-workers').html((parseFloat(data.getnavbardata.data.pool.workers).toFixed(0)));
