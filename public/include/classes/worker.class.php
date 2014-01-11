@@ -198,19 +198,19 @@ class Worker extends Base {
   }
 
   /**
-   * Get all currently active workers in the past 10 minutes
+   * Get all currently active workers in the past 2 minutes
    * @param none
    * @return data mixed int count if any workers are active, false otherwise
    **/
-  public function getCountAllActiveWorkers() {
+  public function getCountAllActiveWorkers($interval=120) {
     $this->debug->append("STA " . __METHOD__, 4);
     if ($data = $this->memcache->get(__FUNCTION__)) return $data;
     $stmt = $this->mysqli->prepare("
       SELECT COUNT(DISTINCT(username)) AS total
       FROM "  . $this->share->getTableName() . "
       WHERE our_result = 'Y'
-      AND time > DATE_SUB(now(), INTERVAL 10 MINUTE)");
-    if ($this->checkStmt($stmt) && $stmt->execute() && $result = $stmt->get_result())
+      AND time > DATE_SUB(now(), INTERVAL ? SECOND)");
+    if ($this->checkStmt($stmt) && $stmt->bind_param('i', $interval) && $stmt->execute() && $result = $stmt->get_result())
       return $this->memcache->setCache(__FUNCTION__, $result->fetch_object()->total);
     return $this->sqlError();
   }
