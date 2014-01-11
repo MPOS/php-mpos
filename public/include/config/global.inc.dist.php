@@ -128,6 +128,7 @@ $config['maxfailed']['pin'] = 3;
  **/
 $config['gettingstarted']['coinname'] = 'Litecoin';
 $config['gettingstarted']['coinurl'] = 'http://www.litecoin.org';
+$config['gettingstarted']['stratumurl'] = '';
 $config['gettingstarted']['stratumport'] = '3333';
 
 /**
