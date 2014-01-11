@@ -24,6 +24,10 @@
         <input type="text" name="email" value="{nocache}{$GLOBAL.userdata.email|escape}{/nocache}" size="20" />
       </fieldset>
       <fieldset>
+        <label>Timezone</label>
+        <select name="timezone">{html_options options=$timezones selected=$smarty.request.timezone|default:$GLOBAL.userdata.timezone}</select>
+      </fieldset>
+      <fieldset>
         <label>Payment Address</label>
         <input type="text" name="paymentAddress" value="{nocache}{$smarty.request.paymentAddress|default:$GLOBAL.userdata.coin_address|escape}{/nocache}" size="40" />
       </fieldset>
