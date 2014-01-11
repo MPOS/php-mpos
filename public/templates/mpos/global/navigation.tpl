@@ -92,7 +92,6 @@
     {if $smarty.session.AUTHENTICATED|default:"0" == 1}
      <br />
     {else}
-    {if !$GLOBAL.website.api.disabled && !$GLOBAL.config.disable_navbar && !$GLOBAL.config.disable_navbar_api}
     <ul>
      <center>
       <div style="display: inline-block;">
@@ -102,7 +101,10 @@
       </div>
      </center>
     </ul>
-      <hr/>
-    {include file="global/navjs.tpl"}
+    <hr/>
+    {if !$GLOBAL.website.api.disabled && !$GLOBAL.config.disable_navbar && !$GLOBAL.config.disable_navbar_api}
+      {include file="global/navjs_api.tpl"}
+    {else}
+      {include file="global/navjs_static.tpl"}
     {/if}
     {/if}
