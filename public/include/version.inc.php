@@ -5,7 +5,7 @@ if (!defined('SECURITY')) die('Hacking attempt');
 
 define('DB_VERSION', '0.0.2');
 define('CONFIG_VERSION', '0.0.3');
-define('MPOS_VERSION', '0.0.1');
+define('MPOS_VERSION', '0.0.2');
 
 // Fetch installed database version
 $db_version = $setting->getValue('DB_VERSION');
