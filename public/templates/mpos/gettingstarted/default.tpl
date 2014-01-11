@@ -18,14 +18,14 @@
       <p>Settings for Stratum (recommended):</p>
       <table width="50%">
         <tbody>
-          <tr><td>STRATUM:</td><td><kbd>stratum+tcp://{$smarty.server.SERVER_NAME}</kbd></td></tr>
+          <tr><td>STRATUM:</td><td><kbd>stratum+tcp://{$SITESTRATUMURL|default:$smarty.server.SERVER_NAME}</kbd></td></tr>
           <tr><td>PORT:</td><td><kbd>{$SITESTRATUMPORT|default:"3333"}</kbd></td></tr>
           <tr><td>Username:</td><td><kbd><em>Weblogin</em>.<em>Worker</em></kbd></td></tr>
           <tr><td>Password:</td><td><kbd>Worker Password</kbd></td></tr>
         </tbody>
       </table>
       <p>If you use a command-line miner, type:</p>
-      <pre>./cgminer {if $GLOBAL.config.algorithm == 'scrypt'}--scrypt {/if} -o stratum+tcp://{$smarty.server.SERVER_NAME}:{$SITESTRATUMPORT|default:"3333"} -u <em>Weblogin</em>.<em>Worker</em> -p <em>Worker password</em></pre>
+      <pre>./cgminer {if $GLOBAL.config.algorithm == 'scrypt'}--scrypt {/if} -o stratum+tcp://{$SITESTRATUMURL|default:$smarty.server.SERVER_NAME}:{$SITESTRATUMPORT|default:"3333"} -u <em>Weblogin</em>.<em>Worker</em> -p <em>Worker password</em></pre>
       <p>If you want, you can create additional workers with usernames and passwords of your choice <a href="{$smarty.server.PHP_SELF}?page=account&action=workers">Here</a></p>
     </li>
     <li>4. <strong>Create a {$SITECOINNAME|default:"Litecoin"} address to recieve payments.</strong>
