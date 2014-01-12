@@ -107,7 +107,7 @@ class RoundStats extends Base {
         FROM " . $this->statistics->getTableName() . " AS s
         LEFT JOIN " . $this->block->getTableName() . " AS b ON s.block_id = b.id
         LEFT JOIN " . $this->user->getTableName() . " AS a ON a.id = s.account_id
-        WHERE b.height = ?
+        WHERE b.height = ? AND s.valid > 0
         GROUP BY username ASC
         ORDER BY valid DESC
         ");
@@ -136,7 +136,7 @@ class RoundStats extends Base {
         FROM " . $this->statistics->getTableName() . " AS s
         LEFT JOIN " . $this->block->getTableName() . " AS b ON s.block_id = b.id
         LEFT JOIN " . $this->user->getTableName() . " AS a ON a.id = s.account_id
-        WHERE b.height = ?
+        WHERE b.height = ? AND s.pplns_valid > 0
         GROUP BY username ASC
         ORDER BY pplns_valid DESC
         ");
