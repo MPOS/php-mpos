@@ -1,8 +1,8 @@
       <form action="{$smarty.server.SCRIPT_NAME}?page=login" method="post" id="loginForm" data-ajax="false">
         <input type="hidden" name="to" value="{($smarty.request.to|default:"{$smarty.server.SCRIPT_NAME}?page=dashboard")|escape}" />
         {if $GLOBAL.csrf.enabled && $GLOBAL.csrf.forms.login}<input type="hidden" name="ctoken" value="{$CTOKEN}" />{/if}
-        <p><input type="text" name="username" value="" id="userForm" maxlength="20"></p>
-        <p><input type="password" name="password" value="" id="passForm" maxlength="20"></p>
+        <p><label for="userForm">Email</label><input type="text" name="username" value="" id="userForm"></p>
+        <p><label for="passForm">Password</label><input type="password" name="password" value="" id="passForm"></p>
         <center>{nocache}{$RECAPTCHA|default:"" nofilter}{/nocache}</center>
         <center><p><input type="submit" value="Login"></p></center>
       </form>
