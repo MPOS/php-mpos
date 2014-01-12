@@ -3,7 +3,6 @@
   <div class="templates-tree" id="templates-tree">
     {include file="admin/templates/tree.tpl" files=$TEMPLATES prefix=""}
   </div>
-  <p>* Bold templates are activated</p>
   <link rel='stylesheet' type='text/css' href='{$PATH}/js/dynatree/skin/ui.dynatree.css'>
   <script type="text/javascript" src="{$PATH}/js/jquery.cookie.js"></script>
   <script type="text/javascript" src="{$PATH}/js/jquery-ui.custom.min.js"></script>
@@ -39,6 +38,9 @@
     .templates-tree span.dynatree-has-activated a,
     .templates-tree span.dynatree-activated a { font-weight: bold; }
   </style>
+  <footer>
+  <ul><li>Bold templates are activated</li></ul>
+  </footer>
 </article>
 
 <article class="module width_3_quarter">
