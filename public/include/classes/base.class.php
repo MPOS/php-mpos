@@ -133,9 +133,9 @@ class Base {
    * @param none
    * @param data mixed Count or false
    **/
-  public function getCountFiltered($column='id', $value=NULL, $type='i') {
+  public function getCountFiltered($column='id', $value=NULL, $type='i', $operator = '=') {
     $this->debug->append("STA " . __METHOD__, 4);
-    $stmt = $this->mysqli->prepare("SELECT COUNT(id) AS count FROM $this->table WHERE $column = ?");
+    $stmt = $this->mysqli->prepare("SELECT COUNT(id) AS count FROM $this->table WHERE $column $operator ?");
     if ($this->checkStmt($stmt) && $stmt->bind_param($type, $value) && $stmt->execute() && $result = $stmt->get_result())
       return $result->fetch_object()->count;
     return $this->sqlError();

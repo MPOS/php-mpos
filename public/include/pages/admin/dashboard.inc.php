@@ -46,6 +46,16 @@ $aUserInfo = array(
 );
 $smarty->assign('USER_INFO', $aUserInfo);
 
+// Fetch login information
+$aLoginInfo = array(
+  '24hours' => $user->getCountFiltered('last_login', time() - 3600, 'i', '>='),
+  '7days' => $user->getCountFiltered('last_login', (time() - (3600 * 7)), 'i', '>='),
+  '1month' => $user->getCountFiltered('last_login', (time() - (3600 * 7 * 4)), 'i', '>='),
+  '6month' => $user->getCountFiltered('last_login', (time() - (3600 * 7 * 4 * 6)), 'i', '>='),
+  '1year' => $user->getCountFiltered('last_login', (time() - (3600 * 365)), 'i', '>=')
+);
+$smarty->assign('USER_LOGINS', $aLoginInfo);
+
 // Fetch invitation information
 if (!$setting->getValue('disable_invitations')) {
   $aInvitationInfo = array(
