@@ -57,11 +57,11 @@
       </fieldset>
       <fieldset>
         <label>Content</label>
-        <textarea name="content" rows="15" type="text" required>{nocache}{$DATABASE_TEMPLATE.content|escape}{/nocache}</textarea>
+        <textarea name="content" rows="15" type="text" required>{nocache}{$DATABASE_TEMPLATE.content nofilter}{/nocache}</textarea>
       </fieldset>
       <fieldset>
         <label>Original Template Content</label>
-        <textarea readonly rows="15" type="text" required>{nocache}{$ORIGINAL_TEMPLATE|escape}{/nocache}</textarea>
+        <textarea readonly rows="15" type="text" required>{nocache}{$ORIGINAL_TEMPLATE nofilter}{/nocache}</textarea>
       </fieldset>
     </div>
      <footer>
