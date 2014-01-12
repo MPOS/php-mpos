@@ -153,19 +153,42 @@ foreach ($aAllBlocks as $iIndex => $aBlock) {
       $iRoundShares = $iNewRoundShares;
     }
 
+    // Merge round shares and pplns shares arrays
+    $aTotalAccountShares = NULL;
+    foreach($aAccountShares as $key => $aData) {
+      $aData['pplns_valid'] = $aData['valid'];
+      $aData['pplns_invalid'] = $aData['invalid'];
+      $aData['valid'] = 0;
+      $aData['invalid'] = 0;
+      $aTotalAccountShares[$aData['username']] = $aData;
+    }
+    foreach($aRoundAccountShares as $key => $aTempData) {
+      if (array_key_exists($aTempData['username'], $aTotalAccountShares)) {
+        $aTotalAccountShares[$aTempData['username']]['valid'] = $aTempData['valid'];
+        $aTotalAccountShares[$aTempData['username']]['invalid'] = $aTempData['invalid'];
+      } else {
+        $aTempData['pplns_valid'] = 0;
+        $aTempData['pplns_invalid'] = 0;
+        $aTotalAccountShares[$aTempData['username']] = $aTempData;
+      }
+    }
+
     // Table header for account shares
     $log->logInfo("ID\tUsername\tValid\tInvalid\tPercentage\tPayout\t\tDonation\tFee");
 
     // Loop through all accounts that have found shares for this round
-    foreach ($aAccountShares as $key => $aData) {
+    foreach ($aTotalAccountShares as $key => $aData) {
       // Skip entries that have no account ID, user deleted?
       if (empty($aData['id'])) {
         $log->logInfo('User ' . $aData['username'] . ' does not have an associated account, skipping');
         continue;
       }
+      if ($aData['pplns_valid'] == 0) {
+        continue;
+      }
 
       // Payout based on PPLNS target shares, proportional payout for all users
-      $aData['percentage'] = round(( 100 / $iRoundShares) * $aData['valid'], 8);
+      $aData['percentage'] = round(( 100 / $iRoundShares) * $aData['pplns_valid'], 8);
       $aData['payout'] = round(( $aData['percentage'] / 100 ) * $dReward, 8);
       // Defaults
       $aData['fee' ] = 0;
@@ -179,32 +202,12 @@ foreach ($aAllBlocks as $iIndex => $aBlock) {
       // Verbose output of this users calculations
       $log->logInfo($aData['id'] . "\t" .
         $aData['username'] . "\t" .
-        $aData['valid'] . "\t" .
-        $aData['invalid'] . "\t" .
+        $aData['pplns_valid'] . "\t" .
+        $aData['pplns_invalid'] . "\t" .
         number_format($aData['percentage'], 8) . "\t" .
         number_format($aData['payout'], 8) . "\t" .
         number_format($aData['donation'], 8) . "\t" .
         number_format($aData['fee'], 8));
-
-      // Add full round share statistics, not just PPLNS
-      foreach ($aRoundAccountShares as $key => $aRoundData) {
-        if ($aRoundData['username'] == $aData['username'])
-          if (!$statistics->updateShareStatistics($aRoundData, $aBlock['id']))
-            $log->logError('Failed to update share statistics for ' . $aData['username'] . ': ' . $statistics->getCronError());
-      }
-
-      // Add PPLNS share statistics
-      foreach ($aAccountShares as $key => $aRoundData) {
-        if ($aRoundData['username'] == $aData['username']){
-          if (@$statistics->getIdShareStatistics($aRoundData, $aBlock['id'])){
-            if (!$statistics->updatePPLNSShareStatistics($aRoundData, $aBlock['id']))
-            $log->logError('Failed to update pplns statistics for ' . $aData['username'] . ': ' . $statistics->getCronError());
-          } else {
-          if (!$statistics->insertPPLNSShareStatistics($aRoundData, $aBlock['id']))
-            $log->logError('Failed to insert pplns statistics for ' . $aData['username'] . ': ' . $statistics->getCronError());
-          }
-        }
-      }
 
       // Add new credit transaction
       if (!$transaction->addTransaction($aData['id'], $aData['payout'], 'Credit', $aBlock['id']))
@@ -217,6 +220,15 @@ foreach ($aAllBlocks as $iIndex => $aBlock) {
       if ($aData['donation'] > 0)
         if (!$transaction->addTransaction($aData['id'], $aData['donation'], 'Donation', $aBlock['id']))
           $log->logFatal('Failed to insert new Donation transaction to database for ' . $aData['username'] . ': ' . $transaction->getCronError());
+    }
+
+    // Add full round share statistics
+    foreach ($aTotalAccountShares as $key => $aRoundData) {
+      if (empty($aRoundData['id'])) {
+        continue;
+      }
+      if (!$statistics->insertPPLNSStatistics($aRoundData, $aBlock['id']))
+        $log->logError('Failed to insert share statistics for ' . $aRoundData['username'] . ': ' . $statistics->getCronError());
     }
 
     // Store this blocks height as last accounted for

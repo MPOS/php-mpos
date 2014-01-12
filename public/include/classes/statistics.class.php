@@ -202,36 +202,12 @@ class Statistics extends Base {
   }
 
   /**
-   * update user statistics of valid and invalid pplns shares
+   * insert user round and pplns shares merged array
    **/
-  public function updatePPLNSShareStatistics($aStats, $iBlockId) {
+  public function insertPPLNSStatistics($aStats, $iBlockId) {
     $this->debug->append("STA " . __METHOD__, 4);
-    $stmt = $this->mysqli->prepare("
-      UPDATE $this->table SET pplns_valid = ?, pplns_invalid = ? WHERE account_id = ? AND block_id = ?");
-    if ($this->checkStmt($stmt) && $stmt->bind_param('iiii', $aStats['valid'], $aStats['invalid'], $aStats['id'], $iBlockId) && $stmt->execute()) return true;
-    return $this->sqlError();
-  }
-
-  /**
-   * insert user statistics of valid and invalid pplns shares "rbpplns"
-   **/
-  public function insertPPLNSShareStatistics($aStats, $iBlockId) {
-    $this->debug->append("STA " . __METHOD__, 4);
-    $stmt = $this->mysqli->prepare("INSERT INTO $this->table (account_id, valid, invalid, pplns_valid, pplns_invalid, block_id) VALUES (?, 0, 0, ?, ?, ?)");
-    if ($this->checkStmt($stmt) && $stmt->bind_param('iiii', $aStats['id'], $aStats['valid'], $aStats['invalid'], $iBlockId) && $stmt->execute()) return true;
-    return $this->sqlError();
-  }
-
-  /**
-   * Fetch the share ID from stats for rbpplns
-   **/
-  function getIdShareStatistics($aStats, $iBlockId) {
-    $stmt = $this->mysqli->prepare("
-      SELECT id AS id FROM $this->table
-      WHERE account_id = ? AND block_id = ?
-      ");
-    if ($this->checkStmt($stmt) && $stmt->bind_param('ii', $aStats['id'], $iBlockId) && $stmt->execute() && $result = $stmt->get_result())
-      return $result->fetch_object()->id;
+    $stmt = $this->mysqli->prepare("INSERT INTO $this->table (account_id, valid, invalid, pplns_valid, pplns_invalid, block_id) VALUES (?, ?, ?, ?, ?, ?)");
+    if ($this->checkStmt($stmt) && $stmt->bind_param('iiiiii', $aStats['id'], $aStats['valid'], $aStats['invalid'], $aStats['pplns_valid'], $aStats['pplns_invalid'], $iBlockId) && $stmt->execute()) return true;
     return $this->sqlError();
   }
 
