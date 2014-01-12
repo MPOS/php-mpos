@@ -69,7 +69,7 @@ $log->logDebug('Marking cronjob as running for monitoring');
 $monitoring->setStatus($cron_name . '_starttime', 'date', time());
 
 // Check if we need to halt our crons due to an outstanding upgrade
-if ($setting->getValue('db_upgrade_required') == 1 || $setting->getValue('config_upgrade_required') == 1) {
+if ($setting->getValue('DB_VERSION') != DB_VERSION || $config['version'] != CONFIG_VERSION) {
   $log->logFatal('Cronjob is currently disabled due to required upgrades. Import any outstanding SQL files and check your configuration file.');
   $monitoring->endCronjob($cron_name, 'E0075', 0, true, false);
 }
