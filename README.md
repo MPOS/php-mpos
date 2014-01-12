@@ -60,6 +60,7 @@ for full information.
 * Apache2
  * libapache2-mod-php5
 * PHP 5.4+
+ * php5-json
  * php5-mysqlnd
  * php5-memcached
  * php5-curl
