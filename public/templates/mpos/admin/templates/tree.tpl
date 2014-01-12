@@ -1,5 +1,6 @@
 <ul>
   {foreach from=$files item="value" key="file"}
+  {if $file != 'master.tpl'}
   {if is_array($value)}
     <li class="folder">
       {$file}
@@ -20,6 +21,7 @@
     <li{if $classes} class="{$classes}" data="addClass:'{$classes}'{if strpos("dynatree-active", $classes) !== false}, activate: true{/if}"{/if}>
       <a href="{$smarty.server.SCRIPT_NAME}?page={$smarty.request.page}&action={$smarty.request.action}&template={$prefix}{$file}">{$file}</a>
     </li>
+  {/if}
   {/if}
   {/foreach}
 </ul>
