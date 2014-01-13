@@ -9,7 +9,7 @@ if ($user->isAuthenticated()) {
       $_SESSION['POPUP'][] = array('CONTENT' => 'You have exceeded the allowed invitations of ' . $config['accounts']['invitations']['count'], 'TYPE' => 'errormsg');
     } else if (isset($_POST['do']) && $_POST['do'] == 'sendInvitation') {
       if ($invitation->sendInvitation($_SESSION['USERDATA']['id'], $_POST['data'])) {
-        $_SESSION['POPUP'][] = array('CONTENT' => 'Invitation sent');
+        $_SESSION['POPUP'][] = array('CONTENT' => 'Invitation sent', 'TYPE' => 'success');
       } else {
         $_SESSION['POPUP'][] = array('CONTENT' => 'Unable to send invitation to recipient: ' . $invitation->getError(), 'TYPE' => 'errormsg');
       }

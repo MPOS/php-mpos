@@ -6,21 +6,21 @@ if ($user->isAuthenticated()) {
   switch (@$_REQUEST['do']) {
   case 'delete':
     if ($worker->deleteWorker($_SESSION['USERDATA']['id'], $_GET['id'])) {
-      $_SESSION['POPUP'][] = array('CONTENT' => 'Worker removed');
+      $_SESSION['POPUP'][] = array('CONTENT' => 'Worker removed', 'TYPE' => 'success');
     } else {
       $_SESSION['POPUP'][] = array('CONTENT' => $worker->getError(), 'TYPE' => 'errormsg');
     }
     break;
   case 'add':
     if ($worker->addWorker($_SESSION['USERDATA']['id'], $_POST['username'], $_POST['password'])) {
-      $_SESSION['POPUP'][] = array('CONTENT' => 'Worker added');
+      $_SESSION['POPUP'][] = array('CONTENT' => 'Worker added', 'TYPE' => 'success');
     } else {
       $_SESSION['POPUP'][] = array('CONTENT' => $worker->getError(), 'TYPE' => 'errormsg');
     }
     break;
   case 'update':
     if ($worker->updateWorkers($_SESSION['USERDATA']['id'], @$_POST['data'])) {
-      $_SESSION['POPUP'][] = array('CONTENT' => 'Worker updated');
+      $_SESSION['POPUP'][] = array('CONTENT' => 'Worker updated', 'TYPE' => 'success');
     } else {
       $_SESSION['POPUP'][] = array('CONTENT' => $worker->getError(), 'TYPE' => 'errormsg');
     }

@@ -5,7 +5,7 @@ if (!defined('SECURITY')) die('Hacking attempt');
 
 // Process password reset request
 if ($user->initResetPassword($_POST['username'], $smarty)) {
-  $_SESSION['POPUP'][] = array('CONTENT' => 'Please check your mail account to finish your password reset');
+  $_SESSION['POPUP'][] = array('CONTENT' => 'Please check your mail account to finish your password reset', 'TYPE' => 'success');
 } else {
   $_SESSION['POPUP'][] = array('CONTENT' => htmlentities($user->getError(), ENT_QUOTES), 'TYPE' => 'errormsg');
 }
