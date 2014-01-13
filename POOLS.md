@@ -261,3 +261,10 @@ Small Time Miners are running various stratum only pools for different coins.
 | Pool URL                     | Coin     | Avg. Hashrate | Avg. Active Workers | Notes |
 | ---------------------------- | -------- | ------------- | ------------------- | ----- |
 | http://ltc.drillbit.me | Litecoin | 80-100 Mhash | ~250 | PROP VARDIFF 0% Fee |
+
+### MegaCoin.mine.nu pool
+### Stratum pool in Barcelona (EUR)
+| Pool URL                     | Coin     | Avg. Hashrate | Avg. Active Workers | Notes |
+| ---------------------------- | -------- | ------------- | ------------------- | ----- |
+| http://megacoin.mine.nu | Megacoin | 1-5 Mhs | ~5 | PROP VARDIFF 1% Fee |
+
