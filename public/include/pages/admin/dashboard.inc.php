@@ -27,10 +27,9 @@ $cron_errors = 0;
 $cron_disabled = 0;
 foreach ($aCrons as $strCron) {
   $status = $monitoring->getStatus($strCron . '_status');
-  $disabled = $monitoring->isDisabled($strCron);
   if ($status['value'] != 0)
     $cron_errors++;
-  if ($disabled['value'] == 1)
+  if ($monitoring->isDisabled($strCron) == 1)
     $cron_disabled++;
 }
 $smarty->assign('CRON_ERROR', $cron_errors);
