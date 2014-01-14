@@ -35,14 +35,14 @@
       <fieldset>
         <label>Automatic Payout Threshold</label>
         <font size="1">{$GLOBAL.config.ap_threshold.min}-{$GLOBAL.config.ap_threshold.max} {$GLOBAL.config.currency}. Set to '0' for no auto payout.</font>
-        <input type="text" name="payoutThreshold" value="{$smarty.request.payoutThreshold|default:$GLOBAL.userdata.ap_threshold|escape}" size="{$GLOBAL.config.ap_threshold.max|strlen}" maxlength="{$GLOBAL.config.ap_threshold.max|strlen}" />
+        <input type="text" name="payoutThreshold" value="{nocache}{$smarty.request.payoutThreshold|default:$GLOBAL.userdata.ap_threshold|escape}{/nocache}" size="{$GLOBAL.config.ap_threshold.max|strlen}" maxlength="{$GLOBAL.config.ap_threshold.max|strlen}" />
       </fieldset>
       <fieldset>
         <label>Anonymous Account</label>
         Hide username on website from others. Admins can still get your user information.
         <label class="checkbox" for="is_anonymous">
         <input class="ios-switch" type="hidden" name="is_anonymous" value="0" />
-        <input class="ios-switch" type="checkbox" name="is_anonymous" value="1" id="is_anonymous" {if $GLOBAL.userdata.is_anonymous}checked{/if} />
+        <input class="ios-switch" type="checkbox" name="is_anonymous" value="1" id="is_anonymous" {nocache}{if $GLOBAL.userdata.is_anonymous}checked{/if}{/nocache} />
         <div class="switch"></div>
         </label>
       </fieldset>
