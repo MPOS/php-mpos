@@ -1,5 +1,8 @@
 <?php
 
+// Make sure we are called from index.php
+if (!defined('SECURITY')) die('Hacking attempt');
+
 define('DB_VERSION', '0.0.2');
 define('CONFIG_VERSION', '0.0.2');
 define('MPOS_VERSION', '0.0.1');

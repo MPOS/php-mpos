@@ -1,6 +1,9 @@
 <?php
-// SHA/Scrypt check
 
+// Make sure we are called from index.php
+if (!defined('SECURITY')) die('Hacking attempt');
+
+// SHA/Scrypt check
 if (empty($config['algorithm']) || $config['algorithm'] == 'scrypt') {
   $config['target_bits'] = 16;
 } else {

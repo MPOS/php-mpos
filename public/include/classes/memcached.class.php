@@ -1,5 +1,8 @@
 <?php
 
+// Make sure we are called from index.php
+if (!defined('SECURITY')) die('Hacking attempt');
+
 /**
  * A wrapper class which provides compatibility between Memcached and Memcache
  * PHP uses the Memcached class on *nix environments, and the Memcache class
