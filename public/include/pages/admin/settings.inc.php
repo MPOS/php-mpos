@@ -13,7 +13,7 @@ if (@$_REQUEST['do'] == 'save' && !empty($_REQUEST['data'])) {
   foreach($_REQUEST['data'] as $var => $value) {
     $setting->setValue($var, $value);
   }
-  $_SESSION['POPUP'][] = array('CONTENT' => 'Settings updated');
+  $_SESSION['POPUP'][] = array('CONTENT' => 'Settings updated', 'TYPE' => 'success');
 }
 
 // Load our available settings from configuration

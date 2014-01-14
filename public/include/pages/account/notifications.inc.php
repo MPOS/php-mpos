@@ -9,7 +9,7 @@ if ($user->isAuthenticated()) {
   } else {
     if (@$_REQUEST['do'] == 'save') {
       if ($notification->updateSettings($_SESSION['USERDATA']['id'], $_REQUEST['data'])) {
-        $_SESSION['POPUP'][] = array('CONTENT' => 'Updated notification settings');
+        $_SESSION['POPUP'][] = array('CONTENT' => 'Updated notification settings', 'TYPE' => 'success');
       } else {
         $_SESSION['POPUP'][] = array('CONTENT' => $notification->getError(), 'TYPE' => 'errormsg');
       }
