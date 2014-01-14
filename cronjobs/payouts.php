@@ -110,6 +110,9 @@ if ($setting->getValue('disable_auto_payouts') != 1) {
   if (! empty($users)) {
     $log->logInfo("\tUserID\tUsername\tBalance\tThreshold\tAddress");
 
+    // Check and see if the sendmany RPC method is available
+    $sendmanyAvailable = ((strpos($bitcoin->help("sendmany"), "unknown") === FALSE) ? 1 : 0);
+
     foreach ($users as $aUserData) {
       $dBalance = $aUserData['confirmed'];
       $log->logInfo("\t" . $aUserData['id'] . "\t" . $aUserData['username'] . "\t" . $dBalance . "\t" . $aUserData['ap_threshold'] . "\t\t" . $aUserData['coin_address']);
@@ -127,37 +130,26 @@ if ($setting->getValue('disable_auto_payouts') != 1) {
           $log->logError('Failed to verify this users coin address, skipping payout');
           continue;
         }
-
-        // Send balance, fees are reduced later by RPC Server
-        try {
-          $txid = $bitcoin->sendtoaddress($aUserData['coin_address'], $dBalance - $config['txfee']);
-        } catch (Exception $e) {
-          $log->logError('Failed to send requested balance to coin address, please check payout process. Does the wallet cover the amount?');
-          continue;
+        $sendmanyArray[$aUserData['coin_address']] = ($dBalance - $config['txfee']);
+      }
+    }
+    // Send balance, fees are reduced later by RPC Server
+    try {
+      // Is sendmany available?
+      if ($sendmanyAvailable == 1) {
+        $txid = $bitcoin->sendmany('', $sendManyArray);
+        foreach ($users as $aUserData) {
+          addTransactionNotify($aUserData['id'], ($dBalance - $config['txfee']), $aUserData['coin_address'], $txid);
         }
-
-        // Create transaction record
-        if ($transaction->addTransaction($aUserData['id'], $dBalance - $config['txfee'], 'Debit_AP', NULL, $aUserData['coin_address'], $txid) && $transaction->addTransaction($aUserData['id'], $config['txfee'], 'TXFee', NULL, $aUserData['coin_address'])) {
-          // Mark all older transactions as archived
-          if (!$transaction->setArchived($aUserData['id'], $transaction->insert_id))
-            $log->logError('Failed to mark transactions for user #' . $aUserData['id'] . ' prior to #' . $transaction->insert_id . ' as archived');
-          // Notify user via  mail
-          $aMailData['email'] = $user->getUserEmail($user->getUserName($aUserData['id']));
-          $aMailData['subject'] = 'Auto Payout Completed';
-          $aMailData['amount'] = $dBalance;
-          if (!$notification->sendNotification($aUserData['id'], 'auto_payout', $aMailData))
-            $log->logError('Failed to send notification email to users address: ' . $aMailData['email']);
-          // Recheck the users balance to make sure it is now 0
-          $aBalance = $transaction->getBalance($aUserData['id']);
-          if ($aBalance['confirmed'] > 0) {
-            $log->logFatal('User has a remaining balance of ' . $aBalance['confirmed'] . ' after a successful payout!');
-            $monitoring->endCronjob($cron_name, 'E0065', 1, true);
-          }
-        } else {
-          $log->logFatal('Failed to add new Debit_AP transaction in database for user ' . $user->getUserName($aUserData['id']));
-          $monitoring->endCronjob($cron_name, 'E0064', 1, true);
+      } else { // Fallback
+        foreach ($users as $aUserData) {
+          $txid = $bitcoin->sendtoaddress($aUserData['coin_address'], ($dBalance - $config['txfee']));
+          addTransactionNotify($aUserData['id'], ($dBalance - $config['txfee']), $aUserData['coin_address'], $txid);
         }
       }
+    } catch (Exception $e) {
+      $log->logError('Failed to send requested balance to coin address, please check payout process. Does the wallet cover the amount?');
+      continue;
     }
   } else {
     $log->logDebug("  no user has configured their AP > 0");
@@ -167,4 +159,38 @@ if ($setting->getValue('disable_auto_payouts') != 1) {
 }
 // Cron cleanup and monitoring
 require_once('cron_end.inc.php');
+
+/**
+ * Adds a transaction, send a notification, and double checks that the balance is zero
+ * @param userID int userID 
+ * @param amount double Amount that the user was paid. Subtract the TXFee in amount!
+ * @param address string User coin address
+ * @param txid string Transaction ID
+ * @return true on success
+ */
+function addTransactionNotify($userID, $amount, $address, $txid) {
+  if ($transaction->addTransaction($userID, $amount, 'Debit_AP', NULL, $address, $txid) && $transaction->addTransaction($userID, $config['txfee'], 'TXFee', NULL, $address)) {
+    // Mark all older transactions as archived
+    if (!$transaction->setArchived($userID, $transaction->insert_id))
+      $log->logError('Failed to mark transactions for user #' . $userID . ' prior to #' . $transaction->insert_id . ' as archived');
+     // Notify user via  mail
+    $aMailData['email'] = $user->getUserEmail($user->getUserName($userID));
+    $aMailData['subject'] = 'Auto Payout Completed';
+    $aMailData['amount'] = $amount;
+    if (!$notification->sendNotification($userID, 'auto_payout', $aMailData))
+      $log->logError('Failed to send notification email to users address: ' . $aMailData['email']);
+    // Recheck the users balance to make sure it is now 0
+    $aBalance = $transaction->getBalance($userID);
+    if ($aBalance['confirmed'] > 0) {
+      $log->logFatal('User has a remaining balance of ' . $aBalance['confirmed'] . ' after a successful payout!');
+      $monitoring->endCronjob($cron_name, 'E0065', 1, true);
+      return false;
+    }
+  } else {
+    $log->logFatal('Failed to add new Debit_AP transaction in database for user ' . $user->getUserName($userID));
+    $monitoring->endCronjob($cron_name, 'E0064', 1, true);
+    return false;
+  }
+return true;
+}
 ?>
