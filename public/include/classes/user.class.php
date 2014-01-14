@@ -130,6 +130,10 @@ class User extends Base {
     if ($this->checkUserPassword($username, $password)) {
       $this->updateLoginTimestamp($this->getUserId($username));
       $this->createSession($username);
+      $aData['username'] = $username;
+      $aData['email'] = $this->getUserEmail($username);;
+      $aData['subject'] = 'Account Login';
+      $this->mail->sendMail('notifications/login', $aData);
       if ($this->setUserIp($this->getUserId($username), $_SERVER['REMOTE_ADDR']))
         return true;
     }
