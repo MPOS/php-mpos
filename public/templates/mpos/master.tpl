@@ -47,11 +47,13 @@
     {include file="global/navigation.tpl"}
 	</aside>
 	<section id="main" class="column">
+    {nocache}
     {if is_array($smarty.session.POPUP|default)}
       {section popup $smarty.session.POPUP}
-        <h4 class="{$smarty.session.POPUP[popup].TYPE|default:"info"}">{$smarty.session.POPUP[popup].CONTENT}</h4>
+        <h4 class="{$smarty.session.POPUP[popup].TYPE|default:"info"}">{$smarty.session.POPUP[popup].CONTENT nofilter}</h4>
       {/section}
     {/if}
+    {/nocache}
     {if $CONTENT != "empty" && $CONTENT != ""}
       {if file_exists($smarty.current_dir|cat:"/$PAGE/$ACTION/$CONTENT")}
         {include file="$PAGE/$ACTION/$CONTENT"}
