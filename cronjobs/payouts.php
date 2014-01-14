@@ -47,7 +47,7 @@ if ($setting->getValue('disable_manual_payouts') != 1) {
       $dBalance = $aBalance['confirmed'];
       $aData['coin_address'] = $user->getCoinAddress($aData['account_id']);
       $aData['username'] = $user->getUserName($aData['account_id']);
-      if ($dBalance > $config['txfee']) {
+      if ($dBalance > $config['txfee_manual']) {
         // To ensure we don't run this transaction again, lets mark it completed
         if (!$oPayout->setProcessed($aData['id'])) {
           $log->logFatal('unable to mark transactions ' . $aData['id'] . ' as processed.');
@@ -66,13 +66,13 @@ if ($setting->getValue('disable_manual_payouts') != 1) {
           continue;
         }
         try {
-          $txid = $bitcoin->sendtoaddress($aData['coin_address'], $dBalance - $config['txfee']);
+          $txid = $bitcoin->sendtoaddress($aData['coin_address'], $dBalance - $config['txfee_manual']);
         } catch (Exception $e) {
           $log->logError('Failed to send requested balance to coin address, please check payout process. Does the wallet cover the amount?');
           continue;
         }
 
-        if ($transaction->addTransaction($aData['account_id'], $dBalance - $config['txfee'], 'Debit_MP', NULL, $aData['coin_address'], $txid) && $transaction->addTransaction($aData['account_id'], $config['txfee'], 'TXFee', NULL, $aData['coin_address'])) {
+        if ($transaction->addTransaction($aData['account_id'], $dBalance - $config['txfee_manual'], 'Debit_MP', NULL, $aData['coin_address'], $txid) && $transaction->addTransaction($aData['account_id'], $config['txfee_manual'], 'TXFee', NULL, $aData['coin_address'])) {
           // Mark all older transactions as archived
           if (!$transaction->setArchived($aData['account_id'], $transaction->insert_id))
             $log->logError('Failed to mark transactions for #' . $aData['account_id'] . ' prior to #' . $transaction->insert_id . ' as archived');
@@ -115,7 +115,7 @@ if ($setting->getValue('disable_auto_payouts') != 1) {
       $log->logInfo("\t" . $aUserData['id'] . "\t" . $aUserData['username'] . "\t" . $dBalance . "\t" . $aUserData['ap_threshold'] . "\t\t" . $aUserData['coin_address']);
 
       // Only run if balance meets threshold and can pay the potential transaction fee
-      if ($dBalance > $aUserData['ap_threshold'] && $dBalance > $config['txfee']) {
+      if ($dBalance > $aUserData['ap_threshold'] && $dBalance > $config['txfee_auto']) {
         // Validate address against RPC
         try {
           $aStatus = $bitcoin->validateaddress($aUserData['coin_address']);
@@ -130,14 +130,14 @@ if ($setting->getValue('disable_auto_payouts') != 1) {
 
         // Send balance, fees are reduced later by RPC Server
         try {
-          $txid = $bitcoin->sendtoaddress($aUserData['coin_address'], $dBalance - $config['txfee']);
+          $txid = $bitcoin->sendtoaddress($aUserData['coin_address'], $dBalance - $config['txfee_auto']);
         } catch (Exception $e) {
           $log->logError('Failed to send requested balance to coin address, please check payout process. Does the wallet cover the amount?');
           continue;
         }
 
         // Create transaction record
-        if ($transaction->addTransaction($aUserData['id'], $dBalance - $config['txfee'], 'Debit_AP', NULL, $aUserData['coin_address'], $txid) && $transaction->addTransaction($aUserData['id'], $config['txfee'], 'TXFee', NULL, $aUserData['coin_address'])) {
+        if ($transaction->addTransaction($aUserData['id'], $dBalance - $config['txfee_auto'], 'Debit_AP', NULL, $aUserData['coin_address'], $txid) && $transaction->addTransaction($aUserData['id'], $config['txfee_auto'], 'TXFee', NULL, $aUserData['coin_address'])) {
           // Mark all older transactions as archived
           if (!$transaction->setArchived($aUserData['id'], $transaction->insert_id))
             $log->logError('Failed to mark transactions for user #' . $aUserData['id'] . ' prior to #' . $transaction->insert_id . ' as archived');
