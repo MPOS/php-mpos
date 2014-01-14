@@ -13,6 +13,7 @@
         </fieldset>
       <div class="clear"></div>
     </div>
+    <center>{nocache}{$RECAPTCHA|default:"" nofilter}{/nocache}</center>
     <footer>
       <div class="submit_link">
         <a href="{$smarty.server.SCRIPT_NAME}?page=password"><font size="1">Forgot your password?</font></a>
