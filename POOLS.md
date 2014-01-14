@@ -177,13 +177,16 @@ Small Time Miners are running various stratum only pools for different coins.
 
 ### [Coinium.org](http://www.coinium.org/ "Coinium.org") ([@raistlinthewiz](https://github.com/raistlinthewiz/ "raistlinthewiz on GitHub"))
 
-[Coinium.org](http://coinium.org/ "Coinium.org") - high performance pool network that is hosted in UK.
+[Coinium.org](http://coinium.org/ "Coinium.org") - high performance pool network.
 
 | Pool URL                         | Coin  | Avg. Hashrate | Avg. Active Workers | Notes |
 | -------------------------------- | ----- | ------------: | ------------------: | ----- |
-| http://doge.coinium.org          | DOGE  | 50 Mhs        | ~100 workers          | PPLNS |
-| http://emd.coinium.org           | EMD   | 10 Mhs        |  ~10 workers          | PPLNS |
-| http://earth.coinium.org         | EAC   | 15 Mhs        |  ~30 workers          | PPLNS |
+| http://earth.coinium.org         | EAC   | 600 Mhs       | ~500 workers        | PPLNS |
+| http://cat.coinium.org           | CAT   | 100 Mhs       | ~100 workers        | PPLNS |
+| http://doge.coinium.org          | DOGE  | 50 Mhs        | ~100 workers        | PPLNS |
+| http://emd.coinium.org           | EMD   | 15 Mhs        |  ~30 workers        | PPLNS |
+| http://lot.coinium.org           | LOT   | 15 Mhs        |  ~30 workers        | PPLNS |
+| http://moon.coinium.org          | MOON  | 15 Mh  s      |  ~30 workers        | PPLNS |
 
 ### t3chie
 
