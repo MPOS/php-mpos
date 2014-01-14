@@ -67,6 +67,7 @@ $aGlobal = array(
   'twofactor' => $config['twofactor'],
   'csrf' => $config['csrf'],
   'config' => array(
+    'recaptcha_enabled' => $setting->getValue('recaptcha_enabled'),
     'disable_navbar' => $setting->getValue('disable_navbar'),
     'disable_navbar_api' => $setting->getValue('disable_navbar_api'),
     'disable_payouts' => $setting->getValue('disable_payouts'),
