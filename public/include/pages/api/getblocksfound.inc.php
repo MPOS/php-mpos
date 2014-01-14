@@ -15,8 +15,10 @@ $setting->getValue('statistics_block_count') ? $iLimit = $setting->getValue('sta
 // Fetch latest blocks found, honor anon flag
 $aBlocks = $statistics->getBlocksFound($iLimit);
 foreach ($aBlocks as $iKey => $aBlockData) {
-  if ($aBlockData['is_anonymous'] == 1)
+  if ($aBlockData['is_anonymous'] == 1) {
     $aBlocks[$iKey]['finder'] = 'anonymous';
+    $aBlocks[$iKey]['worker_name'] = 'anonymous.anon';
+  }
 }
 
 // Output JSON format
