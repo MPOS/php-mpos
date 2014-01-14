@@ -12,8 +12,15 @@ $user_id = $api->checkAccess($user->checkApiKey($_REQUEST['api_key']), @$_REQUES
 // Check how many blocks to fetch
 $setting->getValue('statistics_block_count') ? $iLimit = $setting->getValue('statistics_block_count') : $iLimit = 20;
 
+// Fetch latest blocks found, honor anon flag
+$aBlocks = $statistics->getBlocksFound($iLimit);
+foreach ($aBlocks as $iKey => $aBlockData) {
+  if ($aBlockData['is_anonymous'] == 1)
+    $aBlocks[$iKey]['finder'] = 'anonymous';
+}
+
 // Output JSON format
-echo $api->get_json($statistics->getBlocksFound($iLimit));
+echo $api->get_json($aBlocks);
 
 // Supress master template
 $supress_master = 1;
