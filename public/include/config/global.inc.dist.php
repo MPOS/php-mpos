@@ -231,11 +231,15 @@ $config['coindiffchangetarget'] = 2016;
  *   a default value here which is applied to both manual and auto payouts.
  *   If this is not set, no fee is applied in the transactions history but
  *   the user might still see them when the coins arrive.
+ *   You can set two different transaction fees for manual and auto payouts.
  *
  * Default:
- *   txfee   =  0.1
+ *   txfee_auto   =  0.1
+ *   txfee_manual   =  0.1
+ *
  **/
-$config['txfee'] = 0.1;
+$config['txfee_auto'] = 0.1;
+$config['txfee_manual'] = 0.1;
 
 // Payout a block bonus to block finders, default: 0 (disabled)
 // This bonus is paid by the pool operator, it is not deducted from the block payout!
