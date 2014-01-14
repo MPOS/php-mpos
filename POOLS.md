@@ -269,4 +269,4 @@ Small Time Miners are running various stratum only pools for different coins.
 ### Stratum Pool for Anoncoin in the US
 | Pool URL                         | Coin     | Avg. Hashrate | Avg. Active Workers |          Notes            |
 | -------------------------------- | -------- | ------------- | ------------------: | ------------------------- |
-| https://www.hashme.net | Anoncoin | 41 Mh/s | 34 Workers | Custom Template + PPS + VARDIFF + 0 Fees |
+| https://hashme.net | Anoncoin | 41 Mh/s | 34 Workers | Custom Template + PPS + VARDIFF + 0 Fees |
