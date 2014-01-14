@@ -133,6 +133,7 @@ class User extends Base {
       $aData['username'] = $username;
       $aData['email'] = $this->getUserEmail($username);;
       $aData['subject'] = 'Account Login';
+      $aData['ip'] = $_SERVER['REMOTE_ADDR']
       $this->mail->sendMail('notifications/login', $aData);
       if ($this->setUserIp($this->getUserId($username), $_SERVER['REMOTE_ADDR']))
         return true;
