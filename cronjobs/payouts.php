@@ -42,8 +42,6 @@ if ($setting->getValue('disable_manual_payouts') != 1) {
 
   if (count($aPayouts) > 0) {
     $log->logInfo("\tAccount ID\tUsername\tBalance\t\tCoin Address");
-    // Check and see if the sendmany RPC method is available
-    $sendmanyAvailable = ((strpos($bitcoin->help("sendmany"), "unknown") === FALSE) ? 1 : 0);
     foreach ($aPayouts as $aData) {
       $aBalance = $transaction->getBalance($aData['account_id']);
       $dBalance = $aBalance['confirmed'];
@@ -68,18 +66,7 @@ if ($setting->getValue('disable_manual_payouts') != 1) {
           continue;
         }
         try {
-          // Is sendmany available?
-          if ($sendmanyAvailable == 1) {
-            $txid = $bitcoin->sendmany('', $sendManyArray);
-            foreach ($users as $aUserData) {
-              addTransactionNotify($aUserData['id'], ($dBalance - $config['txfee']), $aUserData['coin_address'], $txid);
-            }
-          } else { // Fallback
-            foreach ($users as $aUserData) {
-              $txid = $bitcoin->sendtoaddress($aUserData['coin_address'], ($dBalance - $config['txfee']));
-              addTransactionNotify($aUserData['id'], ($dBalance - $config['txfee']), $aUserData['coin_address'], $txid);
-            }
-          }
+          $txid = $bitcoin->sendtoaddress($aData['coin_address'], $dBalance - $config['txfee']);
         } catch (Exception $e) {
           $log->logError('Failed to send requested balance to coin address, please check payout process. Does the wallet cover the amount?');
           continue;
@@ -123,6 +110,9 @@ if ($setting->getValue('disable_auto_payouts') != 1) {
   if (! empty($users)) {
     $log->logInfo("\tUserID\tUsername\tBalance\tThreshold\tAddress");
 
+    // Check and see if the sendmany RPC method is available
+    $sendmanyAvailable = ((strpos($bitcoin->help("sendmany"), "unknown") === FALSE) ? 1 : 0);
+
     foreach ($users as $aUserData) {
       $dBalance = $aUserData['confirmed'];
       $log->logInfo("\t" . $aUserData['id'] . "\t" . $aUserData['username'] . "\t" . $dBalance . "\t" . $aUserData['ap_threshold'] . "\t\t" . $aUserData['coin_address']);
@@ -140,15 +130,26 @@ if ($setting->getValue('disable_auto_payouts') != 1) {
           $log->logError('Failed to verify this users coin address, skipping payout');
           continue;
         }
-
-        // Send balance, fees are reduced later by RPC Server
-        try {
-          $txid = $bitcoin->sendtoaddress($aUserData['coin_address'], $dBalance - $config['txfee']);
-        } catch (Exception $e) {
-          $log->logError('Failed to send requested balance to coin address, please check payout process. Does the wallet cover the amount?');
-          continue;
+        $sendmanyArray[$aUserData['coin_address']] = ($dBalance - $config['txfee']);
+      }
+    }
+    // Send balance, fees are reduced later by RPC Server
+    try {
+      // Is sendmany available?
+      if ($sendmanyAvailable == 1) {
+        $txid = $bitcoin->sendmany('', $sendManyArray);
+        foreach ($users as $aUserData) {
+          addTransactionNotify($aUserData['id'], ($dBalance - $config['txfee']), $aUserData['coin_address'], $txid);
+        }
+      } else { // Fallback
+        foreach ($users as $aUserData) {
+          $txid = $bitcoin->sendtoaddress($aUserData['coin_address'], ($dBalance - $config['txfee']));
+          addTransactionNotify($aUserData['id'], ($dBalance - $config['txfee']), $aUserData['coin_address'], $txid);
         }
       }
+    } catch (Exception $e) {
+      $log->logError('Failed to send requested balance to coin address, please check payout process. Does the wallet cover the amount?');
+      continue;
     }
   } else {
     $log->logDebug("  no user has configured their AP > 0");
