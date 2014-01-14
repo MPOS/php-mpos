@@ -37,7 +37,7 @@ cursor:pointer
 header#header {
 height: 55px;
 width: 100%;
-background: #222222 url(../images/header_bg.png) repeat-x;
+background: #0B83E0;
 }
 
 header#header h1.site_title, header#header h2.section_title {
@@ -66,7 +66,6 @@ header#header h2.section_title {
 text-align: left;
 text-indent: 4.5%;
 text-transform: uppercase;
-background: url(../images/header_shadow.png) no-repeat left top;
 }
 
 .btn_view_site {
