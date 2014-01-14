@@ -33,7 +33,7 @@
       <input type="checkbox" value="1" name="tac" id="tac">
       <label for="tac" style="margin:1px 0px 0px -20px"></label>
     </fieldset>
-    <center>{nocache}{$RECAPTCHA|default:""}{/nocache}</center>
+    <center>{nocache}{$RECAPTCHA|default:"" nofilter}{/nocache}</center>
   </div>
   <footer>
     <div class="submit_link">
