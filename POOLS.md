@@ -264,3 +264,9 @@ Small Time Miners are running various stratum only pools for different coins.
 | Pool URL                     | Coin     | Avg. Hashrate | Avg. Active Workers | Notes |
 | ---------------------------- | -------- | ------------- | ------------------- | ----- |
 | http://ltc.drillbit.me | Litecoin | 80-100 Mhash | ~250 | PROP VARDIFF 0% Fee |
+
+### Hashme.net Pool
+### Stratum Pool for Anoncoin in the US
+| Pool URL                         | Coin     | Avg. Hashrate | Avg. Active Workers |          Notes            |
+| -------------------------------- | -------- | ------------- | ------------------: | ------------------------- |
+| https://www.hashme.net | Anoncoin | 41 Mh/s | 34 Workers | Custom Template + PPS + VARDIFF + 0 Fees |
