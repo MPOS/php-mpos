@@ -65,14 +65,18 @@ Small Time Miners are running various stratum only pools for different coins.
 | -------- | ---- | ------------- | ------------------: | ----- |
 | http://coinhuntr.com | Litecoin | 200 MHash | 250 | Custom Frontend template |
 
-### Sheinsha
+### Sheinsha's [Minar.cc Mining Pools](http://www.minar.cc/ "Minar.cc")
+
+[Minar.cc ](http://www.minar.cc/ "Minar.cc") is a multi-coin mining pool dedicated exclusively to altcoins. Many are added every week as new altcoins are launched.
 
 | Pool URL | Coin | Avg. Hashrate | Avg. Active Workers | Notes |
 | -------- | ---- | ------------: | ------------------: | ----- |
-| http://str.minar.cc | StarCoin | 35 MHash  |  35 | PPLNS+VARDIFF, PoS/PoW type coin |
-| http://dmd.minar.cc | DiamondCoin | 90 MHash  |  65 | PPLNS+VARDIFF, PoS/PoW type coin |
-| http://cgb.minar.cc | CryptogenicBullion | 18 MHash  |  15 | PPLNS+VARDIFF, PoS/PoW type coin |
-| http://phs.minar.cc | Philosopherstone Coin | 170 MHash | 130 | PPLNS+VARDIFF, PoS/PoW type coin |
+| http://dmd.minar.cc | Diamond Coin | 90 MHash  |  65 | PPLNS+VARDIFF, PoS/PoW Scrypt coin |
+| http://cgb.minar.cc | CryptogenicBullion | 20 MHash  |  30 | PPLNS+VARDIFF, PoS/PoW Scrypt coin |
+| http://phs.minar.cc | Philosopherstone Coin | 170 MHash | 130 | PPLNS+VARDIFF, PoS/PoW Scrypt coin |
+| http://cin.minar.cc | Cinnamon Coin | 8 MHash | 40 | PPLNS+VARDIFF, PoS/PoW Scrypt coin |
+| http://crc.minar.cc | CraftCoin | 5 MHash | 30 | PPLNS+VARDIFF, PoW Scrypt coin |
+| http://kds.minar.cc | Kudos Coin | 2 MHash | 10 | PPLNS+VARDIFF, PoW Scrypt coin |
 
 ### IainKay & Nushor
 
