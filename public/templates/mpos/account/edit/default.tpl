@@ -58,14 +58,12 @@
         <input type="hidden" name="ea_token" value="{$smarty.request.ea_token|escape}">
         <input type="hidden" name="utype" value="account_edit">
         {if $GLOBAL.twofactor.enabled && $GLOBAL.twofactor.options.details}
-          {if $DETAILSUNLOCKED > 0 && $DETAILSSENT > 0}
-            <input type="submit" value="Update Account" class="alt_btn">
-          {else}
-            {if $DETAILSSENT == 1}
-              <input type="submit" value="Update Account" class="alt_btn" disabled>
-            {else}
-              <input type="submit" value="Unlock" class="alt_btn" name="unlock">
-            {/if}
+          {if $DETAILSSENT == 1 && $DETAILSUNLOCKED == 1}
+          	<input type="submit" value="Update Account" class="alt_btn">
+          {elseif $DETAILSSENT == 0 && $DETAILSUNLOCKED == 1 || $DETAILSSENT == 1 && $DETAILSUNLOCKED == 0}
+            <input type="submit" value="Update Account" class="alt_btn" disabled>
+          {elseif $DETAILSSENT == 0 && $DETAILSUNLOCKED == 0}
+            <input type="submit" value="Unlock" class="alt_btn" name="unlock">
           {/if}
         {else}
           <input type="submit" value="Update Account" class="alt_btn">
@@ -108,14 +106,12 @@
         <input type="hidden" name="wf_token" value="{$smarty.request.wf_token|escape}">
         <input type="hidden" name="utype" value="withdraw_funds">
         {if $GLOBAL.twofactor.enabled && $GLOBAL.twofactor.options.withdraw}
-          {if $WITHDRAWUNLOCKED > 0 && $WITHDRAWSENT > 0}
-            <input type="submit" value="Cash Out" class="alt_btn">
-          {else}
-            {if $WITHDRAWSENT == 1}
-              <input type="submit" value="Cash Out" class="alt_btn" disabled>
-            {else}
-              <input type="submit" value="Unlock" class="alt_btn" name="unlock">
-            {/if}
+          {if $WITHDRAWSENT == 1 && $WITHDRAWUNLOCKED == 1}
+          	<input type="submit" value="Cash Out" class="alt_btn">
+          {elseif $WITHDRAWSENT == 0 && $WITHDRAWUNLOCKED == 1 || $WITHDRAWSENT == 1 && $WITHDRAWUNLOCKED == 0}
+            <input type="submit" value="Cash Out" class="alt_btn" disabled>
+          {elseif $WITHDRAWSENT == 0 && $WITHDRAWUNLOCKED == 0}
+            <input type="submit" value="Unlock" class="alt_btn" name="unlock">
           {/if}
         {else}
           <input type="submit" value="Cash Out" class="alt_btn">
@@ -162,14 +158,12 @@
         <input type="hidden" name="cp_token" value="{$smarty.request.cp_token|escape}">
         <input type="hidden" name="utype" value="change_pw">
         {if $GLOBAL.twofactor.enabled && $GLOBAL.twofactor.options.changepw}
-          {if $CHANGEPASSUNLOCKED > 0 && $CHANGEPASSSENT > 0}
-            <input type="submit" value="Change Password" class="alt_btn">
-          {else}
-            {if $CHANGEPASSSENT == 1}
-              <input type="submit" value="Change Password" class="alt_btn" disabled>
-            {else}
-              <input type="submit" value="Unlock" class="alt_btn" name="unlock">
-            {/if}
+          {if $CHANGEPASSSENT == 1 && $CHANGEPASSUNLOCKED == 1}
+          	<input type="submit" value="Change Password" class="alt_btn">
+          {elseif $CHANGEPASSSENT == 0 && $CHANGEPASSUNLOCKED == 1 || $CHANGEPASSSENT == 1 && $CHANGEPASSUNLOCKED == 0}
+            <input type="submit" value="Change Password" class="alt_btn" disabled>
+          {elseif $CHANGEPASSSENT == 0 && $CHANGEPASSUNLOCKED == 0}
+            <input type="submit" value="Unlock" class="alt_btn" name="unlock">
           {/if}
         {else}
           <input type="submit" value="Change Password" class="alt_btn">
