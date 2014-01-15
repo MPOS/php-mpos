@@ -141,16 +141,12 @@ class User extends Base {
         $notifs->setSetting($this->setting);
         $notifs->setErrorCodes($this->aErrorCodes);
         $ndata = $notifs->getNotificationSettings($uid);
-        if (is_array($ndata)) {
-          foreach ($ndata as $nd) {
-            if ($nd['type'] == 'success_login' && $nd['active'] == 1) {
-              // seems to be active, let's send it
-              $aDataN['username'] = $username;
-              $aDataN['email'] = $this->getUserEmail($username);
-              $aDataN['subject'] = 'Successful login notification';
-              $notifs->sendNotification($uid, 'success_login', $aDataN);
-            }
-          }
+        if ($ndata['success_login'] == 1) {
+          // seems to be active, let's send it
+          $aDataN['username'] = $username;
+          $aDataN['email'] = $this->getUserEmail($username);
+          $aDataN['subject'] = 'Successful login notification';
+          $notifs->sendNotification($uid, 'success_login', $aDataN);
         }
         return true;
       }
