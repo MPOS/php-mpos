@@ -121,6 +121,16 @@ if ($user->isAuthenticated()) {
 }
 // one last time so we can sync with changes we made during this page
 if ($user->isAuthenticated() && $config['twofactor']['enabled']) {
+  // stupid little hack because different request types
+  if (@$_POST['do'] !== 'genPin' || isset($_POST['unlock'])) {
+    $ea_token = (!isset($_GET['ea_token'])) ? '' : $_GET['ea_token'];
+    $cp_token = (!isset($_GET['cp_token'])) ? '' : $_GET['cp_token'];
+    $wf_token = (!isset($_GET['wf_token'])) ? '' : $_GET['wf_token'];
+  } else {
+    $ea_token = (!isset($_POST['ea_token'])) ? '' : $_POST['ea_token'];
+    $cp_token = (!isset($_POST['cp_token'])) ? '' : $_POST['cp_token'];
+    $wf_token = (!isset($_POST['wf_token'])) ? '' : $_POST['wf_token'];
+  }
   if ($config['twofactor']['options']['details']) {
     $ea_editable = $user->token->isTokenValid($_SESSION['USERDATA']['id'], $ea_token, 5);
     $ea_sent = $user->token->doesTokenExist('account_edit', $_SESSION['USERDATA']['id']);

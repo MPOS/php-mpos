@@ -580,7 +580,7 @@ text-shadow: 0 1px 0 #6CDCF9;
 cursor: pointer;
 }
 
-input[type=submit].alt_btn:disabled,input[type=submit].alt_btn:readonly {
+input[type=submit].alt_btn:disabled {
 background: #D0D1D4 url(../images/btn_submit.png) repeat-x;
 border: 1px solid#aaa;
 text-shadow: none;
