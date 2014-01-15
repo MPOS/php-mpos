@@ -39,6 +39,8 @@ These people have supported this project with a donation:
 * Caberhagen (http://litecoin-pool.ch)
 * Mining4All (https://www.mining4all.eu/)
 * [xisi](https://github.com/xisi)
+* [PCFiL](https://github.com/PCFiL)
+* rog1121
 
 Pools running MPOS
 ==================
