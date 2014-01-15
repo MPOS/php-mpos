@@ -29,10 +29,16 @@ class Worker extends Base {
         $iFailed++;
         continue;
       }
+      // Check Manual Difficulty Minimum and Maximum for HARDCODED min and max permitted values
+      if (1 > $value['manual_diff'] || $value['manual_diff'] > 512) {
+        $iFailed++;
+        continue;
+      }
+      
       // Prefix the WebUser to Worker name
       $value['username'] = "$username." . $value['username'];
-      $stmt = $this->mysqli->prepare("UPDATE $this->table SET password = ?, username = ?, monitor = ? WHERE account_id = ? AND id = ?");
-      if ( ! ( $this->checkStmt($stmt) && $stmt->bind_param('ssiii', $value['password'], $value['username'], $value['monitor'], $account_id, $key) && $stmt->execute()) )
+      $stmt = $this->mysqli->prepare("UPDATE $this->table SET password = ?, username = ?, monitor = ?, manual_diff = ? WHERE account_id = ? AND id = ?");
+      if ( ! ( $this->checkStmt($stmt) && $stmt->bind_param('ssiii', $value['password'], $value['username'], $value['monitor'], $value['manual_diff'], $account_id, $key) && $stmt->execute()) )
         $iFailed++;
       }
     }
