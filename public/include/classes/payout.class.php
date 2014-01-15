@@ -38,7 +38,7 @@ class Payout Extends Base {
    **/
   public function createPayout($account_id=NULL, $strToken) {
     // twofactor - if cashout enabled we need to create/check the token
-    if ($this->config['twofactor']['enabled'] && $this->config['twofactor']['withdraw']) {
+    if ($this->config['twofactor']['enabled'] && $this->config['twofactor']['options']['withdraw']) {
       $tData = $this->token->getToken($strToken, 'withdraw_funds');
       $tExists = $this->token->doesTokenExist('withdraw_funds', $account_id);
       if (!is_array($tData) && $tExists == false) {
@@ -50,7 +50,7 @@ class Payout Extends Base {
         $aData['subject'] = 'Manual payout request confirmation';
         $this->mail->sendMail('notifications/withdraw_funds', $aData);
         $this->setErrorMessage("A confirmation has been sent to your e-mail");
-        return false;
+        return true;
       } else {
         // already exists, if it's valid delete it and allow this edit
         if ($strToken === $tData['token']) {
