@@ -79,7 +79,7 @@ if ($setting->getValue('disable_manual_payouts') != 1) {
           // Notify user via  mail
           $aMailData['email'] = $user->getUserEmail($user->getUserName($aData['account_id']));
           $aMailData['subject'] = 'Manual Payout Completed';
-          $aMailData['amount'] = $dBalance;
+          $aMailData['amount'] = $dBalance - $config['txfee_manual'];
           $aMailData['payout_id'] = $aData['id'];
           if (!$notification->sendNotification($aData['account_id'], 'manual_payout', $aMailData))
             $log->logError('Failed to send notification email to users address: ' . $aMailData['email']);
@@ -144,7 +144,7 @@ if ($setting->getValue('disable_auto_payouts') != 1) {
           // Notify user via  mail
           $aMailData['email'] = $user->getUserEmail($user->getUserName($aUserData['id']));
           $aMailData['subject'] = 'Auto Payout Completed';
-          $aMailData['amount'] = $dBalance;
+          $aMailData['amount'] = $dBalance - $config['txfee_auto'];
           if (!$notification->sendNotification($aUserData['id'], 'auto_payout', $aMailData))
             $log->logError('Failed to send notification email to users address: ' . $aMailData['email']);
           // Recheck the users balance to make sure it is now 0
