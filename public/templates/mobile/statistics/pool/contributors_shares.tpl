@@ -10,7 +10,7 @@
 {assign var=rank value=1}
 {assign var=listed value=0}
 {section shares $CONTRIBSHARES}
-{if $GLOBAL.userdata.username == $CONTRIBSHARES[shares].account}{assign var=listed value=1}{/if}
+{if $GLOBAL.userdata.username|default:"" == $CONTRIBSHARES[shares].account}{assign var=listed value=1}{/if}
       <tr>
         <th aign="center">{$rank++}</th>
         <td>{if $CONTRIBSHARES[shares].is_anonymous|default:"0" == 1 && $GLOBAL.userdata.is_admin|default:"0" == 0}anonymous{else}{$CONTRIBSHARES[shares].account|escape}{/if}</td>
