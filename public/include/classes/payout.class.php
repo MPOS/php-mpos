@@ -36,9 +36,17 @@ class Payout Extends Base {
    * @return data mixed Inserted ID or false
    **/
   public function createPayout($account_id=NULL) {
+    if ($token = $this->token->createToken('DEBIT', $id)) {
+          $aData['token'] = $token;
+          $aData['username'] = $username;
+          $aData['email'] = $this->getUserEmail($username);;
+          $aData['subject'] = 'Account Withdrawal Request';
+          $this->mail->sendMail('notifications/withdrawal', $aData);
+    }
     $stmt = $this->mysqli->prepare("INSERT INTO $this->table (account_id) VALUES (?)");
     if ($stmt && $stmt->bind_param('i', $account_id) && $stmt->execute()) {
       return $stmt->insert_id;
+    
     }
     return $this->sqlError('E0049');
   }
