@@ -21,6 +21,23 @@ class Token Extends Base {
       return $result->fetch_assoc();
     return $this->sqlError();
   }
+  
+  /**
+   * Check if a token of this type already exists for a given account_id
+   * @param strType string Name of the type of token
+   * @param account_id int Account id of user to check
+   * @return mixed Number of rows on success, false on failure
+   */
+  public function doesTokenExist($strType=NULL, $account_id=NULL) {
+    if (!$iToken_id = $this->tokentype->getTypeId($strType)) {
+      $this->setErrorMessage('Invalid token type: ' . $strType);
+      return false;
+    }
+    $stmt = $this->mysqli->prepare("SELECT * FROM $this->table WHERE account_id = ? AND type = ? LIMIT 1");
+    if ($stmt && $stmt->bind_param('ii', $account_id, $iToken_id) && $stmt->execute())
+      return $stmt->num_rows;
+    return $this->sqlError();
+  }
 
   /**
    * Insert a new token

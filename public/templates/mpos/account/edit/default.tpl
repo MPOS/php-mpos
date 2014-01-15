@@ -54,6 +54,7 @@
     </div>
     <footer>
       <div class="submit_link">
+        <input type="hidden" name="ea_token" value="{$smarty.request.ea_token|escape}">
         <input type="submit" value="Update Account" class="alt_btn">
       </div>
     </footer>
@@ -88,6 +89,7 @@
     </div>
     <footer>
       <div class="submit_link">
+        <input type="hidden" name="wf_token" value="{$smarty.request.wf_token|escape}">
         <input type="submit" value="Cash Out" class="alt_btn">
       </div>
     </footer>
@@ -126,6 +128,7 @@
     </div>
     <footer>
       <div class="submit_link">
+        <input type="hidden" name="cp_token" value="{$smarty.request.cp_token|escape}">
         <input type="submit" value="Change Password" class="alt_btn">
       </div>
     </footer>

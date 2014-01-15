@@ -25,10 +25,11 @@ if ($user->isAuthenticated()) {
           $dBalance = $aBalance['confirmed'];
           if ($dBalance > $config['txfee']) {
             if (!$oPayout->isPayoutActive($_SESSION['USERDATA']['id'])) {
-              if ($iPayoutId = $oPayout->createPayout($_SESSION['USERDATA']['id'])) {
+              $wf_token = (!isset($_POST['wf_token'])) ? '' : $_POST['wf_token'];
+              if ($iPayoutId = $oPayout->createPayout($_SESSION['USERDATA']['id'], $wf_token)) {
                 $_SESSION['POPUP'][] = array('CONTENT' => 'Created new manual payout request with ID #' . $iPayoutId);
               } else {
-                $_SESSION['POPUP'][] = array('CONTENT' => 'Failed to create manual payout request.', 'TYPE' => 'errormsg');
+                $_SESSION['POPUP'][] = array('CONTENT' => $iPayoutId->getError(), 'TYPE' => 'errormsg');
               }
             } else {
               $_SESSION['POPUP'][] = array('CONTENT' => 'You already have one active manual payout request.', 'TYPE' => 'errormsg');
@@ -40,7 +41,8 @@ if ($user->isAuthenticated()) {
         break;
 
       case 'updateAccount':
-        if ($user->updateAccount($_SESSION['USERDATA']['id'], $_POST['paymentAddress'], $_POST['payoutThreshold'], $_POST['donatePercent'], $_POST['email'], $_POST['is_anonymous'])) {
+        $ea_token = (!isset($_POST['ea_token'])) ? '' : $_POST['ea_token'];
+        if ($user->updateAccount($_SESSION['USERDATA']['id'], $_POST['paymentAddress'], $_POST['payoutThreshold'], $_POST['donatePercent'], $_POST['email'], $_POST['is_anonymous'], $ea_token)) {
           $_SESSION['POPUP'][] = array('CONTENT' => 'Account details updated', 'TYPE' => 'success');
         } else {
           $_SESSION['POPUP'][] = array('CONTENT' => 'Failed to update your account: ' . $user->getError(), 'TYPE' => 'errormsg');
@@ -48,7 +50,8 @@ if ($user->isAuthenticated()) {
         break;
 
       case 'updatePassword':
-        if ($user->updatePassword($_SESSION['USERDATA']['id'], $_POST['currentPassword'], $_POST['newPassword'], $_POST['newPassword2'])) {
+        $cp_token = (!isset($_POST['cp_token'])) ? '' : $_POST['cp_token'];
+        if ($user->updatePassword($_SESSION['USERDATA']['id'], $_POST['currentPassword'], $_POST['newPassword'], $_POST['newPassword2'], $cp_token)) {
           $_SESSION['POPUP'][] = array('CONTENT' => 'Password updated', 'TYPE' => 'success');
         } else {
           $_SESSION['POPUP'][] = array('CONTENT' => $user->getError(), 'TYPE' => 'errormsg');

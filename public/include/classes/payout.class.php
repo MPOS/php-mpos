@@ -32,10 +32,36 @@ class Payout Extends Base {
 
   /**
    * Insert a new payout request
-   * @param account_id Account ID
+   * @param account_id int Account ID
+   * @param strToken string Token to confirm
    * @return data mixed Inserted ID or false
    **/
-  public function createPayout($account_id=NULL) {
+  public function createPayout($account_id=NULL, $strToken) {
+    // twofactor - if cashout enabled we need to create/check the token
+    if ($this->config['twofactor']['enabled'] && $this->config['twofactor']['withdraw']) {
+      $tData = $this->token->getToken($strToken, 'withdraw_funds');
+      $tExists = $this->token->doesTokenExist('withdraw_funds', $account_id);
+      if (!is_array($tData) && $tExists == false) {
+        // token doesn't exist, let's create one, send an email with a link to use it, and error out
+        $token = $this->token->createToken('withdraw_funds', $account_id);
+        $aData['token'] = $token;
+        $aData['username'] = $this->getUserName($account_id);
+        $aData['email'] = $this->getUserEmail($aData['username']);
+        $aData['subject'] = 'Manual payout request confirmation';
+        $this->mail->sendMail('notifications/withdraw_funds', $aData);
+        $this->setErrorMessage("A confirmation has been sent to your e-mail");
+        return false;
+      } else {
+        // already exists, if it's valid delete it and allow this edit
+        if ($strToken === $tData['token']) {
+          $this->token->deleteToken($tData['token']);
+        } else {
+          // token exists for this type, but this is not the right token
+          $this->setErrorMessage("A confirmation was sent to your e-mail, follow that link to cash out");
+          return false;
+        }
+      }
+    }
     $stmt = $this->mysqli->prepare("INSERT INTO $this->table (account_id) VALUES (?)");
     if ($stmt && $stmt->bind_param('i', $account_id) && $stmt->execute()) {
       return $stmt->insert_id;
@@ -59,6 +85,9 @@ class Payout Extends Base {
 $oPayout = new Payout();
 $oPayout->setDebug($debug);
 $oPayout->setMysql($mysqli);
+$oPayout->setConfig($config);
+$oPayout->setMail($mail);
+$oPayout->setToken($oToken);
 $oPayout->setErrorCodes($aErrorCodes);
 
 ?>
