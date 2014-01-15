@@ -100,6 +100,30 @@ $config['coldwallet']['reserve'] = 50;
 $config['coldwallet']['threshold'] = 5;
 
 /**
+ * E-mail confirmations for user actions
+ *
+ * Explanation:
+ *   To increase security for users, account detail changes can require
+ *   an e-mail confirmation prior to performing certain actions.
+ *
+ * Options:
+ *   enabled   :  Whether or not to require e-mail confirmations
+ *   details   :  Require confirmation to change account details
+ *   withdraw  :  Require confirmation to manually withdraw/payout
+ *   changepw  :  Require confirmation to change password
+ *
+ * Default:
+ *   enabled   =  true
+ *   details   =  true
+ *   withdraw  =  true
+ *   changepw  =  true
+ */
+$config['twofactor']['enabled'] = true;
+$config['twofactor']['details'] = true;
+$config['twofactor']['withdraw'] = true;
+$config['twofactor']['changepw'] = true;
+
+/**
  * Lock account after maximum failed logins
  *
  * Explanation:

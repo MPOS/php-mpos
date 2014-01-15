@@ -200,7 +200,10 @@ INSERT INTO `token_types` (`id`, `name`, `expiration`) VALUES
 (1, 'password_reset', 3600),
 (2, 'confirm_email', 0),
 (3, 'invitation', 0),
-(4, 'account_unlock', 0);
+(4, 'account_unlock', 0),
+(5, 'account_edit', 360),
+(6, 'change_pw', 360),
+(7, 'withdraw_funds', 360);
 
 CREATE TABLE IF NOT EXISTS `transactions` (
   `id` int(255) NOT NULL AUTO_INCREMENT,
@@ -230,3 +233,4 @@ CREATE TABLE IF NOT EXISTS `templates` (
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+
