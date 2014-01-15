@@ -120,7 +120,7 @@ if ($user->isAuthenticated()) {
   }
 }
 // one last time so we can sync with changes we made during this page
-if ($config['twofactor']['enabled']) {
+if ($user->isAuthenticated() && $config['twofactor']['enabled']) {
   if ($config['twofactor']['options']['details']) {
     $ea_editable = $user->token->isTokenValid($_SESSION['USERDATA']['id'], $ea_token, 5);
     $ea_sent = $user->token->doesTokenExist('account_edit', $_SESSION['USERDATA']['id']);
