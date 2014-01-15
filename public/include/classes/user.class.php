@@ -256,6 +256,43 @@ class User extends Base {
   }
 
   /**
+   * Send e-mail to confirm a change for 2fa
+   * @param strType string Token type name
+   * @param userID int User ID
+   * @return bool
+   */
+  public function sendChangeConf($strType, $userID) {
+    $exists = $this->token->doesTokenExist($strType, $userID);
+    if ($exists == 0) {
+      $token = $this->token->createToken($strType, $userID);
+      $aData['token'] = $token;
+      $aData['username'] = $this->getUserName($userID);
+      $aData['email'] = $this->getUserEmail($aData['username']);
+      switch ($strType) {
+      	case 'account_edit':
+      	  $aData['subject'] = 'Account detail change confirmation';
+      	  break;
+      	case 'change_pw':
+      	  $aData['subject'] = 'Account password change confirmation';
+      	  break;
+      	case 'withdraw_funds':
+      	  $aData['subject'] = 'Manual payout request confirmation';
+      	  break;
+      	default:
+      	  $aData['subject'] = '';
+      }
+      if ($this->mail->sendMail('notifications/'.$strType, $aData)) {
+        return true;
+      } else {
+        $this->setErrorMessage('Failed to send the notification');
+        return false;
+      }
+    }
+    $this->setErrorMessage('A request has already been sent to your e-mail address. Please wait 10 minutes for it to expire.');
+    return false;
+  }
+  
+  /**
    * Update the accounts password
    * @param userID int User ID
    * @param current string Current password
@@ -274,29 +311,14 @@ class User extends Base {
       $this->setErrorMessage( 'New password is too short, please use more than 8 chars' );
       return false;
     }
-    // twofactor - if changepw is enabled we need to create/check the token
+    // twofactor - consume the token if it is enabled and valid
     if ($this->config['twofactor']['enabled'] && $this->config['twofactor']['options']['changepw']) {
-      $tData = $this->token->getToken($strToken, 'change_pw');
-      $tExists = $this->token->doesTokenExist('change_pw', $userID);
-      if (!is_array($tData) && $tExists == false) {
-        // token doesn't exist, let's create one, send an email with a link to use it, and error out
-        $token = $this->token->createToken('change_pw', $userID);
-        $aData['token'] = $token;
-        $aData['username'] = $this->getUserName($userID);
-        $aData['email'] = $this->getUserEmail($aData['username']);
-        $aData['subject'] = 'Account password change confirmation';
-        $this->mail->sendMail('notifications/change_pw', $aData);
-        $this->setErrorMessage("A confirmation has been sent to your e-mail");
-        return true;
+      $tValid = $this->token->isTokenValid($userID, $strToken, 6);
+      if ($tValid) {
+        $this->token->deleteToken($strToken);
       } else {
-        // already exists, if it's valid delete it and allow this edit
-        if ($strToken === $tData['token']) {
-          $this->token->deleteToken($tData['token']);
-        } else {
-          // token exists for this type, but this is not the right token
-          $this->setErrorMessage("A confirmation was sent to your e-mail, follow that link to change your password");
-          return false;
-        }
+        $this->setErrorMessage('Invalid token');
+        return false;
       }
     }
     $current = $this->getHash($current);
@@ -313,7 +335,7 @@ class User extends Base {
     $this->setErrorMessage( 'Unable to update password, current password wrong?' );
     return false;
   }
-
+  
   /**
    * Update account information from the edit account page
    * @param userID int User ID
@@ -373,29 +395,14 @@ class User extends Base {
     $threshold = min($this->config['ap_threshold']['max'], max(0, floatval($threshold)));
     $donate = min(100, max(0, floatval($donate)));
 
-    // twofactor - if details enabled we need to create/check the token
+    // twofactor - consume the token if it is enabled and valid
     if ($this->config['twofactor']['enabled'] && $this->config['twofactor']['options']['details']) {
-      $tData = $this->token->getToken($strToken, 'account_edit');
-      $tExists = $this->token->doesTokenExist('account_edit', $userID);
-      if (!is_array($tData) && $tExists == false) {
-        // token doesn't exist, let's create one, send an email with a link to use it, and error out
-        $token = $this->token->createToken('account_edit', $userID);
-        $aData['token'] = $token;
-        $aData['username'] = $this->getUserName($userID);
-        $aData['email'] = $this->getUserEmail($aData['username']);
-        $aData['subject'] = 'Account detail change confirmation';
-        $this->mail->sendMail('notifications/account_edit', $aData);
-        $this->setErrorMessage("A confirmation has been sent to your e-mail");
-        return true;
+      $tValid = $this->token->isTokenValid($userID, $strToken, 5);
+      if ($tValid) {
+        $this->token->deleteToken($strToken);
       } else {
-        // already exists, if it's valid delete it and allow this edit
-        if ($strToken === $tData['token']) {
-          $this->token->deleteToken($tData['token']);
-        } else {
-          // token exists for this type, but this is not the right token
-          $this->setErrorMessage("A confirmation was sent to your e-mail, follow that link to edit your account details");
-          return false;
-        }
+        $this->setErrorMessage('Invalid token');
+        return false;
       }
     }
     

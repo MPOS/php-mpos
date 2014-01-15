@@ -64,6 +64,7 @@ $aGlobal = array(
   'confirmations' => $config['confirmations'],
   'reward' => $config['reward'],
   'price' => $setting->getValue('price'),
+  'twofactor' => $config['twofactor'],
   'config' => array(
     'disable_navbar' => $setting->getValue('disable_navbar'),
     'disable_navbar_api' => $setting->getValue('disable_navbar_api'),

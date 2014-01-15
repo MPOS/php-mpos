@@ -7,11 +7,11 @@
     <div class="module_content">
       <fieldset>
         <label>Username</label>
-        <input type="text" value="{$GLOBAL.userdata.username|escape}" readonly />
+        <input type="text" value="{$GLOBAL.userdata.username|escape}" disabled />
       </fieldset>
       <fieldset>
         <label>User Id</label>
-        <input type="text" value="{$GLOBAL.userdata.id}" readonly />
+        <input type="text" value="{$GLOBAL.userdata.id}" disabled />
       </fieldset>
       {if !$GLOBAL.website.api.disabled}
       <fieldset>
@@ -21,29 +21,29 @@
       {/if}
       <fieldset>
         <label>E-Mail</label>
-        <input type="text" name="email" value="{nocache}{$GLOBAL.userdata.email|escape}{/nocache}" size="20" />
+        <input type="text" name="email" value="{nocache}{$GLOBAL.userdata.email|escape}{/nocache}" size="20" {if $GLOBAL.twofactor.enabled && $GLOBAL.twofactor.options.details && !$DETAILSUNLOCKED}disabled{/if}/>
       </fieldset>
       <fieldset>
         <label>Payment Address</label>
-        <input type="text" name="paymentAddress" value="{nocache}{$smarty.request.paymentAddress|default:$GLOBAL.userdata.coin_address|escape}{/nocache}" size="40" />
+        <input type="text" name="paymentAddress" value="{nocache}{$smarty.request.paymentAddress|default:$GLOBAL.userdata.coin_address|escape}{/nocache}" size="40"  {if $GLOBAL.twofactor.enabled && $GLOBAL.twofactor.options.details && !$DETAILSUNLOCKED}disabled{/if}/>
       </fieldset>
       <fieldset>
         <label>Donation Percentage</label>
         <font size="1"> Donation amount in percent (example: 0.5)</font>
-        <input type="text" name="donatePercent" value="{nocache}{$smarty.request.donatePercent|default:$GLOBAL.userdata.donate_percent|escape}{/nocache}" size="4" />
+        <input type="text" name="donatePercent" value="{nocache}{$smarty.request.donatePercent|default:$GLOBAL.userdata.donate_percent|escape}{/nocache}" size="4"  {if $GLOBAL.twofactor.enabled && $GLOBAL.twofactor.options.details && !$DETAILSUNLOCKED}disabled{/if}/>
       </fieldset>
       <fieldset>
         <label>Automatic Payout Threshold</label>
         </br>
         <font size="1" style="margin: 0px -200px;">{$GLOBAL.config.ap_threshold.min}-{$GLOBAL.config.ap_threshold.max} {$GLOBAL.config.currency}. Set to '0' for no auto payout. A {if $GLOBAL.config.txfee_auto > 0.00001}{$GLOBAL.config.txfee_auto}{else}{$GLOBAL.config.txfee_auto|number_format:"8"}{/if}% {$GLOBAL.config.currency} TX fee will apply <span id="tt"><img width="15px" height="15px" title="This {if $GLOBAL.config.txfee_auto > 0.00001}{$GLOBAL.config.txfee_auto}{else}{$GLOBAL.config.txfee_auto|number_format:"8"}{/if}% automatic payment transaction fee is a network fee and goes back into the network not the pool." src="site_assets/mpos/images/questionmark.png"></span></font>
-        <input type="text" name="payoutThreshold" value="{nocache}{$smarty.request.payoutThreshold|default:$GLOBAL.userdata.ap_threshold|escape}{/nocache}" size="{$GLOBAL.config.ap_threshold.max|strlen}" maxlength="{$GLOBAL.config.ap_threshold.max|strlen}" />
+        <input type="text" name="payoutThreshold" value="{nocache}{$smarty.request.payoutThreshold|default:$GLOBAL.userdata.ap_threshold|escape}{/nocache}" size="{$GLOBAL.config.ap_threshold.max|strlen}" maxlength="{$GLOBAL.config.ap_threshold.max|strlen}" {if $GLOBAL.twofactor.enabled && $GLOBAL.twofactor.options.details && !$DETAILSUNLOCKED}disabled{/if}/>
       </fieldset>
       <fieldset>
         <label>Anonymous Account</label>
         Hide username on website from others. Admins can still get your user information.
         <label class="checkbox" for="is_anonymous">
         <input class="ios-switch" type="hidden" name="is_anonymous" value="0" />
-        <input class="ios-switch" type="checkbox" name="is_anonymous" value="1" id="is_anonymous" {nocache}{if $GLOBAL.userdata.is_anonymous}checked{/if}{/nocache} />
+        <input class="ios-switch" type="checkbox" name="is_anonymous" value="1" id="is_anonymous" {nocache}{if $GLOBAL.userdata.is_anonymous}checked{/if}{/nocache} {if $GLOBAL.twofactor.enabled && $GLOBAL.twofactor.options.details && !$DETAILSUNLOCKED}disabled{/if}/>
         <div class="switch"></div>
         </label>
       </fieldset>
@@ -55,8 +55,23 @@
     </div>
     <footer>
       <div class="submit_link">
+      {nocache}
         <input type="hidden" name="ea_token" value="{$smarty.request.ea_token|escape}">
-        <input type="submit" value="Update Account" class="alt_btn">
+        <input type="hidden" name="utype" value="account_edit">
+        {if $GLOBAL.twofactor.enabled && $GLOBAL.twofactor.options.details}
+          {if $DETAILSUNLOCKED > 0 && $DETAILSSENT > 0}
+            <input type="submit" value="Update Account" class="alt_btn">
+          {else}
+            {if $DETAILSSENT == 1}
+              <input type="submit" value="Update Account" class="alt_btn" disabled>
+            {else}
+              <input type="submit" value="Unlock" class="alt_btn" name="unlock">
+            {/if}
+          {/if}
+        {else}
+          <input type="submit" value="Update Account" class="alt_btn">
+        {/if}
+      {/nocache}
       </div>
     </footer>
   </article>
@@ -77,11 +92,11 @@
       </p>
       <fieldset>
         <label>Account Balance</label>
-        <input type="text" value="{nocache}{$GLOBAL.userdata.balance.confirmed|escape}{/nocache}" {$GLOBAL.config.currency} readonly/>
+        <input type="text" value="{nocache}{$GLOBAL.userdata.balance.confirmed|escape}{/nocache}" {$GLOBAL.config.currency} readonly {if $GLOBAL.twofactor.enabled && $GLOBAL.twofactor.options.withdraw && !$WITHDRAWUNLOCKED}disabled{/if}/>
       </fieldset>
       <fieldset>
         <label>Payout to</label>
-        <input type="text" value="{nocache}{$GLOBAL.userdata.coin_address|escape}{/nocache}" readonly/>
+        <input type="text" value="{nocache}{$GLOBAL.userdata.coin_address|escape}{/nocache}" readonly {if $GLOBAL.twofactor.enabled && $GLOBAL.twofactor.options.withdraw && !$WITHDRAWUNLOCKED}disabled{/if}/>
       </fieldset>
       <fieldset>
         <label>4 digit PIN</label>
@@ -90,8 +105,23 @@
     </div>
     <footer>
       <div class="submit_link">
+      {nocache}
         <input type="hidden" name="wf_token" value="{$smarty.request.wf_token|escape}">
-        <input type="submit" value="Cash Out" class="alt_btn">
+        <input type="hidden" name="utype" value="withdraw_funds">
+        {if $GLOBAL.twofactor.enabled && $GLOBAL.twofactor.options.withdraw}
+          {if $WITHDRAWUNLOCKED > 0 && $WITHDRAWSENT > 0}
+            <input type="submit" value="Cash Out" class="alt_btn">
+          {else}
+            {if $WITHDRAWSENT == 1}
+              <input type="submit" value="Cash Out" class="alt_btn" disabled>
+            {else}
+              <input type="submit" value="Unlock" class="alt_btn" name="unlock">
+            {/if}
+          {/if}
+        {else}
+          <input type="submit" value="Cash Out" class="alt_btn">
+        {/if}
+      {/nocache}
       </div>
     </footer>
   </article>
@@ -112,15 +142,15 @@
       </p>
       <fieldset>
         <label>Current Password</label>
-        <input type="password" name="currentPassword" />
+        <input type="password" name="currentPassword" {if $GLOBAL.twofactor.enabled && $GLOBAL.twofactor.options.changepw && !$CHANGEPASSUNLOCKED}disabled{/if}/>
       </fieldset>
       <fieldset>
         <label>New Password</label>
-        <input type="password" name="newPassword" />
+        <input type="password" name="newPassword" {if $GLOBAL.twofactor.enabled && $GLOBAL.twofactor.options.changepw && !$CHANGEPASSUNLOCKED}disabled{/if}/>
       </fieldset>
       <fieldset>
         <label>New Password Repeat</label>
-        <input type="password" name="newPassword2" />
+        <input type="password" name="newPassword2" {if $GLOBAL.twofactor.enabled && $GLOBAL.twofactor.options.changepw && !$CHANGEPASSUNLOCKED}disabled{/if}/>
       </fieldset>
       <fieldset>
         <label>4 digit PIN</label>
@@ -129,8 +159,23 @@
     </div>
     <footer>
       <div class="submit_link">
+      {nocache}
         <input type="hidden" name="cp_token" value="{$smarty.request.cp_token|escape}">
-        <input type="submit" value="Change Password" class="alt_btn">
+        <input type="hidden" name="utype" value="change_pw">
+        {if $GLOBAL.twofactor.enabled && $GLOBAL.twofactor.options.changepw}
+          {if $CHANGEPASSUNLOCKED > 0 && $CHANGEPASSSENT > 0}
+            <input type="submit" value="Change Password" class="alt_btn">
+          {else}
+            {if $CHANGEPASSSENT == 1}
+              <input type="submit" value="Change Password" class="alt_btn" disabled>
+            {else}
+              <input type="submit" value="Unlock" class="alt_btn" name="unlock">
+            {/if}
+          {/if}
+        {else}
+          <input type="submit" value="Change Password" class="alt_btn">
+        {/if}
+      {/nocache}
       </div>
     </footer>
   </article>
