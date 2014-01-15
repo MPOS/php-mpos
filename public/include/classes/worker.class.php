@@ -77,7 +77,7 @@ class Worker extends Base {
   public function getWorker($id, $interval=600) {
     $this->debug->append("STA " . __METHOD__, 4);
     $stmt = $this->mysqli->prepare("
-       SELECT id, username, password, monitor,
+       SELECT id, username, password, monitor, manual_diff,
        ( SELECT COUNT(id) FROM " . $this->share->getTableName() . " WHERE username = w.username AND time > DATE_SUB(now(), INTERVAL 10 MINUTE)) AS count_all,
        ( SELECT COUNT(id) FROM " . $this->share->getArchiveTableName() . " WHERE username = w.username AND time > DATE_SUB(now(), INTERVAL 10 MINUTE)) AS count_all_archive,
        (
@@ -120,7 +120,7 @@ class Worker extends Base {
   public function getWorkers($account_id, $interval=600) {
     $this->debug->append("STA " . __METHOD__, 4);
     $stmt = $this->mysqli->prepare("
-      SELECT id, username, password, monitor,
+      SELECT id, username, password, monitor, manual_diff,
        ( SELECT COUNT(id) FROM " . $this->share->getTableName() . " WHERE username = w.username AND time > DATE_SUB(now(), INTERVAL ? SECOND)) AS count_all,
        ( SELECT COUNT(id) FROM " . $this->share->getArchiveTableName() . " WHERE username = w.username AND time > DATE_SUB(now(), INTERVAL ? SECOND)) AS count_all_archive,
        (
