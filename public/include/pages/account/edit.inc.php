@@ -83,7 +83,7 @@ if ($user->isAuthenticated()) {
         	  if ($dBalance > $config['txfee']) {
         	    if (!$oPayout->isPayoutActive($_SESSION['USERDATA']['id'])) {
         	      if ($iPayoutId = $oPayout->createPayout($_SESSION['USERDATA']['id'], $wf_token)) {
-        	        $wf_sent = 0; $wf_editable = 0;
+        	        $wf_sent = 0;
         	        $_SESSION['POPUP'][] = array('CONTENT' => 'Created new manual payout request with ID #' . $iPayoutId);
         	      } else {
         	        $_SESSION['POPUP'][] = array('CONTENT' => $iPayoutId->getError(), 'TYPE' => 'errormsg');
@@ -99,7 +99,7 @@ if ($user->isAuthenticated()) {
         
           case 'updateAccount':
         	if ($user->updateAccount($_SESSION['USERDATA']['id'], $_POST['paymentAddress'], $_POST['payoutThreshold'], $_POST['donatePercent'], $_POST['email'], $_POST['is_anonymous'], $ea_token)) {
-        	  $ea_sent = 0; $ea_editable = 0;
+        	  $ea_sent = 0;
         	  $_SESSION['POPUP'][] = array('CONTENT' => 'Account details updated', 'TYPE' => 'success');
         	} else {
         	  $_SESSION['POPUP'][] = array('CONTENT' => 'Failed to update your account: ' . $user->getError(), 'TYPE' => 'errormsg');
@@ -108,7 +108,7 @@ if ($user->isAuthenticated()) {
         
           case 'updatePassword':
         	if ($user->updatePassword($_SESSION['USERDATA']['id'], $_POST['currentPassword'], $_POST['newPassword'], $_POST['newPassword2'], $cp_token)) {
-        	  $cp_sent = 0; $cp_editable = 0;
+        	  $cp_sent = 0;
         	  $_SESSION['POPUP'][] = array('CONTENT' => 'Password updated', 'TYPE' => 'success');
         	} else {
         	  $_SESSION['POPUP'][] = array('CONTENT' => $user->getError(), 'TYPE' => 'errormsg');
