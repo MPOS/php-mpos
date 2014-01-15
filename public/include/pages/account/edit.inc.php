@@ -119,6 +119,21 @@ if ($user->isAuthenticated()) {
     }
   }
 }
+// one last time so we can sync with changes we made during this page
+if ($config['twofactor']['enabled']) {
+  if ($config['twofactor']['options']['details']) {
+    $ea_editable = $user->token->isTokenValid($_SESSION['USERDATA']['id'], $ea_token, 5);
+    $ea_sent = $user->token->doesTokenExist('account_edit', $_SESSION['USERDATA']['id']);
+  }
+  if ($config['twofactor']['options']['changepw']) {
+    $cp_editable = $user->token->isTokenValid($_SESSION['USERDATA']['id'], $cp_token, 6);
+    $cp_sent = $user->token->doesTokenExist('change_pw', $_SESSION['USERDATA']['id']);
+  }
+  if ($config['twofactor']['options']['withdraw']) {
+    $wf_editable = $user->token->isTokenValid($_SESSION['USERDATA']['id'], $wf_token, 7);
+    $wf_sent = $user->token->doesTokenExist('withdraw_funds', $_SESSION['USERDATA']['id']);
+  }
+}
 // Tempalte specifics
 $smarty->assign("CONTENT", "default.tpl");
 $smarty->assign("CHANGEPASSUNLOCKED", $cp_editable);
