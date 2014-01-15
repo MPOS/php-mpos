@@ -130,8 +130,30 @@ class User extends Base {
     if ($this->checkUserPassword($username, $password)) {
       $this->updateLoginTimestamp($this->getUserId($username));
       $this->createSession($username);
-      if ($this->setUserIp($this->getUserId($username), $_SERVER['REMOTE_ADDR']))
+      if ($this->setUserIp($this->getUserId($username), $_SERVER['REMOTE_ADDR'])) {
+        // send a notification if success_login is active
+        $uid = $this->getUserId($username);
+        $notifs = new Notification();
+        $notifs->setDebug($this->debug);
+        $notifs->setMysql($this->mysqli);
+        $notifs->setSmarty($this->smarty);
+        $notifs->setConfig($this->config);
+        $notifs->setSetting($this->setting);
+        $notifs->setErrorCodes($this->aErrorCodes);
+        $ndata = $notifs->getNotificationSettings($uid);
+        if (is_array($ndata)) {
+          foreach ($ndata as $nd) {
+            if ($nd['type'] == 'success_login' && $nd['active'] == 1) {
+              // seems to be active, let's send it
+              $aDataN['username'] = $username;
+              $aDataN['email'] = $this->getUserEmail($username);
+              $aDataN['subject'] = 'Successful login notification';
+              $notifs->sendNotification($uid, 'success_login', $aDataN);
+            }
+          }
+        }
         return true;
+      }
     }
     $this->setErrorMessage("Invalid username or password");
     if ($id = $this->getUserId($username)) {
@@ -142,7 +164,7 @@ class User extends Base {
         if ($token = $this->token->createToken('account_unlock', $id)) {
           $aData['token'] = $token;
           $aData['username'] = $username;
-          $aData['email'] = $this->getUserEmail($username);;
+          $aData['email'] = $this->getUserEmail($username);
           $aData['subject'] = 'Account auto-locked';
           $this->mail->sendMail('notifications/locked', $aData);
         }
@@ -777,6 +799,7 @@ $user = new User();
 $user->setDebug($debug);
 $user->setMysql($mysqli);
 $user->setSalt(SALT);
+$user->setSmarty($smarty);
 $user->setConfig($config);
 $user->setMail($mail);
 $user->setToken($oToken);
