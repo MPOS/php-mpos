@@ -229,24 +229,7 @@ class Bitcoin {
   }
 }
 
-/**
- * Exception class for BitcoinClient
- *
- * @author Mike Gogulski
- * 	http://www.gogulski.com/ http://www.nostate.com/
- */
-class BitcoinClientException extends ErrorException {
-  // Redefine the exception so message isn't optional
-  public function __construct($message, $code = 0, $severity = E_USER_NOTICE, Exception $previous = null) {
-    parent::__construct($message, $code, $severity, $previous);
-  }
-
-  public function __toString() {
-    return __CLASS__ . ": [{$this->code}]: {$this->message}\n";
-  }
-}
-
-require_once(INCLUDE_DIR . "/jsonRPCClient.php");
+require_once(INCLUDE_DIR . "/lib/jsonRPCClient.php");
 
 /**
  * Bitcoin client class for access to a Bitcoin server via JSON-RPC-HTTP[S]
@@ -283,21 +266,21 @@ class BitcoinClient extends jsonRPCClient {
    * @access public
    * @throws BitcoinClientException
    */
-  public function __construct($scheme, $username, $password, $address = "localhost", $port = 8332, $certificate_path = '', $debug_level = 0) {
+  public function __construct($scheme, $username, $password, $address = "localhost", $port = 8332, $certificate_path = '', $debug = true) {
     $scheme = strtolower($scheme);
     if ($scheme != "http" && $scheme != "https")
-      throw new BitcoinClientException("Scheme must be http or https");
+      throw new Exception("Scheme must be http or https");
     if (empty($username))
-      throw new BitcoinClientException("Username must be non-blank");
+      throw new Exception("Username must be non-blank");
     if (empty($password))
-      throw new BitcoinClientException("Password must be non-blank");
+      throw new Exception("Password must be non-blank");
     $port = (string) $port;
     if (!$port || empty($port) || !is_numeric($port) || $port < 1 || $port > 65535 || floatval($port) != intval($port))
-      throw new BitcoinClientException("Port must be an integer and between 1 and 65535");
+      throw new Exception("Port must be an integer and between 1 and 65535");
     if (!empty($certificate_path) && !is_readable($certificate_path))
-      throw new BitcoinClientException("Certificate file " . $certificate_path . " is not readable");
+      throw new Exception("Certificate file " . $certificate_path . " is not readable");
     $uri = $scheme . "://" . $username . ":" . $password . "@" . $address . "/";
-    parent::__construct($uri);
+    parent::__construct($uri, $debug);
   }
 
   /**
