@@ -18,7 +18,7 @@
           <span class="toggle">
           <label for="data[idle_worker]">
           <input type="hidden" name="data[idle_worker]" value="0" />
-          <input type="checkbox" class="ios-switch" name="data[idle_worker]" id="data[idle_worker]" value="1"{nocache}{if $SETTINGS['idle_worker']}checked{/if}{/nocache} />
+          <input type="checkbox" class="ios-switch" name="data[idle_worker]" id="data[idle_worker]" value="1"{nocache}{if $SETTINGS['idle_worker']|default:"0" == 1}checked{/if}{/nocache} />
           <div class="switch"></div>
           </label>
           </span>
@@ -30,7 +30,7 @@
           <span class="toggle">
           <label for="data[new_block]">
           <input type="hidden" name="data[new_block]" value="0" />
-          <input type="checkbox" class="ios-switch" name="data[new_block]" id="data[new_block]" value="1"{nocache}{if $SETTINGS['new_block']}checked{/if}{/nocache} />
+          <input type="checkbox" class="ios-switch" name="data[new_block]" id="data[new_block]" value="1"{nocache}{if $SETTINGS['new_block']|default:"0" == 1}checked{/if}{/nocache} />
           <div class="switch"></div>
           </label>
           </span>
@@ -42,7 +42,7 @@
           <span class="toggle">
           <label for="data[auto_payout]">
           <input type="hidden" name="data[auto_payout]" value="0" />
-          <input type="checkbox" class="ios-switch" name="data[auto_payout]" id="data[auto_payout]" value="1"{nocache}{if $SETTINGS['auto_payout']}checked{/if}{/nocache} />
+          <input type="checkbox" class="ios-switch" name="data[auto_payout]" id="data[auto_payout]" value="1"{nocache}{if $SETTINGS['auto_payout']|default:"0" == 1}checked{/if}{/nocache} />
           <div class="switch"></div>
           </label>
           </span>
@@ -54,7 +54,19 @@
           <span class="toggle">
           <label for="data[manual_payout]">
           <input type="hidden" name="data[manual_payout]" value="0" />
-          <input type="checkbox" class="ios-switch" name="data[manual_payout]" id="data[manual_payout]" value="1"{nocache}{if $SETTINGS['manual_payout']}checked{/if}{/nocache} />
+          <input type="checkbox" class="ios-switch" name="data[manual_payout]" id="data[manual_payout]" value="1"{nocache}{if $SETTINGS['manual_payout']|default:"0" == 1}checked{/if}{/nocache} />
+          <div class="switch"></div>
+          </label>
+          </span>
+        </td>
+      </tr>
+      <tr>
+        <td align="left">Successful Login</td>
+        <td>
+          <span class="toggle">
+          <label for="data[success_login]">
+          <input type="hidden" name="data[success_login]" value="0" />
+          <input type="checkbox" class="ios-switch" name="data[success_login]" id="data[success_login]" value="1"{nocache}{if $SETTINGS['success_login']|default:"0" == 1}checked{/if}{/nocache} />
           <div class="switch"></div>
           </label>
           </span>
@@ -94,6 +106,7 @@
 {else if $NOTIFICATIONS[notification].type == auto_payout}Auto Payout
 {else if $NOTIFICATIONS[notification].type == idle_worker}IDLE Worker
 {else if $NOTIFICATIONS[notification].type == manual_payout}Manual Payout
+{else if $NOTIFICATIONS[notification].type == success_login}Successful Login
 {/if}
         </td>
         <td align="center">
