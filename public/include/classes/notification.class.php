@@ -112,28 +112,16 @@ class Notification extends Mail {
     $this->debug->append("STA " . __METHOD__, 4);
     $failed = $ok = 0;
     foreach ($data as $type => $active) {
-      // Does an entry exist already
-      $stmt = $this->mysqli->prepare("SELECT * FROM $this->tableSettings WHERE account_id = ? AND type = ?");
-      if ($stmt && $stmt->bind_param('is', $account_id, $type) && $stmt->execute() && $stmt->store_result() && $stmt->num_rows() > 0) {
-        // We found a matching row
-        $stmt = $this->mysqli->prepare("UPDATE $this->tableSettings SET active = ? WHERE type = ? AND account_id = ?");
-        if ($stmt && $stmt->bind_param('isi', $active, $type, $account_id) && $stmt->execute() && $stmt->close()) {
-          $ok++;
-        } else {
-          $failed++;
-        }
+      $stmt = $this->mysqli->prepare("INSERT INTO $this->tableSettings (active, type, account_id) VALUES (?,?,?) ON DUPLICATE KEY UPDATE active = ?");
+      if ($stmt && $stmt->bind_param('isii', $active, $type, $account_id, $active) && $stmt->execute()) {
+        $ok++;
       } else {
-        $stmt = $this->mysqli->prepare("INSERT INTO $this->tableSettings (active, type, account_id) VALUES (?,?,?)");
-        if ($stmt && $stmt->bind_param('isi', $active, $type, $account_id) && $stmt->execute()) {
-          $ok++;
-        } else {
-          $failed++;
-        }
+        $failed++;
       }
     }
     if ($failed > 0) {
       $this->setErrorMessage($this->getErrorMsg('E0047', $failed));
-      return false;
+      return $this->sqlError();
     }
     return true;
   }
