@@ -275,7 +275,7 @@ class User extends Base {
       return false;
     }
     // twofactor - if changepw is enabled we need to create/check the token
-    if ($this->config['twofactor']['enabled'] && $this->config['twofactor']['changepw']) {
+    if ($this->config['twofactor']['enabled'] && $this->config['twofactor']['options']['changepw']) {
       $tData = $this->token->getToken($strToken, 'change_pw');
       $tExists = $this->token->doesTokenExist('change_pw', $userID);
       if (!is_array($tData) && $tExists == false) {
@@ -287,7 +287,7 @@ class User extends Base {
         $aData['subject'] = 'Account password change confirmation';
         $this->mail->sendMail('notifications/change_pw', $aData);
         $this->setErrorMessage("A confirmation has been sent to your e-mail");
-        return false;
+        return true;
       } else {
         // already exists, if it's valid delete it and allow this edit
         if ($strToken === $tData['token']) {
@@ -374,7 +374,7 @@ class User extends Base {
     $donate = min(100, max(0, floatval($donate)));
 
     // twofactor - if details enabled we need to create/check the token
-    if ($this->config['twofactor']['enabled'] && $this->config['twofactor']['details']) {
+    if ($this->config['twofactor']['enabled'] && $this->config['twofactor']['options']['details']) {
       $tData = $this->token->getToken($strToken, 'account_edit');
       $tExists = $this->token->doesTokenExist('account_edit', $userID);
       if (!is_array($tData) && $tExists == false) {
@@ -386,7 +386,7 @@ class User extends Base {
         $aData['subject'] = 'Account detail change confirmation';
         $this->mail->sendMail('notifications/account_edit', $aData);
         $this->setErrorMessage("A confirmation has been sent to your e-mail");
-        return false;
+        return true;
       } else {
         // already exists, if it's valid delete it and allow this edit
         if ($strToken === $tData['token']) {

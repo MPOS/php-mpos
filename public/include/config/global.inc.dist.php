@@ -119,9 +119,9 @@ $config['coldwallet']['threshold'] = 5;
  *   changepw  =  true
  */
 $config['twofactor']['enabled'] = true;
-$config['twofactor']['details'] = true;
-$config['twofactor']['withdraw'] = true;
-$config['twofactor']['changepw'] = true;
+$config['twofactor']['options']['details'] = true;
+$config['twofactor']['options']['withdraw'] = true;
+$config['twofactor']['options']['changepw'] = true;
 
 /**
  * Lock account after maximum failed logins
