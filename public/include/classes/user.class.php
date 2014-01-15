@@ -311,16 +311,6 @@ class User extends Base {
       $this->setErrorMessage( 'New password is too short, please use more than 8 chars' );
       return false;
     }
-    // twofactor - consume the token if it is enabled and valid
-    if ($this->config['twofactor']['enabled'] && $this->config['twofactor']['options']['changepw']) {
-      $tValid = $this->token->isTokenValid($userID, $strToken, 6);
-      if ($tValid) {
-        $this->token->deleteToken($strToken);
-      } else {
-        $this->setErrorMessage('Invalid token');
-        return false;
-      }
-    }
     $current = $this->getHash($current);
     $new = $this->getHash($new1);
     $stmt = $this->mysqli->prepare("UPDATE $this->table SET pass = ? WHERE ( id = ? AND pass = ? )");
@@ -328,6 +318,16 @@ class User extends Base {
       $stmt->bind_param('sis', $new, $userID, $current);
       $stmt->execute();
       if ($stmt->errno == 0 && $stmt->affected_rows === 1) {
+        // twofactor - consume the token if it is enabled and valid
+        if ($this->config['twofactor']['enabled'] && $this->config['twofactor']['options']['changepw']) {
+          $tValid = $this->token->isTokenValid($userID, $strToken, 6);
+          if ($tValid) {
+            $this->token->deleteToken($strToken);
+          } else {
+            $this->setErrorMessage('Invalid token');
+            return false;
+          }
+        }
         return true;
       }
       $stmt->close();
@@ -395,20 +395,19 @@ class User extends Base {
     $threshold = min($this->config['ap_threshold']['max'], max(0, floatval($threshold)));
     $donate = min(100, max(0, floatval($donate)));
 
-    // twofactor - consume the token if it is enabled and valid
-    if ($this->config['twofactor']['enabled'] && $this->config['twofactor']['options']['details']) {
-      $tValid = $this->token->isTokenValid($userID, $strToken, 5);
-      if ($tValid) {
-        $this->token->deleteToken($strToken);
-      } else {
-        $this->setErrorMessage('Invalid token');
-        return false;
-      }
-    }
-    
     // We passed all validation checks so update the account
     $stmt = $this->mysqli->prepare("UPDATE $this->table SET coin_address = ?, ap_threshold = ?, donate_percent = ?, email = ?, is_anonymous = ? WHERE id = ?");
     if ($this->checkStmt($stmt) && $stmt->bind_param('sddsii', $address, $threshold, $donate, $email, $is_anonymous, $userID) && $stmt->execute())
+      // twofactor - consume the token if it is enabled and valid
+      if ($this->config['twofactor']['enabled'] && $this->config['twofactor']['options']['details']) {
+        $tValid = $this->token->isTokenValid($userID, $strToken, 5);
+        if ($tValid) {
+          $this->token->deleteToken($strToken);
+        } else {
+          $this->setErrorMessage('Invalid token');
+          return false;
+        }
+      }
       return true;
     // Catchall
     $this->setErrorMessage('Failed to update your account');
