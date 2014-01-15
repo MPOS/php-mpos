@@ -43,7 +43,7 @@ These people have supported this project with a donation:
 Pools running MPOS
 ==================
 
-You can find a list of active pools [here](POOLS.md).
+You can find a list of active pools [here](https://github.com/TheSerapher/php-mpos/wiki/Pools).
 
 Requirements
 ============
