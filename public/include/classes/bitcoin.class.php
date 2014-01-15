@@ -266,7 +266,7 @@ class BitcoinClient extends jsonRPCClient {
    * @access public
    * @throws BitcoinClientException
    */
-  public function __construct($scheme, $username, $password, $address = "localhost", $port = 8332, $certificate_path = '', $debug = true) {
+  public function __construct($scheme, $username, $password, $address = "localhost", $certificate_path = '', $debug = false) {
     $scheme = strtolower($scheme);
     if ($scheme != "http" && $scheme != "https")
       throw new Exception("Scheme must be http or https");
@@ -274,9 +274,6 @@ class BitcoinClient extends jsonRPCClient {
       throw new Exception("Username must be non-blank");
     if (empty($password))
       throw new Exception("Password must be non-blank");
-    $port = (string) $port;
-    if (!$port || empty($port) || !is_numeric($port) || $port < 1 || $port > 65535 || floatval($port) != intval($port))
-      throw new Exception("Port must be an integer and between 1 and 65535");
     if (!empty($certificate_path) && !is_readable($certificate_path))
       throw new Exception("Certificate file " . $certificate_path . " is not readable");
     $uri = $scheme . "://" . $username . ":" . $password . "@" . $address . "/";

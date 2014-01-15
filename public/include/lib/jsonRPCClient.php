@@ -35,7 +35,7 @@ class jsonRPCClient {
    * @var boolean
    */
   private $debug;
-  private $debug_output;
+  private $debug_output = NULL;
 
   /**
    * The server URL
@@ -69,7 +69,8 @@ class jsonRPCClient {
    * @return array Debug data
    **/
   public function getDebugData() {
-    return $this->debug_output;
+    if ($this->debug) return $this->debug_output;
+    return false;
   }
 
   /**
@@ -108,7 +109,6 @@ class jsonRPCClient {
     curl_setopt($ch, CURLOPT_POST, true);
     curl_setopt($ch, CURLOPT_POSTFIELDS, $request);
     $response = curl_exec($ch);
-    $this->debug = true;
     if ($this->debug) $this->debug_output[] = 'Response: ' . $response;
     $response = json_decode($response, true);
     $resultStatus = curl_getinfo($ch);
