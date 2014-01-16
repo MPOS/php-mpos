@@ -279,7 +279,7 @@ class User extends Base {
    * @param userID int User ID
    * @return bool
    */
-  public function sendChangeConf($strType, $userID) {
+  public function sendChangeConfigEmail($strType, $userID) {
     $exists = $this->token->doesTokenExist($strType, $userID);
     if ($exists == 0) {
       $token = $this->token->createToken($strType, $userID);

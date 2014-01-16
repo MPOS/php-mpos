@@ -71,7 +71,7 @@ if ($user->isAuthenticated()) {
         $isvalid = in_array($_POST['utype'],$validtypes);
         if ($isvalid) {
           $ctype = strip_tags($_POST['utype']);
-          $send = $user->sendChangeConf($ctype, $_SESSION['USERDATA']['id']);
+          $send = $user->sendChangeConfigEmail($ctype, $_SESSION['USERDATA']['id']);
           if ($send) {
             $_SESSION['POPUP'][] = array('CONTENT' => 'A confirmation was sent to your e-mail, follow that link to continue', 'TYPE' => 'success');
           } else {
