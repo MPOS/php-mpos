@@ -26,6 +26,16 @@ if ($setting->getValue('maintenance') && !$user->isAdmin($user->getUserId($_POST
   $_SESSION['POPUP'][] = array('CONTENT' => 'You are not allowed to login during maintenace.', 'TYPE' => 'info');
 } else if (!empty($_POST['username']) && !empty($_POST['password'])) {
   $nocsrf = 1;
+  $recaptchavalid = 0;
+  if ($setting->getValue('recaptcha_enabled') && $setting->getValue('recaptcha_enabled_logins') && $rsp->is_valid) {
+    if ($rsp->is_valid) {
+      // recaptcha is enabled and valid
+      $recaptchavalid = 1;
+    } else {
+      // error out, invalid captcha
+      $_SESSION['POPUP'][] = array('CONTENT' => 'Unable to login: The captcha you entered was incorrect', 'TYPE' => 'errormsg');
+    }
+  }
   if ($config['csrf']['enabled'] && $config['csrf']['forms']['login']) {
     if ((isset($_POST['ctoken']) && $_POST['ctoken'] !== $user->getCSRFToken($_SERVER['REMOTE_ADDR'], 'login')) || (!isset($_POST['ctoken']))) {
       // csrf protection is on and this token is invalid, error out -> time expired
