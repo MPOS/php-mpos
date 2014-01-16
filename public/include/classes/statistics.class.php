@@ -416,7 +416,8 @@ class Statistics extends Base {
         a.no_fees as no_fees,
         a.username AS username,
         a.donate_percent AS donate_percent,
-        a.email AS email
+        a.email AS email,
+        a.last_login as last_login
       FROM " . $this->user->getTableName() . " AS a";
     if (is_array($filter)) {
       $aFilter = array();
