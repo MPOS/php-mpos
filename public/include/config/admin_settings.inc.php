@@ -355,7 +355,21 @@ $aSettings['recaptcha'][] = array(
   'options' => array( 0 => 'No', 1 => 'Yes' ),
   'default' => 0,
   'name' => 'recaptcha_enabled', 'value' => $setting->getValue('recaptcha_enabled'),
-  'tooltip' => 'Enable or Disable re-Captcha. This will require user input on registraion and other forms.'
+  'tooltip' => 'Enable or Disable re-Captcha globally.'
+);
+$aSettings['recaptcha'][] = array(
+  'display' => 'Enable re-Captcha Registration', 'type' => 'select',
+  'options' => array( 0 => 'No', 1 => 'Yes' ),
+  'default' => 0,
+  'name' => 'recaptcha_enabled_registrations', 'value' => $setting->getValue('recaptcha_enabled_registrations'),
+  'tooltip' => 'Enable or Disable re-Captcha. Adds a re-Captcha to the registration form.'
+);
+$aSettings['recaptcha'][] = array(
+  'display' => 'Enable re-Captcha Logins', 'type' => 'select',
+  'options' => array( 0 => 'No', 1 => 'Yes' ),
+  'default' => 0,
+  'name' => 'recaptcha_enabled_logins', 'value' => $setting->getValue('recaptcha_enabled_logins'),
+  'tooltip' => 'Enable or Disable re-Captcha. Adds a re-Captcha to the login form.'
 );
 $aSettings['recaptcha'][] = array(
   'display' => 're-Captcha Private Key', 'type' => 'text',

@@ -5,7 +5,7 @@ if (!defined('SECURITY')) die('Hacking attempt');
 
 
 // ReCaptcha handling if enabled
-if ($setting->getValue('recaptcha_enabled')) {
+if ($setting->getValue('recaptcha_enabled') && $setting->getValue('recaptcha_enabled_logins')) {
   require_once(INCLUDE_DIR . '/lib/recaptchalib.php');
   if (!empty($_POST['username']) && !empty($_POST['password'])) {
     // Load re-captcha specific data
@@ -33,7 +33,7 @@ if ($setting->getValue('maintenance') && !$user->isAdmin($user->getUserId($_POST
     }
   }
   // Check if recaptcha is enabled, process form data if valid
-  if (($setting->getValue('recaptcha_enabled') != 1 || $rsp->is_valid) && ($nocsrf == 1 || (!$config['csrf']['enabled'] || !$config['csrf']['forms']['login']))) {
+  if (($setting->getValue('recaptcha_enabled') != 1 || $setting->getValue('recaptcha_enabled_logins') != 1 || $rsp->is_valid) && ($nocsrf == 1 || (!$config['csrf']['enabled'] || !$config['csrf']['forms']['login']))) {
     if ($user->checkLogin(@$_POST['username'], @$_POST['password']) ) {
       empty($_POST['to']) ? $to = $_SERVER['SCRIPT_NAME'] : $to = $_POST['to'];
       $port = ($_SERVER["SERVER_PORT"] == "80" or $_SERVER["SERVER_PORT"] == "443") ? "" : (":".$_SERVER["SERVER_PORT"]);
