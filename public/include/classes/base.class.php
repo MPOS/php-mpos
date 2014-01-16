@@ -31,6 +31,9 @@ class Base {
   public function setSalt($salt) {
     $this->salt = $salt;
   }
+  public function setSalty($salt) {
+    $this->salty = $salt;
+  }
   public function setSmarty($smarty) {
     $this->smarty = $smarty;
   }

@@ -4,9 +4,8 @@
 if (!defined('SECURITY'))
   die('Hacking attempt');
 
+// twofactor stuff
 $cp_editable = $wf_editable = $ea_editable = $wf_sent = $ea_sent = $cp_sent = 0;
-
-// stupid hack to fix input when an error happened with a valid token
 $ea_token = (!isset($_POST['ea_token'])) ? '' : $_POST['ea_token'];
 $cp_token = (!isset($_POST['cp_token'])) ? '' : $_POST['cp_token'];
 $wf_token = (!isset($_POST['wf_token'])) ? '' : $_POST['wf_token'];
@@ -80,7 +79,7 @@ if ($user->isAuthenticated()) {
           }
         }
       } else {
-        // back to get, was only post to fix for stupid hack
+        // back to get, was only post to fix for old token
         $ea_token = (!isset($_GET['ea_token'])) ? '' : $_GET['ea_token'];
         $cp_token = (!isset($_GET['cp_token'])) ? '' : $_GET['cp_token'];
         $wf_token = (!isset($_GET['wf_token'])) ? '' : $_GET['wf_token'];
@@ -137,7 +136,6 @@ if ($user->isAuthenticated()) {
 }
 // 2fa - one last time so we can sync with changes we made during this page
 if ($user->isAuthenticated() && $config['twofactor']['enabled']) {
-  // stupid hack part deux
   // set the token to be the old token so we still have it if it errors out
   if ($old_token_type == 5) {
     $ea_token = $old_token;
