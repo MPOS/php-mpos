@@ -7,7 +7,7 @@ if (!defined('SECURITY')) die('Hacking attempt');
  * This is used in the version check to ensure you run the latest version of the configuration file.
  * Once you upgraded your config, change the version here too.
  **/
-$config['version'] = '0.0.5';
+$config['version'] = '0.0.4';
 
 // Our include directory for additional features
 define('INCLUDE_DIR', BASEPATH . 'include');
