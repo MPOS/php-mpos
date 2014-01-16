@@ -65,6 +65,7 @@ $aGlobal = array(
   'reward' => $config['reward'],
   'price' => $setting->getValue('price'),
   'twofactor' => $config['twofactor'],
+  'csrf' => $config['csrf'],
   'config' => array(
     'disable_navbar' => $setting->getValue('disable_navbar'),
     'disable_navbar_api' => $setting->getValue('disable_navbar_api'),

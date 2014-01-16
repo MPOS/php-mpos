@@ -788,6 +788,27 @@ class User extends Base {
     if ($logout == true) $this->logoutUser($_SERVER['REQUEST_URI']);
     return false;
   }
+  
+  /**
+   * Gets the current CSRF token for this user/type setting and time chunk
+   * @param string User; for hash seed, if username isn't available use IP
+   * @param string Type of token; for hash seed, should be unique per page/use
+   * @return string CSRF token
+   */
+  public function getCSRFToken($user, $type) {
+    $date = date('m/d/y/H/i/s');
+    $data = explode('/', $date);
+    $month = $data[0];    $day = $data[1];      $year = $data[2];
+    $hour = $data[3];     $minute = $data[4];   $second = $data[5];
+    $seed = $this->salty;
+    // X second lead time on each minute
+    if ($minute == 59 && $second > (60-$this->config['csrf']['options']['leadtime'])) {
+      $minute = 0;
+      $fhour = ($hour == 23) ? $hour = 0 : $hour+=1;
+    }
+    $seed = $seed.$month.$day.$user.$type.$year.$hour.$minute.$seed;
+    return $this->getHash($seed);
+  }
 }
 
 // Make our class available automatically
@@ -795,6 +816,7 @@ $user = new User();
 $user->setDebug($debug);
 $user->setMysql($mysqli);
 $user->setSalt(SALT);
+$user->setSalty(SALTY);
 $user->setSmarty($smarty);
 $user->setConfig($config);
 $user->setMail($mail);

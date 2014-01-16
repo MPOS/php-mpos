@@ -26,6 +26,7 @@ define('DEBUG', 0);
 
 // SALT used to hash passwords
 define('SALT', 'PLEASEMAKEMESOMETHINGRANDOM');
+define('SALTY', 'THISSHOULDALSOBERRAANNDDOOM');
 
 /**
   * Underlying coin algorithm that you are mining on. Set this to whatever your coin needs:
@@ -122,6 +123,28 @@ $config['twofactor']['enabled'] = true;
 $config['twofactor']['options']['details'] = true;
 $config['twofactor']['options']['withdraw'] = true;
 $config['twofactor']['options']['changepw'] = true;
+
+/**
+ * CSRF protection config
+ *
+ * Explanation:
+ *   To help protect against CSRF, we can generate a hash that changes every minute
+ *   and is unique for each user/IP and page or use, and check against that when
+ *   the form is submitted.
+ *
+ * Options:
+ *   enabled    =   Whether or not we will generate/check for valid CSRF tokens
+ *   leadtime   =   1 minute + leadtime seconds for reseeding tokens
+ *   login      =   Use and check CSRF tokens for the login forms
+ *
+ * Default:
+ *   enabled    =   true
+ *   leadtime   =   3
+ *   login      =   true
+ */
+$config['csrf']['enabled'] = true;
+$config['csrf']['options']['leadtime'] = 3;
+$config['csrf']['forms']['login'] = true;
 
 /**
  * Lock account after maximum failed logins
