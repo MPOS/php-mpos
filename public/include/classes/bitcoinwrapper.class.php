@@ -9,15 +9,16 @@ if (!defined('SECURITY'))
  * some basic caching functionality and some debugging
  **/
 class BitcoinWrapper extends BitcoinClient {
-  public function __construct($type, $username, $password, $host, $debug, $memcache) {
+  public function __construct($type, $username, $password, $host, $debug_level, $debug_object, $memcache) {
     $this->type = $type;
     $this->username = $username;
     $this->password = $password;
     $this->host = $host;
     // $this->debug is already used
-    $this->oDebug = $debug;
+    $this->oDebug = $debug_object;
     $this->memcache = $memcache;
-    return parent::__construct($this->type, $this->username, $this->password, $this->host);
+    $debug_level > 0 ? $debug_level = true : $debug_level = false;
+    return parent::__construct($this->type, $this->username, $this->password, $this->host, '', $debug_level);
   }
   /**
    * Wrap variouns methods to add caching
@@ -75,4 +76,4 @@ class BitcoinWrapper extends BitcoinClient {
 }
 
 // Load this wrapper
-$bitcoin = new BitcoinWrapper($config['wallet']['type'], $config['wallet']['username'], $config['wallet']['password'], $config['wallet']['host'], $debug, $memcache);
+$bitcoin = new BitcoinWrapper($config['wallet']['type'], $config['wallet']['username'], $config['wallet']['password'], $config['wallet']['host'], DEBUG, $debug, $memcache);

@@ -3,20 +3,21 @@
 // Make sure we are called from index.php
 if (!defined('SECURITY')) die('Hacking attempt');
 
+// Fetch data from wallet, always run this check
+if ($bitcoin->can_connect() === true){
+  $dDifficulty = $bitcoin->getdifficulty();
+  $dNetworkHashrate = $bitcoin->getnetworkhashps();
+  $iBlock = $bitcoin->getblockcount();
+  is_int($iBlock) && $iBlock > 0 ? $sBlockHash = $bitcoin->getblockhash($iBlock) : $sBlockHash = '';
+} else {
+  $dDifficulty = 1;
+  $dNetworkHashrate = 1;
+  $iBlock = 0;
+  $_SESSION['POPUP'][] = array('CONTENT' => 'Unable to connect to wallet RPC service: ' . $bitcoin->can_connect(), 'TYPE' => 'errormsg');
+}
+
 if (!$smarty->isCached('master.tpl', $smarty_cache_key)) {
   $debug->append('No cached version available, fetching from backend', 3);
-  // Fetch data from wallet
-  if ($bitcoin->can_connect() === true){
-    $dDifficulty = $bitcoin->getdifficulty();
-    $dNetworkHashrate = $bitcoin->getnetworkhashps();
-    $iBlock = $bitcoin->getblockcount();
-    is_int($iBlock) && $iBlock > 0 ? $sBlockHash = $bitcoin->getblockhash($iBlock) : $sBlockHash = '';
-  } else {
-    $dDifficulty = 1;
-    $dNetworkHashrate = 1;
-    $iBlock = 0;
-    $_SESSION['POPUP'][] = array('CONTENT' => 'Unable to connect to wallet RPC service: ' . $bitcoin->can_connect(), 'TYPE' => 'errormsg');
-  }
 
   // Top share contributors
   $aContributorsShares = $statistics->getTopContributors('shares', 15);
