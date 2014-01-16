@@ -3,7 +3,8 @@
 // Make sure we are called from index.php
 if (!defined('SECURITY')) die('Hacking attempt');
 
-define('DB_VERSION', '0.0.4');
+define('MPOS_VERSION', '0.0.1');
+define('DB_VERSION', '0.0.3');
 define('CONFIG_VERSION', '0.0.4');
 
 // Fetch installed database version
