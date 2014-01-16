@@ -38,6 +38,7 @@
           {if $GLOBAL.config.disable_notifications != 1}<th align="center">Monitor</th>{/if}
           <th align="right">Khash/s</th>
           <th align="right">Difficulty</th>
+          <th align="center">Manual Diff</th>
           <th align="center" style="padding-right: 25px;">Action</th>
         </tr>
       </thead>
@@ -61,6 +62,7 @@
           {/if}
           <td align="right">{$WORKERS[worker].hashrate|number_format}</td>
           <td align="right">{$WORKERS[worker].difficulty|number_format:"2"}</td>
+          <td align="right"><input name="data[{$WORKERS[worker].id}][manual_diff]" value="{$WORKERS[worker].manual_diff|number_format}" size="10" required/></td>
           <td align="center" style="padding-right: 25px;"><a href="{$smarty.server.SCRIPT_NAME}?page={$smarty.request.page|escape}&action={$smarty.request.action|escape}&do=delete&id={$WORKERS[worker].id|escape}" class="icn_trash"><i class="icon-trash" /></a></td>
         </tr>
           {/section}

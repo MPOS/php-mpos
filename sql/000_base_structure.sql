@@ -115,6 +115,7 @@ CREATE TABLE IF NOT EXISTS `pool_worker` (
   `password` char(255) DEFAULT NULL,
   `difficulty` float NOT NULL DEFAULT '0',
   `monitor` tinyint(1) NOT NULL DEFAULT '0',
+  `manual_diff` float NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   UNIQUE KEY `username` (`username`),
   KEY `account_id` (`account_id`),
@@ -128,7 +129,7 @@ CREATE TABLE IF NOT EXISTS `settings` (
   UNIQUE KEY `setting` (`name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-INSERT INTO `settings` (`name`, `value`) VALUES ('DB_VERSION', '0.0.2');
+INSERT INTO `settings` (`name`, `value`) VALUES ('DB_VERSION', '0.0.3');
 
 CREATE TABLE IF NOT EXISTS `shares` (
   `id` bigint(30) NOT NULL AUTO_INCREMENT,

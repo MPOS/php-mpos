@@ -29,10 +29,16 @@ class Worker extends Base {
         $iFailed++;
         continue;
       }
+      // Check Manual Difficulty Minimum and Maximum for HARDCODED min and max permitted values
+      if (0 > $value['manual_diff'] || $value['manual_diff'] > 512) {
+        $this->setErrorMessage('Worker manual difficulty out of range.');
+        return false;
+      }
+      
       // Prefix the WebUser to Worker name
       $value['username'] = "$username." . $value['username'];
-      $stmt = $this->mysqli->prepare("UPDATE $this->table SET password = ?, username = ?, monitor = ? WHERE account_id = ? AND id = ?");
-      if ( ! ( $this->checkStmt($stmt) && $stmt->bind_param('ssiii', $value['password'], $value['username'], $value['monitor'], $account_id, $key) && $stmt->execute()) )
+      $stmt = $this->mysqli->prepare("UPDATE $this->table SET password = ?, username = ?, monitor = ?, manual_diff = ? WHERE account_id = ? AND id = ?");
+      if ( ! ( $this->checkStmt($stmt) && $stmt->bind_param('ssiiii', $value['password'], $value['username'], $value['monitor'], $value['manual_diff'], $account_id, $key) && $stmt->execute()) )
         $iFailed++;
       }
     }
@@ -71,7 +77,7 @@ class Worker extends Base {
   public function getWorker($id, $interval=600) {
     $this->debug->append("STA " . __METHOD__, 4);
     $stmt = $this->mysqli->prepare("
-       SELECT id, username, password, monitor,
+       SELECT id, username, password, monitor, manual_diff,
        ( SELECT COUNT(id) FROM " . $this->share->getTableName() . " WHERE username = w.username AND time > DATE_SUB(now(), INTERVAL 10 MINUTE)) AS count_all,
        ( SELECT COUNT(id) FROM " . $this->share->getArchiveTableName() . " WHERE username = w.username AND time > DATE_SUB(now(), INTERVAL 10 MINUTE)) AS count_all_archive,
        (
@@ -114,7 +120,7 @@ class Worker extends Base {
   public function getWorkers($account_id, $interval=600) {
     $this->debug->append("STA " . __METHOD__, 4);
     $stmt = $this->mysqli->prepare("
-      SELECT id, username, password, monitor,
+      SELECT id, username, password, monitor, manual_diff,
        ( SELECT COUNT(id) FROM " . $this->share->getTableName() . " WHERE username = w.username AND time > DATE_SUB(now(), INTERVAL ? SECOND)) AS count_all,
        ( SELECT COUNT(id) FROM " . $this->share->getArchiveTableName() . " WHERE username = w.username AND time > DATE_SUB(now(), INTERVAL ? SECOND)) AS count_all_archive,
        (
