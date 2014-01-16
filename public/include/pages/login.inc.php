@@ -25,7 +25,7 @@ if ($setting->getValue('maintenance') && !$user->isAdmin($user->getUserId($_POST
       $_SESSION['POPUP'][] = array('CONTENT' => 'Unable to login: '. $user->getError(), 'TYPE' => 'errormsg');
     }
   } else {
-    $_SESSION['POPUP'][] = array('CONTENT' => 'Login token expired'. $user->getError(), 'TYPE' => 'errormsg');
+    $_SESSION['POPUP'][] = array('CONTENT' => 'Unable to login: Token expired', 'TYPE' => 'errormsg');
   }
 } else if (@$_POST['username'] && @$_POST['password']) {
   $_SESSION['POPUP'][] = array('CONTENT' => 'Unable to login: '. $user->getError(), 'TYPE' => 'errormsg');

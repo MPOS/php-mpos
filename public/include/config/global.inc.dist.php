@@ -129,8 +129,8 @@ $config['twofactor']['options']['changepw'] = true;
  *
  * Explanation:
  *   To help protect against CSRF, we can generate a hash that changes every minute
- *   and is unique for each user/IP and page or use, and check against that when
- *   the form is submitted.
+ *   and is unique for each user/IP and page or use, and check against that when a
+ *   form is submitted.
  *
  * Options:
  *   enabled    =   Whether or not we will generate/check for valid CSRF tokens
