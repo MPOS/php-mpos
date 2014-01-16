@@ -96,7 +96,9 @@ CREATE TABLE IF NOT EXISTS `notification_settings` (
   `type` varchar(15) NOT NULL,
   `account_id` int(11) NOT NULL,
   `active` tinyint(1) NOT NULL DEFAULT '0',
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  KEY `account_id` (`account_id`),
+  UNIQUE KEY `account_id_type` (`account_id`,`type`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
 CREATE TABLE IF NOT EXISTS `payouts` (
@@ -128,7 +130,7 @@ CREATE TABLE IF NOT EXISTS `settings` (
   UNIQUE KEY `setting` (`name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-INSERT INTO `settings` (`name`, `value`) VALUES ('DB_VERSION', '0.0.2');
+INSERT INTO `settings` (`name`, `value`) VALUES ('DB_VERSION', '0.0.3');
 
 CREATE TABLE IF NOT EXISTS `shares` (
   `id` bigint(30) NOT NULL AUTO_INCREMENT,
@@ -200,7 +202,10 @@ INSERT INTO `token_types` (`id`, `name`, `expiration`) VALUES
 (1, 'password_reset', 3600),
 (2, 'confirm_email', 0),
 (3, 'invitation', 0),
-(4, 'account_unlock', 0);
+(4, 'account_unlock', 0),
+(5, 'account_edit', 360),
+(6, 'change_pw', 360),
+(7, 'withdraw_funds', 360);
 
 CREATE TABLE IF NOT EXISTS `transactions` (
   `id` int(255) NOT NULL AUTO_INCREMENT,
@@ -230,3 +235,4 @@ CREATE TABLE IF NOT EXISTS `templates` (
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+

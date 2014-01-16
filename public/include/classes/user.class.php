@@ -130,8 +130,26 @@ class User extends Base {
     if ($this->checkUserPassword($username, $password)) {
       $this->updateLoginTimestamp($this->getUserId($username));
       $this->createSession($username);
-      if ($this->setUserIp($this->getUserId($username), $_SERVER['REMOTE_ADDR']))
+      if ($this->setUserIp($this->getUserId($username), $_SERVER['REMOTE_ADDR'])) {
+        // send a notification if success_login is active
+        $uid = $this->getUserId($username);
+        $notifs = new Notification();
+        $notifs->setDebug($this->debug);
+        $notifs->setMysql($this->mysqli);
+        $notifs->setSmarty($this->smarty);
+        $notifs->setConfig($this->config);
+        $notifs->setSetting($this->setting);
+        $notifs->setErrorCodes($this->aErrorCodes);
+        $ndata = $notifs->getNotificationSettings($uid);
+        if ($ndata['success_login'] == 1) {
+          // seems to be active, let's send it
+          $aDataN['username'] = $username;
+          $aDataN['email'] = $this->getUserEmail($username);
+          $aDataN['subject'] = 'Successful login notification';
+          $notifs->sendNotification($uid, 'success_login', $aDataN);
+        }
         return true;
+      }
     }
     $this->setErrorMessage("Invalid username or password");
     if ($id = $this->getUserId($username)) {
@@ -142,7 +160,7 @@ class User extends Base {
         if ($token = $this->token->createToken('account_unlock', $id)) {
           $aData['token'] = $token;
           $aData['username'] = $username;
-          $aData['email'] = $this->getUserEmail($username);;
+          $aData['email'] = $this->getUserEmail($username);
           $aData['subject'] = 'Account auto-locked';
           $this->mail->sendMail('notifications/locked', $aData);
         }
@@ -256,14 +274,52 @@ class User extends Base {
   }
 
   /**
+   * Send e-mail to confirm a change for 2fa
+   * @param strType string Token type name
+   * @param userID int User ID
+   * @return bool
+   */
+  public function sendChangeConfigEmail($strType, $userID) {
+    $exists = $this->token->doesTokenExist($strType, $userID);
+    if ($exists == 0) {
+      $token = $this->token->createToken($strType, $userID);
+      $aData['token'] = $token;
+      $aData['username'] = $this->getUserName($userID);
+      $aData['email'] = $this->getUserEmail($aData['username']);
+      switch ($strType) {
+      	case 'account_edit':
+      	  $aData['subject'] = 'Account detail change confirmation';
+      	  break;
+      	case 'change_pw':
+      	  $aData['subject'] = 'Account password change confirmation';
+      	  break;
+      	case 'withdraw_funds':
+      	  $aData['subject'] = 'Manual payout request confirmation';
+      	  break;
+      	default:
+      	  $aData['subject'] = '';
+      }
+      if ($this->mail->sendMail('notifications/'.$strType, $aData)) {
+        return true;
+      } else {
+        $this->setErrorMessage('Failed to send the notification');
+        return false;
+      }
+    }
+    $this->setErrorMessage('A request has already been sent to your e-mail address. Please wait 10 minutes for it to expire.');
+    return false;
+  }
+  
+  /**
    * Update the accounts password
    * @param userID int User ID
    * @param current string Current password
    * @param new1 string New password
    * @param new2 string New password confirmation
+   * @param strToken string Token for confirmation
    * @return bool
    **/
-  public function updatePassword($userID, $current, $new1, $new2) {
+  public function updatePassword($userID, $current, $new1, $new2, $strToken) {
     $this->debug->append("STA " . __METHOD__, 4);
     if ($new1 !== $new2) {
       $this->setErrorMessage( 'New passwords do not match' );
@@ -280,6 +336,16 @@ class User extends Base {
       $stmt->bind_param('sis', $new, $userID, $current);
       $stmt->execute();
       if ($stmt->errno == 0 && $stmt->affected_rows === 1) {
+        // twofactor - consume the token if it is enabled and valid
+        if ($this->config['twofactor']['enabled'] && $this->config['twofactor']['options']['changepw']) {
+          $tValid = $this->token->isTokenValid($userID, $strToken, 6);
+          if ($tValid) {
+            $this->token->deleteToken($strToken);
+          } else {
+            $this->setErrorMessage('Invalid token');
+            return false;
+          }
+        }
         return true;
       }
       $stmt->close();
@@ -287,19 +353,19 @@ class User extends Base {
     $this->setErrorMessage( 'Unable to update password, current password wrong?' );
     return false;
   }
-
+  
   /**
    * Update account information from the edit account page
    * @param userID int User ID
    * @param address string new coin address
    * @param threshold float auto payout threshold
    * @param donat float donation % of income
+   * @param strToken string Token for confirmation
    * @return bool
    **/
-  public function updateAccount($userID, $address, $threshold, $donate, $email, $is_anonymous) {
+  public function updateAccount($userID, $address, $threshold, $donate, $email, $is_anonymous, $strToken) {
     $this->debug->append("STA " . __METHOD__, 4);
     $bUser = false;
-
     // number validation checks
     if (!is_numeric($threshold)) {
       $this->setErrorMessage('Invalid input for auto-payout');
@@ -350,6 +416,16 @@ class User extends Base {
     // We passed all validation checks so update the account
     $stmt = $this->mysqli->prepare("UPDATE $this->table SET coin_address = ?, ap_threshold = ?, donate_percent = ?, email = ?, is_anonymous = ? WHERE id = ?");
     if ($this->checkStmt($stmt) && $stmt->bind_param('sddsii', $address, $threshold, $donate, $email, $is_anonymous, $userID) && $stmt->execute())
+      // twofactor - consume the token if it is enabled and valid
+      if ($this->config['twofactor']['enabled'] && $this->config['twofactor']['options']['details']) {
+        $tValid = $this->token->isTokenValid($userID, $strToken, 5);
+        if ($tValid) {
+          $this->token->deleteToken($strToken);
+        } else {
+          $this->setErrorMessage('Invalid token');
+          return false;
+        }
+      }
       return true;
     // Catchall
     $this->setErrorMessage('Failed to update your account');
@@ -712,6 +788,29 @@ class User extends Base {
     if ($logout == true) $this->logoutUser($_SERVER['REQUEST_URI']);
     return false;
   }
+  
+  /**
+   * Gets the current CSRF token for this user/type setting and time chunk
+   * @param string User; for hash seed, if username isn't available use IP
+   * @param string Type of token; for hash seed, should be unique per page/use
+   * @return string CSRF token
+   */
+  public function getCSRFToken($user, $type) {
+    $date = date('m/d/y/H/i/s');
+    $data = explode('/', $date);
+    $month = $data[0];    $day = $data[1];      $year = $data[2];
+    $hour = $data[3];     $minute = $data[4];   $second = $data[5];
+    $seed = $this->salty;
+    $lead = $this->config['csrf']['options']['leadtime'];
+    if ($lead >= 11) { $lead = 10; }
+    if ($lead <= 0) { $lead = 3; }
+    if ($minute == 59 && $second > (60-$lead)) {
+      $minute = 0;
+      $fhour = ($hour == 23) ? $hour = 0 : $hour+=1;
+    }
+    $seed = $seed.$month.$day.$user.$type.$year.$hour.$minute.$seed;
+    return $this->getHash($seed);
+  }
 }
 
 // Make our class available automatically
@@ -719,6 +818,8 @@ $user = new User();
 $user->setDebug($debug);
 $user->setMysql($mysqli);
 $user->setSalt(SALT);
+$user->setSalty(SALTY);
+$user->setSmarty($smarty);
 $user->setConfig($config);
 $user->setMail($mail);
 $user->setToken($oToken);

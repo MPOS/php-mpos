@@ -17,3 +17,6 @@ public/include/config/global.inc.sha.php
 
 # IDE Settings
 /.idea/*
+.buildpath
+.project
+.settings

@@ -580,6 +580,17 @@ text-shadow: 0 1px 0 #6CDCF9;
 cursor: pointer;
 }
 
+input[type=submit].alt_btn:disabled {
+background: #D0D1D4 url(../images/btn_submit.png) repeat-x;
+border: 1px solid#aaa;
+text-shadow: none;
+color: #999;
+}
+
+input[type=submit].alt_btn:disabled:hover {
+color: #999;
+}
+
 input[type=submit].alt_btn:hover {
 color: #001217;
 }

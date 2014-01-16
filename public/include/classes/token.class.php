@@ -21,6 +21,37 @@ class Token Extends Base {
       return $result->fetch_assoc();
     return $this->sqlError();
   }
+  
+  /**
+   * Check if a token we're passing in is completely valid
+   * @param account_id int Account id of user
+   * @param token string Token to check
+   * @param type int Type of token
+   * @return int 0 or 1
+   */
+  public function isTokenValid($account_id, $token, $type) {
+    $stmt = $this->mysqli->prepare("SELECT * FROM $this->table WHERE account_id = ? AND token = ? AND type = ? AND time < NOW() LIMIT 1");
+    if ($stmt && $stmt->bind_param('isi', $account_id, $token, $type) && $stmt->execute())
+      return $stmt->get_result()->num_rows;
+    return $this->sqlError();
+  }
+  
+  /**
+   * Check if a token of this type already exists for a given account_id
+   * @param strType string Name of the type of token
+   * @param account_id int Account id of user to check
+   * @return mixed Number of rows on success, false on failure
+   */
+  public function doesTokenExist($strType=NULL, $account_id=NULL) {
+    if (!$iToken_id = $this->tokentype->getTypeId($strType)) {
+      $this->setErrorMessage('Invalid token type: ' . $strType);
+      return false;
+    }
+    $stmt = $this->mysqli->prepare("SELECT * FROM $this->table WHERE account_id = ? AND type = ? LIMIT 1");
+    if ($stmt && $stmt->bind_param('ii', $account_id, $iToken_id) && $stmt->execute())
+      return $stmt->get_result()->num_rows;
+    return $this->sqlError();
+  }
 
   /**
    * Insert a new token

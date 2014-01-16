@@ -7,7 +7,7 @@ if (!defined('SECURITY')) die('Hacking attempt');
  * This is used in the version check to ensure you run the latest version of the configuration file.
  * Once you upgraded your config, change the version here too.
  **/
-$config['version'] = '0.0.3';
+$config['version'] = '0.0.4';
 
 // Our include directory for additional features
 define('INCLUDE_DIR', BASEPATH . 'include');
@@ -26,6 +26,7 @@ define('DEBUG', 0);
 
 // SALT used to hash passwords
 define('SALT', 'PLEASEMAKEMESOMETHINGRANDOM');
+define('SALTY', 'THISSHOULDALSOBERRAANNDDOOM');
 
 /**
   * Underlying coin algorithm that you are mining on. Set this to whatever your coin needs:
@@ -98,6 +99,52 @@ $config['wallet']['password'] = 'testnet';
 $config['coldwallet']['address'] = '';
 $config['coldwallet']['reserve'] = 50;
 $config['coldwallet']['threshold'] = 5;
+
+/**
+ * E-mail confirmations for user actions
+ *
+ * Explanation:
+ *   To increase security for users, account detail changes can require
+ *   an e-mail confirmation prior to performing certain actions.
+ *
+ * Options:
+ *   enabled   :  Whether or not to require e-mail confirmations
+ *   details   :  Require confirmation to change account details
+ *   withdraw  :  Require confirmation to manually withdraw/payout
+ *   changepw  :  Require confirmation to change password
+ *
+ * Default:
+ *   enabled   =  true
+ *   details   =  true
+ *   withdraw  =  true
+ *   changepw  =  true
+ */
+$config['twofactor']['enabled'] = true;
+$config['twofactor']['options']['details'] = true;
+$config['twofactor']['options']['withdraw'] = true;
+$config['twofactor']['options']['changepw'] = true;
+
+/**
+ * CSRF protection config
+ *
+ * Explanation:
+ *   To help protect against CSRF, we can generate a hash that changes every minute
+ *   and is unique for each user/IP and page or use, and check against that when a
+ *   form is submitted.
+ *
+ * Options:
+ *   enabled    =   Whether or not we will generate/check for valid CSRF tokens
+ *   leadtime   =   Length of time in seconds to give as leeway, 1-10s
+ *   login      =   Use and check CSRF tokens for the login forms
+ *
+ * Default:
+ *   enabled    =   true
+ *   leadtime   =   3
+ *   login      =   true
+ */
+$config['csrf']['enabled'] = true;
+$config['csrf']['options']['leadtime'] = 3;
+$config['csrf']['forms']['login'] = true;
 
 /**
  * Lock account after maximum failed logins
