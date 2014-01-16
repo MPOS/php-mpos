@@ -16,13 +16,13 @@
     <tbody>
       <tr>
         <td align="center">
-          <a href="{$smarty.server.PHP_SELF}?page=admin&action=monitoring">{if $CRON_ERROR == 0}None - OK{else}{$CRON_ERROR}{/if}</a>
+          <a href="{$smarty.server.SCRIPT_NAME}?page=admin&action=monitoring">{if $CRON_ERROR == 0}None - OK{else}{$CRON_ERROR}{/if}</a>
         </td>
         <td align="center">
-          <a href="{$smarty.server.PHP_SELF}?page=admin&action=monitoring">{if $CRON_DISABLED == 0}None - OK{else}{$CRON_DISABLED}{/if}</a>
+          <a href="{$smarty.server.SCRIPT_NAME}?page=admin&action=monitoring">{if $CRON_DISABLED == 0}None - OK{else}{$CRON_DISABLED}{/if}</a>
         </td>
         <td align="center">
-          <a href="{$smarty.server.PHP_SELF}?page=admin&action=wallet">{$WALLET_ERROR|default:"None - OK"}</a>
+          <a href="{$smarty.server.SCRIPT_NAME}?page=admin&action=wallet">{$WALLET_ERROR|default:"None - OK"}</a>
         </td>
       </tr>
     </tbody>
