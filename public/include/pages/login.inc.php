@@ -25,7 +25,8 @@ if ($setting->getValue('maintenance') && !$user->isAdmin($user->getUserId($_POST
       $_SESSION['POPUP'][] = array('CONTENT' => 'Unable to login: '. $user->getError(), 'TYPE' => 'errormsg');
     }
   } else {
-    $_SESSION['POPUP'][] = array('CONTENT' => 'Unable to login: Token expired', 'TYPE' => 'errormsg');
+    $img = "<img src='site_assets/mpos/images/questionmark.png' title='Tokens are used to help us mitigate attacks; Simply login again to continue' width='20px' height='20px'>";
+    $_SESSION['POPUP'][] = array('CONTENT' => "Login token expired, please try again $img", 'TYPE' => 'info');
   }
 } else if (@$_POST['username'] && @$_POST['password']) {
   $_SESSION['POPUP'][] = array('CONTENT' => 'Unable to login: '. $user->getError(), 'TYPE' => 'errormsg');

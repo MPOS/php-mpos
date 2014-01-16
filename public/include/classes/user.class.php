@@ -801,8 +801,10 @@ class User extends Base {
     $month = $data[0];    $day = $data[1];      $year = $data[2];
     $hour = $data[3];     $minute = $data[4];   $second = $data[5];
     $seed = $this->salty;
-    // X second lead time on each minute
-    if ($minute == 59 && $second > (60-$this->config['csrf']['options']['leadtime'])) {
+    $lead = $this->config['csrf']['options']['leadtime'];
+    if ($lead >= 11) { $lead = 10; }
+    if ($lead <= 0) { $lead = 3; }
+    if ($minute == 59 && $second > (60-$lead)) {
       $minute = 0;
       $fhour = ($hour == 23) ? $hour = 0 : $hour+=1;
     }

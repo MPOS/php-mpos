@@ -134,7 +134,7 @@ $config['twofactor']['options']['changepw'] = true;
  *
  * Options:
  *   enabled    =   Whether or not we will generate/check for valid CSRF tokens
- *   leadtime   =   1 minute + leadtime seconds for reseeding tokens
+ *   leadtime   =   Length of time in seconds to give as leeway, 1-10s
  *   login      =   Use and check CSRF tokens for the login forms
  *
  * Default:
