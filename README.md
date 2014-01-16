@@ -40,7 +40,7 @@ These people have supported this project with a donation:
 * Mining4All (https://www.mining4all.eu/)
 * [xisi](https://github.com/xisi)
 * [PCFiL](https://github.com/PCFiL)
-* rog1121
+* [rog1121](https://github.com/rog1121)(https://rapidhash.net)
 
 Pools running MPOS
 ==================
