@@ -34,7 +34,7 @@
       </fieldset>
       <fieldset>
         <label>Automatic Payout Threshold</label>
-        <font size="1">{$GLOBAL.config.ap_threshold.min}-{$GLOBAL.config.ap_threshold.max} {$GLOBAL.config.currency}. Set to '0' for no auto payout.</font>
+        <font size="1">{$GLOBAL.config.ap_threshold.min}-{$GLOBAL.config.ap_threshold.max} {$GLOBAL.config.currency}. Set to '0' for no auto payout. A {$GLOBAL.config.txfee}% {$GLOBAL.config.currency} TX fee will apply <span id="tt"><img width="15px" height="15px" title="This 0.1% transaction fee is a network fee and goes back into the network not the pool." src="site_assets/mpos1/images/questionmark.png"></span></font>
         <input type="text" name="payoutThreshold" value="{nocache}{$smarty.request.payoutThreshold|default:$GLOBAL.userdata.ap_threshold|escape}{/nocache}" size="{$GLOBAL.config.ap_threshold.max|strlen}" maxlength="{$GLOBAL.config.ap_threshold.max|strlen}" />
       </fieldset>
       <fieldset>
@@ -71,7 +71,7 @@
     </header>
     <div class="module_content">
       <p style="padding-left:30px; padding-redight:30px; font-size:10px;">
-        Please note: a {if $GLOBAL.config.txfee_manual > 0.00001}{$GLOBAL.config.txfee_manual}{else}{$GLOBAL.config.txfee_manual|number_format:"8"}{/if} {$GLOBAL.config.currency} transaction will apply when processing "On-Demand" manual payments
+        Please note: a {if $GLOBAL.config.txfee_manual > 0.00001}{$GLOBAL.config.txfee_manual}{else}{$GLOBAL.config.txfee_manual|number_format:"8"}{/if} {$GLOBAL.config.currency} transaction will apply when processing "On-Demand" manual payments <span id="tt"><img width="15px" height="15px" title="This 0.1% transaction fee is a network fee and goes back into the network not the pool." src="site_assets/mpos1/images/questionmark.png"></span>
       </p>
       <fieldset>
         <label>Account Balance</label>
