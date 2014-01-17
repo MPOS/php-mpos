@@ -7,7 +7,7 @@
 {if $smarty.request.token|default:""}
     <input type="hidden" name="token" value="{$smarty.request.token|escape}" />
 {/if}
-{if $GLOBAL.csrf.enabled && $GLOBAL.csrf.forms.register}<input type="hidden" name="ctoken" value="{$CTOKEN}" />{/if}
+{if $GLOBAL.csrf.enabled && $GLOBAL.csrf.forms.register}<input type="hidden" name="ctoken" value="{$CTOKEN|escape}" />{/if}
     <input type="hidden" name="action" value="register">
     <fieldset>
       <label>Username</label>
