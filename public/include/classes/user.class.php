@@ -58,6 +58,9 @@ class User extends Base {
   public function isAdmin($id) {
     return $this->getUserAdmin($id);
   }
+  public function getSignupTime($id) {
+    return $this->getSingle($id, 'signup_timestamp', 'id');
+  }
   public function changeNoFee($id) {
     $field = array('name' => 'no_fees', 'type' => 'i', 'value' => !$this->isNoFee($id));
     return $this->updateSingle($id, $field);
@@ -657,15 +660,15 @@ class User extends Base {
       ! $this->setting->getValue('accounts_confirm_email_disabled') ? $is_locked = 1 : $is_locked = 0;
       $is_admin = 0;
       $stmt = $this->mysqli->prepare("
-        INSERT INTO $this->table (username, pass, email, pin, api_key, is_locked)
-        VALUES (?, ?, ?, ?, ?, ?)
+        INSERT INTO $this->table (username, pass, email, signup_timestamp, pin, api_key, is_locked)
+        VALUES (?, ?, ?, ?, ?, ?, ?)
         ");
     } else {
       $is_locked = 0;
       $is_admin = 1;
       $stmt = $this->mysqli->prepare("
-        INSERT INTO $this->table (username, pass, email, pin, api_key, is_admin, is_locked)
-        VALUES (?, ?, ?, ?, ?, 1, ?)
+        INSERT INTO $this->table (username, pass, email, signup_timestamp, pin, api_key, is_admin, is_locked)
+        VALUES (?, ?, ?, ?, ?, ?, 1, ?)
         ");
     }
 
@@ -674,8 +677,9 @@ class User extends Base {
     $pin_hash = $this->getHash($pin);
     $apikey_hash = $this->getHash($username);
     $username_clean = strip_tags($username);
+    $signup_time = time();
 
-    if ($this->checkStmt($stmt) && $stmt->bind_param('sssssi', $username_clean, $password_hash, $email1, $pin_hash, $apikey_hash, $is_locked) && $stmt->execute()) {
+    if ($this->checkStmt($stmt) && $stmt->bind_param('sssissi', $username_clean, $password_hash, $email1, $signup_time, $pin_hash, $apikey_hash, $is_locked) && $stmt->execute()) {
       if (! $this->setting->getValue('accounts_confirm_email_disabled') && $is_admin != 1) {
         if ($token = $this->token->createToken('confirm_email', $stmt->insert_id)) {
           $aData['username'] = $username_clean;
