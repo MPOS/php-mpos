@@ -1,4 +1,4 @@
-Description
+Description ![Codeship](https://www.codeship.io/projects/40fa7600-61a6-0131-3fd3-367b94dc0d60/status)
 ===========
 
 MPOS is a web based Mining Portal for various crypto currencies. A few pools using this interface are running at:
