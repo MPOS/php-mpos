@@ -6,16 +6,18 @@ if (!defined('SECURITY')) die('Hacking attempt');
 class CSRFToken Extends Base {
   /**
    * Gets a basic CSRF token for this user/type and time chunk
-   * @param string User; for hash seed, if username isn't available use IP
-   * @param string Type of token; for hash seed, should be unique per page/use
+   * @param string user User; for hash seed, if username isn't available use IP
+   * @param string type Type of token; for hash seed, should be unique per page/use
+   * @param string timing Which date() chars we add to the seed; month day year hour minute default
+   * @param string seedExtra Extra information to add to the seed
    * @return string CSRF token
    */
-  public function getBasic($user, $type) {
+  public function getBasic($user, $type, $timing='mdyHi', $seedExtra='') {
     $date = date('m/d/y/H/i/s');
     $data = explode('/', $date);
-    $month = $data[0];    $day = $data[1];      $year = $data[2];
-    $hour = $data[3];     $minute = $data[4];   $second = $data[5];
-    $seed = $this->salty;
+    $month = $data[0];    $day = $data[1];        $year = $data[2];
+    $hour = $data[3];     $minute = $data[4];     $second = $data[5];
+    $salt1 = $this->salt; $salt2 = $this->salty;  $seed = $salt1;
     $lead = $this->config['csrf']['options']['leadtime'];
     if ($lead >= 11) { $lead = 10; }
     if ($lead <= 0) { $lead = 3; }
@@ -23,7 +25,13 @@ class CSRFToken Extends Base {
       $minute = 0;
       $fhour = ($hour == 23) ? $hour = 0 : $hour+=1;
     }
-    $seed = $seed.$month.$day.$user.$type.$year.$hour.$minute.$seed;
+    $seed.= (strpos($timing, 'm') !== false) ? $month : '';
+    $seed.= (strpos($timing, 'd') !== false) ? $day : '';
+    $seed.= (strpos($timing, 'y') !== false) ? $year : '';
+    $seed.= (strpos($timing, 'H') !== false) ? $hour : '';
+    $seed.= (strpos($timing, 'i') !== false) ? $minute : '';
+    $seed.= (strpos($timing, 's') !== false) ? $second : '';
+    $seed.= ($seedExtra !== '') ? $seedExtra.$salt2 : $salt2;
     return $this->getHash($seed);
   }
   
