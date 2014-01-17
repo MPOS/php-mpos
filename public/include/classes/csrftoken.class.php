@@ -8,7 +8,7 @@ class CSRFToken Extends Base {
    * Gets a basic CSRF token for this user/type and time chunk
    * @param string user User; for hash seed, if username isn't available use IP
    * @param string type Type of token; for hash seed, should be unique per page/use
-   * @param string timing Which date() chars we add to the seed; month day year hour minute default
+   * @param string timing Which date() chars we add to the seed; default month day year hour minute ie same minute only
    * @param string seedExtra Extra information to add to the seed
    * @return string CSRF token
    */

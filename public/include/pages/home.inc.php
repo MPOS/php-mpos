@@ -22,12 +22,11 @@ if (!$smarty->isCached('master.tpl', $smarty_cache_key)) {
 } else {
   $debug->append('Using cached page', 3);
 }
-// csrf token - update if it's enabled
-$token = '';
-if ($config['csrf']['enabled'] && $config['csrf']['forms']['login']) {
-  $token = $csrftoken->getBasic($user->getCurrentIP(), 'login');
-}
 // Load news entries for Desktop site and unauthenticated users
 $smarty->assign("CONTENT", "default.tpl");
-$smarty->assign('CTOKEN', $token);
+// csrf token
+if ($config['csrf']['enabled'] && $config['csrf']['forms']['login']) {
+  $token = $csrftoken->getBasic($user->getCurrentIP(), 'login');
+  $smarty->assign('CTOKEN', $token);
+}
 ?>
