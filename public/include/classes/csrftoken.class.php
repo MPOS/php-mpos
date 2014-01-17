@@ -36,9 +36,10 @@ class CSRFToken Extends Base {
   }
   
   /**
-   * 
-   * @param unknown $dowhat
-   * @return string
+   * Gets the HTML image (?) with short csrf description for users for the incorrect
+   * token error message
+   * @param dowhat string What will be put in the string "Simply $dowhat again to..."
+   * @return string HTML image with description
    */
   public static function getDescriptionImageHTML($dowhat="try") {
     $string = "<img src='site_assets/mpos/images/questionmark.png' ";

@@ -9,19 +9,11 @@ $cp_editable = $wf_editable = $ea_editable = $wf_sent = $ea_sent = $cp_sent = 0;
 $ea_token = (!isset($_POST['ea_token'])) ? '' : $_POST['ea_token'];
 $cp_token = (!isset($_POST['cp_token'])) ? '' : $_POST['cp_token'];
 $wf_token = (!isset($_POST['wf_token'])) ? '' : $_POST['wf_token'];
-// set old token and type so we can use it later
-$old_token = "";
-$old_token_type = 0;
-if ($ea_token !== "") {
-  $old_token = $ea_token;
-  $old_token_type = 5;
-} else if ($wf_token !== "") {
-  $old_token = $wf_token;
-  $old_token_type = 7;
-} else if ($cp_token !== "") {
-  $old_token_type = 6;
-  $old_token = $cp_token;
-}
+
+// set old token so we can use it if an error happens
+$oldtoken_ea = ($ea_token !== '') ? $ea_token : '';
+$oldtoken_wf = ($wf_token !== '') ? $wf_token : '';
+$oldtoken_cp = ($cp_token !== '') ? $cp_token : '';
 
 if ($user->isAuthenticated()) {
   if ($config['twofactor']['enabled']) {
@@ -136,14 +128,10 @@ if ($user->isAuthenticated()) {
 }
 // 2fa - one last time so we can sync with changes we made during this page
 if ($user->isAuthenticated() && $config['twofactor']['enabled']) {
-  // set the token to be the old token so we still have it if it errors out
-  if ($old_token_type == 5) {
-    $ea_token = $old_token;
-  } else if ($old_token_type == 7) {
-    $wf_token = $old_token;
-  } else if ($old_token_type == 6) {
-    $cp_token = $old_token;
-  }
+  // set the token to be the old token, just in case an error occured
+  $ea_token = ($oldtoken_ea !== '') ? $oldtoken_ea : $ea_token;
+  $wf_token = ($oldtoken_wf !== '') ? $oldtoken_wf : $wf_token;
+  $cp_token = ($oldtoken_cp !== '') ? $oldtoken_cp : $cp_token;
   if ($config['twofactor']['options']['details']) {
     $ea_editable = $user->token->isTokenValid($_SESSION['USERDATA']['id'], $ea_token, 5);
     $ea_sent = $user->token->doesTokenExist('account_edit', $_SESSION['USERDATA']['id']);
