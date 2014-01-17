@@ -82,7 +82,7 @@ class Share Extends Base {
       FROM $this->table AS s
       LEFT JOIN " . $this->user->getTableName() . " AS a
       ON a.username = SUBSTRING_INDEX( s.username , '.', 1 )
-      WHERE s.id > ? AND s.id <= ? AND s.our_result = 'Y' AND a.is_locked = 0
+      WHERE s.id > ? AND s.id <= ? AND s.our_result = 'Y' AND a.is_locked != 2
       ");
     if ($this->checkStmt($stmt) && $stmt->bind_param('ii', $previous_upstream, $current_upstream) && $stmt->execute() && $result = $stmt->get_result())
       return $result->fetch_object()->total;
@@ -107,7 +107,7 @@ class Share Extends Base {
       FROM $this->table AS s
       LEFT JOIN " . $this->user->getTableName() . " AS a
       ON a.username = SUBSTRING_INDEX( s.username , '.', 1 )
-      WHERE s.id > ? AND s.id <= ? AND a.is_locked = 0
+      WHERE s.id > ? AND s.id <= ? AND a.is_locked != 2
       GROUP BY username DESC
       ");
     if ($this->checkStmt($stmt) && $stmt->bind_param('ii', $previous_upstream, $current_upstream) && $stmt->execute() && $result = $stmt->get_result())
@@ -154,7 +154,7 @@ class Share Extends Base {
       FROM $this->tableArchive AS s
       LEFT JOIN " . $this->user->getTableName() . " AS a
       ON a.username = SUBSTRING_INDEX( s.username , '.', 1 )
-      WHERE s.share_id > ? AND s.share_id <= ? AND a.is_locked = 0
+      WHERE s.share_id > ? AND s.share_id <= ? AND a.is_locked != 2
       GROUP BY account DESC");
     if ($this->checkStmt($stmt) && $stmt->bind_param("ii", $iMinId, $iMaxId) && $stmt->execute() && $result = $stmt->get_result()) {
       $aData = NULL;
