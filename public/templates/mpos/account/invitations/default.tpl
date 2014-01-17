@@ -2,6 +2,7 @@
   <input type="hidden" name="page" value="{$smarty.request.page|escape}">
   <input type="hidden" name="action" value="{$smarty.request.action|escape}">
   <input type="hidden" name="do" value="sendInvitation">
+  {if $GLOBAL.csrf.enabled && $GLOBAL.csrf.options.sitewide}<input type="hidden" name="ctoken" value="{$CTOKEN|escape}" />{/if}
   <article class="module width_quarter">
     <header><h3>Invitation</h3></header>
     <div class="module_content">

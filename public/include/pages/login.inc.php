@@ -3,6 +3,12 @@
 // Make sure we are called from index.php
 if (!defined('SECURITY')) die('Hacking attempt');
 
+// csrf if enabled
+$csrfenabled = ($config['csrf']['enabled'] && $config['csrf']['forms']['login']) ? 1 : 0;
+if ($csrfenabled) {
+  $nocsrf = ($csrftoken->getBasic($user->getCurrentIP(), 'login') == @$_POST['ctoken']) ? 1 : 0;
+}
+
 // ReCaptcha handling if enabled
 if ($setting->getValue('recaptcha_enabled') && $setting->getValue('recaptcha_enabled_logins')) {
   require_once(INCLUDE_DIR . '/lib/recaptchalib.php');
@@ -19,11 +25,6 @@ if ($setting->getValue('recaptcha_enabled') && $setting->getValue('recaptcha_ena
   } else {
     $smarty->assign("RECAPTCHA", recaptcha_get_html($setting->getValue('recaptcha_public_key'), null, true));
   }
-}
-
-// csrf if enabled
-if ($config['csrf']['enabled'] && $config['csrf']['forms']['login']) {
-  $nocsrf = ($csrftoken->getBasic($user->getCurrentIP(), 'login') == @$_POST['ctoken']) ? 1 : 0;
 }
 
 if ($setting->getValue('maintenance') && !$user->isAdmin($user->getUserId($_POST['username']))) {
@@ -57,12 +58,15 @@ if ($setting->getValue('maintenance') && !$user->isAdmin($user->getUserId($_POST
     } else {
       $_SESSION['POPUP'][] = array('CONTENT' => 'Unable to login: '. $user->getError(), 'TYPE' => 'errormsg');
     }
+  } else {
+    $img = $csrftoken->getDescriptionImageHTML();
+    $_SESSION['POPUP'][] = array('CONTENT' => "Login token expired, please try again $img", 'TYPE' => 'info');
   }
 }
 // Load login template
 $smarty->assign('CONTENT', 'default.tpl');
 // csrf token
-if ($config['csrf']['enabled'] && $config['csrf']['forms']['login']) {
+if ($csrfenabled) {
   $token = $csrftoken->getBasic($user->getCurrentIP(), 'login');
   $smarty->assign('CTOKEN', $token);
 }

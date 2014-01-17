@@ -3,6 +3,12 @@
 if (!defined('SECURITY')) die('Hacking attempt');
 
 if ($user->isAuthenticated()) {
+  // csrf stuff
+  $csrfenabled = ($config['csrf']['enabled'] && $config['csrf']['options']['sitewide']) ? 1 : 0;
+  if ($csrfenabled) {
+    $nocsrf = ($csrftoken->getBasic($user->getCurrentIP(), 'workers', 'mdyH') == @$_POST['ctoken']) ? 1 : 0;
+  }
+  
   switch (@$_REQUEST['do']) {
   case 'delete':
     if ($worker->deleteWorker($_SESSION['USERDATA']['id'], $_GET['id'])) {
@@ -12,17 +18,27 @@ if ($user->isAuthenticated()) {
     }
     break;
   case 'add':
-    if ($worker->addWorker($_SESSION['USERDATA']['id'], $_POST['username'], $_POST['password'])) {
-      $_SESSION['POPUP'][] = array('CONTENT' => 'Worker added', 'TYPE' => 'success');
+    if (!$csrfenabled || $csrfenabled && $nocsrf) {
+      if ($worker->addWorker($_SESSION['USERDATA']['id'], $_POST['username'], $_POST['password'])) {
+        $_SESSION['POPUP'][] = array('CONTENT' => 'Worker added', 'TYPE' => 'success');
+      } else {
+        $_SESSION['POPUP'][] = array('CONTENT' => $worker->getError(), 'TYPE' => 'errormsg');
+      }
     } else {
-      $_SESSION['POPUP'][] = array('CONTENT' => $worker->getError(), 'TYPE' => 'errormsg');
+      $img = $csrftoken->getDescriptionImageHTML();
+      $_SESSION['POPUP'][] = array('CONTENT' => "Worker token expired, please try again $img", 'TYPE' => 'info');
     }
     break;
   case 'update':
-    if ($worker->updateWorkers($_SESSION['USERDATA']['id'], @$_POST['data'])) {
-      $_SESSION['POPUP'][] = array('CONTENT' => 'Worker updated', 'TYPE' => 'success');
+    if (!$csrfenabled || $csrfenabled && $nocsrf) {
+      if ($worker->updateWorkers($_SESSION['USERDATA']['id'], @$_POST['data'])) {
+        $_SESSION['POPUP'][] = array('CONTENT' => 'Worker updated', 'TYPE' => 'success');
+      } else {
+        $_SESSION['POPUP'][] = array('CONTENT' => $worker->getError(), 'TYPE' => 'errormsg');
+      }
     } else {
-      $_SESSION['POPUP'][] = array('CONTENT' => $worker->getError(), 'TYPE' => 'errormsg');
+      $img = $csrftoken->getDescriptionImageHTML();
+      $_SESSION['POPUP'][] = array('CONTENT' => "Worker token expired, please try again $img", 'TYPE' => 'info');
     }
     break;
   }
@@ -34,5 +50,9 @@ if ($user->isAuthenticated()) {
 }
 
 $smarty->assign('CONTENT', 'default.tpl');
-
+// csrf token
+if ($csrfenabled) {
+  $token = $csrftoken->getBasic($user->getCurrentIP(), 'workers', 'mdyH');
+  $smarty->assign('CTOKEN', $token);
+}
 ?>

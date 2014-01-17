@@ -17,7 +17,7 @@ if ($setting->getValue('lock_registration') && $setting->getValue('disable_invit
   // Load news entries for Desktop site and unauthenticated users
   $smarty->assign("CONTENT", "default.tpl");
   // csrf token
-  if ($config['csrf']['enabled'] && $config['csrf']['forms']['register']) {
+  if ($config['csrf']['enabled'] && $config['csrf']['options']['sitewide']) {
     $token = $csrftoken->getBasic($user->getCurrentIP(), 'register', 'mdyH');
     $smarty->assign('CTOKEN', $token);
   }

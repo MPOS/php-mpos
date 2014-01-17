@@ -16,8 +16,9 @@ if ($setting->getValue('recaptcha_enabled')) {
 }
 
 // csrf if enabled
-if ($config['csrf']['enabled'] && $config['csrf']['options']['sitewide']) {
-  $nocsrf = ($csrftoken->getBasic($user->getCurrentIP(), 'contact', 'mdyH') == $_POST['ctoken']) ? 1 : 0;
+$csrfenabled = ($config['csrf']['enabled'] && $config['csrf']['options']['sitewide']) ? 1 : 0;
+if ($csrfenabled) {
+  $nocsrf = ($csrftoken->getBasic($user->getCurrentIP(), 'invitations', 'mdyH') == @$_POST['ctoken']) ? 1 : 0;
 }
 
 if ($setting->getValue('disable_contactform')) {
@@ -29,11 +30,10 @@ if ($setting->getValue('disable_contactform')) {
     // Check if recaptcha is enabled, process form data if valid
     if ($rsp->is_valid) {
       // Check if csrf is enabled and fail if token is invalid
-      if (!$nocsrf && $config['csrf']['enabled'] && $config['csrf']['forms']['register']) {
+      if (!$nocsrf && $csrfenabled) {
         $img = $csrftoken->getDescriptionImageHTML();
         $_SESSION['POPUP'][] = array('CONTENT' => "Contact token expired, please try again $img", 'TYPE' => 'info');
       } else {
-        // csrf is valid or disabled, send
         $smarty->assign("RECAPTCHA", recaptcha_get_html($setting->getValue('recaptcha_public_key')));
         if ($mail->contactform($_POST['senderName'], $_POST['senderEmail'], $_POST['senderSubject'], $_POST['senderMessage'])) {
           $_SESSION['POPUP'][] = array('CONTENT' => 'Thanks for sending your message! We will get back to you shortly');
@@ -52,7 +52,7 @@ if ($setting->getValue('disable_contactform')) {
     // Captcha disabled
   } else {
     // Check if csrf is enabled and fail if token is invalid
-    if (!$nocsrf && $config['csrf']['enabled'] && $config['csrf']['options']['sitewide']) {
+    if (!$nocsrf && $csrfenabled) {
       $img = $csrftoken->getDescriptionImageHTML();
       $_SESSION['POPUP'][] = array('CONTENT' => "Contact token expired, please try again $img", 'TYPE' => 'info');
     } else if ($mail->contactform($_POST['senderName'], $_POST['senderEmail'], $_POST['senderSubject'], $_POST['senderMessage'])) {

@@ -4,6 +4,7 @@
     <input type="hidden" name="page" value="{$smarty.request.page|escape}">
     <input type="hidden" name="action" value="{$smarty.request.action|escape}">
     <input type="hidden" name="do" value="add">
+    {if $GLOBAL.csrf.enabled && $GLOBAL.csrf.options.sitewide}<input type="hidden" name="ctoken" value="{$CTOKEN|escape}" />{/if}
     <div class="module_content">
       <fieldset>
         <label>Worker Name</label>
@@ -29,6 +30,7 @@
     <input type="hidden" name="page" value="{$smarty.request.page|escape}">
     <input type="hidden" name="action" value="{$smarty.request.action|escape}">
     <input type="hidden" name="do" value="update">
+    {if $GLOBAL.csrf.enabled && $GLOBAL.csrf.options.sitewide}<input type="hidden" name="ctoken" value="{$CTOKEN|escape}" />{/if}
     <table class="tablesorter" cellspacing="0">
       <thead>
         <tr>
