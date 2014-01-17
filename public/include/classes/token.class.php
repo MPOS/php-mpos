@@ -30,9 +30,12 @@ class Token Extends Base {
    * @return int 0 or 1
    */
   public function isTokenValid($account_id, $token, $type) {
-    $stmt = $this->mysqli->prepare("SELECT * FROM $this->table WHERE account_id = ? AND token = ? AND type = ? AND UNIX_TIMESTAMP(time) < NOW() LIMIT 1");
+    $stmt = $this->mysqli->prepare("SELECT * FROM $this->table WHERE account_id = ? AND token = ? AND type = ? AND UNIX_TIMESTAMP(time) < UNIX_TIMESTAMP(NOW()) LIMIT 1");
+    
     if ($stmt && $stmt->bind_param('isi', $account_id, $token, $type) && $stmt->execute())
-      return $stmt->get_result()->num_rows;
+      $res = $stmt->get_result();
+      print_r($res);
+      return $res->num_rows;
     return $this->sqlError();
   }
   
