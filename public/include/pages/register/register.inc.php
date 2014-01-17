@@ -14,6 +14,12 @@ if ($setting->getValue('recaptcha_enabled') && $setting->getValue('recaptcha_ena
   );
   $smarty->assign("RECAPTCHA", recaptcha_get_html($setting->getValue('recaptcha_public_key'), $rsp->error, true));
   if (!$rsp->is_valid) $_SESSION['POPUP'][] = array('CONTENT' => 'Invalid Captcha, please try again.', 'TYPE' => 'errormsg');
+  $recaptcha = ($rsp->isvalid) ? 1 : 0; 
+}
+
+// csrf if enabled
+if ($config['csrf']['enabled'] && $config['csrf']['forms']['register']) {
+  $nocsrf = ($csrftoken->getBasic($user->getCurrentIP(), 'register', 'mdyH') == $_POST['ctoken']) ? 1 : 0;
 }
 
 if ($setting->getValue('disable_invitations') && $setting->getValue('lock_registration')) {
@@ -21,8 +27,12 @@ if ($setting->getValue('disable_invitations') && $setting->getValue('lock_regist
 } else if ($setting->getValue('lock_registration') && !$setting->getValue('disable_invitations') && !isset($_POST['token'])) {
   $_SESSION['POPUP'][] = array('CONTENT' => 'Only invited users are allowed to register.', 'TYPE' => 'errormsg');
 } else {
-  // Check if recaptcha is enabled, process form data if valid or disabled
-  if ($setting->getValue('recaptcha_enabled') != 1 || $setting->getValue('recaptcha_enabled_registrations') != 1 || $rsp->is_valid) {
+  // Check if csrf is enabled and fail if token is invalid
+  if (!$nocsrf && $config['csrf']['enabled'] && $config['csrf']['forms']['register']) {
+    $img = "<img src='site_assets/mpos/images/questionmark.png' title='Tokens are used to help us mitigate attacks; Simply login again to continue' width='20px' height='20px'>";
+    $_SESSION['POPUP'][] = array('CONTENT' => "Register token expired, please try again $img", 'TYPE' => 'info');
+  } else if ($setting->getValue('recaptcha_enabled') != 1 || $setting->getValue('recaptcha_enabled_registrations') != 1 || $rsp->is_valid) {
+    // Check if recaptcha is enabled, process form data if valid or disabled
     isset($_POST['token']) ? $token = $_POST['token'] : $token = '';
     if ($user->register(@$_POST['username'], @$_POST['password1'], @$_POST['password2'], @$_POST['pin'], @$_POST['email1'], @$_POST['email2'], @$_POST['tac'], $token)) {
       ! $setting->getValue('accounts_confirm_email_disabled') ? $_SESSION['POPUP'][] = array('CONTENT' => 'Please check your mailbox to activate this account') : $_SESSION['POPUP'][] = array('CONTENT' => 'Account created, please login');
@@ -34,4 +44,9 @@ if ($setting->getValue('disable_invitations') && $setting->getValue('lock_regist
 
 // We load the default registration template instead of an action specific one
 $smarty->assign("CONTENT", "../default.tpl");
+// csrf token
+if ($config['csrf']['enabled'] && $config['csrf']['forms']['register']) {
+  $token = $csrftoken->getBasic($user->getCurrentIP(), 'register', 'mdyH');
+  $smarty->assign('CTOKEN', $token);
+}
 ?>

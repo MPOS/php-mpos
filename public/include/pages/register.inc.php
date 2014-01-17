@@ -18,7 +18,7 @@ if ($setting->getValue('lock_registration') && $setting->getValue('disable_invit
   $smarty->assign("CONTENT", "default.tpl");
   // csrf token
   if ($config['csrf']['enabled'] && $config['csrf']['forms']['register']) {
-    $token = $csrftoken->getBasic($user->getCurrentIP(), 'register');
+    $token = $csrftoken->getBasic($user->getCurrentIP(), 'register', 'mdyH');
     $smarty->assign('CTOKEN', $token);
   }
 }

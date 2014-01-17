@@ -21,6 +21,11 @@ if ($setting->getValue('recaptcha_enabled') && $setting->getValue('recaptcha_ena
   }
 }
 
+// csrf if enabled
+if ($config['csrf']['enabled'] && $config['csrf']['forms']['login']) {
+  $nocsrf = ($csrftoken->getBasic($user->getCurrentIP(), 'login') == @$_POST['ctoken']) ? 1 : 0;
+}
+
 if ($setting->getValue('maintenance') && !$user->isAdmin($user->getUserId($_POST['username']))) {
   $_SESSION['POPUP'][] = array('CONTENT' => 'You are not allowed to login during maintenace.', 'TYPE' => 'info');
 } else if (!empty($_POST['username']) && !empty($_POST['password'])) {
@@ -52,9 +57,6 @@ if ($setting->getValue('maintenance') && !$user->isAdmin($user->getUserId($_POST
     } else {
       $_SESSION['POPUP'][] = array('CONTENT' => 'Unable to login: '. $user->getError(), 'TYPE' => 'errormsg');
     }
-  } else if ($nocsrf == 0) {
-    $img = "<img src='site_assets/mpos/images/questionmark.png' title='Tokens are used to help us mitigate attacks; Simply login again to continue' width='20px' height='20px'>";
-    $_SESSION['POPUP'][] = array('CONTENT' => "Login token expired, please try again $img", 'TYPE' => 'info');
   }
 }
 // Load login template

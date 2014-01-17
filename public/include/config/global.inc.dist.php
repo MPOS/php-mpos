@@ -138,17 +138,20 @@ $config['twofactor']['options']['changepw'] = true;
  *   sitewide   =   Require a valid CSRF token for all forms, does not override specific form settings
  *   leadtime   =   Length of time in seconds to give as leeway between minute switches
  *   login      =   Use and check login-specific CSRF token
+ *   register   =   Use and check register-specific CSRF token
  *
  * Default:
  *   enabled    =   true
  *   sitewide   =   true
  *   leadtime   =   3
  *   login      =   true
+ *   register   =   true
  */
 $config['csrf']['enabled'] = true;
 $config['csrf']['sitewide'] = true;
 $config['csrf']['options']['leadtime'] = 3;
 $config['csrf']['forms']['login'] = true;
+$config['csrf']['forms']['register'] = true;
 
 /**
  * Lock account after maximum failed logins
