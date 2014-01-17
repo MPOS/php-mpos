@@ -5,7 +5,7 @@
     {if $GLOBAL.csrf.enabled && $GLOBAL.csrf.forms.login}<input type="hidden" name="ctoken" value="{$CTOKEN}" />{/if}
     <input type="hidden" name="to" value="{$smarty.server.SCRIPT_NAME}?page=dashboard" />
     <fieldset2 class="small">
-      <label>Username</label>
+      <label>E-Mail</label>
       <input type="text" name="username" size="22" maxlength="100" required />
       <fieldset2 class="small">
         <label>Password</label>
