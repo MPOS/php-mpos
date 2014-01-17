@@ -15,19 +15,31 @@ if ($setting->getValue('recaptcha_enabled')) {
   );
 }
 
+// csrf if enabled
+if ($config['csrf']['enabled'] && $config['csrf']['options']['sitewide']) {
+  $nocsrf = ($csrftoken->getBasic($user->getCurrentIP(), 'contact', 'mdyH') == $_POST['ctoken']) ? 1 : 0;
+}
+
 if ($setting->getValue('disable_contactform')) {
   $_SESSION['POPUP'][] = array('CONTENT' => 'Contactform is currently disabled. Please try again later.', 'TYPE' => 'errormsg');
 } else if ($setting->getValue('disable_contactform') && !$user->isAuthenticated(false)) {
   $_SESSION['POPUP'][] = array('CONTENT' => 'Contactform is disabled for guests.', 'TYPE' => 'errormsg');
 } else {
-  // Check if recaptcha is enabled, process form data if valid
-  if($setting->getValue('recaptcha_enabled') && $_POST["recaptcha_response_field"] && $_POST["recaptcha_response_field"]!=''){
+   if ($setting->getValue('recaptcha_enabled') && $_POST["recaptcha_response_field"] && $_POST["recaptcha_response_field"]!=''){
+    // Check if recaptcha is enabled, process form data if valid
     if ($rsp->is_valid) {
-      $smarty->assign("RECAPTCHA", recaptcha_get_html($setting->getValue('recaptcha_public_key')));
-      if ($mail->contactform($_POST['senderName'], $_POST['senderEmail'], $_POST['senderSubject'], $_POST['senderMessage'])) {
-      $_SESSION['POPUP'][] = array('CONTENT' => 'Thanks for sending your message! We will get back to you shortly');
+      // Check if csrf is enabled and fail if token is invalid
+      if (!$nocsrf && $config['csrf']['enabled'] && $config['csrf']['forms']['register']) {
+        $img = $csrftoken->getDescriptionImageHTML();
+        $_SESSION['POPUP'][] = array('CONTENT' => "Contact token expired, please try again $img", 'TYPE' => 'info');
       } else {
-        $_SESSION['POPUP'][] = array('CONTENT' => 'There was a problem sending your message. Please try again.' . $user->getError(), 'TYPE' => 'errormsg');
+        // csrf is valid or disabled, send
+        $smarty->assign("RECAPTCHA", recaptcha_get_html($setting->getValue('recaptcha_public_key')));
+        if ($mail->contactform($_POST['senderName'], $_POST['senderEmail'], $_POST['senderSubject'], $_POST['senderMessage'])) {
+          $_SESSION['POPUP'][] = array('CONTENT' => 'Thanks for sending your message! We will get back to you shortly');
+        } else {
+          $_SESSION['POPUP'][] = array('CONTENT' => 'There was a problem sending your message. Please try again.' . $user->getError(), 'TYPE' => 'errormsg');
+        }
       }
     } else {
       $smarty->assign("RECAPTCHA", recaptcha_get_html($setting->getValue('recaptcha_public_key'), $rsp->error));
@@ -39,9 +51,13 @@ if ($setting->getValue('disable_contactform')) {
     $_SESSION['POPUP'][] = array('CONTENT' => 'Empty Captcha, please try again.', 'TYPE' => 'errormsg');
     // Captcha disabled
   } else {
-      if ($mail->contactform($_POST['senderName'], $_POST['senderEmail'], $_POST['senderSubject'], $_POST['senderMessage'])) {
+    // Check if csrf is enabled and fail if token is invalid
+    if (!$nocsrf && $config['csrf']['enabled'] && $config['csrf']['options']['sitewide']) {
+      $img = $csrftoken->getDescriptionImageHTML();
+      $_SESSION['POPUP'][] = array('CONTENT' => "Contact token expired, please try again $img", 'TYPE' => 'info');
+    } else if ($mail->contactform($_POST['senderName'], $_POST['senderEmail'], $_POST['senderSubject'], $_POST['senderMessage'])) {
       $_SESSION['POPUP'][] = array('CONTENT' => 'Thanks for sending your message! We will get back to you shortly');
-      } else {
+    } else {
       $_SESSION['POPUP'][] = array('CONTENT' => 'There was a problem sending your message. Please try again. ' . $user->getError(), 'TYPE' => 'errormsg');
     }
   }
@@ -49,5 +65,9 @@ if ($setting->getValue('disable_contactform')) {
 
 // Tempalte specifics
 $smarty->assign("CONTENT", "default.tpl");
-
+// csrf token
+if ($config['csrf']['enabled'] && $config['csrf']['options']['sitewide']) {
+  $token = $csrftoken->getBasic($user->getCurrentIP(), 'contact', 'mdyH');
+  $smarty->assign('CTOKEN', $token);
+}
 ?>

@@ -35,6 +35,19 @@ class CSRFToken Extends Base {
     return $this->getHash($seed);
   }
   
+  /**
+   * 
+   * @param unknown $dowhat
+   * @return string
+   */
+  public static function getDescriptionImageHTML($dowhat="try") {
+    $string = "<img src='site_assets/mpos/images/questionmark.png' ";
+    $string.= "title='Tokens are used to help us mitigate attacks; Simply ";
+    $string.= htmlentities(strip_tags($dowhat));
+    $string.= " again to continue' width='20px' height='20px'>";
+    return $string;
+  }
+  
   private function getHash($string) {
     return hash('sha256', $this->salty.$string.$this->salt);
   }

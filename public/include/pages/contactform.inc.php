@@ -14,7 +14,11 @@ if ($setting->getValue('disable_contactform')) {
     require_once(INCLUDE_DIR . '/lib/recaptchalib.php');
     $smarty->assign("RECAPTCHA", recaptcha_get_html($setting->getValue('recaptcha_public_key')));
   }
-
+  // csrf token
+  if ($config['csrf']['enabled'] && $config['csrf']['options']['sitewide']) {
+    $token = $csrftoken->getBasic($user->getCurrentIP(), 'contact');
+    $smarty->assign('CTOKEN', $token);
+  }
   // Tempalte specifics
   $smarty->assign("CONTENT", "default.tpl");
 }

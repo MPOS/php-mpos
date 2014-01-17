@@ -29,7 +29,7 @@ if ($setting->getValue('disable_invitations') && $setting->getValue('lock_regist
 } else {
   // Check if csrf is enabled and fail if token is invalid
   if (!$nocsrf && $config['csrf']['enabled'] && $config['csrf']['forms']['register']) {
-    $img = "<img src='site_assets/mpos/images/questionmark.png' title='Tokens are used to help us mitigate attacks; Simply login again to continue' width='20px' height='20px'>";
+    $img = $csrftoken->getDescriptionImageHTML('register');
     $_SESSION['POPUP'][] = array('CONTENT' => "Register token expired, please try again $img", 'TYPE' => 'info');
   } else if ($setting->getValue('recaptcha_enabled') != 1 || $setting->getValue('recaptcha_enabled_registrations') != 1 || $rsp->is_valid) {
     // Check if recaptcha is enabled, process form data if valid or disabled
