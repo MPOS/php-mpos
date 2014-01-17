@@ -13,5 +13,7 @@ How to add tests
  * Below is the suite entry for the sample test in unit/config/SampleTest.php
  
 `<testsuite name="SampleTest">
+
   <directory>unit/config</directory>
+  
 </testsuite>`
