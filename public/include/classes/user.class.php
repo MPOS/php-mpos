@@ -109,7 +109,7 @@ class User extends Base {
    * @param password string Password
    * @return bool
    **/
-  public function checkLogin($username, $password) {
+  public function loginUserMPOS($username, $password) {
     $this->debug->append("STA " . __METHOD__, 4);
     $this->debug->append("Checking login for $username with password $password", 2);
     if (empty($username) || empty($password)) {
@@ -150,6 +150,83 @@ class User extends Base {
 
     return false;
   }
+  
+  /**
+   * Check user OpenID login
+   * @param provider string
+   * @return bool
+   **/
+  public function loginUserOpenID($provider) {
+    $this->debug->append("STA " . __METHOD__, 4);
+    $this->debug->append("Checking login via $provider", 2);
+	try {
+		$openid = new LightOpenID($_SERVER['SERVER_NAME']);
+		if (!$openid->mode) {
+			if ($provider) {
+				switch($provider) {
+				//add custom providers here
+                			case 'facebook' :
+                    				$openid->identity = 'http://facebook-openid.appspot.com';
+                    				break;
+                			case 'google' :
+			                	$openid->identity = 'https://www.google.com/accounts/o8/id';
+                    				break;
+                			default :
+                    				$openid->identity = 'https://www.google.com/accounts/o8/id';
+                    				break;
+				}
+				$openid->required = array('contact/email');
+				header('Location: ' . $openid->authUrl());
+			}
+		} 
+		elseif ($openid->mode == 'cancel') {
+			header('Location: http://www.google.com/');
+		} 
+		else {
+			if ($openid->validate()) {
+				//retrieve openid info
+				$id = $openid->getAttributes();
+				$email = $id['contact/email'];
+				
+				//check if user exists, if not redirect to openid page to get other account details and create user
+				if (!$this->getUserNameByEmail($email)) {
+					$_SESSION['email'] = $email;
+					header("Location: " . $_SERVER['PHP_SELF'] . "?page=account&action=openid");
+					//header('Location: index.php?page=account&action=openid');
+				}
+				//check if username retrievable from email
+				if ($username = $this->getUserNameByEmail($email)) {
+					//check if userid is locked
+		    		if ($this->isLocked($this->getUserId($username))) {
+						$this->setErrorMessage("Account is locked. Please contact site support.");
+						return false;
+    				}
+    					$stmt = $this->mysqli->prepare("SELECT username, id, is_admin, email FROM $this->table WHERE email=? LIMIT 1");
+ 	   				if ($this->checkStmt($stmt)) {
+      						$stmt->bind_param('s', $email);
+      						$stmt->execute();
+      						$stmt->bind_result($row_username, $row_id, $row_admin, $row_email);
+      						$stmt->fetch();
+      						$stmt->close();
+						$user = array();
+						//store user data into user array
+      				 	$this->user = array('username' => $row_username, 'id' => $row_id, 'is_admin' => $row_admin, 'email' => $row_email);
+						//create session with user data
+						$this->createSession($username);
+						//update db with new user ip
+						if ($this->setUserIp($this->getUserId($username), $_SERVER['REMOTE_ADDR']));
+						//header('Location: index.php?page=dashboard');
+						header("Location: " . $_SERVER['PHP_SELF'] . "?page=dashboard");
+
+					}	
+				}
+			}
+		}
+    }
+	catch(ErrorException $e) {
+		trigger_error($e->getMessage());
+	}
+}
 
   /**
    * Check the users PIN for confirmation
