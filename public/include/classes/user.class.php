@@ -145,7 +145,7 @@ class User extends Base {
         $notifs->setSetting($this->setting);
         $notifs->setErrorCodes($this->aErrorCodes);
         $ndata = $notifs->getNotificationSettings($uid);
-        if ($ndata['success_login'] == 1) {
+        if (@$ndata['success_login'] == 1) {
           // seems to be active, let's send it
           $aDataN['username'] = $username;
           $aDataN['email'] = $this->getUserEmail($username);

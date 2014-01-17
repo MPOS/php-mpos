@@ -63,11 +63,11 @@ if ($setting->getValue('disable_contactform')) {
   }
 }
 
-// Tempalte specifics
-$smarty->assign("CONTENT", "default.tpl");
 // csrf token
 if ($config['csrf']['enabled'] && $config['csrf']['options']['sitewide']) {
   $token = $csrftoken->getBasic($user->getCurrentIP(), 'contact', 'mdyH');
   $smarty->assign('CTOKEN', $token);
 }
+// Tempalte specifics
+$smarty->assign("CONTENT", "default.tpl");
 ?>

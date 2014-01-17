@@ -57,7 +57,7 @@
       <div class="submit_link">
       {nocache}
         {if $GLOBAL.csrf.enabled && $GLOBAL.csrf.options.sitewide}<input type="hidden" name="ctoken" value="{$CTOKEN|escape}" />{/if}
-        <input type="hidden" name="ea_token" value="{$smarty.request.ea_token|escape}">
+        <input type="hidden" name="ea_token" value="{$smarty.request.ea_token|escape|default:""}">
         <input type="hidden" name="utype" value="account_edit">
         {if $GLOBAL.twofactor.enabled && $GLOBAL.twofactor.options.details}
           {if $DETAILSSENT == 1 && $DETAILSUNLOCKED == 1}
@@ -105,7 +105,7 @@
     <footer>
       <div class="submit_link">
       {nocache}
-        <input type="hidden" name="wf_token" value="{$smarty.request.wf_token|escape}">
+        <input type="hidden" name="wf_token" value="{$smarty.request.wf_token|escape|default:""}">
         {if $GLOBAL.csrf.enabled && $GLOBAL.csrf.options.sitewide}<input type="hidden" name="ctoken" value="{$CTOKEN|escape}" />{/if}
         <input type="hidden" name="utype" value="withdraw_funds">
         {if $GLOBAL.twofactor.enabled && $GLOBAL.twofactor.options.withdraw}
@@ -158,7 +158,7 @@
     <footer>
       <div class="submit_link">
       {nocache}
-        <input type="hidden" name="cp_token" value="{$smarty.request.cp_token|escape}">
+        <input type="hidden" name="cp_token" value="{$smarty.request.cp_token|escape|default:""}">
         {if $GLOBAL.csrf.enabled && $GLOBAL.csrf.options.sitewide}<input type="hidden" name="ctoken" value="{$CTOKEN|escape}" />{/if}
         <input type="hidden" name="utype" value="change_pw">
         {if $GLOBAL.twofactor.enabled && $GLOBAL.twofactor.options.changepw}

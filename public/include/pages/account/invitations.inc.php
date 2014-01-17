@@ -31,10 +31,10 @@ if ($user->isAuthenticated()) {
     $_SESSION['POPUP'][] = array('CONTENT' => 'Invitations are disabled', 'TYPE' => 'errormsg');
   }
 }
-$smarty->assign('CONTENT', 'default.tpl');
 // csrf token
 if ($csrfenabled) {
   $token = $csrftoken->getBasic($user->getCurrentIP(), 'invitations', 'mdyH');
   $smarty->assign('CTOKEN', $token);
 }
+$smarty->assign('CONTENT', 'default.tpl');
 ?>

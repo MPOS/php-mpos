@@ -48,11 +48,10 @@ if ($user->isAuthenticated()) {
 
   $smarty->assign('WORKERS', $aWorkers);
 }
-
-$smarty->assign('CONTENT', 'default.tpl');
 // csrf token
 if ($csrfenabled) {
   $token = $csrftoken->getBasic($user->getCurrentIP(), 'workers', 'mdyH');
   $smarty->assign('CTOKEN', $token);
 }
+$smarty->assign('CONTENT', 'default.tpl');
 ?>

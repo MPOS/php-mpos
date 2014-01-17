@@ -168,17 +168,17 @@ if ($user->isAuthenticated() && $config['twofactor']['enabled']) {
     $wf_sent = $user->token->doesTokenExist('withdraw_funds', $_SESSION['USERDATA']['id']);
   }
 }
-// Tempalte specifics
-$smarty->assign("CONTENT", "default.tpl");
+// csrf stuff
 $smarty->assign("CHANGEPASSUNLOCKED", $cp_editable);
 $smarty->assign("WITHDRAWUNLOCKED", $wf_editable);
 $smarty->assign("DETAILSUNLOCKED", $ea_editable);
 $smarty->assign("CHANGEPASSSENT", $cp_sent);
 $smarty->assign("WITHDRAWSENT", $wf_sent);
 $smarty->assign("DETAILSSENT", $ea_sent);
-// csrf token
 if ($csrfenabled) {
   $token = $csrftoken->getBasic($user->getCurrentIP(), 'editaccount', 'mdyH');
   $smarty->assign('CTOKEN', $token);
 }
+// Tempalte specifics
+$smarty->assign("CONTENT", "default.tpl");
 ?>

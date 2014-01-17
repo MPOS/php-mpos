@@ -33,14 +33,14 @@ if ($user->isAuthenticated()) {
     // Fetch user notification settings
     $aSettings = $notification->getNotificationSettings($_SESSION['USERDATA']['id']);
 
-    $smarty->assign('NOTIFICATIONS', $aNotifications);
-    $smarty->assign('SETTINGS', $aSettings);
-    $smarty->assign('CONTENT', 'default.tpl');
     // csrf token
     if ($csrfenabled) {
       $token = $csrftoken->getBasic($user->getCurrentIP(), 'editnotifs', 'mdyH');
       $smarty->assign('CTOKEN', $token);
     }
+    $smarty->assign('NOTIFICATIONS', $aNotifications);
+    $smarty->assign('SETTINGS', $aSettings);
+    $smarty->assign('CONTENT', 'default.tpl');
   }
 }
 ?>

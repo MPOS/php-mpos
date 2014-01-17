@@ -63,11 +63,11 @@ if ($setting->getValue('maintenance') && !$user->isAdmin($user->getUserId($_POST
     $_SESSION['POPUP'][] = array('CONTENT' => "Login token expired, please try again $img", 'TYPE' => 'info');
   }
 }
-// Load login template
-$smarty->assign('CONTENT', 'default.tpl');
 // csrf token
 if ($csrfenabled) {
   $token = $csrftoken->getBasic($user->getCurrentIP(), 'login');
   $smarty->assign('CTOKEN', $token);
 }
+// Load login template
+$smarty->assign('CONTENT', 'default.tpl');
 ?>
