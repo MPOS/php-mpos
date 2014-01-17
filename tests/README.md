@@ -12,6 +12,8 @@ How to add tests
  * Add any new suites to the phpunit.xml file
  * Below is the suite entry for the sample test in unit/config/SampleTest.php
  
-```<testsuite name="SampleTest">
+```
+<testsuite name="SampleTest">
   <directory>unit/config</directory>
-</testsuite>```
+</testsuite>
+```
