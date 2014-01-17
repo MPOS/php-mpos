@@ -25,6 +25,9 @@ class User extends Base {
   public function getUserEmail($username, $lower=false) {
     return $this->getSingle($username, 'email', 'username', 's', $lower);
   }
+  public function getUserNotifyEmail($username, $lower=false) {
+    return $this->getSingle($username, 'notify_email', 'username', 's', $lower);
+  }
   public function getUserNoFee($id) {
     return $this->getSingle($id, 'no_fees', 'id');
   }
