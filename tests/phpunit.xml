@@ -1,0 +1,5 @@
+<testsuites>
+  <testsuite name="SampleTest">
+    <directory>unit/config</directory>
+  </testsuite>
+</testsuites>

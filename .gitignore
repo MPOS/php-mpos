@@ -20,3 +20,6 @@ public/include/config/global.inc.sha.php
 .buildpath
 .project
 .settings
+
+# Unit testing
+tests/phpunit/*
