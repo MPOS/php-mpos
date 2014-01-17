@@ -3,7 +3,6 @@
 // Make sure we are called from index.php
 if (!defined('SECURITY')) die('Hacking attempt');
 
-
 // ReCaptcha handling if enabled
 if ($setting->getValue('recaptcha_enabled') && $setting->getValue('recaptcha_enabled_logins')) {
   require_once(INCLUDE_DIR . '/lib/recaptchalib.php');
@@ -37,7 +36,7 @@ if ($setting->getValue('maintenance') && !$user->isAdmin($user->getUserId($_POST
     }
   }
   if ($config['csrf']['enabled'] && $config['csrf']['forms']['login']) {
-    if ((isset($_POST['ctoken']) && $_POST['ctoken'] !== $user->getCSRFToken($_SERVER['REMOTE_ADDR'], 'login')) || (!isset($_POST['ctoken']))) {
+    if ((isset($_POST['ctoken']) && $_POST['ctoken'] !== $csrftoken->getBasic($user->getCurrentIP(), 'login')) || (!isset($_POST['ctoken']))) {
       // csrf protection is on and this token is invalid, error out -> time expired
       $nocsrf = 0;
     }
@@ -61,7 +60,7 @@ if ($setting->getValue('maintenance') && !$user->isAdmin($user->getUserId($_POST
 // csrf token - update if it's enabled
 $token = '';
 if ($config['csrf']['enabled'] && $config['csrf']['forms']['login']) {
-  $token = $user->getCSRFToken($_SERVER['REMOTE_ADDR'], 'login');
+  $token = $csrftoken->getBasic($user->getCurrentIP(), 'login');
 }
 
 // Load login template

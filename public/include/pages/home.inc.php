@@ -25,7 +25,7 @@ if (!$smarty->isCached('master.tpl', $smarty_cache_key)) {
 // csrf token - update if it's enabled
 $token = '';
 if ($config['csrf']['enabled'] && $config['csrf']['forms']['login']) {
-  $token = $user->getCSRFToken($_SERVER['REMOTE_ADDR'], 'login');
+  $token = $csrftoken->getBasic($user->getCurrentIP(), 'login');
 }
 // Load news entries for Desktop site and unauthenticated users
 $smarty->assign("CONTENT", "default.tpl");

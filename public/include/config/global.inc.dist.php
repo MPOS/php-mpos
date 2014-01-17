@@ -135,15 +135,18 @@ $config['twofactor']['options']['changepw'] = true;
  *
  * Options:
  *   enabled    =   Whether or not we will generate/check for valid CSRF tokens
- *   leadtime   =   Length of time in seconds to give as leeway, 1-10s
- *   login      =   Use and check CSRF tokens for the login forms
+ *   sitewide   =   Require a valid CSRF token for all forms, does not override specific form settings
+ *   leadtime   =   Length of time in seconds to give as leeway between minute switches
+ *   login      =   Use and check login-specific CSRF token
  *
  * Default:
  *   enabled    =   true
+ *   sitewide   =   true
  *   leadtime   =   3
  *   login      =   true
  */
 $config['csrf']['enabled'] = true;
+$config['csrf']['sitewide'] = true;
 $config['csrf']['options']['leadtime'] = 3;
 $config['csrf']['forms']['login'] = true;
 

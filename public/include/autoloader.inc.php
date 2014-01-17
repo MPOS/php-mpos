@@ -53,6 +53,7 @@ require_once(CLASS_DIR . '/bitcoinwrapper.class.php');
 require_once(CLASS_DIR . '/monitoring.class.php');
 require_once(CLASS_DIR . '/notification.class.php');
 require_once(CLASS_DIR . '/user.class.php');
+require_once(CLASS_DIR . '/csrftoken.class.php');
 require_once(CLASS_DIR . '/invitation.class.php');
 require_once(CLASS_DIR . '/share.class.php');
 require_once(CLASS_DIR . '/worker.class.php');

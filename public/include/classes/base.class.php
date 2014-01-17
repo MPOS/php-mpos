@@ -73,6 +73,9 @@ class Base {
   public function setTokenType($tokentype) {
     $this->tokentype = $tokentype;
   }
+  public function setCSRFToken($token) {
+    $this->CSRFToken = $token;
+  }
   public function setShare($share) {
     $this->share = $share;
   }
