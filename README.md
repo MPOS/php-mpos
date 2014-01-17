@@ -1,4 +1,4 @@
-Description [ ![Codeship Status for TheSerapher/php-mpos](https://www.codeship.io/projects/40fa7600-61a6-0131-3fd3-367b94dc0d60/status?branch=master)](https://www.codeship.io/projects/12276)
+Description [ ![Codeship Status for TheSerapher/php-mpos](https://www.codeship.io/projects/40fa7600-61a6-0131-3fd3-367b94dc0d60/status?branch=next)](https://www.codeship.io/projects/12276)
 ===========
 
 MPOS is a web based Mining Portal for various crypto currencies. A few pools using this interface are running at:
