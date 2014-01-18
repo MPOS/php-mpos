@@ -136,20 +136,21 @@ $config['twofactor']['options']['changepw'] = true;
  * Options:
  *   enabled    =   Whether or not we will generate/check for valid CSRF tokens
  *   sitewide   =   Require a valid CSRF token for most* forms, does not override form specific settings
- *                  * contact, account edit, workers, notifications, invites, registration
- *   leadtime   =   Length of time in seconds to give as leeway between minute switches
+ *                   * contact, account edit, workers, notifications, invites, registration, passsword resets
  *   login      =   Use and check login-specific CSRF token
+ *   leadtime   =   Length of time in seconds to give as leeway between minute switches
+ *                   * Don't change this unless you know why you're changing it
  *
  * Default:
  *   enabled    =   true
  *   sitewide   =   true
- *   leadtime   =   3
  *   login      =   true
+ *   leadtime   =   3
  */
 $config['csrf']['enabled'] = true;
 $config['csrf']['options']['sitewide'] = true;
-$config['csrf']['options']['leadtime'] = 3;
 $config['csrf']['forms']['login'] = true;
+$config['csrf']['leadtime'] = 3;
 
 /**
  * Lock account after maximum failed logins

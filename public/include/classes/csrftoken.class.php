@@ -18,7 +18,7 @@ class CSRFToken Extends Base {
     $month = $data[0];    $day = $data[1];        $year = $data[2];
     $hour = $data[3];     $minute = $data[4];     $second = $data[5];
     $salt1 = $this->salt; $salt2 = $this->salty;  $seed = $salt1;
-    $lead = $this->config['csrf']['options']['leadtime'];
+    $lead = $this->config['csrf']['leadtime'];
     if ($lead >= 11) { $lead = 10; }
     if ($lead <= 0) { $lead = 3; }
     if ($minute == 59 && $second > (60-$lead)) {
