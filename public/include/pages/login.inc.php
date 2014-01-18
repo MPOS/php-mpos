@@ -59,6 +59,7 @@ if ($setting->getValue('maintenance') && !$user->isAdmin($user->getUserId($_POST
       $_SESSION['POPUP'][] = array('CONTENT' => 'Unable to login: '. $user->getError(), 'TYPE' => 'errormsg');
     }
   } else {
+    // csrf enabled and invalid csrf token
     $img = $csrftoken->getDescriptionImageHTML();
     $_SESSION['POPUP'][] = array('CONTENT' => "Login token expired, please try again $img", 'TYPE' => 'info');
   }

@@ -86,6 +86,9 @@ class Tools extends Base {
       	  return @$aData['return']['markets'][$strCurrency]['lasttradeprice'];
       	  break;
       }
+    } else {
+      $this->setErrorMessage("Got an invalid response using URL ".$this->config['price']['url']." and target ".$this->config['price']['target']);
+      return false;
     }
     // Catchall, we have no data extractor for this API url
     $this->setErrorMessage("Undefined API to getPrice() on URL " . $this->config['price']['url']);

@@ -166,9 +166,9 @@ if ($user->isAuthenticated()) {
 // 2fa - one last time so we can sync with changes we made during this page
 if ($user->isAuthenticated() && $config['twofactor']['enabled']) {
   // set the token to be the old token, just in case an error occured
-  $ea_token = ($oldtoken_ea !== '') ? $oldtoken_ea : @$ea_token;
-  $wf_token = ($oldtoken_wf !== '') ? $oldtoken_wf : @$wf_token;
-  $cp_token = ($oldtoken_cp !== '') ? $oldtoken_cp : @$cp_token;
+  $ea_token = (@$oldtoken_ea !== '') ? $oldtoken_ea : @$ea_token;
+  $wf_token = (@$oldtoken_wf !== '') ? $oldtoken_wf : @$wf_token;
+  $cp_token = (@$oldtoken_cp !== '') ? $oldtoken_cp : @$cp_token;
   if ($config['twofactor']['options']['details']) {
     $ea_editable = $user->token->isTokenValid($_SESSION['USERDATA']['id'], $ea_token, 5);
     $ea_sent = $user->token->doesTokenExist('account_edit', $_SESSION['USERDATA']['id']);
