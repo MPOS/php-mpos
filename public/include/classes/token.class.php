@@ -50,13 +50,12 @@ class Token Extends Base {
     // if start + checktime is LATER than now, ie valid
     if ($checktime >= $now) {
       $stmt = $this->mysqli->prepare("SELECT * FROM $this->table WHERE account_id = ? AND token = ? AND type = ? AND UNIX_TIMESTAMP(time) < UNIX_TIMESTAMP(NOW()) LIMIT 1");
+
+    } else {
       if ($stmt && $stmt->bind_param('isi', $account_id, $token, $type) && $stmt->execute())
         $res = $stmt->get_result();
         return $res->num_rows;
       return $this->sqlError();
-    } else {
-      $this->setErrorMessage("Token has expired");
-      return 0;
     }
   }
   
