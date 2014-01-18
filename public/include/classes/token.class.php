@@ -38,7 +38,7 @@ class Token Extends Base {
    * @param type int Type of token
    * @return int 0 or 1
    */
-  public function isTokenValid($account_id, $token, $type) {
+  public function isTokenValid($account_id, $token, $type, $checkTimeExplicitly=false) {
     if (!is_int($account_id) || !is_int($type)) {
       $this->setErrorMessage("Invalid token");
       return 0;
@@ -47,15 +47,15 @@ class Token Extends Base {
     $ctimedata = new DateTime($this->getCreationTime($token));
     $checktime = $ctimedata->getTimestamp() + $expiretime;
     $now = time();
-    // if start + checktime is LATER than now, ie valid
-    if ($checktime >= $now) {
-      $stmt = $this->mysqli->prepare("SELECT * FROM $this->table WHERE account_id = ? AND token = ? AND type = ? AND UNIX_TIMESTAMP(time) < UNIX_TIMESTAMP(NOW()) LIMIT 1");
-
-    } else {
+    if ($checktime >= $now && $checkTimeExplicitly || !$checkTimeExplicitly) {
+      $stmt = $this->mysqli->prepare("SELECT * FROM $this->table WHERE account_id = ? AND token = ? AND type = ? LIMIT 1");
       if ($stmt && $stmt->bind_param('isi', $account_id, $token, $type) && $stmt->execute())
         $res = $stmt->get_result();
         return $res->num_rows;
       return $this->sqlError();
+    } else {
+      $this->setErrorMessage("Token has expired or is invalid");
+      return 0;
     }
   }
   

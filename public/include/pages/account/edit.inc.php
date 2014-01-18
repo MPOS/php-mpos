@@ -50,6 +50,14 @@ if ($user->isAuthenticated()) {
       $ptc++;
     }
     $_SESSION['POPUP'][] = array('CONTENT' => $popupmsg, 'TYPE' => 'info');
+    // show our token status
+    /*$ea_status = array($ea_sent, $ea_editable);   $statuses = array(0 => 'no', 1 => 'yes');
+    $cp_status = array($cp_sent, $cp_editable);   $messages = array('Edit Account : ','Change Password : ', 'Withdraw Funds : ');
+    $wf_status = array($wf_sent, $ewf_editable);   $alltokens = array($ea_status,$cp_status,$wf_status);
+    $tokennum = 0; $tokenpopupmsg = "";
+    foreach ($alltokens as $atoken) {
+      $tokenpopupmsg = $message[$messages[$tokennum]]." ".$ea_status[0];
+    }*/
   }
   
   if (isset($_POST['do']) && $_POST['do'] == 'genPin') {
@@ -86,11 +94,6 @@ if ($user->isAuthenticated()) {
           }
         }
       } else {
-        // 2fa - when submitting we want the old token, otherwise we'll take what we can $_GET ... B^)
-        $ea_token = $updating ? $oldtoken_ea : @$_GET['ea_token'];
-        $wf_token = $updating ? $oldtoken_wf : @$_GET['wf_token'];
-        $cp_token = $updating ? $oldtoken_cp : @$_GET['cp_token'];
-        
         switch (@$_POST['do']) {
           case 'cashOut':
         	if ($setting->getValue('disable_payouts') == 1 || $setting->getValue('disable_manual_payouts') == 1) {
