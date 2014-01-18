@@ -39,7 +39,7 @@ class Token Extends Base {
    * @return int 0 or 1
    */
   public function isTokenValid($account_id, $token, $type) {
-    if (!is_int($account_id) && !is_int($type)) {
+    if (!is_int($account_id) || !is_int($type)) {
       $this->setErrorMessage("Invalid token");
       return 0;
     }
