@@ -147,7 +147,7 @@
         {nocache}<input type="password" name="newPassword" {if $GLOBAL.twofactor.enabled && $GLOBAL.twofactor.options.changepw && !$CHANGEPASSUNLOCKED}disabled{/if}/>{/nocache}
       </fieldset>
       <fieldset>
-        <label>New Password Repeat</label>
+        <label>Repeat New Password</label>
         {nocache}<input type="password" name="newPassword2" {if $GLOBAL.twofactor.enabled && $GLOBAL.twofactor.options.changepw && !$CHANGEPASSUNLOCKED}disabled{/if}/>{/nocache}
       </fieldset>
       <fieldset>
