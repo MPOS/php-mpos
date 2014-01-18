@@ -8,7 +8,7 @@ if (!defined('SECURITY'))
 $csrfenabled = ($config['csrf']['enabled'] && $config['csrf']['options']['sitewide']) ? 1 : 0;
 if ($csrfenabled) {
   // we have to use editaccount token because this can be called from 2 separate places
-  $nocsrf = ($csrftoken->getBasic($user->getCurrentIP(), 'editaccount', 'mdyH') == @$_POST['ctoken']) ? 1 : 0;
+  $nocsrf = ($csrftoken->getBasic($user->getCurrentIP(), 'editaccount') == @$_POST['ctoken']) ? 1 : 0;
 }
 
 if (!$csrfenabled || $csrfenabled && $nocsrf) {
@@ -26,7 +26,7 @@ if (!$csrfenabled || $csrfenabled && $nocsrf) {
 
 // csrf token
 if ($config['csrf']['enabled'] && $config['csrf']['options']['sitewide']) {
-  $token = $csrftoken->getBasic($user->getCurrentIP(), 'editaccount', 'mdyH');
+  $token = $csrftoken->getBasic($user->getCurrentIP(), 'editaccount');
   $smarty->assign('CTOKEN', $token);
 }
 

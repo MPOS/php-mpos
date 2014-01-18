@@ -16,7 +16,7 @@ $updating = (@$_POST['do']) ? 1 : 0;
 // csrf stuff 
 $csrfenabled = ($config['csrf']['enabled'] && $config['csrf']['options']['sitewide']) ? 1 : 0;
 if ($csrfenabled) {
-  $nocsrf = ($csrftoken->getBasic($user->getCurrentIP(), 'editaccount', 'mdyH') == @$_POST['ctoken']) ? 1 : 0;
+  $nocsrf = ($csrftoken->getBasic($user->getCurrentIP(), 'editaccount') == @$_POST['ctoken']) ? 1 : 0;
 }
 
 if ($user->isAuthenticated()) {
@@ -199,7 +199,7 @@ $smarty->assign("CHANGEPASSSENT", $cp_sent);
 $smarty->assign("WITHDRAWSENT", $wf_sent);
 $smarty->assign("DETAILSSENT", $ea_sent);
 if ($csrfenabled) {
-  $token = $csrftoken->getBasic($user->getCurrentIP(), 'editaccount', 'mdyH');
+  $token = $csrftoken->getBasic($user->getCurrentIP(), 'editaccount');
   $smarty->assign('CTOKEN', $token);
 }
 // Tempalte specifics
