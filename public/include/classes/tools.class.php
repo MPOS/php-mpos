@@ -87,7 +87,7 @@ class Tools extends Base {
       	  break;
       }
     } else {
-      $this->setErrorMessage("Got an invalid response using URL ".$this->config['price']['url']." and target ".$this->config['price']['target']);
+      $this->setErrorMessage("Got an invalid response from ticker API");
       return false;
     }
     // Catchall, we have no data extractor for this API url
