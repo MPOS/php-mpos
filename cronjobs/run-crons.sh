@@ -16,7 +16,7 @@ CRONS="liquid_payout.php findblock.php proportional_payout.php pplns_payout.php 
 VERBOSE="0"
 
 # Base path for PIDFILE, (full path).
-BASEPATH="/tmp"
+BASEPATH="./pid"
 
 # Subfolder for PIDFILE, so it's path will be unique in a multipool server.
 # Path relative to BASEPATH.

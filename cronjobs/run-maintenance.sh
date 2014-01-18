@@ -16,7 +16,7 @@ CRONS="tickerupdate.php notifications.php token_cleanup.php archive_cleanup.php"
 VERBOSE="0"
 
 # Base path for PIDFILE, (full path).
-BASEPATH="/tmp"
+BASEPATH="./pid"
 
 # Subfolder for PIDFILE, so it's path will be unique in a multipool server.
 # Path relative to BASEPATH.
