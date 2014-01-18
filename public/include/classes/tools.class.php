@@ -70,20 +70,22 @@ class Tools extends Base {
     // Check the API type for configured URL
     if (!$strApiType = $this->getApiType($this->config['price']['url']))
       return false;
-    // Extract price depending on API type
-    switch ($strApiType) {
-    case 'coinchose':
-      foreach ($aData as $aItem) {
-        if($strCurrency == $aItem[0])
-          return $aItem['price'];
+    // if api data is valid, extract price depending on API type
+    if (is_array($aData)) {
+      switch ($strApiType) {
+      	case 'coinchose':
+      	  foreach ($aData as $aItem) {
+      	    if($strCurrency == $aItem[0])
+      	      return $aItem['price'];
+      	  }
+      	  break;
+      	case 'btce':
+      	  return $aData['ticker']['last'];
+      	  break;
+      	case 'cryptsy':
+      	  return @$aData['return']['markets'][$strCurrency]['lasttradeprice'];
+      	  break;
       }
-      break;
-    case 'btce':
-      return $aData['ticker']['last'];
-      break;
-    case 'cryptsy':
-      return $aData['return']['markets'][$strCurrency]['lasttradeprice'];
-      break;
     }
     // Catchall, we have no data extractor for this API url
     $this->setErrorMessage("Undefined API to getPrice() on URL " . $this->config['price']['url']);
