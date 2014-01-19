@@ -164,15 +164,15 @@ if ($user->isAuthenticated() && $config['twofactor']['enabled']) {
   $ea_token = (@$oldtoken_ea !== '') ? $oldtoken_ea : @$ea_token;
   $wf_token = (@$oldtoken_wf !== '') ? $oldtoken_wf : @$wf_token;
   $cp_token = (@$oldtoken_cp !== '') ? $oldtoken_cp : @$cp_token;
-  if ($config['twofactor']['options']['details']) {
+  if ($config['twofactor']['options']['details'] && $ea_token !== "") {
     $ea_editable = $user->token->isTokenValid($_SESSION['USERDATA']['id'], $ea_token, 5);
     $ea_sent = $user->token->doesTokenExist('account_edit', $_SESSION['USERDATA']['id']);
   }
-  if ($config['twofactor']['options']['changepw']) {
+  if ($config['twofactor']['options']['changepw'] && $cp_token !== "") {
     $cp_editable = $user->token->isTokenValid($_SESSION['USERDATA']['id'], $cp_token, 6);
     $cp_sent = $user->token->doesTokenExist('change_pw', $_SESSION['USERDATA']['id']);
   }
-  if ($config['twofactor']['options']['withdraw']) {
+  if ($config['twofactor']['options']['withdraw'] && $wf_token !== "") {
     $wf_editable = $user->token->isTokenValid($_SESSION['USERDATA']['id'], $wf_token, 7);
     $wf_sent = $user->token->doesTokenExist('withdraw_funds', $_SESSION['USERDATA']['id']);
   }
