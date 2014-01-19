@@ -48,8 +48,14 @@ class Token Extends Base {
     $checktime = $ctimedata->getTimestamp() + $expiretime;
     $now = time();
     if ($checktime >= $now && $checkTimeExplicitly || !$checkTimeExplicitly) {
-      $stmt = $this->mysqli->prepare("SELECT * FROM $this->table WHERE account_id = ? AND token = ? AND type = ? LIMIT 1");
-      if ($stmt && $stmt->bind_param('isi', $account_id, $token, $type) && $stmt->execute())
+      if ($checkTimeExplicitly) {
+        $stmt = $this->mysqli->prepare("SELECT * FROM $this->table WHERE account_id = ? AND token = ? AND type = ? AND ? >= UNIX_TIMESTAMP() LIMIT 1");
+        $stmt->bind_param('isii', $account_id, $token, $type, $checktime);
+      } else {
+        $stmt = $this->mysqli->prepare("SELECT * FROM $this->table WHERE account_id = ? AND token = ? AND type = ? LIMIT 1");
+        $stmt->bind_param('isi', $account_id, $token, $type);
+      }
+      if ($stmt->execute())
         $res = $stmt->get_result();
         return $res->num_rows;
       return $this->sqlError();
