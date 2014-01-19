@@ -47,13 +47,5 @@ if (!$statistics->getCurrentHashrate())
   $log->logError("getCurrentHashrate update failed");
 $log->logInfo("getCurrentHashrate " . number_format(microtime(true) - $start, 2) . " seconds");
 
-/*
-// Admin specific statistics, we cache the global query due to slowness
-$start = microtime(true);
-if (!$statistics->getAllUserStats('%'))
-  $log->logError("getAllUserStats update failed");
-$log->logInfo("getAllUserStats " . number_format(microtime(true) - $start, 2) . " seconds");
-*/
-
 require_once('cron_end.inc.php');
 ?>
