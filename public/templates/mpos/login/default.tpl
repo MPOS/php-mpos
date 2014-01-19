@@ -6,7 +6,7 @@
     <div class="module_content">
         <fieldset>
           <label>E-Mail</label>
-          <input type="text" name="username" size="22" maxlength="100" value="{$smarty.request.username|default:""|escape}" placeholder="Your email" required />
+          <input type="email" name="username" size="22" maxlength="100" value="{$smarty.request.username|default:""|escape}" placeholder="Your email" required />
         </fieldset>
         <fieldset>
           <label>Password</label>
