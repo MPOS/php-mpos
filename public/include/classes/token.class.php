@@ -47,7 +47,6 @@ class Token Extends Base {
     $expiretime = $this->tokentype->getExpiration($type);
     $ctimedata = new DateTime($this->getCreationTime($token));
     $checktime = $ctimedata->getTimestamp() + $expiretime;
-    $now = time();
     if ($checktime >= $now && $checkTimeExplicitly || !$checkTimeExplicitly) {
       if ($checkTimeExplicitly) {
         $stmt = $this->mysqli->prepare("SELECT * FROM $this->table WHERE account_id = ? AND token = ? AND type = ? AND ? >= UNIX_TIMESTAMP() LIMIT 1");
