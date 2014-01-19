@@ -464,14 +464,14 @@ class Statistics extends Base {
       FROM (
         SELECT
           id,
-          IF(s.difficulty = 0, POW(2, (" . $this->config['difficulty'] . " - 16)), s.difficulty) AS difficulty,
+          IF(difficulty = 0, POW(2, (" . $this->config['difficulty'] . " - 16)), difficulty) AS difficulty,
           username
         FROM shares
         WHERE time > DATE_SUB(now(), INTERVAL ? SECOND) AND our_result = 'Y'
         UNION
         SELECT
           share_id,
-          IF(s.difficulty = 0, POW(2, (" . $this->config['difficulty'] . " - 16)), s.difficulty) AS difficulty,
+          IF(difficulty = 0, POW(2, (" . $this->config['difficulty'] . " - 16)), difficulty) AS difficulty,
           username
         FROM shares_archive
         WHERE time > DATE_SUB(now(), INTERVAL ? SECOND) AND our_result = 'Y'
