@@ -458,21 +458,21 @@ class Statistics extends Base {
       SELECT
         a.id AS id,
         a.username AS account,
-        IFNULL(ROUND(SUM(t1.difficulty) * POW(2, 16) / ? / 1000, 2), 0) AS hashrate,
+        IFNULL(ROUND(SUM(t1.difficulty)  * POW(2, " . $this->config['target_bits'] . ") / ? / 1000, 2), 0) AS hashrate,
         ROUND(COUNT(t1.id) / ?, 2) AS sharerate,
         IFNULL(AVG(IF(difficulty=0, pow(2, (" . $this->config['difficulty'] . " - 16)), difficulty)), 0) AS avgsharediff
       FROM (
         SELECT
-        id,
-        IFNULL(IF(difficulty=0, pow(2, (20 - 16)), difficulty), 0) AS difficulty,
-        username
+          id,
+          IFNULL(IF(difficulty=0, pow(2, (20 - 16)), difficulty), 0) AS difficulty,
+          username
         FROM shares
         WHERE time > DATE_SUB(now(), INTERVAL ? SECOND) AND our_result = 'Y'
         UNION
         SELECT
-        share_id,
-        IFNULL(IF(difficulty=0, pow(2, (20 - 16)), difficulty), 0) AS difficulty,
-        username
+          share_id,
+          IFNULL(IF(difficulty=0, pow(2, (20 - 16)), difficulty), 0) AS difficulty,
+          username
         FROM shares_archive
         WHERE time > DATE_SUB(now(), INTERVAL ? SECOND) AND our_result = 'Y'
       ) AS t1
@@ -490,7 +490,6 @@ class Statistics extends Base {
       var_dump($aData);
       return $this->memcache->setCache(STATISTICS_ALL_USER_HASHRATES, $aData);
     } else {
-      echo $this->mysqli->error;
       return $this->sqlError();
     }
   }
