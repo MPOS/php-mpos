@@ -23,17 +23,17 @@ if ($user->isAuthenticated()) {
   if ($config['twofactor']['enabled']) {
     $popupmsg = 'E-mail confirmations are required for ';
     $popuptypes = array();
-    if ($config['twofactor']['options']['details']) {
+    if ($config['twofactor']['options']['details'] && $oldtoken_ea !== "") {
       $popuptypes[] = 'editing your details';
       $ea_editable = $user->token->isTokenValid($_SESSION['USERDATA']['id'], $oldtoken_ea, 5);
       $ea_sent = $user->token->doesTokenExist('account_edit', $_SESSION['USERDATA']['id']);
     }
-    if ($config['twofactor']['options']['changepw']) {
+    if ($config['twofactor']['options']['changepw'] && $oldtoken_cp !== "") {
       $popuptypes[] = 'changing your password';
       $cp_editable = $user->token->isTokenValid($_SESSION['USERDATA']['id'], $oldtoken_cp, 6);
       $cp_sent = $user->token->doesTokenExist('change_pw', $_SESSION['USERDATA']['id']);
     }
-    if ($config['twofactor']['options']['withdraw']) {
+    if ($config['twofactor']['options']['withdraw'] && $oldtoken_wf !== "") {
       $popuptypes[] = 'withdrawals';
       $wf_editable = $user->token->isTokenValid($_SESSION['USERDATA']['id'], $oldtoken_wf, 7);
       $wf_sent = $user->token->doesTokenExist('withdraw_funds', $_SESSION['USERDATA']['id']);
