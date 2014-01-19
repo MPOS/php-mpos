@@ -244,7 +244,7 @@ class Share Extends Base {
     while ($affected > 0) {
       // Sleep first to allow any IO to cleanup
       sleep($this->config['purge']['sleep']);
-      $stmt = $this->mysqli->prepare("DELETE FROM $this->table WHERE id > ? AND id <= ? LIMIT " . $this->config['purge']['shares']);
+      $stmt = $this->mysqli->prepare("DELETE FROM $this->table WHERE id > ? AND id <= ? ORDER BY id LIMIT " . $this->config['purge']['shares']);
       $start = microtime(true);
       if ($this->checkStmt($stmt) && $stmt->bind_param('ii', $previous_upstream, $current_upstream) && $stmt->execute()) {
         $affected = $stmt->affected_rows;
@@ -331,7 +331,7 @@ class Share Extends Base {
       AND id > ?
       AND UNIX_TIMESTAMP(time) >= ?
       AND UNIX_TIMESTAMP(time) <= ( ? + 60 )
-      ORDER BY id ASC LIMIT 1");
+      ORDER BY id DESC LIMIT 1");
     if ($this->checkStmt($stmt) && $stmt->bind_param('iii', $last, $aBlock['time'], $aBlock['time']) && $stmt->execute() && $result = $stmt->get_result()) {
       $this->oUpstream = $result->fetch_object();
       $this->share_type = 'upstream_share';
@@ -347,7 +347,7 @@ class Share Extends Base {
       WHERE our_result = 'Y'
       AND id > ?
       AND UNIX_TIMESTAMP(time) >= ?
-      ORDER BY id ASC LIMIT 1");
+      ORDER BY id DESC LIMIT 1");
     if ($this->checkStmt($stmt) && $stmt->bind_param('ii', $last, $aBlock['time']) && $stmt->execute() && $result = $stmt->get_result()) {
       $this->oUpstream = $result->fetch_object();
       $this->share_type = 'any_share';
