@@ -36,6 +36,7 @@ class Token Extends Base {
    * @param account_id int Account id of user
    * @param token string Token to check
    * @param type int Type of token
+   * @param checkTimeExplicitly Check the token time for expiration; can cause issues w/ timezone & sync
    * @return int 0 or 1
    */
   public function isTokenValid($account_id, $token, $type, $checkTimeExplicitly=false) {
