@@ -487,7 +487,6 @@ class Statistics extends Base {
       while ($row = $result->fetch_assoc()) {
         $aData['data'][$row['id']] = $row;
       }
-      var_dump($aData);
       return $this->memcache->setCache(STATISTICS_ALL_USER_HASHRATES, $aData);
     } else {
       return $this->sqlError();
