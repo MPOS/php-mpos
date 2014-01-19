@@ -27,9 +27,15 @@ require_once('shared.inc.php');
 
 // Per user share statistics based on all shares submitted
 $start = microtime(true);
-if ( ! $aAllUserShares = $statistics->getAllUserShares() )
+if ( ! $statistics->getAllUserShares() )
   $log->logError('getAllUserShares update failed');
 $log->logInfo("getAllUserShares " . number_format(microtime(true) - $start, 2) . " seconds");
+
+// Get all user hashrate statistics for caching
+$start = microtime(true);
+if ( ! $statistics->getAllUserMiningStats() )
+  $log->logError('getAllUserMiningStats update failed');
+$log->logInfo("getAllUserMiningStats " . number_format(microtime(true) - $start, 2) . " seconds");
 
 $start = microtime(true);
 if (!$statistics->getTopContributors('hashes'))
