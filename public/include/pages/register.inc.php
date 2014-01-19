@@ -15,8 +15,8 @@ if ($setting->getValue('lock_registration') && $setting->getValue('disable_invit
     $smarty->assign("RECAPTCHA", recaptcha_get_html($setting->getValue('recaptcha_public_key'), null, true));
   }
   // csrf token
-  if ($config['csrf']['enabled'] && $config['csrf']['options']['sitewide']) {
-    $token = $csrftoken->getBasic($user->getCurrentIP(), 'register', 'mdyH');
+  if ($config['csrf']['enabled'] && !in_array('register', $config['csrf']['disabled_forms'])) {
+    $token = $csrftoken->getBasic($user->getCurrentIP(), 'register');
     $smarty->assign('CTOKEN', $token);
   }
   // Load news entries for Desktop site and unauthenticated users

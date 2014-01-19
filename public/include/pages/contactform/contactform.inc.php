@@ -3,7 +3,6 @@
 // Make sure we are called from index.php
 if (!defined('SECURITY')) die('Hacking attempt');
 
-
 if ($setting->getValue('recaptcha_enabled')) {
   // Load re-captcha specific data
   require_once(INCLUDE_DIR . '/lib/recaptchalib.php');
@@ -16,9 +15,9 @@ if ($setting->getValue('recaptcha_enabled')) {
 }
 
 // csrf if enabled
-$csrfenabled = ($config['csrf']['enabled'] && $config['csrf']['options']['sitewide']) ? 1 : 0;
+$csrfenabled = ($config['csrf']['enabled'] && !in_array('contact', $config['csrf']['disabled_forms'])) ? 1 : 0;
 if ($csrfenabled) {
-  $nocsrf = ($csrftoken->getBasic($user->getCurrentIP(), 'invitations', 'mdyH') == @$_POST['ctoken']) ? 1 : 0;
+  $nocsrf = ($csrftoken->getBasic($user->getCurrentIP(), 'contact') == @$_POST['ctoken']) ? 1 : 0;
 }
 
 if ($setting->getValue('disable_contactform')) {
@@ -31,8 +30,7 @@ if ($setting->getValue('disable_contactform')) {
     if ($rsp->is_valid) {
       // Check if csrf is enabled and fail if token is invalid
       if (!$nocsrf && $csrfenabled) {
-        $img = $csrftoken->getDescriptionImageHTML();
-        $_SESSION['POPUP'][] = array('CONTENT' => "Contact token expired, please try again $img", 'TYPE' => 'info');
+        $_SESSION['POPUP'][] = array('CONTENT' => $csrftoken->getErrorWithDescriptionHTML(), 'TYPE' => 'info');
       } else {
         $smarty->assign("RECAPTCHA", recaptcha_get_html($setting->getValue('recaptcha_public_key')));
         if ($mail->contactform($_POST['senderName'], $_POST['senderEmail'], $_POST['senderSubject'], $_POST['senderMessage'])) {
@@ -53,8 +51,7 @@ if ($setting->getValue('disable_contactform')) {
   } else {
     // Check if csrf is enabled and fail if token is invalid
     if (!$nocsrf && $csrfenabled) {
-      $img = $csrftoken->getDescriptionImageHTML();
-      $_SESSION['POPUP'][] = array('CONTENT' => "Contact token expired, please try again $img", 'TYPE' => 'info');
+      $_SESSION['POPUP'][] = array('CONTENT' => $csrftoken->getErrorWithDescriptionHTML(), 'TYPE' => 'info');
     } else if ($mail->contactform($_POST['senderName'], $_POST['senderEmail'], $_POST['senderSubject'], $_POST['senderMessage'])) {
       $_SESSION['POPUP'][] = array('CONTENT' => 'Thanks for sending your message! We will get back to you shortly');
     } else {
@@ -64,8 +61,8 @@ if ($setting->getValue('disable_contactform')) {
 }
 
 // csrf token
-if ($config['csrf']['enabled'] && $config['csrf']['options']['sitewide']) {
-  $token = $csrftoken->getBasic($user->getCurrentIP(), 'contact', 'mdyH');
+if ($config['csrf']['enabled'] && !in_array('contact', $config['csrf']['disabled_forms'])) {
+  $token = $csrftoken->getBasic($user->getCurrentIP(), 'contact');
   $smarty->assign('CTOKEN', $token);
 }
 // Tempalte specifics

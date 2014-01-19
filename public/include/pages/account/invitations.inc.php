@@ -6,9 +6,9 @@ if (!defined('SECURITY')) die('Hacking attempt');
 if ($user->isAuthenticated()) {
   if (!$setting->getValue('disable_invitations')) {
     // csrf stuff
-    $csrfenabled = ($config['csrf']['enabled'] && $config['csrf']['options']['sitewide']) ? 1 : 0;
+    $csrfenabled = ($config['csrf']['enabled'] && !in_array('invitations', $config['csrf']['disabled_forms'])) ? 1 : 0;
     if ($csrfenabled) {
-      $nocsrf = ($csrftoken->getBasic($user->getCurrentIP(), 'invitations', 'mdyH') == @$_POST['ctoken']) ? 1 : 0;
+      $nocsrf = ($csrftoken->getBasic($user->getCurrentIP(), 'invitations') == @$_POST['ctoken']) ? 1 : 0;
     }
     if ($invitation->getCountInvitations($_SESSION['USERDATA']['id']) >= $config['accounts']['invitations']['count']) {
       $_SESSION['POPUP'][] = array('CONTENT' => 'You have exceeded the allowed invitations of ' . $config['accounts']['invitations']['count'], 'TYPE' => 'errormsg');
@@ -20,8 +20,7 @@ if ($user->isAuthenticated()) {
           $_SESSION['POPUP'][] = array('CONTENT' => 'Unable to send invitation to recipient: ' . $invitation->getError(), 'TYPE' => 'errormsg');
         }
       } else {
-        $img = $csrftoken->getDescriptionImageHTML();
-        $_SESSION['POPUP'][] = array('CONTENT' => "Invitation token expired, please try again $img", 'TYPE' => 'info');
+        $_SESSION['POPUP'][] = array('CONTENT' => $csrftoken->getErrorWithDescriptionHTML(), 'TYPE' => 'info');
       }
     }
     $aInvitations = $invitation->getInvitations($_SESSION['USERDATA']['id']);
@@ -32,8 +31,8 @@ if ($user->isAuthenticated()) {
   }
 }
 // csrf token
-if ($csrfenabled) {
-  $token = $csrftoken->getBasic($user->getCurrentIP(), 'invitations', 'mdyH');
+if ($csrfenabled && !in_array('invitations', $config['csrf']['disabled_forms'])) {
+  $token = $csrftoken->getBasic($user->getCurrentIP(), 'invitations');
   $smarty->assign('CTOKEN', $token);
 }
 $smarty->assign('CONTENT', 'default.tpl');

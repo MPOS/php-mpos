@@ -8,9 +8,9 @@ if ($user->isAuthenticated()) {
     $smarty->assign('CONTENT', 'empty');
   } else {
     // csrf stuff
-    $csrfenabled = ($config['csrf']['enabled'] && $config['csrf']['options']['sitewide']) ? 1 : 0;
+    $csrfenabled = ($config['csrf']['enabled'] && !in_array('notifications', $config['csrf']['disabled_forms'])) ? 1 : 0;
     if ($csrfenabled) {
-      $nocsrf = ($csrftoken->getBasic($user->getCurrentIP(), 'editnotifs', 'mdyH') == @$_POST['ctoken']) ? 1 : 0;
+      $nocsrf = ($csrftoken->getBasic($user->getCurrentIP(), 'editnotifs') == @$_POST['ctoken']) ? 1 : 0;
     }
     
     if (@$_REQUEST['do'] == 'save') {
@@ -21,8 +21,7 @@ if ($user->isAuthenticated()) {
           $_SESSION['POPUP'][] = array('CONTENT' => $notification->getError(), 'TYPE' => 'errormsg');
         }
       } else {
-        $img = $csrftoken->getDescriptionImageHTML();
-        $_SESSION['POPUP'][] = array('CONTENT' => "Notification token expired, please try again $img", 'TYPE' => 'info');
+        $_SESSION['POPUP'][] = array('CONTENT' => $csrftoken->getErrorWithDescriptionHTML(), 'TYPE' => 'info');
       }
     }
 
@@ -34,8 +33,8 @@ if ($user->isAuthenticated()) {
     $aSettings = $notification->getNotificationSettings($_SESSION['USERDATA']['id']);
 
     // csrf token
-    if ($csrfenabled) {
-      $token = $csrftoken->getBasic($user->getCurrentIP(), 'editnotifs', 'mdyH');
+    if ($csrfenabled && !in_array('notifications', $config['csrf']['disabled_forms'])) {
+      $token = $csrftoken->getBasic($user->getCurrentIP(), 'editnotifs');
       $smarty->assign('CTOKEN', $token);
     }
     $smarty->assign('NOTIFICATIONS', $aNotifications);

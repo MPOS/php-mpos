@@ -4,7 +4,7 @@
 if (!defined('SECURITY')) die('Hacking attempt');
 
 // csrf if enabled
-$csrfenabled = ($config['csrf']['enabled'] && $config['csrf']['forms']['login']) ? 1 : 0;
+$csrfenabled = ($config['csrf']['enabled'] && !in_array('login', $config['csrf']['disabled_forms'])) ? 1 : 0;
 if ($csrfenabled) {
   $nocsrf = ($csrftoken->getBasic($user->getCurrentIP(), 'login') == @$_POST['ctoken']) ? 1 : 0;
 }
@@ -59,13 +59,11 @@ if ($setting->getValue('maintenance') && !$user->isAdmin($user->getUserId($_POST
       $_SESSION['POPUP'][] = array('CONTENT' => 'Unable to login: '. $user->getError(), 'TYPE' => 'errormsg');
     }
   } else {
-    // csrf enabled and invalid csrf token
-    $img = $csrftoken->getDescriptionImageHTML();
-    $_SESSION['POPUP'][] = array('CONTENT' => "Login token expired, please try again $img", 'TYPE' => 'info');
+    $_SESSION['POPUP'][] = array('CONTENT' => $csrftoken->getErrorWithDescriptionHTML(), 'TYPE' => 'info');
   }
 }
 // csrf token
-if ($csrfenabled) {
+if ($csrfenabled && !in_array('login', $config['csrf']['disabled_forms'])) {
   $token = $csrftoken->getBasic($user->getCurrentIP(), 'login');
   $smarty->assign('CTOKEN', $token);
 }

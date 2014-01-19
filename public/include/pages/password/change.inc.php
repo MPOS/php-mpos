@@ -5,9 +5,9 @@ if (!defined('SECURITY'))
   die('Hacking attempt');
 
 // csrf stuff
-$csrfenabled = ($config['csrf']['enabled'] && $config['csrf']['options']['sitewide']) ? 1 : 0;
+$csrfenabled = ($config['csrf']['enabled'] && !in_array('passreset', $config['csrf']['disabled_forms'])) ? 1 : 0;
 if ($csrfenabled) {
-  // we have to use editaccount token because this can be called from 2 separate places
+  // we have to use editaccount token because this that's where we'll get pushed here from
   $nocsrf = ($csrftoken->getBasic($user->getCurrentIP(), 'editaccount') == @$_POST['ctoken']) ? 1 : 0;
 }
 
@@ -20,12 +20,11 @@ if (!$csrfenabled || $csrfenabled && $nocsrf) {
     }
   }
 } else {
-  $img = $csrftoken->getDescriptionImageHTML();
-  $_SESSION['POPUP'][] = array('CONTENT' => "Page token expired, please try again $img", 'TYPE' => 'info');
+  $_SESSION['POPUP'][] = array('CONTENT' => $csrftoken->getErrorWithDescriptionHTML(), 'TYPE' => 'info');
 }
 
 // csrf token
-if ($config['csrf']['enabled'] && $config['csrf']['options']['sitewide']) {
+if ($config['csrf']['enabled'] && !in_array('passreset', $config['csrf']['disabled_forms'])) {
   $token = $csrftoken->getBasic($user->getCurrentIP(), 'editaccount');
   $smarty->assign('CTOKEN', $token);
 }

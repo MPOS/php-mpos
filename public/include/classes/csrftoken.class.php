@@ -19,9 +19,8 @@ class CSRFToken Extends Base {
     $hour = $data[3];     $minute = $data[4];     $second = $data[5];
     $salt1 = $this->salt; $salt2 = $this->salty;  $seed = $salt1;
     $lead = $this->config['csrf']['leadtime'];
-    if ($lead >= 11) { $lead = 10; }
-    if ($lead <= 0) { $lead = 3; }
-    if ($minute == 59 && $second > (60-$lead)) {
+    $lead_sec = ($lead <= 11 && $lead >= 0) ? $lead : 3;
+    if ($minute == 59 && $second > (60-$lead_sec)) {
       $minute = 0;
       $fhour = ($hour == 23) ? $hour = 0 : $hour+=1;
     }
@@ -36,9 +35,17 @@ class CSRFToken Extends Base {
   }
   
   /**
-   * Gets the HTML image (?) with short csrf description for users for the incorrect
-   * token error message
-   * @param dowhat string What will be put in the string "Simply $dowhat again to..."
+   * Convenience method to get a token expired message with a token type, and ? image with description
+   * @param string $tokentype if you want a specific tokentype, set it here
+   * @param string $dowhat What will be put in the string "Simply $dowhat again to...", default is try
+   */
+  public static function getErrorWithDescriptionHTML($tokentype="", $dowhat="try") {
+    return ($tokentype !== "") ? "$tokentype token expired, please try again ".self::getDescriptionImageHTML($dowhat) : "Token expired, please try again ".self::getDescriptionImageHTML($dowhat);
+  }
+  
+  /**
+   * Gets the HTML image (?) with short csrf description for users for the incorrect token error message
+   * @param dowhat string What will be put in the string "Simply $dowhat again to...", default is try
    * @return string HTML image with description
    */
   public static function getDescriptionImageHTML($dowhat="try") {

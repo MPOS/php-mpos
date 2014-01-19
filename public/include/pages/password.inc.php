@@ -5,8 +5,8 @@ if (!defined('SECURITY'))
     die('Hacking attempt');
 
 // csrf token
-if ($config['csrf']['enabled'] && $config['csrf']['options']['sitewide']) {
-  $token = $csrftoken->getBasic($user->getCurrentIP(), 'resetaccount');
+if ($config['csrf']['enabled'] && !in_array('passreset', $config['csrf']['disabled_forms'])) {
+  $token = $csrftoken->getBasic($user->getCurrentIP(), 'resetpass');
   $smarty->assign('CTOKEN', $token);
 }
 // Tempalte specifics

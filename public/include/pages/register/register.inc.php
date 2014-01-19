@@ -18,9 +18,9 @@ if ($setting->getValue('recaptcha_enabled') && $setting->getValue('recaptcha_ena
 }
 
 // csrf if enabled
-$csrfenabled = ($config['csrf']['enabled'] && $config['csrf']['options']['sitewide']) ? 1 : 0;
+$csrfenabled = ($config['csrf']['enabled'] && !in_array('register', $config['csrf']['disabled_forms'])) ? 1 : 0;
 if ($csrfenabled) {
-  $nocsrf = ($csrftoken->getBasic($user->getCurrentIP(), 'register', 'mdyH') == $_POST['ctoken']) ? 1 : 0;
+  $nocsrf = ($csrftoken->getBasic($user->getCurrentIP(), 'register') == $_POST['ctoken']) ? 1 : 0;
 }
 
 if ($setting->getValue('disable_invitations') && $setting->getValue('lock_registration')) {
@@ -40,16 +40,15 @@ if ($setting->getValue('disable_invitations') && $setting->getValue('lock_regist
       }
     }
   } else {
-    $img = $csrftoken->getDescriptionImageHTML('register');
-    $_SESSION['POPUP'][] = array('CONTENT' => "Register token expired, please try again $img", 'TYPE' => 'info');
+    $_SESSION['POPUP'][] = array('CONTENT' => $csrftoken->getErrorWithDescriptionHTML(), 'TYPE' => 'info');
   }
 }
 
 // We load the default registration template instead of an action specific one
 $smarty->assign("CONTENT", "../default.tpl");
 // csrf token
-if ($config['csrf']['enabled'] && $config['csrf']['options']['sitewide']) {
-  $token = $csrftoken->getBasic($user->getCurrentIP(), 'register', 'mdyH');
+if ($config['csrf']['enabled'] && !in_array('register', $config['csrf']['disabled_forms'])) {
+  $token = $csrftoken->getBasic($user->getCurrentIP(), 'register');
   $smarty->assign('CTOKEN', $token);
 }
 ?>

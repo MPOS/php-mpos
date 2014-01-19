@@ -14,7 +14,7 @@ $oldtoken_wf = (isset($_POST['wf_token']) && $_POST['wf_token'] !== '') ? $_POST
 $updating = (@$_POST['do']) ? 1 : 0;
 
 // csrf stuff 
-$csrfenabled = ($config['csrf']['enabled'] && $config['csrf']['options']['sitewide']) ? 1 : 0;
+$csrfenabled = ($config['csrf']['enabled'] && !in_array('accountedit', $config['csrf']['disabled_forms'])) ? 1 : 0;
 if ($csrfenabled) {
   $nocsrf = ($csrftoken->getBasic($user->getCurrentIP(), 'editaccount') == @$_POST['ctoken']) ? 1 : 0;
 }
@@ -77,8 +77,7 @@ if ($user->isAuthenticated()) {
         $_SESSION['POPUP'][] = array('CONTENT' => $user->getError(), 'TYPE' => 'errormsg');
       }
     } else {
-      $img = $csrftoken->getDescriptionImageHTML();
-      $_SESSION['POPUP'][] = array('CONTENT' => "Page token expired, please try again $img", 'TYPE' => 'info');
+      $_SESSION['POPUP'][] = array('CONTENT' => $csrftoken->getErrorWithDescriptionHTML(), 'TYPE' => 'info');
     }
   }
   else {
@@ -98,8 +97,7 @@ if ($user->isAuthenticated()) {
               $_SESSION['POPUP'][] = array('CONTENT' => $user->getError(), 'TYPE' => 'errormsg');
             }
           } else {
-            $img = $csrftoken->getDescriptionImageHTML();
-            $_SESSION['POPUP'][] = array('CONTENT' => "Page token expired, please try again $img", 'TYPE' => 'info');
+            $_SESSION['POPUP'][] = array('CONTENT' => $csrftoken->getErrorWithDescriptionHTML(), 'TYPE' => 'info');
           }
         }
       } else {
@@ -119,8 +117,7 @@ if ($user->isAuthenticated()) {
         	          $_SESSION['POPUP'][] = array('CONTENT' => $iPayoutId->getError(), 'TYPE' => 'errormsg');
         	        }
         	      } else {
-        	        $img = $csrftoken->getDescriptionImageHTML();
-        	        $_SESSION['POPUP'][] = array('CONTENT' => "Page token expired, please try again $img", 'TYPE' => 'info');
+        	        $_SESSION['POPUP'][] = array('CONTENT' => $csrftoken->getErrorWithDescriptionHTML(), 'TYPE' => 'info');
         	      }
         	    } else {
         	      $_SESSION['POPUP'][] = array('CONTENT' => 'You already have one active manual payout request.', 'TYPE' => 'errormsg');
@@ -139,8 +136,7 @@ if ($user->isAuthenticated()) {
             	$_SESSION['POPUP'][] = array('CONTENT' => 'Failed to update your account: ' . $user->getError(), 'TYPE' => 'errormsg');
               }
             } else {
-              $img = $csrftoken->getDescriptionImageHTML();
-              $_SESSION['POPUP'][] = array('CONTENT' => "Page token expired, please try again $img", 'TYPE' => 'info');
+              $_SESSION['POPUP'][] = array('CONTENT' => $csrftoken->getErrorWithDescriptionHTML(), 'TYPE' => 'info');
             }
         	break;
         
@@ -152,8 +148,7 @@ if ($user->isAuthenticated()) {
                 $_SESSION['POPUP'][] = array('CONTENT' => $user->getError(), 'TYPE' => 'errormsg');
               }
             } else {
-              $img = $csrftoken->getDescriptionImageHTML();
-              $_SESSION['POPUP'][] = array('CONTENT' => "Page token expired, please try again $img", 'TYPE' => 'info');
+              $_SESSION['POPUP'][] = array('CONTENT' => $csrftoken->getErrorWithDescriptionHTML(), 'TYPE' => 'info');
             }
         	break;
         }
@@ -198,7 +193,7 @@ $smarty->assign("DETAILSUNLOCKED", $ea_editable);
 $smarty->assign("CHANGEPASSSENT", $cp_sent);
 $smarty->assign("WITHDRAWSENT", $wf_sent);
 $smarty->assign("DETAILSSENT", $ea_sent);
-if ($csrfenabled) {
+if ($csrfenabled && !in_array('accountedit', $config['csrf']['disabled_forms'])) {
   $token = $csrftoken->getBasic($user->getCurrentIP(), 'editaccount');
   $smarty->assign('CTOKEN', $token);
 }
