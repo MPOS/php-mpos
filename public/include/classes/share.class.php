@@ -331,7 +331,7 @@ class Share Extends Base {
       AND id > ?
       AND UNIX_TIMESTAMP(time) >= ?
       AND UNIX_TIMESTAMP(time) <= ( ? + 60 )
-      ORDER BY id DESC LIMIT 1");
+      ORDER BY id ASC LIMIT 1");
     if ($this->checkStmt($stmt) && $stmt->bind_param('iii', $last, $aBlock['time'], $aBlock['time']) && $stmt->execute() && $result = $stmt->get_result()) {
       $this->oUpstream = $result->fetch_object();
       $this->share_type = 'upstream_share';
@@ -347,7 +347,7 @@ class Share Extends Base {
       WHERE our_result = 'Y'
       AND id > ?
       AND UNIX_TIMESTAMP(time) >= ?
-      ORDER BY id DESC LIMIT 1");
+      ORDER BY id ASC LIMIT 1");
     if ($this->checkStmt($stmt) && $stmt->bind_param('ii', $last, $aBlock['time']) && $stmt->execute() && $result = $stmt->get_result()) {
       $this->oUpstream = $result->fetch_object();
       $this->share_type = 'any_share';
