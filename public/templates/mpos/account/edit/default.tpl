@@ -91,7 +91,7 @@
       </p>
       <fieldset>
         <label>Account Balance</label>
-        {nocache}<input type="text" value="{$GLOBAL.userdata.balance.confirmed|escape}" {$GLOBAL.config.currency} readonly {if $GLOBAL.twofactor.enabled && $GLOBAL.twofactor.options.withdraw && !$WITHDRAWUNLOCKED}disabled{/if}/>{/nocache}
+        {nocache}<input type="text" value="{$GLOBAL.userdata.balance.confirmed|escape}" {$GLOBAL.config.currency} readonly/>{/nocache}
       </fieldset>
       <fieldset>
         <label>Payout to</label>
