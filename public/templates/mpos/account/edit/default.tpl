@@ -91,11 +91,11 @@
       </p>
       <fieldset>
         <label>Account Balance</label>
-        {nocache}<input type="text" value="{$GLOBAL.userdata.balance.confirmed|escape}" {$GLOBAL.config.currency} readonly/>{/nocache}
+        {nocache}<input type="text" value="{$GLOBAL.userdata.balance.confirmed|escape}" {$GLOBAL.config.currency} readonly />{/nocache}
       </fieldset>
       <fieldset>
         <label>Payout to</label>
-        {nocache}<input type="text" value="{$GLOBAL.userdata.coin_address|escape}" readonly {if $GLOBAL.twofactor.enabled && $GLOBAL.twofactor.options.withdraw && !$WITHDRAWUNLOCKED}disabled{/if}/>{/nocache}
+        {nocache}<input type="text" value="{$GLOBAL.userdata.coin_address|escape}" readonly />{/nocache}
       </fieldset>
       <fieldset>
         <label>4 digit PIN</label>
