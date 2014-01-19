@@ -244,7 +244,7 @@ class Share Extends Base {
     while ($affected > 0) {
       // Sleep first to allow any IO to cleanup
       sleep($this->config['purge']['sleep']);
-      $stmt = $this->mysqli->prepare("DELETE FROM $this->table WHERE id > ? AND id <= ? LIMIT " . $this->config['purge']['shares']);
+      $stmt = $this->mysqli->prepare("DELETE FROM $this->table WHERE id > ? AND id <= ? ORDER BY id LIMIT " . $this->config['purge']['shares']);
       $start = microtime(true);
       if ($this->checkStmt($stmt) && $stmt->bind_param('ii', $previous_upstream, $current_upstream) && $stmt->execute()) {
         $affected = $stmt->affected_rows;
