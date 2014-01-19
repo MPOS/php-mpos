@@ -590,7 +590,7 @@ class Statistics extends Base {
    * @param worker_id int Worker ID to fetch hashrate for
    * @return data int Current hashrate in khash/s
    **/
-  public function getWorkerHashrate($worker_id) {
+  public function getWorkerHashrate($worker_id,$interval=600) {
     $this->debug->append("STA " . __METHOD__, 4);
     if ($data = $this->memcache->get(__FUNCTION__ . $worker_id)) return $data;
     $stmt = $this->mysqli->prepare("
@@ -599,7 +599,7 @@ class Statistics extends Base {
            " . $this->user->getTableName() . " AS u
       WHERE u.username = SUBSTRING_INDEX( s.username, '.', 1 )
         AND our_result = 'Y'
-        AND s.time > DATE_SUB(now(), INTERVAL 600 SECOND)
+        AND s.time > DATE_SUB(now(), INTERVAL ? SECOND)
         AND u.id = ?");
     if ($this->checkStmt($stmt) && $stmt->bind_param("i", $account_id) && $stmt->execute() && $result = $stmt->get_result() )
       return $this->memcache->setCache(__FUNCTION__ . $worker_id, $result->fetch_object()->hashrate);
