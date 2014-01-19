@@ -49,7 +49,7 @@ class Payout Extends Base {
    * @return boolean bool True or False
    **/
   public function setProcessed($id) {
-    $stmt = $this->mysqli->prepare("UPDATE $this->table SET completed = 1 WHERE id = ?");
+    $stmt = $this->mysqli->prepare("UPDATE $this->table SET completed = 1 WHERE id = ? ORDER BY id LIMIT 1");
     if ($stmt && $stmt->bind_param('i', $id) && $stmt->execute())
       return true;
     return $this->sqlError('E0051');

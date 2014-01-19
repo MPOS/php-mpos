@@ -49,7 +49,7 @@ class Token Extends Base {
    * @return bool
    **/
   public function deleteToken($token) {
-    $stmt = $this->mysqli->prepare("DELETE FROM $this->table WHERE token = ? LIMIT 1");
+    $stmt = $this->mysqli->prepare("DELETE FROM $this->table WHERE token = ? ORDER BY id LIMIT 1");
     if ($stmt && $stmt->bind_param('s', $token) && $stmt->execute())
       return true;
     return $this->sqlError();
