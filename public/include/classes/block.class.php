@@ -145,7 +145,7 @@ class Block extends Base {
    * @return bool
    **/
   public function setConfirmations($block_id, $confirmations) {
-    $stmt = $this->mysqli->prepare("UPDATE $this->table SET confirmations = ? WHERE id = ? ORDER BY id LIMIT 1");
+    $stmt = $this->mysqli->prepare("UPDATE $this->table SET confirmations = ? WHERE id = ? LIMIT 1");
     if ($this->checkStmt($stmt) && $stmt->bind_param("ii", $confirmations, $block_id) && $stmt->execute())
       return true;
     return $this->sqlError();

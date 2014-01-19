@@ -31,7 +31,7 @@ class Worker extends Base {
       }
       // Prefix the WebUser to Worker name
       $value['username'] = "$username." . $value['username'];
-      $stmt = $this->mysqli->prepare("UPDATE $this->table SET password = ?, username = ?, monitor = ? WHERE account_id = ? AND id = ? ORDER BY id LIMIT 1");
+      $stmt = $this->mysqli->prepare("UPDATE $this->table SET password = ?, username = ?, monitor = ? WHERE account_id = ? AND id = ? LIMIT 1");
       if ( ! ( $this->checkStmt($stmt) && $stmt->bind_param('ssiii', $value['password'], $value['username'], $value['monitor'], $account_id, $key) && $stmt->execute()) )
         $iFailed++;
       }
@@ -259,7 +259,7 @@ class Worker extends Base {
    **/
   public function deleteWorker($account_id, $id) {
     $this->debug->append("STA " . __METHOD__, 4);
-    $stmt = $this->mysqli->prepare("DELETE FROM $this->table WHERE account_id = ? AND id = ? ORDER BY id LIMIT 1");
+    $stmt = $this->mysqli->prepare("DELETE FROM $this->table WHERE account_id = ? AND id = ? LIMIT 1");
     if ($this->checkStmt($stmt) && $stmt->bind_param('ii', $account_id, $id) && $stmt->execute() && $stmt->affected_rows == 1)
         return true;
     return $this->sqlError('E0061');
