@@ -77,7 +77,7 @@ class Mail extends Base {
 // Make our class available automatically
 $mail = new Mail ();
 $mail->setDebug($debug);
-$mail->setMysql($mysqli);
+$mail->setDatabase($database);
 $mail->setSmarty($smarty);
 $mail->setConfig($config);
 $mail->setSetting($setting);

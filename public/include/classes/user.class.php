@@ -103,7 +103,7 @@ class User extends Base {
    * @return data array All users with db columns as array fields
    **/
   public function getUsers($filter='%') {
-    $stmt = $this->mysqli->prepare("SELECT * FROM " . $this->getTableName() . " WHERE username LIKE ?");
+    $stmt = $this->database->prepare("SELECT * FROM " . $this->getTableName() . " WHERE username LIKE ?");
     if ($this->checkStmt($stmt) && $stmt->bind_param('s', $filter) && $stmt->execute() && $result = $stmt->get_result()) {
       return $result->fetch_all(MYSQLI_ASSOC);
     }
@@ -145,7 +145,7 @@ class User extends Base {
         $uid = $this->getUserId($username);
         $notifs = new Notification();
         $notifs->setDebug($this->debug);
-        $notifs->setMysql($this->mysqli);
+        $notifs->setDatabase($this->database);
         $notifs->setSmarty($this->smarty);
         $notifs->setConfig($this->config);
         $notifs->setSetting($this->setting);
@@ -192,7 +192,7 @@ class User extends Base {
   public function checkPin($userId, $pin=false) {
     $this->debug->append("STA " . __METHOD__, 4);
     $this->debug->append("Confirming PIN for $userId and pin $pin", 2);
-    $stmt = $this->mysqli->prepare("SELECT pin FROM $this->table WHERE id=? AND pin=? LIMIT 1");
+    $stmt = $this->database->prepare("SELECT pin FROM $this->table WHERE id=? AND pin=? LIMIT 1");
     $pin_hash = $this->getHash($pin);
     if ($stmt->bind_param('is', $userId, $pin_hash) && $stmt->execute() && $stmt->bind_result($row_pin) && $stmt->fetch()) {
       $this->setUserPinFailed($userId, 0);
@@ -226,7 +226,7 @@ class User extends Base {
     $aData['pin'] = $newpin;
     $newpin = $this->getHash($newpin);
     $aData['subject'] = 'PIN Reset Request';
-    $stmt = $this->mysqli->prepare("UPDATE $this->table SET pin = ? WHERE ( id = ? AND pass = ? )");
+    $stmt = $this->database->prepare("UPDATE $this->table SET pin = ? WHERE ( id = ? AND pass = ? )");
 
     if ($this->checkStmt($stmt) && $stmt->bind_param('sis', $newpin, $userID, $current) && $stmt->execute()) {
       if ($stmt->errno == 0 && $stmt->affected_rows === 1) {
@@ -249,7 +249,7 @@ class User extends Base {
    **/
   public function getAllAutoPayout() {
     $this->debug->append("STA " . __METHOD__, 4);
-    $stmt = $this->mysqli->prepare("
+    $stmt = $this->database->prepare("
       SELECT
         id, username, coin_address, ap_threshold
       FROM " . $this->getTableName() . "
@@ -344,7 +344,7 @@ class User extends Base {
     }
     $current = $this->getHash($current);
     $new = $this->getHash($new1);
-    $stmt = $this->mysqli->prepare("UPDATE $this->table SET pass = ? WHERE ( id = ? AND pass = ? )");
+    $stmt = $this->database->prepare("UPDATE $this->table SET pass = ? WHERE ( id = ? AND pass = ? )");
     if ($this->checkStmt($stmt)) {
       $stmt->bind_param('sis', $new, $userID, $current);
       $stmt->execute();
@@ -427,7 +427,7 @@ class User extends Base {
     $donate = min(100, max(0, floatval($donate)));
 
     // We passed all validation checks so update the account
-    $stmt = $this->mysqli->prepare("UPDATE $this->table SET coin_address = ?, ap_threshold = ?, donate_percent = ?, email = ?, is_anonymous = ? WHERE id = ?");
+    $stmt = $this->database->prepare("UPDATE $this->table SET coin_address = ?, ap_threshold = ?, donate_percent = ?, email = ?, is_anonymous = ? WHERE id = ?");
     if ($this->checkStmt($stmt) && $stmt->bind_param('sddsii', $address, $threshold, $donate, $email, $is_anonymous, $userID) && $stmt->execute())
       // twofactor - consume the token if it is enabled and valid
       if ($this->config['twofactor']['enabled'] && $this->config['twofactor']['options']['details']) {
@@ -442,7 +442,7 @@ class User extends Base {
       return true;
     // Catchall
     $this->setErrorMessage('Failed to update your account');
-    $this->debug->append('Account update failed: ' . $this->mysqli->error);
+    $this->debug->append('Account update failed: ' . $this->database->error);
     return false;
   }
 
@@ -453,7 +453,7 @@ class User extends Base {
    **/
   public function checkApiKey($key) {
     $this->debug->append("STA " . __METHOD__, 4);
-    $stmt = $this->mysqli->prepare("SELECT api_key, id FROM $this->table WHERE api_key = ? LIMIT 1");
+    $stmt = $this->database->prepare("SELECT api_key, id FROM $this->table WHERE api_key = ? LIMIT 1");
     if ($this->checkStmt($stmt) && $stmt->bind_param("s", $key) && $stmt->execute() && $stmt->bind_result($api_key, $id) && $stmt->fetch()) {
       if ($api_key === $key)
         return $id;
@@ -472,7 +472,7 @@ class User extends Base {
     $this->debug->append("STA " . __METHOD__, 4);
     $user = array();
     $password_hash = $this->getHash($password);
-    $stmt = $this->mysqli->prepare("SELECT username, id, is_admin FROM $this->table WHERE LOWER(username) = LOWER(?) AND pass = ? LIMIT 1");
+    $stmt = $this->database->prepare("SELECT username, id, is_admin FROM $this->table WHERE LOWER(username) = LOWER(?) AND pass = ? LIMIT 1");
     if ($this->checkStmt($stmt) && $stmt->bind_param('ss', $username, $password_hash) && $stmt->execute() && $stmt->bind_result($row_username, $row_id, $row_admin)) {
       $stmt->fetch();
       $stmt->close();
@@ -538,7 +538,7 @@ class User extends Base {
    **/
   public function getAllUsers($filter='%') {
     $this->debug->append("STA " . __METHOD__, 4);
-    $stmt = $this->mysqli->prepare("
+    $stmt = $this->database->prepare("
       SELECT
       a.id AS id,
       a.username AS username
@@ -571,7 +571,7 @@ class User extends Base {
   public function getUserData($userID) {
     $this->debug->append("STA " . __METHOD__, 4);
     $this->debug->append("Fetching user information for user id: $userID");
-    $stmt = $this->mysqli->prepare("
+    $stmt = $this->database->prepare("
       SELECT
       id, username, pin, api_key, is_admin, is_anonymous, email, no_fees,
       IFNULL(donate_percent, '0') as donate_percent, coin_address, ap_threshold
@@ -646,7 +646,7 @@ class User extends Base {
       }
       // Circle dependency, so we create our own object here
       $invitation = new Invitation();
-      $invitation->setMysql($this->mysqli);
+      $invitation->setDatabase($this->database);
       $invitation->setDebug($this->debug);
       $invitation->setUser($this);
       $invitation->setConfig($this->config);
@@ -659,17 +659,17 @@ class User extends Base {
         return false;
       }
     }
-    if ($this->mysqli->query("SELECT id FROM $this->table LIMIT 1")->num_rows > 0) {
+    if ($this->database->query("SELECT id FROM $this->table LIMIT 1")->num_rows > 0) {
       ! $this->setting->getValue('accounts_confirm_email_disabled') ? $is_locked = 1 : $is_locked = 0;
       $is_admin = 0;
-      $stmt = $this->mysqli->prepare("
+      $stmt = $this->database->prepare("
         INSERT INTO $this->table (username, pass, email, signup_timestamp, pin, api_key, is_locked)
         VALUES (?, ?, ?, ?, ?, ?, ?)
         ");
     } else {
       $is_locked = 0;
       $is_admin = 1;
-      $stmt = $this->mysqli->prepare("
+      $stmt = $this->database->prepare("
         INSERT INTO $this->table (username, pass, email, signup_timestamp, pin, api_key, is_admin, is_locked)
         VALUES (?, ?, ?, ?, ?, ?, 1, ?)
         ");
@@ -704,7 +704,7 @@ class User extends Base {
       }
     } else {
       $this->setErrorMessage( 'Unable to register' );
-      $this->debug->append('Failed to insert user into DB: ' . $this->mysqli->error);
+      $this->debug->append('Failed to insert user into DB: ' . $this->database->error);
       if ($stmt->sqlstate == '23000') $this->setErrorMessage( 'Username or email already registered' );
       return false;
     }
@@ -730,7 +730,7 @@ class User extends Base {
         return false;
       }
       $new_hash = $this->getHash($new1);
-      $stmt = $this->mysqli->prepare("UPDATE $this->table SET pass = ? WHERE id = ?");
+      $stmt = $this->database->prepare("UPDATE $this->table SET pass = ? WHERE id = ?");
       if ($this->checkStmt($stmt) && $stmt->bind_param('si', $new_hash, $aToken['account_id']) && $stmt->execute() && $stmt->affected_rows === 1) {
         if ($this->token->deleteToken($aToken['token'])) {
           return true;
@@ -743,7 +743,7 @@ class User extends Base {
     } else {
       $this->setErrorMessage('Invalid token: ' . $this->token->getError());
     }
-    $this->debug->append('Failed to update password:' . $this->mysqli->error);
+    $this->debug->append('Failed to update password:' . $this->database->error);
     return false;
   }
 
@@ -840,7 +840,7 @@ class User extends Base {
 // Make our class available automatically
 $user = new User();
 $user->setDebug($debug);
-$user->setMysql($mysqli);
+$user->setDatabase($database);
 $user->setSalt(SALT);
 $user->setSmarty($smarty);
 $user->setConfig($config);

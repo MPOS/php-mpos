@@ -24,7 +24,7 @@ class Notification extends Mail {
   public function isNotified($aData) {
     $this->debug->append("STA " . __METHOD__, 4);
     $data = json_encode($aData);
-    $stmt = $this->mysqli->prepare("SELECT id FROM $this->table WHERE data = ? AND active = 1 LIMIT 1");
+    $stmt = $this->database->prepare("SELECT id FROM $this->table WHERE data = ? AND active = 1 LIMIT 1");
     if ($stmt && $stmt->bind_param('s', $data) && $stmt->execute() && $stmt->store_result() && $stmt->num_rows == 1)
       return true;
     return $this->sqlError('E0041');
@@ -35,7 +35,7 @@ class Notification extends Mail {
    **/
   public function getAllActive($strType) {
     $this->debug->append("STA " . __METHOD__, 4);
-    $stmt =$this->mysqli->prepare("SELECT id, data FROM $this->table WHERE active = 1 AND type = ?");
+    $stmt =$this->database->prepare("SELECT id, data FROM $this->table WHERE active = 1 AND type = ?");
     if ($stmt && $stmt->bind_param('s', $strType) && $stmt->execute() && $result = $stmt->get_result())
       return $result->fetch_all(MYSQLI_ASSOC);
     return $this->sqlError('E0042');
@@ -50,7 +50,7 @@ class Notification extends Mail {
     $this->debug->append("STA " . __METHOD__, 4);
     // Store notification data as json
     $data = json_encode($data);
-    $stmt = $this->mysqli->prepare("INSERT INTO $this->table (account_id, type, data, active) VALUES (?, ?,?,1)");
+    $stmt = $this->database->prepare("INSERT INTO $this->table (account_id, type, data, active) VALUES (?, ?,?,1)");
     if ($stmt && $stmt->bind_param('iss', $account_id, $type, $data) && $stmt->execute())
       return true;
     return $this->sqlError('E0043');
@@ -63,7 +63,7 @@ class Notification extends Mail {
    **/
   public function getNofifications($account_id) {
     $this->debug->append("STA " . __METHOD__, 4);
-    $stmt = $this->mysqli->prepare("SELECT * FROM $this->table WHERE account_id = ? ORDER BY time DESC");
+    $stmt = $this->database->prepare("SELECT * FROM $this->table WHERE account_id = ? ORDER BY time DESC");
     if ($stmt && $stmt->bind_param('i', $account_id) && $stmt->execute() && $result = $stmt->get_result())
       return $result->fetch_all(MYSQLI_ASSOC);
     return $this->getError();
@@ -76,7 +76,7 @@ class Notification extends Mail {
    **/
   public function getNotificationSettings($account_id) {
     $this->debug->append("STA " . __METHOD__, 4);
-    $stmt = $this->mysqli->prepare("SELECT * FROM $this->tableSettings WHERE account_id = ?");
+    $stmt = $this->database->prepare("SELECT * FROM $this->tableSettings WHERE account_id = ?");
     if ($stmt && $stmt->bind_param('i', $account_id) && $stmt->execute() && $result = $stmt->get_result()) {
       if ($result->num_rows > 0) {
         while ($row = $result->fetch_assoc()) {
@@ -95,7 +95,7 @@ class Notification extends Mail {
    **/
   public function getNotificationAccountIdByType($strType) {
     $this->debug->append("STA " . __METHOD__, 4);
-    $stmt = $this->mysqli->prepare("SELECT account_id FROM $this->tableSettings WHERE type = ? AND active = 1");
+    $stmt = $this->database->prepare("SELECT account_id FROM $this->tableSettings WHERE type = ? AND active = 1");
     if ($stmt && $stmt->bind_param('s', $strType) && $stmt->execute() && $result = $stmt->get_result()) {
       return $result->fetch_all(MYSQLI_ASSOC);
     }
@@ -112,7 +112,7 @@ class Notification extends Mail {
     $this->debug->append("STA " . __METHOD__, 4);
     $failed = $ok = 0;
     foreach ($data as $type => $active) {
-      $stmt = $this->mysqli->prepare("INSERT INTO $this->tableSettings (active, type, account_id) VALUES (?,?,?) ON DUPLICATE KEY UPDATE active = ?");
+      $stmt = $this->database->prepare("INSERT INTO $this->tableSettings (active, type, account_id) VALUES (?,?,?) ON DUPLICATE KEY UPDATE active = ?");
       if ($stmt && $stmt->bind_param('isii', $active, $type, $account_id, $active) && $stmt->execute()) {
         $ok++;
       } else {
@@ -138,7 +138,7 @@ class Notification extends Mail {
       return false;
     }
     // Check if this user wants strType notifications
-    $stmt = $this->mysqli->prepare("SELECT account_id FROM $this->tableSettings WHERE type = ? AND active = 1 AND account_id = ?");
+    $stmt = $this->database->prepare("SELECT account_id FROM $this->tableSettings WHERE type = ? AND active = 1 AND account_id = ?");
     if ($stmt && $stmt->bind_param('si', $strType, $account_id) && $stmt->execute() && $stmt->bind_result($id) && $stmt->fetch()) {
       if ($stmt->close() && $this->sendMail('notifications/' . $strType, $aMailData) && $this->addNotification($account_id, $strType, $aMailData)) {
         return true;
@@ -157,7 +157,7 @@ class Notification extends Mail {
 
 $notification = new Notification();
 $notification->setDebug($debug);
-$notification->setMysql($mysqli);
+$notification->setDatabase($database);
 $notification->setSmarty($smarty);
 $notification->setConfig($config);
 $notification->setSetting($setting);

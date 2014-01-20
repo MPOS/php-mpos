@@ -53,7 +53,7 @@ class Share Extends Base {
     }
     $sql .= " WHERE id = ? LIMIT 1";
     $this->addParam('i', $id);
-    $stmt = $this->mysqli->prepare($sql);
+    $stmt = $this->database->prepare($sql);
     if ($this->checkStmt($stmt) && call_user_func_array( array($stmt, 'bind_param'), $this->getParam()) && $stmt->execute())
       return true;
     return $this->sqlError();
@@ -64,7 +64,7 @@ class Share Extends Base {
    * Used for PPS calculations without moving to archive
    **/
   public function getLastInsertedShareId() {
-    $stmt = $this->mysqli->prepare("SELECT MAX(id) AS id FROM $this->table");
+    $stmt = $this->database->prepare("SELECT MAX(id) AS id FROM $this->table");
     if ($this->checkStmt($stmt) && $stmt->execute() && $result = $stmt->get_result())
       return $result->fetch_object()->id;
     return $this->sqlError();
@@ -77,7 +77,7 @@ class Share Extends Base {
    * @return data int Total amount of counted shares
    **/
   public function getRoundShares($previous_upstream=0, $current_upstream) {
-    $stmt = $this->mysqli->prepare("SELECT
+    $stmt = $this->database->prepare("SELECT
       ROUND(IFNULL(SUM(IF(difficulty=0, POW(2, (" . $this->config['difficulty'] . " - 16)), difficulty)), 0) / POW(2, (" . $this->config['difficulty'] . " - 16)), 8) AS total
       FROM $this->table
       WHERE our_result = 'Y'
@@ -96,7 +96,7 @@ class Share Extends Base {
    * @return data array username, valid and invalid shares from account
    **/
   public function getSharesForAccounts($previous_upstream=0, $current_upstream) {
-    $stmt = $this->mysqli->prepare("
+    $stmt = $this->database->prepare("
       SELECT
         a.id,
         SUBSTRING_INDEX( s.username , '.', 1 ) as username,
@@ -118,7 +118,7 @@ class Share Extends Base {
    * Fetch the highest available share ID
    **/
   function getMaxShareId() {
-    $stmt = $this->mysqli->prepare("SELECT MAX(id) AS id FROM $this->table");
+    $stmt = $this->database->prepare("SELECT MAX(id) AS id FROM $this->table");
     if ($this->checkStmt($stmt) && $stmt->execute() && $result = $stmt->get_result())
       return $result->fetch_object()->id;
     return $this->sqlError();
@@ -128,7 +128,7 @@ class Share Extends Base {
    * Fetch the highest available share ID from archive
    **/
   function getMaxArchiveShareId() {
-    $stmt = $this->mysqli->prepare("SELECT MAX(share_id) AS share_id FROM $this->tableArchive");
+    $stmt = $this->database->prepare("SELECT MAX(share_id) AS share_id FROM $this->tableArchive");
     if ($this->checkStmt($stmt) && $stmt->execute() && $result = $stmt->get_result())
       return $result->fetch_object()->share_id;
     return $this->sqlError();
@@ -143,7 +143,7 @@ class Share Extends Base {
   function getArchiveShares($iCount) {
     $iMinId = $this->getMinArchiveShareId($iCount);
     $iMaxId = $this->getMaxArchiveShareId();
-    $stmt = $this->mysqli->prepare("
+    $stmt = $this->database->prepare("
       SELECT
         a.id,
         SUBSTRING_INDEX( s.username , '.', 1 ) as account,
@@ -174,14 +174,14 @@ class Share Extends Base {
     // Fallbacks if unset
     if (!isset($this->config['archive']['purge'])) $this->config['archive']['purge'] = 5;
 
-    $stmt = $this->mysqli->prepare("SELECT CEIL(COUNT(id) / 100 * ?) AS count FROM $this->tableArchive");
+    $stmt = $this->database->prepare("SELECT CEIL(COUNT(id) / 100 * ?) AS count FROM $this->tableArchive");
     if ($this->checkStmt($stmt) && $stmt->bind_param('i', $this->config['archive']['purge']) && $stmt->execute() && $result = $stmt->get_result()) {
       $limit = $result->fetch_object()->count;
     } else {
       return $this->sqlError();
     }
     $stmt->close();
-    $stmt = $this->mysqli->prepare("
+    $stmt = $this->database->prepare("
       DELETE FROM $this->tableArchive WHERE time < (
         SELECT MIN(time) FROM (
           SELECT MIN(time) AS time
@@ -223,7 +223,7 @@ class Share Extends Base {
           FROM $this->table
           WHERE id > ? AND id <= ?";
     }
-    $archive_stmt = $this->mysqli->prepare($sql);
+    $archive_stmt = $this->database->prepare($sql);
     if ($this->checkStmt($archive_stmt) && $archive_stmt->bind_param('iii', $block_id, $previous_upstream, $current_upstream) && $archive_stmt->execute())
       return true;
     return $this->sqlError();
@@ -244,7 +244,7 @@ class Share Extends Base {
     while ($affected > 0) {
       // Sleep first to allow any IO to cleanup
       sleep($this->config['purge']['sleep']);
-      $stmt = $this->mysqli->prepare("DELETE FROM $this->table WHERE id > ? AND id <= ? ORDER BY id LIMIT " . $this->config['purge']['shares']);
+      $stmt = $this->database->prepare("DELETE FROM $this->table WHERE id > ? AND id <= ? ORDER BY id LIMIT " . $this->config['purge']['shares']);
       $start = microtime(true);
       if ($this->checkStmt($stmt) && $stmt->bind_param('ii', $previous_upstream, $current_upstream) && $stmt->execute()) {
         $affected = $stmt->affected_rows;
@@ -293,7 +293,7 @@ class Share Extends Base {
     $header_hex = implode(unpack("H*", $header_bin));
 
     // Stratum supported blockhash solution entry
-    $stmt = $this->mysqli->prepare("SELECT SUBSTRING_INDEX( `username` , '.', 1 ) AS account, username as worker, id FROM $this->table WHERE solution = ? LIMIT 1");
+    $stmt = $this->database->prepare("SELECT SUBSTRING_INDEX( `username` , '.', 1 ) AS account, username as worker, id FROM $this->table WHERE solution = ? LIMIT 1");
     if ($this->checkStmt($stmt) && $stmt->bind_param('s', $aBlock['hash']) && $stmt->execute() && $result = $stmt->get_result()) {
       $this->oUpstream = $result->fetch_object();
       $this->share_type = 'stratum_blockhash';
@@ -303,7 +303,7 @@ class Share Extends Base {
 
     // Stratum scrypt hash check
     $scrypt_hash = swapEndian(bin2hex(Scrypt::calc($header_bin, $header_bin, 1024, 1, 1, 32)));
-    $stmt = $this->mysqli->prepare("SELECT SUBSTRING_INDEX( `username` , '.', 1 ) AS account, username as worker, id FROM $this->table WHERE solution = ? LIMIT 1");
+    $stmt = $this->database->prepare("SELECT SUBSTRING_INDEX( `username` , '.', 1 ) AS account, username as worker, id FROM $this->table WHERE solution = ? LIMIT 1");
     if ($this->checkStmt($stmt) && $stmt->bind_param('s', $scrypt_hash) && $stmt->execute() && $result = $stmt->get_result()) {
       $this->oUpstream = $result->fetch_object();
       $this->share_type = 'stratum_solution';
@@ -314,7 +314,7 @@ class Share Extends Base {
     // Failed to fetch via startum solution, try pushpoold
     // Fallback to pushpoold solution type
     $ppheader = sprintf('%08d', $aBlock['version']) . word_reverse($aBlock['previousblockhash']) . word_reverse($aBlock['merkleroot']) . dechex($aBlock['time']) . $aBlock['bits'] . dechex($aBlock['nonce']);
-    $stmt = $this->mysqli->prepare("SELECT SUBSTRING_INDEX( `username` , '.', 1 ) AS account, username as worker, id FROM $this->table WHERE solution LIKE CONCAT(?, '%') LIMIT 1");
+    $stmt = $this->database->prepare("SELECT SUBSTRING_INDEX( `username` , '.', 1 ) AS account, username as worker, id FROM $this->table WHERE solution LIKE CONCAT(?, '%') LIMIT 1");
     if ($this->checkStmt($stmt) && $stmt->bind_param('s', $ppheader) && $stmt->execute() && $result = $stmt->get_result()) {
       $this->oUpstream = $result->fetch_object();
       $this->share_type = 'pp_solution';
@@ -323,7 +323,7 @@ class Share Extends Base {
     }
 
     // Still no match, try upstream result with timerange
-    $stmt = $this->mysqli->prepare("
+    $stmt = $this->database->prepare("
       SELECT
       SUBSTRING_INDEX( `username` , '.', 1 ) AS account, username as worker, id
       FROM $this->table
@@ -340,7 +340,7 @@ class Share Extends Base {
     }
 
     // We failed again, now we take ANY result matching the timestamp
-    $stmt = $this->mysqli->prepare("
+    $stmt = $this->database->prepare("
       SELECT
       SUBSTRING_INDEX( `username` , '.', 1 ) AS account, username as worker, id
       FROM $this->table
@@ -364,7 +364,7 @@ class Share Extends Base {
   function getMinimumShareId($iCount, $current_upstream) {
     // We don't use baseline here to be more accurate
     $iCount = $iCount * pow(2, ($this->config['difficulty'] - 16));
-    $stmt = $this->mysqli->prepare("
+    $stmt = $this->database->prepare("
       SELECT MIN(b.id) AS id FROM
       (
         SELECT id, @total := @total + IF(difficulty=0, POW(2, (" . $this->config['difficulty'] . " - 16)), difficulty) AS total
@@ -385,7 +385,7 @@ class Share Extends Base {
   function getMinArchiveShareId($iCount) {
     // We don't use baseline here to be more accurate
     $iCount = $iCount * pow(2, ($this->config['difficulty'] - 16));
-    $stmt = $this->mysqli->prepare("
+    $stmt = $this->database->prepare("
       SELECT MIN(b.share_id) AS share_id FROM
       (
         SELECT share_id, @total := @total + IF(difficulty=0, POW(2, (" . $this->config['difficulty'] . " - 16)), difficulty) AS total
@@ -404,7 +404,7 @@ class Share Extends Base {
 
 $share = new Share();
 $share->setDebug($debug);
-$share->setMysql($mysqli);
+$share->setDatabase($database);
 $share->setConfig($config);
 $share->setUser($user);
 $share->setBlock($block);
