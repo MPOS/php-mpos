@@ -449,12 +449,64 @@ class Statistics extends Base {
   }
 
   /**
+   * Fetch all user hashrates based on shares and archived shares
+   * @return data integer Current Hashrate in khash/s
+   **/
+  public function getAllUserMiningStats($interval=600) {
+    $this->debug->append("STA " . __METHOD__, 4);
+    $stmt = $this->mysqli->prepare("
+      SELECT
+        a.id AS id,
+        a.username AS account,
+        IFNULL(ROUND(SUM(t1.difficulty)  * POW(2, " . $this->config['target_bits'] . ") / ? / 1000, 2), 0) AS hashrate,
+        ROUND(COUNT(t1.id) / ?, 2) AS sharerate,
+        IFNULL(AVG(IF(difficulty=0, pow(2, (" . $this->config['difficulty'] . " - 16)), difficulty)), 0) AS avgsharediff
+      FROM (
+        SELECT
+          id,
+          IF(difficulty = 0, POW(2, (" . $this->config['difficulty'] . " - 16)), difficulty) AS difficulty,
+          username
+        FROM shares
+        WHERE time > DATE_SUB(now(), INTERVAL ? SECOND) AND our_result = 'Y'
+        UNION
+        SELECT
+          share_id,
+          IF(difficulty = 0, POW(2, (" . $this->config['difficulty'] . " - 16)), difficulty) AS difficulty,
+          username
+        FROM shares_archive
+        WHERE time > DATE_SUB(now(), INTERVAL ? SECOND) AND our_result = 'Y'
+      ) AS t1
+      LEFT JOIN " . $this->user->getTableName() . " AS a
+      ON SUBSTRING_INDEX( t1.username, '.', 1 ) = a.username
+      WHERE a.id IS NOT NULL
+      GROUP BY account
+      ORDER BY hashrate DESC
+      ");
+    if ($this->checkStmt($stmt) && $stmt->bind_param("iiii", $interval, $interval, $interval, $interval) && $stmt->execute() && $result = $stmt->get_result() ) {
+      $aData = array();
+      while ($row = $result->fetch_assoc()) {
+        $aData['data'][$row['id']] = $row;
+      }
+      return $this->memcache->setCache(STATISTICS_ALL_USER_HASHRATES, $aData);
+    } else {
+      return $this->sqlError();
+    }
+  }
+
+  /**
    * Fetch total user hashrate based on shares and archived shares
    * @param account_id integer User ID
    * @return data integer Current Hashrate in khash/s
    **/
   public function getUserHashrate($account_id, $interval=600) {
     $this->debug->append("STA " . __METHOD__, 4);
+    // Dual-caching, try statistics cron first, then fallback to local, then fallbock to SQL
+    if ($data = $this->memcache->get(STATISTICS_ALL_USER_HASHRATES)) {
+      if (array_key_exists($account_id, $data['data']))
+        return $data['data'][$account_id]['hashrate'];
+      // We have no cached value, we return defaults
+      return 0;
+    }
     if ($this->getGetCache() && $data = $this->memcache->get(__FUNCTION__ . $account_id)) return $data;
     $stmt = $this->mysqli->prepare("
       SELECT
@@ -510,6 +562,13 @@ class Statistics extends Base {
    **/
   public function getUserShareDifficulty($account_id, $interval=600) {
     $this->debug->append("STA " . __METHOD__, 4);
+    // Dual-caching, try statistics cron first, then fallback to local, then fallbock to SQL
+    if ($data = $this->memcache->get(STATISTICS_ALL_USER_HASHRATES)) {
+      if (array_key_exists($account_id, $data['data']))
+        return $data['data'][$account_id]['avgsharediff'];
+      // We have no cached value, we return defaults
+      return 0;
+    }
     if ($this->getGetCache() && $data = $this->memcache->get(__FUNCTION__ . $account_id)) return $data;
     $stmt = $this->mysqli->prepare("
       SELECT
@@ -532,6 +591,13 @@ class Statistics extends Base {
    **/
   public function getUserSharerate($account_id, $interval=600) {
     $this->debug->append("STA " . __METHOD__, 4);
+    // Dual-caching, try statistics cron first, then fallback to local, then fallbock to SQL
+    if ($data = $this->memcache->get(STATISTICS_ALL_USER_HASHRATES)) {
+      if (array_key_exists($account_id, $data['data']))
+        return $data['data'][$account_id]['sharerate'];
+      // We have no cached value, we return defaults
+      return 0;
+    }
     if ($this->getGetCache() && $data = $this->memcache->get(__FUNCTION__ . $account_id)) return $data;
     $stmt = $this->mysqli->prepare("
       SELECT
