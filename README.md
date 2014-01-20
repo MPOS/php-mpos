@@ -1,11 +1,8 @@
 Description [ ![Codeship Status for TheSerapher/php-mpos](https://www.codeship.io/projects/40fa7600-61a6-0131-3fd3-367b94dc0d60/status?branch=next)](https://www.codeship.io/projects/12276)
 ===========
 
-MPOS is a web based Mining Portal for various crypto currencies. A few pools using this interface are running at:
+MPOS is a web based Mining Portal for various crypto currencies. It was created by TheSerapher and has hence grown quite large. Recently it was migrated into a Github Organization to make developemnt easier. It's a community driven open source prokect: If you wish to participate contact the team on IRC: https://webchat.freenode.net/?channels=#mpos-dev
 
-* http://ltc.pool.grewe.ca
-* http://fst.pool.grewe.ca
-* http://ftc.pool.grewe.ca
 
 **NOTE**: This project is still under development and commits are happening on a daily basis.
 I do not recommend using this for a live setup as of yet. Wait for the later Release Candidate
@@ -14,9 +11,7 @@ if you wish to run your pool with it. Testing pools are much appreciated though!
 Donations
 =========
 
-I was hoping to keep this out of the README but apparently people remove or change the LTC address
-at the bottom of the page. For those of you finding my project and are willing to appreciate the work
-with some hard earned coins feel free to donate:
+Donations to this project are going directly to TheSerapher, the original author of this project:
 
 * LTC address: `Lge95QR2frp9y1wJufjUPCycVsg5gLJPW8`
 * BTC address: `1HuYK6WPU8o3yWCrAaADDZPRpL5QiXitfv`
