@@ -138,7 +138,7 @@ $config['twofactor']['options']['changepw'] = true;
  *   leadtime         =   Length of time in seconds to give as leeway between minute switches
  *                         * Don't change this unless you know why you're changing it
  *   disabled_forms   =   Which forms you want to disable csrf protection on, if enabled  
- *                         * Valid options  :  contact, accountedit, workers, notifications, invite, register, passreset, unlockaccount
+ *                         * Valid options  :  login, contact, accountedit, workers, notifications, invite, register, passreset, unlockaccount
  * Default:
  *   enabled          =   true
  *   leadtime         =   3
