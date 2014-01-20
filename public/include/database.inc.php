@@ -74,12 +74,6 @@ class Database extends PDO {
         parent::__construct( $dns, $this->user, $this->pass, $options ); 
     }
 }
-// Instantiate class, we are using mysqlng
-//$mysqli = new mysqli($config['db']['host'], $config['db']['user'], $config['db']['pass'], $config['db']['name'], $config['db']['port']);
 
+// Instantiate Database class
 $database = new Database();
-/* check connection */
-/*if (mysqli_connect_errno()) {
-  die("Failed to connect to database");
-}
-*/
