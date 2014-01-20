@@ -7,7 +7,16 @@ if (!defined('SECURITY'))
 class Transaction extends Base {
   protected $table = 'transactions';
   public $num_rows = 0, $insert_id = 0;
+  private $getcache = true;
 
+  // Disable fetching values from cache
+  public function setGetCache($set=false) {
+    $this->getcache = $set;
+  }
+  public function getGetCache() {
+    return $this->getcache;
+  }
+  
   /**
    * Add a new transaction to our class table
    * We also store the inserted ID in case the user needs it
@@ -224,6 +233,7 @@ class Transaction extends Base {
    **/
   public function getLockedBalance() {
     $this->debug->append("STA " . __METHOD__, 4);
+	if ($data = $this->memcache->get(__FUNCTION__ )) return $data;
     $stmt = $this->mysqli->prepare("
       SELECT
         ROUND((
@@ -236,7 +246,7 @@ class Transaction extends Base {
       ON t.block_id = b.id
       WHERE archived = 0");
     if ($this->checkStmt($stmt) && $stmt->bind_param('ii', $this->config['confirmations'], $this->config['confirmations']) && $stmt->execute() && $stmt->bind_result($dBalance) && $stmt->fetch())
-      return $dBalance;
+      return $this->memcache->setCache(__FUNCTION__, $dBalance);
     return $this->sqlError();
   }
 
@@ -247,6 +257,7 @@ class Transaction extends Base {
    **/
   public function getBalance($account_id) {
     $this->debug->append("STA " . __METHOD__, 4);
+	if ($this->getGetCache() && $data = $this->memcache->get(__FUNCTION__)) return $data;
     $stmt = $this->mysqli->prepare("
       SELECT
         IFNULL(ROUND((
@@ -269,7 +280,7 @@ class Transaction extends Base {
       AND archived = 0
       ");
     if ($this->checkStmt($stmt) && $stmt->bind_param("iiiii", $this->config['confirmations'], $this->config['confirmations'], $this->config['confirmations'], $this->config['confirmations'], $account_id) && $stmt->execute() && $result = $stmt->get_result())
-      return $result->fetch_assoc();
+      return $this->memcache->setCache(__FUNCTION__ . $account_id, $result->fetch_assoc());
     return $this->sqlError();
   }
 
