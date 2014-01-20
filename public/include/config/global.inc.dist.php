@@ -7,7 +7,7 @@ if (!defined('SECURITY')) die('Hacking attempt');
  * This is used in the version check to ensure you run the latest version of the configuration file.
  * Once you upgraded your config, change the version here too.
  **/
-$config['version'] = '0.0.4';
+$config['version'] = '0.0.5';
 
 // Our include directory for additional features
 define('INCLUDE_DIR', BASEPATH . 'include');
@@ -134,18 +134,19 @@ $config['twofactor']['options']['changepw'] = true;
  *   form is submitted.
  *
  * Options:
- *   enabled    =   Whether or not we will generate/check for valid CSRF tokens
- *   leadtime   =   Length of time in seconds to give as leeway, 1-10s
- *   login      =   Use and check CSRF tokens for the login forms
- *
+ *   enabled          =   Whether or not we will generate/check for valid CSRF tokens
+ *   leadtime         =   Length of time in seconds to give as leeway between minute switches
+ *                         * Don't change this unless you know why you're changing it
+ *   disabled_forms   =   Which forms you want to disable csrf protection on, if enabled  
+ *                         * Valid options  :  login, contact, accountedit, workers, notifications, invite, register, passreset, unlockaccount
  * Default:
- *   enabled    =   true
- *   leadtime   =   3
- *   login      =   true
+ *   enabled          =   true
+ *   leadtime         =   3
+ *   disabled_forms   =   array();
  */
 $config['csrf']['enabled'] = true;
-$config['csrf']['options']['leadtime'] = 3;
-$config['csrf']['forms']['login'] = true;
+$config['csrf']['leadtime'] = 3;
+$config['csrf']['disabled_forms'] = array();
 
 /**
  * Lock account after maximum failed logins

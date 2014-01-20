@@ -102,4 +102,5 @@ $news = new News();
 $news->setDebug($debug);
 $news->setMysql($mysqli);
 $news->setUser($user);
+$news->setErrorCodes($aErrorCodes);
 ?>

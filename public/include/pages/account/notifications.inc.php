@@ -7,11 +7,21 @@ if ($user->isAuthenticated()) {
     $_SESSION['POPUP'][] = array('CONTENT' => 'Notification system disabled by admin.', 'TYPE' => 'info');
     $smarty->assign('CONTENT', 'empty');
   } else {
+    // csrf stuff
+    $csrfenabled = ($config['csrf']['enabled'] && !in_array('notifications', $config['csrf']['disabled_forms'])) ? 1 : 0;
+    if ($csrfenabled) {
+      $nocsrf = ($csrftoken->getBasic($user->getCurrentIP(), 'editnotifs') == @$_POST['ctoken']) ? 1 : 0;
+    }
+    
     if (@$_REQUEST['do'] == 'save') {
-      if ($notification->updateSettings($_SESSION['USERDATA']['id'], $_REQUEST['data'])) {
-        $_SESSION['POPUP'][] = array('CONTENT' => 'Updated notification settings', 'TYPE' => 'success');
+      if (!$csrfenabled || $csrfenabled && $nocsrf) {
+        if ($notification->updateSettings($_SESSION['USERDATA']['id'], $_REQUEST['data'])) {
+          $_SESSION['POPUP'][] = array('CONTENT' => 'Updated notification settings', 'TYPE' => 'success');
+        } else {
+          $_SESSION['POPUP'][] = array('CONTENT' => $notification->getError(), 'TYPE' => 'errormsg');
+        }
       } else {
-        $_SESSION['POPUP'][] = array('CONTENT' => $notification->getError(), 'TYPE' => 'errormsg');
+        $_SESSION['POPUP'][] = array('CONTENT' => $csrftoken->getErrorWithDescriptionHTML(), 'TYPE' => 'info');
       }
     }
 
@@ -22,6 +32,11 @@ if ($user->isAuthenticated()) {
     // Fetch user notification settings
     $aSettings = $notification->getNotificationSettings($_SESSION['USERDATA']['id']);
 
+    // csrf token
+    if ($csrfenabled && !in_array('notifications', $config['csrf']['disabled_forms'])) {
+      $token = $csrftoken->getBasic($user->getCurrentIP(), 'editnotifs');
+      $smarty->assign('CTOKEN', $token);
+    }
     $smarty->assign('NOTIFICATIONS', $aNotifications);
     $smarty->assign('SETTINGS', $aSettings);
     $smarty->assign('CONTENT', 'default.tpl');

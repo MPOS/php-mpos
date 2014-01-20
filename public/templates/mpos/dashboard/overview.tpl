@@ -1,5 +1,5 @@
 <article class="module module width_3_quarter">
-  <header><h3>Overview {if $GLOBAL.config.price.currency}{$GLOBAL.config.currency}/{$GLOBAL.config.price.currency}: <span id="b-price">{$GLOBAL.price|number_format:"8"}</span>{/if} / Pool Workers: <span id="b-dworkers">{$GLOBAL.workers}</span></h3></header>
+  <header><h3>Overview {if $GLOBAL.config.price.currency}{$GLOBAL.config.currency}/{$GLOBAL.config.price.currency}: <span id="b-price">{$GLOBAL.price|number_format:"8"|default:"0"}</span>{/if} / Pool Workers: <span id="b-dworkers">{$GLOBAL.workers}</span></h3></header>
   <div class="module_content">
     <center>
     <div style="display: inline-block;">

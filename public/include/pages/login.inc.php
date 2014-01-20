@@ -3,6 +3,11 @@
 // Make sure we are called from index.php
 if (!defined('SECURITY')) die('Hacking attempt');
 
+// csrf if enabled
+$csrfenabled = ($config['csrf']['enabled'] && !in_array('login', $config['csrf']['disabled_forms'])) ? 1 : 0;
+if ($csrfenabled) {
+  $nocsrf = ($csrftoken->getBasic($user->getCurrentIP(), 'login') == @$_POST['ctoken']) ? 1 : 0;
+}
 
 // ReCaptcha handling if enabled
 if ($setting->getValue('recaptcha_enabled') && $setting->getValue('recaptcha_enabled_logins')) {
@@ -26,8 +31,18 @@ if ($setting->getValue('maintenance') && !$user->isAdmin($user->getUserId($_POST
   $_SESSION['POPUP'][] = array('CONTENT' => 'You are not allowed to login during maintenace.', 'TYPE' => 'info');
 } else if (!empty($_POST['username']) && !empty($_POST['password'])) {
   $nocsrf = 1;
+  $recaptchavalid = 0;
+  if ($setting->getValue('recaptcha_enabled') && $setting->getValue('recaptcha_enabled_logins') && $rsp->is_valid) {
+    if ($rsp->is_valid) {
+      // recaptcha is enabled and valid
+      $recaptchavalid = 1;
+    } else {
+      // error out, invalid captcha
+      $_SESSION['POPUP'][] = array('CONTENT' => 'Unable to login: The captcha you entered was incorrect', 'TYPE' => 'errormsg');
+    }
+  }
   if ($config['csrf']['enabled'] && $config['csrf']['forms']['login']) {
-    if ((isset($_POST['ctoken']) && $_POST['ctoken'] !== $user->getCSRFToken($_SERVER['REMOTE_ADDR'], 'login')) || (!isset($_POST['ctoken']))) {
+    if ((isset($_POST['ctoken']) && $_POST['ctoken'] !== $csrftoken->getBasic($user->getCurrentIP(), 'login')) || (!isset($_POST['ctoken']))) {
       // csrf protection is on and this token is invalid, error out -> time expired
       $nocsrf = 0;
     }
@@ -43,18 +58,15 @@ if ($setting->getValue('maintenance') && !$user->isAdmin($user->getUserId($_POST
     } else {
       $_SESSION['POPUP'][] = array('CONTENT' => 'Unable to login: '. $user->getError(), 'TYPE' => 'errormsg');
     }
-  } else if ($nocsrf == 0) {
-    $img = "<img src='site_assets/mpos/images/questionmark.png' title='Tokens are used to help us mitigate attacks; Simply login again to continue' width='20px' height='20px'>";
-    $_SESSION['POPUP'][] = array('CONTENT' => "Login token expired, please try again $img", 'TYPE' => 'info');
+  } else {
+    $_SESSION['POPUP'][] = array('CONTENT' => $csrftoken->getErrorWithDescriptionHTML(), 'TYPE' => 'info');
   }
 }
-// csrf token - update if it's enabled
-$token = '';
-if ($config['csrf']['enabled'] && $config['csrf']['forms']['login']) {
-  $token = $user->getCSRFToken($_SERVER['REMOTE_ADDR'], 'login');
+// csrf token
+if ($csrfenabled && !in_array('login', $config['csrf']['disabled_forms'])) {
+  $token = $csrftoken->getBasic($user->getCurrentIP(), 'login');
+  $smarty->assign('CTOKEN', $token);
 }
-
 // Load login template
 $smarty->assign('CONTENT', 'default.tpl');
-$smarty->assign('CTOKEN', $token);
 ?>

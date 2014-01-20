@@ -25,6 +25,9 @@ class User extends Base {
   public function getUserEmail($username, $lower=false) {
     return $this->getSingle($username, 'email', 'username', 's', $lower);
   }
+  public function getUserNotifyEmail($username, $lower=false) {
+    return $this->getSingle($username, 'notify_email', 'username', 's', $lower);
+  }
   public function getUserNoFee($id) {
     return $this->getSingle($id, 'no_fees', 'id');
   }
@@ -57,6 +60,9 @@ class User extends Base {
   }
   public function isAdmin($id) {
     return $this->getUserAdmin($id);
+  }
+  public function getSignupTime($id) {
+    return $this->getSingle($id, 'signup_timestamp', 'id');
   }
   public function changeNoFee($id) {
     $field = array('name' => 'no_fees', 'type' => 'i', 'value' => !$this->isNoFee($id));
@@ -145,11 +151,14 @@ class User extends Base {
         $notifs->setSetting($this->setting);
         $notifs->setErrorCodes($this->aErrorCodes);
         $ndata = $notifs->getNotificationSettings($uid);
-        if ($ndata['success_login'] == 1) {
+        if (@$ndata['success_login'] == 1) {
           // seems to be active, let's send it
           $aDataN['username'] = $username;
           $aDataN['email'] = $this->getUserEmail($username);
           $aDataN['subject'] = 'Successful login notification';
+          $aDataN['LOGINIP'] = $this->getCurrentIP();
+          $aDataN['LOGINUSER'] = $this->user;
+          $aDataN['LOGINTIME'] = date('m/d/y H:i:s');
           $notifs->sendNotification($uid, 'success_login', $aDataN);
         }
         return true;
@@ -654,15 +663,15 @@ class User extends Base {
       ! $this->setting->getValue('accounts_confirm_email_disabled') ? $is_locked = 1 : $is_locked = 0;
       $is_admin = 0;
       $stmt = $this->mysqli->prepare("
-        INSERT INTO $this->table (username, pass, email, pin, api_key, is_locked)
-        VALUES (?, ?, ?, ?, ?, ?)
+        INSERT INTO $this->table (username, pass, email, signup_timestamp, pin, api_key, is_locked)
+        VALUES (?, ?, ?, ?, ?, ?, ?)
         ");
     } else {
       $is_locked = 0;
       $is_admin = 1;
       $stmt = $this->mysqli->prepare("
-        INSERT INTO $this->table (username, pass, email, pin, api_key, is_admin, is_locked)
-        VALUES (?, ?, ?, ?, ?, 1, ?)
+        INSERT INTO $this->table (username, pass, email, signup_timestamp, pin, api_key, is_admin, is_locked)
+        VALUES (?, ?, ?, ?, ?, ?, 1, ?)
         ");
     }
 
@@ -671,8 +680,9 @@ class User extends Base {
     $pin_hash = $this->getHash($pin);
     $apikey_hash = $this->getHash($username);
     $username_clean = strip_tags($username);
+    $signup_time = time();
 
-    if ($this->checkStmt($stmt) && $stmt->bind_param('sssssi', $username_clean, $password_hash, $email1, $pin_hash, $apikey_hash, $is_locked) && $stmt->execute()) {
+    if ($this->checkStmt($stmt) && $stmt->bind_param('sssissi', $username_clean, $password_hash, $email1, $signup_time, $pin_hash, $apikey_hash, $is_locked) && $stmt->execute()) {
       if (! $this->setting->getValue('accounts_confirm_email_disabled') && $is_admin != 1) {
         if ($token = $this->token->createToken('confirm_email', $stmt->insert_id)) {
           $aData['username'] = $username_clean;
@@ -794,26 +804,36 @@ class User extends Base {
   }
   
   /**
-   * Gets the current CSRF token for this user/type setting and time chunk
-   * @param string User; for hash seed, if username isn't available use IP
-   * @param string Type of token; for hash seed, should be unique per page/use
-   * @return string CSRF token
+   * Convenience function to get IP address, no params is the same as REMOTE_ADDR
+   * @param trustremote bool must be FALSE to checkclient or checkforwarded
+   * @param checkclient bool check HTTP_CLIENT_IP for a valid ip first
+   * @param checkforwarded bool check HTTP_X_FORWARDED_FOR for a valid ip first
+   * @return string IP address
    */
-  public function getCSRFToken($user, $type) {
-    $date = date('m/d/y/H/i/s');
-    $data = explode('/', $date);
-    $month = $data[0];    $day = $data[1];      $year = $data[2];
-    $hour = $data[3];     $minute = $data[4];   $second = $data[5];
-    $seed = $this->salty;
-    $lead = $this->config['csrf']['options']['leadtime'];
-    if ($lead >= 11) { $lead = 10; }
-    if ($lead <= 0) { $lead = 3; }
-    if ($minute == 59 && $second > (60-$lead)) {
-      $minute = 0;
-      $fhour = ($hour == 23) ? $hour = 0 : $hour+=1;
+  public function getCurrentIP($trustremote=true, $checkclient=false, $checkforwarded=false) {
+    $client = (isset($_SERVER['HTTP_CLIENT_IP'])) ? $_SERVER['HTTP_CLIENT_IP'] : false;
+    $fwd = (isset($_SERVER['HTTP_X_FORWARDED_FOR'])) ? $_SERVER['HTTP_X_FORWARDED_FOR'] : false;
+    $remote = (isset($_SERVER['REMOTE_ADDR'])) ? $_SERVER['REMOTE_ADDR'] : @$_SERVER['REMOTE_ADDR'];
+    // shared internet
+    if (filter_var($client, FILTER_VALIDATE_IP) && !$trustremote && $checkclient) {
+      return $client;
+    } else if (strpos($fwd, ',') !== false && !$trustremote && $checkforwarded) {
+      // multiple proxies
+      $ips = explode(',', $fwd);
+      $path = array();
+      foreach ($ips as $ip) {
+        if (filter_var($ip, FILTER_VALIDATE_IP)) {
+          $path[] = $ip;
+        }
+      }
+      return array_pop($path);
+    } else if (filter_var($fwd, FILTER_VALIDATE_IP) && !$trustremote && $checkforwarded) {
+      // single
+      return $fwd;
+    } else {
+      // as usual
+      return $remote;
     }
-    $seed = $seed.$month.$day.$user.$type.$year.$hour.$minute.$seed;
-    return $this->getHash($seed);
   }
 }
 
@@ -822,7 +842,6 @@ $user = new User();
 $user->setDebug($debug);
 $user->setMysql($mysqli);
 $user->setSalt(SALT);
-$user->setSalty(SALTY);
 $user->setSmarty($smarty);
 $user->setConfig($config);
 $user->setMail($mail);

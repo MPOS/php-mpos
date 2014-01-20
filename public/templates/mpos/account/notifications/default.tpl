@@ -2,6 +2,7 @@
   <input type="hidden" name="page" value="{$smarty.request.page|escape}">
   <input type="hidden" name="action" value="{$smarty.request.action|escape}">
   <input type="hidden" name="do" value="save">
+  {if $GLOBAL.csrf.enabled && !"notifications"|in_array:$GLOBAL.csrf.disabled_forms}<input type="hidden" name="ctoken" value="{$CTOKEN|escape}" />{/if}
   <article class="module width_quarter">
     <header>
       <h3>Notification Settings</h3>

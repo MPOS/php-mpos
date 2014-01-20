@@ -56,7 +56,8 @@
     <footer>
       <div class="submit_link">
       {nocache}
-        <input type="hidden" name="ea_token" value="{$smarty.request.ea_token|escape}">
+        {if $GLOBAL.csrf.enabled && !"accountedit"|in_array:$GLOBAL.csrf.disabled_forms}<input type="hidden" name="ctoken" value="{$CTOKEN|escape}" />{/if}
+        <input type="hidden" name="ea_token" value="{$smarty.request.ea_token|escape|default:""}">
         <input type="hidden" name="utype" value="account_edit">
         {if $GLOBAL.twofactor.enabled && $GLOBAL.twofactor.options.details}
           {if $DETAILSSENT == 1 && $DETAILSUNLOCKED == 1}
@@ -90,11 +91,11 @@
       </p>
       <fieldset>
         <label>Account Balance</label>
-        {nocache}<input type="text" value="{$GLOBAL.userdata.balance.confirmed|escape}" {$GLOBAL.config.currency} readonly {if $GLOBAL.twofactor.enabled && $GLOBAL.twofactor.options.withdraw && !$WITHDRAWUNLOCKED}disabled{/if}/>{/nocache}
+        {nocache}<input type="text" value="{$GLOBAL.userdata.balance.confirmed|escape}" {$GLOBAL.config.currency} disabled />{/nocache}
       </fieldset>
       <fieldset>
         <label>Payout to</label>
-        {nocache}<input type="text" value="{$GLOBAL.userdata.coin_address|escape}" readonly {if $GLOBAL.twofactor.enabled && $GLOBAL.twofactor.options.withdraw && !$WITHDRAWUNLOCKED}disabled{/if}/>{/nocache}
+        {nocache}<input type="text" value="{$GLOBAL.userdata.coin_address|escape}" disabled />{/nocache}
       </fieldset>
       <fieldset>
         <label>4 digit PIN</label>
@@ -104,7 +105,8 @@
     <footer>
       <div class="submit_link">
       {nocache}
-        <input type="hidden" name="wf_token" value="{$smarty.request.wf_token|escape}">
+        <input type="hidden" name="wf_token" value="{$smarty.request.wf_token|escape|default:""}">
+        {if $GLOBAL.csrf.enabled && !"accountedit"|in_array:$GLOBAL.csrf.disabled_forms}<input type="hidden" name="ctoken" value="{$CTOKEN|escape}" />{/if}
         <input type="hidden" name="utype" value="withdraw_funds">
         {if $GLOBAL.twofactor.enabled && $GLOBAL.twofactor.options.withdraw}
           {if $WITHDRAWSENT == 1 && $WITHDRAWUNLOCKED == 1}
@@ -145,7 +147,7 @@
         {nocache}<input type="password" name="newPassword" {if $GLOBAL.twofactor.enabled && $GLOBAL.twofactor.options.changepw && !$CHANGEPASSUNLOCKED}disabled{/if}/>{/nocache}
       </fieldset>
       <fieldset>
-        <label>New Password Repeat</label>
+        <label>Repeat New Password</label>
         {nocache}<input type="password" name="newPassword2" {if $GLOBAL.twofactor.enabled && $GLOBAL.twofactor.options.changepw && !$CHANGEPASSUNLOCKED}disabled{/if}/>{/nocache}
       </fieldset>
       <fieldset>
@@ -156,7 +158,8 @@
     <footer>
       <div class="submit_link">
       {nocache}
-        <input type="hidden" name="cp_token" value="{$smarty.request.cp_token|escape}">
+        <input type="hidden" name="cp_token" value="{$smarty.request.cp_token|escape|default:""}">
+        {if $GLOBAL.csrf.enabled && !"accountedit"|in_array:$GLOBAL.csrf.disabled_forms}<input type="hidden" name="ctoken" value="{$CTOKEN|escape}" />{/if}
         <input type="hidden" name="utype" value="change_pw">
         {if $GLOBAL.twofactor.enabled && $GLOBAL.twofactor.options.changepw}
           {if $CHANGEPASSSENT == 1 && $CHANGEPASSUNLOCKED == 1}
@@ -180,6 +183,7 @@
   <input type="hidden" name="page" value="{$smarty.request.page|escape}">
   <input type="hidden" name="action" value="{$smarty.request.action|escape}">
   <input type="hidden" name="do" value="genPin">
+  {if $GLOBAL.csrf.enabled && !"editaccount"|in_array:$GLOBAL.csrf.disabled_forms}<input type="hidden" name="ctoken" value="{$CTOKEN|escape}" />{/if}
 	<article class="module width_half">
 	  <header>
 		  <h3>Reset PIN</h3>
