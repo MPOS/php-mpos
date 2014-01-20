@@ -6,6 +6,6 @@
 {if $DATA.message}<p>Personal message:</p><p>{nocache}{$DATA.message}{/nocache}</p>{/if}
 <p></p>
 <p>Cheers,</p>
-<p>Website Administration</p>
+<p>{$GLOBAL.website.name|default:"Unknown Pool"}</p>
 </body>
 </html>

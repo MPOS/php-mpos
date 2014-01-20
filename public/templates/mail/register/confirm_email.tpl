@@ -5,6 +5,6 @@
 <p>http://{$smarty.server.SERVER_NAME}{$smarty.server.SCRIPT_NAME}?page=account&action=confirm&token={nocache}{$DATA.token}{/nocache}</p>
 <p></p>
 <p>Cheers,</p>
-<p>Website Administration</p>
+<p>{$GLOBAL.website.name|default:"Unknown Pool"}</p>
 </body>
 </html>
