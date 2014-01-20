@@ -22,6 +22,7 @@ define('PAGES_DIR', INCLUDE_DIR . '/pages');
 define('THEME_DIR', BASEPATH . 'templates');
 
 // Set debugging level for our debug class
+// Values valid from 0 (disabled) to 5 (most verbose)
 define('DEBUG', 0);
 
 // SALT used to hash passwords
