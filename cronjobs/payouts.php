@@ -25,6 +25,9 @@ chdir(dirname(__FILE__));
 // Include all settings and classes
 require_once('shared.inc.php');
 
+// Fetch raw data - turn off caching
+$transaction->setGetCache(false);
+
 if ($setting->getValue('disable_payouts') == 1) {
   $log->logInfo(" payouts disabled via admin panel");
   $monitoring->endCronjob($cron_name, 'E0009', 0, true, false);
@@ -165,6 +168,9 @@ if ($setting->getValue('disable_auto_payouts') != 1) {
 } else {
   $log->logDebug("Auto payouts disabled via admin panel");
 }
+// Turn cached data back on
+$transaction->setGetCache(true);
+
 // Cron cleanup and monitoring
 require_once('cron_end.inc.php');
 ?>
