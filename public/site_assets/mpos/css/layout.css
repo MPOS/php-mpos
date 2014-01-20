@@ -684,7 +684,7 @@ margin: -5px 0 5px 0;
 text-transform: uppercase;
 }
 
-fieldset input[type=text], fieldset input[type=password] {
+fieldset input[type=email], fieldset input[type=text], fieldset input[type=password] {
 -webkit-border-radius: 5px;
 -moz-border-radius: 5px;
 border-radius: 5px;
@@ -703,7 +703,7 @@ width: 92%;
 margin: 0 10px;
 }
 
-fieldset input[type=text]:focus, fieldset input[type=password]:focus, fieldset input[type=checkbox] {
+fieldset input[type=text]:focus, fieldset input[type=email]:focus, fieldset input[type=password]:focus, fieldset input[type=checkbox] {
 outline: none;
 border: 1px solid #77BACE;
 -webkit-box-shadow: inset 0 2px 2px #ccc, 0 0 10px #ADDCE6;
