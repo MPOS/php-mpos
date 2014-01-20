@@ -205,9 +205,9 @@ INSERT INTO `token_types` (`id`, `name`, `expiration`) VALUES
 (2, 'confirm_email', 0),
 (3, 'invitation', 0),
 (4, 'account_unlock', 0),
-(5, 'account_edit', 360),
-(6, 'change_pw', 360),
-(7, 'withdraw_funds', 360);
+(5, 'account_edit', 3600),
+(6, 'change_pw', 3600),
+(7, 'withdraw_funds', 3600);
 
 CREATE TABLE IF NOT EXISTS `transactions` (
   `id` int(255) NOT NULL AUTO_INCREMENT,
