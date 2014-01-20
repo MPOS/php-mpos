@@ -82,6 +82,9 @@ $dExpectedTimePerBlock = $statistics->getNetworkExpectedTimePerBlock();
 $dEstNextDifficulty = $statistics->getExpectedNextDifficulty();
 $iBlocksUntilDiffChange = $statistics->getBlocksUntilDiffChange();
 
+// Active Workers
+$dActiveWorkers = $worker->getCountAllActiveWorkers();
+
 // Output JSON format
 $data = array(
   'raw' => array( 'personal' => array( 'hashrate' => $dPersonalHashrate ), 'pool' => array( 'hashrate' => $dPoolHashrate ), 'network' => array( 'hashrate' => $dNetworkHashrate / 1000, 'esttimeperblock' => $dExpectedTimePerBlock, 'nextdifficulty' => $dEstNextDifficulty, 'blocksuntildiffchange' => $iBlocksUntilDiffChange ) ),
@@ -94,7 +97,7 @@ $data = array(
       'name' => $setting->getValue('website_name'),
       'currency' => $config['currency']
     ),
-    'workers' => $worker->getCountAllActiveWorkers(), 'hashrate' => $dPoolHashrateAdjusted,
+    'workers' => $dActiveWorkers, 'hashrate' => $dPoolHashrateAdjusted,
     'shares' => array( 'valid' => $aRoundShares['valid'], 'invalid' => $aRoundShares['invalid'], 'invalid_percent' => $dPoolInvalidPercent, 'estimated' => $iEstShares, 'progress' => $dEstPercent ),
     'price' => $aPrice,
     'difficulty' => pow(2, $config['difficulty'] - 16),
