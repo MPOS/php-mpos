@@ -58,8 +58,6 @@ class Database extends PDO {
     private $user; 
     private $pass; 
      
-    public $error="";
-
     public function __construct(){ 
         global $config;
         $this->engine = isset($config['db']['driver']) ? $config['db']['driver'] : 'mysql'; 
