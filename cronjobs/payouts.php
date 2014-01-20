@@ -29,7 +29,7 @@ if ($setting->getValue('disable_payouts') == 1) {
   $log->logInfo(" payouts disabled via admin panel");
   $monitoring->endCronjob($cron_name, 'E0009', 0, true, false);
 }
-
+$log->logInfo("Starting Payout...");
 if ($bitcoin->can_connect() !== true) {
   $log->logFatal(" unable to connect to RPC server, exiting");
   $monitoring->endCronjob($cron_name, 'E0006', 1, true);
@@ -37,10 +37,15 @@ if ($bitcoin->can_connect() !== true) {
 
 if ($setting->getValue('disable_manual_payouts') != 1) {
   // Fetch outstanding payout requests
-  $aPayouts = $oPayout->getUnprocessedPayouts();
+  if (!$aPayouts = $oPayout->getUnprocessedPayouts()) {
+    $log->logFatal("\tFailed Processing Manual Payment Queue...");
+    $monitoring->endCronjob($cron_name, 'E0050', 1, true);
+  }
+  
   if (count($aPayouts > 0)) $log->logDebug(" found " . count($aPayouts) . " queued manual payout requests");
 
   if (count($aPayouts) > 0) {
+    $log->logInfo("\tStarting Manual Payments...");
     $log->logInfo("\tAccount ID\tUsername\tBalance\t\tCoin Address");
     foreach ($aPayouts as $aData) {
       $aBalance = $transaction->getBalance($aData['account_id']);
@@ -55,16 +60,6 @@ if ($setting->getValue('disable_manual_payouts') != 1) {
         }
 
         $log->logInfo("\t" . $aData['account_id'] . "\t\t" . $aData['username'] . "\t" . $dBalance . "\t\t" . $aData['coin_address']);
-        try {
-          $aStatus = $bitcoin->validateaddress($aData['coin_address']);
-          if (!$aStatus['isvalid']) {
-            $log->logError('Failed to verify this users coin address, skipping payout');
-            continue;
-          }
-        } catch (Exception $e) {
-          $log->logError('Failed to verify this users coin address, skipping payout');
-          continue;
-        }
         try {
           $txid = $bitcoin->sendtoaddress($aData['coin_address'], $dBalance - $config['txfee_manual']);
         } catch (Exception $e) {
@@ -103,11 +98,15 @@ if ($setting->getValue('disable_manual_payouts') != 1) {
 
 if ($setting->getValue('disable_auto_payouts') != 1) {
   // Fetch all users balances
-  $users = $transaction->getAPQueue();
+  if (!$users = $transaction->getAPQueue()) {
+	$log->logFatal("\tFailed Processing Auto Payment Payment Queue...");
+	$monitoring->endCronjob($cron_name, 'E0050', 1, true);
+  }
   if (count($users) > 0) $log->logDebug(" found " . count($users) . " queued payout(s)");
 
   // Go through users and run transactions
   if (! empty($users)) {
+    $log->logInfo("\tStarting Auto Payments...");
     $log->logInfo("\tUserID\tUsername\tBalance\tThreshold\tAddress");
 
     foreach ($users as $aUserData) {
@@ -116,18 +115,6 @@ if ($setting->getValue('disable_auto_payouts') != 1) {
 
       // Only run if balance meets threshold and can pay the potential transaction fee
       if ($dBalance > $aUserData['ap_threshold'] && $dBalance > $config['txfee_auto']) {
-        // Validate address against RPC
-        try {
-          $aStatus = $bitcoin->validateaddress($aUserData['coin_address']);
-          if (!$aStatus['isvalid']) {
-            $log->logError('Failed to verify this users coin address, skipping payout');
-            continue;
-          }
-        } catch (Exception $e) {
-          $log->logError('Failed to verify this users coin address, skipping payout');
-          continue;
-        }
-
         // Send balance, fees are reduced later by RPC Server
         try {
           $txid = $bitcoin->sendtoaddress($aUserData['coin_address'], $dBalance - $config['txfee_auto']);
@@ -165,6 +152,8 @@ if ($setting->getValue('disable_auto_payouts') != 1) {
 } else {
   $log->logDebug("Auto payouts disabled via admin panel");
 }
+$log->logInfo("\tCompleted Payouts");
+
 // Cron cleanup and monitoring
 require_once('cron_end.inc.php');
 ?>
