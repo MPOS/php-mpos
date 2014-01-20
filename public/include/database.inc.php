@@ -7,6 +7,9 @@ if (!defined('SECURITY'))
 class DatabaseException extends Exception {};
 class DatabaseStatement extends PDOStatement { 
     public $num_rows;
+
+    function close() { return true; }
+
     function get_result() {
        return $this;
     }
@@ -23,8 +26,18 @@ class DatabaseStatement extends PDOStatement {
     }
     function fetch_all() {
        $ret = $this->fetchAll();
-       if ($ret) $this->num_rows = 1;
+       if ($ret) $this->num_rows = count($ret);
        return  $ret;
+    }
+ 
+    function bind_result() {
+        $args = func_get_args();
+        $i=0;
+        foreach ($args as $arg) { 
+            $this->bindColumn($i+1, $arg);
+            $i++;
+        }
+        return true;
     }
  
     function bind_param() {
