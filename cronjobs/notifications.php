@@ -25,6 +25,9 @@ chdir(dirname(__FILE__));
 // Include all settings and classes
 require_once('shared.inc.php');
 
+//Fetch from raw data
+$worker->setGetCache(false);
+
 if ($setting->getValue('disable_notifications') == 1) {
   $monitoring->endCronjob($cron_name, 'E0009', 0, true, false);
 }
@@ -71,6 +74,9 @@ if (!empty($aNotifications)) {
 } else {
   $log->logDebug(" no active IDLE worker notifications\n");
 }
+
+//Fetch from raw data
+$worker->setGetCache(true);
 
 require_once('cron_end.inc.php');
 ?>
