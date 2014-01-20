@@ -41,7 +41,7 @@ if ($setting->getValue('maintenance') && !$user->isAdmin($user->getUserId($_POST
       $_SESSION['POPUP'][] = array('CONTENT' => 'Unable to login: The captcha you entered was incorrect', 'TYPE' => 'errormsg');
     }
   }
-  if ($config['csrf']['enabled'] && $config['csrf']['forms']['login']) {
+  if ($config['csrf']['enabled'] && !in_array('login', $config['csrf']['disabled_forms'])) {
     if ((isset($_POST['ctoken']) && $_POST['ctoken'] !== $csrftoken->getBasic($user->getCurrentIP(), 'login')) || (!isset($_POST['ctoken']))) {
       // csrf protection is on and this token is invalid, error out -> time expired
       $nocsrf = 0;
