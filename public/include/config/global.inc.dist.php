@@ -463,7 +463,7 @@ $config['difficulty'] = 20;
  *   reward       = 50
  *
  **/
-$config['reward_type'] = 'fixed';
+$config['reward_type'] = 'block';
 $config['reward'] = 50;
 
 // Confirmations per block required to credit transactions, default: 120
