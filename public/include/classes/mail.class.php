@@ -57,17 +57,17 @@ class Mail extends Base {
    **/
   public function sendMail($template, $aData) {
     // Make sure we don't load a cached filed
-    $this->smarty->clearCache(BASEPATH . 'templates/mail/' . $template  . '.tpl');
+    $this->smarty->clearCache(BASEPATH . 'templates/mail/' . $template . '.tpl');
     $this->smarty->clearCache(BASEPATH . 'templates/mail/subject.tpl');
     $this->smarty->assign('WEBSITENAME', $this->setting->getValue('website_name'));
     $this->smarty->assign('SUBJECT', $aData['subject']);
     $this->smarty->assign('DATA', $aData);
-    $headers = 'From: {$GLOBAL.website.name|default:"Unknown Pool"} <' . $this->setting->getValue('website_email') . ">\n";
+    $headers .= 'From: ' . $this->setting->getValue('website_name') . '<' . $this->setting->getValue('website_email') . ">\n";
     $headers .= "MIME-Version: 1.0\n";
     $headers .= "Content-Type: text/html; charset=ISO-8859-1\r\n";
     if (strlen(@$aData['senderName']) > 0 && @strlen($aData['senderEmail']) > 0 )
       $headers .= 'Reply-To: ' . $aData['senderName'] . ' <' . $aData['senderEmail'] . ">\n";
-    if (mail($aData['email'], $this->smarty->fetch(BASEPATH . 'templates/mail/subject.tpl'), $this->smarty->fetch(BASEPATH . 'templates/mail/' . $template  . '.tpl'), $headers))
+    if (mail($aData['email'], $this->smarty->fetch(BASEPATH . 'templates/mail/subject.tpl'), $this->smarty->fetch(BASEPATH . 'templates/mail/' . $template .$
       return true;
     $this->setErrorMessage($this->sqlError('E0031'));
     return false;
