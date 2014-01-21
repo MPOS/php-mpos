@@ -54,6 +54,7 @@ if (is_dir(INCLUDE_DIR . '/pages/')) {
 }
 
 // Set a default action here if no page has been requested
+@$_REQUEST['page'] = (is_array($_REQUEST['page']) || !isset($_REQUEST['page'])) ? 'home' : $_REQUEST['page'];
 if (isset($_REQUEST['page']) && isset($arrPages[$_REQUEST['page']])) {
   $page = $_REQUEST['page'];
 } else if (isset($_REQUEST['page']) && ! isset($arrPages[$_REQUEST['page']])) {
@@ -72,7 +73,7 @@ if (is_dir(INCLUDE_DIR . '/pages/' . $page)) {
     }
 }
 // Default to empty (nothing) if nothing set or not known
-$action = isset($_REQUEST['action']) && isset($arrActions[$_REQUEST['action']]) ? $_REQUEST['action'] : "";
+$action = (isset($_REQUEST['action']) && !is_array($_REQUEST['action'])) && isset($arrActions[$_REQUEST['action']]) ? $_REQUEST['action'] : "";
 
 // Load the page code setting the content for the page OR the page action instead if set
 if (!empty($action)) {
