@@ -1,5 +1,0 @@
-$data["tokenkey"] = "...."; // the token key
-$data["tokentype"] = "...."; // the token type
-$data["tokencounter"] = "...."; // the token counter for hotp
-$data["tokenalgorithm"] = "...."; // the token algorithm (not supported by ga yet)
-$data["tokentimer"] = "...." // the token timer (For totp) and not supported by ga yet

@@ -555,6 +555,29 @@ class User extends Base {
     $field = array('name' => 'last_login', 'type' => 'i', 'value' => time());
     return $this->updateSingle($id, $field);
   }
+  
+  /**
+   * Gets users GAuth key
+   * @param string Username
+   * @return string key used to generate the URL
+   **/
+  public function getGAuthKey($email) {
+    $stmt = $this->mysqli->prepare("SELECT email, gauth_key FROM $this->table WHERE email = ? limit 1");
+    if ($this->checkStmt($stmt) && $stmt->bind_param('s', $email) && $stmt->execute() && $stmt->bind_result($row_email, $row_gakey)) {
+      $stmt->fetch();
+      $stmt->close();
+      if ($row_gakey) {
+        return $row_gakey;
+      }
+      return null;
+    }
+  }
+  public function setGAuthKey($email, $key) {
+    $field = array('name' => 'gauth_key', 'type' => 's', 'value' => $key);
+    $username = $this->getUserNameByEmail($email);
+    $uid = $this->getUserId($username);
+    return $this->updateSingle($uid, $field);
+  }
 
   /**
    * Log out current user, destroy the session
@@ -909,3 +932,4 @@ $user->setToken($oToken);
 $user->setBitcoin($bitcoin);
 $user->setSetting($setting);
 $user->setErrorCodes($aErrorCodes);
+$user->setGAuth($GAuth);

@@ -60,6 +60,7 @@ require_once(CLASS_DIR . '/bitcoin.class.php');
 require_once(CLASS_DIR . '/bitcoinwrapper.class.php');
 require_once(CLASS_DIR . '/monitoring.class.php');
 require_once(CLASS_DIR . '/notification.class.php');
+require_once(CLASS_DIR . '/gauth.class.php');
 require_once(CLASS_DIR . '/user.class.php');
 require_once(CLASS_DIR . '/csrftoken.class.php');
 require_once(CLASS_DIR . '/invitation.class.php');
@@ -75,5 +76,7 @@ require_once(INCLUDE_DIR . '/lib/scrypt.php');
 if ($config['twofactor']['mode'] == 'gauth') {
   require_once(CLASS_DIR . '/gauth.class.php');
 }
+// Include our versions
+require_once(INCLUDE_DIR . '/version.inc.php');
 
 ?>
