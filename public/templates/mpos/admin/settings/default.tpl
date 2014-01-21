@@ -5,7 +5,7 @@
     <input type="hidden" name="do" value="save" />
     <header>
       <h3 class="tabs_involved">Settings</h3>
-      <ul class="tabs">
+      <ul style="margin: 10px 20px 0px 0px;" class="tabs">
 {foreach item=TAB from=array_keys($SETTINGS)}
         <li><a href="#{$TAB}">{$TAB|capitalize}</a></li>
 {/foreach}
@@ -14,6 +14,7 @@
     <div class="tab_container">
 {foreach item=TAB from=array_keys($SETTINGS)}
       <div class="tab_content module_content" id="{$TAB}">
+      <br />
 {section name=setting loop=$SETTINGS.$TAB}
         <fieldset>
           <label>{$SETTINGS.$TAB[setting].display}</label>
