@@ -36,6 +36,7 @@ if ( ! $dNetworkHashrateModifier = $setting->getValue('statistics_network_hashra
 // Fetch raw data
 $statistics->setGetCache(false);
 $dPoolHashrate = $statistics->getCurrentHashrate($interval);
+$dActiveWorkers = $worker->getCountAllActiveWorkers();
 if ($dPoolHashrate > $dNetworkHashrate) $dNetworkHashrate = $dPoolHashrate;
 $statistics->setGetCache(true);
 
@@ -64,8 +65,8 @@ if ($iEstShares > 0 && $aRoundShares['valid'] > 0) {
 
 // Output JSON format
 $data = array(
-  'raw' => array( 'workers' => $worker->getCountAllActiveWorkers(), 'pool' => array( 'hashrate' => $dPoolHashrate ) ),
-  'pool' => array( 'workers' => $worker->getCountAllActiveWorkers(), 'hashrate' => $dPoolHashrateAdjusted, 'estimated' => $iEstShares, 'progress' => $dEstPercent ),
+  'raw' => array( 'workers' => $dActiveWorkers, 'pool' => array( 'hashrate' => $dPoolHashrate ) ),
+  'pool' => array( 'workers' => $dActiveWorkers, 'hashrate' => $dPoolHashrateAdjusted, 'estimated' => $iEstShares, 'progress' => $dEstPercent ),
   'network' => array( 'hashrate' => $dNetworkHashrateAdjusted, 'difficulty' => $dDifficulty, 'block' => $iBlock ),
 );
 echo $api->get_json($data);

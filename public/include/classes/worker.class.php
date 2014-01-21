@@ -5,6 +5,16 @@ if (!defined('SECURITY')) die('Hacking attempt');
 
 class Worker extends Base {
   protected $table = 'pool_worker';
+  private $getcache = true;
+
+// Disable fetching values from cache
+  public function setGetCache($set=false) {
+    $this->getcache = $set;
+  }
+  public function getGetCache() {
+    return $this->getcache;
+  }
+
 
   /**
    * Update worker list for a user
@@ -70,6 +80,7 @@ class Worker extends Base {
    **/
   public function getWorker($id, $interval=600) {
     $this->debug->append("STA " . __METHOD__, 4);
+	if ($this->getGetCache() && $data = $this->memcache->get(__FUNCTION__ . $id)) return $data;
     $stmt = $this->mysqli->prepare("
        SELECT id, username, password, monitor,
        ( SELECT COUNT(id) FROM " . $this->share->getTableName() . " WHERE username = w.username AND time > DATE_SUB(now(), INTERVAL 10 MINUTE)) AS count_all,
@@ -102,7 +113,7 @@ class Worker extends Base {
        WHERE id = ?
        ");
     if ($this->checkStmt($stmt) && $stmt->bind_param('iiiiiii', $interval, $interval, $interval, $interval, $interval, $interval, $id) && $stmt->execute() && $result = $stmt->get_result())
-      return $result->fetch_assoc();
+      return $this->memcache->setCache(__FUNCTION__ . $id, $result->fetch_assoc());   
     return $this->sqlError('E0055');
   }
 
@@ -155,6 +166,7 @@ class Worker extends Base {
    **/
   public function getAllWorkers($iLimit=0, $interval=600, $start=0) {
     $this->debug->append("STA " . __METHOD__, 4);
+	if ($data = $this->memcache->get(__FUNCTION__)) return $data;
     $stmt = $this->mysqli->prepare("
       SELECT id, username, password, monitor,
       IFNULL(IF(difficulty=0, pow(2, (" . $this->config['difficulty'] . " - 16)), difficulty), 0) AS difficulty,
@@ -193,7 +205,7 @@ class Worker extends Base {
       FROM $this->table AS w
       ORDER BY hashrate DESC LIMIT ?,?");
     if ($this->checkStmt($stmt) && $stmt->bind_param('iiiiiiiiii', $interval, $interval, $interval, $interval, $interval, $interval, $interval, $interval, $start, $iLimit) && $stmt->execute() && $result = $stmt->get_result())
-      return $result->fetch_all(MYSQLI_ASSOC);
+      return $this->memcache->setCache(__FUNCTION__, $result->fetch_object()->total);
     return $this->sqlError('E0057');
   }
 
