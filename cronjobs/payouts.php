@@ -88,7 +88,7 @@ if ($setting->getValue('disable_manual_payouts') != 1) {
             $monitoring->endCronjob($cron_name, 'E0065', 1, true);
           }
         } else {
-          $log->logFatal('Failed to add new Debit_MP transaction in database for user ' . $user->getUserName($aData['account_id']) . ' ERROR: ' . $transaction->getCronError()););
+          $log->logFatal('Failed to add new Debit_MP transaction in database for user ' . $user->getUserName($aData['account_id']) . ' ERROR: ' . $transaction->getCronError());
           $monitoring->endCronjob($cron_name, 'E0064', 1, true);
         }
       }
