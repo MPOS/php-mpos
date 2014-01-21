@@ -53,7 +53,9 @@ class StatsCache {
     if (empty($expiration))
       $expiration = $this->config['memcache']['expiration'] + rand( -$this->config['memcache']['splay'], $this->config['memcache']['splay']);
     $this->debug->append("Storing " . $this->config['memcache']['keyprefix'] . "$key with expiration $expiration", 3);
-    return $this->cache->set($this->config['memcache']['keyprefix'] . $key, $value, $expiration);
+    if ($this->cache->set($this->config['memcache']['keyprefix'] . $key, $value, $expiration))
+      return $value;
+    return false;
   }
 
   /**
