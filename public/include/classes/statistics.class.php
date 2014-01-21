@@ -217,7 +217,7 @@ class Statistics extends Base {
    * @param none
    * @return data object Return our hashrateas an object
    **/
-  public function getCurrentHashrate($interval=600) {
+  public function getCurrentHashrate($interval=180) {
     $this->debug->append("STA " . __METHOD__, 4);
     if ($this->getGetCache() && $data = $this->memcache->get(__FUNCTION__)) return $data;
     $stmt = $this->mysqli->prepare("
@@ -245,7 +245,7 @@ class Statistics extends Base {
    * @param none
    * @return data object Our share rate in shares per second
    **/
-  public function getCurrentShareRate($interval=600) {
+  public function getCurrentShareRate($interval=180) {
     $this->debug->append("STA " . __METHOD__, 4);
     if ($data = $this->memcache->get(__FUNCTION__)) return $data;
     $stmt = $this->mysqli->prepare("
@@ -452,7 +452,7 @@ class Statistics extends Base {
    * Fetch all user hashrates based on shares and archived shares
    * @return data integer Current Hashrate in khash/s
    **/
-  public function getAllUserMiningStats($interval=600) {
+  public function getAllUserMiningStats($interval=180) {
     $this->debug->append("STA " . __METHOD__, 4);
     $stmt = $this->mysqli->prepare("
       SELECT
@@ -498,7 +498,7 @@ class Statistics extends Base {
    * @param account_id integer User ID
    * @return data integer Current Hashrate in khash/s
    **/
-  public function getUserHashrate($account_id, $interval=600) {
+  public function getUserHashrate($account_id, $interval=180) {
     $this->debug->append("STA " . __METHOD__, 4);
     // Dual-caching, try statistics cron first, then fallback to local, then fallbock to SQL
     if ($data = $this->memcache->get(STATISTICS_ALL_USER_HASHRATES)) {
@@ -560,7 +560,7 @@ class Statistics extends Base {
    * @param interval int Data interval in seconds
    * @return double Share difficulty or 0
    **/
-  public function getUserShareDifficulty($account_id, $interval=600) {
+  public function getUserShareDifficulty($account_id, $interval=180) {
     $this->debug->append("STA " . __METHOD__, 4);
     // Dual-caching, try statistics cron first, then fallback to local, then fallbock to SQL
     if ($data = $this->memcache->get(STATISTICS_ALL_USER_HASHRATES)) {
@@ -589,7 +589,7 @@ class Statistics extends Base {
    * @param account_id integer User ID
    * @return data integer Current Sharerate in shares/s
    **/
-  public function getUserSharerate($account_id, $interval=600) {
+  public function getUserSharerate($account_id, $interval=180) {
     $this->debug->append("STA " . __METHOD__, 4);
     // Dual-caching, try statistics cron first, then fallback to local, then fallbock to SQL
     if ($data = $this->memcache->get(STATISTICS_ALL_USER_HASHRATES)) {
@@ -633,7 +633,7 @@ class Statistics extends Base {
    * @param worker_id int Worker ID to fetch hashrate for
    * @return data int Current hashrate in khash/s
    **/
-  public function getWorkerHashrate($worker_id,$interval=600) {
+  public function getWorkerHashrate($worker_id,$interval=180) {
     $this->debug->append("STA " . __METHOD__, 4);
     if ($data = $this->memcache->get(__FUNCTION__ . $worker_id)) return $data;
     $stmt = $this->mysqli->prepare("
