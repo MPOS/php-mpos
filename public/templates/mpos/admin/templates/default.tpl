@@ -55,7 +55,7 @@
         <label>Active</label>
         <input type="hidden" name="active" value="0" />
         <input type="checkbox" name="active" value="1" id="active" {nocache}{if $DATABASE_TEMPLATE.active}checked{/if}{/nocache} />
-        <label for="active"></label>
+        <label for="active" style="margin: -1px 0px 0px -186px;"></label>
       </fieldset>
       <fieldset>
         <label>Content</label>
