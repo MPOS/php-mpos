@@ -72,17 +72,15 @@ $pps_value = round($pps_reward / (pow(2, $config['target_bits']) * $dDifficulty)
 $log->logInfo("PPS value: " . $pps_value);
 
 // Find our last share accounted and last inserted share for PPS calculations
-$log->logInfo("PPS Previous Share ID: " . $iLastShareId);
-if (!$iPreviousShareId = $setting->getValue('pps_last_share_id');
+$log->logInfo("PPS Previous Share ID: " . $iLastShareId); 
+if (!$iPreviousShareId = $setting->getValue('pps_last_share_id') {
 	$log->logError("Failed to fetch Previous Share ID. ERROR: " . $setting->getCronError());
 }
 
 $log->logInfo("PPS Last Share ID: " . $iPreviousShareId);
-if (!$iLastShareId = $share->getLastInsertedShareId();
+if (!$iLastShareId = $share->getLastInsertedShareId()) {
 	$log->logError("Failed to fetch Last Inserted PPS Share ID. ERROR: " . $share->getCronError());
 }
-
-
 
 // Check for all new shares, we start one higher as our last accounted share to avoid duplicates
 $log->logInfo("Query getSharesForAccounts... starting...");
@@ -149,14 +147,15 @@ if (!$setting->setValue('pps_last_share_id', $iLastShareId)) {
 
 // Fetch all unaccounted blocks
 $log->logInfo("\tFetching unaccounted blocks.");
-$aAllBlocks = $block->getAllUnaccounted('ASC');
+if (!$aAllBlocks = $block->getAllUnaccounted('ASC')) {
+	$log->logInfo("Failed to fetch unaccounted Blocks. NOTICE: " . $block->getCronError());
+}
 if (empty($aAllBlocks)) {
   $log->logInfo("\tNo new blocks.");
   // No monitoring event here, not fatal for PPS
 }
 
 // Go through blocks and archive/delete shares that have been accounted for
-
 foreach ($aAllBlocks as $iIndex => $aBlock) {
   // If we are running through more than one block, check for previous share ID
   $log->logInfo("\tProcess each block for Previous Share ID.");
@@ -192,11 +191,12 @@ foreach ($aAllBlocks as $iIndex => $aBlock) {
     $monitoring->endCronjob($cron_name, 'E0016', 1, true);
   }
   // Mark this block as accounted for
-  $log->logInfo("\tMark Block as accounted");
+  $log->logInfo("\tMarking Block as accounted...");
   if (!$block->setAccounted($aBlock['id'])) {
     $log->logFatal("Failed to mark block as accounted! Aborting! Error: " . $block->getCronError());
     $monitoring->endCronjob($cron_name, 'E0014', 1, true);
   }
+  $log->logInfo("\tMarked Block" . $aBlock['id'] . " as accounted.");
 }
 $log->logInfo("Completed PPS Payout");
 
