@@ -74,18 +74,18 @@ $log->logInfo("PPS value: " . $pps_value);
 // Find our last share accounted and last inserted share for PPS calculations
 $log->logInfo("PPS Previous Share ID: " . $iLastShareId); 
 if (!$iPreviousShareId = $setting->getValue('pps_last_share_id') {
-	$log->logError("Failed to fetch Previous Share ID. ERROR: " . $setting->getCronError());
+    $log->logError("Failed to fetch Previous Share ID. ERROR: " . $setting->getCronError());
 }
 
 $log->logInfo("PPS Last Share ID: " . $iPreviousShareId);
 if (!$iLastShareId = $share->getLastInsertedShareId()) {
-	$log->logError("Failed to fetch Last Inserted PPS Share ID. ERROR: " . $share->getCronError());
+    $log->logError("Failed to fetch Last Inserted PPS Share ID. ERROR: " . $share->getCronError());
 }
 
 // Check for all new shares, we start one higher as our last accounted share to avoid duplicates
 $log->logInfo("Query getSharesForAccounts... starting...");
 if (!$aAccountShares = $share->getSharesForAccounts($iPreviousShareId + 1, $iLastShareId)) {
-	$log->logError("Failed to fetch Account Shares. ERROR: " . $share->getCronError());
+    $log->logError("Failed to fetch Account Shares. ERROR: " . $share->getCronError());
 }
 $log->logInfo("Query Completed...");
 
@@ -142,13 +142,13 @@ foreach ($aAccountShares as $aData) {
 // Store our last inserted ID for the next run
 $log->logInfo("\tFetching Last Share ID...");
 if (!$setting->setValue('pps_last_share_id', $iLastShareId)) {
-	$log->logError("Failed to fetch Last Share ID. ERROR: " . $setting->getCronError());
+    $log->logError("Failed to fetch Last Share ID. ERROR: " . $setting->getCronError());
 }
 
 // Fetch all unaccounted blocks
 $log->logInfo("\tFetching unaccounted blocks.");
 if (!$aAllBlocks = $block->getAllUnaccounted('ASC')) {
-	$log->logInfo("Failed to fetch unaccounted Blocks. NOTICE: " . $block->getCronError());
+    $log->logInfo("Failed to fetch unaccounted Blocks. NOTICE: " . $block->getCronError());
 }
 if (empty($aAllBlocks)) {
   $log->logInfo("\tNo new blocks.");
@@ -170,7 +170,7 @@ foreach ($aAllBlocks as $iIndex => $aBlock) {
   // Per account statistics
   $log->logInfo("\tStarting to store fresh user statistics...");
   if (!$aAccountShares = $share->getSharesForAccounts(@$iLastBlockShare, $aBlock['share_id'])) {
-	$log->logError("Failed to Account Shares. ERROR: " . $share->getCronError());
+    $log->logError("Failed to Account Shares. ERROR: " . $share->getCronError());
   }
   
   foreach ($aAccountShares as $key => $aData) {
