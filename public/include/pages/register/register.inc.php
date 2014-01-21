@@ -14,7 +14,7 @@ if ($setting->getValue('recaptcha_enabled') && $setting->getValue('recaptcha_ena
   );
   $smarty->assign("RECAPTCHA", recaptcha_get_html($setting->getValue('recaptcha_public_key'), $rsp->error, true));
   if (!$rsp->is_valid) $_SESSION['POPUP'][] = array('CONTENT' => 'Invalid Captcha, please try again.', 'TYPE' => 'errormsg');
-  $recaptcha = ($rsp->isvalid) ? 1 : 0; 
+  $recaptcha = ($rsp->is_valid) ? 1 : 0;
 }
 
 // csrf if enabled
