@@ -657,9 +657,9 @@ class Statistics extends Base {
    **/
   public function getTopContributors($type='shares', $limit=15) {
     $this->debug->append("STA " . __METHOD__, 4);
-    if ($this->getGetCache() && $data = $this->memcache->get(__FUNCTION__ . $type . $limit)) return $data;
     switch ($type) {
     case 'shares':
+      if ($this->getGetCache() && $data = $this->memcache->get(__FUNCTION__ . $type . $limit)) return $data;
       if ($data = $this->memcache->get(STATISTICS_ALL_USER_SHARES)) {
         // Use global cache to build data, if we have any data there
         if (!empty($data['data']) && is_array($data['data'])) {
@@ -700,6 +700,7 @@ class Statistics extends Base {
       break;
 
     case 'hashes':
+      if ($this->getGetCache() && $data = $this->memcache->getStatic(__FUNCTION__ . $type . $limit)) return $data;
       $stmt = $this->mysqli->prepare("
          SELECT
           a.username AS account,
@@ -717,7 +718,7 @@ class Statistics extends Base {
         GROUP BY account
         ORDER BY hashrate DESC LIMIT ?");
       if ($this->checkStmt($stmt) && $stmt->bind_param("i", $limit) && $stmt->execute() && $result = $stmt->get_result())
-        return $this->memcache->setCache(__FUNCTION__ . $type . $limit, $result->fetch_all(MYSQLI_ASSOC));
+        return $this->memcache->setStaticCache(__FUNCTION__ . $type . $limit, $result->fetch_all(MYSQLI_ASSOC));
       return $this->sqlError();
       break;
     }
