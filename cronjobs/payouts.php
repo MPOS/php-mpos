@@ -63,7 +63,7 @@ if ($setting->getValue('disable_manual_payouts') != 1) {
         try {
           $txid = $bitcoin->sendtoaddress($aData['coin_address'], $dBalance - $config['txfee_manual']);
         } catch (Exception $e) {
-          $log->logError('Skipping payment. Failed to send balance to coin address: ' . $aData['coin_address'] . ' ERROR: ' . . $e->getMessage());
+          $log->logError('Skipping payment. Failed to send balance to coin address: ' . $aData['coin_address'] . ' ERROR: ' . $e->getMessage());
           continue;
         }
 
@@ -122,7 +122,7 @@ if ($setting->getValue('disable_auto_payouts') != 1) {
         try {
           $txid = $bitcoin->sendtoaddress($aUserData['coin_address'], $dBalance - $config['txfee_auto']);
         } catch (Exception $e) {
-          $log->logError('Skipping payment. Failed to send balance to coin address: ' . $aData['coin_address'] . ' ERROR: ' . . $e->getMessage());
+          $log->logError('Skipping payment. Failed to send balance to coin address: ' . $aData['coin_address'] . ' ERROR: ' . $e->getMessage());
           continue;
         }
 
