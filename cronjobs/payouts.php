@@ -58,17 +58,17 @@ if ($setting->getValue('disable_manual_payouts') != 1) {
         try {
           $aStatus = $bitcoin->validateaddress($aData['coin_address']);
           if (!$aStatus['isvalid']) {
-            $log->logError('Failed to verify this users coin address, skipping payout');
+		    $log->logError('Skipping payment. Failed to verify coin address: ' . $aData['coin_address'] . ' ERROR: ' . $e->getMessage());
             continue;
           }
         } catch (Exception $e) {
-          $log->logError('Failed to verify this users coin address, skipping payout');
+          $log->logError('Skipping payment. RPC ERROR: ' . $e->getMessage());
           continue;
         }
         try {
           $txid = $bitcoin->sendtoaddress($aData['coin_address'], $dBalance - $config['txfee_manual']);
         } catch (Exception $e) {
-          $log->logError('Failed to send requested balance to coin address, please check payout process. Does the wallet cover the amount? Error:' . $e->getMessage());
+          $log->logError('Skipping payment. Failed to send balance to coin address: ' . $aData['coin_address'] . ' ERROR: ' . . $e->getMessage());
           continue;
         }
 
@@ -120,11 +120,11 @@ if ($setting->getValue('disable_auto_payouts') != 1) {
         try {
           $aStatus = $bitcoin->validateaddress($aUserData['coin_address']);
           if (!$aStatus['isvalid']) {
-            $log->logError('Failed to verify this users coin address, skipping payout');
+		    $log->logError('Skipping payment. Failed to verify coin address: ' . $aData['coin_address'] . ' ERROR: ' . $e->getMessage());
             continue;
           }
         } catch (Exception $e) {
-          $log->logError('Failed to verify this users coin address, skipping payout');
+          $log->logError('Skipping payment. RPC ERROR: ' . $e->getMessage());
           continue;
         }
 
@@ -132,7 +132,7 @@ if ($setting->getValue('disable_auto_payouts') != 1) {
         try {
           $txid = $bitcoin->sendtoaddress($aUserData['coin_address'], $dBalance - $config['txfee_auto']);
         } catch (Exception $e) {
-          $log->logError('Failed to send requested balance to coin address, please check payout process. Does the wallet cover the amount?');
+          $log->logError('Skipping payment. Failed to send balance to coin address: ' . $aData['coin_address'] . ' ERROR: ' . . $e->getMessage());
           continue;
         }
 
