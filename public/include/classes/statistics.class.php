@@ -622,7 +622,7 @@ class Statistics extends Base {
    **/
   public function getWorkerHashrate($worker_id, $interval=180) {
     $this->debug->append("STA " . __METHOD__, 4);
-    if ($data = $this->memcache->get(__FUNCTION__ . $worker_id)) return $data;
+    if ($data = $this->memcache->get(__FUNCTION__ . $username)) return $data;
     $stmt = $this->mysqli->prepare("
       SELECT IFNULL(ROUND(SUM(IF(difficulty=0, POW(2, (" . $this->config['difficulty'] . " - 16)), difficulty)) * POW(2, " . $this->config['target_bits'] . ") / 600 / 1000), 0) AS hashrate
       FROM " . $this->share->getTableName() . " AS
