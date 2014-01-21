@@ -14,10 +14,12 @@
       <input type="text" class="text tiny" name="username" value="{$smarty.post.username|escape|default:""}" size="15" maxlength="20" required>
     </fieldset>
     <fieldset>
-      <label>Password</label>
-      <input type="password" class="text tiny" name="password1" value="" size="15" maxlength="100" required>
+      <label>Password</label> 
+      <p style="padding-right:10px;display:block;margin-top:0px;float:right;color:#999;" id="pw_strength">Strength</p>
+      <input type="password" class="text tiny" name="password1" value="" size="15" maxlength="100" id="pw_field" required>
       <label>Repeat Password</label>
-      <input type="password" class="text tiny" name="password2" value="" size="15" maxlength="100" required>
+      <p style="padding-right:10px;display:block;margin-top:0px;float:right;" id="pw_match"></p>
+      <input type="password" class="text tiny" name="password2" value="" size="15" maxlength="100" id="pw_field2" required>
     </fieldset>
     <fieldset>
       <label>Email</label>

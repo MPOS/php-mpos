@@ -144,11 +144,13 @@
       </fieldset>
       <fieldset>
         <label>New Password</label>
-        {nocache}<input type="password" name="newPassword" {if $GLOBAL.twofactor.enabled && $GLOBAL.twofactor.options.changepw && !$CHANGEPASSUNLOCKED}disabled{/if}/>{/nocache}
+        <p style="padding-right:10px;display:block;margin-top:0px;float:right;color:#999;" id="pw_strength"></p>
+        {nocache}<input type="password" name="newPassword" id="pw_field"{if $GLOBAL.twofactor.enabled && $GLOBAL.twofactor.options.changepw && !$CHANGEPASSUNLOCKED}disabled{/if}/>{/nocache}
       </fieldset>
       <fieldset>
         <label>Repeat New Password</label>
-        {nocache}<input type="password" name="newPassword2" {if $GLOBAL.twofactor.enabled && $GLOBAL.twofactor.options.changepw && !$CHANGEPASSUNLOCKED}disabled{/if}/>{/nocache}
+        <p style="padding-right:10px;display:block;margin-top:0px;float:right;" id="pw_match"></p>
+        {nocache}<input type="password" name="newPassword2" id="pw_field2"{if $GLOBAL.twofactor.enabled && $GLOBAL.twofactor.options.changepw && !$CHANGEPASSUNLOCKED}disabled{/if}/>{/nocache}
       </fieldset>
       <fieldset>
         <label>4 digit PIN</label>
