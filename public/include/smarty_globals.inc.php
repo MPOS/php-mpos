@@ -129,10 +129,10 @@ if (@$_SESSION['USERDATA']['id']) {
   $aGlobal['userdata']['balance'] = $transaction->getBalance($_SESSION['USERDATA']['id']);
 
   // Other userdata that we can cache savely
-  $aGlobal['userdata']['shares'] = $statistics->getUserShares($_SESSION['USERDATA']['username']);
-  $aGlobal['userdata']['rawhashrate'] = $statistics->getUserHashrate($_SESSION['USERDATA']['username']);
+  $aGlobal['userdata']['shares'] = $statistics->getUserShares($_SESSION['USERDATA']['username'], $_SESSION['USERDATA']['id']);
+  $aGlobal['userdata']['rawhashrate'] = $statistics->getUserHashrate($_SESSION['USERDATA']['username'], $_SESSION['USERDATA']['id']);
   $aGlobal['userdata']['hashrate'] = $aGlobal['userdata']['rawhashrate'] * $dPersonalHashrateModifier;
-  $aGlobal['userdata']['sharerate'] = $statistics->getUserSharerate($_SESSION['USERDATA']['username']);
+  $aGlobal['userdata']['sharerate'] = $statistics->getUserSharerate($_SESSION['USERDATA']['username'], $_SESSION['USERDATA']['id']);
 
   switch ($config['payout_system']) {
   case 'prop':

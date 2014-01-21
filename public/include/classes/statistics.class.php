@@ -568,7 +568,8 @@ class Statistics extends Base {
       FROM " . $this->share->getTableName() . " AS s
       WHERE username = '?.%'
       AND time > DATE_SUB(now(), INTERVAL ? SECOND)
-      AND our_result = 'Y');
+      AND our_result = 'Y'
+	  ");
     if ($this->checkStmt($stmt) && $stmt->bind_param("ii", $username, $interval) && $stmt->execute() && $result = $stmt->get_result() )
       return $this->memcache->setCache(__FUNCTION__ . $username, $result->fetch_object()->avgsharediff);
     return $this->sqlError();

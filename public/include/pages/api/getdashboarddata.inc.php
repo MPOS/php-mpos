@@ -45,13 +45,13 @@ if ( ! $dNetworkHashrateModifier = $setting->getValue('statistics_network_hashra
 $statistics->setGetCache(false);
 $dPoolHashrate = $statistics->getCurrentHashrate($interval);
 if ($dPoolHashrate > $dNetworkHashrate) $dNetworkHashrate = $dPoolHashrate;
-$dPersonalHashrate = $statistics->getUserHashrate($username, $interval);
-$dPersonalSharerate = $statistics->getUserSharerate($username, $interval);
-$dPersonalShareDifficulty = $statistics->getUserShareDifficulty($username, $interval);
+$dPersonalHashrate = $statistics->getUserHashrate($username, $user_id, $interval);
+$dPersonalSharerate = $statistics->getUserSharerate($username, $user_id, $interval);
+$dPersonalShareDifficulty = $statistics->getUserShareDifficulty($username, $user_id, $interval);
 $statistics->setGetCache(true);
 
 // Use caches for this one
-$aUserRoundShares = $statistics->getUserShares($username);
+$aUserRoundShares = $statistics->getUserShares($username, $user_id);
 $aRoundShares = $statistics->getRoundShares();
 
 if ($config['payout_system'] != 'pps') {

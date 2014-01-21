@@ -15,9 +15,9 @@ $aTransactionSummary = $transaction->getTransactionSummary($user_id);
 // Output JSON format
 $data = array(
   'username' => $username,
-  'shares' =>  $statistics->getUserShares($username),
-  'hashrate' => $statistics->getUserHashrate($username),
-  'sharerate' => $statistics->getUserSharerate($username)
+  'shares' =>  $statistics->getUserShares($username, $user_id),
+  'hashrate' => $statistics->getUserHashrate($username, $user_id),
+  'sharerate' => $statistics->getUserSharerate($username, $user_id)
 );
 echo $api->get_json($data);
 
