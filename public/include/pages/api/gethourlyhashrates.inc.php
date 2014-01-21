@@ -12,7 +12,7 @@ $username = $user->getUsername($user_id)
 
 // Output JSON format
 $data = array(
-  'mine' => $statistics->getHourlyHashrateByAccount($username),
+  'mine' => $statistics->getHourlyHashrateByAccount($username,$user_id),
   'pool' => $statistics->getHourlyHashrateByPool()
 );
 
