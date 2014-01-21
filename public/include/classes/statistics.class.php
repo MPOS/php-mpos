@@ -219,7 +219,7 @@ class Statistics extends Base {
    **/
   public function getCurrentHashrate($interval=180) {
     $this->debug->append("STA " . __METHOD__, 4);
-    if ($this->getGetCache() && $data = $this->memcache->get(__FUNCTION__)) return $data;
+    if ($this->getGetCache() && $data = $this->memcache->getStatic(__FUNCTION__)) return $data;
     $stmt = $this->mysqli->prepare("
       SELECT
       (
@@ -236,7 +236,7 @@ class Statistics extends Base {
         )
       ) AS hashrate
       FROM DUAL");
-    if ($this->checkStmt($stmt) && $stmt->bind_param('iiii', $interval, $interval, $interval, $interval) && $stmt->execute() && $result = $stmt->get_result() ) return $this->memcache->setCache(__FUNCTION__, $result->fetch_object()->hashrate);
+    if ($this->checkStmt($stmt) && $stmt->bind_param('iiii', $interval, $interval, $interval, $interval) && $stmt->execute() && $result = $stmt->get_result() ) return $this->memcache->setStaticCache(__FUNCTION__, $result->fetch_object()->hashrate);
     return $this->sqlError();
   }
 
@@ -247,7 +247,7 @@ class Statistics extends Base {
    **/
   public function getCurrentShareRate($interval=180) {
     $this->debug->append("STA " . __METHOD__, 4);
-    if ($data = $this->memcache->get(__FUNCTION__)) return $data;
+    if ($data = $this->memcache->getStatic(__FUNCTION__)) return $data;
     $stmt = $this->mysqli->prepare("
       SELECT
       (
@@ -264,7 +264,7 @@ class Statistics extends Base {
         )
       ) AS sharerate
       FROM DUAL");
-    if ($this->checkStmt($stmt) && $stmt->bind_param('iiii', $interval, $interval, $interval, $interval) && $stmt->execute() && $result = $stmt->get_result() ) return $this->memcache->setCache(__FUNCTION__, $result->fetch_object()->sharerate);
+    if ($this->checkStmt($stmt) && $stmt->bind_param('iiii', $interval, $interval, $interval, $interval) && $stmt->execute() && $result = $stmt->get_result() ) return $this->memcache->setStaticCache(__FUNCTION__, $result->fetch_object()->sharerate);
     return $this->sqlError();
   }
 
