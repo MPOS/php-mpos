@@ -1,0 +1,5 @@
+The following three lines is what my freeradius users command looks like - pretty darn simple really
+
+DEFAULT Auth-Type := Accept
+	Exec-Program-Wait = "/usr/bin/php /home/paulr/src/eclipse-workspace/ga4php/authserver/usercmd.php radauth %{User-Name} %{User-Password}",
+	Fall-Through = Yes

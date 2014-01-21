@@ -1,0 +1,45 @@
+DEPRECATED INFO - IGNORE THIS!
+
+
+Put data Functions:
+
+Token type:
+1) "settokentype"
+2) ["username"] = username
+   ["tokentype] = tokentype
+return true/false;
+
+Set Token:
+1) "setusertoken"
+2) ["username"] = username
+   ["tokentype"] = tokentype
+   ["tokenkey"] = tokenkey
+return true/false;
+   
+Delete Token:
+1) "deleteusertoken"
+2) "username"
+return true/false
+
+Set Token Counter:
+1) "settokencounter"
+2) ["username"] = username
+   ["tokencounter"] = counter
+return true/false
+   
+=======================================================
+   
+Get Data Functions:
+
+UserList:
+1) "userlist"
+2) ""
+returns array
+
+GetToken:
+1) "gettoken"
+2) "username"
+return:
+["tokentype"] = token type
+["tokenkey"] = token key
+["tokencounter"] = token counter (for hotp)

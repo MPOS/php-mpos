@@ -1,6 +1,9 @@
 <?php
 $defflip = (!cfip()) ? exit(header('HTTP/1.1 401 Unauthorized')) : 1;
 
+// GAuth if enabled
+//$config['twofactor']['mode']  
+
 // ReCaptcha handling if enabled
 if ($setting->getValue('recaptcha_enabled') && $setting->getValue('recaptcha_enabled_logins')) {
   require_once(INCLUDE_DIR . '/lib/recaptchalib.php');
