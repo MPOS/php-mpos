@@ -88,7 +88,7 @@ if ($setting->getValue('disable_manual_payouts') != 1) {
             $monitoring->endCronjob($cron_name, 'E0065', 1, true);
           }
         } else {
-          $log->logFatal('Failed to add new Debit_MP transaction in database for user ' . $user->getUserName($aData['account_id']) . ' ERROR: ' . $notification->getCronError()););
+          $log->logFatal('Failed to add new Debit_MP transaction in database for user ' . $user->getUserName($aData['account_id']) . ' ERROR: ' . $transaction->getCronError()););
           $monitoring->endCronjob($cron_name, 'E0064', 1, true);
         }
       }
@@ -102,7 +102,7 @@ if ($setting->getValue('disable_manual_payouts') != 1) {
 if ($setting->getValue('disable_auto_payouts') != 1) {
   // Fetch all users balances
   if (!$users = $transaction->getAPQueue()) {
-	$log->logFatal("\tFailed Processing Auto Payment Payment Queue. ERROR: " . $share->getCronError());
+	$log->logFatal("\tFailed Processing Auto Payment Payment Queue. ERROR: " . $transaction->getCronError());
 	$monitoring->endCronjob($cron_name, 'E0050', 1, true);
   }
   if (count($users) > 0) $log->logDebug(" found " . count($users) . " queued payout(s)");
@@ -144,7 +144,7 @@ if ($setting->getValue('disable_auto_payouts') != 1) {
             $monitoring->endCronjob($cron_name, 'E0065', 1, true);
           }
         } else {
-          $log->logFatal('Failed to add new Debit_AP transaction in database for user ' . $user->getUserName($aUserData['id']) . ' ERROR: ' . $notification->getCronError());
+          $log->logFatal('Failed to add new Debit_AP transaction in database for user ' . $user->getUserName($aUserData['id']) . ' ERROR: ' . $transaction->getCronError());
           $monitoring->endCronjob($cron_name, 'E0064', 1, true);
         }
       }

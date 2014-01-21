@@ -182,7 +182,7 @@ foreach ($aAllBlocks as $iIndex => $aBlock) {
   $log->logInfo("\tMove shares to archive...");
   if ($aBlock['share_id'] < $iLastShareId) {
     if (!$share->moveArchive($aBlock['share_id'], $aBlock['id'], @$iLastBlockShare))
-      $log->logError("Failed to copy shares to archive: " . $share->getCronError() . ': ' . $share->getCronError());
+      $log->logError("Failed to copy shares to from " . $aBlock['share_id'] . " to " . $iLastBlockShare . ' Error: ' . $share->getCronError());
   }
   // Delete shares
   $log->logInfo("\tDelete accounted shares...");

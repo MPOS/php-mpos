@@ -106,7 +106,7 @@ foreach ($aAllBlocks as $iIndex => $aBlock) {
       // Grab only the most recent shares from Archive that fill the missing shares
       $log->logInfo('Fetching ' . ($pplns_target - $iRoundShares) . ' additional shares from archive');
       if (!$aArchiveShares = $share->getArchiveShares($pplns_target - $iRoundShares)) {
-        $log->logError('Failed to fetch shares from archive, setting target to round total');
+        $log->logError('Failed to fetch shares from archive, setting target to round total. Error: ' . $share->getCronError());
         $pplns_target = $iRoundShares;
       } else {
         // Add archived shares to users current shares, if we have any in archive
@@ -236,10 +236,10 @@ foreach ($aAllBlocks as $iIndex => $aBlock) {
 
     // Move counted shares to archive before this blockhash upstream share
     if (!$share->moveArchive($iCurrentUpstreamId, $aBlock['id'], $iPreviousShareId))
-      $log->logError('Failed to copy shares to archive table: ' . $share->getCronError() . ': ' . $share->getCronError());
+      $log->logError('Failed to copy shares to archive table: ' . $iPreviousShareId . ' to ' . $iCurrentUpstreamId . ' aborting! Error: ' . $share->getCronError());
     // Delete all accounted shares
     if (!$share->deleteAccountedShares($iCurrentUpstreamId, $iPreviousShareId)) {
-      $log->logFatal("Failed to delete accounted shares from $iPreviousShareId to $iCurrentUpstreamId, aborting! Error: " . $share->getCronError());
+      $log->logFatal("Failed to delete accounted shares from " . $iPreviousShareId . " to " . $iCurrentUpstreamId . " aborting! Error: " . $share->getCronError());
       $monitoring->endCronjob($cron_name, 'E0016', 1, true);
     }
     // Mark this block as accounted for
