@@ -368,7 +368,7 @@ class Statistics extends Base {
         ROUND(IFNULL(SUM(IF(our_result='Y', IF(s.difficulty=0, POW(2, (" . $this->config['difficulty'] . " - 16)), s.difficulty), 0)), 0) / POW(2, (" . $this->config['difficulty'] . " - 16)), 0) AS valid,
         ROUND(IFNULL(SUM(IF(our_result='N', IF(s.difficulty=0, POW(2, (" . $this->config['difficulty'] . " - 16)), s.difficulty), 0)), 0) / POW(2, (" . $this->config['difficulty'] . " - 16)), 0) AS invalid
       FROM " . $this->share->getTableName() . "
-      WHERE username = '?.%'
+      WHERE username LIKE '?.%'
         AND UNIX_TIMESTAMP(time) >IFNULL((SELECT MAX(b.time) FROM " . $this->block->getTableName() . " AS b),0)");
     if ($stmt && $stmt->bind_param("i", $username) && $stmt->execute() && $result = $stmt->get_result())
       return $this->memcache->setCache(__FUNCTION__ . $account_id, $result->fetch_assoc());
@@ -513,7 +513,7 @@ class Statistics extends Base {
           id, our_result, IF(s.difficulty = 0, POW(2, (" . $this->config['difficulty'] . " - 16)), difficulty) AS difficulty
         FROM
           shares
-        WHERE username = '?.%'
+        WHERE username LIKE '?.%'
           AND time > DATE_SUB(now(), INTERVAL ? SECOND)
           AND our_result = 'Y'
       UNION
@@ -521,7 +521,7 @@ class Statistics extends Base {
           share_id, our_result, IF(s.difficulty = 0, POW(2, (" . $this->config['difficulty'] . " - 16)), difficulty) AS difficulty
         FROM
           shares_archive
-        WHERE username = '?.%'
+        WHERE username LIKE '?.%'
           AND time > DATE_SUB(now(), INTERVAL ? SECOND)
           AND our_result = 'Y'
         ) AS temp");
@@ -537,7 +537,7 @@ class Statistics extends Base {
       SELECT
         ROUND(IFNULL(SUM(IF(s.difficulty=0, POW(2, (" . $this->config['difficulty'] . " - 16)), s.difficulty)), 0) / POW(2, (" . $this->config['difficulty'] . " - 16)), 0) AS total
       FROM " . $this->share->getTableName() . "
-      WHERE username = '?.%'
+      WHERE username LIKE '?.%'
       AND id > ?
       AND our_result = 'Y'");
     if ($this->checkStmt($stmt) && $stmt->bind_param("ii", $username, $last_paid_pps_id) && $stmt->execute() && $result = $stmt->get_result() )
@@ -566,7 +566,7 @@ class Statistics extends Base {
         IFNULL(AVG(IF(difficulty=0, pow(2, (" . $this->config['difficulty'] . " - 16)), difficulty)), 0) AS avgsharediff,
         COUNT(s.id) AS total
       FROM " . $this->share->getTableName() . " AS s
-      WHERE username = '?.%'
+      WHERE username LIKE '?.%'
       AND time > DATE_SUB(now(), INTERVAL ? SECOND)
       AND our_result = 'Y'
 	  ");
@@ -598,7 +598,7 @@ class Statistics extends Base {
           id
         FROM
           shares
-        WHERE username = '?.%'
+        WHERE username LIKE '?.%'
           AND time > DATE_SUB(now(), INTERVAL ? SECOND)
           AND our_result = 'Y'
       UNION
@@ -606,7 +606,7 @@ class Statistics extends Base {
           share_id
         FROM
           shares_archive
-        WHERE username = '?.%'
+        WHERE username LIKE '?.%'
           AND time > DATE_SUB(now(), INTERVAL ? SECOND)
           AND our_result = 'Y'
       ) AS temp");
@@ -725,7 +725,7 @@ class Statistics extends Base {
       WHERE time <= FROM_UNIXTIME(FLOOR(UNIX_TIMESTAMP(NOW())/(60*60))*(60*60))
         AND time >= FROM_UNIXTIME(FLOOR(UNIX_TIMESTAMP(NOW())/(60*60))*(60*60)) - INTERVAL 24 HOUR
         AND our_result = 'Y'
-        AND username = '?.%'
+        AND username LIKE '?.%'
       GROUP BY HOUR(time)
       UNION
       SELECT
@@ -736,7 +736,7 @@ class Statistics extends Base {
       WHERE time <= FROM_UNIXTIME(FLOOR(UNIX_TIMESTAMP(NOW())/(60*60))*(60*60))
         AND time >= FROM_UNIXTIME(FLOOR(UNIX_TIMESTAMP(NOW())/(60*60))*(60*60)) - INTERVAL 24 HOUR
         AND our_result = 'Y'
-        AND username = '?.%'
+        AND username LIKE '?.%'
       GROUP BY HOUR(time)");
     if ($this->checkStmt($stmt) && $stmt->bind_param('ii', $username, $username) && $stmt->execute() && $result = $stmt->get_result()) {
       $iStartHour = date('G');
