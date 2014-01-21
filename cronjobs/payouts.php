@@ -102,8 +102,8 @@ if ($setting->getValue('disable_manual_payouts') != 1) {
 if ($setting->getValue('disable_auto_payouts') != 1) {
   // Fetch all users balances
   if (!$users = $transaction->getAPQueue()) {
-	$log->logFatal("\tFailed Processing Auto Payment Payment Queue. ERROR: " . $transaction->getCronError());
-	$monitoring->endCronjob($cron_name, 'E0050', 1, true);
+    $log->logFatal("\tFailed Processing Auto Payment Payment Queue. ERROR: " . $transaction->getCronError());
+    $monitoring->endCronjob($cron_name, 'E0050', 1, true);
   }
   if (count($users) > 0) $log->logDebug(" found " . count($users) . " queued payout(s)");
 
