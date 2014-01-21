@@ -29,7 +29,7 @@
 	<script type="text/javascript" src="{$PATH}/js/tinybox.js"></script>
 	<script type="text/javascript" src="{$PATH}/../global/js/number_format.js"></script>
   <!--[if IE]><script type="text/javascript" src="{$PATH}/js/excanvas.js"></script><![endif]-->
-
+  <script type="text/javascript" src="{$PATH}/js/pwcheck.js"></script>
     {if $GLOBAL.statistics.analytics.enabled}
       {$GLOBAL.statistics.analytics.code nofilter}
     {/if}
