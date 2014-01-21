@@ -80,9 +80,9 @@ if ($setting->getValue('disable_manual_payouts') != 1) {
             $log->logError('Failed to send notification email to users address: ' . $aMailData['email'] . 'ERROR: ' . $notification->getCronError());
           // Recheck the users balance to make sure it is now 0
           if (!$aBalance = $transaction->getBalance($aData['account_id']) {
-			$log->logFatal('Failed to fetch balance for account ' . $aData['account_id'] . '. ERROR: ' . $transaction->getCronError());
-			$monitoring->endCronjob($cron_name, 'E0065', 1, true);
-		  }
+            $log->logFatal('Failed to fetch balance for account ' . $aData['account_id'] . '. ERROR: ' . $transaction->getCronError());
+            $monitoring->endCronjob($cron_name, 'E0065', 1, true);
+          }
           if ($aBalance['confirmed'] > 0) {
             $log->logFatal('User has a remaining balance of ' . $aBalance['confirmed'] . ' after a successful payout!');
             $monitoring->endCronjob($cron_name, 'E0065', 1, true);

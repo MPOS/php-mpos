@@ -56,14 +56,14 @@ if ($config['pps']['reward']['type'] == 'blockavg' && $block->getBlockCount() > 
   if ($config['pps']['reward']['type'] == 'block') {
      if ($aLastBlock = $block->getLast()) {
         $pps_reward = $aLastBlock['amount'];
-		$log->logInfo("PPS value (Last Block): " . $pps_reward);
+        $log->logInfo("PPS value (Last Block): " . $pps_reward);
      } else {
        $pps_reward = $config['pps']['reward']['default'];
-	   $log->logInfo("PPS value (Default): " . $pps_reward);
+       $log->logInfo("PPS value (Default): " . $pps_reward);
      }
   } else {
      $pps_reward = $config['pps']['reward']['default'];
-	 $log->logInfo("PPS value (Default): " . $pps_reward);
+     $log->logInfo("PPS value (Default): " . $pps_reward);
   }
 }
 
