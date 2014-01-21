@@ -15,7 +15,7 @@ if ( ! $interval = $setting->getValue('statistics_ajax_data_interval')) $interva
 
 // Gather un-cached data
 $statistics->setGetCache(false);
-$sharerate = $statistics->getUserSharerate($username, $interval);
+$sharerate = $statistics->getUserSharerate($username, $user_id, $interval);
 $statistics->setGetCache(true);
 
 // Output JSON format

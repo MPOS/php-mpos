@@ -353,7 +353,7 @@ class Statistics extends Base {
    * @param username str username
    * @return data array invalid and valid share counts
    **/
-  public function getUserShares($username) {
+  public function getUserShares($username, $account_id) {
     $this->debug->append("STA " . __METHOD__, 4);
     // Dual-caching, try statistics cron first, then fallback to local, then fallbock to SQL
     if ($data = $this->memcache->get(STATISTICS_ALL_USER_SHARES)) {
@@ -495,7 +495,7 @@ class Statistics extends Base {
    * @param $username string username
    * @return data integer Current Hashrate in khash/s
    **/
-  public function getUserHashrate($username, $interval=600) {
+  public function getUserHashrate($username, $account_id, $interval=600) {
     $this->debug->append("STA " . __METHOD__, 4);
     // Dual-caching, try statistics cron first, then fallback to local, then fallbock to SQL
     if ($data = $this->memcache->get(STATISTICS_ALL_USER_HASHRATES)) {
@@ -551,7 +551,7 @@ class Statistics extends Base {
    * @param interval int Data interval in seconds
    * @return double Share difficulty or 0
    **/
-  public function getUserShareDifficulty($username, $interval=600) {
+  public function getUserShareDifficulty($username, $account_id, $interval=600) {
     $this->debug->append("STA " . __METHOD__, 4);
     // Dual-caching, try statistics cron first, then fallback to local, then fallbock to SQL
     if ($data = $this->memcache->get(STATISTICS_ALL_USER_HASHRATES)) {
@@ -568,7 +568,8 @@ class Statistics extends Base {
       FROM " . $this->share->getTableName() . " AS s
       WHERE username = '?.%'
       AND time > DATE_SUB(now(), INTERVAL ? SECOND)
-      AND our_result = 'Y');
+      AND our_result = 'Y'
+	  ");
     if ($this->checkStmt($stmt) && $stmt->bind_param("ii", $username, $interval) && $stmt->execute() && $result = $stmt->get_result() )
       return $this->memcache->setCache(__FUNCTION__ . $username, $result->fetch_object()->avgsharediff);
     return $this->sqlError();
@@ -579,7 +580,7 @@ class Statistics extends Base {
    * @param username string username 
    * @return data integer Current Sharerate in shares/s
    **/
-  public function getUserSharerate($username, $interval=600) {
+  public function getUserSharerate($username, $account_id, $interval=600) {
     $this->debug->append("STA " . __METHOD__, 4);
     // Dual-caching, try statistics cron first, then fallback to local, then fallbock to SQL
     if ($data = $this->memcache->get(STATISTICS_ALL_USER_HASHRATES)) {
@@ -627,7 +628,7 @@ class Statistics extends Base {
       FROM " . $this->share->getTableName() . " AS
       WHERE username = '?.%'
         AND our_result = 'Y'
-        AND time > DATE_SUB(now(), INTERVAL ? SECOND));
+        AND time > DATE_SUB(now(), INTERVAL ? SECOND)");
     if ($this->checkStmt($stmt) && $stmt->bind_param("i", $username, $interval) && $stmt->execute() && $result = $stmt->get_result() )
       return $this->memcache->setCache(__FUNCTION__ . $username, $result->fetch_object()->hashrate);
     return $this->sqlError();
