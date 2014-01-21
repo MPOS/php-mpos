@@ -219,7 +219,7 @@ class Statistics extends Base {
    **/
   public function getCurrentHashrate($interval=180) {
     $this->debug->append("STA " . __METHOD__, 4);
-    if ($this->getGetCache() && $data = $this->memcache->get(__FUNCTION__)) return $data;
+    if ($this->getGetCache() && $data = $this->memcache->getStatic(__FUNCTION__)) return $data;
     $stmt = $this->mysqli->prepare("
       SELECT
       (
@@ -236,7 +236,7 @@ class Statistics extends Base {
         )
       ) AS hashrate
       FROM DUAL");
-    if ($this->checkStmt($stmt) && $stmt->bind_param('iiii', $interval, $interval, $interval, $interval) && $stmt->execute() && $result = $stmt->get_result() ) return $this->memcache->setCache(__FUNCTION__, $result->fetch_object()->hashrate);
+    if ($this->checkStmt($stmt) && $stmt->bind_param('iiii', $interval, $interval, $interval, $interval) && $stmt->execute() && $result = $stmt->get_result() ) return $this->memcache->setStaticCache(__FUNCTION__, $result->fetch_object()->hashrate);
     return $this->sqlError();
   }
 
@@ -247,7 +247,7 @@ class Statistics extends Base {
    **/
   public function getCurrentShareRate($interval=180) {
     $this->debug->append("STA " . __METHOD__, 4);
-    if ($data = $this->memcache->get(__FUNCTION__)) return $data;
+    if ($data = $this->memcache->getStatic(__FUNCTION__)) return $data;
     $stmt = $this->mysqli->prepare("
       SELECT
       (
@@ -264,7 +264,7 @@ class Statistics extends Base {
         )
       ) AS sharerate
       FROM DUAL");
-    if ($this->checkStmt($stmt) && $stmt->bind_param('iiii', $interval, $interval, $interval, $interval) && $stmt->execute() && $result = $stmt->get_result() ) return $this->memcache->setCache(__FUNCTION__, $result->fetch_object()->sharerate);
+    if ($this->checkStmt($stmt) && $stmt->bind_param('iiii', $interval, $interval, $interval, $interval) && $stmt->execute() && $result = $stmt->get_result() ) return $this->memcache->setStaticCache(__FUNCTION__, $result->fetch_object()->sharerate);
     return $this->sqlError();
   }
 
@@ -487,7 +487,7 @@ class Statistics extends Base {
       while ($row = $result->fetch_assoc()) {
         $aData['data'][$row['id']] = $row;
       }
-      return $this->memcache->setCache(STATISTICS_ALL_USER_HASHRATES, $aData);
+      return $this->memcache->setStaticCache(STATISTICS_ALL_USER_HASHRATES, $aData, 600);
     } else {
       return $this->sqlError();
     }
@@ -501,7 +501,7 @@ class Statistics extends Base {
   public function getUserHashrate($account_id, $interval=180) {
     $this->debug->append("STA " . __METHOD__, 4);
     // Dual-caching, try statistics cron first, then fallback to local, then fallbock to SQL
-    if ($data = $this->memcache->get(STATISTICS_ALL_USER_HASHRATES)) {
+    if ($data = $this->memcache->getStatic(STATISTICS_ALL_USER_HASHRATES)) {
       if (array_key_exists($account_id, $data['data']))
         return $data['data'][$account_id]['hashrate'];
       // We have no cached value, we return defaults
@@ -563,7 +563,7 @@ class Statistics extends Base {
   public function getUserShareDifficulty($account_id, $interval=180) {
     $this->debug->append("STA " . __METHOD__, 4);
     // Dual-caching, try statistics cron first, then fallback to local, then fallbock to SQL
-    if ($data = $this->memcache->get(STATISTICS_ALL_USER_HASHRATES)) {
+    if ($data = $this->memcache->getStatic(STATISTICS_ALL_USER_HASHRATES)) {
       if (array_key_exists($account_id, $data['data']))
         return $data['data'][$account_id]['avgsharediff'];
       // We have no cached value, we return defaults
@@ -592,7 +592,7 @@ class Statistics extends Base {
   public function getUserSharerate($account_id, $interval=180) {
     $this->debug->append("STA " . __METHOD__, 4);
     // Dual-caching, try statistics cron first, then fallback to local, then fallbock to SQL
-    if ($data = $this->memcache->get(STATISTICS_ALL_USER_HASHRATES)) {
+    if ($data = $this->memcache->getStatic(STATISTICS_ALL_USER_HASHRATES)) {
       if (array_key_exists($account_id, $data['data']))
         return $data['data'][$account_id]['sharerate'];
       // We have no cached value, we return defaults
@@ -657,9 +657,9 @@ class Statistics extends Base {
    **/
   public function getTopContributors($type='shares', $limit=15) {
     $this->debug->append("STA " . __METHOD__, 4);
-    if ($this->getGetCache() && $data = $this->memcache->get(__FUNCTION__ . $type . $limit)) return $data;
     switch ($type) {
     case 'shares':
+      if ($this->getGetCache() && $data = $this->memcache->get(__FUNCTION__ . $type . $limit)) return $data;
       if ($data = $this->memcache->get(STATISTICS_ALL_USER_SHARES)) {
         // Use global cache to build data, if we have any data there
         if (!empty($data['data']) && is_array($data['data'])) {
@@ -700,6 +700,7 @@ class Statistics extends Base {
       break;
 
     case 'hashes':
+      if ($this->getGetCache() && $data = $this->memcache->getStatic(__FUNCTION__ . $type . $limit)) return $data;
       $stmt = $this->mysqli->prepare("
          SELECT
           a.username AS account,
@@ -717,7 +718,7 @@ class Statistics extends Base {
         GROUP BY account
         ORDER BY hashrate DESC LIMIT ?");
       if ($this->checkStmt($stmt) && $stmt->bind_param("i", $limit) && $stmt->execute() && $result = $stmt->get_result())
-        return $this->memcache->setCache(__FUNCTION__ . $type . $limit, $result->fetch_all(MYSQLI_ASSOC));
+        return $this->memcache->setStaticCache(__FUNCTION__ . $type . $limit, $result->fetch_all(MYSQLI_ASSOC));
       return $this->sqlError();
       break;
     }
