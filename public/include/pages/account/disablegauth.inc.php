@@ -36,7 +36,7 @@ if ($setting->getValue('maintenance') && !$user->isAdmin($user->getUserId($_POST
       $checkpin = $user->checkPin($user->getUserId($username), @$_POST['authPin']);
       $checklogin = $user->checkLogin(@$_POST['username'], @$_POST['password']);
       if ($checkpin) {
-        if ($checklogin && $uses_gauth && $da_sent && $da_editable) {
+        if ($checklogin && $uses_gauth && $da_sent && $da_editable && $checkpin) {
           // everything is good, let's disable it and wipe the old secret just in case
           $userid = $oToken->getTokenCreator('disable_gauth', $oldtoken);
           $username = $user->getUserName($userid);

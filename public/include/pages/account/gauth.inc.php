@@ -23,11 +23,13 @@ if ($user->isAuthenticated()) {
   }
   
   if (isset($_POST['reset_secret']) || isset($_POST['update_gauth']) && @$_POST['user_gauth'] == 0 && $current_gauth > 0) {
-    // reset/log out
-    // send an email token
-    $user->sendChangeConfigEmail('disable_gauth', $_SESSION['USERDATA']['id']);
-    // and log out
-    $user->logoutUser("", "?page=account&action=disablegauth");
+    // reset/log out or attempted disable
+    $send_token_reset = $user->sendChangeConfigEmail('disable_gauth', $_SESSION['USERDATA']['id']);
+    if ($send_token_reset) {
+      $user->logoutUser("", "?page=account&action=disablegauth");
+    } else {
+      $_SESSION['POPUP'][] = array('CONTENT' => "Failed to send the notification: ".$user->getError(), 'TYPE' => 'errormsg');
+    }
   }
   
   if (isset($_POST['user_gauth']) && isset($_POST['update_gauth'])) {
@@ -35,10 +37,14 @@ if ($user->isAuthenticated()) {
     $current_gauth = $user->getUserGAuthEnabledByEmail($email);
     
     if ($current_gauth > 0 && $setting_gauth == 0) {
-      // disable, send an email token
-      $user->sendChangeConfigEmail('disable_gauth', $_SESSION['USERDATA']['id']);
+      // disable catchall
+      $send_token_disable = $user->sendChangeConfigEmail('disable_gauth', $_SESSION['USERDATA']['id']);
       // and log out
-      $user->logoutUser($_SERVER['REQUEST_URI']);
+      if ($send_token_disable) {
+        $user->logoutUser($_SERVER['REQUEST_URI']);
+      } else {
+        $_SESSION['POPUP'][] = array('CONTENT' => "Failed to send the notification: ".$user->getError(), 'TYPE' => 'errormsg');
+      }
     }
     
     if ($current_gauth == 0) {
