@@ -8,14 +8,15 @@ $api->isActive();
 
 // Check user token
 $user_id = $api->checkAccess($user->checkApiKey($_REQUEST['api_key']), @$_REQUEST['id']);
+$username = $user->getUsername($user_id);
 
 // Output JSON format
 $data = array(
-  'mine' => $statistics->getHourlyHashrateByAccount($id),
+  'mine' => $statistics->getHourlyHashrateByAccount($username, $user_id),
   'pool' => $statistics->getHourlyHashrateByPool()
 );
 
-echo $api->json($data);
+echo $api->get_json($data);
 
 // Supress master template
 $supress_master = 1;

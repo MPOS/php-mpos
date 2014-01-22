@@ -22,6 +22,7 @@ $supress_master = 1;
 
 // Check user token and access level permissions
 $user_id = $api->checkAccess($user->checkApiKey($_REQUEST['api_key']), @$_REQUEST['id']);
+$username = $user->getUsername($user_id);
 
 // Fetch RPC information
 if ($bitcoin->can_connect() === true) {
@@ -44,20 +45,20 @@ if ( ! $dNetworkHashrateModifier = $setting->getValue('statistics_network_hashra
 $statistics->setGetCache(false);
 $dPoolHashrate = $statistics->getCurrentHashrate($interval);
 if ($dPoolHashrate > $dNetworkHashrate) $dNetworkHashrate = $dPoolHashrate;
-$dPersonalHashrate = $statistics->getUserHashrate($user_id, $interval);
-$dPersonalSharerate = $statistics->getUserSharerate($user_id, $interval);
-$dPersonalShareDifficulty = $statistics->getUserShareDifficulty($user_id, $interval);
+$dPersonalHashrate = $statistics->getUserHashrate($username, $user_id, $interval);
+$dPersonalSharerate = $statistics->getUserSharerate($username, $user_id, $interval);
+$dPersonalShareDifficulty = $statistics->getUserShareDifficulty($username, $user_id, $interval);
 $statistics->setGetCache(true);
 
 // Use caches for this one
-$aUserRoundShares = $statistics->getUserShares($user_id);
+$aUserRoundShares = $statistics->getUserShares($username, $user_id);
 $aRoundShares = $statistics->getRoundShares();
 
 if ($config['payout_system'] != 'pps') {
   $aEstimates = $statistics->getUserEstimates($aRoundShares, $aUserRoundShares, $user->getUserDonatePercent($user_id), $user->getUserNoFee($user_id));
   $dUnpaidShares = 0;
 } else {
-  $dUnpaidShares = $statistics->getUserUnpaidPPSShares($user_id, $setting->getValue('pps_last_share_id'));
+  $dUnpaidShares = $statistics->getUserUnpaidPPSShares($username, $user_id, $setting->getValue('pps_last_share_id'));
   $aEstimates = $statistics->getUserEstimates($dPersonalSharerate, $dPersonalShareDifficulty, $user->getUserDonatePercent($user_id), $user->getUserNoFee($user_id), $statistics->getPPSValue());
 }
 

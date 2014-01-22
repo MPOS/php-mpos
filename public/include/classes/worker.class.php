@@ -72,8 +72,8 @@ class Worker extends Base {
     $this->debug->append("STA " . __METHOD__, 4);
     $stmt = $this->mysqli->prepare("
        SELECT id, username, password, monitor,
-       ( SELECT COUNT(id) FROM " . $this->share->getTableName() . " WHERE username = w.username AND time > DATE_SUB(now(), INTERVAL 10 MINUTE)) AS count_all,
-       ( SELECT COUNT(id) FROM " . $this->share->getArchiveTableName() . " WHERE username = w.username AND time > DATE_SUB(now(), INTERVAL 10 MINUTE)) AS count_all_archive,
+       ( SELECT COUNT(id) FROM " . $this->share->getTableName() . " WHERE username = w.username AND time > DATE_SUB(now(), INTERVAL ? SECOND)) AS count_all,
+       ( SELECT COUNT(id) FROM " . $this->share->getArchiveTableName() . " WHERE username = w.username AND time > DATE_SUB(now(), INTERVAL ? SECOND)) AS count_all_archive,
        (
          SELECT
           IFNULL(IF(our_result='Y', ROUND(SUM(IF(difficulty=0, pow(2, (" . $this->config['difficulty'] . " - 16)), difficulty)) * POW(2, " . $this->config['target_bits'] . ") / ? / 1000), 0), 0) AS hashrate
@@ -101,7 +101,7 @@ class Worker extends Base {
        FROM $this->table AS w
        WHERE id = ?
        ");
-    if ($this->checkStmt($stmt) && $stmt->bind_param('iiiiiii', $interval, $interval, $interval, $interval, $interval, $interval, $id) && $stmt->execute() && $result = $stmt->get_result())
+    if ($this->checkStmt($stmt) && $stmt->bind_param('iiiiiiiii',$interval, $interval, $interval, $interval, $interval, $interval, $interval, $interval, $id) && $stmt->execute() && $result = $stmt->get_result())
       return $result->fetch_assoc();
     return $this->sqlError('E0055');
   }

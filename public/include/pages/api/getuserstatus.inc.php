@@ -8,16 +8,16 @@ $api->isActive();
 
 // Check user token
 $user_id = $api->checkAccess($user->checkApiKey($_REQUEST['api_key']), @$_REQUEST['id']);
-
+$username = $user->getUsername($user_id);
 // Fetch transaction summary
 $aTransactionSummary = $transaction->getTransactionSummary($user_id);
 
 // Output JSON format
 $data = array(
-  'username' => $user->getUsername($user_id),
-  'shares' =>  $statistics->getUserShares($user_id),
-  'hashrate' => $statistics->getUserHashrate($user_id),
-  'sharerate' => $statistics->getUserSharerate($user_id)
+  'username' => $username,
+  'shares' =>  $statistics->getUserShares($username, $user_id),
+  'hashrate' => $statistics->getUserHashrate($username, $user_id),
+  'sharerate' => $statistics->getUserSharerate($username, $user_id)
 );
 echo $api->get_json($data);
 
