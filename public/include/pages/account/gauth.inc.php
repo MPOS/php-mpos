@@ -1,4 +1,5 @@
 <?php
+
 // Make sure we are called from index.php
 if (!defined('SECURITY')) die('Hacking attempt');
 
@@ -46,12 +47,25 @@ if ($user->isAuthenticated()) {
       $gauth_key_exists = $user->getGAuthKeyExists($set_gauth_key);
       // this is stupid but we should be doing this - if key exists keep creating until we get one that doesn't
       if ($gauth_key_exists > 0) {
-        while ($gauth_key_exists > 0) {
+        // due to some weird php 5.4 -> 5.5 differences idk how to loop this a sane way, so look out, getto recheck ahoy
+        $set_gauth_key = $GAuth->createSecret();
+        $gauth_key_exists = $user->getGAuthKeyExists($set_gauth_key);
+        if ($gauth_key_exists > 0) {
           $set_gauth_key = $GAuth->createSecret();
           $gauth_key_exists = $user->getGAuthKeyExists($set_gauth_key);
+          if ($gauth_key_exists > 0) {
+            $set_gauth_key = $GAuth->createSecret();
+            $gauth_key_exists = $user->getGAuthKeyExists($set_gauth_key);
+            if ($gauth_key_exists > 0) {
+              // welp, 3rd times a charm, let's fail it
+              $_SESSION['POPUP'][] = array('CONTENT' => "Creation of a valid Google Authentication key failed, please contact the administrator.", 'TYPE' => 'errormsg');
+            }
+          }
         }
       }
-      $user->setGAuthKey($email, $set_gauth_key);
+      if ($gauth_key_exists == 0) {
+        $user->setGAuthKey($email, $set_gauth_key);
+      }
     }
     $user->setUserGAuthEnabled($email, $setting_gauth);
   }
