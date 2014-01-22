@@ -1,7 +1,7 @@
 Description [ ![Codeship Status for TheSerapher/php-mpos](https://www.codeship.io/projects/40fa7600-61a6-0131-3fd3-367b94dc0d60/status?branch=next)](https://www.codeship.io/projects/12276)
 ===========
 
-MPOS is a web based Mining Portal for various crypto currencies. It was created by [TheSerapher](https://github.com/TheSerapher) and has hence grown quite large. Recently it was migrated into a Github Organization to make developemnt easier. It's a community driven open source prokect: If you wish to participate contact the team on IRC: https://webchat.freenode.net/?channels=#mpos-dev
+MPOS is a web based Mining Portal for various crypto currencies. It was created by [TheSerapher](https://github.com/TheSerapher) and has hence grown quite large. Recently it was migrated into a Github Organization to make development easier. It's a community driven open source project: If you wish to participate contact the team on IRC: https://webchat.freenode.net/?channels=#mpos-dev
 
 
 **NOTE**: This project is still under development and commits are happening on a daily basis.
@@ -123,7 +123,7 @@ Please take a look at the [Quick Start Guide](https://github.com/TheSerapher/php
 Customization
 =============
 
-This project was meant to allow users to easily cusomize the system and templates. Hence no upstream framework was used to keep it as simple as possible.
+This project was meant to allow users to easily customize the system and templates. Hence no upstream framework was used to keep it as simple as possible.
 If you are just using the system, there will be no need to adjust anything. Things will work out of the box! But if you plan on creating
 your own theme, things are pretty easy:
 
@@ -145,7 +145,7 @@ Related Software
 
 There are a few other projects out there that take advantage of MPOS and it's included API. Here a quick list that you can check out for yourself:
 
-* [MPOS IRC Bot](https://github.com/WKNiGHT-/mpos-bot) written in Python, standlone bot, using the MPOS API
+* [MPOS IRC Bot](https://github.com/WKNiGHT-/mpos-bot) written in Python, standalone bot, using the MPOS API
 * [MPOS Eggdrop Module](https://github.com/iAmShorty/mpos-eggdrop-tcl) written in TCL, adding MPOS commands to this bot, using the MPOS API
 
 Contributing
