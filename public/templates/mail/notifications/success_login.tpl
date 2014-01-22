@@ -1,6 +1,5 @@
 <html>
 <body>
-{debug}
 <p>Your account has successfully logged in</p>
 <p>User: {$DATA.LOGINUSER}</p>
 <p>IP: {$DATA.LOGINIP}</p>
