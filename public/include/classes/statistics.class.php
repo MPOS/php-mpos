@@ -513,7 +513,7 @@ class Statistics extends Base {
         IFNULL(IF(our_result='Y', ROUND(SUM(IF(difficulty=0, POW(2, (" . $this->config['difficulty'] . " - 16)), difficulty)) * POW(2, " . $this->config['target_bits'] . ") / ? / 1000), 0), 0) AS hashrate
       FROM (
         SELECT
-          id, our_result, IF(s.difficulty = 0, POW(2, (" . $this->config['difficulty'] . " - 16)), difficulty) AS difficulty
+          id, our_result, IF(difficulty = 0, POW(2, (" . $this->config['difficulty'] . " - 16)), difficulty) AS difficulty
         FROM
           shares
         WHERE username LIKE ?
@@ -521,7 +521,7 @@ class Statistics extends Base {
           AND our_result = 'Y'
       UNION
         SELECT
-          share_id, our_result, IF(s.difficulty = 0, POW(2, (" . $this->config['difficulty'] . " - 16)), difficulty) AS difficulty
+          share_id, our_result, IF(difficulty = 0, POW(2, (" . $this->config['difficulty'] . " - 16)), difficulty) AS difficulty
         FROM
           shares_archive
         WHERE username LIKE ?
