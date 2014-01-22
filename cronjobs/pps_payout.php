@@ -72,15 +72,16 @@ $pps_value = round($pps_reward / (pow(2, $config['target_bits']) * $dDifficulty)
 $log->logInfo("PPS value: " . $pps_value);
 
 // Find our last share accounted and last inserted share for PPS calculations
-$log->logInfo("PPS Previous Share ID: " . $iLastShareId); 
+
 if (!$iPreviousShareId = $setting->getValue('pps_last_share_id')) {
     $log->logError("Failed to fetch Previous Share ID. ERROR: " . $setting->getCronError());
 }
+$log->logInfo("PPS Last Share ID: " . $iPreviousShareId); 
 
-$log->logInfo("PPS Last Share ID: " . $iPreviousShareId);
 if (!$iLastShareId = $share->getLastInsertedShareId()) {
     $log->logError("Failed to fetch Last Inserted PPS Share ID. ERROR: " . $share->getCronError());
 }
+$log->logInfo("PPS Last Processed Share ID: " . $iLastShareId);
 
 // Check for all new shares, we start one higher as our last accounted share to avoid duplicates
 $log->logInfo("Query getSharesForAccounts... starting...");
