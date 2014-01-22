@@ -14,7 +14,7 @@ class RoundStats extends Base {
    * Get next block for round stats
    **/
   public function getNextBlock($iHeight=0) {
-    $stmt = $this->mysqli->prepare("
+    $stmt = $this->database->prepare("
       SELECT height
       FROM " . $this->block->getTableName() . "
       WHERE height > ?
@@ -29,7 +29,7 @@ class RoundStats extends Base {
    * Get prev block for round stats
    **/
   public function getPreviousBlock($iHeight=0) {
-    $stmt = $this->mysqli->prepare("
+    $stmt = $this->database->prepare("
       SELECT height
       FROM " . $this->block->getTableName() . "
       WHERE height < ?
@@ -44,7 +44,7 @@ class RoundStats extends Base {
    * search for block height
    **/
   public function searchForBlockHeight($iHeight=0) {
-    $stmt = $this->mysqli->prepare("
+    $stmt = $this->database->prepare("
        SELECT height 
        FROM " . $this->block->getTableName() . "
        WHERE height >= ?
@@ -59,7 +59,7 @@ class RoundStats extends Base {
    * get next block for stats paging
    **/
   public function getNextBlockForStats($iHeight=0, $limit=10) {
-    $stmt = $this->mysqli->prepare("
+    $stmt = $this->database->prepare("
       SELECT MAX(x.height) AS height
       FROM (
         SELECT height FROM " . $this->block->getTableName() . "
@@ -77,7 +77,7 @@ class RoundStats extends Base {
    * @return data array Block information from DB
    **/
   public function getDetailsForBlockHeight($iHeight=0) {
-    $stmt = $this->mysqli->prepare("
+    $stmt = $this->database->prepare("
       SELECT 
       b.id, height, blockhash, amount, confirmations, difficulty, FROM_UNIXTIME(time) as time, shares,
       IF(a.is_anonymous, 'anonymous', a.username) AS finder,
@@ -97,7 +97,7 @@ class RoundStats extends Base {
    * @return data array Block information from DB
    **/
   public function getRoundStatsForAccounts($iHeight=0) {
-    $stmt = $this->mysqli->prepare("
+    $stmt = $this->database->prepare("
       SELECT
         a.id,
         a.username,
@@ -127,7 +127,7 @@ class RoundStats extends Base {
    * @return data array Block information from DB
    **/
   public function getPPLNSRoundStatsForAccounts($iHeight=0) {
-    $stmt = $this->mysqli->prepare("
+    $stmt = $this->database->prepare("
       SELECT
         a.username,
         a.is_anonymous,
@@ -149,7 +149,7 @@ class RoundStats extends Base {
    * Get total valid pplns shares for block height
    **/
   public function getPPLNSRoundShares($iHeight=0) {
-    $stmt = $this->mysqli->prepare("
+    $stmt = $this->database->prepare("
       SELECT
         SUM(s.pplns_valid) AS pplns_valid
         FROM " . $this->statistics->getTableName() . " AS s
@@ -168,7 +168,7 @@ class RoundStats extends Base {
    **/
   public function getAllRoundTransactions($iHeight=0) {
     $this->debug->append("STA " . __METHOD__, 4);
-    $stmt = $this->mysqli->prepare("
+    $stmt = $this->database->prepare("
       SELECT
       t.id AS id,
       a.id AS uid,
@@ -195,7 +195,7 @@ class RoundStats extends Base {
    **/
   public function getUserRoundTransactions($iHeight=0, $id=0) {
     $this->debug->append("STA " . __METHOD__, 4);
-    $stmt = $this->mysqli->prepare("
+    $stmt = $this->database->prepare("
       SELECT
       t.id AS id,
       a.username AS username,
@@ -216,7 +216,7 @@ class RoundStats extends Base {
    * Get ALL last blocks from height for admin panel
    **/
   public function getAllReportBlocksFoundHeight($iHeight=0, $limit=10) {
-    $stmt = $this->mysqli->prepare("
+    $stmt = $this->database->prepare("
       SELECT
         height, shares
       FROM " . $this->block->getTableName() . "
@@ -231,7 +231,7 @@ class RoundStats extends Base {
    * Get USER last blocks from height for admin panel
    **/
   public function getUserReportBlocksFoundHeight($iHeight=0, $limit=10, $iUser) {
-    $stmt = $this->mysqli->prepare("
+    $stmt = $this->database->prepare("
       SELECT
         b.height, b.shares
         FROM " . $this->block->getTableName() . " AS b
@@ -248,7 +248,7 @@ class RoundStats extends Base {
    * Get shares for block height for user admin panel
    **/
   public function getRoundStatsForUser($iHeight=0, $iUser) {
-    $stmt = $this->mysqli->prepare("
+    $stmt = $this->database->prepare("
       SELECT
         s.valid,
         s.invalid,
@@ -268,7 +268,7 @@ class RoundStats extends Base {
    **/
   public function getUserRoundTransHeight($iHeight=0, $iUser) {
     $this->debug->append("STA " . __METHOD__, 4);
-    $stmt = $this->mysqli->prepare("
+    $stmt = $this->database->prepare("
       SELECT
       IFNULL(t.amount, 0) AS amount
       FROM " . $this->transaction->getTableName() . " AS t
@@ -284,7 +284,7 @@ class RoundStats extends Base {
 
 $roundstats = new RoundStats();
 $roundstats->setDebug($debug);
-$roundstats->setMysql($mysqli);
+$roundstats->setDatabase($database);
 $roundstats->setConfig($config);
 $roundstats->setErrorCodes($aErrorCodes);
 $roundstats->setUser($user);

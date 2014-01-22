@@ -13,7 +13,7 @@ class Invitation extends Base {
    **/
   public function getInvitations($account_id) {
     $this->debug->append("STA " . __METHOD__, 4);
-    $stmt = $this->mysqli->prepare("SELECT * FROM $this->table WHERE account_id = ?");
+    $stmt = $this->database->prepare("SELECT * FROM $this->table WHERE account_id = ?");
     if ($stmt && $stmt->bind_param('i', $account_id) && $stmt->execute() && $result = $stmt->get_result())
       return $result->fetch_all(MYSQLI_ASSOC);
     $this->sqlError('E0021');
@@ -26,8 +26,8 @@ class Invitation extends Base {
    **/
   public function getCountInvitations($account_id) {
     $this->debug->append("STA " . __METHOD__, 4);
-    $stmt = $this->mysqli->prepare("SELECT count(id) AS total FROM $this->table WHERE account_id = ?");
-    if ($stmt && $stmt->bind_param('i', $account_id) && $stmt->execute() && $stmt->bind_result($total) && $stmt->fetch())
+    $stmt = $this->database->prepare("SELECT count(id) AS total FROM $this->table WHERE account_id = ?");
+    if ($stmt && $stmt->bind_param('i', $account_id) && $stmt->execute() && $stmt->bind_result(&$total) && $stmt->fetch())
       return $total;
     $this->sqlError('E0021');
   }
@@ -77,7 +77,7 @@ class Invitation extends Base {
    **/
   public function createInvitation($account_id, $email, $token_id) {
     $this->debug->append("STA " . __METHOD__, 4);
-    $stmt = $this->mysqli->prepare("INSERT INTO $this->table ( account_id, email, token_id ) VALUES ( ?, ?, ?)");
+    $stmt = $this->database->prepare("INSERT INTO $this->table ( account_id, email, token_id ) VALUES ( ?, ?, ?)");
     if ($stmt && $stmt->bind_param('isi', $account_id, $email, $token_id) && $stmt->execute())
       return true;
     $this->sqlError('E0022');
@@ -132,7 +132,7 @@ class Invitation extends Base {
 // Instantiate class
 $invitation = new invitation();
 $invitation->setDebug($debug);
-$invitation->setMysql($mysqli);
+$invitation->setDatabase($database);
 $invitation->setMail($mail);
 $invitation->setUser($user);
 $invitation->setToken($oToken);

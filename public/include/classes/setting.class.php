@@ -12,7 +12,7 @@ class Setting extends Base {
    * @return value string Value
    **/
   public function getValue($name) {
-    $stmt = $this->mysqli->prepare("SELECT value FROM $this->table WHERE name = ? LIMIT 1");
+    $stmt = $this->database->prepare("SELECT value FROM $this->table WHERE name = ? LIMIT 1");
     if ($this->checkStmt($stmt) && $stmt->bind_param('s', $name) && $stmt->execute() && $result = $stmt->get_result())
       if ($result->num_rows > 0)
         return $result->fetch_object()->value;
@@ -28,7 +28,7 @@ class Setting extends Base {
    * @return bool
    **/
   public function setValue($name, $value) {
-    $stmt = $this->mysqli->prepare("
+    $stmt = $this->database->prepare("
       INSERT INTO $this->table (name, value)
       VALUES (?, ?)
       ON DUPLICATE KEY UPDATE value = ?");
@@ -38,7 +38,7 @@ class Setting extends Base {
   }
 }
 
-$setting = new Setting($debug, $mysqli);
+$setting = new Setting($debug, $database);
 $setting->setDebug($debug);
-$setting->setMysql($mysqli);
+$setting->setDatabase($database);
 $setting->setErrorCodes($aErrorCodes);

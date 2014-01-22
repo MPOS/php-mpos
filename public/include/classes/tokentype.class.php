@@ -31,7 +31,7 @@ class Token_Type Extends Base {
    * @return array Tokens with expiration times set
    **/
   public function getAllExpirations() {
-    $stmt = $this->mysqli->prepare("SELECT * FROM $this->table WHERE expiration > 0");
+    $stmt = $this->database->prepare("SELECT * FROM $this->table WHERE expiration > 0");
     if ($this->checkStmt($stmt) && $stmt->execute() && $result = $stmt->get_result())
       return $result->fetch_all(MYSQLI_ASSOC);
     return $this->sqlError();
@@ -40,5 +40,5 @@ class Token_Type Extends Base {
 
 $tokentype = new Token_Type();
 $tokentype->setDebug($debug);
-$tokentype->setMysql($mysqli);
+$tokentype->setDatabase($database);
 $tokentype->setErrorCodes($aErrorCodes);

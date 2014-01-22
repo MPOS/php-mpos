@@ -54,7 +54,7 @@ class Template extends Base {
    */
   public function getActiveTemplates() {
     $this->debug->append("STA " . __METHOD__, 4);
-    $stmt = $this->mysqli->prepare("SELECT template, modified_at FROM $this->table WHERE active = 1");
+    $stmt = $this->database->prepare("SELECT template, modified_at FROM $this->table WHERE active = 1");
     if ($stmt && $stmt->execute() && $result = $stmt->get_result()) {
       $rows = $result->fetch_all(MYSQLI_ASSOC);
       $hash = array();
@@ -65,7 +65,7 @@ class Template extends Base {
     }
 
     $this->setErrorMessage('Failed to get active templates');
-    $this->debug->append('Template::getActiveTemplates failed: ' . $this->mysqli->error);
+    $this->debug->append('Template::getActiveTemplates failed: ' . $this->database->error);
     return false;
   }
 
@@ -153,12 +153,12 @@ class Template extends Base {
   public function getEntry($template, $columns = "*") {
     $this->debug->append("STA " . __METHOD__, 4);
 
-    $stmt = $this->mysqli->prepare("SELECT $columns FROM $this->table WHERE template = ?");
+    $stmt = $this->database->prepare("SELECT $columns FROM $this->table WHERE template = ?");
     if ($stmt && $stmt->bind_param('s', $template) && $stmt->execute() && $result = $stmt->get_result())
       return $result->fetch_assoc();
 
     $this->setErrorMessage('Failed to get the template');
-    $this->debug->append('Template::getEntry failed: ' . $this->mysqli->error);
+    $this->debug->append('Template::getEntry failed: ' . $this->database->error);
     return false;
   }
 
@@ -187,16 +187,16 @@ class Template extends Base {
    **/
   public function updateEntry($template, $content, $active=0) {
     $this->debug->append("STA " . __METHOD__, 4);
-    $stmt = $this->mysqli->prepare("INSERT INTO $this->table (`template`, `content`, `active`, `modified_at`) VALUES(?, ?, ?, CURRENT_TIMESTAMP) ON DUPLICATE KEY UPDATE content = VALUES(content), active = VALUES(active), modified_at = CURRENT_TIMESTAMP");
+    $stmt = $this->database->prepare("INSERT INTO $this->table (`template`, `content`, `active`, `modified_at`) VALUES(?, ?, ?, CURRENT_TIMESTAMP) ON DUPLICATE KEY UPDATE content = VALUES(content), active = VALUES(active), modified_at = CURRENT_TIMESTAMP");
     if ($stmt && $stmt->bind_param('ssi', $template, $content, $active) && $stmt->execute())
       return true;
 
     $this->setErrorMessage('Database error');
-    $this->debug->append('Template::updateEntry failed: ' . $this->mysqli->error);
+    $this->debug->append('Template::updateEntry failed: ' . $this->database->error);
     return false;
   }
 }
 
 $template = new Template();
 $template->setDebug($debug);
-$template->setMysql($mysqli);
+$template->setDatabase($database);

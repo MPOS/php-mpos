@@ -68,7 +68,7 @@ class Monitoring extends Base {
    * @return value string Value
    **/
   public function getStatus($name) {
-    $query = $this->mysqli->prepare("SELECT * FROM $this->table WHERE name = ? LIMIT 1");
+    $query = $this->database->prepare("SELECT * FROM $this->table WHERE name = ? LIMIT 1");
     if ($query && $query->bind_param('s', $name) && $query->execute() && $result = $query->get_result()) {
       return $result->fetch_assoc();
     } else {
@@ -84,7 +84,7 @@ class Monitoring extends Base {
    * @return bool
    **/
   public function setStatus($name, $type, $value) {
-    $stmt = $this->mysqli->prepare("
+    $stmt = $this->database->prepare("
       INSERT INTO $this->table (name, type, value)
       VALUES (?, ?, ?)
       ON DUPLICATE KEY UPDATE value = ?
@@ -130,5 +130,5 @@ $monitoring->setErrorCodes($aErrorCodes);
 $monitoring->setConfig($config);
 $monitoring->setDebug($debug);
 $monitoring->setMail($mail);
-$monitoring->setMysql($mysqli);
+$monitoring->setDatabase($database);
 $monitoring->setSetting($setting);

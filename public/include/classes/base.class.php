@@ -22,8 +22,8 @@ class Base {
   public function setDebug($debug) {
     $this->debug = $debug;
   }
-  public function setMysql($mysqli) {
-    $this->mysqli = $mysqli;
+  public function setDatabase($database) {
+    $this->database = $database;
   }
   public function setMail($mail) {
     $this->mail = $mail;
@@ -128,7 +128,7 @@ class Base {
    **/
   public function getCount() {
     $this->debug->append("STA " . __METHOD__, 4);
-    $stmt = $this->mysqli->prepare("SELECT COUNT(id) AS count FROM $this->table");
+    $stmt = $this->database->prepare("SELECT COUNT(id) AS count FROM $this->table");
     if ($this->checkStmt($stmt) && $stmt->execute() && $result = $stmt->get_result())
       return $result->fetch_object()->count;
     return $this->sqlError();
@@ -141,7 +141,7 @@ class Base {
    **/
   public function getCountFiltered($column='id', $value=NULL, $type='i', $operator = '=') {
     $this->debug->append("STA " . __METHOD__, 4);
-    $stmt = $this->mysqli->prepare("SELECT COUNT(id) AS count FROM $this->table WHERE $column $operator ?");
+    $stmt = $this->database->prepare("SELECT COUNT(id) AS count FROM $this->table WHERE $column $operator ?");
     if ($this->checkStmt($stmt) && $stmt->bind_param($type, $value) && $stmt->execute() && $result = $stmt->get_result())
       return $result->fetch_object()->count;
     return $this->sqlError();
@@ -155,7 +155,7 @@ class Base {
    **/
   public function getAllAssoc() {
     $this->debug->append("STA " . __METHOD__, 4);
-    $stmt = $this->mysqli->prepare("SELECT * FROM $this->table");
+    $stmt = $this->database->prepare("SELECT * FROM $this->table");
     if ($this->checkStmt($stmt) && $stmt->execute() && $result = $stmt->get_result())
       return $result->fetch_all(MYSQLI_ASSOC);
     return $this->sqlError();
@@ -170,7 +170,7 @@ class Base {
    **/
   protected function getSingleAssoc($value, $field='id', $type='i') {
     $this->debug->append("STA " . __METHOD__, 4);
-    $stmt = $this->mysqli->prepare("SELECT * FROM $this->table WHERE $field = ? LIMIT 1");
+    $stmt = $this->database->prepare("SELECT * FROM $this->table WHERE $field = ? LIMIT 1");
     if ($this->checkStmt($stmt) && $stmt->bind_param($type, $value) && $stmt->execute() && $result = $stmt->get_result())
       return $result->fetch_assoc();
     return false;
@@ -190,11 +190,11 @@ class Base {
     $sql = "SELECT $search FROM $this->table WHERE";
     $lower ? $sql .= " LOWER($field) = LOWER(?)" : $sql .= " $field = ?";
     $sql .= " LIMIT 1";
-    $stmt = $this->mysqli->prepare($sql);
+    $stmt = $this->database->prepare($sql);
     if ($this->checkStmt($stmt)) {
       $stmt->bind_param($type, $value);
       $stmt->execute();
-      $stmt->bind_result($retval);
+      $stmt->bind_result(&$retval);
       $stmt->fetch();
       $stmt->close();
       return $retval;
@@ -226,8 +226,8 @@ class Base {
       $this->setErrorMessage(call_user_func_array(array($this, 'getErrorMsg'), func_get_args()));
     }
     // Default to SQL error for debug and cron errors
-    $this->debug->append($this->getErrorMsg('E0019', $this->mysqli->error));
-    $this->setCronMessage($this->getErrorMsg('E0019', $this->mysqli->error));
+    $this->debug->append($this->getErrorMsg('E0019', $this->database->errorInfo()));
+    $this->setCronMessage($this->getErrorMsg('E0019', $this->database->errorInfo()));
     return false;
   }
 
@@ -240,7 +240,7 @@ class Base {
   protected function updateSingle($id, $field, $table='') {
     if (empty($table)) $table = $this->table;
     $this->debug->append("STA " . __METHOD__, 4);
-    $stmt = $this->mysqli->prepare("UPDATE $table SET " . $field['name'] . " = ? WHERE id = ? LIMIT 1");
+    $stmt = $this->database->prepare("UPDATE $table SET " . $field['name'] . " = ? WHERE id = ? LIMIT 1");
     if ($this->checkStmt($stmt) && $stmt->bind_param($field['type'].'i', $field['value'], $id) && $stmt->execute())
       return true;
     $this->debug->append("Unable to update " . $field['name'] . " with " . $field['value'] . " for ID $id");
@@ -259,7 +259,7 @@ class Base {
     // Clear the data
     $this->values = NULL;
     $this->types = NULL;
-    // See here why we need this: http://stackoverflow.com/questions/16120822/mysqli-bind-param-expected-to-be-a-reference-value-given
+    // See here why we need this: http://stackoverflow.com/questions/16120822/database-bind-param-expected-to-be-a-reference-value-given
     if (strnatcmp(phpversion(),'5.3') >= 0) {
       $refs = array();
       foreach($array as $key => $value)

@@ -25,7 +25,7 @@ class Token Extends Base {
       $this->setErrorMessage('Invalid token type: ' . $strType);
       return false;
     }
-    $stmt = $this->mysqli->prepare("SELECT * FROM $this->table WHERE token = ? LIMIT 1");
+    $stmt = $this->database->prepare("SELECT * FROM $this->table WHERE token = ? LIMIT 1");
     if ($stmt && $stmt->bind_param('s', $strToken) && $stmt->execute() && $result = $stmt->get_result())
       return $result->fetch_assoc();
     return $this->sqlError();
@@ -50,10 +50,10 @@ class Token Extends Base {
     $now = time();
     if ($checktime >= $now && $checkTimeExplicitly || !$checkTimeExplicitly) {
       if ($checkTimeExplicitly) {
-        $stmt = $this->mysqli->prepare("SELECT * FROM $this->table WHERE account_id = ? AND token = ? AND type = ? AND ? >= UNIX_TIMESTAMP() LIMIT 1");
+        $stmt = $this->database->prepare("SELECT * FROM $this->table WHERE account_id = ? AND token = ? AND type = ? AND ? >= UNIX_TIMESTAMP() LIMIT 1");
         $stmt->bind_param('isii', $account_id, $token, $type, $checktime);
       } else {
-        $stmt = $this->mysqli->prepare("SELECT * FROM $this->table WHERE account_id = ? AND token = ? AND type = ? LIMIT 1");
+        $stmt = $this->database->prepare("SELECT * FROM $this->table WHERE account_id = ? AND token = ? AND type = ? LIMIT 1");
         $stmt->bind_param('isi', $account_id, $token, $type);
       }
       if ($stmt->execute())
@@ -77,7 +77,7 @@ class Token Extends Base {
       $this->setErrorMessage('Invalid token type: ' . $strType);
       return false;
     }
-    $stmt = $this->mysqli->prepare("SELECT * FROM $this->table WHERE account_id = ? AND type = ? LIMIT 1");
+    $stmt = $this->database->prepare("SELECT * FROM $this->table WHERE account_id = ? AND type = ? LIMIT 1");
     if ($stmt && $stmt->bind_param('ii', $account_id, $iToken_id) && $stmt->execute())
       return $stmt->get_result()->num_rows;
     return $this->sqlError();
@@ -95,7 +95,7 @@ class Token Extends Base {
       return false;
     }
     $strToken = bin2hex(openssl_random_pseudo_bytes(32));
-    $stmt = $this->mysqli->prepare("
+    $stmt = $this->database->prepare("
       INSERT INTO $this->table (token, type, account_id)
       VALUES (?, ?, ?)
       ");
@@ -110,7 +110,7 @@ class Token Extends Base {
    * @return bool
    **/
   public function deleteToken($token) {
-    $stmt = $this->mysqli->prepare("DELETE FROM $this->table WHERE token = ? LIMIT 1");
+    $stmt = $this->database->prepare("DELETE FROM $this->table WHERE token = ? LIMIT 1");
     if ($stmt && $stmt->bind_param('s', $token) && $stmt->execute())
       return true;
     return $this->sqlError();
@@ -131,7 +131,7 @@ class Token Extends Base {
 
     $failed = $this->deleted = 0;
     foreach ($aTokenTypes as $aTokenType) {
-      $stmt = $this->mysqli->prepare("DELETE FROM $this->table WHERE (NOW() - time) > ? AND type = ?");
+      $stmt = $this->database->prepare("DELETE FROM $this->table WHERE (NOW() - time) > ? AND type = ?");
       if (! ($this->checkStmt($stmt) && $stmt->bind_param('ii', $aTokenType['expiration'], $aTokenType['id']) && $stmt->execute())) {
         $failed++;
       } else {
@@ -148,6 +148,6 @@ class Token Extends Base {
 
 $oToken = new Token();
 $oToken->setDebug($debug);
-$oToken->setMysql($mysqli);
+$oToken->setDatabase($database);
 $oToken->setTokenType($tokentype);
 $oToken->setErrorCodes($aErrorCodes);

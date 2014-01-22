@@ -12,7 +12,7 @@ class Block extends Base {
    * @return data array Array with database fields as keys
    **/
   public function getLast() {
-    $stmt = $this->mysqli->prepare("SELECT * FROM $this->table ORDER BY height DESC LIMIT 1");
+    $stmt = $this->database->prepare("SELECT * FROM $this->table ORDER BY height DESC LIMIT 1");
     if ($this->checkStmt($stmt) && $stmt->execute() && $result = $stmt->get_result())
       return $result->fetch_assoc();
     return $this->sqlError();
@@ -24,7 +24,7 @@ class Block extends Base {
    * @return data array Block information from DB
    **/
   public function getBlock($height) {
-    $stmt = $this->mysqli->prepare("SELECT * FROM $this->table WHERE height = ? LIMIT 1");
+    $stmt = $this->database->prepare("SELECT * FROM $this->table WHERE height = ? LIMIT 1");
     if ($this->checkStmt($stmt) && $stmt->bind_param('i', $height) && $stmt->execute() && $result = $stmt->get_result())
       return $result->fetch_assoc();
     return $this->sqlError();
@@ -36,7 +36,7 @@ class Block extends Base {
    * @return data array Block information from DB
    **/
   public function getBlockByShareId($share_id) {
-    $stmt = $this->mysqli->prepare("SELECT * FROM $this->table WHERE share_id = ? LIMIT 1");
+    $stmt = $this->database->prepare("SELECT * FROM $this->table WHERE share_id = ? LIMIT 1");
     if ($this->checkStmt($stmt) && $stmt->bind_param('i', $share_id) && $stmt->execute() && $result = $stmt->get_result())
       return $result->fetch_assoc();
     return $this->sqlError();
@@ -48,7 +48,7 @@ class Block extends Base {
    * @return data array Block information from DB
    **/
   public function getBlockById($id) {
-    $stmt = $this->mysqli->prepare("SELECT * FROM $this->table WHERE id = ? LIMIT 1");
+    $stmt = $this->database->prepare("SELECT * FROM $this->table WHERE id = ? LIMIT 1");
     if ($this->checkStmt($stmt) && $stmt->bind_param('i', $id) && $stmt->execute() && $result = $stmt->get_result())
       return $result->fetch_assoc();
     return $this->sqlError();
@@ -60,7 +60,7 @@ class Block extends Base {
    * @return int data Share ID
    **/
   public function getLastShareId() {
-    $stmt = $this->mysqli->prepare("SELECT MAX(share_id) AS share_id FROM $this->table LIMIT 1");
+    $stmt = $this->database->prepare("SELECT MAX(share_id) AS share_id FROM $this->table LIMIT 1");
     if ($this->checkStmt($stmt) && $stmt->execute() && $result = $stmt->get_result())
       return $result->fetch_object()->share_id;
     return $this->sqlError();
@@ -72,7 +72,7 @@ class Block extends Base {
    * @return data array Array with database fields as keys
    **/
   public function getAllUnsetShareId($order='ASC') {
-    $stmt = $this->mysqli->prepare("SELECT * FROM $this->table WHERE ISNULL(share_id) ORDER BY height $order");
+    $stmt = $this->database->prepare("SELECT * FROM $this->table WHERE ISNULL(share_id) ORDER BY height $order");
     if ($this->checkStmt($stmt) && $stmt->execute() && $result = $stmt->get_result())
       return $result->fetch_all(MYSQLI_ASSOC);
     return $this->sqlError(); 
@@ -84,7 +84,7 @@ class Block extends Base {
    * @return data array Array with database fields as keys
    **/
   public function getAllUnaccounted($order='ASC') {
-    $stmt = $this->mysqli->prepare("SELECT * FROM $this->table WHERE accounted = 0 ORDER BY height $order");
+    $stmt = $this->database->prepare("SELECT * FROM $this->table WHERE accounted = 0 ORDER BY height $order");
     if ($this->checkStmt($stmt) && $stmt->execute() && $result = $stmt->get_result())
       return $result->fetch_all(MYSQLI_ASSOC);
     return $this->sqlError();
@@ -96,7 +96,7 @@ class Block extends Base {
    * @return data int Count of rows
    **/
   public function getBlockCount() {
-    $stmt = $this->mysqli->prepare("SELECT COUNT(id) AS blocks FROM $this->table");
+    $stmt = $this->database->prepare("SELECT COUNT(id) AS blocks FROM $this->table");
     if ($this->checkStmt($stmt) && $stmt->execute() && $result = $stmt->get_result())
       return (int)$result->fetch_object()->blocks;
     return $this->sqlError();
@@ -108,7 +108,7 @@ class Block extends Base {
    * @return data float Float value of average shares
    **/
   public function getAvgBlockShares($height, $limit=1) {
-    $stmt = $this->mysqli->prepare("SELECT AVG(x.shares) AS average FROM (SELECT shares FROM $this->table WHERE height <= ? ORDER BY height DESC LIMIT ?) AS x");
+    $stmt = $this->database->prepare("SELECT AVG(x.shares) AS average FROM (SELECT shares FROM $this->table WHERE height <= ? ORDER BY height DESC LIMIT ?) AS x");
     if ($this->checkStmt($stmt) && $stmt->bind_param('ii', $height, $limit) && $stmt->execute() && $result = $stmt->get_result())
       return (float)$result->fetch_object()->average;
     return $this->sqlError();
@@ -120,7 +120,7 @@ class Block extends Base {
    * @return data float Float value of average shares
    **/
   public function getAvgBlockReward($limit=1) {
-    $stmt = $this->mysqli->prepare("SELECT AVG(x.amount) AS average FROM (SELECT amount FROM $this->table ORDER BY height DESC LIMIT ?) AS x");
+    $stmt = $this->database->prepare("SELECT AVG(x.amount) AS average FROM (SELECT amount FROM $this->table ORDER BY height DESC LIMIT ?) AS x");
     if ($this->checkStmt($stmt) && $stmt->bind_param('i', $limit) && $stmt->execute() && $result = $stmt->get_result())
       return (float)$result->fetch_object()->average;
     return $this->sqlError();
@@ -132,7 +132,7 @@ class Block extends Base {
    * @return data array Array with database fields as keys
    **/
   public function getAllUnconfirmed($confirmations=120) {
-    $stmt = $this->mysqli->prepare("SELECT * FROM $this->table WHERE confirmations < ? AND confirmations > -1");
+    $stmt = $this->database->prepare("SELECT * FROM $this->table WHERE confirmations < ? AND confirmations > -1");
     if ($this->checkStmt($stmt) && $stmt->bind_param("i", $confirmations) && $stmt->execute() && $result = $stmt->get_result())
       return $result->fetch_all(MYSQLI_ASSOC);
     return $this->sqlError();
@@ -145,7 +145,7 @@ class Block extends Base {
    * @return bool
    **/
   public function setConfirmations($block_id, $confirmations) {
-    $stmt = $this->mysqli->prepare("UPDATE $this->table SET confirmations = ? WHERE id = ? LIMIT 1");
+    $stmt = $this->database->prepare("UPDATE $this->table SET confirmations = ? WHERE id = ? LIMIT 1");
     if ($this->checkStmt($stmt) && $stmt->bind_param("ii", $confirmations, $block_id) && $stmt->execute())
       return true;
     return $this->sqlError();
@@ -157,7 +157,7 @@ class Block extends Base {
    * @return data array Array with database fields as keys
    **/
   public function getAll($order='DESC') {
-    $stmt = $this->mysqli->prepare("SELECT * FROM $this->table ORDER BY height $order");
+    $stmt = $this->database->prepare("SELECT * FROM $this->table ORDER BY height $order");
     if ($this->checkStmt($stmt) && $stmt->execute() && $result = $stmt->get_result())
       return $result->fetch_all(MYSQLI_ASSOC);
     return $this->sqlError();
@@ -169,7 +169,7 @@ class Block extends Base {
    * @return bool
    **/
   public function addBlock($block) {
-    $stmt = $this->mysqli->prepare("INSERT INTO $this->table (height, blockhash, confirmations, amount, difficulty, time) VALUES (?, ?, ?, ?, ?, ?)");
+    $stmt = $this->database->prepare("INSERT INTO $this->table (height, blockhash, confirmations, amount, difficulty, time) VALUES (?, ?, ?, ?, ?, ?)");
     if ($this->checkStmt($stmt) && $stmt->bind_param('isiddi', $block['height'], $block['blockhash'], $block['confirmations'], $block['amount'], $block['difficulty'], $block['time']) && $stmt->execute())
       return true;
     return $this->sqlError();
@@ -181,8 +181,8 @@ class Block extends Base {
    * @return mixed upstream ID or 0, false on error
    **/
   public function getLastUpstreamId() {
-    $stmt = $this->mysqli->prepare("SELECT MAX(share_id) AS share_id FROM $this->table");
-    if ($this->checkStmt($stmt) && $stmt->execute() && $stmt->bind_result($share_id) && $stmt->fetch())
+    $stmt = $this->database->prepare("SELECT MAX(share_id) AS share_id FROM $this->table");
+    if ($this->checkStmt($stmt) && $stmt->execute() && $stmt->bind_result(&$share_id) && $stmt->fetch())
       return $share_id ? $share_id : 0;
     return $this->sqlError();
   }
@@ -246,6 +246,6 @@ class Block extends Base {
 // Automatically load our class for furhter usage
 $block = new Block();
 $block->setDebug($debug);
-$block->setMysql($mysqli);
+$block->setDatabase($database);
 $block->setConfig($config);
 $block->setErrorCodes($aErrorCodes);

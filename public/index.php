@@ -22,7 +22,7 @@ limitations under the License.
 $dStartTime = microtime(true);
 
 // This should be okay
-define("BASEPATH", "./");
+define("BASEPATH", dirname(__FILE__) . "/");
 
 // Our security check
 define("SECURITY", 1);

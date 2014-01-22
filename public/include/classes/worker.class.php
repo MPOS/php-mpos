@@ -31,7 +31,7 @@ class Worker extends Base {
       }
       // Prefix the WebUser to Worker name
       $value['username'] = "$username." . $value['username'];
-      $stmt = $this->mysqli->prepare("UPDATE $this->table SET password = ?, username = ?, monitor = ? WHERE account_id = ? AND id = ? LIMIT 1");
+      $stmt = $this->database->prepare("UPDATE $this->table SET password = ?, username = ?, monitor = ? WHERE account_id = ? AND id = ? LIMIT 1");
       if ( ! ( $this->checkStmt($stmt) && $stmt->bind_param('ssiii', $value['password'], $value['username'], $value['monitor'], $account_id, $key) && $stmt->execute()) )
         $iFailed++;
       }
@@ -48,7 +48,7 @@ class Worker extends Base {
    **/
   public function getAllIdleWorkers($interval=600) {
     $this->debug->append("STA " . __METHOD__, 4);
-    $stmt = $this->mysqli->prepare("
+    $stmt = $this->database->prepare("
       SELECT w.account_id AS account_id, w.id AS id, w.username AS username
       FROM " . $this->share->getTableName() . " AS s
       RIGHT JOIN " . $this->getTableName() . " AS w
@@ -70,7 +70,7 @@ class Worker extends Base {
    **/
   public function getWorker($id, $interval=600) {
     $this->debug->append("STA " . __METHOD__, 4);
-    $stmt = $this->mysqli->prepare("
+    $stmt = $this->database->prepare("
        SELECT id, username, password, monitor,
        ( SELECT COUNT(id) FROM " . $this->share->getTableName() . " WHERE username = w.username AND time > DATE_SUB(now(), INTERVAL ? SECOND)) AS count_all,
        ( SELECT COUNT(id) FROM " . $this->share->getArchiveTableName() . " WHERE username = w.username AND time > DATE_SUB(now(), INTERVAL ? SECOND)) AS count_all_archive,
@@ -113,7 +113,7 @@ class Worker extends Base {
    **/
   public function getWorkers($account_id, $interval=600) {
     $this->debug->append("STA " . __METHOD__, 4);
-    $stmt = $this->mysqli->prepare("
+    $stmt = $this->database->prepare("
       SELECT id, username, password, monitor,
        ( SELECT COUNT(id) FROM " . $this->share->getTableName() . " WHERE username = w.username AND time > DATE_SUB(now(), INTERVAL ? SECOND)) AS count_all,
        ( SELECT COUNT(id) FROM " . $this->share->getArchiveTableName() . " WHERE username = w.username AND time > DATE_SUB(now(), INTERVAL ? SECOND)) AS count_all_archive,
@@ -155,7 +155,7 @@ class Worker extends Base {
    **/
   public function getAllWorkers($iLimit=0, $interval=600, $start=0) {
     $this->debug->append("STA " . __METHOD__, 4);
-    $stmt = $this->mysqli->prepare("
+    $stmt = $this->database->prepare("
       SELECT id, username, password, monitor,
       IFNULL(IF(difficulty=0, pow(2, (" . $this->config['difficulty'] . " - 16)), difficulty), 0) AS difficulty,
        (
@@ -205,7 +205,7 @@ class Worker extends Base {
   public function getCountAllActiveWorkers($interval=120) {
     $this->debug->append("STA " . __METHOD__, 4);
     if ($data = $this->memcache->get(__FUNCTION__)) return $data;
-    $stmt = $this->mysqli->prepare("
+    $stmt = $this->database->prepare("
       SELECT COUNT(DISTINCT(username)) AS total
       FROM "  . $this->share->getTableName() . "
       WHERE our_result = 'Y'
@@ -240,7 +240,7 @@ class Worker extends Base {
       $this->setErrorMessage($this->getErrorMsg('E0073'));
       return false;
     }
-    $stmt = $this->mysqli->prepare("INSERT INTO $this->table (account_id, username, password) VALUES(?, ?, ?)");
+    $stmt = $this->database->prepare("INSERT INTO $this->table (account_id, username, password) VALUES(?, ?, ?)");
     if ($this->checkStmt($stmt) && $stmt->bind_param('iss', $account_id, $workerName, $workerPassword)) {
       if (!$stmt->execute()) {
         if ($stmt->sqlstate == '23000') return $this->sqlError('E0059');
@@ -259,7 +259,7 @@ class Worker extends Base {
    **/
   public function deleteWorker($account_id, $id) {
     $this->debug->append("STA " . __METHOD__, 4);
-    $stmt = $this->mysqli->prepare("DELETE FROM $this->table WHERE account_id = ? AND id = ? LIMIT 1");
+    $stmt = $this->database->prepare("DELETE FROM $this->table WHERE account_id = ? AND id = ? LIMIT 1");
     if ($this->checkStmt($stmt) && $stmt->bind_param('ii', $account_id, $id) && $stmt->execute() && $stmt->affected_rows == 1)
         return true;
     return $this->sqlError('E0061');
@@ -268,7 +268,7 @@ class Worker extends Base {
 
 $worker = new Worker();
 $worker->setDebug($debug);
-$worker->setMysql($mysqli);
+$worker->setDatabase($database);
 $worker->setMemcache($memcache);
 $worker->setShare($share);
 $worker->setConfig($config);

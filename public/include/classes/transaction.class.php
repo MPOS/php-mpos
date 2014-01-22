@@ -19,7 +19,7 @@ class Transaction extends Base {
    * @return bool
    **/
   public function addTransaction($account_id, $amount, $type='Credit', $block_id=NULL, $coin_address=NULL, $txid=NULL) {
-    $stmt = $this->mysqli->prepare("INSERT INTO $this->table (account_id, amount, block_id, type, coin_address, txid) VALUES (?, ?, ?, ?, ?, ?)");
+    $stmt = $this->database->prepare("INSERT INTO $this->table (account_id, amount, block_id, type, coin_address, txid) VALUES (?, ?, ?, ?, ?, ?)");
     if ($this->checkStmt($stmt) && $stmt->bind_param("idisss", $account_id, $amount, $block_id, $type, $coin_address, $txid) && $stmt->execute()) {
       $this->insert_id = $stmt->insert_id;
       return true;
@@ -35,7 +35,7 @@ class Transaction extends Base {
    **/
   public function setArchived($account_id, $txid) {
     // Update all paid out transactions as archived
-    $stmt = $this->mysqli->prepare("
+    $stmt = $this->database->prepare("
       UPDATE $this->table AS t
       LEFT JOIN " . $this->block->getTableName() . " AS b
       ON b.id = t.block_id
@@ -69,7 +69,7 @@ class Transaction extends Base {
       $this->addParam('i', $account_id);
     }
     $sql .= " GROUP BY t.type";
-    $stmt = $this->mysqli->prepare($sql);
+    $stmt = $this->database->prepare($sql);
     if (!empty($account_id)) {
       if (!($this->checkStmt($stmt) && call_user_func_array( array($stmt, 'bind_param'), $this->getParam()) && $stmt->execute()))
         return false;
@@ -163,7 +163,7 @@ class Transaction extends Base {
     // Add some other params to query
     $this->addParam('i', $start);
     $this->addParam('i', $limit);
-    $stmt = $this->mysqli->prepare($sql);
+    $stmt = $this->database->prepare($sql);
     if ($this->checkStmt($stmt) && call_user_func_array( array($stmt, 'bind_param'), $this->getParam()) && $stmt->execute() && $result = $stmt->get_result())
       return $result->fetch_all(MYSQLI_ASSOC);
     return $this->sqlError();
@@ -174,7 +174,7 @@ class Transaction extends Base {
    * @return mixed array/bool Return types on succes, false on failure
    **/
   public function getTypes() {
-    $stmt = $this->mysqli->prepare("SELECT DISTINCT type FROM $this->table");
+    $stmt = $this->database->prepare("SELECT DISTINCT type FROM $this->table");
     if ($this->checkStmt($stmt) && $stmt->execute() && $result = $stmt->get_result()) {
       $aData = array('' => '');
       while ($row = $result->fetch_assoc()) {
@@ -192,7 +192,7 @@ class Transaction extends Base {
    **/
   public function getDonations() {
     $this->debug->append("STA " . __METHOD__, 4);
-    $stmt = $this->mysqli->prepare("
+    $stmt = $this->database->prepare("
       SELECT
         SUM(t.amount) AS donation,
         a.username AS username,
@@ -224,7 +224,7 @@ class Transaction extends Base {
    **/
   public function getLockedBalance() {
     $this->debug->append("STA " . __METHOD__, 4);
-    $stmt = $this->mysqli->prepare("
+    $stmt = $this->database->prepare("
       SELECT
         ROUND((
           SUM( IF( ( t.type IN ('Credit','Bonus') AND b.confirmations >= ? ) OR t.type = 'Credit_PPS', t.amount, 0 ) ) -
@@ -235,7 +235,7 @@ class Transaction extends Base {
       LEFT JOIN " . $this->block->getTableName() . " AS b
       ON t.block_id = b.id
       WHERE archived = 0");
-    if ($this->checkStmt($stmt) && $stmt->bind_param('ii', $this->config['confirmations'], $this->config['confirmations']) && $stmt->execute() && $stmt->bind_result($dBalance) && $stmt->fetch())
+    if ($this->checkStmt($stmt) && $stmt->bind_param('ii', $this->config['confirmations'], $this->config['confirmations']) && $stmt->execute() && $stmt->bind_result(&$dBalance) && $stmt->fetch())
       return $dBalance;
     return $this->sqlError();
   }
@@ -247,7 +247,7 @@ class Transaction extends Base {
    **/
   public function getBalance($account_id) {
     $this->debug->append("STA " . __METHOD__, 4);
-    $stmt = $this->mysqli->prepare("
+    $stmt = $this->database->prepare("
       SELECT
         IFNULL(ROUND((
           SUM( IF( ( t.type IN ('Credit','Bonus') AND b.confirmations >= ? ) OR t.type = 'Credit_PPS', t.amount, 0 ) ) -
@@ -280,7 +280,7 @@ class Transaction extends Base {
    **/
   public function getAPQueue() {
     $this->debug->append("STA " . __METHOD__, 4);
-    $stmt = $this->mysqli->prepare("
+    $stmt = $this->database->prepare("
       SELECT
         a.id,
         a.username,
@@ -313,7 +313,7 @@ class Transaction extends Base {
 $transaction = new Transaction();
 $transaction->setMemcache($memcache);
 $transaction->setDebug($debug);
-$transaction->setMysql($mysqli);
+$transaction->setDatabase($database);
 $transaction->setConfig($config);
 $transaction->setBlock($block);
 $transaction->setUser($user);
