@@ -31,11 +31,11 @@ class DatabaseStatement extends PDOStatement {
     }
  
     function bind_result() {
-        $args = func_get_args();
-        $i=0;
-        foreach ($args as $arg) { 
-            $this->bindColumn($i+1, $arg);
-            $i++;
+        $stack = debug_backtrace(); // Hacky stuff since func_get_args doesnt return byref, but byval.
+        if (!isset($stack[0]['args'])) return false;
+
+        for($i=0; $i >= count($stack[0]['args']); $i++) {
+            $this->bindColumn($i+1, &$stack[0]['args'][$i]);
         }
         return true;
     }

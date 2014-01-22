@@ -194,7 +194,7 @@ class User extends Base {
     $this->debug->append("Confirming PIN for $userId and pin $pin", 2);
     $stmt = $this->database->prepare("SELECT pin FROM $this->table WHERE id=? AND pin=? LIMIT 1");
     $pin_hash = $this->getHash($pin);
-    if ($stmt->bind_param('is', $userId, $pin_hash) && $stmt->execute() && $stmt->bind_result($row_pin) && $stmt->fetch()) {
+    if ($stmt->bind_param('is', $userId, $pin_hash) && $stmt->execute() && $stmt->bind_result(&$row_pin) && $stmt->fetch()) {
       $this->setUserPinFailed($userId, 0);
       return $pin_hash === $row_pin;
     }
@@ -454,7 +454,7 @@ class User extends Base {
   public function checkApiKey($key) {
     $this->debug->append("STA " . __METHOD__, 4);
     $stmt = $this->database->prepare("SELECT api_key, id FROM $this->table WHERE api_key = ? LIMIT 1");
-    if ($this->checkStmt($stmt) && $stmt->bind_param("s", $key) && $stmt->execute() && $stmt->bind_result($api_key, $id) && $stmt->fetch()) {
+    if ($this->checkStmt($stmt) && $stmt->bind_param("s", $key) && $stmt->execute() && $stmt->bind_result(&$api_key, &$id) && $stmt->fetch()) {
       if ($api_key === $key)
         return $id;
     }
@@ -473,7 +473,7 @@ class User extends Base {
     $user = array();
     $password_hash = $this->getHash($password);
     $stmt = $this->database->prepare("SELECT username, id, is_admin FROM $this->table WHERE LOWER(username) = LOWER(?) AND pass = ? LIMIT 1");
-    if ($this->checkStmt($stmt) && $stmt->bind_param('ss', $username, $password_hash) && $stmt->execute() && $stmt->bind_result($row_username, $row_id, $row_admin)) {
+    if ($this->checkStmt($stmt) && $stmt->bind_param('ss', $username, $password_hash) && $stmt->execute() && $stmt->bind_result(&$row_username, &$row_id, &$row_admin)) {
       $stmt->fetch();
       $stmt->close();
       // Store the basic login information

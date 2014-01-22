@@ -27,7 +27,7 @@ class Invitation extends Base {
   public function getCountInvitations($account_id) {
     $this->debug->append("STA " . __METHOD__, 4);
     $stmt = $this->database->prepare("SELECT count(id) AS total FROM $this->table WHERE account_id = ?");
-    if ($stmt && $stmt->bind_param('i', $account_id) && $stmt->execute() && $stmt->bind_result($total) && $stmt->fetch())
+    if ($stmt && $stmt->bind_param('i', $account_id) && $stmt->execute() && $stmt->bind_result(&$total) && $stmt->fetch())
       return $total;
     $this->sqlError('E0021');
   }

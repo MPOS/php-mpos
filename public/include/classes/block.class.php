@@ -182,7 +182,7 @@ class Block extends Base {
    **/
   public function getLastUpstreamId() {
     $stmt = $this->database->prepare("SELECT MAX(share_id) AS share_id FROM $this->table");
-    if ($this->checkStmt($stmt) && $stmt->execute() && $stmt->bind_result($share_id) && $stmt->fetch())
+    if ($this->checkStmt($stmt) && $stmt->execute() && $stmt->bind_result(&$share_id) && $stmt->fetch())
       return $share_id ? $share_id : 0;
     return $this->sqlError();
   }

@@ -235,7 +235,7 @@ class Transaction extends Base {
       LEFT JOIN " . $this->block->getTableName() . " AS b
       ON t.block_id = b.id
       WHERE archived = 0");
-    if ($this->checkStmt($stmt) && $stmt->bind_param('ii', $this->config['confirmations'], $this->config['confirmations']) && $stmt->execute() && $stmt->bind_result($dBalance) && $stmt->fetch())
+    if ($this->checkStmt($stmt) && $stmt->bind_param('ii', $this->config['confirmations'], $this->config['confirmations']) && $stmt->execute() && $stmt->bind_result(&$dBalance) && $stmt->fetch())
       return $dBalance;
     return $this->sqlError();
   }

@@ -194,7 +194,7 @@ class Base {
     if ($this->checkStmt($stmt)) {
       $stmt->bind_param($type, $value);
       $stmt->execute();
-      $stmt->bind_result($retval);
+      $stmt->bind_result(&$retval);
       $stmt->fetch();
       $stmt->close();
       return $retval;
