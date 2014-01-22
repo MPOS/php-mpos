@@ -58,7 +58,7 @@
 </article>
 {/if}
 {if $USER_GAUTH > 0}
-<article class="module width_half" {if $USER_GAUTH == 1}style="margin-top:-160px"{/if}>
+<article class="module width_half" {if $USER_GAUTH == 1}style="margin-top:-180px"{/if}>
   <header><h3>Reset {if $USER_GAUTH == 1}or Hide{/if} Secret</h3></header>
   <div class="module_content">
   <p><b style='color:red'>Resetting your secret <u>will log you out</u> and you will have to <u>reauthenticate yourself</u></b></p>
