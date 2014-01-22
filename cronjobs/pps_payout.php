@@ -170,7 +170,7 @@ if ($aAllBlocks = $block->getAllUnaccounted('ASC')) {
         if (!$statistics->updateShareStatistics($aData, $aBlock['id']))
             $log->logError("Failed to update statistics for Block " . $aBlock['id'] . "for" . $aData['username'] . ' ERROR: ' . $statistics->getCronError());
     }
-    $log->logInfo("\t\Statistics updated.");
+    $log->logInfo("\tUser Statistics updated.");
   
     // Move shares to archive
     $log->logInfo("\tBlock: " . $aBlock['id'] . "\t Move shares to archive...");

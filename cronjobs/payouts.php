@@ -36,6 +36,7 @@ if ($bitcoin->can_connect() !== true) {
 }
 if ($setting->getValue('disable_manual_payouts') != 1) {
     // Fetch outstanding payout requests
+	$log->logInfo("\tStarting Payments...");
     if ($aPayouts = $oPayout->getUnprocessedPayouts()) {
         if (count($aPayouts) > 0) {
             $log->logInfo("\tStarting Manual Payments...");
@@ -89,10 +90,10 @@ if ($setting->getValue('disable_manual_payouts') != 1) {
         } 
     }
     else if (empty($aPayouts)) {
-        $log->logInfo("\tNo new manual payout requests.");
+        $log->logInfo("\tStopping Payments. No Payout Requests Found.");
     }
 else {
-    $log->logFatal("\tFailed Processing Manual Payment Queue...");
+    $log->logFatal("\tFailed Processing Manual Payment Queue...Aborting...");
     $monitoring->endCronjob($cron_name, 'E0050', 1, true);
 }
 if (count($aPayouts > 0)) $log->logDebug(" found " . count($aPayouts) . " queued manual payout requests");
@@ -102,7 +103,7 @@ else {
 }
 if ($setting->getValue('disable_auto_payouts') != 1) {
     // Fetch all users balances
-    if (!$users = $transaction->getAPQueue()) {
+    if ($users = $transaction->getAPQueue()) {
         if (!empty($users)) {
             if (count($users) > 0) $log->logDebug(" found " . count($users) . " queued payout(s)");
             // Go through users and run transactions
@@ -148,7 +149,7 @@ if ($setting->getValue('disable_auto_payouts') != 1) {
         } 
     }
     else if(empty($users)) {
-        $log->logInfo("\tNo Auto payments eligible.");
+        $log->logInfo("\tSkipped payments. No auto payments eligible.");
         $log->logDebug("Users have not configured their AP > 0");
     }
     else{
