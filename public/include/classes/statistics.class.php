@@ -528,7 +528,7 @@ class Statistics extends Base {
           AND time > DATE_SUB(now(), INTERVAL ? SECOND)
           AND our_result = 'Y') AS temp");   
     $username = $username . ".%";
-    if ($this->checkStmt($stmt) && $stmt->bind_param("iiiii", $interval, $username, $interval, $username, $interval) && $stmt->execute() && $result = $stmt->get_result() )
+    if ($this->checkStmt($stmt) && $stmt->bind_param("isisi", $interval, $username, $interval, $username, $interval) && $stmt->execute() && $result = $stmt->get_result() )
       return $this->memcache->setCache(__FUNCTION__ . $account_id, $result->fetch_object()->hashrate);
     return $this->sqlError();
   }
