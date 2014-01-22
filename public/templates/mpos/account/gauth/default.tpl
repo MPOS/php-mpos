@@ -24,7 +24,6 @@
     <input type="hidden" name="action" value="{$smarty.request.action|escape}">
     <p>Require a Google Authenticator token when logging into your account.</p>
     <p><b style='color:red'>If you LOSE ACCESS to your Google Authenticator you will be <u>unable to login</u>{if $USER_GAUTH < 1}, and once enabled you <u>will have to reauthenticate via email to disable{/if}</u>!</b></p>
-    
     <fieldset>
       <label>Google Authenticator</label>
       <p style="padding-left:10px;display:block;margin-top:0px;">{if $USER_GAUTH}DISABLE Google Authenticator{else}REQUIRE Google Authenticator{/if}</p>
@@ -44,15 +43,15 @@
 </article>
 {if $USER_GAUTH == 1}
 <article class="module width_half">
-  <header><h3>Settings</h3></header>
+  <header><h3>Secret</h3></header>
   <div class="module_content">
-    <p>This is the code you'll need to scan, or put into your device to use your Google Authenticator:</p>
+    <p>This is the secret you'll need to scan, or enter into your device to use your Google Authenticator:</p>
     <pre>
     {$GAUTH_KEY}
     </pre>
     <div id="qrcodeholder_ga"></div>
     <pre style='color:red'>
-    DO NOT SHARE THIS QR CODE OR KEY WITH ANYONE
+    DO NOT SHARE THIS QR CODE OR SECRET WITH ANYONE
     THEY CAN BE USED TO GENERATE A TOKEN TO LOGIN TO YOUR ACCOUNT
     </pre>
   </div>
