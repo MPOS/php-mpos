@@ -148,7 +148,7 @@ if ($setting->getValue('disable_auto_payouts') != 1) {
         } 
     }
     else if(empty($users)) {
-        $log->logInfo("\tSkipping payments. No auto payments eligible.");
+        $log->logInfo("\tSkipping payments. No Auto Payments Eligible.");
         $log->logDebug("Users have not configured their AP > 0");
     }
     else{
