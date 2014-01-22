@@ -28,7 +28,7 @@ require_once('shared.inc.php');
 
 // Check if we are set as the payout system
 if ($config['payout_system'] != 'pps') {
-  $log->logInfo("Please activate this cron in configuration via payout_system = pps\n");
+  $log->logInfo("\tPlease activate this cron in configuration via payout_system = pps\n");
   exit(0);
 }
 $log->logInfo("Starting PPS Payout...");
@@ -51,50 +51,50 @@ if ( $bitcoin->can_connect() === true ){
 // We don't use the classes implementation just in case people start mucking around with it
 if ($config['pps']['reward']['type'] == 'blockavg' && $block->getBlockCount() > 0) {
   $pps_reward = round($block->getAvgBlockReward($config['pps']['blockavg']['blockcount']));
-  $log->logInfo("PPS reward using block average, amount: " . $pps_reward . "\tdifficulty: " . $dDifficulty);
+  $log->logInfo("\tPPS reward using block average, amount: " . $pps_reward . "\tdifficulty: " . $dDifficulty);
 } else {
   if ($config['pps']['reward']['type'] == 'block') {
      if ($aLastBlock = $block->getLast()) {
         $pps_reward = $aLastBlock['amount'];
-        $log->logInfo("PPS value (Last Block): " . $pps_reward);
+        $log->logInfo("\tPPS value (Last Block): " . $pps_reward);
      } else {
        $pps_reward = $config['pps']['reward']['default'];
-       $log->logInfo("PPS value (Default): " . $pps_reward);
+       $log->logInfo("\tPPS value (Default): " . $pps_reward);
      }
   } else {
      $pps_reward = $config['pps']['reward']['default'];
-     $log->logInfo("PPS value (Default): " . $pps_reward);
+     $log->logInfo("\tPPS value (Default): " . $pps_reward);
   }
 }
 
 // Per-share value to be paid out to users
 $pps_value = round($pps_reward / (pow(2, $config['target_bits']) * $dDifficulty), 12);
-$log->logInfo("PPS value: " . $pps_value);
+$log->logInfo("\tPPS value: " . $pps_value);
 
 // Find our last share accounted and last inserted share for PPS calculations
 
 if (!$iPreviousShareId = $setting->getValue('pps_last_share_id')) {
     $log->logError("Failed to fetch Previous Share ID. ERROR: " . $setting->getCronError());
 }
-$log->logInfo("PPS Last Share ID: " . $iPreviousShareId); 
+$log->logInfo("\tPPS Last Share ID: " . $iPreviousShareId); 
 
 if (!$iLastShareId = $share->getLastInsertedShareId()) {
     $log->logError("Failed to fetch Last Inserted PPS Share ID. ERROR: " . $share->getCronError());
 }
-$log->logInfo("PPS Last Processed Share ID: " . $iLastShareId);
+$log->logInfo("\tPPS Last Processed Share ID: " . $iLastShareId);
 
 // Check for all new shares, we start one higher as our last accounted share to avoid duplicates
-$log->logInfo("Query getSharesForAccounts... starting...");
+$log->logInfo("\tQuery getSharesForAccounts... starting...");
 if (!$aAccountShares = $share->getSharesForAccounts($iPreviousShareId + 1, $iLastShareId)) {
     $log->logError("Failed to fetch Account Shares. ERROR: " . $share->getCronError());
 }
-$log->logInfo("Query Completed...");
+$log->logInfo("\tQuery Completed...");
 
 if (!empty($aAccountShares)) {
   // Info for this payout
-  $log->logInfo("PPS reward type: " . $config['pps']['reward']['type'] . ", amount: " . $pps_reward . "\tdifficulty: " . $dDifficulty . "\tPPS value: " . $pps_value);
-  $log->logInfo("Running through accounts to process shares...");
-  $log->logInfo("ID\tUsername\tInvalid\tValid\t\tPPS Value\t\tPayout\t\tDonation\tFee");
+  $log->logInfo("\tPPS reward type: " . $config['pps']['reward']['type'] . ", amount: " . $pps_reward . "\tdifficulty: " . $dDifficulty . "\tPPS value: " . $pps_value);
+  $log->logInfo("\tRunning through accounts to process shares...");
+  $log->logInfo("\tID\tUsername\tInvalid\tValid\t\tPPS Value\t\tPayout\t\tDonation\tFee");
 }
 
 foreach ($aAccountShares as $aData) {
@@ -170,31 +170,31 @@ if ($aAllBlocks = $block->getAllUnaccounted('ASC')) {
         if (!$statistics->updateShareStatistics($aData, $aBlock['id']))
             $log->logError("Failed to update statistics for Block " . $aBlock['id'] . "for" . $aData['username'] . ' ERROR: ' . $statistics->getCronError());
     }
-    $log->logInfo("\Statistics updated.");
+    $log->logInfo("\t\Statistics updated.");
   
     // Move shares to archive
-    $log->logInfo("\t$aBlock['id']\t Move shares to archive...");
+    $log->logInfo("\tBlock: " . $aBlock['id'] . "\t Move shares to archive...");
     if ($aBlock['share_id'] < $iLastShareId) {
         if (!$share->moveArchive($aBlock['share_id'], $aBlock['id'], @$iLastBlockShare))
             $log->logError("Failed to copy shares to from " . $aBlock['share_id'] . " to " . $iLastBlockShare . ' Error: ' . $share->getCronError());
     }
-    $log->logInfo("\t$aBlock['id']\t Shares moved to archive...");
+    $log->logInfo("\tBlock: " . $aBlock['id'] . "\t Shares moved to archive...");
    
     // Delete shares
-    $log->logInfo("\t$aBlock['id']\t Deleting accounted shares...");
+    $log->logInfo("\tBlock: " . $aBlock['id'] . "\t Deleting accounted shares...");
     if ($aBlock['share_id'] < $iLastShareId && !$share->deleteAccountedShares($aBlock['share_id'], $iLastBlockShare)) {
         $log->logFatal("Failed to delete accounted shares from " . $aBlock['share_id'] . " to " . $iLastBlockShare . ", aborting! Error: " . $share->getCronError());
         $monitoring->endCronjob($cron_name, 'E0016', 1, true);
     }
-    $log->logInfo("\t$aBlock['id']\t Deleted accounted shares.");
+    $log->logInfo("\tBlock: " . $aBlock['id'] . "\t Deleted accounted shares.");
   
     // Mark this block as accounted for
-    $log->logInfo("\t$aBlock['id']\t Marking Block as accounted...");
+    $log->logInfo("\tBlock: " . $aBlock['id'] . "\t Marking Block as accounted...");
     if (!$block->setAccounted($aBlock['id'])) {
         $log->logFatal("Failed to mark block as accounted! Aborting! Error: " . $block->getCronError());
         $monitoring->endCronjob($cron_name, 'E0014', 1, true);
     }
-    $log->logInfo("\t$aBlock['id']\t Block paid and accounted for.");
+    $log->logInfo("\tBlock: " . $aBlock['id'] . "\t Block paid and accounted for.");
     }
 }
 else if (empty($aAllBlocks)) {
