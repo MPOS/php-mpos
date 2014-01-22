@@ -4,9 +4,9 @@
 if (!defined('SECURITY')) die('Hacking attempt');
 
 // csrf if enabled
-$csrfenabled = ($config['csrf']['enabled'] && !in_array('login', $config['csrf']['disabled_forms'])) ? 1 : 0;
+$csrfenabled = ($config['csrf']['enabled'] && !in_array('dgauth', $config['csrf']['disabled_forms'])) ? 1 : 0;
 if ($csrfenabled) {
-  $nocsrf = ($csrftoken->getBasic($user->getCurrentIP(), 'login') == @$_POST['ctoken']) ? 1 : 0;
+  $nocsrf = ($csrftoken->getBasic($user->getCurrentIP(), 'dgauth') == @$_POST['ctoken']) ? 1 : 0;
 }
 
 $oldtoken = (!isset($_GET['da_token']) || empty($_GET['da_token'])) ? @$_POST['da_token'] : @$_GET['da_token'];
@@ -72,8 +72,8 @@ if ($setting->getValue('maintenance') && !$user->isAdmin($user->getUserId($_POST
   }
 }
 // csrf token
-if ($csrfenabled && !in_array('gauth', $config['csrf']['disabled_forms'])) {
-  $token = $csrftoken->getBasic($user->getCurrentIP(), 'gauth');
+if ($csrfenabled && !in_array('dgauth', $config['csrf']['disabled_forms'])) {
+  $token = $csrftoken->getBasic($user->getCurrentIP(), 'dgauth');
   $smarty->assign('CTOKEN', $token);
 }
 if ($user->isAuthenticated(false)) {
