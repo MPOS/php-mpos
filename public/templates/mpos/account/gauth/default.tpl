@@ -23,7 +23,8 @@
     <input type="hidden" name="page" value="{$smarty.request.page|escape}">
     <input type="hidden" name="action" value="{$smarty.request.action|escape}">
     <p>Require a Google Authenticator token when logging into your account.</p>
-    <p><b style='color:red'>If you LOSE ACCESS to your Google Authenticator you will be <u>unable to login</u>, and once enabled you <u>will have to reauthenticate via email to disable</u>!</b></p>
+    <p><b style='color:red'>If you LOSE ACCESS to your Google Authenticator you will be <u>unable to login</u>{if $USER_GAUTH < 1}, and once enabled you <u>will have to reauthenticate via email to disable</u>{/if}!</b></p>
+    
     <fieldset>
       <label>Google Authenticator</label>
       <p style="padding-left:10px;display:block;margin-top:0px;">{if $USER_GAUTH}DISABLE Google Authenticator{else}REQUIRE Google Authenticator{/if}</p>
@@ -32,6 +33,7 @@
       <input type="checkbox" class="ios-switch" name="user_gauth" id="user_gauth" value="1" {nocache}{if $USER_GAUTH}checked{/if}{/nocache} />
       <div class="switch"></div>
     </fieldset>
+    {if $USER_GAUTH > 0}<p><b style='color:red'>REQUIRES E-MAIL CONFIRMATION TO DISABLE, YOU WILL BE LOGGED OUT</b></p>{/if}
   </div>
   <footer>
   <div class="submit_link">
@@ -57,7 +59,7 @@
 </article>
 {/if}
 {if $USER_GAUTH > 0}
-<article class="module width_half" {if $USER_GAUTH == 1}style="margin-top:-195px"{/if}>
+<article class="module width_half" {if $USER_GAUTH == 1}style="margin-top:-160px"{/if}>
   <header><h3>Reset {if $USER_GAUTH == 1}or Hide{/if} Secret</h3></header>
   <div class="module_content">
   <p><b style='color:red'>Resetting or Hiding your secret <u>will log you out</u> and you will have to <u>reauthenticate yourself</u></b></p>

@@ -9,7 +9,9 @@ if ($user->isAuthenticated()) {
     $nocsrf = ($csrftoken->getBasic($user->getCurrentIP(), 'gauth') == @$_POST['ctoken']) ? 1 : 0;
   }
   
-  if (isset($_POST['reset_secret'])) {
+  $setting_gauth = (isset($_POST['user_gauth']) && $_POST['user_gauth'] == 1) ? (int)$_POST['user_gauth'] : 0;
+  
+  if (isset($_POST['reset_secret']) || isset($_POST['update_gauth']) && @$_POST['user_gauth'] == 0) {
     // reset/log out
     // send an email token
     $user->sendChangeConfigEmail('disable_gauth', $_SESSION['USERDATA']['id']);
@@ -28,7 +30,6 @@ if ($user->isAuthenticated()) {
   }
   
   if (isset($_POST['user_gauth']) && isset($_POST['update_gauth'])) {
-    $setting_gauth = ($_POST['user_gauth'] == 1) ? (int)$_POST['user_gauth'] : 0;
     $email = $user->getUserEmail($_SESSION['USERDATA']['username']);
     $current_gauth = $user->getUserGAuthEnabledByEmail($email);
     
