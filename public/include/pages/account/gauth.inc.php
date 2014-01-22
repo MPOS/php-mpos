@@ -42,9 +42,13 @@ if ($user->isAuthenticated()) {
     if ($current_gauth == 0) {
       // hasn't been enabled before, generate their key
       $set_gauth_key = $GAuth->createSecret();
+      $gauth_key_exists = $user->getGAuthKeyExists($set_gauth_key);
       // this is stupid but we should be doing this - if key exists keep creating until we get one that doesn't
-      while (!empty($user->getGAuthKeyExists($set_gauth_key))) {
-        $set_gauth_key = $GAuth->createSecret();
+      if ($gauth_key_exists > 0) {
+        while ($gauth_key_exists > 0) {
+          $set_gauth_key = $GAuth->createSecret();
+          $gauth_key_exists = $user->getGAuthKeyExists($set_gauth_key);
+        }
       }
       $user->setGAuthKey($email, $set_gauth_key);
     }
