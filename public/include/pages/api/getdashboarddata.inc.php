@@ -22,7 +22,7 @@ $supress_master = 1;
 
 // Check user token and access level permissions
 $user_id = $api->checkAccess($user->checkApiKey($_REQUEST['api_key']), @$_REQUEST['id']);
-$username = $user->getUsername($user_id)
+$username = $user->getUsername($user_id);
 
 // Fetch RPC information
 if ($bitcoin->can_connect() === true) {
@@ -58,7 +58,7 @@ if ($config['payout_system'] != 'pps') {
   $aEstimates = $statistics->getUserEstimates($aRoundShares, $aUserRoundShares, $user->getUserDonatePercent($user_id), $user->getUserNoFee($user_id));
   $dUnpaidShares = 0;
 } else {
-  $dUnpaidShares = $statistics->getUserUnpaidPPSShares($username, $setting->getValue('pps_last_share_id'));
+  $dUnpaidShares = $statistics->getUserUnpaidPPSShares($username, $user_id, $setting->getValue('pps_last_share_id'));
   $aEstimates = $statistics->getUserEstimates($dPersonalSharerate, $dPersonalShareDifficulty, $user->getUserDonatePercent($user_id), $user->getUserNoFee($user_id), $statistics->getPPSValue());
 }
 

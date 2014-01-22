@@ -8,11 +8,11 @@ $api->isActive();
 
 // Check user token
 $user_id = $api->checkAccess($user->checkApiKey($_REQUEST['api_key']), @$_REQUEST['id']);
-$username = $user->getUsername($user_id)
+$username = $user->getUsername($user_id);
 
 // Output JSON format
 $data = array(
-  'mine' => $statistics->getHourlyHashrateByAccount($username,$user_id),
+  'mine' => $statistics->getHourlyHashrateByAccount($username, $user_id),
   'pool' => $statistics->getHourlyHashrateByPool()
 );
 

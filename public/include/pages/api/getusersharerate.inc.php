@@ -8,7 +8,7 @@ $api->isActive();
 
 // Check user token
 $user_id = $api->checkAccess($user->checkApiKey($_REQUEST['api_key']), @$_REQUEST['id']);
-$username = $user->getUsername($user_id)
+$username = $user->getUsername($user_id);
 
 // Fetch settings
 if ( ! $interval = $setting->getValue('statistics_ajax_data_interval')) $interval = 300;
