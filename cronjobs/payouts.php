@@ -36,7 +36,6 @@ if ($bitcoin->can_connect() !== true) {
 }
 if ($setting->getValue('disable_manual_payouts') != 1) {
     // Fetch outstanding payout requests
-	$log->logInfo("\tStarting Payments...");
     if ($aPayouts = $oPayout->getUnprocessedPayouts()) {
         if (count($aPayouts) > 0) {
             $log->logInfo("\tStarting Manual Payments...");
@@ -160,7 +159,7 @@ if ($setting->getValue('disable_auto_payouts') != 1) {
 else {
     $log->logDebug("Auto payouts disabled via admin panel");
 }
-$log->logInfo("\tCompleted Payouts");
+$log->logInfo("Completed Payouts");
 // Cron cleanup and monitoring
 require_once('cron_end.inc.php');
 ?>
