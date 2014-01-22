@@ -48,6 +48,7 @@ $config['csrf']['enabled'] = true;
  *   https://github.com/MPOS/php-mpos/wiki/Config-Setup#wiki-e-mail-confirmations
  */
 $config['twofactor']['enabled'] = true;
+$config['twofactor']['mode'] = '';
 $config['twofactor']['options']['details'] = true;
 $config['twofactor']['options']['withdraw'] = true;
 $config['twofactor']['options']['changepw'] = true;
