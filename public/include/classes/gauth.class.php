@@ -7,4 +7,5 @@ $GAuth->setDebug($debug);
 $GAuth->setMysql($mysqli);
 $GAuth->setSalt(SALT);
 $GAuth->setConfig($config);
+$GAuth->setSetting($setting);
 ?>

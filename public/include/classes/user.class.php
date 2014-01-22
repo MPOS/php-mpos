@@ -55,6 +55,12 @@ class User extends Base {
   public function getUserPinFailed($id) {
    return $this->getSingle($id, 'failed_pins', 'id');
   }
+  public function getUserGAuthEnabledByEmail($email) {
+    return $this->getSingle($email, 'gauth_enabled', 'email', 's');
+  }
+  public function getGAuthKey($email) {
+    return $this->getSingle($email, 'gauth_key', 'email', 's');
+  }
   public function isNoFee($id) {
     return $this->getUserNoFee($id);
   }
@@ -90,6 +96,12 @@ class User extends Base {
     $field = array( 'name' => 'failed_pins', 'type' => 'i', 'value' => $value);
     return $this->updateSingle($id, $field);
   }
+  public function setUserGAuthEnabled($email, $value) {
+    $field = array( 'name' => 'gauth_enabled', 'type' => 'i', 'value' => $value);
+    $uname = $this->getUserNameByEmail($email);
+    $id = $this->getUserId($uname);
+    return $this->updateSingle($id, $field);
+  }
   private function incUserFailed($id) {
     $field = array( 'name' => 'failed_logins', 'type' => 'i', 'value' => $this->getUserFailed($id) + 1);
     return $this->updateSingle($id, $field);
@@ -103,6 +115,11 @@ class User extends Base {
     return $this->updateSingle($id, $field);
   }
 
+  public function getGAuthKeyExists($key) {
+    $gakey_exists = $this->getSingle($key, 'gauth_key', 'gauth_key', 's');
+    return (!empty($gakey_exists));
+  }
+  
   /**
    * Fetch all users for administrative tasks
    * @param none
@@ -114,7 +131,74 @@ class User extends Base {
       return $result->fetch_all(MYSQLI_ASSOC);
     }
   }
-
+  
+  /**
+   * Check if the GAuth token provided is valid for the given user/email
+   * @param string $email User's email/login
+   * @param int $token provided GAuth token
+   * @return boolean true if token is valid, false if not
+   */
+  public function isGAuthTokenValid($email, $token) {
+    $token = (int)$token;
+    if (empty($email) || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
+      $this->setErrorMessage("Invalid e-mail address.");
+      return false;
+    }
+    $key = $this->getGAuthKey($email);
+    if (!$key || $key == "" || empty($key)) {
+      // nope, they don't, let's create one for them
+      $keySet = $this->GAuth->createSecret();
+      $this->setGAuthKey($email, $keySet);
+      return true;
+    } else {
+      // yes, let's check it
+      $code = $this->GAuth->getCode($key);
+      $gauth_token = $this->GAuth->verifyCode($key, $code, 2);
+      if ($gauth_token == $token) {
+        return true;
+      } else {
+        return false;
+      }
+    }
+  }
+  
+  /**
+   * If a GAuth token fails, we call this to increment failed logins and lock the account if necessary
+   * @param string $email User's email/login
+   * @return false with error message set
+   */
+  public function tokenFailedGAuth($email) {
+    // bad email/login
+    if (empty($email) || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
+      $this->setErrorMessage("Invalid e-mail address.");
+      return false;
+    }
+    $uname = $this->getUserNameByEmail($email);
+    $uid = $this->getUserId($uname);
+    // already locked
+    if ($this->isLocked($uid)) {
+      $this->setErrorMessage('Account locked.');
+      return false;
+    }
+    // should be locked
+    if (isset($this->config['maxfailed']['login']) && $this->getUserFailed($uid) >= $this->config['maxfailed']['login']) {
+      $this->changeLocked($uid);
+      $this->setErrorMessage('Account locked.');
+      return false;
+    }
+    // invalid either way, inc failed
+    $this->incUserFailed($uid);
+    // check lock again so we don't miss on the same try
+    if (isset($this->config['maxfailed']['login']) && $this->getUserFailed($uid) >= $this->config['maxfailed']['login']) {
+      $this->changeLocked($uid);
+      $this->setErrorMessage('Account locked.');
+      return false;
+    }
+    // generic fallback
+    $this->setErrorMessage("Invalid or expired GAuth token.");
+    return false;
+  }
+  
   /**
    * Check user login
    * @param username string Username
@@ -327,6 +411,9 @@ class User extends Base {
       	  break;
       	case 'withdraw_funds':
       	  $aData['subject'] = 'Manual payout request confirmation';
+      	  break;
+      	case 'disable_gauth':
+      	  $aData['subject'] = 'Disable Google Authenticator confirmation';
       	  break;
       	default:
       	  $aData['subject'] = '';
@@ -556,22 +643,6 @@ class User extends Base {
     return $this->updateSingle($id, $field);
   }
   
-  /**
-   * Gets users GAuth key
-   * @param string Username
-   * @return string key used to generate the URL
-   **/
-  public function getGAuthKey($email) {
-    $stmt = $this->mysqli->prepare("SELECT email, gauth_key FROM $this->table WHERE email = ? limit 1");
-    if ($this->checkStmt($stmt) && $stmt->bind_param('s', $email) && $stmt->execute() && $stmt->bind_result($row_email, $row_gakey)) {
-      $stmt->fetch();
-      $stmt->close();
-      if ($row_gakey) {
-        return $row_gakey;
-      }
-      return null;
-    }
-  }
   public function setGAuthKey($email, $key) {
     $field = array('name' => 'gauth_key', 'type' => 's', 'value' => $key);
     $username = $this->getUserNameByEmail($email);

@@ -28,6 +28,8 @@ CREATE TABLE IF NOT EXISTS `accounts` (
   `donate_percent` float DEFAULT '0',
   `ap_threshold` float DEFAULT '0',
   `coin_address` varchar(255) DEFAULT NULL,
+  `gauth_key` varchar(65) DEFAULT '' NOT NULL,
+  `gauth_enabled` int(1) DEFAULT 0 NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `username` (`username`),
   UNIQUE KEY `email` (`email`)
