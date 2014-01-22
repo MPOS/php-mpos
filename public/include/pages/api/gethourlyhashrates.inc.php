@@ -16,7 +16,7 @@ $data = array(
   'pool' => $statistics->getHourlyHashrateByPool()
 );
 
-echo $api->json($data);
+echo $api->get_json($data);
 
 // Supress master template
 $supress_master = 1;
