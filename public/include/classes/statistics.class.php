@@ -351,6 +351,7 @@ class Statistics extends Base {
   /**
    * Get amount of shares for a specific user
    * @param username str username
+   * @param account_id int account id
    * @return data array invalid and valid share counts
    **/
   public function getUserShares($username, $account_id=NULL) {
@@ -369,10 +370,8 @@ class Statistics extends Base {
         ROUND(IFNULL(SUM(IF(our_result='N', IF(difficulty=0, POW(2, (" . $this->config['difficulty'] . " - 16)), difficulty), 0)), 0) / POW(2, (" . $this->config['difficulty'] . " - 16)), 0) AS invalid
       FROM " . $this->share->getTableName() . "
       WHERE username LIKE ?
-        AND UNIX_TIMESTAMP(time) >IFNULL((SELECT MAX(b.time) FROM " . $this->block->getTableName() . " AS b),0)");
-    
-    $username = $username . ".%";
-    
+        AND UNIX_TIMESTAMP(time) >IFNULL((SELECT MAX(b.time) FROM " . $this->block->getTableName() . " AS b),0)");  
+    $username = $username . ".%";   
    if ($stmt && $stmt->bind_param("s", $username) && $stmt->execute() && $result = $stmt->get_result())
       return $this->memcache->setCache(__FUNCTION__ . $account_id, $result->fetch_assoc());
     return $this->sqlError();
@@ -496,6 +495,7 @@ class Statistics extends Base {
   /**
    * Fetch total user hashrate based on shares and archived shares
    * @param $username string username
+   * @param $account_id int account id
    * @return data integer Current Hashrate in khash/s
    **/
   public function getUserHashrate($username, $account_id=NULL, $interval=180) {
@@ -526,10 +526,8 @@ class Statistics extends Base {
           shares_archive
         WHERE username LIKE ?
           AND time > DATE_SUB(now(), INTERVAL ? SECOND)
-          AND our_result = 'Y') AS temp");
-    
+          AND our_result = 'Y') AS temp");   
     $username = $username . ".%";
-
     if ($this->checkStmt($stmt) && $stmt->bind_param("iiiii", $interval, $username, $interval, $username, $interval) && $stmt->execute() && $result = $stmt->get_result() )
       return $this->memcache->setCache(__FUNCTION__ . $account_id, $result->fetch_object()->hashrate);
     return $this->sqlError();
@@ -545,9 +543,7 @@ class Statistics extends Base {
       WHERE username LIKE ?
       AND id > ?
       AND our_result = 'Y'");
-
     $username = $username . ".%";
-
     if ($this->checkStmt($stmt) && $stmt->bind_param("si", $username, $last_paid_pps_id) && $stmt->execute() && $result = $stmt->get_result() )
       return $this->memcache->setCache(__FUNCTION__ . $account_id, $result->fetch_object()->total);
     return $this->sqlError();
@@ -556,6 +552,7 @@ class Statistics extends Base {
   /**
    * Get average share difficulty across all workers for user
    * @param username string username
+   * @param $account_id int account id
    * @param interval int Data interval in seconds
    * @return double Share difficulty or 0
    **/
@@ -574,18 +571,20 @@ class Statistics extends Base {
         IFNULL(AVG(IF(difficulty=0, pow(2, (" . $this->config['difficulty'] . " - 16)), difficulty)), 0) AS avgsharediff,
         COUNT(s.id) AS total
       FROM " . $this->share->getTableName() . " AS s
-      WHERE username LIKE ?.%
+      WHERE username LIKE ?
       AND time > DATE_SUB(now(), INTERVAL ? SECOND)
       AND our_result = 'Y'
 	  ");
+    $username = $username . ".%";
     if ($this->checkStmt($stmt) && $stmt->bind_param("si", $username, $interval) && $stmt->execute() && $result = $stmt->get_result() )
       return $this->memcache->setCache(__FUNCTION__ . $account_id, $result->fetch_object()->avgsharediff);
     return $this->sqlError();
   }
 
   /**
-   * Same as getUserHashrate for Sharerate
-   * @param username string username 
+   * Get Shares per x interval by user
+   * @param username string username
+   * @param $account_id int account id   
    * @return data integer Current Sharerate in shares/s
    **/
   public function getUserSharerate($username, $account_id=NULL, $interval=180) {
@@ -618,9 +617,7 @@ class Statistics extends Base {
           AND time > DATE_SUB(now(), INTERVAL ? SECOND)
           AND our_result = 'Y'
       ) AS temp");
-
     $username = $username . ".%";
-
     if ($this->checkStmt($stmt) && $stmt->bind_param("isisi", $interval, $username, $interval, $username, $interval) && $stmt->execute() && $result = $stmt->get_result() )
       return $this->memcache->setCache(__FUNCTION__ . $account_id, $result->fetch_object()->sharerate);
     return $this->sqlError();
@@ -723,6 +720,7 @@ class Statistics extends Base {
   /**
    * get Hourly hashrate for a user
    * @param username string Username
+   * @param $account_id int account id
    * @return data array NOT FINISHED YET
    **/
   public function getHourlyHashrateByAccount($username, $account_id=NULL) {
@@ -749,9 +747,7 @@ class Statistics extends Base {
         AND our_result = 'Y'
         AND username LIKE ?
       GROUP BY HOUR(time)");
-
     $username = $username . ".%";
-
     if ($this->checkStmt($stmt) && $stmt->bind_param('ss', $username, $username) && $stmt->execute() && $result = $stmt->get_result()) {
       $iStartHour = date('G');
       // Initilize array
