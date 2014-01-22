@@ -14,8 +14,9 @@ $username = $user->getUsername($user_id);
 if ( ! $interval = $setting->getValue('statistics_ajax_data_interval')) $interval = 300;
 
 // Gather un-cached data
+$statistics->setGetCache(false);
 $hashrate = $statistics->getUserHashrate($username, $user_id, $interval);
-
+$statistics->setGetCache(true);
 
 // Output JSON
 echo $api->get_json($hashrate);
