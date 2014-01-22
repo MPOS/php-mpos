@@ -107,7 +107,7 @@ if ($setting->getValue('disable_auto_payouts') != 1) {
         if (!empty($users)) {
             if (count($users) > 0) $log->logDebug(" found " . count($users) . " queued payout(s)");
             // Go through users and run transactions
-            $log->logInfo("\tStarting Auto Payments...");
+            $log->logInfo("Starting Payments...");
             $log->logInfo("\tUserID\tUsername\tBalance\tThreshold\tAddress");
             foreach ($users as $aUserData) {
                 $dBalance = $aUserData['confirmed'];
@@ -149,7 +149,7 @@ if ($setting->getValue('disable_auto_payouts') != 1) {
         } 
     }
     else if(empty($users)) {
-        $log->logInfo("\tSkipped payments. No auto payments eligible.");
+        $log->logInfo("\tSkipping payments. No auto payments eligible.");
         $log->logDebug("Users have not configured their AP > 0");
     }
     else{
