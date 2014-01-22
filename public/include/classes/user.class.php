@@ -157,7 +157,7 @@ class User extends Base {
           $aDataN['email'] = $this->getUserEmail($username);
           $aDataN['subject'] = 'Successful login notification';
           $aDataN['LOGINIP'] = $this->getCurrentIP();
-          $aDataN['LOGINUSER'] = $this->user;
+          $aDataN['LOGINUSER'] = $username;
           $aDataN['LOGINTIME'] = date('m/d/y H:i:s');
           $notifs->sendNotification($uid, 'success_login', $aDataN);
         }
