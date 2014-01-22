@@ -13,9 +13,9 @@ $user_id = $api->checkAccess($user->checkApiKey($_REQUEST['api_key']), @$_REQUES
 if ( ! $interval = $setting->getValue('statistics_ajax_data_interval')) $interval = 300;
 
 // Output JSON format
-$statistics->setGetCache(false);
+
 $dPoolHashrate = $statistics->getCurrentHashrate($interval);
-$statistics->setGetCache(true);
+
 
 echo $api->get_json($dPoolHashrate);
 
