@@ -117,7 +117,7 @@ class User extends Base {
 
   public function getGAuthKeyExists($key) {
     $gakey_exists = $this->getSingle($key, 'gauth_key', 'gauth_key', 's');
-    return (!empty($gakey_exists));
+    return (!empty($gakey_exists)) ? 1 : 0;
   }
   
   /**
