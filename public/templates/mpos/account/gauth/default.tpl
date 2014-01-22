@@ -61,7 +61,7 @@
 <article class="module width_half" {if $USER_GAUTH == 1}style="margin-top:-160px"{/if}>
   <header><h3>Reset {if $USER_GAUTH == 1}or Hide{/if} Secret</h3></header>
   <div class="module_content">
-  <p><b style='color:red'>Resetting or Hiding your secret <u>will log you out</u> and you will have to <u>reauthenticate yourself</u></b></p>
+  <p><b style='color:red'>Resetting your secret <u>will log you out</u> and you will have to <u>reauthenticate yourself</u></b></p>
   <p><b style='color:red'>If you RESET your secret, you will have to <u>reauthenticate via e-mail</u></b></p>
   <p><input type="submit" value="Reset Secret" class="alt_btn" name="reset_secret"></p>
   {if $USER_GAUTH == 1}
