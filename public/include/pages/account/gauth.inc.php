@@ -10,23 +10,23 @@ if ($user->isAuthenticated()) {
   }
   
   $setting_gauth = (isset($_POST['user_gauth']) && $_POST['user_gauth'] == 1) ? (int)$_POST['user_gauth'] : 0;
-  
-  if (isset($_POST['reset_secret']) || isset($_POST['update_gauth']) && @$_POST['user_gauth'] == 0) {
-    // reset/log out
-    // send an email token
-    $user->sendChangeConfigEmail('disable_gauth', $_SESSION['USERDATA']['id']);
-    // and log out
-    $user->logoutUser("", "?page=account&action=disablegauth");
-  }
+  $email = $user->getUserEmail($_SESSION['USERDATA']['username']);
+  $current_gauth = $user->getUserGAuthEnabledByEmail($email);
   
   if (isset($_POST['hide_secret'])) {
-    $email = $user->getUserEmail($_SESSION['USERDATA']['username']);
-    $current_gauth = $user->getUserGAuthEnabledByEmail($email);
     if ($current_gauth == 1) {
       // well, they asked for it...
       $email = $user->getUserEmail($_SESSION['USERDATA']['username']);
       $user->setUserGAuthEnabled($email, 2);
     }
+  }
+  
+  if (isset($_POST['reset_secret']) || isset($_POST['update_gauth']) && @$_POST['user_gauth'] == 0 && $current_gauth > 0) {
+    // reset/log out
+    // send an email token
+    $user->sendChangeConfigEmail('disable_gauth', $_SESSION['USERDATA']['id']);
+    // and log out
+    $user->logoutUser("", "?page=account&action=disablegauth");
   }
   
   if (isset($_POST['user_gauth']) && isset($_POST['update_gauth'])) {
