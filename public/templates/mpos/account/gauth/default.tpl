@@ -23,7 +23,7 @@
     <input type="hidden" name="page" value="{$smarty.request.page|escape}">
     <input type="hidden" name="action" value="{$smarty.request.action|escape}">
     <p>Require a Google Authenticator token when logging into your account.</p>
-    <p><b style='color:red'>If you LOSE ACCESS to your Google Authenticator you will be <u>unable to login</u>{if $USER_GAUTH < 1}, and once enabled you <u>will have to reauthenticate via email to disable</u>{/if}!</b></p>
+    <p><b style='color:red'>If you LOSE ACCESS to your Google Authenticator you will be <u>unable to login</u>{if $USER_GAUTH < 1}, and once enabled you <u>will have to reauthenticate via email to disable{/if}</u>!</b></p>
     
     <fieldset>
       <label>Google Authenticator</label>
