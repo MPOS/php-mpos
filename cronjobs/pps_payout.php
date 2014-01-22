@@ -169,35 +169,39 @@ foreach ($aAllBlocks as $iIndex => $aBlock) {
     exit(1);
   }
   // Per account statistics
-  $log->logInfo("\tStarting to store fresh user statistics...");
+  $log->logInfo("\tRefresh user statistics...");
   if (!$aAccountShares = $share->getSharesForAccounts(@$iLastBlockShare, $aBlock['share_id'])) {
     $log->logError("Failed to Account Shares. ERROR: " . $share->getCronError());
   }
-  
   foreach ($aAccountShares as $key => $aData) {
     if (!$statistics->updateShareStatistics($aData, $aBlock['id']))
       $log->logError("Failed to update statistics for Block " . $aBlock['id'] . "for" . $aData['username'] . ' ERROR: ' . $statistics->getCronError());
   }
+   $log->logInfo("\Statistics updated.");
   
   // Move shares to archive
-  $log->logInfo("\tMove shares to archive...");
+  $log->logInfo("\t$aBlock['id']\t Move shares to archive...");
   if ($aBlock['share_id'] < $iLastShareId) {
     if (!$share->moveArchive($aBlock['share_id'], $aBlock['id'], @$iLastBlockShare))
       $log->logError("Failed to copy shares to from " . $aBlock['share_id'] . " to " . $iLastBlockShare . ' Error: ' . $share->getCronError());
   }
+   $log->logInfo("\t$aBlock['id']\t Shares moved to archive...");
+   
   // Delete shares
-  $log->logInfo("\tDelete accounted shares...");
+  $log->logInfo("\t$aBlock['id']\t Deleting accounted shares...");
   if ($aBlock['share_id'] < $iLastShareId && !$share->deleteAccountedShares($aBlock['share_id'], $iLastBlockShare)) {
     $log->logFatal("Failed to delete accounted shares from " . $aBlock['share_id'] . " to " . $iLastBlockShare . ", aborting! Error: " . $share->getCronError());
     $monitoring->endCronjob($cron_name, 'E0016', 1, true);
   }
+  $log->logInfo("\t$aBlock['id']\t Deleted accounted shares.");
+  
   // Mark this block as accounted for
-  $log->logInfo("\tMarking Block as accounted...");
+  $log->logInfo("\t$aBlock['id']\t Marking Block as accounted...");
   if (!$block->setAccounted($aBlock['id'])) {
     $log->logFatal("Failed to mark block as accounted! Aborting! Error: " . $block->getCronError());
     $monitoring->endCronjob($cron_name, 'E0014', 1, true);
   }
-  $log->logInfo("\tMarked Block" . $aBlock['id'] . " as accounted.");
+  $log->logInfo("\t$aBlock['id']\t Block paid and accounted for.");
 }
 $log->logInfo("Completed PPS Payout");
 
