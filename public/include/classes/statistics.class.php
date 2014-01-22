@@ -753,7 +753,7 @@ class Statistics extends Base {
       // Initilize array
       for ($i = 0; $i < 24; $i++) $aData[($iStartHour + $i) % 24] = 0;
       // Fill data
-      while ($row = $result->fetch_assoc()) $aData[$row['hour']] = $row['hashrate'];
+      while ($row = $result->fetch_assoc()) $aData[$row['hour']] += $row['hashrate'];
       return $this->memcache->setCache(__FUNCTION__ . $account_id, $aData);
     }
     return $this->sqlError();
@@ -792,7 +792,7 @@ class Statistics extends Base {
       // Initilize array
       for ($i = 0; $i < 24; $i++) $aData[($iStartHour + $i) % 24] = 0;
       // Fill data
-      while ($row = $result->fetch_assoc()) $aData[$row['hour']] = (int) $row['hashrate'];
+      while ($row = $result->fetch_assoc()) $aData[$row['hour']] += (int) $row['hashrate'];
       return $this->memcache->setCache(__FUNCTION__, $aData);
     }
     return $this->sqlError();
