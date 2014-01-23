@@ -295,7 +295,7 @@ class Transaction extends Base {
             ), 8
           ), 0
         ) AS confirmed
-      FROM transactions AS t
+      FROM $this->table AS t
       LEFT JOIN blocks AS b
       ON t.block_id = b.id
       LEFT JOIN accounts AS a
