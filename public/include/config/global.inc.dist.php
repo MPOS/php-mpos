@@ -149,6 +149,34 @@ $config['csrf']['leadtime'] = 3;
 $config['csrf']['disabled_forms'] = array();
 
 /**
+ * EXPERIMENTAL
+ * Memcache anti resource-dos protection / request rate limiting
+ *
+ * Explanation:
+ *   Because bots/angry users can just fire away at pages or f5 us to death, we can attempt to rate limit requests
+ *   using memcache.
+ *
+ * Options:
+ *   enabled          =   Whether or not we will try to rate limit requests
+ *   per_page         =   Add a per-page bit, allows us to block only specific page rate limits if need be
+ *   flush_seconds    =   Number of seconds between each flush of user and per_page bits we store
+ *   rate_limit       =   Number of valid requests to allow per user/per_page per flush_seconds
+ *   error_push_page  =   Page to push rate limited requests to, if empty we'll just exit with an error
+ *   
+ * Default:
+ *   enabled          =   true
+ *   per_page         =   false
+ *   flush_seconds    =   60
+ *   rate_limit       =   30
+ *   error_push_page  =   array('page' => 'error', 'action' => 'ratelimit');
+ */
+$config['mc_antidos']['enabled'] = true;
+$config['mc_antidos']['per_page'] = false;
+$config['mc_antidos']['flush_seconds'] = 60;
+$config['mc_antidos']['rate_limit'] = 30;
+$config['mc_antidos']['error_push_page'] = array('page' => 'error', 'action' => 'ratelimit');
+
+/**
  * Lock account after maximum failed logins
  *
  * Explanation:

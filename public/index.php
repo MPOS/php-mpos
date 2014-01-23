@@ -43,6 +43,23 @@ $session_id = session_id();
 // We include all needed files here, even though our templates could load them themself
 require_once(INCLUDE_DIR . '/autoloader.inc.php');
 
+// Rate limiting
+if ($config['memcache']['enabled'] && $config['mc_antidos']['enabled']) {
+  require_once(CLASS_DIR . '/memcache-antidos.class.php');
+  $per_page = ($config['mc_antidos']['per_page']) ? $_SERVER['QUERY_STRING'] : '';
+  $MCAD = new MemcacheAntiDos($config['mc_antidos'], $_SERVER['REMOTE_ADDR'], $per_page, $config['memcache']);
+  $rate_limit_reached = $MCAD->rateLimitRequest();
+  $error_page = $config['mc_antidos']['error_push_page'];
+  if ($rate_limit_reached == true) {
+    if (!is_array($error_page) || count($error_page) < 1 || (empty($error_page['page']) && empty($error_page['action']))) {
+      die("You are sending too many requests too fast!");
+    } else {
+      $_REQUEST['page'] = $error_page['page'];
+      $_REQUEST['action'] = (isset($error_page['action']) && !empty($error_page['action'])) ? $error_page['action'] : $_REQUEST['action'];
+    }
+  }
+}
+
 // Create our pages array from existing files
 if (is_dir(INCLUDE_DIR . '/pages/')) {
     foreach (glob(INCLUDE_DIR . '/pages/*.inc.php') as $filepath) {
