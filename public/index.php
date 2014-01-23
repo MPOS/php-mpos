@@ -59,7 +59,7 @@ if ($config['memcache']['enabled'] && $config['mc_antidos']['enabled']) {
   $is_ajax_call = (in_array(substr($_SERVER['QUERY_STRING'], 0, 32), $ajax_call_querystrings)) ? true : false;
   if ($is_ajax_call && $config['mc_antidos']['protect_ajax']) {
     $per_page = 'navbar';
-  } else if ($is_ajax_call) {
+  } else if ($is_ajax_call && !$config['mc_antidos']['protect_ajax']) {
     // protect isn't on, we'll ignore it
     $skip_check = true;
   } else if ($config['mc_antidos']['ignore_admins'] && isset($_SESSION['USERDATA']['is_admin']) && $_SESSION['USERDATA']['is_admin']) {
