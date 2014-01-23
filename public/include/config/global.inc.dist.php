@@ -171,7 +171,7 @@ $config['csrf']['disabled_forms'] = array();
  *   error_push_page  =   array('page' => 'error', 'action' => 'ratelimit');
  */
 $config['mc_antidos']['enabled'] = true;
-$config['mc_antidos']['per_page'] = false;
+$config['mc_antidos']['per_page'] = false;    // DO NOT ENABLE THIS UNLESS YOU ARE GOING TO ADD FUNCTIONALITY FOR IT
 $config['mc_antidos']['flush_seconds'] = 60;
 $config['mc_antidos']['rate_limit'] = 30;
 $config['mc_antidos']['error_push_page'] = array('page' => 'error', 'action' => 'ratelimit');
