@@ -27,7 +27,7 @@ if ($setting->getValue('recaptcha_enabled') && $setting->getValue('recaptcha_ena
   }
 }
 
-if ($setting->getValue('maintenance') && !$user->isAdmin($user->getUserId($_POST['username']))) {
+if ($setting->getValue('maintenance') && !$user->isAdmin($user->getUserIdByEmail($_POST['username']))) {
   $_SESSION['POPUP'][] = array('CONTENT' => 'You are not allowed to login during maintenace.', 'TYPE' => 'info');
 } else if (!empty($_POST['username']) && !empty($_POST['password'])) {
   $nocsrf = 1;
