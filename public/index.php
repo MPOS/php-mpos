@@ -46,16 +46,27 @@ require_once(INCLUDE_DIR . '/autoloader.inc.php');
 // Rate limiting
 if ($config['memcache']['enabled'] && $config['mc_antidos']['enabled']) {
   require_once(CLASS_DIR . '/memcache-antidos.class.php');
+  $skip_check = false;
   $per_page = ($config['mc_antidos']['per_page']) ? $_SERVER['QUERY_STRING'] : '';
-  $MCAD = new MemcacheAntiDos($config['mc_antidos'], $_SERVER['REMOTE_ADDR'], $per_page, $config['memcache']);
-  $rate_limit_reached = $MCAD->rateLimitRequest();
-  $error_page = $config['mc_antidos']['error_push_page'];
-  if ($rate_limit_reached == true) {
-    if (!is_array($error_page) || count($error_page) < 1 || (empty($error_page['page']) && empty($error_page['action']))) {
-      die("You are sending too many requests too fast!");
-    } else {
-      $_REQUEST['page'] = $error_page['page'];
-      $_REQUEST['action'] = (isset($error_page['action']) && !empty($error_page['action'])) ? $error_page['action'] : $_REQUEST['action'];
+  // if this is an api call we need to be careful not to time them out for those calls separately
+  $is_ajax_call = ($_SERVER['QUERY_STRING'] == substr('page=api&action=getnavbardata', 0, 29)) ? true : false;
+  if ($is_ajax_call && $config['mc_antidos']['protect_ajax']) {
+    $per_page = 'navbar';
+  } else if ($is_ajax_call) {
+    // protect isn't on, we'll ignore it
+    $skip_check = true;
+  }
+  if (!$skip_check) {
+    $MCAD = new MemcacheAntiDos($config['mc_antidos'], $_SERVER['REMOTE_ADDR'], $per_page, $config['memcache']);
+    $rate_limit_reached = $MCAD->rateLimitRequest();
+    $error_page = $config['mc_antidos']['error_push_page'];
+    if ($rate_limit_reached == true) {
+      if (!is_array($error_page) || count($error_page) < 1 || (empty($error_page['page']) && empty($error_page['action']))) {
+        die("You are sending too many requests too fast!");
+      } else {
+        $_REQUEST['page'] = $error_page['page'];
+        $_REQUEST['action'] = (isset($error_page['action']) && !empty($error_page['action'])) ? $error_page['action'] : $_REQUEST['action'];
+      }
     }
   }
 }
