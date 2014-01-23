@@ -42,7 +42,7 @@ $count = 0;
 foreach ($aAllBlocks as $iIndex => $aBlock) {
   // If we have unaccounted blocks without share_ids, they might not have been inserted yet
   if (!$aBlock['share_id']) {
-    $log->logError('E0062: Block has no share_id, not running payouts');
+    $log->logError('E0062: Block ' . $aBlock['id'] . ' has no share_id, not running payouts');
     $monitoring->endCronjob($cron_name, 'E0062', 0, true);
   }
 
@@ -85,7 +85,7 @@ foreach ($aAllBlocks as $iIndex => $aBlock) {
       // We need to go one ID lower due to `id >` or we won't match if minimum share ID == $aBlock['share_id']
       $aAccountShares = $share->getSharesForAccounts($iMinimumShareId - 1, $aBlock['share_id']);
       if (empty($aAccountShares)) {
-        $log->logFatal("No shares found for this block, aborted! Block Height : " . $aBlock['height']);
+        $log->logFatal("No shares found for this block, aborted! Block Height : " . $aBlock['height'] . ', Block ID: ' . $aBlock['id']);
         $monitoring->endCronjob($cron_name, 'E0013', 1, true);
       }
       foreach($aAccountShares as $key => $aData) {
@@ -99,7 +99,7 @@ foreach ($aAllBlocks as $iIndex => $aBlock) {
       // Grab the full current round shares since we didn't match target
       $aAccountShares = $aRoundAccountShares;
       if (empty($aAccountShares)) {
-        $log->logFatal("No shares found for this block, aborted! Block height: " . $aBlock['height']);
+        $log->logFatal("No shares found for this block, aborted! Block height: " . $aBlock['height'] . ', Block ID:' . $aBlock['id']);
         $monitoring->endCronjob($cron_name, 'E0013', 1, true);
       }
 
@@ -211,15 +211,15 @@ foreach ($aAllBlocks as $iIndex => $aBlock) {
 
       // Add new credit transaction
       if (!$transaction->addTransaction($aData['id'], $aData['payout'], 'Credit', $aBlock['id']))
-        $log->logFatal('Failed to insert new Credit transaction to database for ' . $aData['username'] . ': ' . $transaction->getCronError());
+        $log->logFatal('Failed to insert new Credit transaction to database for ' . $aData['username'] . ': ' . $transaction->getCronError() . 'on block ' . $aBlock['id']);
       // Add new fee debit for this block
       if ($aData['fee'] > 0 && $config['fees'] > 0)
         if (!$transaction->addTransaction($aData['id'], $aData['fee'], 'Fee', $aBlock['id']))
-          $log->logFatal('Failed to insert new Fee transaction to database for ' . $aData['username'] . ': ' . $transaction->getCronError());
+          $log->logFatal('Failed to insert new Fee transaction to database for ' . $aData['username'] . ': ' . $transaction->getCronError() . 'on block ' . $aBlock['id']);
       // Add new donation debit
       if ($aData['donation'] > 0)
         if (!$transaction->addTransaction($aData['id'], $aData['donation'], 'Donation', $aBlock['id']))
-          $log->logFatal('Failed to insert new Donation transaction to database for ' . $aData['username'] . ': ' . $transaction->getCronError());
+          $log->logFatal('Failed to insert new Donation transaction to database for ' . $aData['username'] . ': ' . $transaction->getCronError() . 'on block ' . $aBlock['id']);
     }
 
     // Add full round share statistics
@@ -228,7 +228,7 @@ foreach ($aAllBlocks as $iIndex => $aBlock) {
         continue;
       }
       if (!$statistics->insertPPLNSStatistics($aRoundData, $aBlock['id']))
-        $log->logError('Failed to insert share statistics for ' . $aRoundData['username'] . ': ' . $statistics->getCronError());
+        $log->logError('Failed to insert share statistics for ' . $aRoundData['username'] . ': ' . $statistics->getCronError() . 'on block ' . $aBlock['id']);
     }
 
     // Store this blocks height as last accounted for
@@ -236,19 +236,19 @@ foreach ($aAllBlocks as $iIndex => $aBlock) {
 
     // Move counted shares to archive before this blockhash upstream share
     if (!$share->moveArchive($iCurrentUpstreamId, $aBlock['id'], $iPreviousShareId))
-      $log->logError('Failed to copy shares to archive table: ' . $share->getCronError() . ': ' . $share->getCronError());
+      $log->logError('Failed to copy shares to archive table for block ' . $aBlock['id'] . ': ' . $share->getCronError() . ': ' . $share->getCronError());
     // Delete all accounted shares
     if (!$share->deleteAccountedShares($iCurrentUpstreamId, $iPreviousShareId)) {
-      $log->logFatal("Failed to delete accounted shares from $iPreviousShareId to $iCurrentUpstreamId, aborting! Error: " . $share->getCronError());
+      $log->logFatal("Failed to delete accounted shares from $iPreviousShareId to $iCurrentUpstreamId for block ' . $aBlock['id'] . ', aborting! Error: " . $share->getCronError());
       $monitoring->endCronjob($cron_name, 'E0016', 1, true);
     }
     // Mark this block as accounted for
     if (!$block->setAccounted($aBlock['id'])) {
-      $log->logFatal("Failed to mark block as accounted! Aborting! Error: " . $block->getCronError());
+      $log->logFatal("Failed to mark block' . $aBlock['id'] . ' as accounted! Aborting! Error: " . $block->getCronError());
       $monitoring->endCronjob($cron_name, 'E0014', 1, true);
     }
   } else {
-    $log->logFatal('Potential double payout detected. Aborted.');
+    $log->logFatal('Potential double payout detected for block ' . $aBlock['id'] . '. Aborted.');
     $aMailData = array(
       'email' => $setting->getValue('system_error_email'),
       'subject' => 'Payout processing aborted',
