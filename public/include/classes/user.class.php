@@ -22,6 +22,9 @@ class User extends Base {
   public function getUserId($username, $lower=false) {
     return $this->getSingle($username, 'id', 'username', 's', $lower);
   }
+  public function getUserIdByEmail($email, $lower=false) {
+    return $this->getSingle($email, 'id', 'email', 's', $lower);
+  }
   public function getUserEmail($username, $lower=false) {
     return $this->getSingle($username, 'email', 'username', 's', $lower);
   }
