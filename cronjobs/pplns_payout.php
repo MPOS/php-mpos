@@ -239,12 +239,12 @@ foreach ($aAllBlocks as $iIndex => $aBlock) {
       $log->logError('Failed to copy shares to archive table for block ' . $aBlock['id'] . ': ' . $share->getCronError() . ': ' . $share->getCronError());
     // Delete all accounted shares
     if (!$share->deleteAccountedShares($iCurrentUpstreamId, $iPreviousShareId)) {
-      $log->logFatal("Failed to delete accounted shares from $iPreviousShareId to $iCurrentUpstreamId for block ' . $aBlock['id'] . ', aborting! Error: " . $share->getCronError());
+      $log->logFatal("Failed to delete accounted shares from $iPreviousShareId to $iCurrentUpstreamId for block " . $aBlock['id'] . ", aborting! Error: " . $share->getCronError());
       $monitoring->endCronjob($cron_name, 'E0016', 1, true);
     }
     // Mark this block as accounted for
     if (!$block->setAccounted($aBlock['id'])) {
-      $log->logFatal("Failed to mark block' . $aBlock['id'] . ' as accounted! Aborting! Error: " . $block->getCronError());
+      $log->logFatal("Failed to mark block" . $aBlock['id'] . " as accounted! Aborting! Error: " . $block->getCronError());
       $monitoring->endCronjob($cron_name, 'E0014', 1, true);
     }
   } else {
