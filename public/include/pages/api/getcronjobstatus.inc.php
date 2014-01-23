@@ -41,14 +41,7 @@ foreach ($aCrons as $strCron) {
     'message' => $monitoring->getStatus($strCron . '_message'),
   );
 }
-// Output JSON format
-$data = array(
-  'raw' => array( 'personal' => array( 'hashrate' => $dPersonalHashrate ), 'pool' => array( 'hashrate' => $dPoolHashrate ), 'network' => array( 'hashrate' => $dNetworkHashrate / 1000 ) ),
-  'personal' => array ( 'hashrate' => $dPersonalHashrateAdjusted, 'sharerate' => $dPersonalSharerate, 'shares' => $aUserRoundShares),
-  'pool' => array( 'hashrate' => $dPoolHashrateAdjusted, 'shares' => $aRoundShares ),
-  'network' => array( 'hashrate' => $dNetworkHashrateAdjusted, 'difficulty' => $dDifficulty, 'block' => $iBlock ),
-);
-echo $api->get_json($data);
+echo $api->get_json($aCronStatus);
 
 // Supress master template
 $supress_master = 1;
