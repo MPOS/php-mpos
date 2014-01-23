@@ -3,7 +3,7 @@
     <input type="hidden" name="token" value="{$smarty.request.token|escape}">
     <input type="hidden" name="page" value="{$smarty.request.page|escape}">
     <input type="hidden" name="action" value="{$smarty.request.action|escape}">
-    {if $GLOBAL.csrf.enabled && $GLOBAL.csrf.options.sitewide}<input type="hidden" name="ctoken" value="{$CTOKEN|escape}" />{/if}
+    {if $GLOBAL.csrf.enabled && !"passreset"|in_array:$GLOBAL.csrf.disabled_forms}<input type="hidden" name="ctoken" value="{$CTOKEN|escape}" />{/if}
     
     <input type="hidden" name="do" value="resetPassword">
     <header><h3>Password reset</h3></header>
@@ -21,7 +21,7 @@
     <footer>
       {nocache}
         <input type="hidden" name="cp_token" value="{$smarty.request.cp_token|escape|default:""}">
-        {if $GLOBAL.csrf.enabled && $GLOBAL.csrf.options.sitewide}<input type="hidden" name="ctoken" value="{$CTOKEN|escape}" />{/if}
+        {if $GLOBAL.csrf.enabled && !"passreset"|in_array:$GLOBAL.csrf.disabled_forms}<input type="hidden" name="ctoken" value="{$CTOKEN|escape}" />{/if}
         <input type="hidden" name="utype" value="change_pw">
         {if $GLOBAL.twofactor.enabled && $GLOBAL.twofactor.options.changepw}
           {if $CHANGEPASSSENT == 1 && $CHANGEPASSUNLOCKED == 1}
