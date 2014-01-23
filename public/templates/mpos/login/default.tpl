@@ -6,11 +6,11 @@
     <div class="module_content">
         <fieldset>
           <label>E-Mail</label>
-          <input type="email" name="username" size="22" maxlength="100" value="{$smarty.request.username|default:""|escape}" placeholder="Your email" required />
+          <input type="email" name="username" size="22" maxlength="100" value="{$smarty.request.username|default:""|escape}" placeholder="Your email" tabindex="1" required />
         </fieldset>
         <fieldset>
           <label>Password</label>
-          <input type="password" name="password" size="22" maxlength="100" placeholder="Your password" required />
+          <input type="password" name="password" size="22" maxlength="100" placeholder="Your password" tabindex="2" required />
         </fieldset>
       <div class="clear"></div>
     </div>
