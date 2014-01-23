@@ -27,7 +27,7 @@ class MemcacheAntiDos
     unset($config);
     // prep stuff we need to check this request
     $key_md5 = substr(md5($userORip), 0, 4);
-    $request_md5 = (!empty($per_page)) ? substr(md5($request), 0, 4) : '';
+    $request_md5 = substr(md5($request), 0, 4);
     $request_key = $mcSettings['keyprefix'].self::$key.$key_md5."_".$request_md5."_".$per_page;
     $request_data = $this->cache->get($request_key);
     $now = time();
