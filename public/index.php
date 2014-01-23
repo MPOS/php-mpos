@@ -55,6 +55,8 @@ if ($config['memcache']['enabled'] && $config['mc_antidos']['enabled']) {
   } else if ($is_ajax_call) {
     // protect isn't on, we'll ignore it
     $skip_check = true;
+  } else if ($config['mc_antidos']['ignore_admins'] && $_SESSION['USERDATA']['is_admin']) {
+    $skip_check = true;
   }
   if (!$skip_check) {
     $MCAD = new MemcacheAntiDos($config['mc_antidos'], $_SERVER['REMOTE_ADDR'], $per_page, $config['memcache']);

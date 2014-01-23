@@ -163,6 +163,7 @@ $config['csrf']['disabled_forms'] = array();
  *   flush_seconds    =   Number of seconds between each flush of user and per_page bits we store
  *   rate_limit       =   Number of valid requests to allow per user/per_page per flush_seconds
  *   error_push_page  =   Page to push rate limited requests to, if empty we'll just exit with an error
+ *   ignore_admins    =   Ignores the rate limit for administrators
  *   
  * Default:
  *   enabled          =   true
@@ -171,6 +172,7 @@ $config['csrf']['disabled_forms'] = array();
  *   flush_seconds    =   60
  *   rate_limit       =   30
  *   error_push_page  =   array('page' => 'error', 'action' => 'ratelimit');
+ *   ignore_admins    =   true
  */
 $config['mc_antidos']['enabled'] = true;
 $config['mc_antidos']['per_page'] = false;    // DO NOT ENABLE THIS UNLESS YOU ARE GOING TO ADD FUNCTIONALITY FOR IT
@@ -178,6 +180,7 @@ $config['mc_antidos']['protect_ajax'] = true;
 $config['mc_antidos']['flush_seconds'] = 60;
 $config['mc_antidos']['rate_limit'] = 30;
 $config['mc_antidos']['error_push_page'] = array('page' => 'error', 'action' => 'ratelimit');
+$config['mc_antidos']['ignore_admins'] = true;
 
 /**
  * Lock account after maximum failed logins
