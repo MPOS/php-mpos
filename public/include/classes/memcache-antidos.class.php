@@ -37,11 +37,8 @@ class MemcacheAntiDos
       $request_data['ident'] = $key_md5;
       $request_data['last_hit'] = $now;
       $request_data['hits_since_flush'] += 1;
-      // too many hits, we should rate limit this
-      if ($request_data['hits_since_flush'] > $rate_limit) {
-        $this->rate_limit_this_request = true;
-      } else {
-        // not rate limited yet, update the rest of the object
+      // not rate limited yet, update the rest of the object
+      if ($request_data['hits_since_flush'] < $rate_limit) {
         if (($request_data['last_flush'] + $flush_sec) <= $now || ($request_data['last_hit'] + $flush_sec) <= $now) {
           // needs to be flushed
           $request_data['hits_since_flush'] = 0;
@@ -55,6 +52,9 @@ class MemcacheAntiDos
           $this->cache->set($request_key, $request_data, $flush_sec);
           $this->rate_limit_this_request = false;
         }
+      } else {
+        // too many hits, we should rate limit this
+        $this->rate_limit_this_request = true;
       }
     } else {
       // doesn't exist for this request_key, create one
