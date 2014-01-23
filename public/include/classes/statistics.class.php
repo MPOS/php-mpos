@@ -529,7 +529,7 @@ class Statistics extends Base {
           AND our_result = 'Y') AS temp");   
     $username = $username . ".%";
     if ($this->checkStmt($stmt) && $stmt->bind_param("isisi", $interval, $username, $interval, $username, $interval) && $stmt->execute() && $result = $stmt->get_result() )
-      return $this->memcache->setCache(__FUNCTION__ . $account_id, $result->fetch_object()->hashrate);
+      return $this->memcache->setCache(__FUNCTION__ . $account_id, (float)$result->fetch_object()->hashrate);
     return $this->sqlError();
   }
 
@@ -577,7 +577,7 @@ class Statistics extends Base {
 	  ");
     $username = $username . ".%";
     if ($this->checkStmt($stmt) && $stmt->bind_param("si", $username, $interval) && $stmt->execute() && $result = $stmt->get_result() )
-      return $this->memcache->setCache(__FUNCTION__ . $account_id, $result->fetch_object()->avgsharediff);
+      return $this->memcache->setCache(__FUNCTION__ . $account_id, (float)$result->fetch_object()->avgsharediff);
     return $this->sqlError();
   }
 
@@ -619,7 +619,7 @@ class Statistics extends Base {
       ) AS temp");
     $username = $username . ".%";
     if ($this->checkStmt($stmt) && $stmt->bind_param("isisi", $interval, $username, $interval, $username, $interval) && $stmt->execute() && $result = $stmt->get_result() )
-      return $this->memcache->setCache(__FUNCTION__ . $account_id, $result->fetch_object()->sharerate);
+      return $this->memcache->setCache(__FUNCTION__ . $account_id, (float)$result->fetch_object()->sharerate);
     return $this->sqlError();
   }
 
@@ -638,7 +638,7 @@ class Statistics extends Base {
         AND our_result = 'Y'
         AND time > DATE_SUB(now(), INTERVAL ? SECOND)");
     if ($this->checkStmt($stmt) && $stmt->bind_param("si", $workername, $interval) && $stmt->execute() && $result = $stmt->get_result())
-      return $this->memcache->setCache(__FUNCTION__ . $worker_id, $result->fetch_object()->hashrate);
+      return $this->memcache->setCache(__FUNCTION__ . $worker_id, (float)$result->fetch_object()->hashrate);
     return $this->sqlError();
   }
 
