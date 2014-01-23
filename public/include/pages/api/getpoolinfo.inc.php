@@ -22,10 +22,14 @@ $data = array(
 	'stratumport'			=> $config[gettingstarted][stratumport],
 	// payments
 	'payout_system' 		=> $config[payout_system],
+	'confirmations' => $config['confirmations'],
 	'min_ap_threshold' 		=> $config[ap_threshold][min],
 	'max_ap_threshold' 		=> $config[ap_threshold][max],
-	'txfee' 				=> $config[txfee],
-	'fees'					=> $config[fees],
+	// backwards compatibility for old API calls
+	'txfee' => $config['txfee_manual'],
+	'txfee_manual' => $config['txfee_manual'],
+	'txfee_auto' => $config['txfee_auto'],
+	'fees'					=> $config[fees]
 );
 
 echo $api->get_json($data);
