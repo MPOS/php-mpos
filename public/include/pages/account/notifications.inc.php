@@ -10,7 +10,7 @@ if ($user->isAuthenticated()) {
     // csrf stuff
     $csrfenabled = ($config['csrf']['enabled'] && !in_array('notifications', $config['csrf']['disabled_forms'])) ? 1 : 0;
     if ($csrfenabled) {
-      $nocsrf = ($csrftoken->getBasic($user->getCurrentIP(), 'editnotifs') == @$_POST['ctoken']) ? 1 : 0;
+      $nocsrf = ($csrftoken->checkBasic($user->getCurrentIP(), 'editnotifs', @$_POST['ctoken'])) ? 1 : 0;
     }
     
     if (@$_REQUEST['do'] == 'save') {

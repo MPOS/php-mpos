@@ -6,7 +6,7 @@ if (!defined('SECURITY')) die('Hacking attempt');
 // csrf stuff
 $csrfenabled = ($config['csrf']['enabled'] && !in_array('unlockaccount', $config['csrf']['disabled_forms'])) ? 1 : 0;
 if ($csrfenabled) {
-  $nocsrf = ($csrftoken->getBasic($user->getCurrentIP(), 'unlockaccount') == @$_POST['ctoken']) ? 1 : 0;
+  $nocsrf = ($csrftoken->checkBasic($user->getCurrentIP(), 'unlockaccount', @$_POST['ctoken'])) ? 1 : 0;
 }
 
 // Confirm an account by token

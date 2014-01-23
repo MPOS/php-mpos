@@ -20,7 +20,7 @@ if ($setting->getValue('recaptcha_enabled') && $setting->getValue('recaptcha_ena
 // csrf if enabled
 $csrfenabled = ($config['csrf']['enabled'] && !in_array('register', $config['csrf']['disabled_forms'])) ? 1 : 0;
 if ($csrfenabled) {
-  $nocsrf = ($csrftoken->getBasic($user->getCurrentIP(), 'register') == $_POST['ctoken']) ? 1 : 0;
+  $nocsrf = ($csrftoken->checkBasic($user->getCurrentIP(), 'register', @$_POST['ctoken'])) ? 1 : 0;
 }
 
 if ($setting->getValue('disable_invitations') && $setting->getValue('lock_registration')) {
