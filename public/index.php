@@ -49,7 +49,14 @@ if ($config['memcache']['enabled'] && $config['mc_antidos']['enabled']) {
   $skip_check = false;
   $per_page = ($config['mc_antidos']['per_page']) ? $_SERVER['QUERY_STRING'] : '';
   // if this is an api call we need to be careful not to time them out for those calls separately
-  $is_ajax_call = ($_SERVER['QUERY_STRING'] == substr('page=api&action=getnavbardata', 0, 29)) ? true : false;
+  $ajax_call_querystrings = array(
+    'page=api&action=getuserbalance',
+    'page=api&action=getnavbardata',
+    'page=api&action=getdashboarddata',
+    'page=api&action=getuserworkers'
+  );
+  // cut off any potential extra get info from querystring and see if it's an ajax call
+  $is_ajax_call = (in_array(substr($_SERVER['QUERY_STRING'], 0, 32), $ajax_call_querystrings)) ? true : false;
   if ($is_ajax_call && $config['mc_antidos']['protect_ajax']) {
     $per_page = 'navbar';
   } else if ($is_ajax_call) {
