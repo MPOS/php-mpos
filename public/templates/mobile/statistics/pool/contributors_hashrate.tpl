@@ -13,7 +13,7 @@
 {assign var=listed value=0}
 {section contrib $CONTRIBHASHES}
       {math assign="estday" equation="round(reward / ( diff * pow(2,32) / ( hashrate * 1000 ) / 3600 / 24), 3)" diff=$DIFFICULTY reward=$REWARD hashrate=$CONTRIBHASHES[contrib].hashrate}
-      {if $GLOBAL.userdata.username == $CONTRIBSHARES[contrib].account}{assign var=listed value=1}{/if}
+      {if $GLOBAL.userdata.username|default:"" == $CONTRIBSHARES[contrib].account}{assign var=listed value=1}{/if}
       <tr>
         <th>{$rank++}</th>
         <td>{if $CONTRIBHASHES[contrib].is_anonymous|default:"0" == 1 && $GLOBAL.userdata.is_admin|default:"0" == 0}anonymous{else}{$CONTRIBHASHES[contrib].account|escape}{/if}</td>
