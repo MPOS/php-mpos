@@ -14,12 +14,6 @@ if ($setting->getValue('recaptcha_enabled')) {
   );
 }
 
-// csrf if enabled
-$csrfenabled = ($config['csrf']['enabled'] && !in_array('contact', $config['csrf']['disabled_forms'])) ? 1 : 0;
-if ($csrfenabled) {
-  $nocsrf = ($csrftoken->checkBasic($user->getCurrentIP(), 'contact', @$_POST['ctoken'])) ? 1 : 0;
-}
-
 if ($setting->getValue('disable_contactform')) {
   $_SESSION['POPUP'][] = array('CONTENT' => 'Contactform is currently disabled. Please try again later.', 'TYPE' => 'errormsg');
 } else if ($setting->getValue('disable_contactform') && !$user->isAuthenticated(false)) {
@@ -29,7 +23,7 @@ if ($setting->getValue('disable_contactform')) {
     // Check if recaptcha is enabled, process form data if valid
     if ($rsp->is_valid) {
       // Check if csrf is enabled and fail if token is invalid
-      if (!$nocsrf && $csrfenabled) {
+      if ($config['csrf']['enabled'] && $csrftoken->valid) {
         $_SESSION['POPUP'][] = array('CONTENT' => $csrftoken->getErrorWithDescriptionHTML(), 'TYPE' => 'info');
       } else {
         $smarty->assign("RECAPTCHA", recaptcha_get_html($setting->getValue('recaptcha_public_key')));
@@ -50,7 +44,7 @@ if ($setting->getValue('disable_contactform')) {
     // Captcha disabled
   } else {
     // Check if csrf is enabled and fail if token is invalid
-    if (!$nocsrf && $csrfenabled) {
+    if ($config['csrf']['enabled'] && !$csrftoken->valid) {
       $_SESSION['POPUP'][] = array('CONTENT' => $csrftoken->getErrorWithDescriptionHTML(), 'TYPE' => 'info');
     } else if ($mail->contactform($_POST['senderName'], $_POST['senderEmail'], $_POST['senderSubject'], $_POST['senderMessage'])) {
       $_SESSION['POPUP'][] = array('CONTENT' => 'Thanks for sending your message! We will get back to you shortly');
@@ -60,11 +54,7 @@ if ($setting->getValue('disable_contactform')) {
   }
 }
 
-// csrf token
-if ($config['csrf']['enabled'] && !in_array('contact', $config['csrf']['disabled_forms'])) {
-  $token = $csrftoken->getBasic($user->getCurrentIP(), 'contact');
-  $smarty->assign('CTOKEN', $token);
-}
 // Tempalte specifics
 $smarty->assign("CONTENT", "default.tpl");
+
 ?>

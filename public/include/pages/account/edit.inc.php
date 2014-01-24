@@ -13,12 +13,6 @@ $oldtoken_cp = (isset($_POST['cp_token']) && $_POST['cp_token'] !== '') ? $_POST
 $oldtoken_wf = (isset($_POST['wf_token']) && $_POST['wf_token'] !== '') ? $_POST['wf_token'] : @$_GET['wf_token'];
 $updating = (@$_POST['do']) ? 1 : 0;
 
-// csrf stuff 
-$csrfenabled = ($config['csrf']['enabled'] && !in_array('accountedit', $config['csrf']['disabled_forms'])) ? 1 : 0;
-if ($csrfenabled) {
-  $nocsrf = ($csrftoken->checkBasic($user->getCurrentIP(), 'editaccount', @$_POST['ctoken'])) ? 1 : 0;
-}
-
 if ($user->isAuthenticated()) {
   if ($config['twofactor']['enabled']) {
     $popupmsg = 'E-mail confirmations are required for ';
@@ -70,7 +64,7 @@ if ($user->isAuthenticated()) {
   }
   
   if (isset($_POST['do']) && $_POST['do'] == 'genPin') {
-    if (!$csrfenabled || $csrfenabled && $nocsrf) {
+    if (!$config['csrf']['enabled'] || $config['csrf']['enabled'] && $csrftoken->valid) {
       if ($user->generatePin($_SESSION['USERDATA']['id'], $_POST['currentPassword'])) {
         $_SESSION['POPUP'][] = array('CONTENT' => 'Your PIN # has been sent to your email.', 'TYPE' => 'success');
       } else {
@@ -89,7 +83,7 @@ if ($user->isAuthenticated()) {
         $isvalid = in_array($_POST['utype'],$validtypes);
         if ($isvalid) {
           $ctype = strip_tags($_POST['utype']);
-          if (!$csrfenabled || $csrfenabled && $nocsrf) {
+          if (!$config['csrf']['enabled'] || $config['csrf']['enabled'] && $csrftoken->valid) {
             $send = $user->sendChangeConfigEmail($ctype, $_SESSION['USERDATA']['id']);
             if ($send) {
               $_SESSION['POPUP'][] = array('CONTENT' => 'A confirmation was sent to your e-mail, follow that link to continue', 'TYPE' => 'success');
@@ -110,7 +104,7 @@ if ($user->isAuthenticated()) {
         	  $dBalance = $aBalance['confirmed'];
         	  if ($dBalance > $config['txfee_manual']) {
         	    if (!$oPayout->isPayoutActive($_SESSION['USERDATA']['id'])) {
-        	      if (!$csrfenabled || $csrfenabled && $nocsrf) {
+        	      if (!$config['csrf']['enabled'] || $config['csrf']['enabled'] && $csrftoken->valid) {
         	        if ($iPayoutId = $oPayout->createPayout($_SESSION['USERDATA']['id'], $oldtoken_wf)) {
         	          $_SESSION['POPUP'][] = array('CONTENT' => 'Created new manual payout request with ID #' . $iPayoutId);
         	        } else {
@@ -129,7 +123,7 @@ if ($user->isAuthenticated()) {
         	break;
         
           case 'updateAccount':
-            if (!$csrfenabled || $csrfenabled && $nocsrf) {
+            if (!$config['csrf']['enabled'] || $config['csrf']['enabled'] && $csrftoken->valid) {
               if ($user->updateAccount($_SESSION['USERDATA']['id'], $_POST['paymentAddress'], $_POST['payoutThreshold'], $_POST['donatePercent'], $_POST['email'], $_POST['is_anonymous'], $oldtoken_ea)) {
             	$_SESSION['POPUP'][] = array('CONTENT' => 'Account details updated', 'TYPE' => 'success');
               } else {
@@ -141,7 +135,7 @@ if ($user->isAuthenticated()) {
         	break;
         
           case 'updatePassword':
-            if (!$csrfenabled || $csrfenabled && $nocsrf) {
+            if (!$config['csrf']['enabled'] || $config['csrf']['enabled'] && $csrftoken->valid) {
               if ($user->updatePassword($_SESSION['USERDATA']['id'], $_POST['currentPassword'], $_POST['newPassword'], $_POST['newPassword2'], $oldtoken_cp)) {
                 $_SESSION['POPUP'][] = array('CONTENT' => 'Password updated', 'TYPE' => 'success');
               } else {
@@ -185,8 +179,7 @@ if ($user->isAuthenticated() && $config['twofactor']['enabled']) {
   (!empty($cpprep_sent) && !empty($cpprep_edit)) ? $_SESSION['POPUP'][] = array('CONTENT' => $cpprep_sent, 'TYPE' => 'success'):"";
   (!empty($cpprep_sent) && empty($cpprep_edit)) ? $_SESSION['POPUP'][] = array('CONTENT' => $message_tokensent_invalid.$messages_tokensent_status['cp'], 'TYPE' => 'success'):"";
 }
-
-// csrf stuff
+// two-factor stuff
 $smarty->assign("CHANGEPASSUNLOCKED", $cp_editable);
 $smarty->assign("WITHDRAWUNLOCKED", $wf_editable);
 $smarty->assign("DETAILSUNLOCKED", $ea_editable);
@@ -194,10 +187,7 @@ $smarty->assign("CHANGEPASSSENT", $cp_sent);
 $smarty->assign("WITHDRAWSENT", $wf_sent);
 $smarty->assign("DETAILSSENT", $ea_sent);
 $smarty->assign("DONATE_THRESHOLD", $config['donate_threshold']);
-if ($csrfenabled && !in_array('accountedit', $config['csrf']['disabled_forms'])) {
-  $token = $csrftoken->getBasic($user->getCurrentIP(), 'editaccount');
-  $smarty->assign('CTOKEN', $token);
-}
+
 // Tempalte specifics
 $smarty->assign("CONTENT", "default.tpl");
 ?>

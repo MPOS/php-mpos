@@ -2,7 +2,7 @@
   <form action="" method="POST">
     <input type="hidden" name="page" value="password">
     <input type="hidden" name="action" value="reset">
-    {if $GLOBAL.csrf.enabled && !"passreset"|in_array:$GLOBAL.csrf.disabled_forms}<input type="hidden" name="ctoken" value="{$CTOKEN|escape}" />{/if}
+    <input type="hidden" name="ctoken" value="{$CTOKEN|escape|default:""}" />
     <header><h3>Password reset</h3></header>
     <div class="module_content">
       <p>If you have an email set for your account, enter your username to get your password reset</p>

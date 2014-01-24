@@ -81,6 +81,12 @@ if (is_dir(INCLUDE_DIR . '/pages/' . $page)) {
 // Default to empty (nothing) if nothing set or not known
 $action = (isset($_REQUEST['action']) && !is_array($_REQUEST['action'])) && isset($arrActions[$_REQUEST['action']]) ? $_REQUEST['action'] : "";
 
+// Check csrf token validity if necessary
+if ($config['csrf']['enabled'] && isset($_POST['ctoken']) && !empty($_POST['ctoken']) && !is_array($_POST['ctoken'])) {
+  $csrftoken->valid = ($csrftoken->checkBasic($user->getCurrentIP(), $arrPages[$page], $_POST['ctoken'])) ? 1 : 0;
+}
+if ($config['csrf']['enabled']) $smarty->assign('CTOKEN', $csrftoken->getBasic($user->getCurrentIP(), $arrPages[$page]));
+
 // Load the page code setting the content for the page OR the page action instead if set
 if (!empty($action)) {
     $debug->append('Loading Action: ' . $action . ' -> ' . $arrActions[$action], 1);

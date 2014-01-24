@@ -1,7 +1,7 @@
 <form action="{$smarty.server.SCRIPT_NAME}" method="post">
   <input type="hidden" name="page" value="{$smarty.request.page|escape}">
   <input type="hidden" name="action" value="contactform">
-  {if $GLOBAL.csrf.enabled && !"contact"|in_array:$GLOBAL.csrf.disabled_forms}<input type="hidden" name="ctoken" value="{$CTOKEN|escape}" />{/if}
+  <input type="hidden" name="ctoken" value="{$CTOKEN|escape|default:""}" />
     <article class="module width_3_quarter">
     <header><h3>Contact Us</h3></header>
     <div class="module_content">
