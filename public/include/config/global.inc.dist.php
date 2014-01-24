@@ -7,7 +7,7 @@ if (!defined('SECURITY')) die('Hacking attempt');
  * This is used in the version check to ensure you run the latest version of the configuration file.
  * Once you upgraded your config, change the version here too.
  **/
-$config['version'] = '0.0.5';
+$config['version'] = '0.0.6';
 
 // Our include directory for additional features
 define('INCLUDE_DIR', BASEPATH . 'include');
@@ -135,7 +135,7 @@ $config['twofactor']['options']['changepw'] = true;
  *
  * Options:
  *   enabled          =   Whether or not we will generate/check for valid CSRF tokens
- *   disabled_forms   =   Which forms you want to disable csrf protection on, if enabled  
+ *   disabled_forms   =   Which forms you want to disable csrf protection on, if enabled
  *                         * Valid options  :  login, contact, accountedit, workers, notifications, invite, register, passreset, unlockaccount
  * Default:
  *   enabled          =   true
@@ -216,6 +216,16 @@ $config['price']['currency'] = 'USD';
 $config['ap_threshold']['min'] = 1;
 $config['ap_threshold']['max'] = 250;
 
+/**
+ * Donation thresholds
+ *
+ * You can define a min and max values for you users
+ * donation settings here.
+ *
+ * Defaults:
+ *   `min` = `1`
+ **/
+$config['donate_threshold']['min'] = 1;
 
 /**
  * Account specific settings
