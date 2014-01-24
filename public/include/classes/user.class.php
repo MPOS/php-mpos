@@ -13,17 +13,10 @@ class User extends Base {
   private function getHash($string) {
     return hash('sha256', $string.$this->salt);
   }
-  public function getUserName($id) {
-    return $this->getSingle($id, 'username', 'id');
-  }
-  public function getUserNameByEmail($email) {
-    return $this->getSingle($email, 'username', 'email', 's');
-  }
+  
+  // ALL CALLS BY USERNAME
   public function getUserId($username, $lower=false) {
     return $this->getSingle($username, 'id', 'username', 's', $lower);
-  }
-  public function getUserIdByEmail($email, $lower=false) {
-    return $this->getSingle($email, 'id', 'email', 's', $lower);
   }
   public function getUserEmail($username, $lower=false) {
     return $this->getSingle($username, 'email', 'username', 's', $lower);
@@ -31,11 +24,30 @@ class User extends Base {
   public function getUserNotifyEmail($username, $lower=false) {
     return $this->getSingle($username, 'notify_email', 'username', 's', $lower);
   }
-  public function getUserNoFee($id) {
-    return $this->getSingle($id, 'no_fees', 'id');
+
+  // ALL CALLS BY EMAIL
+  public function getEmail($email) {
+    return $this->getSingle($email, 'email', 'email', 's');
+  }
+  public function getUserNameByEmail($email) {
+    return $this->getSingle($email, 'username', 'email', 's');
+  }
+  public function getUserIdByEmail($email, $lower=false) {
+    return $this->getSingle($email, 'id', 'email', 's', $lower);
+  }
+
+  // ALL CALLS BY USERID
+  public function getUserName($id) {
+    return $this->getSingle($id, 'username', 'id');
+  }
+  public function getUserEmailbyID($id) {
+    return $this->getSingle($id, 'email', 'id');
   }
   public function getUserDonatePercent($id) {
     return $this->getDonatePercent($id);
+  }
+  public function getUserNoFee($id) {
+    return $this->getSingle($id, 'no_fees', 'id');
   }
   public function getUserAdmin($id) {
     return $this->getSingle($id, 'is_admin', 'id');
@@ -45,9 +57,6 @@ class User extends Base {
   }
   public function getUserIp($id) {
     return $this->getSingle($id, 'loggedIp', 'id');
-  }
-  public function getEmail($email) {
-    return $this->getSingle($email, 'email', 'email', 's');
   }
   public function getUserFailed($id) {
    return $this->getSingle($id, 'failed_logins', 'id');
