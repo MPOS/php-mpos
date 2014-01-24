@@ -17,7 +17,7 @@ if ($setting->getValue('recaptcha_enabled')) {
 // csrf if enabled
 $csrfenabled = ($config['csrf']['enabled'] && !in_array('contact', $config['csrf']['disabled_forms'])) ? 1 : 0;
 if ($csrfenabled) {
-  $nocsrf = ($csrftoken->getBasic($user->getCurrentIP(), 'contact') == @$_POST['ctoken']) ? 1 : 0;
+  $nocsrf = ($csrftoken->checkBasic($user->getCurrentIP(), 'contact', @$_POST['ctoken'])) ? 1 : 0;
 }
 
 if ($setting->getValue('disable_contactform')) {

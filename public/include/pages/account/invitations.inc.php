@@ -8,7 +8,7 @@ if ($user->isAuthenticated()) {
     // csrf stuff
     $csrfenabled = ($config['csrf']['enabled'] && !in_array('invitations', $config['csrf']['disabled_forms'])) ? 1 : 0;
     if ($csrfenabled) {
-      $nocsrf = ($csrftoken->getBasic($user->getCurrentIP(), 'invitations') == @$_POST['ctoken']) ? 1 : 0;
+      $nocsrf = ($csrftoken->checkBasic($user->getCurrentIP(), 'invitations', @$_POST['ctoken'])) ? 1 : 0;
     }
     if ($invitation->getCountInvitations($_SESSION['USERDATA']['id']) >= $config['accounts']['invitations']['count']) {
       $_SESSION['POPUP'][] = array('CONTENT' => 'You have exceeded the allowed invitations of ' . $config['accounts']['invitations']['count'], 'TYPE' => 'errormsg');

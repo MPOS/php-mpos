@@ -5,33 +5,67 @@ if (!defined('SECURITY')) die('Hacking attempt');
 
 class CSRFToken Extends Base {
   /**
-   * Gets a basic CSRF token for this user/type and time chunk
-   * @param string user User; for hash seed, if username isn't available use IP
-   * @param string type Type of token; for hash seed, should be unique per page/use
-   * @param string timing Which date() chars we add to the seed; default month day year hour minute ie same minute only
-   * @param string seedExtra Extra information to add to the seed
-   * @return string CSRF token
+   * Gets a basic csrf token
+   * @param string $user user or IP/host address
+   * @param string $type page name or other unique per-page identifier
    */
-  public function getBasic($user, $type, $timing='mdyHi', $seedExtra='') {
-    $date = date('m/d/y/H/i/s');
-    $data = explode('/', $date);
-    $month = $data[0];    $day = $data[1];        $year = $data[2];
-    $hour = $data[3];     $minute = $data[4];     $second = $data[5];
-    $salt1 = $this->salt; $salt2 = $this->salty;  $seed = $salt1;
-    $lead = $this->config['csrf']['leadtime'];
-    $lead_sec = ($lead <= 11 && $lead >= 0) ? $lead : 3;
-    if ($minute == 59 && $second > (60-$lead_sec)) {
-      $minute = 0;
-      $fhour = ($hour == 23) ? $hour = 0 : $hour+=1;
-    }
-    $seed.= (strpos($timing, 'm') !== false) ? $month : '';
-    $seed.= (strpos($timing, 'd') !== false) ? $day : '';
-    $seed.= (strpos($timing, 'y') !== false) ? $year : '';
-    $seed.= (strpos($timing, 'H') !== false) ? $hour : '';
-    $seed.= (strpos($timing, 'i') !== false) ? $minute : '';
-    $seed.= (strpos($timing, 's') !== false) ? $second : '';
-    $seed.= ($seedExtra !== '') ? $seedExtra.$salt2 : $salt2;
+  public function getBasic($user, $type) {
+    $date = date('m/d/y/H/i');
+    $d = explode('/', $date);
+    $seed = $this->buildSeed($user.$type, $d[0], $d[1], $d[2], $d[3], $d[4]);
     return $this->getHash($seed);
+  }
+  
+  /**
+   * Returns +1 min and +1 hour rollovers hashes
+   * @param string $user user or IP/host address
+   * @param string $type page name or other unique per-page identifier
+   * @return array 1min and 1hour hashes
+   */
+  public function checkAdditional($user, $type) {
+    $date = date('m/d/y/H/i');
+    $d = explode('/', $date);
+    // minute may have rolled over
+    $seed1 = $this->buildSeed($user.$type, $d[0], $d[1], $d[2], $d[3], ($d[4]-1));
+    // hour may have rolled over
+    $seed2 = $this->buildSeed($user.$type, $d[0], $d[1], $d[2], ($d[3]-1), 59);
+    return array($this->getHash($seed1), $this->getHash($seed2));
+  }
+  
+  /**
+   * Builds a seed with the given data
+   * @param string $data
+   * @param int $year
+   * @param int $month
+   * @param int $day
+   * @param int $hour
+   * @param int $minute
+   * @return string seed
+   */
+  private function buildSeed($data, $year, $month, $day, $hour, $minute) {
+    return $this->salty.$year.$month.$day.$data.$hour.$minute.$this->salt;
+  }
+  
+  /**
+   * Checks if the token is correct as is, if not checks for rollovers with checkAdditional()
+   * @param string $user user or IP/host address
+   * @param string $type page name or other unique per-page identifier
+   * @param string $token token to check against
+   * @return boolean
+   */
+  public function checkBasic($user, $type, $token) {
+    if (empty($token)) return false;
+    $token_now = $this->getBasic($user, $type);
+    if ($token_now !== $token) {
+      $tokens_check = $this->checkAdditional($user, $type);
+      $match = 0;
+      foreach ($tokens_check as $checkit) {
+        if ($checkit == $token) $match = 1;
+      }
+      return ($match) ? true : false;
+    } else {
+      return true;
+    }
   }
   
   /**

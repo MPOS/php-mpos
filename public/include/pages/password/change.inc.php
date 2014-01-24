@@ -8,7 +8,7 @@ if (!defined('SECURITY'))
 $csrfenabled = ($config['csrf']['enabled'] && !in_array('passreset', $config['csrf']['disabled_forms'])) ? 1 : 0;
 if ($csrfenabled) {
   // we have to use editaccount token because this that's where we'll get pushed here from
-  $nocsrf = ($csrftoken->getBasic($user->getCurrentIP(), 'editaccount') == @$_POST['ctoken']) ? 1 : 0;
+  $nocsrf = ($csrftoken->checkBasic($user->getCurrentIP(), 'editaccount', @$_POST['ctoken'])) ? 1 : 0;
 }
 
 if (!$csrfenabled || $csrfenabled && $nocsrf) {
