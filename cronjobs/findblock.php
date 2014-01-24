@@ -155,7 +155,7 @@ if (empty($aAllBlocks)) {
           foreach ($aAccounts as $aData) {
             $aMailData['height'] = $aBlock['height'];
             $aMailData['subject'] = 'New Block';
-            $aMailData['email'] = $user->getUserEmail($user->getUserName($aData['account_id']));
+            $aMailData['email'] = $user->getUserEmailByID($aData['account_id']);
             $aMailData['shares'] = $iRoundShares;
             if (!$notification->sendNotification($aData['account_id'], 'new_block', $aMailData))
               $log->logError('Failed to notify user of new found block: ' . $user->getUserName($aData['account_id']));
