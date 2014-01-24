@@ -200,8 +200,7 @@ if ($aAllBlocks = $block->getAllUnaccounted('ASC')) {
 else if (empty($aAllBlocks)) {
     $log->logInfo("\tNo new blocks.");
     // No monitoring event here, not fatal for PPS
-}
-else {
+} else {
     $log->logInfo("Failed to fetch unaccounted Blocks. NOTICE: " . $block->getCronError());
 }
 $log->logInfo("Completed PPS Payout");
