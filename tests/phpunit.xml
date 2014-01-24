@@ -3,8 +3,11 @@
     <testsuite name="SampleTest">
       <directory>unit/config</directory>
     </testsuite>
-    <testsuite name="SecurityRegress">
-      <directory>unit/securityregress/SecurityRegress.php</directory>
+    <testsuite name="Security_CSRFToken">
+      <directory>unit/securityregress/Security_CSRFToken.php</directory>
+    </testsuite>
+    <testsuite name="Security_Sessions">
+      <directory>unit/securityregress/Security_Sessions.php</directory>
     </testsuite>
   </testsuites>
 </phpunit>
