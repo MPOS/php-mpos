@@ -68,8 +68,8 @@ if ($setting->getValue('disable_manual_payouts') != 1) {
         try {
           $txid = $bitcoin->sendtoaddress($aData['coin_address'], $dBalance - $config['txfee_manual']);
         } catch (Exception $e) {
-          $log->logError('Failed to send requested balance to coin address, please check payout process. Does the wallet cover the amount? Error:' . $e->getMessage());
-          continue;
+          $log->logFatal('Failed sending coins to user, aborting due to a coind exception in RPC call. Please check your RPC transactions.');
+          $monitoring->endCronjob($cron_name, 'E0078', 1, true);
         }
 
         if ($transaction->addTransaction($aData['account_id'], $dBalance - $config['txfee_manual'], 'Debit_MP', NULL, $aData['coin_address'], $txid) && $transaction->addTransaction($aData['account_id'], $config['txfee_manual'], 'TXFee', NULL, $aData['coin_address'])) {
@@ -132,8 +132,8 @@ if ($setting->getValue('disable_auto_payouts') != 1) {
         try {
           $txid = $bitcoin->sendtoaddress($aUserData['coin_address'], $dBalance - $config['txfee_auto']);
         } catch (Exception $e) {
-          $log->logError('Failed to send requested balance to coin address, please check payout process. Does the wallet cover the amount?');
-          continue;
+          $log->logFatal('Failed sending coins to user, aborting due to a coind exception in RPC call. Please check your RPC transactions.');
+          $monitoring->endCronjob($cron_name, 'E0078', 1, true);
         }
 
         // Create transaction record
