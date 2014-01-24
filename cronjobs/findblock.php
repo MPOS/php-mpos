@@ -147,18 +147,31 @@ if (empty($aAllBlocks)) {
         $log->logError('Failed to create Bonus transaction in database for user ' . $user->getUserName($iAccountId) . ' for block ' . $aBlock['height'] . ': ' . $transaction->getCronError());
       }
 
-      if ($setting->getValue('disable_notifications') != 1) {
-        // Notify users
-        $aAccounts = $notification->getNotificationAccountIdByType('new_block');
-        if (is_array($aAccounts)) {
-          foreach ($aAccounts as $aData) {
-            $aMailData['height'] = $aBlock['height'];
-            $aMailData['subject'] = 'New Block';
-            $aMailData['email'] = $user->getUserEmail($user->getUserName($aData['account_id']));
-            $aMailData['shares'] = $iRoundShares;
-            if (!$notification->sendNotification($aData['account_id'], 'new_block', $aMailData))
-              $log->logError('Failed to notify user of new found block: ' . $user->getUserName($aData['account_id']));
-          }
+      if ($setting->getValue('disable_notifications') != 1 && $aAccounts = $notification->getNotificationAccountIdByType('new_block')) {
+        if ($config['payout_system'] != 'pps') {
+            if (is_array($aAccounts)) {
+                foreach ($aAccounts as $aData) {
+                $aMailData['height'] = $aBlock['height'];
+                $aMailData['subject'] = 'New Block';
+                $aMailData['email'] = $user->getUserEmailByID($aData['account_id']);
+                $aMailData['shares'] = $iRoundShares;
+                if (!$notification->sendNotification($aData['account_id'], 'new_block', $aMailData))
+                    $log->logError('Failed to notify user of new found block: ' . $user->getUserName($aData['account_id']));
+                }
+            }
+        } else {
+            if (is_array($aAccounts)) {
+                foreach ($aAccounts as $aData) {
+                    if ($user->isAdmin($aData['account_id'])) {
+                    $aMailData['height'] = $aBlock['height'];
+                    $aMailData['subject'] = 'New Block';
+                    $aMailData['email'] = $user->getUserEmailByID($aData['account_id']);
+                    $aMailData['shares'] = $iRoundShares;
+                    if (!$notification->sendNotification($aData['account_id'], 'new_block', $aMailData))
+                        $log->logError('Failed to notify admin of new found block: ' . $user->getUserName($aData['account_id']));
+                    }
+                }
+            } 
         }
       }
     }
