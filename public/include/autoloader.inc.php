@@ -28,8 +28,14 @@ if ($detect->isMobile() && $setting->getValue('website_mobile_theme')) {
   // Set to mobile theme
   $setting->getValue('website_mobile_theme') ? $theme = $setting->getValue('website_mobile_theme') : $theme = 'mobile';
 } else {
+  // Our default template to load, pages can overwrite this later
+  $master_template = 'master.tpl';
   // Use configured theme, fallback to default theme
   $setting->getValue('website_theme') ? $theme = $setting->getValue('website_theme') : $theme = 'mpos';
+  // Validate configured theme folder + master template, fallback to default theme
+  if (!file_exists($master_template))
+    $theme = 'mpos';
+
 }
 define('THEME', $theme);
 
