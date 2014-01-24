@@ -142,7 +142,7 @@ if ($setting->getValue('disable_auto_payouts') != 1) {
           if (!$transaction->setArchived($aUserData['id'], $transaction->insert_id))
             $log->logError('Failed to mark transactions for user #' . $aUserData['id'] . ' prior to #' . $transaction->insert_id . ' as archived');
           // Notify user via  mail
-          $aMailData['email'] = $user->getUserEmailByID($aData['account_id']);
+          $aMailData['email'] = $user->getUserEmailByID($aUserData['account_id']);
           $aMailData['subject'] = 'Auto Payout Completed';
           $aMailData['amount'] = $dBalance - $config['txfee_auto'];
           if (!$notification->sendNotification($aUserData['id'], 'auto_payout', $aMailData))
