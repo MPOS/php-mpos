@@ -72,6 +72,10 @@ foreach ($aAllBlocks as $iIndex => $aBlock) {
 
     // Loop through all accounts that have found shares for this round
     foreach ($aAccountShares as $key => $aData) {
+      // Skip users with only invalids
+      if ($aData['valid'] == 0) {
+        continue;
+      }
       // Skip entries that have no account ID, user deleted?
       if (empty($aData['id'])) {
         $log->logInfo('User ' . $aData['username'] . ' does not have an associated account, skipping');
