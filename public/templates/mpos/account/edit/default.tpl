@@ -29,8 +29,8 @@
       </fieldset>
       <fieldset>
         <label>Donation Percentage</label>
-        <font size="1"> Donation amount in percent (example: 0.5)</font>
-        {nocache}<input type="text" name="donatePercent" value="{$smarty.request.donatePercent|default:$GLOBAL.userdata.donate_percent|escape}" size="4" {if $GLOBAL.twofactor.enabled && $GLOBAL.twofactor.options.details && !$DETAILSUNLOCKED}disabled{/if}/>{/nocache}
+        <font size="1"> Donation amount in percent ({$DONATE_THRESHOLD.min}-100%)</font>
+        {nocache}<input type="text" name="donatePercent" value="{$smarty.request.donatePercent|default:$GLOBAL.userdata.donate_percent|escape|number_format:"2"}" size="4" {if $GLOBAL.twofactor.enabled && $GLOBAL.twofactor.options.details && !$DETAILSUNLOCKED}disabled{/if}/>{/nocache}
       </fieldset>
       <fieldset>
         <label>Automatic Payout Threshold</label>

@@ -382,6 +382,7 @@ class User extends Base {
   public function updateAccount($userID, $address, $threshold, $donate, $email, $is_anonymous, $strToken) {
     $this->debug->append("STA " . __METHOD__, 4);
     $bUser = false;
+    $donate = round($donate, 2);
     // number validation checks
     if (!is_numeric($threshold)) {
       $this->setErrorMessage('Invalid input for auto-payout');
@@ -396,8 +397,8 @@ class User extends Base {
     if (!is_numeric($donate)) {
       $this->setErrorMessage('Invalid input for donation');
       return false;
-    } else if ($donate < 0) {
-      $this->setErrorMessage('Donation below allowed 0% limit');
+    } else if ($donate < $this->config['donate_threshold']['min'] && $donate != 0) {
+      $this->setErrorMessage('Donation below allowed ' . $this->config['donate_threshold']['min'] . '% limit');
       return false;
     } else if ($donate > 100) {
       $this->setErrorMessage('Donation above allowed 100% limit');
