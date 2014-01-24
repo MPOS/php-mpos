@@ -1,5 +1,10 @@
+<phpunit bootstrap="bootstrap.php">
 <testsuites>
-  <testsuite name="SampleTest">
-    <directory>unit/config</directory>
-  </testsuite>
-</testsuites>
+    <testsuite name="SampleTest">
+      <directory>unit/config</directory>
+    </testsuite>
+    <testsuite name="SecurityRegress">
+      <directory>unit/securityregress/SecurityRegress.php</directory>
+    </testsuite>
+  </testsuites>
+</phpunit>
