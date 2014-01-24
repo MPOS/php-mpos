@@ -590,7 +590,7 @@ class Statistics extends Base {
   public function getUserSharerate($username, $account_id=NULL, $interval=180) {
     $this->debug->append("STA " . __METHOD__, 4);
     // Dual-caching, try statistics cron first, then fallback to local, then fallbock to SQL
-    if ($data = $this->memcache->getStatic(STATISTICS_ALL_USER_HASHRATES)) {
+    if ($this->getGetCache() && $data = $this->memcache->getStatic(STATISTICS_ALL_USER_HASHRATES)) {
       if (array_key_exists($account_id, $data['data']))
         return $data['data'][$account_id]['sharerate'];
       // We have no cached value, we return defaults
