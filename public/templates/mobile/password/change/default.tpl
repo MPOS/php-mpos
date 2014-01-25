@@ -2,7 +2,7 @@
       <input type="hidden" name="token" value="{$smarty.request.token|escape}">
       <input type="hidden" name="page" value="{$smarty.request.page|escape}">
       <input type="hidden" name="action" value="{$smarty.request.action|escape}">
-      {if $GLOBAL.csrf.enabled && !"editaccount"|in_array:$GLOBAL.csrf.disabled_forms}<input type="hidden" name="ctoken" value="{$CTOKEN|escape}" />{/if}
+      <input type="hidden" name="ctoken" value="{$CTOKEN|escape|default:""}" />
       <input type="hidden" name="do" value="useToken">
       <table>
         <tr><td>New Password: </td><td><input type="password" name="newPassword"></td></tr>

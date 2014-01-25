@@ -148,7 +148,7 @@ class Notification extends Mail {
       }
     } else {
       $this->setErrorMessage('User disabled ' . $strType . ' notifications');
-      return false;
+      return true;
     }
     $this->setErrorMessage('Error sending mail notification');
     return false;

@@ -2,7 +2,7 @@
 <div class="login_small">
   <form action="{$smarty.server.SCRIPT_NAME}" method="post" id="loginForm">
     <input type="hidden" name="page" value="login" />
-    {if $GLOBAL.csrf.enabled && $GLOBAL.csrf.forms.login}<input type="hidden" name="ctoken" value="{$CTOKEN|escape}" />{/if}
+    <input type="hidden" name="ctoken" value="{$CTOKEN|escape|default:""}" />
     <input type="hidden" name="to" value="{$smarty.server.SCRIPT_NAME}?page=dashboard" />
     <fieldset2 class="small">
       <label>Username</label>

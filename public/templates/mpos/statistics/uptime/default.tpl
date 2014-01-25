@@ -24,7 +24,7 @@
 {assign var=node value="."|explode:$item.friendlyname}
       <tr>
         <td align="center"><img src="{$GLOBALASSETS}/images/flags/{$node.0}.png"/></td>
-        <td align="center">{$node.1}</td>
+        {if $node|count > 1}<td align="center">{$node.1}</td>{/if}
         <td align="center"><span class="ur-status-{$CODES[$item.status]|lower}">{$CODES[$item.status]}</span></td>
         <td align="center">{$item.log.1.datetime|date_format:"%b %d, %Y %H:%M"}</td>
         <td align="center"><span class="chart" data-percent="{$item.customuptimeratio.0}"><span class="percent"></span></span></td>

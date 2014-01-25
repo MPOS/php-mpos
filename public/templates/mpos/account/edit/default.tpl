@@ -56,7 +56,7 @@
     <footer>
       <div class="submit_link">
       {nocache}
-        {if $GLOBAL.csrf.enabled && !"accountedit"|in_array:$GLOBAL.csrf.disabled_forms}<input type="hidden" name="ctoken" value="{$CTOKEN|escape}" />{/if}
+        <input type="hidden" name="ctoken" value="{$CTOKEN|escape|default:""}" />
         <input type="hidden" name="ea_token" value="{$smarty.request.ea_token|escape|default:""}">
         <input type="hidden" name="utype" value="account_edit">
         {if $GLOBAL.twofactor.enabled && $GLOBAL.twofactor.options.details}
@@ -106,7 +106,7 @@
       <div class="submit_link">
       {nocache}
         <input type="hidden" name="wf_token" value="{$smarty.request.wf_token|escape|default:""}">
-        {if $GLOBAL.csrf.enabled && !"accountedit"|in_array:$GLOBAL.csrf.disabled_forms}<input type="hidden" name="ctoken" value="{$CTOKEN|escape}" />{/if}
+        <input type="hidden" name="ctoken" value="{$CTOKEN|escape|default:""}" />
         <input type="hidden" name="utype" value="withdraw_funds">
         {if $GLOBAL.twofactor.enabled && $GLOBAL.twofactor.options.withdraw}
           {if $WITHDRAWSENT == 1 && $WITHDRAWUNLOCKED == 1}
@@ -161,7 +161,7 @@
       <div class="submit_link">
       {nocache}
         <input type="hidden" name="cp_token" value="{$smarty.request.cp_token|escape|default:""}">
-        {if $GLOBAL.csrf.enabled && !"accountedit"|in_array:$GLOBAL.csrf.disabled_forms}<input type="hidden" name="ctoken" value="{$CTOKEN|escape}" />{/if}
+        <input type="hidden" name="ctoken" value="{$CTOKEN|escape|default:""}" />
         <input type="hidden" name="utype" value="change_pw">
         {if $GLOBAL.twofactor.enabled && $GLOBAL.twofactor.options.changepw}
           {if $CHANGEPASSSENT == 1 && $CHANGEPASSUNLOCKED == 1}
@@ -185,7 +185,7 @@
   <input type="hidden" name="page" value="{$smarty.request.page|escape}">
   <input type="hidden" name="action" value="{$smarty.request.action|escape}">
   <input type="hidden" name="do" value="genPin">
-  {if $GLOBAL.csrf.enabled && !"editaccount"|in_array:$GLOBAL.csrf.disabled_forms}<input type="hidden" name="ctoken" value="{$CTOKEN|escape}" />{/if}
+  <input type="hidden" name="ctoken" value="{$CTOKEN|escape|default:""}" />
 	<article class="module width_half">
 	  <header>
 		  <h3>Reset PIN</h3>

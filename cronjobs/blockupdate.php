@@ -33,8 +33,9 @@ if ( $bitcoin->can_connect() !== true ) {
 // Fetch all unconfirmed blocks
 $aAllBlocks = $block->getAllUnconfirmed(max($config['network_confirmations'],$config['confirmations']));
 
-$log->logInfo("ID\tHeight\tBlockhash\tConfirmations");
+$header = false;
 foreach ($aAllBlocks as $iIndex => $aBlock) {
+  !$header ? $log->logInfo("ID\tHeight\tBlockhash\tConfirmations") : $header = true;
   $aBlockInfo = $bitcoin->getblock($aBlock['blockhash']);
   // Fetch this blocks transaction details to find orphan blocks
   $aTxDetails = $bitcoin->gettransaction($aBlockInfo['tx'][0]);
