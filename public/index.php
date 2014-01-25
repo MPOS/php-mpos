@@ -1,5 +1,4 @@
 <?php
-
 /*
 
 Copyright:: 2013, Sebastian Grewe
@@ -16,7 +15,20 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 
- */
+*/
+
+// Set a decently long SECURITY key with special chars etc
+define('SECURITY', '*)WT#&YHfd');
+define('SECHASH_CHECK', true);
+
+// change SECHASH every second, we allow up to 3 sec back for slow servers
+if (SECHASH_CHECK) {
+  function fip($tr=0) { return md5(SECURITY.(time()-$tr).SECURITY); }
+  define('SECHASH', fip());
+  function cfip() { return (fip()==SECHASH||fip(1)==SECHASH||fip(2)==SECHASH) ? 1 : 0; }
+} else {
+  function cfip() { return 1; }
+}
 
 // Used for performance calculations
 $dStartTime = microtime(true);
@@ -25,9 +37,6 @@ $dStartTime = microtime(true);
 // No but Its now, - Aim
 define("BASEPATH", dirname(__FILE__) . "/");
 
-// Our security check
-define("SECURITY", 1);
-
 // Include our configuration (holding defines for the requires)
 if (!include_once(BASEPATH . 'include/config/global.inc.php')) die('Unable to load site configuration');
 
@@ -35,18 +44,66 @@ if (!include_once(BASEPATH . 'include/config/global.inc.php')) die('Unable to lo
 $master_template = 'master.tpl';
 
 // Start a session
-session_set_cookie_params(time()+$config['cookie']['duration'], $config['cookie']['path'], $config['cookie']['domain'], $config['cookie']['secure'], $config['cookie']['httponly']);
-$session_start = @session_start();
-if (!$session_start) {
-  session_destroy();
-  session_regenerate_id(true);
-  session_start();
-}
-@setcookie(session_name(), session_id(), time()+$config['cookie']['duration'], $config['cookie']['path'], $config['cookie']['domain'], $config['cookie']['secure'], $config['cookie']['httponly']);
 
 // Load Classes, they name defines the $ variable used
 // We include all needed files here, even though our templates could load them themself
 require_once(INCLUDE_DIR . '/autoloader.inc.php');
+
+if ($config['strict']) {
+  $session = new SessionManager($config, $_SERVER['HTTP_HOST']);
+  if ($session->verify_server()) {
+    $session->create_session($_SERVER['REMOTE_ADDR']);
+    if ($session->verify_client($_SERVER['REMOTE_ADDR'])) {
+      $session->update_client($_SERVER['REMOTE_ADDR']);
+    }
+  }
+} else {
+  session_set_cookie_params(time()+$config['cookie']['duration'], $config['cookie']['path'], $config['cookie']['domain'], $config['cookie']['secure'], $config['cookie']['httponly']);
+  $session_start = @session_start();
+  if (!$session_start) {
+    session_destroy();
+    session_regenerate_id(true);
+    session_start();
+  }
+  @setcookie(session_name(), session_id(), time()+$config['cookie']['duration'], $config['cookie']['path'], $config['cookie']['domain'], $config['cookie']['secure'], $config['cookie']['httponly']);
+}
+// Rate limiting
+if ($config['memcache']['enabled'] && $config['mc_antidos']['enabled'] || $config['strict']) {
+  require_once(CLASS_DIR . '/memcache_ad.class.php');
+  
+  $skip_check = false;
+  $per_page = ($config['mc_antidos']['per_page']) ? $_SERVER['QUERY_STRING'] : '';
+  // if this is an api call we need to be careful not to time them out for those calls separately
+  $ajax_call_querystrings = array(
+    'page=api&action=getuserbalance',
+    'page=api&action=getnavbardata',
+    'page=api&action=getdashboarddata',
+    'page=api&action=getuserworkers'
+  );
+  // cut off any potential extra get info from querystring and see if it's an ajax call
+  $is_ajax_call = (in_array(substr($_SERVER['QUERY_STRING'], 0, 32), $ajax_call_querystrings)) ? true : false;
+  if ($is_ajax_call && $config['mc_antidos']['protect_ajax']) {
+    $per_page = 'navbar';
+  } else if ($is_ajax_call && !$config['mc_antidos']['protect_ajax']) {
+    // protect isn't on, we'll ignore it
+    $skip_check = true;
+  } else if ($config['mc_antidos']['ignore_admins'] && isset($_SESSION['USERDATA']['is_admin']) && $_SESSION['USERDATA']['is_admin']) {
+    $skip_check = true;
+  }
+  if (!$skip_check) {
+    $session->memcache_handle = new MemcacheAntiDos($config['mc_antidos'], $_SERVER['REMOTE_ADDR'], $per_page, $config['memcache']);
+    $rate_limit_reached = $session->memcache_handle->rateLimitRequest();
+    $error_page = $config['mc_antidos']['error_push_page'];
+    if ($rate_limit_reached == true) {
+      if (!is_array($error_page) || count($error_page) < 1 || (empty($error_page['page']) && empty($error_page['action']))) {
+        die("You are sending too many requests too fast!");
+      } else {
+        $_REQUEST['page'] = $error_page['page'];
+        $_REQUEST['action'] = (isset($error_page['action']) && !empty($error_page['action'])) ? $error_page['action'] : $_REQUEST['action'];
+      }
+    }
+  }
+}
 
 // Create our pages array from existing files
 if (is_dir(INCLUDE_DIR . '/pages/')) {

@@ -1,7 +1,5 @@
 <?php
-
-// Make sure we are called from index.php
-if (!defined('SECURITY')) die('Hacking attempt');
+$defflip = (!cfip()) ? exit(header('HTTP/1.1 401 Unauthorized')) : 1;
 
 $aErrorCodes['OK'] = 'OK';
 $aErrorCodes['E0001'] = 'Out of Order Share Detected';

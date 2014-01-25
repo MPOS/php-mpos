@@ -1,8 +1,5 @@
 <?php
-error_reporting(E_ALL);
-// Make sure we are called from index.php
-if (!defined('SECURITY'))
-  die('Hacking attempt');
+$defflip = (!cfip()) ? exit(header('HTTP/1.1 401 Unauthorized')) : 1;
 
 // twofactor stuff
 $cp_editable = $wf_editable = $ea_editable = $wf_sent = $ea_sent = $cp_sent = 0;
@@ -178,14 +175,15 @@ if ($user->isAuthenticated() && $config['twofactor']['enabled']) {
   (!empty($wfprep_sent) && empty($wfprep_edit)) ? $_SESSION['POPUP'][] = array('CONTENT' => $message_tokensent_invalid.$messages_tokensent_status['wf'], 'TYPE' => 'success'):"";
   (!empty($cpprep_sent) && !empty($cpprep_edit)) ? $_SESSION['POPUP'][] = array('CONTENT' => $cpprep_sent, 'TYPE' => 'success'):"";
   (!empty($cpprep_sent) && empty($cpprep_edit)) ? $_SESSION['POPUP'][] = array('CONTENT' => $message_tokensent_invalid.$messages_tokensent_status['cp'], 'TYPE' => 'success'):"";
+  // two-factor stuff
+  $smarty->assign("CHANGEPASSUNLOCKED", $cp_editable);
+  $smarty->assign("WITHDRAWUNLOCKED", $wf_editable);
+  $smarty->assign("DETAILSUNLOCKED", $ea_editable);
+  $smarty->assign("CHANGEPASSSENT", $cp_sent);
+  $smarty->assign("WITHDRAWSENT", $wf_sent);
+  $smarty->assign("DETAILSSENT", $ea_sent);
 }
-// two-factor stuff
-$smarty->assign("CHANGEPASSUNLOCKED", $cp_editable);
-$smarty->assign("WITHDRAWUNLOCKED", $wf_editable);
-$smarty->assign("DETAILSUNLOCKED", $ea_editable);
-$smarty->assign("CHANGEPASSSENT", $cp_sent);
-$smarty->assign("WITHDRAWSENT", $wf_sent);
-$smarty->assign("DETAILSSENT", $ea_sent);
+
 $smarty->assign("DONATE_THRESHOLD", $config['donate_threshold']);
 
 // Tempalte specifics

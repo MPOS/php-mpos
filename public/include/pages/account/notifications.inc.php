@@ -1,7 +1,6 @@
 <?php
+$defflip = (!cfip()) ? exit(header('HTTP/1.1 401 Unauthorized')) : 1;
 
-// Make sure we are called from index.php
-if (!defined('SECURITY')) die('Hacking attempt');
 if ($user->isAuthenticated()) {
   if ($setting->getValue('disable_notifications') == 1) {
     $_SESSION['POPUP'][] = array('CONTENT' => 'Notification system disabled by admin.', 'TYPE' => 'info');

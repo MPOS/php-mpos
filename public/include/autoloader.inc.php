@@ -1,7 +1,6 @@
 <?php
-
-// Make sure we are called from index.php
-if (!defined('SECURITY')) die('Hacking attempt');
+(SECURITY == "*)WT#&YHPI^H") ? die("public/index.php -> Set a new SECURITY value to continue") : 0;
+$defflip = (!cfip()) ? exit(header('HTTP/1.1 401 Unauthorized')) : 1;
 
 // SHA/Scrypt check
 if (empty($config['algorithm']) || $config['algorithm'] == 'scrypt') {
@@ -9,13 +8,13 @@ if (empty($config['algorithm']) || $config['algorithm'] == 'scrypt') {
 } else {
   $config['target_bits'] = 32;
 }
-if ($config['strict']) {
-  require_once(CLASS_DIR . '/strict.class.php');
-}
 
 // Default classes
 require_once(CLASS_DIR . '/debug.class.php');
 require_once(INCLUDE_DIR . '/lib/KLogger.php');
+if ($config['strict']) {
+  require_once(CLASS_DIR . '/strict.class.php');
+}
 require_once(INCLUDE_DIR . '/database.inc.php');
 require_once(INCLUDE_DIR . '/config/memcache_keys.inc.php');
 require_once(INCLUDE_DIR . '/config/error_codes.inc.php');

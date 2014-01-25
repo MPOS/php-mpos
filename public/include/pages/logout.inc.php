@@ -1,10 +1,11 @@
 <?php
+$defflip = (!cfip()) ? exit(header('HTTP/1.1 401 Unauthorized')) : 1;
 
-// Make sure we are called from index.php
-if (!defined('SECURITY'))
-    die('Hacking attempt');
-
-// This probably (?) never fails
-$user->logoutUser();
+if ($config['strict']) {
+  $session->destroy_session($_SERVER['REMOTE_ADDR']);
+  $user->logoutUser();
+} else {
+  $user->logoutUser();
+}
 $smarty->assign("CONTENT", "default.tpl");
 ?>

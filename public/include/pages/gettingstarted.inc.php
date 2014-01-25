@@ -1,8 +1,5 @@
 <?php
-
-// Make sure we are called from index.php
-if (!defined('SECURITY'))
-    die('Hacking attempt');
+$defflip = (!cfip()) ? exit(header('HTTP/1.1 401 Unauthorized')) : 1;
 
 $smarty->assign("SITESTRATUMURL", $config['gettingstarted']['stratumurl']);
 $smarty->assign("SITESTRATUMPORT", $config['gettingstarted']['stratumport']);

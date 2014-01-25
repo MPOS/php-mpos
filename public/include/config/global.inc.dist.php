@@ -1,13 +1,24 @@
 <?php
-// Make sure we are called from index.php
-if (!defined('SECURITY')) die('Hacking attempt');
+$defflip = (!cfip()) ? exit(header('HTTP/1.1 401 Unauthorized')) : 1;
+
+/**
+ * Forces extra security options when enabled
+ */
+$config['strict'] = true;
+$config['strict__enforce_ssl'] = false;
+$config['strict__bind_protocol'] = 'http';
+$config['strict__bind_host'] = 'localhost';
+$config['strict__bind_port'] = 80;
+// CHANGE THIS KEY
+define('strict__FIP_key', '45934debe4965c10c424254a2c8170df');
+// If you use this, you'll also have to change a key in public/index.php ... you'll see.
 
 /**
  * Do not edit this unless you have confirmed that your config has been updated!
  * This is used in the version check to ensure you run the latest version of the configuration file.
  * Once you upgraded your config, change the version here too.
  **/
-$config['version'] = '0.0.6';
+$config['version'] = '0.0.7';
 
 // Our include directory for additional features
 define('INCLUDE_DIR', BASEPATH . 'include');
