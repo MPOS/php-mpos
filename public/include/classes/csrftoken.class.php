@@ -4,6 +4,7 @@
 if (!defined('SECURITY')) die('Hacking attempt');
 
 class CSRFToken Extends Base {
+  public $valid = 0;
   /**
    * Gets a basic csrf token
    * @param string $user user or IP/host address

@@ -36,27 +36,26 @@ $master_template = 'master.tpl';
 
 // Start a session
 session_set_cookie_params(time()+$config['cookie']['duration'], $config['cookie']['path'], $config['cookie']['domain'], $config['cookie']['secure'], $config['cookie']['httponly']);
-if (!@session_start()) {
-	$user->logoutUser();
-	if (!@session_regenerate_id(true)) {
-		$user->logoutUser();
-	}
-	if(!@setcookie(session_name(), session_id(), time()+$config['cookie']['duration'], $config['cookie']['path'], $config['cookie']['domain'], $config['cookie']['secure'], $config['cookie']['httponly'])) {
-		@setcookie(session_name(),session_id(), time()-$config['cookie']['duration'], $config['cookie']['path'], $config['cookie']['domain'], $config['cookie']['secure'], $config['cookie']['httponly']); 
-	}
+$session_start = @session_start();
+if (!$session_start) {
+  session_destroy();
+  session_regenerate_id(true);
+  session_start();
 }
+@setcookie(session_name(), session_id(), time()+$config['cookie']['duration'], $config['cookie']['path'], $config['cookie']['domain'], $config['cookie']['secure'], $config['cookie']['httponly']);
+
 // Load Classes, they name defines the $ variable used
 // We include all needed files here, even though our templates could load them themself
 require_once(INCLUDE_DIR . '/autoloader.inc.php');
 
 // Create our pages array from existing files
 if (is_dir(INCLUDE_DIR . '/pages/')) {
-    foreach (glob(INCLUDE_DIR . '/pages/*.inc.php') as $filepath) {
-        $filename = basename($filepath);
-        $pagename = substr($filename, 0, strlen($filename) - 8);
-        $arrPages[$pagename] = $filename;
-        $debug->append("Adding $pagename as " . $filename . " to accessible pages", 4);
-    }
+  foreach (glob(INCLUDE_DIR . '/pages/*.inc.php') as $filepath) {
+    $filename = basename($filepath);
+    $pagename = substr($filename, 0, strlen($filename) - 8);
+    $arrPages[$pagename] = $filename;
+    $debug->append("Adding $pagename as " . $filename . " to accessible pages", 4);
+  }
 }
 
 // Set a default action here if no page has been requested
@@ -71,23 +70,31 @@ if (isset($_REQUEST['page']) && isset($arrPages[$_REQUEST['page']])) {
 
 // Create our pages array from existing files
 if (is_dir(INCLUDE_DIR . '/pages/' . $page)) {
-    foreach (glob(INCLUDE_DIR . '/pages/' . $page . '/*.inc.php') as $filepath) {
-        $filename = basename($filepath);
-        $pagename = substr($filename, 0, strlen($filename) - 8);
-        $arrActions[$pagename] = $filename;
-        $debug->append("Adding $pagename as " . $filename . ".inc.php to accessible actions", 4);
-    }
+  foreach (glob(INCLUDE_DIR . '/pages/' . $page . '/*.inc.php') as $filepath) {
+    $filename = basename($filepath);
+    $pagename = substr($filename, 0, strlen($filename) - 8);
+    $arrActions[$pagename] = $filename;
+    $debug->append("Adding $pagename as " . $filename . ".inc.php to accessible actions", 4);
+  }
 }
 // Default to empty (nothing) if nothing set or not known
 $action = (isset($_REQUEST['action']) && !is_array($_REQUEST['action'])) && isset($arrActions[$_REQUEST['action']]) ? $_REQUEST['action'] : "";
 
+// Check csrf token validity if necessary
+if ($config['csrf']['enabled'] && isset($_POST['ctoken']) && !empty($_POST['ctoken']) && !is_array($_POST['ctoken'])) {
+  $csrftoken->valid = ($csrftoken->checkBasic($user->getCurrentIP(), $arrPages[$page], $_POST['ctoken'])) ? 1 : 0;
+} else if ($config['csrf']['enabled'] && (!@$_POST['ctoken'] || empty($_POST['ctoken']) || is_array($_POST['ctoken']))) {
+  $csrftoken->valid = 0;
+}
+if ($config['csrf']['enabled']) $smarty->assign('CTOKEN', $csrftoken->getBasic($user->getCurrentIP(), $arrPages[$page]));
+
 // Load the page code setting the content for the page OR the page action instead if set
 if (!empty($action)) {
-    $debug->append('Loading Action: ' . $action . ' -> ' . $arrActions[$action], 1);
-    require_once(PAGES_DIR . '/' . $page . '/' . $arrActions[$action]);
+  $debug->append('Loading Action: ' . $action . ' -> ' . $arrActions[$action], 1);
+  require_once(PAGES_DIR . '/' . $page . '/' . $arrActions[$action]);
 } else {
-    $debug->append('Loading Page: ' . $page . ' -> ' . $arrPages[$page], 1);
-    require_once(PAGES_DIR . '/' . $arrPages[$page]);
+  $debug->append('Loading Page: ' . $page . ' -> ' . $arrPages[$page], 1);
+  require_once(PAGES_DIR . '/' . $arrPages[$page]);
 }
 
 define('PAGE', $page);
@@ -110,4 +117,5 @@ if (!@$supress_master) $smarty->display($master_template, $smarty_cache_key);
 
 // Unset any temporary values here
 unset($_SESSION['POPUP']);
+
 ?>

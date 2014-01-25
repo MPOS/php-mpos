@@ -126,7 +126,7 @@ $config['twofactor']['options']['withdraw'] = true;
 $config['twofactor']['options']['changepw'] = true;
 
 /**
- * CSRF protection config
+ * CSRF protection
  *
  * Explanation:
  *   To help protect against CSRF, we can generate a hash that changes every minute
@@ -134,15 +134,11 @@ $config['twofactor']['options']['changepw'] = true;
  *   form is submitted.
  *
  * Options:
- *   enabled          =   Whether or not we will generate/check for valid CSRF tokens
- *   disabled_forms   =   Which forms you want to disable csrf protection on, if enabled
- *                         * Valid options  :  login, contact, accountedit, workers, notifications, invite, register, passreset, unlockaccount
+ *   enabled          =   Whether or not we will generate & check for valid CSRF tokens
  * Default:
  *   enabled          =   true
- *   disabled_forms   =   array();
  */
 $config['csrf']['enabled'] = true;
-$config['csrf']['disabled_forms'] = array();
 
 /**
  * Lock account after maximum failed logins

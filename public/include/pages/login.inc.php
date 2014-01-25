@@ -3,12 +3,6 @@
 // Make sure we are called from index.php
 if (!defined('SECURITY')) die('Hacking attempt');
 
-// csrf if enabled
-$csrfenabled = ($config['csrf']['enabled'] && !in_array('login', $config['csrf']['disabled_forms'])) ? 1 : 0;
-if ($csrfenabled) {
-  $nocsrf = ($csrftoken->checkBasic($user->getCurrentIP(), 'login', @$_POST['ctoken'])) ? 1 : 0;
-}
-
 // ReCaptcha handling if enabled
 if ($setting->getValue('recaptcha_enabled') && $setting->getValue('recaptcha_enabled_logins')) {
   require_once(INCLUDE_DIR . '/lib/recaptchalib.php');
@@ -31,7 +25,7 @@ if ($setting->getValue('maintenance') && !$user->isAdmin($user->getUserIdByEmail
 } else if (!empty($_POST['username']) && !empty($_POST['password'])) {
   // Check if recaptcha is enabled, process form data if valid
   if (!$setting->getValue('recaptcha_enabled') || !$setting->getValue('recaptcha_enabled_logins') || ($setting->getValue('recaptcha_enabled') && $setting->getValue('recaptcha_enabled_logins') && $rsp->is_valid)) {
-    if (!$csrfenabled || $csrfenabled && $nocsrf) {
+    if (!$config['csrf']['enabled'] || $config['csrf']['enabled'] && $csrftoken->valid) {
       if ($user->checkLogin(@$_POST['username'], @$_POST['password']) ) {
         empty($_POST['to']) ? $to = $_SERVER['SCRIPT_NAME'] : $to = $_POST['to'];
         $port = ($_SERVER["SERVER_PORT"] == "80" or $_SERVER["SERVER_PORT"] == "443") ? "" : (":".$_SERVER["SERVER_PORT"]);
@@ -48,11 +42,7 @@ if ($setting->getValue('maintenance') && !$user->isAdmin($user->getUserIdByEmail
     $_SESSION['POPUP'][] = array('CONTENT' => 'Invalid Captcha, please try again.', 'TYPE' => 'errormsg');
   }
 }
-// csrf token
-if ($csrfenabled && !in_array('login', $config['csrf']['disabled_forms'])) {
-  $token = $csrftoken->getBasic($user->getCurrentIP(), 'login');
-  $smarty->assign('CTOKEN', $token);
-}
+
 // Load login template
 $smarty->assign('CONTENT', 'default.tpl');
 ?>
