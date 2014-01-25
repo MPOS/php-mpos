@@ -1,5 +1,5 @@
 <?php
-
+error_reporting(E_ALL);
 // Make sure we are called from index.php
 if (!defined('SECURITY'))
   die('Hacking attempt');

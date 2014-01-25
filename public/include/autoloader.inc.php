@@ -9,6 +9,10 @@ if (empty($config['algorithm']) || $config['algorithm'] == 'scrypt') {
 } else {
   $config['target_bits'] = 32;
 }
+if ($config['strict']) {
+  require_once(CLASS_DIR . '/strict.class.php');
+}
+
 // Default classes
 require_once(CLASS_DIR . '/debug.class.php');
 require_once(INCLUDE_DIR . '/lib/KLogger.php');
