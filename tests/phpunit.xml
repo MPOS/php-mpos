@@ -9,5 +9,8 @@
     <testsuite name="Security_Sessions">
       <directory>unit/securityregress/Security_Sessions.php</directory>
     </testsuite>
+    <testsuite name="Security_Tokens">
+      <directory>unit/securityregress/Security_Tokens.php</directory>
+    </testsuite>
   </testsuites>
 </phpunit>

@@ -36,6 +36,18 @@ class Token_Type Extends Base {
       return $result->fetch_all(MYSQLI_ASSOC);
     return $this->sqlError();
   }
+  
+  /**
+   * Fetch all tokens - used for unit tests
+   * @param none
+   * @return array All tokentypes
+   **/
+  public function getAll() {
+    $stmt = $this->mysqli->prepare("SELECT * FROM $this->table");
+    if ($this->checkStmt($stmt) && $stmt->execute() && $result = $stmt->get_result())
+      return $result->fetch_all(MYSQLI_ASSOC);
+    return $this->sqlError();
+  }
 }
 
 $tokentype = new Token_Type();

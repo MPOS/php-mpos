@@ -14,7 +14,6 @@ class Security_CSRFToken extends PHPUnit_Framework_Testcase {
     $created_token = $csrftoken->getBasic($user->getCurrentIP(), 'test-token');
     $test_token = $csrftoken->checkBasic($user->getCurrentIP(), 'test-token', $created_token);
     $this->assertTrue($test_token);
-    $this->assertAttributeEquals($csrftoken->valid, true);
   }
   
   /**
