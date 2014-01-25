@@ -82,7 +82,7 @@ if ($setting->getValue('disable_manual_payouts') != 1) {
           $aMailData['amount'] = $dBalance - $config['txfee_manual'];
           $aMailData['payout_id'] = $aData['id'];
           if (!$notification->sendNotification($aData['account_id'], 'manual_payout', $aMailData))
-            $log->logError('Failed to send notification email to users address: ' . $aMailData['email']);
+            $log->logError('Failed to send notification email to users address ' . $aMailData['email'] . ' : ' . $notification->getCronError);
           // Recheck the users balance to make sure it is now 0
           $aBalance = $transaction->getBalance($aData['account_id']);
           if ($aBalance['confirmed'] > 0) {
