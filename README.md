@@ -160,7 +160,24 @@ You can contribute to this project in different ways:
 Contact
 =======
 
-You can find me on Freenode.net, #MPOS.
+You can find the team on Freenode.net, #MPOS.
+
+Team Members
+============
+
+Author and Github Owner: [TheSerapher](https://github.com/TheSerapher) aka Sebastian Grewe
+
+Developers:
+
+* [nrpatten](https://github.com/nrpatten)
+* [Aim](https://github.com/fspijkerman)
+* [raistlinthewiz](https://github.com/raistlinthewiz)
+* [xisi](https://github.com/xisi)
+* [nutnut](https://github.com/nutnut)
+* [obigal](https://github.com/obigal)
+* [iAmShorty](https://github.com/iAmShorty)
+* [rog1121](https://github.com/rog1121)
+* [neozonz](https://github.com/neozonz)
 
 License and Author
 ==================
