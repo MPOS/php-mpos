@@ -4,7 +4,7 @@ $defflip = (!cfip()) ? exit(header('HTTP/1.1 401 Unauthorized')) : 1;
 if ($user->isAuthenticated()) {
   switch (@$_REQUEST['do']) {
   case 'delete':
-    if (!$config['csrf']['enabled'] || $config['csrf']['enabled'] && $csrftoken->valid) {
+    if (!$config['csrf']['enabled'] || ($config['csrf']['enabled'])) {
       if ($worker->deleteWorker($_SESSION['USERDATA']['id'], $_GET['id'])) {
         $_SESSION['POPUP'][] = array('CONTENT' => 'Worker removed', 'TYPE' => 'success');
       } else {

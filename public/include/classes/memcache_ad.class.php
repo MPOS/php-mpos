@@ -12,12 +12,8 @@ class MemcacheAntiDos
     'hits_since_flush' => 0
   );
   public $rate_limit_this_request = false;
-  public function __construct($config, $userORip, $request, $mcSettings) {
-    if (PHP_OS == 'WINNT') {
-      require_once('memcached.class.php');
-    }
-    $this->cache = new Memcached();
-    $this->cache->addServer($mcSettings['host'], $mcSettings['port']);
+  public function __construct($config, &$memcache, $userORip, $request, $mcSettings) {
+    $this->cache = $memcache;
     // set our config options
     $per_page = $config['per_page'];
     $flush_sec = $config['flush_seconds'];

@@ -37,6 +37,9 @@ class Base {
   public function setUser($user) {
     $this->user = $user;
   }
+  public function setSessionManager($session) {
+    $this->session = $session;
+  }
   public function setConfig($config) {
     $this->config = $config;
   }

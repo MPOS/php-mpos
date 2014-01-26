@@ -34,12 +34,8 @@ class SessionManager {
   public function verify_client($ip) {
     if ($this->started && $this->memcache_handle !== null && $this->verify_server()) {
       $read_client = $this->memcache_handle->get(md5((string)$ip));
-      if ($read_client !== false) {
-        if (md5((string)$ip) !== $read_client[0]) {
-          return false;
-        } else {
-          return true;
-        }
+      if (is_array($read_client) && $read_client[0] == session_id()) {
+        return true;
       } else {
         return false;
       }
@@ -54,7 +50,7 @@ class SessionManager {
     }
   }
   
-  public function set_cookie() {
+  public function set_cookie($ip) {
     if ($this->started && $this->memcache_handle !== null && $this->verify_server() && $this->verify_client($ip)) {
       @setcookie(session_name(), session_id(), $this->config_dura, $this->config_path, $this->config_domain, $this->config_secure, $this->config_httponly);
     }
@@ -83,18 +79,19 @@ class SessionManager {
         $this->update_client($ip);
         $this->started = true;
         $this->current_session_id = session_id();
-        $this->set_cookie();
+        $this->set_cookie($ip);
         return true;
       } else {
-        if ($this->verify_server() && $this->verify_client($ip)) {
-          $this->update_client($ip);
-          return true;
-        }
+        $this->update_client($ip);
+        $this->started = true;
+        $this->current_session_id = session_id();
+        $this->set_cookie($ip);
+        return true;
       }
     }
   }
   
-  public function __construct($config, $server_host) {
+  public function __construct($config, &$memcache, $server_host) {
     $this->config_dura = $config['cookie']['duration'];
     $this->config_path = $config['cookie']['path'];
     $this->config_domain = $config['cookie']['domain'];
@@ -103,6 +100,7 @@ class SessionManager {
     if ($config['strict__enforce_ssl']) $config['strict__bind_protocol'] = 'https';
     $this->bind_address = $config['strict__bind_protocol']."://".$config['strict__bind_host'].":".$config['strict__bind_port'];
     $this->server_http_host = $config['strict__bind_protocol']."://".$_SERVER['HTTP_HOST'].":".$config['strict__bind_port'];
+    $this->memcache_handle = $memcache;
     unset($config);
     $this->set_cookie_params((time()+$this->config_dura), $this->config_path, $this->config_domain, $this->config_secure, $this->config_httponly);
   }

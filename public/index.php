@@ -50,8 +50,19 @@ $master_template = 'master.tpl';
 // We include all needed files here, even though our templates could load them themself
 require_once(INCLUDE_DIR . '/autoloader.inc.php');
 
+if ($config['memcache']['enabled'] && ($config['mc_antidos']['enabled'] || $config['strict'])) {
+  if (PHP_OS == 'WINNT') {
+    require_once('memcached.class.php');
+  }
+  // strict mode and memcache antidos need a memcache handle
+  $memcache = new Memcached();
+  $memcache->addServer($config['memcache']['host'], $config['memcache']['port']);
+}
+
 if ($config['strict']) {
-  $session = new SessionManager($config, $_SERVER['HTTP_HOST']);
+  require_once(CLASS_DIR . '/memcache_ad.class.php');
+  $session = new SessionManager($config, $memcache, $_SERVER['HTTP_HOST']);
+  $user->setSessionManager($session);
   if ($session->verify_server()) {
     $session->create_session($_SERVER['REMOTE_ADDR']);
     if ($session->verify_client($_SERVER['REMOTE_ADDR'])) {
@@ -70,8 +81,6 @@ if ($config['strict']) {
 }
 // Rate limiting
 if ($config['memcache']['enabled'] && $config['mc_antidos']['enabled'] || $config['strict']) {
-  require_once(CLASS_DIR . '/memcache_ad.class.php');
-  
   $skip_check = false;
   $per_page = ($config['mc_antidos']['per_page']) ? $_SERVER['QUERY_STRING'] : '';
   // if this is an api call we need to be careful not to time them out for those calls separately
@@ -97,8 +106,8 @@ if ($config['memcache']['enabled'] && $config['mc_antidos']['enabled'] || $confi
     $skip_check = true;
   }
   if (!$skip_check) {
-    $session->memcache_handle = new MemcacheAntiDos($config['mc_antidos'], $_SERVER['REMOTE_ADDR'], $per_page, $config['memcache']);
-    $rate_limit_reached = $session->memcache_handle->rateLimitRequest();
+    $mcad = new MemcacheAntiDos($config['mc_antidos'], $memcache, $_SERVER['REMOTE_ADDR'], $per_page, $config['memcache']);
+    $rate_limit_reached = $mcad->rateLimitRequest();
     $error_page = $config['mc_antidos']['error_push_page'];
     if ($rate_limit_reached == true) {
       if (!is_array($error_page) || count($error_page) < 1 || (empty($error_page['page']) && empty($error_page['action']))) {
@@ -146,7 +155,7 @@ $action = (isset($_REQUEST['action']) && !is_array($_REQUEST['action'])) && isse
 // Check csrf token validity if necessary
 if ($config['csrf']['enabled'] && isset($_POST['ctoken']) && !empty($_POST['ctoken']) && !is_array($_POST['ctoken'])) {
   $csrftoken->valid = ($csrftoken->checkBasic($user->getCurrentIP(), $arrPages[$page], $_POST['ctoken'])) ? 1 : 0;
-} else if ($config['csrf']['enabled'] && (!@$_POST['ctoken'] || empty($_POST['ctoken']) || is_array($_POST['ctoken']))) {
+} else if ($config['csrf']['enabled'] && (!@$_POST['ctoken'] || empty($_POST['ctoken']))) {
   $csrftoken->valid = 0;
 }
 if ($config['csrf']['enabled']) $smarty->assign('CTOKEN', $csrftoken->getBasic($user->getCurrentIP(), $arrPages[$page]));

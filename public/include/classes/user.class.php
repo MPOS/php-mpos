@@ -493,10 +493,20 @@ class User extends Base {
   private function createSession($username) {
     $this->debug->append("STA " . __METHOD__, 4);
     $this->debug->append("Log in user to _SESSION", 2);
-    session_regenerate_id(true);
-    $_SESSION['AUTHENTICATED'] = '1';
-    // $this->user from checkUserPassword
-    $_SESSION['USERDATA'] = $this->user;
+    if ($this->config['strict']) {
+      if ($this->session->verify_server()) {
+        if ($this->session->create_session($_SERVER['REMOTE_ADDR'])) {
+          $this->session->update_client($_SERVER['REMOTE_ADDR']);
+          $_SESSION['AUTHENTICATED'] = '1';
+          $_SESSION['USERDATA'] = $this->user;
+        }
+      }
+    } else {
+      session_regenerate_id(true);
+      $_SESSION['AUTHENTICATED'] = '1';
+      // $this->user from checkUserPassword
+      $_SESSION['USERDATA'] = $this->user;
+    }
   }
 
   /**
@@ -514,7 +524,7 @@ class User extends Base {
    * @param none
    * @return true
    **/
-  public function logoutUser($from="") {
+  public function logoutUser() {
     $this->debug->append("STA " . __METHOD__, 4);
     // Unset all of the session variables
     $_SESSION = array();
@@ -529,8 +539,8 @@ class User extends Base {
     session_regenerate_id(true);
     // Enforce a page reload and point towards login with referrer included, if supplied
     $port = ($_SERVER["SERVER_PORT"] == "80" || $_SERVER["SERVER_PORT"] == "443") ? "" : (":".$_SERVER["SERVER_PORT"]);
-    $location = @$_SERVER['HTTPS'] ? 'https://' . $_SERVER['SERVER_NAME'] . $port . $_SERVER['SCRIPT_NAME'] : 'http://' . $_SERVER['SERVER_NAME'] . $port . $_SERVER['SCRIPT_NAME'];
-    if (!empty($from)) $location .= '?page=login&to=' . urlencode($from);
+    $pushto = $_SERVER['SCRIPT_NAME'].'?page=login';
+    $location = @$_SERVER['HTTPS'] ? 'https://' . $_SERVER['SERVER_NAME'] . $port . $pushto : 'http://' . $_SERVER['SERVER_NAME'] . $port . $pushto;
     // if (!headers_sent()) header('Location: ' . $location);
     exit('<meta http-equiv="refresh" content="0; url=' . $location . '"/>');
   }
