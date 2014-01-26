@@ -45,7 +45,7 @@ if ($setting->getValue('disable_manual_payouts') != 1) {
         $dBalance = $aBalance['confirmed'];
         $aData['coin_address'] = $user->getCoinAddress($aData['account_id']);
         $aData['username'] = $user->getUserName($aData['account_id']);
-		// Validate address against RPC
+        // Validate address against RPC
         try {
           $aStatus = $bitcoin->validateaddress($aData['coin_address']);
           if (!$aStatus['isvalid']) {
