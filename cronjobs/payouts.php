@@ -45,17 +45,6 @@ if ($setting->getValue('disable_manual_payouts') != 1) {
         $dBalance = $aBalance['confirmed'];
         $aData['coin_address'] = $user->getCoinAddress($aData['account_id']);
         $aData['username'] = $user->getUserName($aData['account_id']);
-        // Validate address against RPC
-        try {
-          $aStatus = $bitcoin->validateaddress($aData['coin_address']);
-          if (!$aStatus['isvalid']) {
-            $log->logError('Failed to verify this users coin address, skipping payout');
-            continue;
-          }
-        } catch (Exception $e) {
-          $log->logError('Failed to verify this users coin address, skipping payout');
-          continue;
-        }
         if ($dBalance > $config['txfee_manual']) {
           // To ensure we don't run this transaction again, lets mark it completed
           if (!$oPayout->setProcessed($aData['id'])) {
@@ -120,17 +109,6 @@ if ($setting->getValue('disable_auto_payouts') != 1) {
         $log->logInfo("\t" . $aUserData['id'] . "\t" . $aUserData['username'] . "\t" . $dBalance . "\t" . $aUserData['ap_threshold'] . "\t\t" . $aUserData['coin_address']);
         // Only run if balance meets threshold and can pay the potential transaction fee
         if ($dBalance > $aUserData['ap_threshold'] && $dBalance > $config['txfee_auto']) {
-          // Validate address against RPC
-          try {
-          $aStatus = $bitcoin->validateaddress($aUserData['coin_address']);
-          if (!$aStatus['isvalid']) {
-            $log->logError('Failed to verify this users coin address, skipping payout');
-            continue;
-            }
-          } catch (Exception $e) {
-            $log->logError('Failed to verify this users coin address, skipping payout');
-            continue;
-          }
           // Send balance, fees are reduced later by RPC Server
           try {
             $txid = $bitcoin->sendtoaddress($aUserData['coin_address'], $dBalance - $config['txfee_auto']);
