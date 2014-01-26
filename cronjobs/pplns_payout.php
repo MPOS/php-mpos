@@ -49,9 +49,9 @@ foreach ($aAllBlocks as $iIndex => $aBlock) {
   // We support some dynamic share targets but fall back to our fixed value
   // Re-calculate after each run due to re-targets in this loop
   if ($config['pplns']['shares']['type'] == 'blockavg' && $block->getBlockCount() > 0) {
-      $pplns_target = round($block->getAvgBlockShares($aBlock['height'], $config['pplns']['blockavg']['blockcount']));
+    $pplns_target = round($block->getAvgBlockShares($aBlock['height'], $config['pplns']['blockavg']['blockcount']));
   } else if ($config['pplns']['shares']['type'] == 'dynamic' && $block->getBlockCount() > 0) {
-      $pplns_target = round($block->getAvgBlockShares($aBlock['height'], $config['pplns']['blockavg']['blockcount']) * (100 - $config['pplns']['dynamic']['percent'])/100 + $aBlock['shares'] * $config['pplns']['dynamic']['percent']/100);
+    $pplns_target = round($block->getAvgBlockShares($aBlock['height'], $config['pplns']['blockavg']['blockcount']) * (100 - $config['pplns']['dynamic']['percent'])/100 + $aBlock['shares'] * $config['pplns']['dynamic']['percent']/100);
   } else {
     $pplns_target = $config['pplns']['shares']['default'];
   }
@@ -123,21 +123,21 @@ foreach ($aAllBlocks as $iIndex => $aBlock) {
           }
           // reverse payout
           if ($config['pplns']['reverse_payout']) {
-             $aSharesData = NULL;
-             foreach($aAccountShares as $key => $aData) {
-               $aSharesData[$aData['username']] = $aData;
-             }
-             // Add users from archive not in current round
-             foreach($aArchiveShares as $key => $aArchData) {
-               if (!array_key_exists($aArchData['account'], $aSharesData)) {
-                 $log->logDebug('Adding user ' . $aArchData['account'] . ' to round shares');
-                 $log->logDebug('  valid   : ' . $aArchData['valid']);
-                 $log->logDebug('  invalid   : ' . $aArchData['invalid']);
-                 $aArchData['username'] = $aArchData['account'];
-                 $aSharesData[$aArchData['account']] = $aArchData;
-               }
-             }
-          $aAccountShares = $aSharesData;
+            $aSharesData = NULL;
+            foreach($aAccountShares as $key => $aData) {
+              $aSharesData[$aData['username']] = $aData;
+            }
+            // Add users from archive not in current round
+            foreach($aArchiveShares as $key => $aArchData) {
+              if (!array_key_exists($aArchData['account'], $aSharesData)) {
+                $log->logDebug('Adding user ' . $aArchData['account'] . ' to round shares');
+                $log->logDebug('  valid   : ' . $aArchData['valid']);
+                $log->logDebug('  invalid   : ' . $aArchData['invalid']);
+                $aArchData['username'] = $aArchData['account'];
+                $aSharesData[$aArchData['account']] = $aArchData;
+              }
+            }
+            $aAccountShares = $aSharesData;
           }
         }
         // We tried to fill up to PPLNS target, now we need to check the actual shares to properly payout users
