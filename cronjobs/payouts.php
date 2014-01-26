@@ -55,8 +55,8 @@ if ($setting->getValue('disable_manual_payouts') != 1) {
           try {
             $txid = $bitcoin->sendtoaddress($aData['coin_address'], $dBalance - $config['txfee_manual']);
           } catch (Exception $e) {
-            $log->logError('Skipping payment. Failed to send balance to coin address: ' . $aData['coin_address'] . ' ERROR: ' . $e->getMessage());
-            continue;
+            $log->logError('E0078: RPC method did not return 200 OK: Address: ' . $aData['coin_address'] . ' ERROR: ' . $e->getMessage());
+            $monitoring->endCronjob($cron_name, 'E0078', 1, true);
           }
           if ($transaction->addTransaction($aData['account_id'], $dBalance - $config['txfee_manual'], 'Debit_MP', NULL, $aData['coin_address'], $txid) && $transaction->addTransaction($aData['account_id'], $config['txfee_manual'], 'TXFee', NULL, $aData['coin_address'])) {
             // Mark all older transactions as archived
@@ -113,8 +113,8 @@ if ($setting->getValue('disable_auto_payouts') != 1) {
           try {
             $txid = $bitcoin->sendtoaddress($aUserData['coin_address'], $dBalance - $config['txfee_auto']);
           } catch (Exception $e) {
-            $log->logError('Skipping payment. Failed to send balance to coin address: ' . $aData['coin_address'] . ' ERROR: ' . $e->getMessage());
-            continue;
+            $log->logError('E0078: RPC method did not return 200 OK: Address: ' . $aData['coin_address'] . ' ERROR: ' . $e->getMessage());
+            $monitoring->endCronjob($cron_name, 'E0078', 1, true);
           }
           // Create transaction record
           if ($transaction->addTransaction($aUserData['id'], $dBalance - $config['txfee_auto'], 'Debit_AP', NULL, $aUserData['coin_address'], $txid) && $transaction->addTransaction($aUserData['id'], $config['txfee_auto'], 'TXFee', NULL, $aUserData['coin_address'])) {
