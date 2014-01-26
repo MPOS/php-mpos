@@ -767,7 +767,7 @@ class User extends Base {
       }
     }
     if (!$aData['email'] = $this->getUserEmail($username, true)) {
-      $this->setErrorMessage("Unable to find a mail address for user $username");
+      $this->setErrorMessage("Please check your mail account to finish your password reset");
       return false;
     }
     if (!$aData['token'] = $this->token->createToken('password_reset', $this->getUserId($username, true))) {
