@@ -46,16 +46,16 @@ if ($setting->getValue('disable_manual_payouts') != 1) {
         $aData['coin_address'] = $user->getCoinAddress($aData['account_id']);
         $aData['username'] = $user->getUserName($aData['account_id']);
 		// Validate address against RPC
-		try {
-			$aStatus = $bitcoin->validateaddress($aData['coin_address']);
-			if (!$aStatus['isvalid']) {
-				$log->logError('Failed to verify this users coin address, skipping payout');
-				continue;
-			}
-		} catch (Exception $e) {
-			$log->logError('Failed to verify this users coin address, skipping payout');
-			continue;
-		}
+        try {
+          $aStatus = $bitcoin->validateaddress($aData['coin_address']);
+          if (!$aStatus['isvalid']) {
+            $log->logError('Failed to verify this users coin address, skipping payout');
+            continue;
+          }
+        } catch (Exception $e) {
+          $log->logError('Failed to verify this users coin address, skipping payout');
+          continue;
+        }
         if ($dBalance > $config['txfee_manual']) {
           // To ensure we don't run this transaction again, lets mark it completed
           if (!$oPayout->setProcessed($aData['id'])) {
