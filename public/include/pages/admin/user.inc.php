@@ -23,7 +23,7 @@ case 'lock':
   $supress_master = 1;
   // Reset user account
   if ($user->isLocked($_POST['account_id']) == 0) {
-    $user->setLocked($_POST['account_id'], 1);
+    $user->setLocked($_POST['account_id'], 2);
   } else {
     $user->setLocked($_POST['account_id'], 0);
     $user->setUserFailed($_POST['account_id'], 0);
