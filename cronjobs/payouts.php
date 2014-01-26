@@ -49,11 +49,11 @@ if ($setting->getValue('disable_manual_payouts') != 1) {
         try {
           $aStatus = $bitcoin->validateaddress($aData['coin_address']);
           if (!$aStatus['isvalid']) {
-            $log->logError('Failed to verify this users coin address, skipping payout');
+            $log->logError('User: ' . $aData['username'] . ' - Failed to verify this users coin address, skipping payout');
             continue;
           }
         } catch (Exception $e) {
-          $log->logError('Failed to verify this users coin address, skipping payout');
+          $log->logError('User: ' . $aData['username'] . ' - Failed to verify this users coin address, skipping payout');
           continue;
         }
         if ($dBalance > $config['txfee_manual']) {
@@ -121,11 +121,11 @@ if ($setting->getValue('disable_auto_payouts') != 1) {
         try {
           $aStatus = $bitcoin->validateaddress($aUserData['coin_address']);
           if (!$aStatus['isvalid']) {
-            $log->logError('Failed to verify this users coin address, skipping payout');
+            $log->logError('User: ' . $aUserData['username'] . ' - Failed to verify this users coin address, skipping payout');
             continue;
           }
         } catch (Exception $e) {
-          $log->logError('Failed to verify this users coin address, skipping payout');
+          $log->logError('User: ' . $aUserData['username'] . ' - Failed to verify this users coin address, skipping payout');
           continue;
         }
         $log->logInfo("\t" . $aUserData['id'] . "\t" . $aUserData['username'] . "\t" . $dBalance . "\t" . $aUserData['ap_threshold'] . "\t\t" . $aUserData['coin_address']);
