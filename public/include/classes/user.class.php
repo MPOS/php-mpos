@@ -457,6 +457,7 @@ class User extends Base {
    **/
   public function checkApiKey($key) {
     $this->debug->append("STA " . __METHOD__, 4);
+    if (!is_string($key)) return false;
     $stmt = $this->mysqli->prepare("SELECT api_key, id FROM $this->table WHERE api_key = ? LIMIT 1");
     if ($this->checkStmt($stmt) && $stmt->bind_param("s", $key) && $stmt->execute() && $stmt->bind_result($api_key, $id) && $stmt->fetch()) {
       if ($api_key === $key)
