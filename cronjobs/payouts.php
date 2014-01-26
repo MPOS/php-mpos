@@ -113,7 +113,7 @@ if ($setting->getValue('disable_auto_payouts') != 1) {
           try {
             $txid = $bitcoin->sendtoaddress($aUserData['coin_address'], $dBalance - $config['txfee_auto']);
           } catch (Exception $e) {
-            $log->logError('E0078: RPC method did not return 200 OK: Address: ' . $aData['coin_address'] . ' ERROR: ' . $e->getMessage());
+            $log->logError('E0078: RPC method did not return 200 OK: Address: ' . $aUserData['coin_address'] . ' ERROR: ' . $e->getMessage());
             $monitoring->endCronjob($cron_name, 'E0078', 1, true);
           }
           // Create transaction record
