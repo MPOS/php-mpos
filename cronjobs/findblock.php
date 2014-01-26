@@ -121,7 +121,7 @@ if (empty($aAllBlocks)) {
         }
       } else {
         $log->logFatal('E0005: Unable to fetch blocks upstream share, aborted:' . $share->getCronError());
-        $monitoring->endCronjob($cron_name, 'E0005', 1, true);
+        $monitoring->endCronjob($cron_name, 'E0005', 0, true);
       }
 
       $log->logInfo(
