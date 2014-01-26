@@ -1,5 +1,5 @@
 <?php
-(SECURITY == "*)WT#&YHPI^H") ? die("public/index.php -> Set a new SECURITY value to continue") : 0;
+(SECURITY == "*)WT#&YHfd" && SECHASH_CHECK) ? die("public/index.php -> Set a new SECURITY value to continue") : 0;
 $defflip = (!cfip()) ? exit(header('HTTP/1.1 401 Unauthorized')) : 1;
 
 // SHA/Scrypt check
