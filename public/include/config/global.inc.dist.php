@@ -3,15 +3,22 @@ $defflip = (!cfip()) ? exit(header('HTTP/1.1 401 Unauthorized')) : 1;
 
 /**
  * Forces extra security options when enabled
+ * 
+ * You must have Memcache enabled and configured & Memcache anti-dos configured to use this.
+ * 
+ *   Check -> Memcache configuration
+ *   Check -> Memcache anti resource-dos
+ *   
+ *   Runs a FILTER_VALIDATE_*TYPE on every parameter of bind_param
+ *   Verifies server vs. bound protocol/host/port set below
+ *   Enables memcache rate limiting of requests
+ *   Verifies client when creating/resuming from a session
  */
 $config['strict'] = true;
 $config['strict__enforce_ssl'] = false;
 $config['strict__bind_protocol'] = 'http';
 $config['strict__bind_host'] = 'localhost';
 $config['strict__bind_port'] = 80;
-// CHANGE THIS KEY
-define('strict__FIP_key', '45934debe4965c10c424254a2c8170df');
-// If you use this, you'll also have to change a key in public/index.php ... you'll see.
 
 /**
  * Do not edit this unless you have confirmed that your config has been updated!

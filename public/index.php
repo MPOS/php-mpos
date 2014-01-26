@@ -19,8 +19,10 @@ limitations under the License.
 
 // Set a decently long SECURITY key with special chars etc
 define('SECURITY', '*)WT#&YHfd');
-// Disable the sechash check if you're sure, still checks if SECURITY defined as before
+// Whether or not to check SECHASH for validity, still checks if SECURITY defined as before if disabled
 define('SECHASH_CHECK', true);
+
+// Nothing below here to configure, move along...
 
 // change SECHASH every second, we allow up to 3 sec back for slow servers
 if (SECHASH_CHECK) {
