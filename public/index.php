@@ -19,6 +19,7 @@ limitations under the License.
 
 // Set a decently long SECURITY key with special chars etc
 define('SECURITY', '*)WT#&YHfd');
+// Disable the sechash check if you're sure, still checks if SECURITY defined as before
 define('SECHASH_CHECK', true);
 
 // change SECHASH every second, we allow up to 3 sec back for slow servers
@@ -27,7 +28,7 @@ if (SECHASH_CHECK) {
   define('SECHASH', fip());
   function cfip() { return (fip()==SECHASH||fip(1)==SECHASH||fip(2)==SECHASH) ? 1 : 0; }
 } else {
-  function cfip() { return 1; }
+  function cfip() { return (defined('SECURITY')) ? 1 : 0; }
 }
 
 // Used for performance calculations
@@ -42,8 +43,6 @@ if (!include_once(BASEPATH . 'include/config/global.inc.php')) die('Unable to lo
 
 // Our default template to load, pages can overwrite this later
 $master_template = 'master.tpl';
-
-// Start a session
 
 // Load Classes, they name defines the $ variable used
 // We include all needed files here, even though our templates could load them themself
@@ -74,15 +73,20 @@ if ($config['memcache']['enabled'] && $config['mc_antidos']['enabled'] || $confi
   $skip_check = false;
   $per_page = ($config['mc_antidos']['per_page']) ? $_SERVER['QUERY_STRING'] : '';
   // if this is an api call we need to be careful not to time them out for those calls separately
-  $ajax_call_querystrings = array(
-    'page=api&action=getuserbalance',
-    'page=api&action=getnavbardata',
-    'page=api&action=getdashboarddata',
-    'page=api&action=getuserworkers'
+  $ajax_calls = array(
+    array('api', 'getuserbalance'),
+    array('api', 'getnavbardata'),
+    array('api', 'getdashboarddata'),
+    array('api', 'getuserworkers')
   );
-  // cut off any potential extra get info from querystring and see if it's an ajax call
-  $is_ajax_call = (in_array(substr($_SERVER['QUERY_STRING'], 0, 32), $ajax_call_querystrings)) ? true : false;
+  $iac = 0;
+  foreach ($ajax_calls as $ac) {
+    $iac = (@$_REQUEST['page'] == $ac[0] && @$_REQUEST['action'] == $ac[1]) ? $iac+=1 : $iac;
+  }
+  $is_ajax_call = ($iac > 0) ? true : false;
   if ($is_ajax_call && $config['mc_antidos']['protect_ajax']) {
+    // we set this to navbar on purpose - if they screw with the REQUEST by adding more
+    // params it still gets added under navbar so multiple requests will still get capped
     $per_page = 'navbar';
   } else if ($is_ajax_call && !$config['mc_antidos']['protect_ajax']) {
     // protect isn't on, we'll ignore it
