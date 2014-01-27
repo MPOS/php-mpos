@@ -41,6 +41,8 @@ if ($setting->getValue('disable_manual_payouts') != 1) {
       $log->logInfo("\tStarting Manual Payments...");
       $log->logInfo("\tAccount ID\tUsername\tBalance\t\tCoin Address");
       foreach ($aPayouts as $aData) {
+        $transaction_id = NULL;
+        $rpc_txid = NULL;
         $aBalance = $transaction->getBalance($aData['account_id']);
         $dBalance = $aBalance['confirmed'];
         $aData['coin_address'] = $user->getCoinAddress($aData['account_id']);
@@ -126,6 +128,8 @@ if ($setting->getValue('disable_auto_payouts') != 1) {
       $log->logInfo("Starting Payments...");
       $log->logInfo("\tUserID\tUsername\tBalance\tThreshold\tAddress");
       foreach ($users as $aUserData) {
+        $transaction_id = NULL;
+        $rpc_txid = NULL;
         $dBalance = $aUserData['confirmed'];
         // Validate address against RPC
         try {
