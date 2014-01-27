@@ -27,6 +27,19 @@ class Transaction extends Base {
     return $this->sqlError();
   }
 
+  /**
+   * Update a transaction with a RPC transaction ID
+   * @param id integer Transaction ID
+   * @param txid string RPC Transaction Identifier
+   * @return bool true or false
+   **/
+  public function setRPCTxId($transaction_id, $rpc_txid=NULL) {
+    $stmt = $this->mysqli->prepare("UPDATE $this->table SET txid = ? WHERE id = ?");
+    if ($this->checkStmt($stmt) && $stmt->bind_param('si', $rpc_txid, $transaction_id) && $stmt->execute())
+      return true;
+    return $this->sqlError();
+  }
+
   /*
    * Mark transactions of a user as archived
    * @param account_id int Account ID
