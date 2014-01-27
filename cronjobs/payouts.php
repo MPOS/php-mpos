@@ -149,7 +149,7 @@ if ($setting->getValue('disable_auto_payouts') != 1) {
           if ($transaction->addTransaction($aUserData['id'], $dBalance - $config['txfee_auto'], 'Debit_AP', NULL, $aUserData['coin_address'], NULL)) {
             // Store debit ID for later update
             $transaction_id = $transaction->insert_id;
-            if ($transaction->addTransaction($aUserData['id'], $config['txfee_auto'], 'TXFee', NULL, $aUserData['coin_address']))
+            if (!$transaction->addTransaction($aUserData['id'], $config['txfee_auto'], 'TXFee', NULL, $aUserData['coin_address']))
               $log->logError('Failed to add TXFee record: ' . $transaction->getCronError());
             // Mark all older transactions as archived
             if (!$transaction->setArchived($aUserData['id'], $transaction->insert_id))
