@@ -175,7 +175,7 @@ if ($motd = $setting->getValue('system_motd'))
 $smarty->assign('DEBUG', DEBUG);
 
 // Make it available in Smarty
-$smarty->assign('PATH', 'site_assets/' . THEME);
-$smarty->assign('GLOBALASSETS', 'site_assets/global');
+$smarty->assign('PATH', 'templates/' . THEME . '/assets');
+$smarty->assign('GLOBALASSETS', 'templates/global');
 $smarty->assign('GLOBAL', $aGlobal);
 ?>
