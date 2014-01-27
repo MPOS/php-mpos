@@ -49,7 +49,7 @@ if (! $statistics_ajax_refresh_interval = $setting->getValue('statistics_ajax_re
 if (! $statistics_ajax_long_refresh_interval = $setting->getValue('statistics_ajax_long_refresh_interval')) $statistics_ajax_long_refresh_interval = 10;
 
 // Small helper array
-$aHashunits = array( '1' => 'KH/s', '0.001' => 'MH/s', '0.000001' => 'GH/s' );
+$aHashunits = array( '1' => 'KH/s', '0.001' => 'MH/s', '0.000001' => 'GH/s', '0.000000001' => 'TH/s' );
 
 // Global data for Smarty
 $aGlobal = array(
