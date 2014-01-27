@@ -147,6 +147,8 @@ There are a few other projects out there that take advantage of MPOS and it's in
 
 * [MPOS IRC Bot](https://github.com/WKNiGHT-/mpos-bot) written in Python, standalone bot, using the MPOS API
 * [MPOS Eggdrop Module](https://github.com/iAmShorty/mpos-eggdrop-tcl) written in TCL, adding MPOS commands to this bot, using the MPOS API
+* [Windows Phone Pool App](http://www.windowsphone.com/en-us/store/app/meeneminermonitor/7ec6eac7-a642-409b-96c8-57b5cfdf45cf)
+* [iPhone iMPOS App](https://itunes.apple.com/us/app/impos/id742179239?mt=8)
 
 Contributing
 ============
