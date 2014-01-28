@@ -28,7 +28,7 @@ if ($setting->getValue('maintenance') && !$user->isAdmin($user->getUserIdByEmail
     if (!$config['csrf']['enabled'] || $config['csrf']['enabled'] && $csrftoken->valid) {
       if ($user->checkLogin(@$_POST['username'], @$_POST['password']) ) {
         $port = ($_SERVER["SERVER_PORT"] == "80" or $_SERVER["SERVER_PORT"] == "443") ? "" : (":".$_SERVER["SERVER_PORT"]);
-        $location = @$_SERVER['HTTPS'] === true ? 'https://' : 'http://';
+        $location = @$_SERVER['HTTPS'] ? 'https://' : 'http://';
         $location .= $_SERVER['SERVER_NAME'] . $port . $_SERVER['SCRIPT_NAME'] . '?page=dashboard';
         if (!headers_sent()) header('Location: ' . $location);
         exit('<meta http-equiv="refresh" content="0; url=' . htmlspecialchars($location) . '"/>');
