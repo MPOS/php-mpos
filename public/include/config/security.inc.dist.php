@@ -8,8 +8,8 @@
  *   Check -> Memcache configuration
  *   Check -> Memcache anti resource-dos
  *
- *   Options                            Default      Explanation
- *   -------                        +   -------   +  -----------
+ *     Options                          Default      Explanation
+ *     -------                      +   -------   +  -----------
  *     strict                       :    true     :  Whether or not to use strict mode
  *     __https_only		            :    false    :  Requires/pushes to https
  *     __mysql_filter               :    true     :  Uses a mysqli shim to use php filters on all incoming data

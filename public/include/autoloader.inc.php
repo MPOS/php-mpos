@@ -71,8 +71,8 @@ require_once(INCLUDE_DIR . '/lib/scrypt.php');
 // Include our versions
 require_once(INCLUDE_DIR . '/version.inc.php');
 
-if ($user->isAdmin(@$_SESSION['USERDATA']['id'])) {
-  //include_once(INCLUDE_DIR . '/admin_checks.inc.php');
+if (@$_SESSION['USERDATA']['is_admin'] && $user->isAdmin(@$_SESSION['USERDATA']['id'])) {
+  include_once(INCLUDE_DIR . '/admin_checks.inc.php');
 }
 
 ?>
