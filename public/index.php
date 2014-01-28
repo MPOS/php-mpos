@@ -128,7 +128,7 @@ if ($config['memcache']['enabled'] && ($config['mc_antidos']['enabled'] || $conf
 }
 
 // Quick config check
-if (@$_SESSION['USERDATA']['is_admin'] && (!$config['skip_config_tests'])) {
+if (@$_SESSION['USERDATA']['is_admin'] && !@$config['skip_config_tests']) {
   require_once(INCLUDE_DIR. '/admin_checks.php');
 }
 

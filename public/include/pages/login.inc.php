@@ -29,7 +29,7 @@ if ($setting->getValue('maintenance') && !$user->isAdmin($user->getUserIdByEmail
         $port = ($_SERVER["SERVER_PORT"] == "80" || $_SERVER["SERVER_PORT"] == "443") ? "" : (":".$_SERVER["SERVER_PORT"]);
         $location = (@$_SERVER['HTTPS'] == "on") ? 'https://' : 'http://';
         $location .= $_SERVER['SERVER_NAME'] . $port . $_SERVER['SCRIPT_NAME'];
-        if ($config['strict']) {
+        if ($config['strict'] && $config['memcache']['enabled']) {
           $update = array('key' => '','sid' => '','ua' => '','ip' => '','la' => 0,'hn' => 0,'hnl' => 0,'ha' => 0,'hal' => 0);
           $session->regen_session_id();
           $update['sid'] = session_id();

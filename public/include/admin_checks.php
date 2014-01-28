@@ -2,16 +2,17 @@
 $defflip = (!cfip()) ? exit(header('HTTP/1.1 401 Unauthorized')) : 1;
 
 if (@$_SESSION['USERDATA']['is_admin'] && $user->isAdmin(@$_SESSION['USERDATA']['id'])) {
-  
   if (!include_once(INCLUDE_DIR . '/lib/jsonRPCClient.php')) die('Unable to load libs');
-  
   $notice = array();
   $enotice = array();
   $error = array();
   
-  // setup some basic stuff for checking
-  $apache_user = posix_getuid();
-  $apache_user = (function_exists('posix_getpwuid')) ? posix_getpwuid($apache_user) : $apache_user;
+  // setup some basic stuff for checking - getuid/getpwuid not available on mac/windows
+  $apache_user = 'unknown';
+  if (substr_count(strtolower(PHP_OS), 'nix') > 0) {
+    $apache_user = (function_exists('posix_getuid')) ? posix_getuid() : 'unknown';
+    $apache_user = (function_exists('posix_getpwuid')) ? posix_getpwuid($apache_user) : $apache_user;
+  }
   
   // setup checks
   // check if memcache isn't available but enabled in config -> error
@@ -71,19 +72,29 @@ if (@$_SESSION['USERDATA']['is_admin'] && $user->isAdmin(@$_SESSION['USERDATA'][
     $error[] = "strict or mc_antidos are enabled and memcache is not, <u>memcache is required</u> to use these.";
   }
   // poke stratum using gettingstarted details -> enotice
-  $socket = @socket_create(AF_INET, SOCK_STREAM, SOL_TCP);
-  if ($socket !== false) {
-    $address = @gethostbyname($config['gettingstarted']['stratumurl']);
-    $result = @socket_connect($socket, $address, $config['gettingstarted']['stratumport']);
-    if ($result !== 1) {
+  if (substr_count(strtolower(PHP_OS), 'nix') > 0) {
+    // unix *poke*
+    $socket = @socket_create(AF_INET, SOCK_STREAM, SOL_TCP);
+    if ($socket !== false) {
+      $address = @gethostbyname($config['gettingstarted']['stratumurl']);
+      $result = @socket_connect($socket, $address, $config['gettingstarted']['stratumport']);
+      if ($result !== 1) {
+        $enotice[] = "We tried to poke your Stratum server using config->gettingstarted details but it didn't respond";
+      }
+      $close = @socket_close($socket);
+    }
+  } else {
+    // mac/windows *poke*
+    if (! $fp = @fsockopen($config['gettingstarted']['stratumurl'],$config['gettingstarted']['stratumport'],$errCode,$errStr,1)) {
       $enotice[] = "We tried to poke your Stratum server using config->gettingstarted details but it didn't respond";
     }
-    $close = @socket_close($socket);
+    @fclose($fp);
   }
+  
   // security checks
   // strict not on -> notice
   if (!$config['strict']) {
-    $notice[] = "strict is <u>disabled</u> - if you have memcache, you should turn this on.";
+    $notice[] = "Strict is <u>disabled</u> - if you have memcache, you should turn this on.";
   }
   // salts too short -> notice, salts default -> error
   if ((strlen(SALT) < 24) || (strlen(SALTY) < 24) || SALT == 'PLEASEMAKEMESOMETHINGRANDOM' || SALTY == 'THISSHOULDALSOBERRAANNDDOOM') {

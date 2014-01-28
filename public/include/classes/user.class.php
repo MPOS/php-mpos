@@ -493,7 +493,7 @@ class User extends Base {
   private function createSession($username) {
     $this->debug->append("STA " . __METHOD__, 4);
     $this->debug->append("Log in user to _SESSION", 2);
-    if ($this->config['strict']) {
+    if ($this->config['strict'] && $this->config['memcache']['enabled']) {
       session_regenerate_id(true);
       $_SESSION['AUTHENTICATED'] = '1';
       // $this->user from checkUserPassword
