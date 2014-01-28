@@ -1,4 +1,6 @@
 <?php 
+$defflip = (!cfip()) ? exit(header('HTTP/1.1 401 Unauthorized')) : 1;
+
 /**
  * Strict is a set of extra security options can use that when enabled can help protect against
  * a few different types of attacks.
