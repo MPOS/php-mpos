@@ -41,7 +41,7 @@ if (empty($aWorkers)) {
     $aData['username'] = $user->getUserName($aWorker['account_id']);
     $aData['subject'] = 'IDLE Worker : ' . $aWorker['username'];
     $aData['worker'] = $aWorker['username'];
-    $aData['email'] = $user->getUserEmail($aData['username']);
+    $aData['email'] = $user->getUserEmail($aData['account_id']);
     $log->logDebug("    " . $aWorker['username'] . "...");
     if (!$notification->sendNotification($aWorker['account_id'], 'idle_worker', $aData))
       $log->logDebug("    Failed sending notifications: " . $notification->getCronError());
