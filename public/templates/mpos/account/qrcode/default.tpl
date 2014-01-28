@@ -4,7 +4,7 @@
   {literal}
   $(document).ready(function(){
     $('#qrcodeholder').qrcode({
-      text    : "{/literal}|http{if $smarty.server.HTTPS|default:"0" eq '1'}s{/if}://{$smarty.server.SERVER_NAME}{$smarty.server.SCRIPT_NAME}?page=api|{$GLOBAL.userdata.api_key}|{$GLOBAL.userdata.id}|{literal}",
+      text    : "{/literal}|http{if $smarty.server.HTTPS|default:"0" eq 'on'}s{/if}://{$smarty.server.SERVER_NAME}{$smarty.server.SCRIPT_NAME}?page=api|{$GLOBAL.userdata.api_key}|{$GLOBAL.userdata.id}|{literal}",
       render    : "canvas",  // 'canvas' or 'table'. Default value is 'canvas'
       background : "#ffffff",
       foreground : "#000000",
