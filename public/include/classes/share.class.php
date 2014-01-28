@@ -78,10 +78,11 @@ class Share Extends Base {
    **/
   public function getRoundShares($previous_upstream=0, $current_upstream) {
     $stmt = $this->mysqli->prepare("SELECT
-      ROUND(IFNULL(SUM(IF(difficulty=0, POW(2, (" . $this->config['difficulty'] . " - 16)), difficulty)), 0) / POW(2, (" . $this->config['difficulty'] . " - 16)), 8) AS total
-      FROM $this->table
-      WHERE our_result = 'Y'
-      AND id > ? AND id <= ?
+      ROUND(IFNULL(SUM(IF(s.difficulty=0, POW(2, (" . $this->config['difficulty'] . " - 16)), s.difficulty)), 0) / POW(2, (" . $this->config['difficulty'] . " - 16)), 8) AS total
+      FROM $this->table AS s
+      LEFT JOIN " . $this->user->getTableName() . " AS a
+      ON a.username = SUBSTRING_INDEX( s.username , '.', 1 )
+      WHERE s.id > ? AND s.id <= ? AND s.our_result = 'Y' AND a.is_locked != 2
       ");
     if ($this->checkStmt($stmt) && $stmt->bind_param('ii', $previous_upstream, $current_upstream) && $stmt->execute() && $result = $stmt->get_result())
       return $result->fetch_object()->total;
@@ -106,7 +107,7 @@ class Share Extends Base {
       FROM $this->table AS s
       LEFT JOIN " . $this->user->getTableName() . " AS a
       ON a.username = SUBSTRING_INDEX( s.username , '.', 1 )
-      WHERE s.id > ? AND s.id <= ?
+      WHERE s.id > ? AND s.id <= ? AND a.is_locked != 2
       GROUP BY username DESC
       ");
     if ($this->checkStmt($stmt) && $stmt->bind_param('ii', $previous_upstream, $current_upstream) && $stmt->execute() && $result = $stmt->get_result())
@@ -153,7 +154,7 @@ class Share Extends Base {
       FROM $this->tableArchive AS s
       LEFT JOIN " . $this->user->getTableName() . " AS a
       ON a.username = SUBSTRING_INDEX( s.username , '.', 1 )
-      WHERE s.share_id > ? AND s.share_id <= ?
+      WHERE s.share_id > ? AND s.share_id <= ? AND a.is_locked != 2
       GROUP BY account DESC");
     if ($this->checkStmt($stmt) && $stmt->bind_param("ii", $iMinId, $iMaxId) && $stmt->execute() && $result = $stmt->get_result()) {
       $aData = NULL;

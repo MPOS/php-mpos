@@ -10,7 +10,7 @@ if (!isset($_GET['token']) || empty($_GET['token'])) {
   $_SESSION['POPUP'][] = array('CONTENT' => 'Unable to re-activate your account. Invalid token.', 'TYPE' => 'errormsg');
 } else {
   if (!$config['csrf']['enabled'] || $config['csrf']['enabled'] && $csrftoken->valid) {
-    if ($user->setUserFailed($aToken['account_id'], 0) && $user->setUserPinFailed($aToken['account_id'], 0) && $user->changeLocked($aToken['account_id'])) {
+    if ($user->setUserFailed($aToken['account_id'], 0) && $user->setUserPinFailed($aToken['account_id'], 0) && $user->setLocked($aToken['account_id'], 0)) {
       $oToken->deleteToken($aToken['token']);
       $_SESSION['POPUP'][] = array('CONTENT' => 'Account re-activated. Please login.');
     } else {
