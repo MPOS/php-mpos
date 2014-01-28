@@ -13,10 +13,17 @@ class User extends Base {
   private function getHash($string) {
     return hash('sha256', $string.$this->salt);
   }
-  
-  // ALL CALLS BY USERNAME
+  public function getUserName($id) {
+    return $this->getSingle($id, 'username', 'id');
+  }
+  public function getUserNameByEmail($email) {
+    return $this->getSingle($email, 'username', 'email', 's');
+  }
   public function getUserId($username, $lower=false) {
     return $this->getSingle($username, 'id', 'username', 's', $lower);
+  }
+  public function getUserIdByEmail($email, $lower=false) {
+    return $this->getSingle($email, 'id', 'email', 's', $lower);
   }
   public function getUserEmail($username, $lower=false) {
     return $this->getSingle($username, 'email', 'username', 's', $lower);
@@ -24,30 +31,11 @@ class User extends Base {
   public function getUserNotifyEmail($username, $lower=false) {
     return $this->getSingle($username, 'notify_email', 'username', 's', $lower);
   }
-
-  // ALL CALLS BY EMAIL
-  public function getEmail($email) {
-    return $this->getSingle($email, 'email', 'email', 's');
-  }
-  public function getUserNameByEmail($email) {
-    return $this->getSingle($email, 'username', 'email', 's');
-  }
-  public function getUserIdByEmail($email, $lower=false) {
-    return $this->getSingle($email, 'id', 'email', 's', $lower);
-  }
-
-  // ALL CALLS BY USERID
-  public function getUserName($id) {
-    return $this->getSingle($id, 'username', 'id');
-  }
-  public function getUserEmailbyID($id) {
-    return $this->getSingle($id, 'email', 'id');
+  public function getUserNoFee($id) {
+    return $this->getSingle($id, 'no_fees', 'id');
   }
   public function getUserDonatePercent($id) {
     return $this->getDonatePercent($id);
-  }
-  public function getUserNoFee($id) {
-    return $this->getSingle($id, 'no_fees', 'id');
   }
   public function getUserAdmin($id) {
     return $this->getSingle($id, 'is_admin', 'id');
@@ -57,6 +45,9 @@ class User extends Base {
   }
   public function getUserIp($id) {
     return $this->getSingle($id, 'loggedIp', 'id');
+  }
+  public function getEmail($email) {
+    return $this->getSingle($email, 'email', 'email', 's');
   }
   public function getUserFailed($id) {
    return $this->getSingle($id, 'failed_logins', 'id');
@@ -154,7 +145,7 @@ class User extends Base {
       $this->createSession($username);
       if ($this->setUserIp($this->getUserId($username), $_SERVER['REMOTE_ADDR'])) {
         // send a notification if success_login is active
-        $uid = $this->getUserId($username);
+        $userid = $this->getUserId($username);
         $notifs = new Notification();
         $notifs->setDebug($this->debug);
         $notifs->setMysql($this->mysqli);
@@ -162,30 +153,30 @@ class User extends Base {
         $notifs->setConfig($this->config);
         $notifs->setSetting($this->setting);
         $notifs->setErrorCodes($this->aErrorCodes);
-        $ndata = $notifs->getNotificationSettings($uid);
+        $ndata = $notifs->getNotificationSettings($userid);
         if (@$ndata['success_login'] == 1) {
           // seems to be active, let's send it
           $aDataN['username'] = $username;
-          $aDataN['email'] = $this->getUserEmail($username);
+          $aDataN['email'] = $this->getUserEmailByID($userid);
           $aDataN['subject'] = 'Successful login notification';
           $aDataN['LOGINIP'] = $this->getCurrentIP();
           $aDataN['LOGINUSER'] = $username;
           $aDataN['LOGINTIME'] = date('m/d/y H:i:s');
-          $notifs->sendNotification($uid, 'success_login', $aDataN);
+          $notifs->sendNotification($userid, 'success_login', $aDataN);
         }
         return true;
       }
     }
     $this->setErrorMessage("Invalid username or password");
-    if ($id = $this->getUserId($username)) {
-      $this->incUserFailed($id);
+    if ($userid = $this->getUserId($username)) {
+      $this->incUserFailed($userid);
       // Check if this account should be locked
       if (isset($this->config['maxfailed']['login']) && $this->getUserFailed($id) >= $this->config['maxfailed']['login']) {
-        $this->changeLocked($id);
-        if ($token = $this->token->createToken('account_unlock', $id)) {
+        $this->changeLocked($userid);
+        if ($token = $this->token->createToken('account_unlock', $userid)) {
           $aData['token'] = $token;
           $aData['username'] = $username;
-          $aData['email'] = $this->getUserEmail($username);
+          $aData['email'] = $this->getUserEmailByID($userid);
           $aData['subject'] = 'Account auto-locked';
           $this->mail->sendMail('notifications/locked', $aData);
         }
@@ -215,10 +206,9 @@ class User extends Base {
     if (isset($this->config['maxfailed']['pin']) && $this->getUserPinFailed($userId) >= $this->config['maxfailed']['pin']) {
       $this->changeLocked($userId);
       if ($token = $this->token->createToken('account_unlock', $userId)) {
-        $username = $this->getUserName($userId);
         $aData['token'] = $token;
-        $aData['username'] = $username;
-        $aData['email'] = $this->getUserEmail($username);;
+        $aData['username'] = $this->getUserName($userId);
+        $aData['email'] = $this->getUserEmailByID($userId);
         $aData['subject'] = 'Account auto-locked';
         $this->mail->sendMail('notifications/locked', $aData);
       }
@@ -229,14 +219,11 @@ class User extends Base {
 
   public function generatePin($userID, $current) {
     $this->debug->append("STA " . __METHOD__, 4);
-    $username = $this->getUserName($userID);
-    $email = $this->getUserEmail($username);
     $current = $this->getHash($current);
-    $newpin = intval( '0' . rand(1,9) . rand(0,9) . rand(0,9) . rand(0,9) );
-    $aData['username'] = $username;
-    $aData['email'] = $email;
-    $aData['pin'] = $newpin;
-    $newpin = $this->getHash($newpin);
+    $aData['username'] = $this->getUserName($userID);
+    $aData['email'] = $this->getUserEmailByID($userId);
+    $aData['pin'] = intval( '0' . rand(1,9) . rand(0,9) . rand(0,9) . rand(0,9) );
+    $newpin = $this->getHash($aData['pin']);
     $aData['subject'] = 'PIN Reset Request';
     $stmt = $this->mysqli->prepare("UPDATE $this->table SET pin = ? WHERE ( id = ? AND pass = ? )");
 
@@ -769,6 +756,7 @@ class User extends Base {
   public function initResetPassword($username) {
     $this->debug->append("STA " . __METHOD__, 4);
     // Fetch the users mail address
+    
     if (empty($username)) {
       $this->serErrorMessage("Username must not be empty");
       return false;
