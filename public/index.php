@@ -41,7 +41,8 @@ define("BASEPATH", dirname(__FILE__) . "/");
 
 // Include our configuration (holding defines for the requires)
 if (!include_once(BASEPATH . 'include/config/global.inc.php')) die('Unable to load site configuration');
-if (!include_once(BASEPATH . 'include/config/security.inc.php')) die('Unable to load security configuration');
+if (!include_once(BASEPATH . 'include/config/security.inc.dist.php')) die('Unable to load security configuration');
+if (@file_exists(BASEPATH . 'include/config/security.inc.php')) include_once(BASEPATH . 'include/config/security.inc.php');
 
 // switch to https if config option is enabled
 $hts = ($config['strict__https_only'] && (!empty($_SERVER['QUERY_STRING']))) ? "https://".$_SERVER['SERVER_NAME'].$_SERVER['SCRIPT_NAME']."?".$_SERVER['QUERY_STRING'] : "https://".$_SERVER['SERVER_NAME'].$_SERVER['SCRIPT_NAME'];
