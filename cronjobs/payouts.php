@@ -41,6 +41,8 @@ if ($setting->getValue('disable_manual_payouts') != 1) {
       $log->logInfo("\tStarting Manual Payments...");
       $log->logInfo("\tAccount ID\tUsername\tBalance\t\tCoin Address");
       foreach ($aPayouts as $aData) {
+        $transaction_id = NULL;
+        $rpc_txid = NULL;
         $aBalance = $transaction->getBalance($aData['account_id']);
         $dBalance = $aBalance['confirmed'];
         $aData['coin_address'] = $user->getCoinAddress($aData['account_id']);
@@ -63,16 +65,26 @@ if ($setting->getValue('disable_manual_payouts') != 1) {
             $monitoring->endCronjob($cron_name, 'E0010', 1, true);
           }
           $log->logInfo("\t" . $aData['account_id'] . "\t\t" . $aData['username'] . "\t" . $dBalance . "\t\t" . $aData['coin_address']);
-          try {
-            $txid = $bitcoin->sendtoaddress($aData['coin_address'], $dBalance - $config['txfee_manual']);
-          } catch (Exception $e) {
-            $log->logError('E0078: RPC method did not return 200 OK: Address: ' . $aData['coin_address'] . ' ERROR: ' . $e->getMessage());
-            $monitoring->endCronjob($cron_name, 'E0078', 1, true);
-          }
-          if ($transaction->addTransaction($aData['account_id'], $dBalance - $config['txfee_manual'], 'Debit_MP', NULL, $aData['coin_address'], $txid) && $transaction->addTransaction($aData['account_id'], $config['txfee_manual'], 'TXFee', NULL, $aData['coin_address'])) {
+          if ($transaction->addTransaction($aData['account_id'], $dBalance - $config['txfee_manual'], 'Debit_MP', NULL, $aData['coin_address'], NULL)) {
+            // Store debit transaction ID for later update
+            $transaction_id = $transaction->insert_id;
+            if (!$transaction->addTransaction($aData['account_id'], $config['txfee_manual'], 'TXFee', NULL, $aData['coin_address']))
+              $log->logError('Failed to add TXFee record: ' . $transaction->getCronError());
             // Mark all older transactions as archived
             if (!$transaction->setArchived($aData['account_id'], $transaction->insert_id))
               $log->logError('Failed to mark transactions for #' . $aData['account_id'] . ' prior to #' . $transaction->insert_id . ' as archived. ERROR: ' . $transaction->getCronError());
+            // Run the payouts from RPC now that the user is fully debited
+            try {
+              $rpc_txid = $bitcoin->sendtoaddress($aData['coin_address'], $dBalance - $config['txfee_manual']);
+            } catch (Exception $e) {
+              $log->logError('E0078: RPC method did not return 200 OK: Address: ' . $aData['coin_address'] . ' ERROR: ' . $e->getMessage());
+              // Remove this line below if RPC calls are failing but transactions are still added to it
+              // Don't blame MPOS if you run into issues after commenting this out!
+              $monitoring->endCronjob($cron_name, 'E0078', 1, true);
+            }
+            // Update our transaction and add the RPC Transaction ID
+            if (empty($rpc_txid) || !$transaction->setRPCTxId($transaction_id, $rpc_txid))
+              $log->logError('Unable to add RPC transaction ID ' . $rpc_txid . ' to transaction record ' . $tx_id . ': ' . $transaction->getCronError());
             // Notify user via  mail
             $aMailData['email'] = $user->getUserEmail($user->getUserName($aData['account_id']));
             $aMailData['subject'] = 'Manual Payout Completed';
@@ -116,6 +128,8 @@ if ($setting->getValue('disable_auto_payouts') != 1) {
       $log->logInfo("Starting Payments...");
       $log->logInfo("\tUserID\tUsername\tBalance\tThreshold\tAddress");
       foreach ($users as $aUserData) {
+        $transaction_id = NULL;
+        $rpc_txid = NULL;
         $dBalance = $aUserData['confirmed'];
         // Validate address against RPC
         try {
@@ -131,18 +145,27 @@ if ($setting->getValue('disable_auto_payouts') != 1) {
         $log->logInfo("\t" . $aUserData['id'] . "\t" . $aUserData['username'] . "\t" . $dBalance . "\t" . $aUserData['ap_threshold'] . "\t\t" . $aUserData['coin_address']);
         // Only run if balance meets threshold and can pay the potential transaction fee
         if ($dBalance > $aUserData['ap_threshold'] && $dBalance > $config['txfee_auto']) {
-          // Send balance, fees are reduced later by RPC Server
-          try {
-            $txid = $bitcoin->sendtoaddress($aUserData['coin_address'], $dBalance - $config['txfee_auto']);
-          } catch (Exception $e) {
-            $log->logError('E0078: RPC method did not return 200 OK: Address: ' . $aUserData['coin_address'] . ' ERROR: ' . $e->getMessage());
-            $monitoring->endCronjob($cron_name, 'E0078', 1, true);
-          }
           // Create transaction record
-          if ($transaction->addTransaction($aUserData['id'], $dBalance - $config['txfee_auto'], 'Debit_AP', NULL, $aUserData['coin_address'], $txid) && $transaction->addTransaction($aUserData['id'], $config['txfee_auto'], 'TXFee', NULL, $aUserData['coin_address'])) {
+          if ($transaction->addTransaction($aUserData['id'], $dBalance - $config['txfee_auto'], 'Debit_AP', NULL, $aUserData['coin_address'], NULL)) {
+            // Store debit ID for later update
+            $transaction_id = $transaction->insert_id;
+            if (!$transaction->addTransaction($aUserData['id'], $config['txfee_auto'], 'TXFee', NULL, $aUserData['coin_address']))
+              $log->logError('Failed to add TXFee record: ' . $transaction->getCronError());
             // Mark all older transactions as archived
             if (!$transaction->setArchived($aUserData['id'], $transaction->insert_id))
               $log->logError('Failed to mark transactions for user #' . $aUserData['id'] . ' prior to #' . $transaction->insert_id . ' as archived. ERROR: ' . $transaction->getCronError());
+            // Run the payouts from RPC now that the user is fully debited
+            try {
+              $rpc_txid = $bitcoin->sendtoaddress($aUserData['coin_address'], $dBalance - $config['txfee_auto']);
+            } catch (Exception $e) {
+              $log->logError('E0078: RPC method did not return 200 OK: Address: ' . $aUserData['coin_address'] . ' ERROR: ' . $e->getMessage());
+              // Remove this line below if RPC calls are failing but transactions are still added to it
+              // Don't blame MPOS if you run into issues after commenting this out!
+              $monitoring->endCronjob($cron_name, 'E0078', 1, true);
+            }
+            // Update our transaction and add the RPC Transaction ID
+            if (empty($rpc_txid) || !$transaction->setRPCTxId($transaction_id, $rpc_txid))
+              $log->logError('Unable to add RPC transaction ID ' . $rpc_txid . ' to transaction record ' . $tx_id . ': ' . $transaction->getCronError());
             // Notify user via  mail
             $aMailData['email'] = $user->getUserEmail($user->getUserName($aUserData['id']));
             $aMailData['subject'] = 'Auto Payout Completed';
