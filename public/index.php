@@ -128,6 +128,20 @@ if ($config['memcache']['enabled'] && ($config['mc_antidos']['enabled'] || $conf
   }
 }
 
+// Got past rate limiter and session manager, show last logged in popup if it's still set
+if (@$_GET['clp'] == 1 && @$_SESSION['last_ip_pop']) unset($_SESSION['last_ip_pop']);
+if (count(@$_SESSION['last_ip_pop']) == 2) {
+  $data = $_SESSION['last_ip_pop'];
+  $ip = filter_var($data[0], FILTER_VALIDATE_IP);
+  $time = date("l, F jS \a\\t g:i a", $data[1]);
+  $closelink = "<a href='index.php?page=dashboard&clp=1' style='float:right;padding-right:14px;'>Close</a>";
+  if (@$_SESSION['AUTHENTICATED'] && $_SESSION['last_ip_pop'][0] !== $_SERVER['REMOTE_ADDR']) {
+    $_SESSION['POPUP'][] = array('CONTENT' => "You last logged in from <b>$ip</b> on $time $closelink", 'TYPE' => 'warning');
+  } else {
+    $_SESSION['POPUP'][] = array('CONTENT' => "You last logged in from <b>$ip</b> on $time $closelink", 'TYPE' => 'info');
+  }
+}
+
 // Quick config check
 if (@$_SESSION['USERDATA']['is_admin'] && !@$config['skip_config_tests']) {
   require_once(INCLUDE_DIR. '/admin_checks.php');

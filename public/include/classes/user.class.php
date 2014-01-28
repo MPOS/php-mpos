@@ -43,6 +43,9 @@ class User extends Base {
   public function getUserIp($id) {
     return $this->getSingle($id, 'loggedIp', 'id');
   }
+  public function getLastLogin($id) {
+    return $this->getSingle($id, 'last_login', 'id');
+  }
   public function getEmail($email) {
     return $this->getSingle($email, 'email', 'email', 's');
   }
@@ -138,9 +141,13 @@ class User extends Base {
       return false;
     }
     if ($this->checkUserPassword($username, $password)) {
-      $this->updateLoginTimestamp($this->getUserId($username));
-      $this->createSession($username);
-      if ($this->setUserIp($this->getUserId($username), $_SERVER['REMOTE_ADDR'])) {
+      $uid = $this->getUserId($username);
+      $this->updateLoginTimestamp($uid);
+      $getIPAddress = $this->getUserIp($uid);
+      $setIPAddress = $this->setUserIp($uid, $_SERVER['REMOTE_ADDR']);
+      $lastLoginTime = $this->getLastLogin($uid);
+      $this->createSession($username, $getIPAddress, $lastLoginTime);
+      if ($setIPAddress) {
         // send a notification if success_login is active
         $uid = $this->getUserId($username);
         $notifs = new Notification();
@@ -490,9 +497,12 @@ class User extends Base {
    * @param username string Username to create session for
    * @return none
    **/
-  private function createSession($username) {
+  private function createSession($username, $lastIP='', $lastLoginTime='') {
     $this->debug->append("STA " . __METHOD__, 4);
     $this->debug->append("Log in user to _SESSION", 2);
+    if (!empty($lastIP) && (!empty($lastLoginTime))) {
+      $_SESSION['last_ip_pop'] = array($lastIP, $lastLoginTime);
+    }
     if ($this->config['strict'] && $this->config['memcache']['enabled']) {
       session_regenerate_id(true);
       $_SESSION['AUTHENTICATED'] = '1';
