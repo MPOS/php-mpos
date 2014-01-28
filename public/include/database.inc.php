@@ -2,7 +2,7 @@
 $defflip = (!cfip()) ? exit(header('HTTP/1.1 401 Unauthorized')) : 1;
 
 // Instantiate class, we are using mysqlng
-if ($config['strict']) {
+if ($config['strict'] && $config['strict__mysql_filter']) {
   $mysqli = new mysqli_strict($config['db']['host'], $config['db']['user'], $config['db']['pass'], $config['db']['name'], $config['db']['port']);
 } else {
   $mysqli = new mysqli($config['db']['host'], $config['db']['user'], $config['db']['pass'], $config['db']['name'], $config['db']['port']);

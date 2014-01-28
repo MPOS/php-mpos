@@ -1,6 +1,5 @@
 <article class="module width_half">
   <form action="{$smarty.server.SCRIPT_NAME}?page=login" method="post" id="loginForm">
-    <input type="hidden" name="to" value="{($smarty.request.to|default:"{$smarty.server.SCRIPT_NAME}?page=dashboard")|escape}" />
     <input type="hidden" name="ctoken" value="{$CTOKEN|escape|default:""}" />
     <header><h3>Login with existing account</h3></header>
     <div class="module_content">

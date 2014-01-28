@@ -494,13 +494,10 @@ class User extends Base {
     $this->debug->append("STA " . __METHOD__, 4);
     $this->debug->append("Log in user to _SESSION", 2);
     if ($this->config['strict']) {
-      if ($this->session->verify_server()) {
-        if ($this->session->create_session($_SERVER['REMOTE_ADDR'])) {
-          $this->session->update_client($_SERVER['REMOTE_ADDR']);
-          $_SESSION['AUTHENTICATED'] = '1';
-          $_SESSION['USERDATA'] = $this->user;
-        }
-      }
+      session_regenerate_id(true);
+      $_SESSION['AUTHENTICATED'] = '1';
+      // $this->user from checkUserPassword
+      $_SESSION['USERDATA'] = $this->user;
     } else {
       session_regenerate_id(true);
       $_SESSION['AUTHENTICATED'] = '1';
@@ -537,10 +534,11 @@ class User extends Base {
     session_destroy();
     // Enforce generation of a new Session ID and delete the old
     session_regenerate_id(true);
+    
     // Enforce a page reload and point towards login with referrer included, if supplied
     $port = ($_SERVER["SERVER_PORT"] == "80" || $_SERVER["SERVER_PORT"] == "443") ? "" : (":".$_SERVER["SERVER_PORT"]);
     $pushto = $_SERVER['SCRIPT_NAME'].'?page=login';
-    $location = @$_SERVER['HTTPS'] ? 'https://' . $_SERVER['SERVER_NAME'] . $port . $pushto : 'http://' . $_SERVER['SERVER_NAME'] . $port . $pushto;
+    $location = (@$_SERVER['HTTPS'] == 'on') ? 'https://' . $_SERVER['SERVER_NAME'] . $port . $pushto : 'http://' . $_SERVER['SERVER_NAME'] . $port . $pushto;
     // if (!headers_sent()) header('Location: ' . $location);
     exit('<meta http-equiv="refresh" content="0; url=' . $location . '"/>');
   }
@@ -804,7 +802,7 @@ class User extends Base {
    * @param none
    * @return bool
    **/
-  public function isAuthenticated($logout=true) {
+public function isAuthenticated($logout=true) {
     $this->debug->append("STA " . __METHOD__, 4);
     if (@$_SESSION['AUTHENTICATED'] == true &&
         !$this->isLocked($_SESSION['USERDATA']['id']) &&

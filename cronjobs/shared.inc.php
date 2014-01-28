@@ -18,6 +18,21 @@ limitations under the License.
 
  */
 
+define('SECURITY', '*)WT#&YHfd');
+// Whether or not to check SECHASH for validity, still checks if SECURITY defined as before if disabled
+define('SECHASH_CHECK', false);
+
+// Nothing below here to configure, move along...
+
+// change SECHASH every second, we allow up to 3 sec back for slow servers
+if (SECHASH_CHECK) {
+  function fip($tr=0) { return md5(SECURITY.(time()-$tr).SECURITY); }
+  define('SECHASH', fip());
+  function cfip() { return (fip()==SECHASH||fip(1)==SECHASH||fip(2)==SECHASH) ? 1 : 0; }
+} else {
+  function cfip() { return (@defined('SECURITY')) ? 1 : 0; }
+}
+
 // MODIFY THIS
 // We need to find our include files so set this properly
 define("BASEPATH", "../public/");

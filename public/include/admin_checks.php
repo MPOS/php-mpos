@@ -1,0 +1,113 @@
+<?php
+$defflip = (!cfip()) ? exit(header('HTTP/1.1 401 Unauthorized')) : 1;
+
+if (@$_SESSION['USERDATA']['is_admin'] && $user->isAdmin(@$_SESSION['USERDATA']['id'])) {
+  
+  if (!include_once(INCLUDE_DIR . '/lib/jsonRPCClient.php')) die('Unable to load libs');
+  
+  $notice = array();
+  $enotice = array();
+  $error = array();
+  
+  // setup some basic stuff for checking
+  $apache_user = posix_getuid();
+  $apache_user = (function_exists('posix_getpwuid')) ? posix_getpwuid($apache_user) : $apache_user;
+  
+  // setup checks
+  // check if memcache isn't available but enabled in config -> error
+  if (!class_exists('Memcached') && $config['memcache']['enabled']) {
+    $error[] = "You have memcache enabled in your config and it's not available. Install the package on your system.";
+  }
+  // if it's not enabled, test it if it exists, if it works -> error tell them to enable, -> otherwise notice it's disabled
+  if (!$config['memcache']['enabled']) {
+    if (PHP_OS == 'WINNT') {
+      require_once(CLASS_DIR . 'memcached.class.php');
+    }
+    if (class_exists('Memcached')) {
+      $memcache_test = @new Memcached();
+      $memcache_test_add = @$memcache_test->addServer($config['memcache']['host'], $config['memcache']['port']);
+      $randmctv = rand(5,10);
+      $memcache_test_set = @$memcache_test->set('test_mpos_setval', $randmctv);
+      $memcache_test_get = @$memcache_test->get('test_mpos_setval');
+    }
+    if (class_exists('Memcached') && $memcache_test_get == $randmctv) {
+      $error[] = "You have memcache disabled in the config and it's available & works! Enable it.";
+    } else {
+      $notice[] = "Memcache is disabled; Almost every linux distro has packages for it, you should be using it if you can.";
+    }
+  }
+  // check if we can write templates/cache and templates/compile -> error
+  if (!is_writable(THEME_DIR.'/cache')) {
+    $error[] = "templates/cache folder is not writable for uid {$apache_user['name']}";
+  }
+  if (!is_writable(THEME_DIR.'/compile')) {
+    $error[] = "templates/compile folder is not writable for uid {$apache_user['name']}";
+  }
+  // check if daemon can connect -> error
+  try {
+    if ($bitcoin->can_connect() !== true) {
+      $error[] = "Unable to connect to coin daemon using provided credentials";
+    }
+  } catch (Exception $e) {
+  }
+  // if coldwallet is not empty, check if the address is valid -> error
+  if (!empty($config['coldwallet']['address'])) {
+    try {
+      if ($bitcoin->can_connect() == true) {
+        $validate_cold_address = $bitcoin->validateaddress($config['coldwallet']['address']);
+        if (!$validate_cold_address['isvalid']) {
+          $error[] = "Your cold wallet address is <u>SET and INVALID</u>";
+        }
+      }
+    } catch (Exception $e) {
+    }
+  }
+  // if database connection fails -> error
+  $db_connect = new mysqli($config['db']['host'], $config['db']['user'], $config['db']['pass'], $config['db']['name'], $config['db']['port']);
+  if (mysqli_connect_errno() || !array_key_exists('client_info', $db_connect)) {
+    $error[] = "Unable to connect to mysql using provided credentials";
+  }
+  if (($config['strict'] || $config['mc_antidos']) && !$config['memcache']['enabled']) {
+    $error[] = "strict or mc_antidos are enabled and memcache is not, <u>memcache is required</u> to use these.";
+  }
+  // poke stratum using gettingstarted details -> enotice
+  $socket = @socket_create(AF_INET, SOCK_STREAM, SOL_TCP);
+  if ($socket !== false) {
+    $address = @gethostbyname($config['gettingstarted']['stratumurl']);
+    $result = @socket_connect($socket, $address, $config['gettingstarted']['stratumport']);
+    if ($result !== 1) {
+      $enotice[] = "We tried to poke your Stratum server using config->gettingstarted details but it didn't respond";
+    }
+    $close = @socket_close($socket);
+  }
+  // security checks
+  // strict not on -> notice
+  if (!$config['strict']) {
+    $notice[] = "strict is <u>disabled</u> - if you have memcache, you should turn this on.";
+  }
+  // salts too short -> notice, salts default -> error
+  if ((strlen(SALT) < 24) || (strlen(SALTY) < 24) || SALT == 'PLEASEMAKEMESOMETHINGRANDOM' || SALTY == 'THISSHOULDALSOBERRAANNDDOOM') {
+    if (SALT == 'PLEASEMAKEMESOMETHINGRANDOM' || SALTY == 'THISSHOULDALSOBERRAANNDDOOM') {
+      $error[] = "You absolutely <u>SHOULD NOT leave your SALT or SALTY default</u>";
+    } else {
+      $notice[] = "SALT or SALTY is too short, they should be more than 24 characters and changing them will require registering again.";
+    }
+  }
+  
+  // display the errors
+  foreach ($enotice as $en) {
+    $_SESSION['POPUP'][] = array('CONTENT' => $en, 'TYPE' => 'info');
+  }
+  if (!count($notice) && !count($error)) {
+    $_SESSION['POPUP'][] = array('CONTENT' => 'The config options we checked seem OK', 'TYPE' => 'success');
+  } else {
+    foreach ($notice as $n) {
+      $_SESSION['POPUP'][] = array('CONTENT' => $n, 'TYPE' => 'warning');
+    }
+    foreach ($error as $e) {
+      $_SESSION['POPUP'][] = array('CONTENT' => $e, 'TYPE' => 'errormsg');
+    }
+  }
+}
+
+?>

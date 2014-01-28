@@ -16,11 +16,10 @@ See the License for the specific language governing permissions and
 limitations under the License.
 
 */
-
 // Set a decently long SECURITY key with special chars etc
 define('SECURITY', '*)WT#&YHfd');
 // Whether or not to check SECHASH for validity, still checks if SECURITY defined as before if disabled
-define('SECHASH_CHECK', true);
+define('SECHASH_CHECK', false);
 
 // Nothing below here to configure, move along...
 
@@ -30,7 +29,7 @@ if (SECHASH_CHECK) {
   define('SECHASH', fip());
   function cfip() { return (fip()==SECHASH||fip(1)==SECHASH||fip(2)==SECHASH) ? 1 : 0; }
 } else {
-  function cfip() { return (defined('SECURITY')) ? 1 : 0; }
+  function cfip() { return (@defined('SECURITY')) ? 1 : 0; }
 }
 
 // Used for performance calculations
@@ -42,6 +41,11 @@ define("BASEPATH", dirname(__FILE__) . "/");
 
 // Include our configuration (holding defines for the requires)
 if (!include_once(BASEPATH . 'include/config/global.inc.php')) die('Unable to load site configuration');
+if (!include_once(BASEPATH . 'include/config/security.inc.php')) die('Unable to load security configuration');
+
+// switch to https if config option is enabled
+$hts = ($config['strict__https_only'] && (!empty($_SERVER['QUERY_STRING']))) ? "https://".$_SERVER['SERVER_NAME'].$_SERVER['SCRIPT_NAME']."?".$_SERVER['QUERY_STRING'] : "https://".$_SERVER['SERVER_NAME'].$_SERVER['SCRIPT_NAME'];
+($config['strict__https_only'] && @!$_SERVER['HTTPS']) ? exit(header($hts)):0;
 
 // Our default template to load, pages can overwrite this later
 $master_template = 'master.tpl';
@@ -52,26 +56,26 @@ require_once(INCLUDE_DIR . '/autoloader.inc.php');
 
 if ($config['memcache']['enabled'] && ($config['mc_antidos']['enabled'] || $config['strict'])) {
   if (PHP_OS == 'WINNT') {
-    require_once('memcached.class.php');
+    require_once(CLASS_DIR . 'memcached.class.php');
   }
   // strict mode and memcache antidos need a memcache handle
   $memcache = new Memcached();
   $memcache->addServer($config['memcache']['host'], $config['memcache']['port']);
 }
 
-if ($config['strict']) {
+if ($config['memcache']['enabled'] && $config['strict'] || $config['mc_antidos']['enabled']) {
   require_once(CLASS_DIR . '/memcache_ad.class.php');
-  $session = new SessionManager($config, $memcache, $_SERVER['HTTP_HOST']);
-  $user->setSessionManager($session);
-  if ($session->verify_server()) {
-    $session->create_session($_SERVER['REMOTE_ADDR']);
-    if ($session->verify_client($_SERVER['REMOTE_ADDR'])) {
-      $session->update_client($_SERVER['REMOTE_ADDR']);
-    }
+}
+
+if ($config['memcache']['enabled'] && $config['strict']) {
+  $session = new strict_session($config, $memcache);
+  if ($config['strict__verify_server'] && !$session) {
+    // server not verified, session manager will kill the client verification failures
+    exit(header('HTTP/1.1 401 Unauthorized'));
   }
 } else {
-  session_set_cookie_params(time()+$config['cookie']['duration'], $config['cookie']['path'], $config['cookie']['domain'], $config['cookie']['secure'], $config['cookie']['httponly']);
   $session_start = @session_start();
+  session_set_cookie_params(time()+$config['cookie']['duration'], $config['cookie']['path'], $config['cookie']['domain'], $config['cookie']['secure'], $config['cookie']['httponly']);
   if (!$session_start) {
     session_destroy();
     session_regenerate_id(true);
@@ -79,11 +83,12 @@ if ($config['strict']) {
   }
   @setcookie(session_name(), session_id(), time()+$config['cookie']['duration'], $config['cookie']['path'], $config['cookie']['domain'], $config['cookie']['secure'], $config['cookie']['httponly']);
 }
+
 // Rate limiting
-if ($config['memcache']['enabled'] && $config['mc_antidos']['enabled'] || $config['strict']) {
+if ($config['memcache']['enabled'] && ($config['mc_antidos']['enabled'] || $config['strict'])) {
   $skip_check = false;
-  $per_page = ($config['mc_antidos']['per_page']) ? $_SERVER['QUERY_STRING'] : '';
   // if this is an api call we need to be careful not to time them out for those calls separately
+  $per_page = '';
   $ajax_calls = array(
     array('api', 'getuserbalance'),
     array('api', 'getnavbardata'),
@@ -96,9 +101,7 @@ if ($config['memcache']['enabled'] && $config['mc_antidos']['enabled'] || $confi
   }
   $is_ajax_call = ($iac > 0) ? true : false;
   if ($is_ajax_call && $config['mc_antidos']['protect_ajax']) {
-    // we set this to navbar on purpose - if they screw with the REQUEST by adding more
-    // params it still gets added under navbar so multiple requests will still get capped
-    $per_page = 'navbar';
+    $per_page = 'api';
   } else if ($is_ajax_call && !$config['mc_antidos']['protect_ajax']) {
     // protect isn't on, we'll ignore it
     $skip_check = true;
@@ -107,9 +110,13 @@ if ($config['memcache']['enabled'] && $config['mc_antidos']['enabled'] || $confi
   }
   if (!$skip_check) {
     $mcad = new MemcacheAntiDos($config['mc_antidos'], $memcache, $_SERVER['REMOTE_ADDR'], $per_page, $config['memcache']);
-    $rate_limit_reached = $mcad->rateLimitRequest();
+    $rate_limit_reached_site = $mcad->rateLimitSite();
+    $rate_limit_reached_api = $mcad->rateLimitAPI();
+    if ($rate_limit_reached_api && $is_ajax_call && $config['mc_antidos']['protect_ajax']) {
+      exit(header('HTTP/1.1 401 Unauthorized'));
+    }
     $error_page = $config['mc_antidos']['error_push_page'];
-    if ($rate_limit_reached == true) {
+    if ($rate_limit_reached_site == true) {
       if (!is_array($error_page) || count($error_page) < 1 || (empty($error_page['page']) && empty($error_page['action']))) {
         die("You are sending too many requests too fast!");
       } else {
@@ -118,6 +125,11 @@ if ($config['memcache']['enabled'] && $config['mc_antidos']['enabled'] || $confi
       }
     }
   }
+}
+
+// Quick config check
+if (@$_SESSION['USERDATA']['is_admin'] && (!$config['skip_config_tests'])) {
+  require_once(INCLUDE_DIR. '/admin_checks.php');
 }
 
 // Create our pages array from existing files

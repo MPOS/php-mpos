@@ -2,30 +2,16 @@
 $defflip = (!cfip()) ? exit(header('HTTP/1.1 401 Unauthorized')) : 1;
 
 /**
- * Forces extra security options when enabled
- * 
- * You must have Memcache enabled and configured & Memcache anti-dos configured to use this.
- * 
- *   Check -> Memcache configuration
- *   Check -> Memcache anti resource-dos
- *   
- *   Runs a FILTER_VALIDATE_*TYPE on every parameter of bind_param
- *   Verifies server vs. bound protocol/host/port set below
- *   Enables memcache rate limiting of requests
- *   Verifies client when creating/resuming from a session
- */
-$config['strict'] = true;
-$config['strict__enforce_ssl'] = false;
-$config['strict__bind_protocol'] = 'http';
-$config['strict__bind_host'] = 'localhost';
-$config['strict__bind_port'] = 80;
-
-/**
  * Do not edit this unless you have confirmed that your config has been updated!
  * This is used in the version check to ensure you run the latest version of the configuration file.
  * Once you upgraded your config, change the version here too.
  **/
 $config['version'] = '0.0.7';
+
+/**
+ * Unless you disable this, we'll do a quick check on your config first.
+ */
+$config['skip_config_tests'] = false;
 
 // Our include directory for additional features
 define('INCLUDE_DIR', BASEPATH . 'include');
@@ -118,64 +104,6 @@ $config['wallet']['password'] = 'testnet';
 $config['coldwallet']['address'] = '';
 $config['coldwallet']['reserve'] = 50;
 $config['coldwallet']['threshold'] = 5;
-
-/**
- * E-mail confirmations for user actions
- *
- * Explanation:
- *   To increase security for users, account detail changes can require
- *   an e-mail confirmation prior to performing certain actions.
- *
- * Options:
- *   enabled   :  Whether or not to require e-mail confirmations
- *   details   :  Require confirmation to change account details
- *   withdraw  :  Require confirmation to manually withdraw/payout
- *   changepw  :  Require confirmation to change password
- *
- * Default:
- *   enabled   =  true
- *   details   =  true
- *   withdraw  =  true
- *   changepw  =  true
- */
-$config['twofactor']['enabled'] = true;
-$config['twofactor']['options']['details'] = true;
-$config['twofactor']['options']['withdraw'] = true;
-$config['twofactor']['options']['changepw'] = true;
-
-/**
- * CSRF protection
- *
- * Explanation:
- *   To help protect against CSRF, we can generate a hash that changes every minute
- *   and is unique for each user/IP and page or use, and check against that when a
- *   form is submitted.
- *
- * Options:
- *   enabled          =   Whether or not we will generate & check for valid CSRF tokens
- * Default:
- *   enabled          =   true
- */
-$config['csrf']['enabled'] = true;
-
-/**
- * Lock account after maximum failed logins
- *
- * Explanation:
- *   To avoid accounts being hacked by brute force attacks,
- *   set a maximum amount of failed login or pin entry attempts before locking
- *   the account. They will need to contact site support to re-enable the account.
- *
- *   This also applies for invalid PIN entries, which is covered by the pin option.
- *
- *   Workers are not affected by this lockout, mining will continue as usual.
- *
- * Default:
- *   login  =  3
- *   pin    =  3
- **/
-$config['maxfailed']['login'] = 3;
-$config['maxfailed']['pin'] = 3;
 
 /**
  * Getting Started Config
