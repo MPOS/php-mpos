@@ -44,6 +44,11 @@ if (@$_SESSION['USERDATA']['is_admin'] && $user->isAdmin(@$_SESSION['USERDATA'][
   if (!is_writable(THEME_DIR.'/compile')) {
     $error[] = "templates/compile folder is not writable for uid {$apache_user['name']}";
   }
+  // check if we can write the config files, we should NOT be able to -> error
+  if (is_writable(INCLUDE_DIR.'/config/global.inc.php') || is_writable(INCLUDE_DIR.'/config/global.inc.dist.php') ||
+      is_writable(INCLUDE_DIR.'/config/security.inc.php') || is_writable(INCLUDE_DIR.'/config/security.inc.dist.php')) {
+    $error[] = "Your config files <b>SHOULD NOT be writable to this user</b>!";
+  }
   // check if daemon can connect -> error
   try {
     if ($bitcoin->can_connect() !== true) {
