@@ -104,9 +104,9 @@ if (@$_SESSION['USERDATA']['is_admin'] && $user->isAdmin(@$_SESSION['USERDATA'][
   // salts too short -> notice, salts default -> error
   if ((strlen($config['SALT']) < 24) || (strlen($config['SALTY']) < 24) || $config['SALT'] == 'PLEASEMAKEMESOMETHINGRANDOM' || $config['SALTY'] == 'THISSHOULDALSOBERRAANNDDOOM') {
     if ($config['SALT'] == 'PLEASEMAKEMESOMETHINGRANDOM' || $config['SALTY'] == 'THISSHOULDALSOBERRAANNDDOOM') {
-      $error[] = "You absolutely <u>SHOULD NOT leave your SALT or SALTY default</u>";
+      $error[] = "You absolutely <u>SHOULD NOT leave your SALT or SALTY default</u> changing them will require registering again";
     } else {
-      $notice[] = "SALT or SALTY is too short, they should be more than 24 characters and changing them will require registering again.";
+      $notice[] = "SALT or SALTY is too short, they should be more than 24 characters and changing them will require registering again";
     }
   }
   

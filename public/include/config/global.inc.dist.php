@@ -13,7 +13,6 @@ $config['version'] = '0.0.7';
  */
 $config['skip_config_tests'] = false;
 
-
 /**
  * Defines
  *  Debug setting and salts for hashing passwords

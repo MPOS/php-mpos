@@ -53,7 +53,7 @@ $config['twofactor']['options']['changepw'] = true;
 
 /**
  * Lock account after X
- *  Lock accounts after X attempts
+ *  Lock accounts after X invalid logins or pins
  *   https://github.com/MPOS/php-mpos/wiki/Config-Setup#wiki-lock-accounts-after-failed-logins
  **/
 $config['maxfailed']['login'] = 3;

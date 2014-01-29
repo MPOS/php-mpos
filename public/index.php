@@ -72,7 +72,6 @@ if ($config['memcache']['enabled'] && $config['strict']) {
   }
   @setcookie(session_name(), session_id(), time()+$config['cookie']['duration'], $config['cookie']['path'], $config['cookie']['domain'], $config['cookie']['secure'], $config['cookie']['httponly']);
 }
-
 // Rate limiting
 if ($config['memcache']['enabled'] && ($config['mc_antidos']['enabled'] || $config['strict'])) {
   $skip_check = false;
@@ -116,7 +115,8 @@ if ($config['memcache']['enabled'] && ($config['mc_antidos']['enabled'] || $conf
   }
 }
 
-// Got past rate limiter and session manager, show last logged in popup if it's still set
+// Got past rate limiter and session manager
+// show last logged in popup if it's still set
 if (@$_GET['clp'] == 1 && @$_SESSION['last_ip_pop']) unset($_SESSION['last_ip_pop']);
 if (count(@$_SESSION['last_ip_pop']) == 2) {
   $data = $_SESSION['last_ip_pop'];
@@ -130,9 +130,12 @@ if (count(@$_SESSION['last_ip_pop']) == 2) {
   }
 }
 
-// Quick config check
-if (@$_SESSION['USERDATA']['is_admin'] && !@$config['skip_config_tests']) {
-  require_once(INCLUDE_DIR. '/admin_checks.php');
+// version check and config check if not disabled
+if (@$_SESSION['USERDATA']['is_admin'] && $user->isAdmin(@$_SESSION['USERDATA']['id'])) {
+  require_once(INCLUDE_DIR . '/version.inc.php');
+  if (!@$config['skip_config_checks']) {
+    require_once(INCLUDE_DIR . '/admin_checks.php');
+  }
 }
 
 // Create our pages array from existing files

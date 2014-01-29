@@ -68,11 +68,4 @@ require_once(CLASS_DIR . '/api.class.php');
 require_once(INCLUDE_DIR . '/lib/Michelf/Markdown.php');
 require_once(INCLUDE_DIR . '/lib/scrypt.php');
 
-// Include our versions
-require_once(INCLUDE_DIR . '/version.inc.php');
-
-if (@$_SESSION['USERDATA']['is_admin'] && $user->isAdmin(@$_SESSION['USERDATA']['id'])) {
-  include_once(INCLUDE_DIR . '/admin_checks.inc.php');
-}
-
 ?>
