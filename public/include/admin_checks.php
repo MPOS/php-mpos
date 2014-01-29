@@ -37,6 +37,11 @@ if (@$_SESSION['USERDATA']['is_admin'] && $user->isAdmin(@$_SESSION['USERDATA'][
       $notice[] = "Memcache is disabled; Almost every linux distro has packages for it, you should be using it if you can.";
     }
   }
+  // check if htaccess exists
+  if (!file_exists(BASEPATH.".htaccess")) {
+    $htaccess_link = "<a href='https://github.com/MPOS/php-mpos/blob/next/public/.htaccess'>.htaccess></a>";
+    $notice[] = "You don't seem to have a .htaccess in your public folder, if you're using apache set it up $htaccess_link";
+  }
   // check if we can write templates/cache and templates/compile -> error
   if (!is_writable(THEME_DIR.'/cache')) {
     $error[] = "templates/cache folder is not writable for uid {$apache_user['name']}";
