@@ -84,7 +84,7 @@ if ($setting->getValue('disable_manual_payouts') != 1) {
             }
             // Update our transaction and add the RPC Transaction ID
             if (empty($rpc_txid) || !$transaction->setRPCTxId($transaction_id, $rpc_txid))
-              $log->logError('Unable to add RPC transaction ID ' . $rpc_txid . ' to transaction record ' . $tx_id . ': ' . $transaction->getCronError());
+              $log->logError('Unable to add RPC transaction ID ' . $rpc_txid . ' to transaction record ' . $transaction_id . ': ' . $transaction->getCronError());
             // Notify user via  mail
             $aMailData['email'] = $user->getUserEmail($user->getUserName($aData['account_id']));
             $aMailData['subject'] = 'Manual Payout Completed';
@@ -165,7 +165,7 @@ if ($setting->getValue('disable_auto_payouts') != 1) {
             }
             // Update our transaction and add the RPC Transaction ID
             if (empty($rpc_txid) || !$transaction->setRPCTxId($transaction_id, $rpc_txid))
-              $log->logError('Unable to add RPC transaction ID ' . $rpc_txid . ' to transaction record ' . $tx_id . ': ' . $transaction->getCronError());
+              $log->logError('Unable to add RPC transaction ID ' . $rpc_txid . ' to transaction record ' . $transaction_id . ': ' . $transaction->getCronError());
             // Notify user via  mail
             $aMailData['email'] = $user->getUserEmail($user->getUserName($aUserData['id']));
             $aMailData['subject'] = 'Auto Payout Completed';
