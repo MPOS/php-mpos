@@ -142,10 +142,10 @@ class User extends Base {
     }
     if ($this->checkUserPassword($username, $password)) {
       $uid = $this->getUserId($username);
+      $lastLoginTime = $this->getLastLogin($uid);
       $this->updateLoginTimestamp($uid);
       $getIPAddress = $this->getUserIp($uid);
       $setIPAddress = $this->setUserIp($uid, $_SERVER['REMOTE_ADDR']);
-      $lastLoginTime = $this->getLastLogin($uid);
       $this->createSession($username, $getIPAddress, $lastLoginTime);
       if ($setIPAddress) {
         // send a notification if success_login is active
