@@ -47,14 +47,15 @@ $dStartTime = microtime(true);
 // Our cron name
 $cron_name = basename($_SERVER['PHP_SELF'], '.php');
 
-// Our security check
-define("SECURITY", 1);
-
 // Include our configuration (holding defines for the requires)
+require_once(BASEPATH . 'include/config/global.inc.dist.php');
 require_once(BASEPATH . 'include/config/global.inc.php');
 
-// We include all needed files here, even though our templates could load them themself
-require_once(INCLUDE_DIR . '/autoloader.inc.php');
+require_once(BASEPATH . 'include/config/security.inc.dist.php');
+@include_once(BASEPATH . 'include/config/security.inc.php');
+
+require_once(BASEPATH . 'include/bootstrap.php');
+require_once(BASEPATH . 'include/version.inc.php');
 
 // Command line switches
 array_shift($argv);
