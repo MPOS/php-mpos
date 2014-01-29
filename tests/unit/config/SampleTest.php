@@ -8,8 +8,8 @@ class TestDistConfig extends PHPUnit_Framework_Testcase {
    * Test to make sure SALT is sane
    */
   function testSaltLength() {
-    $this->assertNotEmpty(SALT);
-    $this->assertGreaterThan(1, strlen(SALT));
+    $this->assertNotEmpty($config['SALT']);
+    $this->assertGreaterThan(1, strlen($config['SALTY']));
   }
 }
 

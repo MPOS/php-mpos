@@ -97,8 +97,8 @@ class CSRFToken Extends Base {
 $csrftoken = new CSRFToken();
 $csrftoken->setDebug($debug);
 $csrftoken->setMysql($mysqli);
-$csrftoken->setSalt(SALT);
-$csrftoken->setSalty(SALTY);
+$csrftoken->setSalt($config['SALT']);
+$csrftoken->setSalty($config['SALTY']);
 $csrftoken->setMail($mail);
 $csrftoken->setUser($user);
 $csrftoken->setToken($oToken);

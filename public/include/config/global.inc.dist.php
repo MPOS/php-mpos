@@ -19,14 +19,9 @@ $config['skip_config_tests'] = false;
  *  Debug setting and salts for hashing passwords
  *   https://github.com/MPOS/php-mpos/wiki/Config-Setup#wiki-defines--salts
  */
-define('DEBUG', 0);
-define('SALT', 'PLEASEMAKEMESOMETHINGRANDOM');
-define('SALTY', 'THISSHOULDALSOBERRAANNDDOOM');
-
-define('INCLUDE_DIR', BASEPATH . 'include');
-define('CLASS_DIR', INCLUDE_DIR . '/classes');
-define('PAGES_DIR', INCLUDE_DIR . '/pages');
-define('THEME_DIR', BASEPATH . 'templates');
+$config['DEBUG'] = 0;
+$config['SALT'] = 'PLEASEMAKEMESOMETHINGRANDOM';
+$config['SALTY'] = 'THISSHOULDALSOBERRAANNDDOOM';
 
 /**
   * Coin Algorithm

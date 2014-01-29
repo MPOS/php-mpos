@@ -32,28 +32,16 @@ if (SECHASH_CHECK) {
   function cfip() { return (@defined('SECURITY')) ? 1 : 0; }
 }
 
-// Used for performance calculations
-$dStartTime = microtime(true);
-
 // This should be okay
 // No but Its now, - Aim
 define("BASEPATH", dirname(__FILE__) . "/");
 
-// Include our configuration (holding defines for the requires)
-if (!include_once(BASEPATH . 'include/config/global.inc.php')) die('Unable to load site configuration');
-if (!include_once(BASEPATH . 'include/config/security.inc.dist.php')) die('Unable to load security configuration');
-if (@file_exists(BASEPATH . 'include/config/security.inc.php')) include_once(BASEPATH . 'include/config/security.inc.php');
+// all our includes and config etc are now in bootstrap
+include_once('include/bootstrap.php');
 
 // switch to https if config option is enabled
 $hts = ($config['strict__https_only'] && (!empty($_SERVER['QUERY_STRING']))) ? "https://".$_SERVER['SERVER_NAME'].$_SERVER['SCRIPT_NAME']."?".$_SERVER['QUERY_STRING'] : "https://".$_SERVER['SERVER_NAME'].$_SERVER['SCRIPT_NAME'];
-($config['strict__https_only'] && @!$_SERVER['HTTPS']) ? exit(header($hts)):0;
-
-// Our default template to load, pages can overwrite this later
-$master_template = 'master.tpl';
-
-// Load Classes, they name defines the $ variable used
-// We include all needed files here, even though our templates could load them themself
-require_once(INCLUDE_DIR . '/autoloader.inc.php');
+($config['strict__https_only'] && @!$_SERVER['HTTPS']) ? exit(header("Location: ".$hts)):0;
 
 if ($config['memcache']['enabled'] && ($config['mc_antidos']['enabled'] || $config['strict'])) {
   if (PHP_OS == 'WINNT') {

@@ -102,8 +102,8 @@ if (@$_SESSION['USERDATA']['is_admin'] && $user->isAdmin(@$_SESSION['USERDATA'][
     $notice[] = "Strict is <u>disabled</u> - if you have memcache, you should turn this on.";
   }
   // salts too short -> notice, salts default -> error
-  if ((strlen(SALT) < 24) || (strlen(SALTY) < 24) || SALT == 'PLEASEMAKEMESOMETHINGRANDOM' || SALTY == 'THISSHOULDALSOBERRAANNDDOOM') {
-    if (SALT == 'PLEASEMAKEMESOMETHINGRANDOM' || SALTY == 'THISSHOULDALSOBERRAANNDDOOM') {
+  if ((strlen($config['SALT']) < 24) || (strlen($config['SALTY']) < 24) || $config['SALT'] == 'PLEASEMAKEMESOMETHINGRANDOM' || $config['SALTY'] == 'THISSHOULDALSOBERRAANNDDOOM') {
+    if ($config['SALT'] == 'PLEASEMAKEMESOMETHINGRANDOM' || $config['SALTY'] == 'THISSHOULDALSOBERRAANNDDOOM') {
       $error[] = "You absolutely <u>SHOULD NOT leave your SALT or SALTY default</u>";
     } else {
       $notice[] = "SALT or SALTY is too short, they should be more than 24 characters and changing them will require registering again.";

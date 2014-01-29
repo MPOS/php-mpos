@@ -861,7 +861,7 @@ public function isAuthenticated($logout=true) {
 $user = new User();
 $user->setDebug($debug);
 $user->setMysql($mysqli);
-$user->setSalt(SALT);
+$user->setSalt($config['SALT']);
 $user->setSmarty($smarty);
 $user->setConfig($config);
 $user->setMail($mail);

@@ -108,5 +108,5 @@ class Debug {
 }
 
 // Instantiate this class
-$debug = new Debug(DEBUG);
+$debug = new Debug($config['DEBUG']);
 ?>
