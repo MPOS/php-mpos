@@ -814,7 +814,7 @@ class User extends Base {
    **/
 public function isAuthenticated($logout=true) {
     $this->debug->append("STA " . __METHOD__, 4);
-    if (@$_SESSION['AUTHENTICATED'] == true &&
+    if (@$_SESSION['AUTHENTICATED'] == '1' &&
         !$this->isLocked($_SESSION['USERDATA']['id']) &&
         $this->getUserIp($_SESSION['USERDATA']['id']) == $_SERVER['REMOTE_ADDR']
       ) return true;
