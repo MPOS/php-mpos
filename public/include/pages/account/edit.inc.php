@@ -150,7 +150,7 @@ if ($user->isAuthenticated()) {
 
 
 // 2fa - one last time so we can sync with changes we made during this page
-if ($user->isAuthenticated() && $config['twofactor']['enabled']) {
+if ($config['twofactor']['enabled'] && $user->isAuthenticated()) {
   // set the token to be the old token, just in case an error occured
   $ea_token = (@$oldtoken_ea !== '') ? $oldtoken_ea : @$ea_token;
   $wf_token = (@$oldtoken_wf !== '') ? $oldtoken_wf : @$wf_token;
