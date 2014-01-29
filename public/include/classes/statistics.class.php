@@ -437,7 +437,7 @@ class Statistics extends Base {
       // Add our cached shares to the users
       $aUsers = array();
       while ($row = $result->fetch_assoc()) {
-        $row['shares'] = $this->getUserShares($row['id']);
+        $row['shares'] = $this->getUserShares($row['username'], $row['id']);
         $aUsers[] = $row;
       }
       if (count($aUsers) > 0) {
