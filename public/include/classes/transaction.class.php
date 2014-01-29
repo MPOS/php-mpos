@@ -313,7 +313,7 @@ class Transaction extends Base {
       ON t.block_id = b.id
       LEFT JOIN accounts AS a
       ON t.account_id = a.id
-      WHERE t.archived = 0 AND a.ap_threshold > 0
+      WHERE t.archived = 0 AND a.ap_threshold > 0 AND a.coin_address IS NOT NULL AND a.coin_address != ''
       GROUP BY t.account_id
       HAVING confirmed > a.ap_threshold
       ");
