@@ -219,7 +219,7 @@ $config['pps']['blockavg']['blockcount'] = 10;
 $config['memcache']['enabled'] = true;
 $config['memcache']['host'] = 'localhost';
 $config['memcache']['port'] = 11211;
-$config['memcache']['keyprefix'] = 'mpos_';
+$config['memcache']['keyprefix'] = 'mpos_'.$config['currency'].'_';
 $config['memcache']['expiration'] = 90;
 $config['memcache']['splay'] = 15;
 
