@@ -136,7 +136,7 @@ foreach ($aAllBlocks as $iIndex => $aBlock) {
       $monitoring->endCronjob($cron_name, 'E0014', 1, true);
     }
   } else {
-    $log->logFatal('Potential double payout detected. Aborted.');
+    $log->logFatal('Potential double payout detected for block ' . $aBlock['id'] . '. Aborted.');
     $aMailData = array(
       'email' => $setting->getValue('system_error_email'),
       'subject' => 'Payout Failure: Double Payout',
@@ -146,7 +146,7 @@ foreach ($aAllBlocks as $iIndex => $aBlock) {
       'Block Share ID' => $aBlock['share_id']
     );
     if (!$mail->sendMail('notifications/error', $aMailData))
-    $log->logFatal('Potential double payout detected. Aborted.');
+      $log->logError('Failed to send notification mail');
     $monitoring->endCronjob($cron_name, 'E0015', 1, true);
   }
 }

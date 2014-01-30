@@ -258,7 +258,7 @@ foreach ($aAllBlocks as $iIndex => $aBlock) {
       'Block Share ID' => $aBlock['share_id']
     );
     if (!$mail->sendMail('notifications/error', $aMailData))
-      $log->logError("    Failed sending notifications: " . $notification->getCronError() . "\n");
+      $log->logError("    Failed sending notifications: " . $notification->getCronError());
     $monitoring->endCronjob($cron_name, 'E0015', 1, true);
   }
 }
