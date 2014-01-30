@@ -50,12 +50,12 @@ class strict_session {
   }
   public function verify_client($client_model, $data, $login=false) {
     $fails = 0;
-    $fails += ((count($client_model)) !== (count($data))) ? 1 : 0;
-    $fails += ($client_model['ua'] !== $data['ua']) ? 1 : 0;
-    $fails += ($client_model['ip'] !== $data['ip']) ? 1 : 0;
+    $fails += ((count($client_model)) !== (count($data)) && $this->validate_client) ? 1 : 0;
+    $fails += ($client_model['ua'] !== $data['ua'] && $this->validate_client && $this->validate_client_ua) ? 1 : 0;
+    $fails += ($client_model['ip'] !== $data['ip'] && $this->validate_client && $this->validate_client_ip) ? 1 : 0;
     $now = time();
     $this->validation_misses = $fails;
-    if ($fails > $this->validate_client_num && $login == false) {
+    if ($fails > $this->validate_client_num && $login == false && $this->validate_client) {
       // something changed
       $port = ($_SERVER["SERVER_PORT"] == "80" || $_SERVER["SERVER_PORT"] == "443") ? "" : (":".$_SERVER["SERVER_PORT"]);
       $location = (@$_SERVER['HTTPS'] == "on") ? 'https://' : 'http://';
