@@ -29,17 +29,7 @@ if ($setting->getValue('maintenance') && !$user->isAdmin($user->getUserIdByEmail
         $port = ($_SERVER["SERVER_PORT"] == "80" || $_SERVER["SERVER_PORT"] == "443") ? "" : (":".$_SERVER["SERVER_PORT"]);
         $location = (@$_SERVER['HTTPS'] == "on") ? 'https://' : 'http://';
         $location .= $_SERVER['SERVER_NAME'] . $port . $_SERVER['SCRIPT_NAME'];
-        if ($config['strict'] && $config['memcache']['enabled']) {
-          $update = array('key' => '','sid' => '','ua' => '','ip' => '','la' => 0,'hn' => 0,'hnl' => 0,'ha' => 0,'hal' => 0);
-          $session->regen_session_id();
-          $update['sid'] = session_id();
-          $update['ua'] = md5($_SERVER['HTTP_USER_AGENT']);
-          $update['ip'] = md5($_SERVER['REMOTE_ADDR']);
-          $update['la'] = time();
-          $update['key'] = md5($update['ip']);
-          $session->create_or_update_client($update, true, true);
-          $location.= '?page=dashboard';
-        }
+        $location.= '?page=dashboard';
         if (!headers_sent()) header('Location: ' . $location);
         exit('<meta http-equiv="refresh" content="0; url=' . htmlspecialchars($location) . '"/>');
       } else {

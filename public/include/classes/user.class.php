@@ -503,17 +503,10 @@ class User extends Base {
     if (!empty($lastIP) && (!empty($lastLoginTime))) {
       $_SESSION['last_ip_pop'] = array($lastIP, $lastLoginTime);
     }
-    if ($this->config['strict'] && $this->config['memcache']['enabled']) {
-      session_regenerate_id(true);
-      $_SESSION['AUTHENTICATED'] = '1';
-      // $this->user from checkUserPassword
-      $_SESSION['USERDATA'] = $this->user;
-    } else {
-      session_regenerate_id(true);
-      $_SESSION['AUTHENTICATED'] = '1';
-      // $this->user from checkUserPassword
-      $_SESSION['USERDATA'] = $this->user;
-    }
+    session_regenerate_id(true);
+    $_SESSION['AUTHENTICATED'] = '1';
+    // $this->user from checkUserPassword
+    $_SESSION['USERDATA'] = $this->user;
   }
 
   /**
@@ -814,17 +807,10 @@ class User extends Base {
    **/
 public function isAuthenticated($logout=true) {
     $this->debug->append("STA " . __METHOD__, 4);
-    if (!$this->config['strict']) {
-      if (@$_SESSION['AUTHENTICATED'] == true &&
-      !$this->isLocked($_SESSION['USERDATA']['id']) &&
-      $this->getUserIp($_SESSION['USERDATA']['id']) == $_SERVER['REMOTE_ADDR']
-      ) return true;
-    } else {
-      if (@$_SESSION['AUTHENTICATED'] && $_SESSION['AUTHENTICATED'] == '1' &&
-      (!$this->isLocked($_SESSION['USERDATA']['id'])) &&
-      ($this->getUserIp($_SESSION['USERDATA']['id']) == $_SERVER['REMOTE_ADDR']))
-        return true;
-    }
+    if (@$_SESSION['AUTHENTICATED'] == true &&
+    !$this->isLocked($_SESSION['USERDATA']['id']) &&
+    $this->getUserIp($_SESSION['USERDATA']['id']) == $_SERVER['REMOTE_ADDR']
+    ) return true;
     // Catchall
     if ($logout == true) $this->logoutUser($_SERVER['REQUEST_URI']);
     return false;

@@ -78,8 +78,8 @@ if (@$_SESSION['USERDATA']['is_admin'] && $user->isAdmin(@$_SESSION['USERDATA'][
   if (mysqli_connect_errno() || !array_key_exists('client_info', $db_connect)) {
     $error[] = "Unable to connect to mysql using provided credentials";
   }
-  if (($config['strict'] || $config['mc_antidos']) && !$config['memcache']['enabled']) {
-    $error[] = "strict or mc_antidos are enabled and memcache is not, <u>memcache is required</u> to use these.";
+  if ($config['mc_antidos'] && !$config['memcache']['enabled']) {
+    $error[] = "mc_antidos is enabled and memcache is not, <u>memcache is required</u> to use this";
   }
   // poke stratum using gettingstarted details -> enotice
   if (substr_count(strtolower(PHP_OS), 'nix') > 0) {
@@ -102,10 +102,6 @@ if (@$_SESSION['USERDATA']['is_admin'] && $user->isAdmin(@$_SESSION['USERDATA'][
   }
   
   // security checks
-  // strict not on -> notice
-  if (!$config['strict']) {
-    $notice[] = "Strict is <u>disabled</u> - if you have memcache, you should turn this on.";
-  }
   // salts too short -> notice, salts default -> error
   if ((strlen($config['SALT']) < 24) || (strlen($config['SALTY']) < 24) || $config['SALT'] == 'PLEASEMAKEMESOMETHINGRANDOM' || $config['SALTY'] == 'THISSHOULDALSOBERRAANNDDOOM') {
     if ($config['SALT'] == 'PLEASEMAKEMESOMETHINGRANDOM' || $config['SALTY'] == 'THISSHOULDALSOBERRAANNDDOOM') {

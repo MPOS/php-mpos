@@ -2,22 +2,12 @@
 $defflip = (!cfip()) ? exit(header('HTTP/1.1 401 Unauthorized')) : 1;
 
 /**
- * Strict Mode
- *  Extra security options that can help protect against a few different types of attacks
- *   https://github.com/MPOS/php-mpos/wiki/Config-Setup#wiki-strict-mode
+ * Misc
+ *  Extra security settings
+ *   
  **/
-$config['strict'] = true;
-$config['strict__https_only'] = false;
-$config['strict__mysql_filter'] = true;
-$config['strict__verify_client'] = true;
-$config['strict__verify_client_ip'] = true;
-$config['strict__verify_client_useragent'] = true;
-$config['strict__verify_client_sessionid'] = true;
-$config['strict__verify_client_fails'] = 0;
-$config['strict__verify_server'] = false;
-$config['strict__bind_protocol'] = 'https';
-$config['strict__bind_host'] = '';
-$config['strict__bind_port'] = 443;
+$config['https_only'] = false;
+$config['mysql_filter'] = true;
 
 /**
  * Memcache Rate Limiting

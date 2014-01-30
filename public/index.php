@@ -40,40 +40,33 @@ define("BASEPATH", dirname(__FILE__) . "/");
 include_once('include/bootstrap.php');
 
 // switch to https if config option is enabled
-$hts = ($config['strict__https_only'] && (!empty($_SERVER['QUERY_STRING']))) ? "https://".$_SERVER['SERVER_NAME'].$_SERVER['SCRIPT_NAME']."?".$_SERVER['QUERY_STRING'] : "https://".$_SERVER['SERVER_NAME'].$_SERVER['SCRIPT_NAME'];
-($config['strict__https_only'] && @!$_SERVER['HTTPS']) ? exit(header("Location: ".$hts)):0;
+$hts = ($config['https_only'] && (!empty($_SERVER['QUERY_STRING']))) ? "https://".$_SERVER['SERVER_NAME'].$_SERVER['SCRIPT_NAME']."?".$_SERVER['QUERY_STRING'] : "https://".$_SERVER['SERVER_NAME'].$_SERVER['SCRIPT_NAME'];
+($config['https_only'] && @!$_SERVER['HTTPS']) ? exit(header("Location: ".$hts)):0;
 
-if ($config['memcache']['enabled'] && ($config['mc_antidos']['enabled'] || $config['strict'])) {
+if ($config['memcache']['enabled'] && $config['mc_antidos']['enabled']) {
   if (PHP_OS == 'WINNT') {
     require_once(CLASS_DIR . 'memcached.class.php');
   }
-  // strict mode and memcache antidos need a memcache handle
+  // memcache antidos needs a memcache handle
   $memcache = new Memcached();
   $memcache->addServer($config['memcache']['host'], $config['memcache']['port']);
 }
 
-if ($config['memcache']['enabled'] && $config['strict'] || $config['mc_antidos']['enabled']) {
+if ($config['memcache']['enabled'] && $config['mc_antidos']['enabled']) {
   require_once(CLASS_DIR . '/memcache_ad.class.php');
 }
 
-if ($config['memcache']['enabled'] && $config['strict']) {
-  $session = new strict_session($config, $memcache);
-  if ($config['strict__verify_server'] && !$session) {
-    // server not verified, session manager will kill the client verification failures
-    exit(header('HTTP/1.1 401 Unauthorized'));
-  }
-} else {
-  $session_start = @session_start();
-  session_set_cookie_params(time()+$config['cookie']['duration'], $config['cookie']['path'], $config['cookie']['domain'], $config['cookie']['secure'], $config['cookie']['httponly']);
-  if (!$session_start) {
-    session_destroy();
-    session_regenerate_id(true);
-    session_start();
-  }
-  @setcookie(session_name(), session_id(), time()+$config['cookie']['duration'], $config['cookie']['path'], $config['cookie']['domain'], $config['cookie']['secure'], $config['cookie']['httponly']);
+$session_start = @session_start();
+session_set_cookie_params(time()+$config['cookie']['duration'], $config['cookie']['path'], $config['cookie']['domain'], $config['cookie']['secure'], $config['cookie']['httponly']);
+if (!$session_start) {
+  session_destroy();
+  session_regenerate_id(true);
+  session_start();
 }
+@setcookie(session_name(), session_id(), time()+$config['cookie']['duration'], $config['cookie']['path'], $config['cookie']['domain'], $config['cookie']['secure'], $config['cookie']['httponly']);
+
 // Rate limiting
-if ($config['memcache']['enabled'] && ($config['mc_antidos']['enabled'] || $config['strict'])) {
+if ($config['memcache']['enabled'] && $config['mc_antidos']['enabled']) {
   $skip_check = false;
   // if this is an api call we need to be careful not to time them out for those calls separately
   $per_page = '';
@@ -97,14 +90,12 @@ if ($config['memcache']['enabled'] && ($config['mc_antidos']['enabled'] || $conf
     $skip_check = true;
   }
   if (!$skip_check) {
-    $mcad = new MemcacheAntiDos($config['mc_antidos'], $memcache, $_SERVER['REMOTE_ADDR'], $per_page, $config['memcache']);
-    $rate_limit_reached_site = $mcad->rateLimitSite();
-    $rate_limit_reached_api = $mcad->rateLimitAPI();
-    if ($rate_limit_reached_api && $is_ajax_call && $config['mc_antidos']['protect_ajax']) {
+    $mcad = new MemcacheAntiDos($config, $memcache, $per_page);
+    if ($config['mc_antidos']['protect_ajax'] && $is_ajax_call && $mcad->rate_limit_api_request) {
       exit(header('HTTP/1.1 401 Unauthorized'));
     }
     $error_page = $config['mc_antidos']['error_push_page'];
-    if ($rate_limit_reached_site == true) {
+    if ($mcad->rate_limit_site_request) {
       if (!is_array($error_page) || count($error_page) < 1 || (empty($error_page['page']) && empty($error_page['action']))) {
         die("You are sending too many requests too fast!");
       } else {
