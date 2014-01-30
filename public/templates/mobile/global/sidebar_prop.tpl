@@ -29,7 +29,7 @@
                     </tr>
                     <tr>
                       <td><b>Your Invalid</b></td>
-                      <td align="right"><i>{$GLOBAL.userdata.shares.invalid|number_format}</i>{if $GLOBAL.roundshares.valid > 0}<font size='1px'> ({($GLOBAL.userdata.shares.invalid / ($GLOBAL.roundshares.valid + $GLOBAL.roundshares.invalid) * 100)|number_format:"2"}%)</font>{/if}</td>
+                      <td align="right"><i>{$GLOBAL.userdata.shares.invalid|number_format}</i>{if $GLOBAL.roundshares.valid > 0}<font size='1px'> ({($GLOBAL.userdata.shares.invalid /  $GLOBAL.userdata.shares.valid * 100)|number_format:"2"}%)</font>{/if}</td>
                     </tr>
 
                     <tr><td colspan="2">&nbsp;</td></tr>
