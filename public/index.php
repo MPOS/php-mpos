@@ -1,5 +1,4 @@
 <?php
-
 /*
 
 Copyright:: 2013, Sebastian Grewe
@@ -16,27 +15,49 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 
- */
+*/
+// Set a decently long SECURITY key with special chars etc
+define('SECURITY', '*)WT#&YHfd');
+// Whether or not to check SECHASH for validity, still checks if SECURITY defined as before if disabled
+define('SECHASH_CHECK', false);
 
-// Used for performance calculations
-$dStartTime = microtime(true);
+// Nothing below here to configure, move along...
+
+// change SECHASH every second, we allow up to 3 sec back for slow servers
+if (SECHASH_CHECK) {
+  function fip($tr=0) { return md5(SECURITY.(time()-$tr).SECURITY); }
+  define('SECHASH', fip());
+  function cfip() { return (fip()==SECHASH||fip(1)==SECHASH||fip(2)==SECHASH) ? 1 : 0; }
+} else {
+  function cfip() { return (@defined('SECURITY')) ? 1 : 0; }
+}
 
 // This should be okay
 // No but Its now, - Aim
 define("BASEPATH", dirname(__FILE__) . "/");
 
-// Our security check
-define("SECURITY", 1);
+// all our includes and config etc are now in bootstrap
+include_once('include/bootstrap.php');
 
-// Include our configuration (holding defines for the requires)
-if (!include_once(BASEPATH . 'include/config/global.inc.php')) die('Unable to load site configuration');
+// switch to https if config option is enabled
+$hts = ($config['https_only'] && (!empty($_SERVER['QUERY_STRING']))) ? "https://".$_SERVER['SERVER_NAME'].$_SERVER['SCRIPT_NAME']."?".$_SERVER['QUERY_STRING'] : "https://".$_SERVER['SERVER_NAME'].$_SERVER['SCRIPT_NAME'];
+($config['https_only'] && @!$_SERVER['HTTPS']) ? exit(header("Location: ".$hts)):0;
 
-// Our default template to load, pages can overwrite this later
-$master_template = 'master.tpl';
+if ($config['memcache']['enabled'] && $config['mc_antidos']['enabled']) {
+  if (PHP_OS == 'WINNT') {
+    require_once(CLASS_DIR . 'memcached.class.php');
+  }
+  // memcache antidos needs a memcache handle
+  $memcache = new Memcached();
+  $memcache->addServer($config['memcache']['host'], $config['memcache']['port']);
+}
 
-// Start a session
-session_set_cookie_params(time()+$config['cookie']['duration'], $config['cookie']['path'], $config['cookie']['domain'], $config['cookie']['secure'], $config['cookie']['httponly']);
+if ($config['memcache']['enabled'] && $config['mc_antidos']['enabled']) {
+  require_once(CLASS_DIR . '/memcache_ad.class.php');
+}
+
 $session_start = @session_start();
+session_set_cookie_params(time()+$config['cookie']['duration'], $config['cookie']['path'], $config['cookie']['domain'], $config['cookie']['secure'], $config['cookie']['httponly']);
 if (!$session_start) {
   session_destroy();
   session_regenerate_id(true);
@@ -44,9 +65,69 @@ if (!$session_start) {
 }
 @setcookie(session_name(), session_id(), time()+$config['cookie']['duration'], $config['cookie']['path'], $config['cookie']['domain'], $config['cookie']['secure'], $config['cookie']['httponly']);
 
-// Load Classes, they name defines the $ variable used
-// We include all needed files here, even though our templates could load them themself
-require_once(INCLUDE_DIR . '/autoloader.inc.php');
+// Rate limiting
+if ($config['memcache']['enabled'] && $config['mc_antidos']['enabled']) {
+  $skip_check = false;
+  // if this is an api call we need to be careful not to time them out for those calls separately
+  $per_page = '';
+  $ajax_calls = array(
+    array('api', 'getuserbalance'),
+    array('api', 'getnavbardata'),
+    array('api', 'getdashboarddata'),
+    array('api', 'getuserworkers')
+  );
+  $iac = 0;
+  foreach ($ajax_calls as $ac) {
+    $iac = (@$_REQUEST['page'] == $ac[0] && @$_REQUEST['action'] == $ac[1]) ? $iac+=1 : $iac;
+  }
+  $is_ajax_call = ($iac > 0) ? true : false;
+  if ($is_ajax_call && $config['mc_antidos']['protect_ajax']) {
+    $per_page = 'api';
+  } else if ($is_ajax_call && !$config['mc_antidos']['protect_ajax']) {
+    // protect isn't on, we'll ignore it
+    $skip_check = true;
+  } else if ($config['mc_antidos']['ignore_admins'] && isset($_SESSION['USERDATA']['is_admin']) && $_SESSION['USERDATA']['is_admin']) {
+    $skip_check = true;
+  }
+  if (!$skip_check) {
+    $mcad = new MemcacheAntiDos($config, $memcache, $per_page);
+    if ($config['mc_antidos']['protect_ajax'] && $is_ajax_call && $mcad->rate_limit_api_request) {
+      exit(header('HTTP/1.1 401 Unauthorized'));
+    }
+    $error_page = $config['mc_antidos']['error_push_page'];
+    if ($mcad->rate_limit_site_request) {
+      if (!is_array($error_page) || count($error_page) < 1 || (empty($error_page['page']) && empty($error_page['action']))) {
+        die("You are sending too many requests too fast!");
+      } else {
+        $_REQUEST['page'] = $error_page['page'];
+        $_REQUEST['action'] = (isset($error_page['action']) && !empty($error_page['action'])) ? $error_page['action'] : $_REQUEST['action'];
+      }
+    }
+  }
+}
+
+// Got past rate limiter and session manager
+// show last logged in popup if it's still set
+if (@$_GET['clp'] == 1 && @$_SESSION['last_ip_pop']) unset($_SESSION['last_ip_pop']);
+if (count(@$_SESSION['last_ip_pop']) == 2) {
+  $data = $_SESSION['last_ip_pop'];
+  $ip = filter_var($data[0], FILTER_VALIDATE_IP);
+  $time = date("l, F jS \a\\t g:i a", $data[1]);
+  $closelink = "<a href='index.php?page=dashboard&clp=1' style='float:right;padding-right:14px;'>Close</a>";
+  if (@$_SESSION['AUTHENTICATED'] && $_SESSION['last_ip_pop'][0] !== $_SERVER['REMOTE_ADDR']) {
+    $_SESSION['POPUP'][] = array('CONTENT' => "You last logged in from <b>$ip</b> on $time $closelink", 'TYPE' => 'warning');
+  } else {
+    $_SESSION['POPUP'][] = array('CONTENT' => "You last logged in from <b>$ip</b> on $time $closelink", 'TYPE' => 'info');
+  }
+}
+
+// version check and config check if not disabled
+if (@$_SESSION['USERDATA']['is_admin'] && $user->isAdmin(@$_SESSION['USERDATA']['id'])) {
+  require_once(INCLUDE_DIR . '/version.inc.php');
+  if (!@$config['skip_config_tests']) {
+    require_once(INCLUDE_DIR . '/admin_checks.php');
+  }
+}
 
 // Create our pages array from existing files
 if (is_dir(INCLUDE_DIR . '/pages/')) {
@@ -83,7 +164,7 @@ $action = (isset($_REQUEST['action']) && !is_array($_REQUEST['action'])) && isse
 // Check csrf token validity if necessary
 if ($config['csrf']['enabled'] && isset($_POST['ctoken']) && !empty($_POST['ctoken']) && !is_array($_POST['ctoken'])) {
   $csrftoken->valid = ($csrftoken->checkBasic($user->getCurrentIP(), $arrPages[$page], $_POST['ctoken'])) ? 1 : 0;
-} else if ($config['csrf']['enabled'] && (!@$_POST['ctoken'] || empty($_POST['ctoken']) || is_array($_POST['ctoken']))) {
+} else if ($config['csrf']['enabled'] && (!@$_POST['ctoken'] || empty($_POST['ctoken']))) {
   $csrftoken->valid = 0;
 }
 if ($config['csrf']['enabled']) $smarty->assign('CTOKEN', $csrftoken->getBasic($user->getCurrentIP(), $arrPages[$page]));

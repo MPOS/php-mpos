@@ -1,7 +1,6 @@
 <?php
-
-// Make sure we are called from index.php
-if (!defined('SECURITY')) die('Hacking attempt');
+(SECURITY == "*)WT#&YHfd" && SECHASH_CHECK) ? die("public/index.php -> Set a new SECURITY value to continue") : 0;
+$defflip = (!cfip()) ? exit(header('HTTP/1.1 401 Unauthorized')) : 1;
 
 // SHA/Scrypt check
 if (empty($config['algorithm']) || $config['algorithm'] == 'scrypt') {
@@ -9,9 +8,13 @@ if (empty($config['algorithm']) || $config['algorithm'] == 'scrypt') {
 } else {
   $config['target_bits'] = 32;
 }
+
 // Default classes
 require_once(CLASS_DIR . '/debug.class.php');
 require_once(INCLUDE_DIR . '/lib/KLogger.php');
+if ($config['mysql_filter']) {
+  require_once(CLASS_DIR . '/strict.class.php');
+}
 require_once(INCLUDE_DIR . '/database.inc.php');
 require_once(INCLUDE_DIR . '/config/memcache_keys.inc.php');
 require_once(INCLUDE_DIR . '/config/error_codes.inc.php');
@@ -64,8 +67,5 @@ require_once(CLASS_DIR . '/news.class.php');
 require_once(CLASS_DIR . '/api.class.php');
 require_once(INCLUDE_DIR . '/lib/Michelf/Markdown.php');
 require_once(INCLUDE_DIR . '/lib/scrypt.php');
-
-// Include our versions
-require_once(INCLUDE_DIR . '/version.inc.php');
 
 ?>

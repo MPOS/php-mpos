@@ -1,8 +1,5 @@
 <?php
-
-// Make sure we are called from index.php
-if (!defined('SECURITY'))
-  die('Hacking attempt');
+$defflip = (!cfip()) ? exit(header('HTTP/1.1 401 Unauthorized')) : 1;
 
 class User extends Base {
   protected $table = 'accounts';
@@ -45,6 +42,9 @@ class User extends Base {
   }
   public function getUserIp($id) {
     return $this->getSingle($id, 'loggedIp', 'id');
+  }
+  public function getLastLogin($id) {
+    return $this->getSingle($id, 'last_login', 'id');
   }
   public function getEmail($email) {
     return $this->getSingle($email, 'email', 'email', 's');
@@ -141,9 +141,13 @@ class User extends Base {
       return false;
     }
     if ($this->checkUserPassword($username, $password)) {
-      $this->updateLoginTimestamp($this->getUserId($username));
-      $this->createSession($username);
-      if ($this->setUserIp($this->getUserId($username), $_SERVER['REMOTE_ADDR'])) {
+      $uid = $this->getUserId($username);
+      $lastLoginTime = $this->getLastLogin($uid);
+      $this->updateLoginTimestamp($uid);
+      $getIPAddress = $this->getUserIp($uid);
+      $setIPAddress = $this->setUserIp($uid, $_SERVER['REMOTE_ADDR']);
+      $this->createSession($username, $getIPAddress, $lastLoginTime);
+      if ($setIPAddress) {
         // send a notification if success_login is active
         $uid = $this->getUserId($username);
         $notifs = new Notification();
@@ -493,9 +497,12 @@ class User extends Base {
    * @param username string Username to create session for
    * @return none
    **/
-  private function createSession($username) {
+  private function createSession($username, $lastIP='', $lastLoginTime='') {
     $this->debug->append("STA " . __METHOD__, 4);
     $this->debug->append("Log in user to _SESSION", 2);
+    if (!empty($lastIP) && (!empty($lastLoginTime))) {
+      $_SESSION['last_ip_pop'] = array($lastIP, $lastLoginTime);
+    }
     session_regenerate_id(true);
     $_SESSION['AUTHENTICATED'] = '1';
     // $this->user from checkUserPassword
@@ -517,7 +524,7 @@ class User extends Base {
    * @param none
    * @return true
    **/
-  public function logoutUser($from="") {
+  public function logoutUser() {
     $this->debug->append("STA " . __METHOD__, 4);
     // Unset all of the session variables
     $_SESSION = array();
@@ -530,10 +537,11 @@ class User extends Base {
     session_destroy();
     // Enforce generation of a new Session ID and delete the old
     session_regenerate_id(true);
+    
     // Enforce a page reload and point towards login with referrer included, if supplied
-    $port = ($_SERVER["SERVER_PORT"] == "80" or $_SERVER["SERVER_PORT"] == "443") ? "" : (":".$_SERVER["SERVER_PORT"]);
-    $location = @$_SERVER['HTTPS'] ? 'https://' . $_SERVER['SERVER_NAME'] . $port . $_SERVER['SCRIPT_NAME'] : 'http://' . $_SERVER['SERVER_NAME'] . $port . $_SERVER['SCRIPT_NAME'];
-    if (!empty($from)) $location .= '?page=login&to=' . urlencode($from);
+    $port = ($_SERVER["SERVER_PORT"] == "80" || $_SERVER["SERVER_PORT"] == "443") ? "" : (":".$_SERVER["SERVER_PORT"]);
+    $pushto = $_SERVER['SCRIPT_NAME'].'?page=login';
+    $location = (@$_SERVER['HTTPS'] == 'on') ? 'https://' . $_SERVER['SERVER_NAME'] . $port . $pushto : 'http://' . $_SERVER['SERVER_NAME'] . $port . $pushto;
     // if (!headers_sent()) header('Location: ' . $location);
     exit('<meta http-equiv="refresh" content="0; url=' . $location . '"/>');
   }
@@ -797,12 +805,12 @@ class User extends Base {
    * @param none
    * @return bool
    **/
-  public function isAuthenticated($logout=true) {
+public function isAuthenticated($logout=true) {
     $this->debug->append("STA " . __METHOD__, 4);
     if (@$_SESSION['AUTHENTICATED'] == true &&
-        !$this->isLocked($_SESSION['USERDATA']['id']) &&
-        $this->getUserIp($_SESSION['USERDATA']['id']) == $_SERVER['REMOTE_ADDR']
-      ) return true;
+    !$this->isLocked($_SESSION['USERDATA']['id']) &&
+    $this->getUserIp($_SESSION['USERDATA']['id']) == $_SERVER['REMOTE_ADDR']
+    ) return true;
     // Catchall
     if ($logout == true) $this->logoutUser($_SERVER['REQUEST_URI']);
     return false;
@@ -846,7 +854,7 @@ class User extends Base {
 $user = new User();
 $user->setDebug($debug);
 $user->setMysql($mysqli);
-$user->setSalt(SALT);
+$user->setSalt($config['SALT']);
 $user->setSmarty($smarty);
 $user->setConfig($config);
 $user->setMail($mail);

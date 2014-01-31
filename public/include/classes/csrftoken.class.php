@@ -1,7 +1,5 @@
 <?php
-
-// Make sure we are called from index.php
-if (!defined('SECURITY')) die('Hacking attempt');
+$defflip = (!cfip()) ? exit(header('HTTP/1.1 401 Unauthorized')) : 1;
 
 class CSRFToken Extends Base {
   public $valid = 0;
@@ -99,8 +97,8 @@ class CSRFToken Extends Base {
 $csrftoken = new CSRFToken();
 $csrftoken->setDebug($debug);
 $csrftoken->setMysql($mysqli);
-$csrftoken->setSalt(SALT);
-$csrftoken->setSalty(SALTY);
+$csrftoken->setSalt($config['SALT']);
+$csrftoken->setSalty($config['SALTY']);
 $csrftoken->setMail($mail);
 $csrftoken->setUser($user);
 $csrftoken->setToken($oToken);

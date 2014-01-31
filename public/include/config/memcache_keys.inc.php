@@ -1,7 +1,5 @@
 <?php
-
-// Make sure we are called from index.php
-if (!defined('SECURITY')) die('Hacking attempt');
+$defflip = (!cfip()) ? exit(header('HTTP/1.1 401 Unauthorized')) : 1;
 
 define('STATISTICS_ALL_USER_SHARES', 'STATISTICS_ALL_USER_SHARES');
 define('STATISTICS_ALL_USER_HASHRATES', 'STATISTICS_ALL_USER_HASHRATES');

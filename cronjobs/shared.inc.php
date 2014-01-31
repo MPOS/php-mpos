@@ -18,6 +18,21 @@ limitations under the License.
 
  */
 
+define('SECURITY', '*)WT#&YHfd');
+// Whether or not to check SECHASH for validity, still checks if SECURITY defined as before if disabled
+define('SECHASH_CHECK', false);
+
+// Nothing below here to configure, move along...
+
+// change SECHASH every second, we allow up to 3 sec back for slow servers
+if (SECHASH_CHECK) {
+  function fip($tr=0) { return md5(SECURITY.(time()-$tr).SECURITY); }
+  define('SECHASH', fip());
+  function cfip() { return (fip()==SECHASH||fip(1)==SECHASH||fip(2)==SECHASH) ? 1 : 0; }
+} else {
+  function cfip() { return (@defined('SECURITY')) ? 1 : 0; }
+}
+
 // MODIFY THIS
 // We need to find our include files so set this properly
 define("BASEPATH", "../public/");
@@ -32,14 +47,15 @@ $dStartTime = microtime(true);
 // Our cron name
 $cron_name = basename($_SERVER['PHP_SELF'], '.php');
 
-// Our security check
-define("SECURITY", 1);
-
 // Include our configuration (holding defines for the requires)
+require_once(BASEPATH . 'include/config/global.inc.dist.php');
 require_once(BASEPATH . 'include/config/global.inc.php');
 
-// We include all needed files here, even though our templates could load them themself
-require_once(INCLUDE_DIR . '/autoloader.inc.php');
+require_once(BASEPATH . 'include/config/security.inc.dist.php');
+@include_once(BASEPATH . 'include/config/security.inc.php');
+
+require_once(BASEPATH . 'include/bootstrap.php');
+require_once(BASEPATH . 'include/version.inc.php');
 
 // Command line switches
 array_shift($argv);

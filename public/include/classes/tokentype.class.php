@@ -1,8 +1,5 @@
 <?php
-
-// Make sure we are called from index.php
-if (!defined('SECURITY'))
-  die('Hacking attempt');
+$defflip = (!cfip()) ? exit(header('HTTP/1.1 401 Unauthorized')) : 1;
 
 class Token_Type Extends Base {
   protected $table = 'token_types';
@@ -32,6 +29,18 @@ class Token_Type Extends Base {
    **/
   public function getAllExpirations() {
     $stmt = $this->mysqli->prepare("SELECT * FROM $this->table WHERE expiration > 0");
+    if ($this->checkStmt($stmt) && $stmt->execute() && $result = $stmt->get_result())
+      return $result->fetch_all(MYSQLI_ASSOC);
+    return $this->sqlError();
+  }
+  
+  /**
+   * Fetch all tokens - used for unit tests
+   * @param none
+   * @return array All tokentypes
+   **/
+  public function getAll() {
+    $stmt = $this->mysqli->prepare("SELECT * FROM $this->table");
     if ($this->checkStmt($stmt) && $stmt->execute() && $result = $stmt->get_result())
       return $result->fetch_all(MYSQLI_ASSOC);
     return $this->sqlError();

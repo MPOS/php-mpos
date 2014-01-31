@@ -1,18 +1,13 @@
 <?php
-// Make sure we are called from index.php
-if (!defined('SECURITY')) die('Hacking attempt');
+$defflip = (!cfip()) ? exit(header('HTTP/1.1 401 Unauthorized')) : 1;
 
 if ($user->isAuthenticated()) {
   switch (@$_REQUEST['do']) {
   case 'delete':
-    if (!$config['csrf']['enabled'] || $config['csrf']['enabled'] && $csrftoken->valid) {
-      if ($worker->deleteWorker($_SESSION['USERDATA']['id'], $_GET['id'])) {
-        $_SESSION['POPUP'][] = array('CONTENT' => 'Worker removed', 'TYPE' => 'success');
-      } else {
-        $_SESSION['POPUP'][] = array('CONTENT' => $worker->getError(), 'TYPE' => 'errormsg');
-      }
+    if ($worker->deleteWorker($_SESSION['USERDATA']['id'], $_GET['id'])) {
+      $_SESSION['POPUP'][] = array('CONTENT' => 'Worker removed', 'TYPE' => 'success');
     } else {
-      $_SESSION['POPUP'][] = array('CONTENT' => $csrftoken->getErrorWithDescriptionHTML(), 'TYPE' => 'info');
+      $_SESSION['POPUP'][] = array('CONTENT' => $worker->getError(), 'TYPE' => 'errormsg');
     }
     break;
     

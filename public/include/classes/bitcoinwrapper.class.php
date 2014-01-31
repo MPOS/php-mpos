@@ -1,8 +1,5 @@
 <?php
-
-// Make sure we are called from index.php
-if (!defined('SECURITY'))
-  die('Hacking attempt');
+$defflip = (!cfip()) ? exit(header('HTTP/1.1 401 Unauthorized')) : 1;
 
 /**
  * We use a wrapper class around BitcoinClient to add
@@ -76,4 +73,4 @@ class BitcoinWrapper extends BitcoinClient {
 }
 
 // Load this wrapper
-$bitcoin = new BitcoinWrapper($config['wallet']['type'], $config['wallet']['username'], $config['wallet']['password'], $config['wallet']['host'], DEBUG, $debug, $memcache);
+$bitcoin = new BitcoinWrapper($config['wallet']['type'], $config['wallet']['username'], $config['wallet']['password'], $config['wallet']['host'], $config['DEBUG'], $debug, $memcache);

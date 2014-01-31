@@ -1,7 +1,5 @@
 <?php
-
-// Make sure we are called from index.php
-if (!defined('SECURITY')) die('Hacking attempt');
+$defflip = (!cfip()) ? exit(header('HTTP/1.1 401 Unauthorized')) : 1;
 
 // ReCaptcha handling if enabled
 if ($setting->getValue('recaptcha_enabled') && $setting->getValue('recaptcha_enabled_logins')) {
@@ -26,10 +24,12 @@ if ($setting->getValue('maintenance') && !$user->isAdmin($user->getUserIdByEmail
   // Check if recaptcha is enabled, process form data if valid
   if (!$setting->getValue('recaptcha_enabled') || !$setting->getValue('recaptcha_enabled_logins') || ($setting->getValue('recaptcha_enabled') && $setting->getValue('recaptcha_enabled_logins') && $rsp->is_valid)) {
     if (!$config['csrf']['enabled'] || $config['csrf']['enabled'] && $csrftoken->valid) {
+      // check if login is correct
       if ($user->checkLogin(@$_POST['username'], @$_POST['password']) ) {
-        $port = ($_SERVER["SERVER_PORT"] == "80" or $_SERVER["SERVER_PORT"] == "443") ? "" : (":".$_SERVER["SERVER_PORT"]);
-        $location = @$_SERVER['HTTPS'] ? 'https://' : 'http://';
-        $location .= $_SERVER['SERVER_NAME'] . $port . $_SERVER['SCRIPT_NAME'] . '?page=dashboard';
+        $port = ($_SERVER["SERVER_PORT"] == "80" || $_SERVER["SERVER_PORT"] == "443") ? "" : (":".$_SERVER["SERVER_PORT"]);
+        $location = (@$_SERVER['HTTPS'] == "on") ? 'https://' : 'http://';
+        $location .= $_SERVER['SERVER_NAME'] . $port . $_SERVER['SCRIPT_NAME'];
+        $location.= '?page=dashboard';
         if (!headers_sent()) header('Location: ' . $location);
         exit('<meta http-equiv="refresh" content="0; url=' . htmlspecialchars($location) . '"/>');
       } else {
@@ -42,7 +42,7 @@ if ($setting->getValue('maintenance') && !$user->isAdmin($user->getUserIdByEmail
     $_SESSION['POPUP'][] = array('CONTENT' => 'Invalid Captcha, please try again.', 'TYPE' => 'errormsg');
   }
 }
-
 // Load login template
 $smarty->assign('CONTENT', 'default.tpl');
+
 ?>

@@ -1,8 +1,5 @@
 <?php
-
-// Make sure we are called from index.php
-if (!defined('SECURITY'))
-    die('Hacking attempt');
+$defflip = (!cfip()) ? exit(header('HTTP/1.1 401 Unauthorized')) : 1;
 
 /**
  * This file defines the debug class used in this site to enable
@@ -111,5 +108,5 @@ class Debug {
 }
 
 // Instantiate this class
-$debug = new Debug(DEBUG);
+$debug = new Debug($config['DEBUG']);
 ?>

@@ -1,5 +1,4 @@
       <form action="{$smarty.server.SCRIPT_NAME}?page=login" method="post" id="loginForm" data-ajax="false">
-        <input type="hidden" name="to" value="{($smarty.request.to|default:"{$smarty.server.SCRIPT_NAME}?page=dashboard")|escape}" />
         <input type="hidden" name="ctoken" value="{$CTOKEN|escape|default:""}" />
         <p><label for="userForm">Email</label><input type="text" name="username" value="" id="userForm"></p>
         <p><label for="passForm">Password</label><input type="password" name="password" value="" id="passForm"></p>

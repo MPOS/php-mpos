@@ -1,8 +1,5 @@
 <?php
-
-// Make sure we are called from index.php
-if (!defined('SECURITY'))
-  die('Hacking attempt');
+$defflip = (!cfip()) ? exit(header('HTTP/1.1 401 Unauthorized')) : 1;
 
 /**
  * Our base class that we extend our other classes from
@@ -39,6 +36,9 @@ class Base {
   }
   public function setUser($user) {
     $this->user = $user;
+  }
+  public function setSessionManager($session) {
+    $this->session = $session;
   }
   public function setConfig($config) {
     $this->config = $config;

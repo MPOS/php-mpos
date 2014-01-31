@@ -1,7 +1,6 @@
 <?php
+$defflip = (!cfip()) ? exit(header('HTTP/1.1 401 Unauthorized')) : 1;
 
-// Make sure we are called from index.php
-if (!defined('SECURITY')) die('Hacking attempt');
 if ($user->isAuthenticated()) {
   $iLimit = 30;
   empty($_REQUEST['start']) ? $start = 0 : $start = $_REQUEST['start'];
