@@ -72,10 +72,10 @@ if ($user->isAuthenticated()) {
     }
   }
   else {
-    if ( @$_POST['do'] && (!$checkpin = $user->checkPin($_SESSION['USERDATA']['id'], @$_POST['authPin']))) {
+    if ( @$_POST['do'] && !$user->checkPin($_SESSION['USERDATA']['id'], @$_POST['authPin'])) {
       $_SESSION['POPUP'][] = array('CONTENT' => 'Invalid PIN. ' . ($config['maxfailed']['pin'] - $user->getUserPinFailed($_SESSION['USERDATA']['id'])) . ' attempts remaining.', 'TYPE' => 'errormsg');
     } else {
-      if (isset($_POST['unlock']) && isset($_POST['utype']) && $checkpin) {
+      if (isset($_POST['unlock']) && isset($_POST['utype'])) {
         $validtypes = array('account_edit','change_pw','withdraw_funds');
         $isvalid = in_array($_POST['utype'],$validtypes);
         if ($isvalid) {
@@ -99,6 +99,9 @@ if ($user->isAuthenticated()) {
         	} else {
         	  $aBalance = $transaction->getBalance($_SESSION['USERDATA']['id']);
         	  $dBalance = $aBalance['confirmed'];
+        	  if ($this->config['logging']['enabled'] && $this->config['logging']['level'] > 0) {
+        	    $user->log->LogInfo($_SESSION['USERDATA']['username']." requesting manual payout from [".$_SERVER['REMOTE_ADDR']."]");
+        	  }
         	  if ($dBalance > $config['txfee_manual']) {
         	    if (!$oPayout->isPayoutActive($_SESSION['USERDATA']['id'])) {
         	      if (!$config['csrf']['enabled'] || $config['csrf']['enabled'] && $csrftoken->valid) {

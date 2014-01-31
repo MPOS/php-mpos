@@ -41,8 +41,20 @@ class Payout Extends Base {
       if ($this->config['twofactor']['enabled'] && $this->config['twofactor']['options']['withdraw']) {
         $tValid = $this->token->isTokenValid($account_id, $strToken, 7);
         if ($tValid) {
-          $this->token->deleteToken($strToken);
+          $delete = $this->token->deleteToken($strToken);
+          if ($delete) {
+            return true;
+          } else {
+            if ($this->config['logging']['enabled'] && $this->config['logging']['level'] > 0) {
+              $this->log->LogInfo("User $account_id requested manual payout but the token deletion failed from [".$_SERVER['REMOTE_ADDR']."]");
+            }
+            $this->setErrorMessage('Unable to delete token');
+            return false;
+          }
         } else {
+          if ($this->config['logging']['enabled'] && $this->config['logging']['level'] > 0) {
+            $this->log->LogInfo("User $account_id requested manual payout using an invalid token from [".$_SERVER['REMOTE_ADDR']."]");
+          }
           $this->setErrorMessage('Invalid token');
           return false;
         }
@@ -67,6 +79,7 @@ class Payout Extends Base {
 
 $oPayout = new Payout();
 $oPayout->setDebug($debug);
+$oPayout->setLog($log);
 $oPayout->setMysql($mysqli);
 $oPayout->setConfig($config);
 $oPayout->setToken($oToken);

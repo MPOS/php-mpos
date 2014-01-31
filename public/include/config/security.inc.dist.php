@@ -4,10 +4,20 @@ $defflip = (!cfip()) ? exit(header('HTTP/1.1 401 Unauthorized')) : 1;
 /**
  * Misc
  *  Extra security settings
- *   
+ *
  **/
 $config['https_only'] = false;
 $config['mysql_filter'] = true;
+
+/**
+ * Logging
+ *  Log security issues - 0 = disabled, 2 = everything, 3 = warnings only
+ *   
+ */
+$config['logging']['enabled'] = true;
+$config['logging']['level'] = 3;
+$config['logging']['path'] = realpath(BASEPATH.'../logs');
+$config['logging']['file'] = date('Y-m-d').'.security.log';
 
 /**
  * Memcache Rate Limiting

@@ -59,12 +59,14 @@ if ($config['memcache']['enabled'] && $config['mc_antidos']['enabled']) {
 $session_start = @session_start();
 session_set_cookie_params(time()+$config['cookie']['duration'], $config['cookie']['path'], $config['cookie']['domain'], $config['cookie']['secure'], $config['cookie']['httponly']);
 if (!$session_start) {
+  if ($this->config['logging']['enabled'] && $this->config['logging']['level'] > 0) {
+    $log->LogInfo("Forcing session id regeneration for ".$_SERVER['REMOTE_ADDR']." [hijack attempt?]");
+  }
   session_destroy();
   session_regenerate_id(true);
   session_start();
 }
 @setcookie(session_name(), session_id(), time()+$config['cookie']['duration'], $config['cookie']['path'], $config['cookie']['domain'], $config['cookie']['secure'], $config['cookie']['httponly']);
-
 // Rate limiting
 if ($config['memcache']['enabled'] && $config['mc_antidos']['enabled']) {
   $skip_check = false;

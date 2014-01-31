@@ -1,0 +1,3 @@
+ErrorDocument 404 /public/index.php?page=error&action=404
+RedirectMatch 404 /logs(/|$)
+Options -Indexes
