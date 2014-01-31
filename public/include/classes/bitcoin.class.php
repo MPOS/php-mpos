@@ -296,4 +296,16 @@ class BitcoinClient extends jsonRPCClient {
     }
     return true;
   }
+
+  public function validateaddress($coin_address) {
+    try {
+      $aStatus = parent::validateaddress($coin_address);
+      if (!$aStatus['isvalid']) {
+        return false;
+      }
+    } catch (Exception $e) {
+      return false;
+    }
+    return true;
+  }
 }
