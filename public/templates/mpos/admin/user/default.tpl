@@ -34,13 +34,13 @@
       <tr>
         <td align="left">
 {if $smarty.request.start|default:"0" > 0}
-          <a href="{$smarty.server.SCRIPT_NAME}?page={$smarty.request.page|escape}&action={$smarty.request.action|escape}&start={$smarty.request.start|escape|default:"0" - $LIMIT}{if $FILTERS|default:""}{$FILTERS}{/if}"><i class="icon-left-open"></i></a>
+          <a href="{$smarty.server.SCRIPT_NAME}?page={$smarty.request.page|escape}&action={$smarty.request.action|escape}&start={$smarty.request.start|escape|default:"0" - $LIMIT}{if $FILTERS|default:""}{$FILTERS}{/if}"><i class="icon-left-open"></i> Previous 30</a>
 {else}
           <i class="icon-left-open"></i>
 {/if}
         </td>
         <td align="right">
-          <a href="{$smarty.server.SCRIPT_NAME}?page={$smarty.request.page|escape}&action={$smarty.request.action|escape}&start={$smarty.request.start|escape|default:"0" + $LIMIT}{if $FILTERS|default:""}{$FILTERS}{/if}"><i class="icon-right-open"></i></a>
+          <a href="{$smarty.server.SCRIPT_NAME}?page={$smarty.request.page|escape}&action={$smarty.request.action|escape}&start={$smarty.request.start|escape|default:"0" + $LIMIT}{if $FILTERS|default:""}{$FILTERS}{/if}"><i class="icon-right-open"></i> Next 30</a>
         </td>
     </tbody>
   </table>
@@ -65,7 +65,8 @@
       {html_options name="filter[no_fees]" options=$NOFEE selected=$smarty.request.filter.no_fees|default:""}
     </fieldset>
     <ul>
-      <li>Note: Text search fields support '%' as wildcard.</li>
+      <li>Note: Text search fields support '%' as a wildcard.</li>
+      <li>Note: Leave all fields blank to show all users.</li>
     </ul>
   </div>
   <footer>
