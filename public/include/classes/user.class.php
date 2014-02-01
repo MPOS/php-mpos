@@ -137,7 +137,7 @@ class User extends Base {
       }
     }
     if ($this->isLocked($this->getUserId($username))) {
-      $this->setErrorMessage('Account locked.');
+      $this->setErrorMessage('Account locked. Please Check your Email for instructions to unlock.');
       return false;
     }
     if ($this->checkUserPassword($username, $password)) {
