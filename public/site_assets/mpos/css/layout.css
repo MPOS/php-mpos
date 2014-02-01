@@ -1,4 +1,4 @@
-/* Essentials */
+﻿/* Essentials */
 
 html, div, map, dt, isindex, form, header, aside, section, section, article, footer {  
     display: block;  
@@ -859,3 +859,9 @@ color: #32510F;
 padding: 10px 0;
 text-indent: 40px;
 font-size: 14px;}
+
+/* Footer */
+.footer {
+height:65px;
+background-image:url('../images/footer_bg.png');
+}
