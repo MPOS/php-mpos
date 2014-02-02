@@ -56,7 +56,7 @@ foreach ($users as $aData) {
   // Duplicate check
   if (in_array($aData['coin_address'], $aAllAddresses)) {
     $status = 'DUPE';
-  } else {
+  } else if (!empty($aData['coin_address'])) {
     $aAllAddresses[] = $aData['coin_address'];
   }
   printf($mask, $aData['username'], $aData['email'], $aData['coin_address'], $status);
