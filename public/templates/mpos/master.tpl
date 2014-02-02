@@ -17,17 +17,17 @@
 	<![endif]-->
 	<script type="text/javascript" src="{$PATH}/js/jquery-2.0.3.min.js"></script>
 	<script type="text/javascript" src="{$PATH}/js/jquery-migrate-1.2.1.min.js"></script>
-	<script type="text/javascript" src="{$PATH}/js/hideshow.js" type="text/javascript"></script>
+	<script type="text/javascript" src="{$PATH}/js/hideshow.js"></script>
   <script type="text/javascript" src="{$PATH}/js/jquery.visualize.js"></script>
   <script type="text/javascript" src="{$PATH}/js/jquery.jqplot.min.js"></script>
-	<script type="text/javascript" src="{$PATH}/js/jquery.tablesorter.min.js" type="text/javascript"></script>
-	<script type="text/javascript" src="{$PATH}/js/jquery.tablesorter.pager.js" type="text/javascript"></script>
+	<script type="text/javascript" src="{$PATH}/js/jquery.tablesorter.min.js"></script>
+	<script type="text/javascript" src="{$PATH}/js/jquery.tablesorter.pager.js"></script>
 	<script type="text/javascript" src="{$PATH}/js/jquery.equalHeight.js"></script>
   <script type="text/javascript" src="{$PATH}/js/raphael.2.1.2.min.js"></script>
   <script type="text/javascript" src="{$PATH}/js/justgage.1.0.1.min.js"></script>
 	<script type="text/javascript" src="{$PATH}/js/custom.js"></script>
 	<script type="text/javascript" src="{$PATH}/js/tinybox.js"></script>
-	<script type="text/javascript" src="{$PATH}/../global/js/number_format.js"></script>
+	<script type="text/javascript" src="{$PATH}/global/js/number_format.js"></script>
   <!--[if IE]><script type="text/javascript" src="{$PATH}/js/excanvas.js"></script><![endif]-->
   <script type="text/javascript" src="{$PATH}/js/pwcheck.js"></script>
     {if $GLOBAL.statistics.analytics.enabled}
