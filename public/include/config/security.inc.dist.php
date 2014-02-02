@@ -8,6 +8,7 @@ $defflip = (!cfip()) ? exit(header('HTTP/1.1 401 Unauthorized')) : 1;
  **/
 $config['https_only'] = false;
 $config['mysql_filter'] = true;
+$config['protect_session_state'] = false;
 
 /**
  * Logging

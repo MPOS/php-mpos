@@ -12,9 +12,7 @@ if (empty($config['algorithm']) || $config['algorithm'] == 'scrypt') {
 // Default classes
 require_once(CLASS_DIR . '/debug.class.php');
 require_once(INCLUDE_DIR . '/lib/KLogger.php');
-if ($config['logging']['enabled']) {
-  $log = new KLogger($config['logging']['path']."/".$config['logging']['file'], $config['logging']['level']);
-}
+require_once(CLASS_DIR . '/logger.class.php');
 if ($config['mysql_filter']) {
   require_once(CLASS_DIR . '/strict.class.php');
 }

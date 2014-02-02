@@ -99,9 +99,7 @@ if ($user->isAuthenticated()) {
         	} else {
         	  $aBalance = $transaction->getBalance($_SESSION['USERDATA']['id']);
         	  $dBalance = $aBalance['confirmed'];
-        	  if ($this->config['logging']['enabled'] && $this->config['logging']['level'] > 0) {
-        	    $user->log->LogInfo($_SESSION['USERDATA']['username']." requesting manual payout from [".$_SERVER['REMOTE_ADDR']."]");
-        	  }
+        	  $user->log->log("info", $_SESSION['USERDATA']['username']." requesting manual payout from [".$_SERVER['REMOTE_ADDR']."]");
         	  if ($dBalance > $config['txfee_manual']) {
         	    if (!$oPayout->isPayoutActive($_SESSION['USERDATA']['id'])) {
         	      if (!$config['csrf']['enabled'] || $config['csrf']['enabled'] && $csrftoken->valid) {
