@@ -29,6 +29,9 @@
 	<script type="text/javascript" src="{$PATH}/js/tinybox.js"></script>
 	<script type="text/javascript" src="{$PATH}/../global/js/number_format.js"></script>
   <!--[if IE]><script type="text/javascript" src="{$PATH}/js/excanvas.js"></script><![endif]-->
+  {literal}<script>
+    var zxcvbnPath = "{/literal}{$PATH}{literal}/js/zxcvbn/zxcvbn.js";
+  </script>{/literal}
   <script type="text/javascript" src="{$PATH}/js/pwcheck.js"></script>
     {if $GLOBAL.statistics.analytics.enabled}
       {$GLOBAL.statistics.analytics.code nofilter}
