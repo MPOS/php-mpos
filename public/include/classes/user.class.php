@@ -393,9 +393,7 @@ class User extends Base {
       }
       $stmt->close();
     }
-    
     $this->log->log("warn", $this->getUserName($userID)." incorrect password update attempt from [".$_SERVER['REMOTE_ADDR']."]");
-    
     $this->setErrorMessage( 'Unable to update password, current password wrong?' );
     return false;
   }
