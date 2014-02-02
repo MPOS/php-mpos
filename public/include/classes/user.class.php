@@ -428,14 +428,8 @@ class User extends Base {
         return false;
       }
       if ($this->bitcoin->can_connect() === true) {
-        try {
-          $aStatus = $this->bitcoin->validateaddress($address);
-          if (!$aStatus['isvalid']) {
-            $this->setErrorMessage('Invalid coin address');
-            return false;
-          }
-        } catch (Exception $e) {
-          $this->setErrorMessage('Unable to verify coin address');
+        if (!$this->bitcoin->validateaddress($address)) {
+          $this->setErrorMessage('Invalid coin address');
           return false;
         }
       } else {
