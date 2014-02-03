@@ -1,7 +1,7 @@
 <article class="module width_half">
   <form action="{$smarty.server.SCRIPT_NAME}?page=account&action=disablegauth" method="post" id="loginForm">
     <input type="hidden" name="to" value="{($smarty.request.to|default:"{$smarty.server.SCRIPT_NAME}?page=dashboard")|escape}" />
-    {if $GLOBAL.csrf.enabled && !"gauth"|in_array:$GLOBAL.csrf.disabled_forms}<input type="hidden" name="ctoken" value="{$CTOKEN|escape}" />{/if}
+    <input type="hidden" name="ctoken" value="{$CTOKEN|escape}" />
     <header><h3>Confirm removal of Google Authentication</h3></header>
     <div class="module_content">
         <fieldset>

@@ -1,4 +1,4 @@
-{if $GLOBAL.twofactor.mode == "gauth" && $GLOBAL.twofactor.enabled && $GLOBAL.twofactor.options.login}
+{if $GLOBAL.twofactor.mode == "gauth" && $GLOBAL.twofactor.enabled}
 {if $USER_GAUTH == 1}
 <script type="text/javascript" src="{$PATH}/js/jquery.qrcode.min.js"></script>
 <script type="text/javascript">
@@ -37,7 +37,7 @@
   <footer>
   <div class="submit_link">
   	<input type="submit" value="Update" class="alt_btn" name="update_gauth">
-  	{if $GLOBAL.csrf.enabled && !"gauth"|in_array:$GLOBAL.csrf.disabled_forms}<input type="hidden" name="ctoken" value="{$CTOKEN|escape}" />{/if}
+  	<input type="hidden" name="ctoken" value="{$CTOKEN|escape}" />
   </div>
   </footer>
 </article>

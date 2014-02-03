@@ -11,7 +11,7 @@
           <label>Password</label>
           <input type="password" name="password" size="22" maxlength="100" placeholder="Your password" tabindex="2" required />
         </fieldset>
-        {if $GLOBAL.twofactor.mode == 'gauth' && $GLOBAL.twofactor.enabled && $GLOBAL.twofactor.options.login}
+        {if $GLOBAL.twofactor.mode == 'gauth' && $GLOBAL.twofactor.enabled}
         <fieldset>
           <label>Google Authenticator Token</label>
           <input type="text" name="gatoken" size="22" maxlength="100" placeholder="Google Authenticator Token" />

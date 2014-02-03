@@ -22,31 +22,35 @@ if ($setting->getValue('maintenance') && !$user->isAdmin($user->getUserIdByEmail
   $_SESSION['POPUP'][] = array('CONTENT' => 'You are not allowed to login during maintenace.', 'TYPE' => 'info');
 } else if (!empty($_POST['username']) && !empty($_POST['password'])) {
   // Check if recaptcha is enabled, process form data if valid
-
-  if (($setting->getValue('recaptcha_enabled') != 1 || $setting->getValue('recaptcha_enabled_logins') != 1 || $rsp->is_valid) && ($nocsrf == 1 || (!$config['csrf']['enabled'] || in_array('login', $config['csrf']['disabled_forms'])))) {
-    if ($config['twofactor']['enabled'] && $config['twofactor']['mode'] == 'gauth' && $config['twofactor']['options']['login']) {
+  if ($setting->getValue('recaptcha_enabled') != 1 || $setting->getValue('recaptcha_enabled_logins') != 1 || $setting->getValue('recaptcha_enabled') && $rsp->is_valid) {
+    if ($config['twofactor']['enabled'] && $config['twofactor']['mode'] == 'gauth') {
       // check GAuth token if we need to
       $uses_gauth = $user->getUserGAuthEnabledByEmail($_POST['username']);
       if ($uses_gauth > 0) {
         $gauthed = $user->isGAuthTokenValid($_POST['username'], @$_POST['gatoken']);
       }
     }
-    if ($config['twofactor']['enabled'] && $config['twofactor']['mode'] == 'gauth' && $uses_gauth > 0 && $gauthed && $config['twofactor']['options']['login'] || $config['twofactor']['mode'] == '' || !$config['twofactor']['options']['login'] || !$config['twofactor']['enabled'] || $uses_gauth == 0) {
+    if (($config['twofactor']['enabled'] && $config['twofactor']['mode'] == 'gauth' && $uses_gauth > 0 && $gauthed) || ($config['twofactor']['mode'] == '' || !$config['twofactor']['enabled'] || !$uses_gauth)) {
       // if gauth is correct or disabled continue
-      if ($user->checkLogin(@$_POST['username'], @$_POST['password']) ) {
-        if ($config['twofactor']['enabled'] && $config['twofactor']['mode'] == 'gauth' && $uses_gauth > 0 && $gauthed) {
-          // if token isn't hidden already, we should hide it because this is the first successful login with it on
-          if ($uses_gauth == 1) {
-            $user->setUserGAuthEnabled($_POST['username'], 2);
+      if (!$config['csrf']['enabled'] || $config['csrf']['enabled'] && $csrftoken->valid) {
+        if ($user->checkLogin(@$_POST['username'], @$_POST['password']) ) {
+          if ($config['twofactor']['enabled'] && $config['twofactor']['mode'] == 'gauth' && $uses_gauth > 0 && $gauthed) {
+            // if token isn't hidden already, we should hide it because this is the first successful login with it on
+            if ($uses_gauth == 1) {
+              $user->setUserGAuthEnabled($_POST['username'], 2);
+            }
           }
+          $port = ($_SERVER["SERVER_PORT"] == "80" || $_SERVER["SERVER_PORT"] == "443") ? "" : (":".$_SERVER["SERVER_PORT"]);
+          $location = (@$_SERVER['HTTPS'] == "on") ? 'https://' : 'http://';
+          $location .= $_SERVER['SERVER_NAME'] . $port . $_SERVER['SCRIPT_NAME'];
+          $location.= '?page=dashboard';
+          if (!headers_sent()) header('Location: ' . $location);
+          exit('<meta http-equiv="refresh" content="0; url=' . htmlspecialchars($location) . '"/>');
+        } else {
+          $_SESSION['POPUP'][] = array('CONTENT' => 'Unable to login: '. $user->getError(), 'TYPE' => 'errormsg');
         }
-        empty($_POST['to']) ? $to = $_SERVER['SCRIPT_NAME'] : $to = $_POST['to'];
-        $port = ($_SERVER["SERVER_PORT"] == "80" or $_SERVER["SERVER_PORT"] == "443") ? "" : (":".$_SERVER["SERVER_PORT"]);
-        $location = @$_SERVER['HTTPS'] === true ? 'https://' . $_SERVER['SERVER_NAME'] . $port . $to : 'http://' . $_SERVER['SERVER_NAME'] . $port . $to;
-        if (!headers_sent()) header('Location: ' . $location);
-        exit('<meta http-equiv="refresh" content="0; url=' . htmlspecialchars($location) . '"/>');
       } else {
-        $_SESSION['POPUP'][] = array('CONTENT' => 'Unable to login: '. $user->getError(), 'TYPE' => 'errormsg');
+        $_SESSION['POPUP'][] = array('CONTENT' => $csrftoken->getErrorWithDescriptionHTML(), 'TYPE' => 'info');
       }
     } else {
       // gauth is enabled & incorrect, inc failed logins/display error

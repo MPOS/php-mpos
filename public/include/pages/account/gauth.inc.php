@@ -4,15 +4,19 @@
 if (!defined('SECURITY')) die('Hacking attempt');
 
 if ($user->isAuthenticated()) {
-  // csrf stuff
-  $csrfenabled = ($config['csrf']['enabled'] && !in_array('gauth', $config['csrf']['disabled_forms'])) ? 1 : 0;
-  if ($csrfenabled) {
-    $nocsrf = ($csrftoken->getBasic($user->getCurrentIP(), 'gauth') == @$_POST['ctoken']) ? 1 : 0;
-  }
-  
   $setting_gauth = (isset($_POST['user_gauth']) && $_POST['user_gauth'] == 1) ? (int)$_POST['user_gauth'] : 0;
   $email = $user->getUserEmail($_SESSION['USERDATA']['username']);
   $current_gauth = $user->getUserGAuthEnabledByEmail($email);
+  
+  if (@$_POST['update_gauth'] || @$_POST['reset_secret']) {
+    if (!$config['csrf']['enabled'] || $config['csrf']['enabled'] && $csrftoken->valid) {
+      // continue
+    } else {
+      if ($config['csrf']['enabled'] && !$csrftoken->valid) {
+        $_SESSION['POPUP'][] = array('CONTENT' => $csrftoken->getErrorWithDescriptionHTML(), 'TYPE' => 'info');
+      }
+    }
+  }
   
   if (isset($_POST['hide_secret'])) {
     if ($current_gauth == 1) {
@@ -25,13 +29,9 @@ if ($user->isAuthenticated()) {
   if (isset($_POST['reset_secret']) || isset($_POST['update_gauth']) && @$_POST['user_gauth'] == 0 && $current_gauth > 0) {
     // reset/log out or attempted disable
     $send_token_reset = $user->sendChangeConfigEmail('disable_gauth', $_SESSION['USERDATA']['id']);
-    if ($send_token_reset) {
-      $user->logoutUser("", "?page=account&action=disablegauth");
-    } else {
-      $_SESSION['POPUP'][] = array('CONTENT' => "Failed to send the notification: ".$user->getError(), 'TYPE' => 'errormsg');
-    }
+    $user->logoutUser();
   }
-  
+
   if (isset($_POST['user_gauth']) && isset($_POST['update_gauth'])) {
     $email = $user->getUserEmail($_SESSION['USERDATA']['username']);
     $current_gauth = $user->getUserGAuthEnabledByEmail($email);
@@ -76,7 +76,7 @@ if ($user->isAuthenticated()) {
     $user->setUserGAuthEnabled($email, $setting_gauth);
   }
   
-  if ($config['twofactor']['enabled'] && $config['twofactor']['mode'] == 'gauth' && $config['twofactor']['options']['login']) {
+  if ($config['twofactor']['enabled'] && $config['twofactor']['mode'] == 'gauth') {
     $smarty->assign("GAUTH_ENABLED", true);
     $email = $user->getUserEmail($_SESSION['USERDATA']['username']);
     $user_enabled = $user->getUserGAuthEnabledByEmail($email);
@@ -86,11 +86,6 @@ if ($user->isAuthenticated()) {
     $smarty->assign("USER_GAUTH", $user_enabled);
     $smarty->assign("GAUTH_URL", $gauth_url);
     $smarty->assign("GAUTH_KEY", $user->getGAuthKey($email));
-  }
-  
-  if ($csrfenabled && !in_array('gauth', $config['csrf']['disabled_forms'])) {
-    $token = $csrftoken->getBasic($user->getCurrentIP(), 'gauth');
-    $smarty->assign('CTOKEN', $token);
   }
   $smarty->assign("CONTENT", "default.tpl");
 }
