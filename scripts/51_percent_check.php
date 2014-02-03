@@ -31,7 +31,7 @@ chdir(dirname(__FILE__));
 require_once('shared.inc.php');
 
 // Fetch hashrates
-$dNetworkHashrate = $bitcoin->getnetworkhashps();
+$dNetworkHashrate = $bitcoin->getnetworkhashps() / 1000;
 $dPoolHashrate = $statistics->getCurrentHashrate();
 $iPercentage = round(100 / $dNetworkHashrate * $dPoolHashrate, 0);
 
