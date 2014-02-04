@@ -40,9 +40,6 @@ class Base {
   public function setUser($user) {
     $this->user = $user;
   }
-  public function setSessionManager($session) {
-    $this->session = $session;
-  }
   public function setConfig($config) {
     $this->config = $config;
   }
@@ -81,6 +78,12 @@ class Base {
   }
   public function setShare($share) {
     $this->share = $share;
+  }
+  public function setGAuth($GAuth) {
+    $this->GAuth = $GAuth;
+  }
+  public function setUserSettings($settings) {
+    $this->uSettings = $settings;
   }
   public function setErrorMessage($msg) {
     $this->sError = $msg;

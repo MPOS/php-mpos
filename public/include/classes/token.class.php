@@ -80,6 +80,20 @@ class Token Extends Base {
       return $stmt->get_result()->num_rows;
     return $this->sqlError();
   }
+  
+  /**
+   * Get the userid using the token type and token
+   * @param string $strType
+   * @param unknown $token
+   * @return boolean
+   */
+  public function getTokenCreator($strType=NULL, $token) {
+    if (!$iToken_id = $this->tokentype->getTypeId($strType)) {
+      $this->setErrorMessage('Invalid token type: ' . $strType);
+      return false;
+    }
+    return $this->getSingle($token, 'account_id', 'token', 's');
+  }
 
   /**
    * Insert a new token

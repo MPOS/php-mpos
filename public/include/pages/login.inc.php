@@ -22,21 +22,42 @@ if ($setting->getValue('maintenance') && !$user->isAdmin($user->getUserIdByEmail
   $_SESSION['POPUP'][] = array('CONTENT' => 'You are not allowed to login during maintenace.', 'TYPE' => 'info');
 } else if (!empty($_POST['username']) && !empty($_POST['password'])) {
   // Check if recaptcha is enabled, process form data if valid
-  if (!$setting->getValue('recaptcha_enabled') || !$setting->getValue('recaptcha_enabled_logins') || ($setting->getValue('recaptcha_enabled') && $setting->getValue('recaptcha_enabled_logins') && $rsp->is_valid)) {
-    if (!$config['csrf']['enabled'] || $config['csrf']['enabled'] && $csrftoken->valid) {
-      // check if login is correct
-      if ($user->checkLogin(@$_POST['username'], @$_POST['password']) ) {
-        $port = ($_SERVER["SERVER_PORT"] == "80" || $_SERVER["SERVER_PORT"] == "443") ? "" : (":".$_SERVER["SERVER_PORT"]);
-        $location = (@$_SERVER['HTTPS'] == "on") ? 'https://' : 'http://';
-        $location .= $_SERVER['SERVER_NAME'] . $port . $_SERVER['SCRIPT_NAME'];
-        $location.= '?page=dashboard';
-        if (!headers_sent()) header('Location: ' . $location);
-        exit('<meta http-equiv="refresh" content="0; url=' . htmlspecialchars($location) . '"/>');
+  if ($setting->getValue('recaptcha_enabled') != 1 || $setting->getValue('recaptcha_enabled_logins') != 1 || $setting->getValue('recaptcha_enabled') && $rsp->is_valid) {
+    if ($config['twofactor']['enabled'] && $config['twofactor']['mode'] == 'gauth') {
+      // check GAuth token if we need to
+      $uses_gauth = $user->getUserGAuthEnabledByEmail($_POST['username']);
+      if ($uses_gauth > 0) {
+        $gauthed = $user->isGAuthTokenValid($_POST['username'], @$_POST['gatoken']);
+      }
+    }
+    if (($config['twofactor']['enabled'] && $config['twofactor']['mode'] == 'gauth' && $uses_gauth > 0 && $gauthed) || ($config['twofactor']['mode'] == '' || !$config['twofactor']['enabled'] || !$uses_gauth)) {
+      // if gauth is correct or disabled continue
+      if (!$config['csrf']['enabled'] || $config['csrf']['enabled'] && $csrftoken->valid) {
+        if ($user->checkLogin(@$_POST['username'], @$_POST['password']) ) {
+          if ($config['twofactor']['enabled'] && $config['twofactor']['mode'] == 'gauth' && $uses_gauth > 0 && $gauthed) {
+            // if token isn't hidden already, we should hide it because this is the first successful login with it on
+            if ($uses_gauth == 1) {
+              $user->setUserGAuthEnabled($_POST['username'], 2);
+            }
+          }
+          $port = ($_SERVER["SERVER_PORT"] == "80" || $_SERVER["SERVER_PORT"] == "443") ? "" : (":".$_SERVER["SERVER_PORT"]);
+          $location = (@$_SERVER['HTTPS'] == "on") ? 'https://' : 'http://';
+          $location .= $_SERVER['SERVER_NAME'] . $port . $_SERVER['SCRIPT_NAME'];
+          $location.= '?page=dashboard';
+          if (!headers_sent()) header('Location: ' . $location);
+          exit('<meta http-equiv="refresh" content="0; url=' . htmlspecialchars($location) . '"/>');
+        } else {
+          $_SESSION['POPUP'][] = array('CONTENT' => 'Unable to login: '. $user->getError(), 'TYPE' => 'errormsg');
+        }
       } else {
-        $_SESSION['POPUP'][] = array('CONTENT' => 'Unable to login: '.$user->getError(), 'TYPE' => 'errormsg');
+        $_SESSION['POPUP'][] = array('CONTENT' => $csrftoken->getErrorWithDescriptionHTML(), 'TYPE' => 'info');
       }
     } else {
-      $_SESSION['POPUP'][] = array('CONTENT' => $csrftoken->getErrorWithDescriptionHTML(), 'TYPE' => 'info');
+      // gauth is enabled & incorrect, inc failed logins/display error
+      if ($config['twofactor']['mode'] == 'gauth' && $uses_gauth > 0 && !$gauthed) {
+        $user->tokenFailedGAuth($_POST['username']);
+        $_SESSION['POPUP'][] = array('CONTENT' => "Unable to login: ".$user->getError(), 'TYPE' => 'errormsg');
+      }
     }
   } else {
     $_SESSION['POPUP'][] = array('CONTENT' => 'Invalid Captcha, please try again.', 'TYPE' => 'errormsg');

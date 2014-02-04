@@ -136,7 +136,6 @@ $config['txfee_manual'] = 0.1;
  */
 $config['block_bonus'] = 0;
 
-
 /**
  * Payout System
  *  Payout system chosen
@@ -159,7 +158,6 @@ $config['purge']['shares'] = 25000;
  **/
 $config['archive']['maxrounds'] = 10; 
 $config['archive']['maxage'] = 60 * 24; 
-
 
 /**
  * Pool Fees

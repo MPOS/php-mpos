@@ -13,7 +13,6 @@ if ($setting->getValue('recaptcha_enabled') && $setting->getValue('recaptcha_ena
   );
   $smarty->assign("RECAPTCHA", recaptcha_get_html($setting->getValue('recaptcha_public_key'), $rsp->error, true));
   if (!$rsp->is_valid) $_SESSION['POPUP'][] = array('CONTENT' => 'Invalid Captcha, please try again.', 'TYPE' => 'errormsg');
-  $recaptcha = ($rsp->is_valid) ? 1 : 0;
 }
 
 if ($setting->getValue('disable_invitations') && $setting->getValue('lock_registration')) {
@@ -27,12 +26,17 @@ if ($setting->getValue('disable_invitations') && $setting->getValue('lock_regist
       // Check if recaptcha is enabled, process form data if valid or disabled
       isset($_POST['token']) ? $token = $_POST['token'] : $token = '';
       if ($user->register(@$_POST['username'], @$_POST['password1'], @$_POST['password2'], @$_POST['pin'], @$_POST['email1'], @$_POST['email2'], @$_POST['tac'], $token)) {
-        (!$setting->getValue('accounts_confirm_email_disabled')) ? $_SESSION['POPUP'][] = array('CONTENT' => 'Please check your mailbox to activate this account') : $_SESSION['POPUP'][] = array('CONTENT' => 'Account created, please login');
+        ! $setting->getValue('accounts_confirm_email_disabled') ? $_SESSION['POPUP'][] = array('CONTENT' => 'Please check your mailbox to activate this account') : $_SESSION['POPUP'][] = array('CONTENT' => 'Account created, please login');
+        if ($config['twofactor']['enabled'] && $config['twofactor']['mode'] == 'gauth') {
+          // if GAuth is enabled, set their key
+          $key = $GAuth->createSecret();
+          $user->updateGAuthKey($_POST['username'], $key);
+        }
       } else {
         $_SESSION['POPUP'][] = array('CONTENT' => 'Unable to create account: ' . $user->getError(), 'TYPE' => 'errormsg');
       }
     }
-  } else {
+  } else { 
     $_SESSION['POPUP'][] = array('CONTENT' => $csrftoken->getErrorWithDescriptionHTML(), 'TYPE' => 'info');
   }
 }

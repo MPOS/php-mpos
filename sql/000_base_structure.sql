@@ -28,6 +28,8 @@ CREATE TABLE IF NOT EXISTS `accounts` (
   `donate_percent` float DEFAULT '0',
   `ap_threshold` float DEFAULT '0',
   `coin_address` varchar(255) DEFAULT NULL,
+  `gauth_key` varchar(65) DEFAULT '' NOT NULL,
+  `gauth_enabled` int(1) DEFAULT 0 NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `username` (`username`),
   UNIQUE KEY `email` (`email`)
@@ -132,7 +134,7 @@ CREATE TABLE IF NOT EXISTS `settings` (
   UNIQUE KEY `setting` (`name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-INSERT INTO `settings` (`name`, `value`) VALUES ('DB_VERSION', '0.0.4');
+INSERT INTO `settings` (`name`, `value`) VALUES ('DB_VERSION', '0.0.5');
 
 CREATE TABLE IF NOT EXISTS `shares` (
   `id` bigint(30) NOT NULL AUTO_INCREMENT,
@@ -207,7 +209,9 @@ INSERT INTO `token_types` (`id`, `name`, `expiration`) VALUES
 (4, 'account_unlock', 0),
 (5, 'account_edit', 3600),
 (6, 'change_pw', 3600),
-(7, 'withdraw_funds', 3600);
+(7, 'withdraw_funds', 3600),
+(8, 'disable_gauth', 3600),
+(9, 'unlock_settings', 3600);
 
 CREATE TABLE IF NOT EXISTS `transactions` (
   `id` int(255) NOT NULL AUTO_INCREMENT,
@@ -232,6 +236,15 @@ CREATE TABLE IF NOT EXISTS `templates` (
   `content` mediumtext,
   `modified_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`template`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE IF NOT EXISTS `user_settings` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(25) NOT NULL,
+  `account_id` int(11) NOT NULL,
+  `value` varchar(255) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `name_account` (`name`,`account_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

@@ -5,6 +5,7 @@
     <ul class="toggle">
       <li class="icon-gauge"><a href="{$smarty.server.SCRIPT_NAME}?page=dashboard">Dashboard</a></li>
       <li class="icon-user"><a href="{$smarty.server.SCRIPT_NAME}?page=account&action=edit">Edit Account</a></li>
+    {if $GLOBAL.twofactor.enabled}<li class="icon-cog"><a href="{$smarty.server.SCRIPT_NAME}?page=account&action=settings">Edit Settings</a></li>{/if}
       <li class="icon-photo"><a href="{$smarty.server.SCRIPT_NAME}?page=account&action=workers">My Workers</a></li>
       <li class="icon-indent-left"><a href="{$smarty.server.SCRIPT_NAME}?page=account&action=transactions">Transactions</a></li>
     {if !$GLOBAL.config.disable_notifications}<li class="icon-megaphone"><a href="{$smarty.server.SCRIPT_NAME}?page=account&action=notifications">Notifications</a></li>{/if}

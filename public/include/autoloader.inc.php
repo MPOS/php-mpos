@@ -23,6 +23,7 @@ require_once(INCLUDE_DIR . '/config/error_codes.inc.php');
 // We need to load these two first
 require_once(CLASS_DIR . '/base.class.php');
 require_once(CLASS_DIR . '/setting.class.php');
+require_once(CLASS_DIR . '/usersetting.class.php');
 
 // We need this one in here to properly set our theme
 require_once(INCLUDE_DIR . '/lib/Mobile_Detect.php');
@@ -60,6 +61,7 @@ require_once(CLASS_DIR . '/bitcoin.class.php');
 require_once(CLASS_DIR . '/bitcoinwrapper.class.php');
 require_once(CLASS_DIR . '/monitoring.class.php');
 require_once(CLASS_DIR . '/notification.class.php');
+require_once(CLASS_DIR . '/gauth.class.php');
 require_once(CLASS_DIR . '/user.class.php');
 require_once(CLASS_DIR . '/csrftoken.class.php');
 require_once(CLASS_DIR . '/invitation.class.php');
@@ -72,5 +74,10 @@ require_once(CLASS_DIR . '/news.class.php');
 require_once(CLASS_DIR . '/api.class.php');
 require_once(INCLUDE_DIR . '/lib/Michelf/Markdown.php');
 require_once(INCLUDE_DIR . '/lib/scrypt.php');
+if ($config['twofactor']['mode'] == 'gauth') {
+  require_once(CLASS_DIR . '/gauth.class.php');
+}
+// Include our versions
+require_once(INCLUDE_DIR . '/version.inc.php');
 
 ?>
