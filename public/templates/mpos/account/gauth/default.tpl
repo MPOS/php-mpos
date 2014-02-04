@@ -32,7 +32,7 @@
       <input type="checkbox" class="ios-switch" name="user_gauth" id="user_gauth" value="1" {nocache}{if $USER_GAUTH}checked{/if}{/nocache} />
       <div class="switch"></div>
     </fieldset>
-    {if $USER_GAUTH > 0}<p><b style='color:red'>REQUIRES E-MAIL CONFIRMATION TO DISABLE, YOU WILL BE LOGGED OUT</b></p>{/if}
+    {if $USER_GAUTH > 0}<p><b style='color:red'>Requires e-mail confirmation to disable, <u>you will be logged out</u></b></p>{/if}
   </div>
   <footer>
   <div class="submit_link">
@@ -45,7 +45,7 @@
 <article class="module width_half">
   <header><h3>Secret</h3></header>
   <div class="module_content">
-    <p>This is the secret you'll need to scan, or enter into your device to use your Google Authenticator:</p>
+    <p>This is the secret you'll need to scan or enter into your device to use your Google Authenticator:</p>
     <pre>
     {$GAUTH_KEY}
     </pre>
@@ -58,7 +58,7 @@
 </article>
 {/if}
 {if $USER_GAUTH > 0}
-<article class="module width_half" {if $USER_GAUTH == 1}style="margin-top:-180px"{/if}>
+<article class="module width_half" {if $USER_GAUTH == 1}style="margin-top:-175px"{/if}>
   <header><h3>Reset {if $USER_GAUTH == 1}or Hide{/if} Secret</h3></header>
   <div class="module_content">
   <p><b style='color:red'>Resetting your secret <u>will log you out</u> and you will have to <u>reauthenticate yourself</u></b></p>
@@ -70,7 +70,6 @@
   <p>Note: Your secret is hidden automatically after your first successful login with Google Authentication enabled.</p>
   {/if}
   </div>
-  <footer></footer>
 </article>
 {/if}
 {/if}

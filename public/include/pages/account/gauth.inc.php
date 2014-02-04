@@ -4,6 +4,7 @@
 if (!defined('SECURITY')) die('Hacking attempt');
 
 if ($user->isAuthenticated()) {
+  
   $setting_gauth = (isset($_POST['user_gauth']) && $_POST['user_gauth'] == 1) ? (int)$_POST['user_gauth'] : 0;
   $email = $user->getUserEmail($_SESSION['USERDATA']['username']);
   $current_gauth = $user->getUserGAuthEnabledByEmail($email);

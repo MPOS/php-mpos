@@ -23,6 +23,7 @@ require_once(INCLUDE_DIR . '/config/error_codes.inc.php');
 // We need to load these two first
 require_once(CLASS_DIR . '/base.class.php');
 require_once(CLASS_DIR . '/setting.class.php');
+require_once(CLASS_DIR . '/usersetting.class.php');
 
 // We need this one in here to properly set our theme
 require_once(INCLUDE_DIR . '/lib/Mobile_Detect.php');

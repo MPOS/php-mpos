@@ -35,10 +35,20 @@ class Payout Extends Base {
    * @return data mixed Inserted ID or false
    **/
   public function createPayout($account_id=NULL, $strToken) {
+    // twofactor - consume the token if it is enabled and valid
+    if ($this->config['twofactor']['enabled'] && $this->config['twofactor']['options']['withdraw'] && $this->uSettings->getValue('confirm_withdraw', $userID)) {
+      $tValid = $this->token->isTokenValid($account_id, $strToken, 7);
+      if ($tValid) {
+        $this->token->deleteToken($strToken);
+      } else {
+        $this->setErrorMessage('Invalid token');
+        return false;
+      }
+    }
     $stmt = $this->mysqli->prepare("INSERT INTO $this->table (account_id) VALUES (?)");
     if ($stmt && $stmt->bind_param('i', $account_id) && $stmt->execute()) {
       // twofactor - consume the token if it is enabled and valid
-      if ($this->config['twofactor']['enabled'] && $this->config['twofactor']['options']['withdraw']) {
+      if ($this->config['twofactor']['enabled'] && $this->config['twofactor']['options']['withdraw'] && $this->uSettings->getValue('confirm_withdraw', $account_id)) {
         $tValid = $this->token->isTokenValid($account_id, $strToken, 7);
         if ($tValid) {
           $delete = $this->token->deleteToken($strToken);
@@ -80,5 +90,6 @@ $oPayout->setMysql($mysqli);
 $oPayout->setConfig($config);
 $oPayout->setToken($oToken);
 $oPayout->setErrorCodes($aErrorCodes);
+$oPayout->setUserSettings($uSetting);
 
 ?>

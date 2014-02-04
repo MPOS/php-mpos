@@ -11,7 +11,12 @@ $oldtoken_wf = (isset($_POST['wf_token']) && $_POST['wf_token'] !== '') ? $_POST
 $updating = (@$_POST['do']) ? 1 : 0;
 
 if ($user->isAuthenticated()) {
+  $confirm_account = 0; $confirm_changepw = 0; $confirm_withdraw = 0;
   if ($config['twofactor']['enabled']) {
+    if ($config['twofactor']['options']['details']) $confirm_account = $uSetting->getValue('confirm_account', @$_SESSION['USERDATA']['id']);
+    if ($config['twofactor']['options']['changepw']) $confirm_changepw = $uSetting->getValue('confirm_changepw', @$_SESSION['USERDATA']['id']);
+    if ($config['twofactor']['options']['withdraw']) $confirm_withdraw = $uSetting->getValue('confirm_withdraw', @$_SESSION['USERDATA']['id']);
+    
     $popupmsg = 'E-mail confirmations are required for ';
     $popuptypes = array();
     if ($config['twofactor']['options']['details'] && $oldtoken_ea !== "") {
@@ -57,7 +62,7 @@ if ($user->isAuthenticated()) {
       $ptc++;
     }
     // display global notice about tokens being in use and for which bits they're active
-    $_SESSION['POPUP'][] = array('CONTENT' => $popupmsg, 'TYPE' => 'info');
+    //if (count($popuptypes)) $_SESSION['POPUP'][] = array('CONTENT' => $popupmsg, 'TYPE' => 'info');
   }
   
   if (isset($_POST['do']) && $_POST['do'] == 'genPin') {
@@ -103,10 +108,14 @@ if ($user->isAuthenticated()) {
         	  if ($dBalance > $config['txfee_manual']) {
         	    if (!$oPayout->isPayoutActive($_SESSION['USERDATA']['id'])) {
         	      if (!$config['csrf']['enabled'] || $config['csrf']['enabled'] && $csrftoken->valid) {
-        	        if ($iPayoutId = $oPayout->createPayout($_SESSION['USERDATA']['id'], $oldtoken_wf)) {
-        	          $_SESSION['POPUP'][] = array('CONTENT' => 'Created new manual payout request with ID #' . $iPayoutId);
+        	        if ($confirm_withdraw && $wf_editable || !$confirm_withdraw) {
+        	          if ($iPayoutId = $oPayout->createPayout($_SESSION['USERDATA']['id'], $oldtoken_wf)) {
+        	            $_SESSION['POPUP'][] = array('CONTENT' => 'Created new manual payout request with ID #' . $iPayoutId);
+        	          } else {
+        	            $_SESSION['POPUP'][] = array('CONTENT' => $iPayoutId->getError(), 'TYPE' => 'errormsg');
+        	          }
         	        } else {
-        	          $_SESSION['POPUP'][] = array('CONTENT' => $iPayoutId->getError(), 'TYPE' => 'errormsg');
+        	          $_SESSION['POPUP'][] = array('CONTENT' => 'Invalid token', 'TYPE' => 'errormsg');
         	        }
         	      } else {
         	        $_SESSION['POPUP'][] = array('CONTENT' => $csrftoken->getErrorWithDescriptionHTML(), 'TYPE' => 'info');
@@ -122,10 +131,14 @@ if ($user->isAuthenticated()) {
         
           case 'updateAccount':
             if (!$config['csrf']['enabled'] || $config['csrf']['enabled'] && $csrftoken->valid) {
-              if ($user->updateAccount($_SESSION['USERDATA']['id'], $_POST['paymentAddress'], $_POST['payoutThreshold'], $_POST['donatePercent'], $_POST['email'], $_POST['is_anonymous'], $oldtoken_ea)) {
-            	$_SESSION['POPUP'][] = array('CONTENT' => 'Account details updated', 'TYPE' => 'success');
+              if ($confirm_account && $ea_editable || !$confirm_account) {
+                if ($user->updateAccount($_SESSION['USERDATA']['id'], $_POST['paymentAddress'], $_POST['payoutThreshold'], $_POST['donatePercent'], $_POST['email'], $_POST['is_anonymous'], $oldtoken_ea)) {
+                  $_SESSION['POPUP'][] = array('CONTENT' => 'Account details updated', 'TYPE' => 'success');
+                } else {
+                  $_SESSION['POPUP'][] = array('CONTENT' => 'Failed to update your account: ' . $user->getError(), 'TYPE' => 'errormsg');
+                }
               } else {
-            	$_SESSION['POPUP'][] = array('CONTENT' => 'Failed to update your account: ' . $user->getError(), 'TYPE' => 'errormsg');
+                $_SESSION['POPUP'][] = array('CONTENT' => 'Invalid token', 'TYPE' => 'errormsg');
               }
             } else {
               $_SESSION['POPUP'][] = array('CONTENT' => $csrftoken->getErrorWithDescriptionHTML(), 'TYPE' => 'info');
@@ -134,10 +147,14 @@ if ($user->isAuthenticated()) {
         
           case 'updatePassword':
             if (!$config['csrf']['enabled'] || $config['csrf']['enabled'] && $csrftoken->valid) {
-              if ($user->updatePassword($_SESSION['USERDATA']['id'], $_POST['currentPassword'], $_POST['newPassword'], $_POST['newPassword2'], $oldtoken_cp)) {
-                $_SESSION['POPUP'][] = array('CONTENT' => 'Password updated', 'TYPE' => 'success');
+              if ($confirm_changepw && $cp_editable || !$confirm_changepw) {
+                if ($user->updatePassword($_SESSION['USERDATA']['id'], $_POST['currentPassword'], $_POST['newPassword'], $_POST['newPassword2'], $oldtoken_cp)) {
+                  $_SESSION['POPUP'][] = array('CONTENT' => 'Password updated', 'TYPE' => 'success');
+                } else {
+                  $_SESSION['POPUP'][] = array('CONTENT' => $user->getError(), 'TYPE' => 'errormsg');
+                }
               } else {
-                $_SESSION['POPUP'][] = array('CONTENT' => $user->getError(), 'TYPE' => 'errormsg');
+                $_SESSION['POPUP'][] = array('CONTENT' => 'Invalid token', 'TYPE' => 'errormsg');
               }
             } else {
               $_SESSION['POPUP'][] = array('CONTENT' => $csrftoken->getErrorWithDescriptionHTML(), 'TYPE' => 'info');
@@ -177,13 +194,21 @@ if ($config['twofactor']['enabled'] && $user->isAuthenticated()) {
   (!empty($cpprep_sent) && !empty($cpprep_edit)) ? $_SESSION['POPUP'][] = array('CONTENT' => $cpprep_sent, 'TYPE' => 'success'):"";
   (!empty($cpprep_sent) && empty($cpprep_edit)) ? $_SESSION['POPUP'][] = array('CONTENT' => $message_tokensent_invalid.$messages_tokensent_status['cp'], 'TYPE' => 'success'):"";
   // two-factor stuff
-  $smarty->assign("CHANGEPASSUNLOCKED", $cp_editable);
-  $smarty->assign("WITHDRAWUNLOCKED", $wf_editable);
-  $smarty->assign("DETAILSUNLOCKED", $ea_editable);
-  $smarty->assign("CHANGEPASSSENT", $cp_sent);
-  $smarty->assign("WITHDRAWSENT", $wf_sent);
-  $smarty->assign("DETAILSSENT", $ea_sent);
 }
+
+$cp_editable = (!@$cp_editable && !@$confirm_changepw) ? 1 : $cp_editable;
+$wf_editable = (!@$wf_editable && !@$confirm_withdraw) ? 1 : $wf_editable;
+$ea_editable = (!@$ea_editable && !@$confirm_account) ? 1 : $ea_editable;
+$cp_sent = (!@$cp_sent && !@$confirm_changepw) ? 1 : $cp_sent;
+$wf_sent = (!@$wf_sent && !@$confirm_withdraw) ? 1 : $wf_sent;
+$ea_sent = (!@$ea_sent && !@$confirm_account) ? 1 : $ea_sent;
+
+$smarty->assign("CHANGEPASSUNLOCKED", $cp_editable);
+$smarty->assign("WITHDRAWUNLOCKED", $wf_editable);
+$smarty->assign("DETAILSUNLOCKED", $ea_editable);
+$smarty->assign("CHANGEPASSSENT", $cp_sent);
+$smarty->assign("WITHDRAWSENT", $wf_sent);
+$smarty->assign("DETAILSSENT", $ea_sent);
 
 $smarty->assign("DONATE_THRESHOLD", $config['donate_threshold']);
 

@@ -100,6 +100,7 @@ class User extends Base {
     $field = array( 'name' => 'gauth_enabled', 'type' => 'i', 'value' => $value);
     $uname = $this->getUserNameByEmail($email);
     $id = $this->getUserId($uname);
+    $this->log->log("warn", "$uname changed gauth_enabled to $value from [".$_SERVER['REMOTE_ADDR']."]");
     return $this->updateSingle($id, $field);
   }
   private function incUserFailed($id) {
@@ -177,12 +178,13 @@ class User extends Base {
     $uid = $this->getUserId($uname);
     // already locked
     if ($this->isLocked($uid)) {
+      $this->log->log("warn", "$uname trying to login to a locked account from [".$_SERVER['REMOTE_ADDR']."]");
       $this->setErrorMessage('Account locked.');
       return false;
     }
     // should be locked
     if (isset($this->config['maxfailed']['login']) && $this->getUserFailed($uid) >= $this->config['maxfailed']['login']) {
-      $this->changeLocked($uid);
+      $this->setLocked($uid, 1);
       $this->setErrorMessage('Account locked.');
       return false;
     }
@@ -190,11 +192,12 @@ class User extends Base {
     $this->incUserFailed($uid);
     // check lock again so we don't miss on the same try
     if (isset($this->config['maxfailed']['login']) && $this->getUserFailed($uid) >= $this->config['maxfailed']['login']) {
-      $this->changeLocked($uid);
+      $this->setLocked($uid, 1);
       $this->setErrorMessage('Account locked.');
       return false;
     }
     // generic fallback
+    $this->log->log("warn", "$uname trying to login using an invalid GAuth token from [".$_SERVER['REMOTE_ADDR']."]");
     $this->setErrorMessage("Invalid or expired GAuth token.");
     return false;
   }
@@ -415,6 +418,9 @@ class User extends Base {
       	case 'disable_gauth':
       	  $aData['subject'] = 'Disable Google Authenticator confirmation';
       	  break;
+      	case 'unlock_settings':
+      	  $aData['subject'] = 'Unlock account settings';
+      	  break;
       	default:
       	  $aData['subject'] = '';
       }
@@ -453,7 +459,7 @@ class User extends Base {
     }
     $current = $this->getHash($current);
     $new = $this->getHash($new1);
-    if ($this->config['twofactor']['enabled'] && $this->config['twofactor']['options']['changepw']) {
+    if ($this->config['twofactor']['enabled'] && $this->config['twofactor']['options']['changepw'] && $this->uSettings->getValue('confirm_changepw', $userID)) {
       $tValid = $this->token->isTokenValid($userID, $strToken, 6);
       if ($tValid) {
         if ($this->token->deleteToken($strToken)) {
@@ -546,7 +552,7 @@ class User extends Base {
     $donate = min(100, max(0, floatval($donate)));
 
     // twofactor - consume the token if it is enabled and valid
-    if ($this->config['twofactor']['enabled'] && $this->config['twofactor']['options']['details']) {
+    if ($this->config['twofactor']['enabled'] && $this->config['twofactor']['options']['details'] && $this->uSettings->getValue('confirm_account', $userID)) {
       $tValid = $this->token->isTokenValid($userID, $strToken, 5);
       if ($tValid) {
         if ($this->token->deleteToken($strToken)) {
@@ -1004,3 +1010,4 @@ $user->setBitcoin($bitcoin);
 $user->setSetting($setting);
 $user->setErrorCodes($aErrorCodes);
 $user->setGAuth($GAuth);
+$user->setUserSettings($uSetting);
