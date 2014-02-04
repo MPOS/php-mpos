@@ -15,6 +15,12 @@ if (@$_SESSION['USERDATA']['is_admin'] && $user->isAdmin(@$_SESSION['USERDATA'][
   }
   
   // setup checks
+  // logging
+  if ($config['logging']['enabled']) {
+    if (!is_writable($config['logging']['path'])) {
+      $error[] = "Logging is enabled but we can't write in the logging path";
+    }
+  }
   // check if memcache isn't available but enabled in config -> error
   if (!class_exists('Memcached') && $config['memcache']['enabled']) {
     $error[] = "You have memcache enabled in your config and it's not available. Install the package on your system.";

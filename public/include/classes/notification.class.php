@@ -120,6 +120,7 @@ class Notification extends Mail {
       $this->setErrorMessage($this->getErrorMsg('E0047', $failed));
       return $this->sqlError();
     }
+    $this->log->log("info", "User $account_id updated notification settings from [".$_SERVER['REMOTE_ADDR']."]");
     return true;
   }
 
@@ -154,6 +155,7 @@ class Notification extends Mail {
 
 $notification = new Notification();
 $notification->setDebug($debug);
+$notification->setLog($log);
 $notification->setMysql($mysqli);
 $notification->setSmarty($smarty);
 $notification->setConfig($config);

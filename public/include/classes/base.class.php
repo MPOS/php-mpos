@@ -19,6 +19,9 @@ class Base {
   public function setDebug($debug) {
     $this->debug = $debug;
   }
+  public function setLog($log) {
+    $this->log = $log;
+  }
   public function setMysql($mysqli) {
     $this->mysqli = $mysqli;
   }

@@ -11,6 +11,7 @@
 # Logs
 /cronjobs/logs/*.txt
 /cronjobs/logs/*.txt.*.gz
+/logs/*
 
 # Test configs
 public/include/config/global.inc.scrypt.php
