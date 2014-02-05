@@ -447,7 +447,7 @@ class User extends Base {
       return false;
     }
     if (!empty($address)) {
-      if ($this->existsCoinAddress($address)) {
+      if ($address != $this->getCoinAddress($userID) && $this->existsCoinAddress($address)) {
         $this->setErrorMessage('Address is already in use');
         return false;
       }
