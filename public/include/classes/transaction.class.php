@@ -312,21 +312,110 @@ class Transaction extends Base {
       ON t.account_id = a.id
       WHERE t.archived = 0 AND a.ap_threshold > 0 AND a.coin_address IS NOT NULL AND a.coin_address != ''
       GROUP BY t.account_id
-      HAVING confirmed > a.ap_threshold
-      ");
+      HAVING confirmed > a.ap_threshold AND confirmed > " . $this->config['txfee_auto']);
     if ($this->checkStmt($stmt) && $stmt->execute() && $result = $stmt->get_result())
       return $result->fetch_all(MYSQLI_ASSOC);
     return $this->sqlError();
+  }
+
+
+  /**
+   * Debit a user account
+   * @param account_id int Account ID
+   * @param coin_address string Coin Address
+   * @param amount float Balance to record
+   * @return int Debit transaction ID or false
+   **/
+  public function createDebitMPRecord($account_id, $coin_address, $amount) {
+    return $this->createDebitRecord($account_id, $coin_address, $amount, 'Debit_MP');
+  }
+  public function createDebitAPRecord($account_id, $coin_address, $amount) {
+    return $this->createDebitRecord($account_id, $coin_address, $amount, 'Debit_AP');
+  }
+  private function createDebitRecord($account_id, $coin_address, $amount, $type) {
+    $type == 'Debit_MP' ? $txfee = $this->config['txfee_manual'] : $txfee = $this->config['txfee_auto'];
+    // Add Debit record
+    if (!$this->addTransaction($account_id, $amount, $type, NULL, $coin_address, NULL)) {
+      $this->setErrorMessage('Failed to create ' . $type . ' transaction record in database');
+      return false;
+    }
+    // Fetch the inserted record ID so we can return this at the end
+    $transaction_id = $this->insert_id;
+    // Add TXFee record
+    if (!$this->addTransaction($account_id, $txfee, 'TXFee', NULL, $coin_address)) {
+      $this->setErrorMessage('Failed to create TXFee transaction record in database: ' . $this->getError());
+      return false;
+    }
+    // Mark transactions archived
+    if (!$this->setArchived($account_id, $this->insert_id)) {
+      $this->setErrorMessage('Failed to mark transactions <= #' . $this->insert_id . ' as archived. ERROR: ' . $this->getError());
+      return false;
+    }
+    // Recheck the users balance to make sure it is now 0
+    if (!$aBalance = $this->getBalance($account_id)) {
+      $this->setErrorMessage('Failed to fetch balance for account ' . $account_id . '. ERROR: ' . $this->getCronError());
+      return false;
+    }
+    if ($aBalance['confirmed'] > 0) {
+      $this->setErrorMessage('User has a remaining balance of ' . $aBalance['confirmed'] . ' after a successful payout!');
+      return false;
+    }
+    // Notify user via  mail
+    $aMailData['email'] = $this->user->getUserEmailById($account_id);
+    $aMailData['subject'] = $type . ' Completed';
+    $aMailData['amount'] = $amount - $txfee;
+    if (!$this->notification->sendNotification($account_id, 'payout', $aMailData)) {
+      $this->setErrorMessage('Failed to send notification email to users address: ' . $aMailData['email'] . 'ERROR: ' . $this->notification->getCronError());
+    }
+    return $transaction_id;
+  }
+
+  /**
+   * Get all new, unprocessed manual payout requests
+   * @param none
+   * @return data Associative array with DB Fields
+   **/
+  public function getMPQueue() {
+    $stmt = $this->mysqli->prepare("
+      SELECT
+      a.id,
+      a.username,
+      a.ap_threshold,
+      a.coin_address,
+      p.id AS payout_id,
+      IFNULL(
+        ROUND(
+          (
+            SUM( IF( ( t.type IN ('Credit','Bonus') AND b.confirmations >= " . $this->config['confirmations'] . ") OR t.type = 'Credit_PPS', t.amount, 0 ) ) -
+            SUM( IF( t.type IN ('Debit_MP', 'Debit_AP'), t.amount, 0 ) ) -
+            SUM( IF( ( t.type IN ('Donation','Fee') AND b.confirmations >= " . $this->config['confirmations'] . ") OR ( t.type IN ('Donation_PPS', 'Fee_PPS', 'TXFee') ), t.amount, 0 ) )
+          ), 8
+        ), 0
+      ) AS confirmed
+      FROM " . $this->payout->getTableName() . " AS p
+      JOIN " . $this->user->getTableName() . " AS a
+      ON p.account_id = a.id
+      JOIN " . $this->getTableName() . " AS t
+      ON t.account_id = p.account_id
+      JOIN " . $this->block->getTableName() . " AS b
+      ON t.block_id = b.id
+      WHERE p.completed = 0 AND t.archived = 0 AND a.coin_address IS NOT NULL AND a.coin_address != ''
+      GROUP BY t.account_id
+      HAVING confirmed > " . $this->config['txfee_manual']);
+    if ($this->checkStmt($stmt) && $stmt->execute() && $result = $stmt->get_result())
+      return $result->fetch_all(MYSQLI_ASSOC);
+    return $this->sqlError('E0050');
   }
 }
 
 $transaction = new Transaction();
 $transaction->setMemcache($memcache);
+$transaction->setNotification($notification);
 $transaction->setDebug($debug);
 $transaction->setMysql($mysqli);
 $transaction->setConfig($config);
 $transaction->setBlock($block);
 $transaction->setUser($user);
+$transaction->setPayout($oPayout);
 $transaction->setErrorCodes($aErrorCodes);
-
 ?>

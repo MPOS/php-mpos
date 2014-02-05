@@ -33,6 +33,9 @@ require_once('shared.inc.php');
 // Fetch all users
 $users = $user->getAllAssoc();
 
+// Duplicate address check
+$aAllAddresses = array();
+
 // Table mask
 $mask = "| %-35.35s | %-35.35s | %-40.40s | %-7.7s |\n";
 echo 'Validating all coin addresses. This may take some time.' . PHP_EOL . PHP_EOL;
@@ -44,12 +47,17 @@ foreach ($users as $aData) {
   } else if ($aData['is_locked'] == 1) {
     $status = 'LOCKED';
   } else {
-    $ret = $bitcoin->validateaddress($aData['coin_address']);
-    if ($ret['isvalid']) {
+    if ($bitcoin->validateaddress($aData['coin_address'])) {
       $status = 'VALID';
     } else {
       $status = 'INVALID';
     }
+  }
+  // Duplicate check
+  if (in_array($aData['coin_address'], $aAllAddresses)) {
+    $status = 'DUPE';
+  } else if (!empty($aData['coin_address'])) {
+    $aAllAddresses[] = $aData['coin_address'];
   }
   printf($mask, $aData['username'], $aData['email'], $aData['coin_address'], $status);
 }

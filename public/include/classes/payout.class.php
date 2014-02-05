@@ -17,18 +17,6 @@ class Payout Extends Base {
   }
 
   /**
-   * Get all new, unprocessed payout requests
-   * @param none
-   * @return data Associative array with DB Fields
-   **/
-  public function getUnprocessedPayouts() {
-    $stmt = $this->mysqli->prepare("SELECT * FROM $this->table WHERE completed = 0");
-    if ($this->checkStmt($stmt) && $stmt->execute() && $result = $stmt->get_result())
-      return $result->fetch_all(MYSQLI_ASSOC);
-    return $this->sqlError('E0050');
-  }
-
-  /**
    * Insert a new payout request
    * @param account_id int Account ID
    * @param strToken string Token to confirm

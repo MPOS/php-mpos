@@ -55,6 +55,12 @@ class Base {
   public function setBlock($block) {
     $this->block = $block;
   }
+  public function setPayout($payout) {
+    $this->payout = $payout;
+  }
+  public function setNotification($notification) {
+    $this->notification = $notification;
+  }
   public function setTransaction($transaction) {
     $this->transaction = $transaction;
   }

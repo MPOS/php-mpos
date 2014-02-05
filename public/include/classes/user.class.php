@@ -25,8 +25,8 @@ class User extends Base {
   public function getUserEmail($username, $lower=false) {
     return $this->getSingle($username, 'email', 'username', 's', $lower);
   }
-  public function getUserNotifyEmail($username, $lower=false) {
-    return $this->getSingle($username, 'notify_email', 'username', 's', $lower);
+  public function getUserEmailById($id) {
+    return $this->getSingle($id, 'email', 'id', 'i');
   }
   public function getUserNoFee($id) {
     return $this->getSingle($id, 'no_fees', 'id');
@@ -293,6 +293,16 @@ class User extends Base {
   }
 
   /**
+   * Check if a coin address exists already
+   * @param address string Coin Address
+   * @return bool True of false
+   **/
+  public function existsCoinAddress($address) {
+    $this->debug->append("STA " . __METHOD__, 4);
+    return $this->getSingle($address, 'coin_address', 'coin_address') === $address;
+  }
+
+  /**
    * Fetch users donation value 
    * @param userID int UserID
    * @return data string Coin Address
@@ -437,21 +447,21 @@ class User extends Base {
       return false;
     }
     if (!empty($address)) {
+      if ($this->existsCoinAddress($address)) {
+        $this->setErrorMessage('Address is already in use');
+        return false;
+      }
       if ($this->bitcoin->can_connect() === true) {
-        try {
-          $aStatus = $this->bitcoin->validateaddress($address);
-          if (!$aStatus['isvalid']) {
-            $this->setErrorMessage('Invalid coin address');
-            return false;
-          }
-        } catch (Exception $e) {
-          $this->setErrorMessage('Unable to verify coin address');
+        if (!$this->bitcoin->validateaddress($address)) {
+          $this->setErrorMessage('Invalid coin address');
           return false;
         }
       } else {
         $this->setErrorMessage('Unable to connect to RPC server for coin address validation');
         return false;
       }
+    } else {
+      $address = NULL;
     }
 
     // Number sanitizer, just in case we fall through above
