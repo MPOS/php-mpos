@@ -96,6 +96,8 @@ if ($user->isAuthenticated()) {
           case 'cashOut':
         	if ($setting->getValue('disable_payouts') == 1 || $setting->getValue('disable_manual_payouts') == 1) {
         	  $_SESSION['POPUP'][] = array('CONTENT' => 'Manual payouts are disabled.', 'TYPE' => 'info');
+          } else if (!$user->getCoinAddress($_SESSION['USERDATA']['id'])) {
+            $_SESSION['POPUP'][] = array('CONTENT' => 'You have no payout address set.', 'TYPE' => 'errormsg');
         	} else {
         	  $aBalance = $transaction->getBalance($_SESSION['USERDATA']['id']);
         	  $dBalance = $aBalance['confirmed'];
@@ -119,7 +121,7 @@ if ($user->isAuthenticated()) {
         	  }
         	}
         	break;
-        
+
           case 'updateAccount':
             if (!$config['csrf']['enabled'] || $config['csrf']['enabled'] && $csrftoken->valid) {
               if ($user->updateAccount($_SESSION['USERDATA']['id'], $_POST['paymentAddress'], $_POST['payoutThreshold'], $_POST['donatePercent'], $_POST['email'], $_POST['is_anonymous'], $oldtoken_ea)) {
@@ -131,7 +133,7 @@ if ($user->isAuthenticated()) {
               $_SESSION['POPUP'][] = array('CONTENT' => $csrftoken->getErrorWithDescriptionHTML(), 'TYPE' => 'info');
             }
         	break;
-        
+
           case 'updatePassword':
             if (!$config['csrf']['enabled'] || $config['csrf']['enabled'] && $csrftoken->valid) {
               if ($user->updatePassword($_SESSION['USERDATA']['id'], $_POST['currentPassword'], $_POST['newPassword'], $_POST['newPassword2'], $oldtoken_cp)) {
