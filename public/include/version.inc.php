@@ -1,7 +1,7 @@
 <?php
 $defflip = (!cfip()) ? exit(header('HTTP/1.1 401 Unauthorized')) : 1;
 
-define('MPOS_VERSION', '0.0.3');
+define('MPOS_VERSION', '0.0.4');
 define('DB_VERSION', '0.0.5');
 define('CONFIG_VERSION', '0.0.7');
 
