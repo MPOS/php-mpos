@@ -71,10 +71,8 @@ if (@$_SESSION['USERDATA']['is_admin'] && $user->isAdmin(@$_SESSION['USERDATA'][
   if (!empty($config['coldwallet']['address'])) {
     try {
       if ($bitcoin->can_connect() == true) {
-        $validate_cold_address = $bitcoin->validateaddress($config['coldwallet']['address']);
-        if (!$validate_cold_address['isvalid']) {
+        if (!$bitcoin->validateaddress($config['coldwallet']['address']))
           $error[] = "Your cold wallet address is <u>SET and INVALID</u>";
-        }
       }
     } catch (Exception $e) {
     }
