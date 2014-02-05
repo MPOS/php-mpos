@@ -38,6 +38,7 @@ These people have supported this project with a donation:
 * [xisi](https://github.com/xisi)
 * [PCFiL](https://github.com/PCFiL)
 * [rog1121](https://github.com/rog1121)(https://rapidhash.net)
+* [Wow, Much Pool](http://http://www.wowmuchpool.com/)
 
 Pools running MPOS
 ==================
