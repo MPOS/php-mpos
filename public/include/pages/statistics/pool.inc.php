@@ -42,6 +42,9 @@ if (!$smarty->isCached('master.tpl', $smarty_cache_key)) {
     $dTimeSinceLast = 0;
   }
 
+  // Block average reward or fixed
+  $reward = $config['reward_type'] == 'fixed' ? $config['reward'] : $block->getAverageAmount();
+
     // Round progress
   $iEstShares = $statistics->getEstimatedShares($dDifficulty);
   $aRoundShares = $statistics->getRoundShares();
@@ -73,7 +76,7 @@ if (!$smarty->isCached('master.tpl', $smarty_cache_key)) {
     $smarty->assign("LASTBLOCK", 0);
   }
   $smarty->assign("DIFFICULTY", $dDifficulty);
-  $smarty->assign("REWARD", $config['reward']);
+  $smarty->assign("REWARD", $reward);
 } else {
   $debug->append('Using cached page', 3);
 }

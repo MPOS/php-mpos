@@ -1,4 +1,5 @@
 <!-- Wrapper -->
+{$REWARD}
 <div style="overflow: auto">
 {include file="statistics/pool/contributors_shares.tpl"}
 {include file="statistics/pool/contributors_hashrate.tpl"}

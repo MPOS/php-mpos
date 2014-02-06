@@ -808,7 +808,8 @@ class Statistics extends Base {
     $this->debug->append("STA " . __METHOD__, 4);
     if ($this->config['payout_system'] != 'pps') {
       if (@$value1['valid'] > 0  && @$value2['valid'] > 0) {
-        $aEstimates['block'] = round(( (int)$value2['valid'] / (int)$value1['valid'] ) * (float)$this->config['reward'], 8);
+        $this->config['reward_type'] == 'fixed' ? $reward = $this->config['reward'] : $reward = $this->block->getAverageAmount();
+        $aEstimates['block'] = round(( (int)$value2['valid'] / (int)$value1['valid'] ) * (float)$reward, 8);
         $bNoFees == 0 ? $aEstimates['fee'] = round(((float)$this->config['fees'] / 100) * (float)$aEstimates['block'], 8) : $aEstimates['fee'] = 0;
         $aEstimates['donation'] = round((( (float)$dDonate / 100) * ((float)$aEstimates['block'] - (float)$aEstimates['fee'])), 8);
         $aEstimates['payout'] = round((float)$aEstimates['block'] - (float)$aEstimates['donation'] - (float)$aEstimates['fee'], 8);

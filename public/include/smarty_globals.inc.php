@@ -60,7 +60,7 @@ $aGlobal = array(
   'roundshares' => $aRoundShares,
   'fees' => $config['fees'],
   'confirmations' => $config['confirmations'],
-  'reward' => $config['reward'],
+  'reward' => $config['reward_type'] == 'fixed' ? $config['reward'] : $block->getAverageAmount(),
   'price' => $setting->getValue('price'),
   'twofactor' => $config['twofactor'],
   'csrf' => $config['csrf'],
