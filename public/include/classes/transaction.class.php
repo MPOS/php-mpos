@@ -397,7 +397,7 @@ class Transaction extends Base {
       ON p.account_id = a.id
       JOIN " . $this->getTableName() . " AS t
       ON t.account_id = p.account_id
-      JOIN " . $this->block->getTableName() . " AS b
+      LEFT JOIN " . $this->block->getTableName() . " AS b
       ON t.block_id = b.id
       WHERE p.completed = 0 AND t.archived = 0 AND a.coin_address IS NOT NULL AND a.coin_address != ''
       GROUP BY t.account_id
