@@ -800,7 +800,7 @@ class User extends Base {
           $this->setErrorMessage('Unable to invalidate used token');
         }
       } else {
-        $this->setErrorMessage('Unable to set new password');
+        $this->setErrorMessage('Unable to set new password or you chose the same password. Please use a different one.');
       }
     } else {
       $this->setErrorMessage('Invalid token: ' . $this->token->getError());
