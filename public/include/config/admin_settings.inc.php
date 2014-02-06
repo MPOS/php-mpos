@@ -23,21 +23,21 @@ $aSettings['website'][] = array(
   'size' => 25,
   'default' => 'The Pool',
   'name' => 'website_name', 'value' => $setting->getValue('website_name'),
-  'tooltip' => 'The name of you pool page, displayed in the header of the page.'
+  'tooltip' => 'The name of your pool page, displayed in the header of the page.'
 );
 $aSettings['website'][] = array(
   'display' => 'Website Title', 'type' => 'text',
   'size' => 25,
   'default' => 'The Pool - Mining Evolved',
   'name' => 'website_title', 'value' => $setting->getValue('website_title'),
-  'tooltip' => 'The title of you pool page, displayed in the browser window header.'
+  'tooltip' => 'The title of your pool page, displayed in the browser window header.'
 );
 $aSettings['website'][] = array(
   'display' => 'Website Slogan', 'type' => 'text',
   'size' => 25,
   'default' => 'Resistance is Futile',
   'name' => 'website_slogan', 'value' => $setting->getValue('website_slogan'),
-  'tooltip' => 'The slogan of you pool page, displayed in the browser window header.'
+  'tooltip' => 'The slogan of your pool page, displayed in the browser window header.'
 );
 $aSettings['website'][] = array(
   'display' => 'Website e-mail', 'type' => 'text',

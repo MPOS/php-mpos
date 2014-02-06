@@ -1,5 +1,7 @@
     <hr/>
+<ul>
     <li class="icon-home"><a href="{$smarty.server.SCRIPT_NAME}">Home</a></li>
+</ul>
     {if $smarty.session.AUTHENTICATED|default:"0" == 1}
     <h3>My Account</h3>
     <ul class="toggle">
@@ -31,12 +33,12 @@
     {if $smarty.session.AUTHENTICATED|default}
     <h3>Statistics</h3>
     <ul class="toggle">
-      <li class="icon-align-left"><a href="{$smarty.server.SCRIPT_NAME}?page=statistics&action=pool">Pool</a></li>
-      <li class="icon-th-large"><a href="{$smarty.server.SCRIPT_NAME}?page=statistics&action=blocks">Blocks</a></li>
-      <li class="icon-chart"><a href="{$smarty.server.SCRIPT_NAME}?page=statistics&action=graphs">Graphs</a></li>
-      <li class="icon-record"><a href="{$smarty.server.SCRIPT_NAME}?page=statistics&action=round">Round</a></li>
-      <li class="icon-search"><a href="{$smarty.server.SCRIPT_NAME}?page=statistics&action=blockfinder">Finder</a></li>
-      {if $GLOBAL.config.monitoring_uptimerobot_api_keys|default:"0"}<li class="icon-bell"><a href="{$smarty.server.SCRIPT_NAME}?page=statistics&action=uptime">Uptime</a></li>{/if}
+      <li class="icon-align-left"><a href="{$smarty.server.SCRIPT_NAME}?page=statistics&amp;action=pool">Pool</a></li>
+      <li class="icon-th-large"><a href="{$smarty.server.SCRIPT_NAME}?page=statistics&amp;action=blocks">Blocks</a></li>
+      <li class="icon-chart"><a href="{$smarty.server.SCRIPT_NAME}?page=statistics&amp;action=graphs">Graphs</a></li>
+      <li class="icon-record"><a href="{$smarty.server.SCRIPT_NAME}?page=statistics&amp;action=round">Round</a></li>
+      <li class="icon-search"><a href="{$smarty.server.SCRIPT_NAME}?page=statistics&amp;action=blockfinder">Finder</a></li>
+      {if $GLOBAL.config.monitoring_uptimerobot_api_keys|default:"0"}<li class="icon-bell"><a href="{$smarty.server.SCRIPT_NAME}?page=statistics&amp;action=uptime">Uptime</a></li>{/if}
     </ul>
     {else}
     <h3>Statistics</h3>
@@ -86,20 +88,18 @@
       <li class="icon-doc"><a href="{$smarty.server.SCRIPT_NAME}?page=tac">Terms and Conditions</a></li>
       {/if}
     </ul>
-    <ul>
+
       <hr/>
-    </ul>
+
     {if $smarty.session.AUTHENTICATED|default:"0" == 1}
      <br />
     {else}
     <ul>
-     <center>
       <div style="display: inline-block;">
-      <i><u><b><font size="2">LIVE STATS</font></b></u></i>
+      <i><u><b>LIVE STATS</b></u></i>
       <div id="mr" style="width:180px; height:120px;"></div>
       <div id="hr" style="width:180px; height:120px;"></div>
       </div>
-     </center>
     </ul>
     <hr/>
     {if !$GLOBAL.website.api.disabled && !$GLOBAL.config.disable_navbar && !$GLOBAL.config.disable_navbar_api}
