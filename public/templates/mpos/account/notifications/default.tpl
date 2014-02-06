@@ -25,6 +25,7 @@
           </span>
         </td>
       </tr>
+      {if $DISABLE_BLOCKNOTIFICATIONS|default:"" != 1}
       <tr>
         <td align="left">New Blocks</td>
         <td>
@@ -37,6 +38,7 @@
           </span>
         </td>
       </tr>
+      {/if}
       <tr>
         <td align="left">Auto Payout</td>
         <td>

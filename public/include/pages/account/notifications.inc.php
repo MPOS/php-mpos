@@ -22,9 +22,12 @@ if ($user->isAuthenticated()) {
     $aNotifications = $notification->getNofifications($_SESSION['USERDATA']['id']);
     if (!$aNotifications) $_SESSION['POPUP'][] = array('CONTENT' => 'Could not find any notifications', 'TYPE' => 'errormsg');
 
+    // Fetch global settings
+    $smarty->assign('DISABLE_BLOCKNOTIFICATIONS', $setting->getValue('notifications_disable_block'));
+
     // Fetch user notification settings
     $aSettings = $notification->getNotificationSettings($_SESSION['USERDATA']['id']);
-    
+
     $smarty->assign('NOTIFICATIONS', $aNotifications);
     $smarty->assign('SETTINGS', $aSettings);
     $smarty->assign('CONTENT', 'default.tpl');

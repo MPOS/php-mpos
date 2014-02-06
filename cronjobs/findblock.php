@@ -148,7 +148,7 @@ if (empty($aAllBlocks)) {
         $log->logError('Failed to create Bonus transaction in database for user ' . $user->getUserName($iAccountId) . ' for block ' . $aBlock['height'] . ': ' . $transaction->getCronError());
       }
 
-      if ($setting->getValue('disable_notifications') != 1) {
+      if ($setting->getValue('disable_notifications') != 1 && $setting->getValue('notifications_disable_block') != 1) {
         // Notify users
         $aAccounts = $notification->getNotificationAccountIdByType('new_block');
         if (is_array($aAccounts)) {

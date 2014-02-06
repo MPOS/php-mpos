@@ -272,13 +272,6 @@ $aSettings['system'][] = array(
   'tooltip' => 'Enable or Disable the payout cronjob. Users will not be able to withdraw any funds automatically if disabled. Will NOT be logged in monitoring page.'
 );
 $aSettings['system'][] = array(
-  'display' => 'Disable notifications', 'type' => 'select',
-  'options' => array( 0 => 'No', 1 => 'Yes' ),
-  'default' => 0,
-  'name' => 'disable_notifications', 'value' => $setting->getValue('disable_notifications'),
-  'tooltip' => 'Enable or Disable system notifications. This includes new found blocks, monitoring and all other notifications.'
-);
-$aSettings['system'][] = array(
   'display' => 'Disable API', 'type' => 'select',
   'options' => array( 0 => 'No', 1 => 'Yes' ),
   'default' => 0,
@@ -397,4 +390,17 @@ $aSettings['monitoring'][] = array(
   'name' => 'monitoring_uptimerobot_api_keys', 'value' => $setting->getValue('monitoring_uptimerobot_api_keys'),
   'tooltip' => 'Create per-monitor API keys and save them here to propagate your uptime statistics.'
 );
-
+$aSettings['notifications'][] = array(
+  'display' => 'Disable notifications', 'type' => 'select',
+  'options' => array( 0 => 'No', 1 => 'Yes' ),
+  'default' => 0,
+  'name' => 'disable_notifications', 'value' => $setting->getValue('disable_notifications'),
+  'tooltip' => 'Enable or Disable system notifications. This includes new found blocks, monitoring and all other notifications.'
+);
+$aSettings['notifications'][] = array(
+  'display' => 'Disable Block Notifications', 'type' => 'select',
+  'options' => array( 0 => 'No', 1 => 'Yes'),
+  'default' => 0,
+  'name' => 'notifications_disable_block', 'value' => $setting->getValue('notifications_disable_block'),
+  'tooltip' => 'Enable/Disable block notifications globally. Will remove the user option too.'
+);
