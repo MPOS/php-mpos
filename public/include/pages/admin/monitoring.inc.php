@@ -7,24 +7,11 @@ if (!$user->isAuthenticated() || !$user->isAdmin($_SESSION['USERDATA']['id'])) {
   die("404 Page not found");
 }
 
-// Default crons to monitor
-$aCrons = array('statistics','payouts','token_cleanup','archive_cleanup','blockupdate','findblock','notifications','tickerupdate','liquid_payout');
-
-// Special cases, only add them if activated
-switch ($config['payout_system']) {
-case 'pplns':
-  $aCrons[] = $config['payout_system'] . '_payout';
-  break;
-case 'pps':
-  $aCrons[] = $config['payout_system'] . '_payout';
-  break;
-case 'prop':
-  $aCrons[] = 'proportional_payout';
-  break;
-}
+// Load our cron list $aMonitorCrons
+require_once(INCLUDE_DIR . '/config/monitor_crons.inc.php');
 
 // Data array for template
-foreach ($aCrons as $strCron) {
+foreach ($aMonitorCrons as $strCron) {
   $aCronStatus[$strCron] = array(
     'disabled' => $monitoring->getStatus($strCron . '_disabled'),
     'exit' => $monitoring->getStatus($strCron . '_status'),
