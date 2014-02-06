@@ -192,7 +192,7 @@ $config['difficulty'] = 20;
  *   https://github.com/MPOS/php-mpos/wiki/Config-Setup#wiki-reward-settings
  **/
 $config['reward_type'] = 'block';
-$config['reward'] = 20;
+$config['reward'] = 50;
 
 /**
  * Confirmations
