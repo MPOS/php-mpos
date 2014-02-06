@@ -552,7 +552,7 @@ class User extends Base {
     // $this->user from checkUserPassword
     $_SESSION['USERDATA'] = $this->user;
     if ($this->config['protect_session_state']) {
-      $_SESSION['STATE'] = md5($_SESSION['USERDATA']['username'].$_SESSION['USERDATA']['id'].$_SERVER['HTTP_USER_AGENT']);
+      $_SESSION['STATE'] = md5($_SESSION['USERDATA']['username'].$_SESSION['USERDATA']['id'].@$_SERVER['HTTP_USER_AGENT']);
     }
   }
 
@@ -864,7 +864,7 @@ public function isAuthenticated($logout=true) {
     if (@$_SESSION['AUTHENTICATED'] == true &&
     !$this->isLocked($_SESSION['USERDATA']['id']) &&
     $this->getUserIp($_SESSION['USERDATA']['id']) == $_SERVER['REMOTE_ADDR'] &&
-    (!$this->config['protect_session_state'] || ($this->config['protect_session_state'] && $_SESSION['STATE'] == md5($_SESSION['USERDATA']['username'].$_SESSION['USERDATA']['id'].$_SERVER['HTTP_USER_AGENT'])))
+    (!$this->config['protect_session_state'] || ($this->config['protect_session_state'] && $_SESSION['STATE'] == md5($_SESSION['USERDATA']['username'].$_SESSION['USERDATA']['id'].@$_SERVER['HTTP_USER_AGENT'])))
     ) return true;
     // Catchall
     $this->log->log("warn", "Forcing logout, user is locked or IP changed mid session from [".$_SERVER['REMOTE_ADDR']."] [hijack attempt?]");

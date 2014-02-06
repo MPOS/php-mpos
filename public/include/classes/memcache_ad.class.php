@@ -10,7 +10,7 @@ class MemcacheAntiDos
   public function __construct($config, &$memcache, $request='') {
     $this->cache = $memcache;
     // set our config options
-    $userORip = $_SERVER['REMOTE_ADDR'].$_SERVER['HTTP_USER_AGENT'];
+    $userORip = $_SERVER['REMOTE_ADDR'].@$_SERVER['HTTP_USER_AGENT'];
     // prep stuff we need to check this request
     $key_md5 = $config['memcache']['keyprefix'].md5($userORip);
     $request_data = $this->cache->get($key_md5);
