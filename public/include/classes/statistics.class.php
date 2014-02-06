@@ -670,7 +670,9 @@ class Statistics extends Base {
           return $data_new;
         }
       }
-      // No cached data, fallback to SQL and cache in local cache
+      // No cached data, fallback to SQL ONLY if we don't use memcache
+      if ($this->config['memcache']['enabled'])
+        return false;
       $stmt = $this->mysqli->prepare("
         SELECT
           a.username AS account,
