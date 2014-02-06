@@ -43,19 +43,6 @@ include_once('include/bootstrap.php');
 $hts = ($config['https_only'] && (!empty($_SERVER['QUERY_STRING']))) ? "https://".$_SERVER['SERVER_NAME'].$_SERVER['SCRIPT_NAME']."?".$_SERVER['QUERY_STRING'] : "https://".$_SERVER['SERVER_NAME'].$_SERVER['SCRIPT_NAME'];
 ($config['https_only'] && @!$_SERVER['HTTPS']) ? exit(header("Location: ".$hts)):0;
 
-if ($config['memcache']['enabled'] && $config['mc_antidos']['enabled']) {
-  if (PHP_OS == 'WINNT') {
-    require_once(CLASS_DIR . 'memcached.class.php');
-  }
-  // memcache antidos needs a memcache handle
-  $memcache = new Memcached();
-  $memcache->addServer($config['memcache']['host'], $config['memcache']['port']);
-}
-
-if ($config['memcache']['enabled'] && $config['mc_antidos']['enabled']) {
-  require_once(CLASS_DIR . '/memcache_ad.class.php');
-}
-
 $session_start = @session_start();
 session_set_cookie_params(time()+$config['cookie']['duration'], $config['cookie']['path'], $config['cookie']['domain'], $config['cookie']['secure'], $config['cookie']['httponly']);
 if (!$session_start) {
@@ -65,8 +52,16 @@ if (!$session_start) {
   session_start();
 }
 @setcookie(session_name(), session_id(), time()+$config['cookie']['duration'], $config['cookie']['path'], $config['cookie']['domain'], $config['cookie']['secure'], $config['cookie']['httponly']);
+
 // Rate limiting
 if ($config['memcache']['enabled'] && $config['mc_antidos']['enabled']) {
+  if (PHP_OS == 'WINNT') {
+    require_once(CLASS_DIR . 'memcached.class.php');
+  }
+  // memcache antidos needs a memcache handle
+  $memcache = new Memcached();
+  $memcache->addServer($config['memcache']['host'], $config['memcache']['port']);
+  require_once(CLASS_DIR . '/memcache_ad.class.php');
   $skip_check = false;
   // if this is an api call we need to be careful not to time them out for those calls separately
   $per_page = '';
