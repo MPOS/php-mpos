@@ -1,7 +1,6 @@
 <form action="{$smarty.server.SCRIPT_NAME}" method="post">
   <input type="hidden" name="page" value="{$smarty.request.page|escape}">
   <input type="hidden" name="action" value="contactform">
-  <input type="hidden" name="ctoken" value="{$CTOKEN|escape|default:""}" />
     <article class="module width_3_quarter">
     <header><h3>Contact Us</h3></header>
     <div class="module_content">
@@ -21,7 +20,7 @@
         <label for="message">Your Message</label>
         <textarea type="text" name="senderMessage" cols="80" rows="10" maxlength="10000" required>{$smarty.request.senderMessage|escape|default:""}</textarea>
       </fieldset>
-      <center>{nocache}{$RECAPTCHA|default:""}{/nocache}</center>
+      <center>{nocache}{$RECAPTCHA|default:"" nofilter}{/nocache}</center>
     </div>
     <footer>
       <div class="submit_link"><input type="submit" class="alt_btn" name="sendMessage" value="Send Email" /></div>

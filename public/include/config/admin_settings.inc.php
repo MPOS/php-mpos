@@ -363,6 +363,13 @@ $aSettings['recaptcha'][] = array(
   'tooltip' => 'Enable or Disable re-Captcha. Adds a re-Captcha to the registration form.'
 );
 $aSettings['recaptcha'][] = array(
+  'display' => 'Enable re-Captcha Contactform', 'type' => 'select',
+  'options' => array( 0 => 'No', 1 => 'Yes' ),
+  'default' => 0,
+  'name' => 'recaptcha_enabled_contactform', 'value' => $setting->getValue('recaptcha_enabled_contactform'),
+  'tooltip' => 'Enable or Disable re-Captcha. Adds a re-Captcha to the contact form.'
+);
+$aSettings['recaptcha'][] = array(
   'display' => 'Enable re-Captcha Logins', 'type' => 'select',
   'options' => array( 0 => 'No', 1 => 'Yes' ),
   'default' => 0,
