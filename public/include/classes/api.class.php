@@ -28,13 +28,17 @@ class Api extends Base {
    * @return string JSON object
    **/
   function get_json($data, $force=false) {
-    return json_encode(
+    $json = json_encode(
       array( $_REQUEST['action'] => array(
         'version' => $this->api_version,
         'runtime' => (microtime(true) - $this->dStartTime) * 1000,
         'data' => $data
       )), $force ? JSON_FORCE_OBJECT : 0
     );
+    // JSONP support issue #1700
+    if (isset($_REQUEST['callback']))
+      return $_REQUEST['callback'] . '(' . $json . ');';
+    return $json;
   }
 
   /**
