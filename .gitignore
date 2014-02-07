@@ -9,8 +9,9 @@
 /public/templates/cache/**
 
 # Logs
-/cronjobs/logs/*.txt
-/cronjobs/logs/*.txt.*.gz
+/cronjobs/**
+/cronjobs/logs/**.txt
+/cronjobs/logs/**.txt.*.gz
 /logs/*
 
 # Test configs
