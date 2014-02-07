@@ -18,12 +18,13 @@ if ($bitcoin->can_connect() === true){
 $version['CURRENT'] = array('DB' => DB_VERSION, 'CONFIG' => CONFIG_VERSION, 'CORE' => MPOS_VERSION);
 $version['INSTALLED'] = array('DB' => $setting->getValue('DB_VERSION'), 'CONFIG' => $config['version'], 'CORE' => MPOS_VERSION);
 
-// Fetch cron information
-$aCrons = array('statistics','payouts','token_cleanup','archive_cleanup','blockupdate','findblock','notifications','tickerupdate');
+// Fetch our cron list $aMonitorCrons
+require_once(INCLUDE_DIR . '/config/monitor_crons.inc.php');
+
 // Data array for template
 $cron_errors = 0;
 $cron_disabled = 0;
-foreach ($aCrons as $strCron) {
+foreach ($aMonitorCrons as $strCron) {
   $status = $monitoring->getStatus($strCron . '_status');
   if ($status['value'] != 0)
     $cron_errors++;
