@@ -39,11 +39,8 @@ if ( $bitcoin->can_connect() === true ){
   if (is_array($dDifficulty) && array_key_exists('proof-of-work', $dDifficulty))
     $dDifficulty = $dDifficulty['proof-of-work'];
 } else {
-  $log->logFatal("Aborted: " . $bitcoin->can_connect() . "\n");
-  $monitoring->setStatus($cron_name . "_active", "yesno", 0); 
-  $monitoring->setStatus($cron_name . "_message", "message", "Unable to connect to RPC server");
-  $monitoring->setStatus($cron_name . "_status", "okerror", 1); 
-  exit(1);
+  $log->logFatal('Unable to connect to RPC server backend');
+  $monitoring->endCronjob($cron_name, 'E0006', 1, true);
 }
 
 // We support some dynamic reward targets but fall back to our fixed value
