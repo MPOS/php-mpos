@@ -147,9 +147,9 @@ if (is_dir(INCLUDE_DIR . '/pages/' . $page)) {
 $action = (isset($_REQUEST['action']) && !is_array($_REQUEST['action'])) && isset($arrActions[$_REQUEST['action']]) ? $_REQUEST['action'] : "";
 
 // Check csrf token validity if necessary
-if ($config['csrf']['enabled'] && isset($_POST['ctoken']) && !empty($_POST['ctoken']) && !is_array($_POST['ctoken'])) {
-  $csrftoken->valid = ($csrftoken->checkBasic($user->getCurrentIP(), $arrPages[$page], $_POST['ctoken'])) ? 1 : 0;
-} else if ($config['csrf']['enabled'] && (!@$_POST['ctoken'] || empty($_POST['ctoken']))) {
+if ($config['csrf']['enabled'] && isset($_REQUEST['ctoken']) && !empty($_REQUEST['ctoken']) && !is_array($_REQUEST['ctoken'])) {
+  $csrftoken->valid = ($csrftoken->checkBasic($user->getCurrentIP(), $arrPages[$page], $_REQUEST['ctoken'])) ? 1 : 0;
+} else if ($config['csrf']['enabled'] && (!@$_REQUEST['ctoken'] || empty($_REQUEST['ctoken']))) {
   $csrftoken->valid = 0;
 }
 if ($config['csrf']['enabled']) $smarty->assign('CTOKEN', $csrftoken->getBasic($user->getCurrentIP(), $arrPages[$page]));
