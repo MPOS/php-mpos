@@ -33,12 +33,12 @@ class Payout Extends Base {
           if ($delete) {
             return true;
           } else {
-            $this->log->log("info", "User $account_id requested manual payout but the token deletion failed from [".$_SERVER['REMOTE_ADDR']."]");
+            $this->log->log("info", "User $account_id requested manual payout but failed to delete payout token");
             $this->setErrorMessage('Unable to delete token');
             return false;
           }
         } else {
-          $this->log->log("info", "User $account_id requested manual payout using an invalid token from [".$_SERVER['REMOTE_ADDR']."]");
+          $this->log->log("info", "User $account_id requested manual payout using an invalid payout token");
           $this->setErrorMessage('Invalid token');
           return false;
         }

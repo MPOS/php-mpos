@@ -8,7 +8,7 @@ if (!$user->isAuthenticated() || !$user->isAdmin($_SESSION['USERDATA']['id'])) {
 }
 
 if (@$_REQUEST['do'] == 'save' && !empty($_REQUEST['data'])) {
-  $user->log->log("warn", @$_SESSION['USERDATA']['username']." changed admin settings from [".$_SERVER['REMOTE_ADDR']."]");
+  $user->log->log("warn", @$_SESSION['USERDATA']['username']." changed admin settings");
   foreach($_REQUEST['data'] as $var => $value) {
     $setting->setValue($var, $value);
   }

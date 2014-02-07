@@ -12,11 +12,15 @@ $config['protect_session_state'] = false;
 
 /**
  * Logging
- *  Log security issues - 0 = disabled, 2 = everything, 3 = warnings only
- *   
+ *  0 = Nothing
+ *  1 = Everything
+ *  2 = INFO only
+ *  3 = + WARN
+ *  4 = + ERROR
+ *  5 = + FATAL
  */
 $config['logging']['enabled'] = true;
-$config['logging']['level'] = 3;
+$config['logging']['level'] = 5;
 $config['logging']['path'] = realpath(BASEPATH.'../logs');
 $config['logging']['file'] = date('Y-m-d').'.security.log';
 

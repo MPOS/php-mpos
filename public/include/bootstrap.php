@@ -22,7 +22,7 @@ if (@file_exists(BASEPATH . 'include/config/security.inc.php')) include_once(BAS
 $session_start = @session_start();
 session_set_cookie_params(time()+$config['cookie']['duration'], $config['cookie']['path'], $config['cookie']['domain'], $config['cookie']['secure'], $config['cookie']['httponly']);
 if (!$session_start) {
-    $log->log("info", "Forcing session id regeneration for ".$_SERVER['REMOTE_ADDR']." [hijack attempt?]");
+    $log->log("info", "Forcing session id regeneration, session failed to start [hijack attempt?]");
       session_destroy();
       session_regenerate_id(true);
         session_start();

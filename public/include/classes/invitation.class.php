@@ -114,14 +114,14 @@ class Invitation extends Base {
     }
     $aData['username'] = $this->user->getUserName($account_id);
     $aData['subject'] = 'Pending Invitation';
-    $this->log->log("info", $this->user->getUserName($account_id)." sent an invitation from [".$_SERVER['REMOTE_ADDR']."]");
+    $this->log->log("info", $this->user->getUserName($account_id)." sent an invitation");
     if ($this->mail->sendMail('invitations/body', $aData)) {
       $aToken = $this->token->getToken($aData['token'], 'invitation');
       if (!$this->createInvitation($account_id, $aData['email'], $aToken['id']))
         return false;
       return true;
     } else {
-      $this->log->log("warn", $this->user->getUserName($account_id)." sent an invitation but the mailing failed from [".$_SERVER['REMOTE_ADDR']."]");
+      $this->log->log("warn", $this->user->getUserName($account_id)." sent an invitation but failed to send e-mail");
       $this->setErrorMessage($this->getErrorMsg('E0028'));
     }
     $this->setErrorMessage($this->getErrorMsg('E0029'));
