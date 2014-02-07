@@ -74,4 +74,5 @@ $aErrorCodes['E0075'] = 'Upgrade required';
 $aErrorCodes['E0076'] = 'No coins in wallet available';
 $aErrorCodes['E0077'] = 'RPC method or connection failed';
 $aErrorCodes['E0078'] = 'RPC method did not return 200 OK';
+$aErrorCodes['E0079'] = 'Wallet does not cover payouts total amount';
 ?>

@@ -34,9 +34,19 @@ if ($bitcoin->can_connect() !== true) {
   $log->logFatal(" unable to connect to RPC server, exiting");
   $monitoring->endCronjob($cron_name, 'E0006', 1, true);
 }
+if (!$dWalletBalance = $bitcoin->getbalance())
+  $dWalletBalance = 0;
 
 // Fetch our manual payouts, process them
 if ($setting->getValue('disable_manual_payouts') != 1 && $aManualPayouts = $transaction->getMPQueue()) {
+  // Calculate our sum first
+  $dMPTotalAmount = 0;
+  foreach ($aManualPayouts as $aUserData) $dMPTotalAmount += $aUserData['confirmed'];
+  if ($dMPTotalAmount > $dWalletBalance) {
+    $log->logError(" Wallet does not cover MP payouts");
+    $monitoring->endCronjob($cron_name, 'E0079', 0, true);
+  }
+
   $log->logInfo('  found ' . count($aManualPayouts) . ' queued manual payouts');
   $mask = '    | %-10.10s | %-25.25s | %-20.20s | %-40.40s | %-20.20s |';
   $log->logInfo(sprintf($mask, 'UserID', 'Username', 'Balance', 'Address', 'Payout ID'));
@@ -73,8 +83,18 @@ if ($setting->getValue('disable_manual_payouts') != 1 && $aManualPayouts = $tran
   }
 }
 
+if (!$dWalletBalance = $bitcoin->getbalance())
+  $dWalletBalance = 0;
 // Fetch our auto payouts, process them
 if ($setting->getValue('disable_auto_payouts') != 1 && $aAutoPayouts = $transaction->getAPQueue()) {
+  // Calculate our sum first
+  $dAPTotalAmount = 0;
+  foreach ($aAutoPayouts as $aUserData) $dAPTotalAmount += $aUserData['confirmed'];
+  if ($dAPTotalAmount > $dWalletBalance) {
+    $log->logError(" Wallet does not cover AP payouts");
+    $monitoring->endCronjob($cron_name, 'E0079', 0, true);
+  }
+
   $log->logInfo('  found ' . count($aAutoPayouts) . ' queued auto payouts');
   $mask = '    | %-10.10s | %-25.25s | %-20.20s | %-40.40s | %-20.20s |';
   $log->logInfo(sprintf($mask, 'UserID', 'Username', 'Balance', 'Address', 'Threshold'));
