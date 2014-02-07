@@ -239,6 +239,21 @@ class Block extends Base {
     $field = array( 'name' => 'accounted', 'value' => 1, 'type' => 'i');
     return $this->updateSingle($block_id, $field);
   }
+
+  /**
+   * Fetch the average amount of the past N blocks
+   * @param limit int Block limit
+   * @param return mixed Block array or false
+   **/
+  public function getAverageAmount($limit=10) {
+    $stmt = $this->mysqli->prepare("SELECT AVG(amount) as avg_amount FROM ( SELECT amount FROM $this->table ORDER BY id DESC LIMIT ?) AS t1");
+    if ($this->checkStmt($stmt) && $stmt->bind_param('i', $limit) && $stmt->execute() && $result = $stmt->get_result()) {
+      return $result->fetch_object()->avg_amount;
+    } else {
+      $this->setErrorMessage('Failed to get average award from blocks');
+      return $this->sqlError();
+    }
+  }
 }
 
 // Automatically load our class for furhter usage
