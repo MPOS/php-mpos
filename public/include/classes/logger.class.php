@@ -5,30 +5,49 @@ class Logger {
   private $logging = false;
   public function __construct($config) {
     if ($config['logging']['enabled'] && $config['logging']['level'] > 0) {
-      $this->KLogger = new KLogger($config['logging']['path']."/".$config['logging']['file'], $config['logging']['level']);
+      $this->KLogger = KLogger::instance($config['logging']['path'], $config['logging']['level']);
       $this->logging = true;
     }
   }
-  public function log($type, $message) {
+  public function log($strType, $strMessage) {
     // Logmask, we add some infos into the KLogger
     $strMask = "[ %12s ] [ %8s | %-8s ] : %s";
     $strIPAddress = isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : 'unknown';
     $strPage = isset($_REQUEST['page']) ? $_REQUEST['page'] : 'none';
     $strAction = isset($_REQUEST['action']) ? $_REQUEST['action'] : 'none';
+    $strMessage = sprintf($strMask, $strIPAddress, $strPage, $strAction, $strMessage);
     if ($this->logging) {
-      switch ($type) {
-      	case 'info':
-          $this->KLogger->LogInfo(sprintf($strMask, $strIPAddress, $strPage, $strAction, $message));
-          break;
-        case 'warn':
-          $this->KLogger->LogWarn(sprintf($strMask, $strIPAddress, $strPage, $strAction, $message));
-          break;
-        case 'error':
-          $this->KLogger->LogError(sprintf($strMask, $strIPAddress, $strPage, $strAction, $message));
-          break;
-        case 'fatal':
-          $this->KLogger->LogFatal(sprintf($strMask, $strIPAddress, $strPage, $strAction, $message));
-          break;
+      switch ($strType) {
+      case 'emerg':
+        $this->KLogger->LogEmerg($strMessage);
+        break;
+      case 'alert':
+        $this->KLogger->LogAlert($strMessage);
+        break;
+      case 'crit':
+        $this->KLogger->LogCrit($strMessage);
+        break;
+      case 'error':
+        $this->KLogger->LogError($strMessage);
+        break;
+      case 'warn':
+        $this->KLogger->LogWarn($strMessage);
+        break;
+      case 'notice':
+        $this->KLogger->LogNotice($strMessage);
+        break;
+      case 'info':
+        $this->KLogger->LogInfo($strMessage);
+        break;
+      case 'fatal':
+        $this->KLogger->LogFatal($strMessage);
+        break;
+      case 'debug':
+        $this->KLogger->LogDebug($strMessage);
+        break;
+      case '':
+        $this->KLogger->LogFatal($strMessage);
+        break;
       }
       return true;
     } else {
