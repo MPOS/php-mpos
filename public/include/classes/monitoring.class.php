@@ -94,6 +94,21 @@ class Monitoring extends Base {
   }
 
   /**
+   * Start a cronjob, mark various fields properly
+   * @param cron_name string Cronjob name
+   **/
+  public function startCronjob($cron_name) {
+    $aStatus = $this->getStatus($cron_name . '_active');
+    if ($aStatus['value'] == 1) {
+      $this->setErrorMessage('Cron is already active in database: ' . $cron_name . '_active is 1');
+      return false;
+    }
+    $this->setStatus($cron_name . "_active", "yesno", 1);
+    $this->setStatus($cron_name . '_starttime', 'date', time());
+    return true;
+  }
+
+  /**
    * End cronjob with an error message
    * @param cron_name string Cronjob Name
    * @param msgCode string Message code as stored in error_codes array
