@@ -246,7 +246,7 @@ class Block extends Base {
    * @param return mixed Block array or false
    **/
   public function getAverageAmount($limit=10) {
-    $stmt = $this->mysqli->prepare("SELECT AVG(amount) as avg_amount FROM ( SELECT amount FROM $this->table ORDER BY id DESC LIMIT ?) AS t1");
+    $stmt = $this->mysqli->prepare("SELECT IFNULL(AVG(amount), " . $this->config['reward'] . ") as avg_amount FROM ( SELECT amount FROM $this->table ORDER BY id DESC LIMIT ?) AS t1");
     if ($this->checkStmt($stmt) && $stmt->bind_param('i', $limit) && $stmt->execute() && $result = $stmt->get_result()) {
       return $result->fetch_object()->avg_amount;
     } else {
