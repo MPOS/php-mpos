@@ -59,7 +59,7 @@ if ($setting->getValue('disable_manual_payouts') != 1 && $aManualPayouts = $tran
       $monitoring->endCronjob($cron_name, 'E0010', 1, true);
     }
     if ($bitcoin->validateaddress($aUserData['coin_address'])) {
-      if (!$transaction_id = $transaction->createDebitAPRecord($aUserData['id'], $aUserData['coin_address'], $aUserData['confirmed'] - $config['txfee_manual'])) {
+      if (!$transaction_id = $transaction->createDebitMPRecord($aUserData['id'], $aUserData['coin_address'], $aUserData['confirmed'] - $config['txfee_manual'])) {
         $log->logFatal('    failed to fullt debit user ' . $aUserData['username'] . ': ' . $transaction->getCronError());
         $monitoring->endCronjob($cron_name, 'E0064', 1, true);
       } else {
