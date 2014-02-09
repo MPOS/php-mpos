@@ -45,6 +45,11 @@ class BitcoinWrapper extends BitcoinClient {
       $data = $data['proof-of-work'];
     return $this->memcache->setCache(__FUNCTION__, $data, 30);
   }
+  public function validateaddress($addr) {
+    $this->oDebug->append("STA " . __METHOD__, 4);
+    if ($data = $this->memcache->get(__FUNCTION__)) return $data;
+    return $this->memcache->setCache(__FUNCTION__, $addr, 30);
+  }
   public function getestimatedtime($iCurrentPoolHashrate) {
     $this->oDebug->append("STA " . __METHOD__, 4);
     if ($iCurrentPoolHashrate == 0) return 0;
