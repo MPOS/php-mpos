@@ -25,6 +25,7 @@ class Payout Extends Base {
   public function createPayout($account_id=NULL, $strToken) {
     $stmt = $this->mysqli->prepare("INSERT INTO $this->table (account_id) VALUES (?)");
     if ($stmt && $stmt->bind_param('i', $account_id) && $stmt->execute()) {
+      $insert_id = $stmt->insert_id;
       // twofactor - consume the token if it is enabled and valid
       if ($this->config['twofactor']['enabled'] && $this->config['twofactor']['options']['withdraw']) {
         $tValid = $this->token->isTokenValid($account_id, $strToken, 7);
@@ -43,7 +44,7 @@ class Payout Extends Base {
           return false;
         }
       }
-      return $stmt->insert_id;
+      return $insert_id;
     }
     return $this->sqlError('E0049');
   }
