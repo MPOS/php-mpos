@@ -29,7 +29,7 @@ if ($setting->getValue('disable_payouts') == 1) {
   $log->logInfo(" payouts disabled via admin panel");
   $monitoring->endCronjob($cron_name, 'E0009', 0, true, false);
 }
-$log->logInfo("Starting Payout...");
+$log->logDebug("Starting Payout...");
 if ($bitcoin->can_connect() !== true) {
   $log->logFatal(" unable to connect to RPC server, exiting");
   $monitoring->endCronjob($cron_name, 'E0006', 1, true);
@@ -39,7 +39,7 @@ if ($bitcoin->can_connect() !== true) {
 // This does not test if it actually works too!
 $sendmanyAvailable = ((strpos($bitcoin->help('sendmany'), 'unknown') === FALSE) ? true : false);
 if ($sendmanyAvailable)
-  $log->logInfo('  sendmany available in coind help command');
+  $log->logDebug('  sendmany available in coind help command');
 
 if (!$dWalletBalance = $bitcoin->getbalance())
   $dWalletBalance = 0;
