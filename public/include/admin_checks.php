@@ -65,17 +65,19 @@ if (@$_SESSION['USERDATA']['is_admin'] && $user->isAdmin(@$_SESSION['USERDATA'][
     if ($bitcoin->can_connect() !== true) {
       $error[] = "Unable to connect to coin daemon using provided credentials";
     }
-  } catch (Exception $e) {
-  }
-  // if coldwallet is not empty, check if the address is valid -> error
-  if (!empty($config['coldwallet']['address'])) {
-    try {
-      if ($bitcoin->can_connect() == true) {
+    else {
+      // validate that the wallet service is not in test mode
+      if ($bitcoin->is_testnet() == true) {
+        $error[] = "The coin daemon service is running as a testnet. Check the TESTNET seeing in your  coin daemon config and make sure the correct port is set in the MPOS config.";
+      }
+
+      // if coldwallet is not empty, check if the address is valid -> error
+      if (!empty($config['coldwallet']['address'])) {
         if (!$bitcoin->validateaddress($config['coldwallet']['address']))
           $error[] = "Your cold wallet address is <u>SET and INVALID</u>";
       }
-    } catch (Exception $e) {
     }
+  } catch (Exception $e) {
   }
   // if database connection fails -> error
   $db_connect = new mysqli($config['db']['host'], $config['db']['user'], $config['db']['pass'], $config['db']['name'], $config['db']['port']);
