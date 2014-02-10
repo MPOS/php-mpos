@@ -31,9 +31,7 @@ class Payout Extends Base {
         $tValid = $this->token->isTokenValid($account_id, $strToken, 7);
         if ($tValid) {
           $delete = $this->token->deleteToken($strToken);
-          if ($delete) {
-            return true;
-          } else {
+          if (!$delete) {
             $this->log->log("info", "User $account_id requested manual payout but failed to delete payout token");
             $this->setErrorMessage('Unable to delete token');
             return false;
