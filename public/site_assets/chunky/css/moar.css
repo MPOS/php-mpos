@@ -1,0 +1,147 @@
+.logo {
+  margin-left: -50px;
+  margin-top: -10px;
+}
+
+.align-middle {
+  margin-top: -4px;
+}
+
+.info {
+  background-color: #618fb0;
+  border-color: #4f8a9e;
+  color: #f8f8f8;
+  text-shadow: none;
+  border: none;
+  padding: 15px;
+  margin-bottom: 20px;
+  border: 1px solid transparent;
+  border-radius: 1px;
+}
+
+.errormsg {
+  text-shadow: none;
+  border: none;
+  background-color: #e5603b;
+  border-color: #e3372d;
+  color: #f8f8f8;
+  padding: 15px;
+  margin-bottom: 20px;
+  border: 1px solid transparent;
+  border-radius: 1px;
+}
+
+.module {
+  font-size: 12px;
+  font-weight: 200;
+  line-height: 14px;
+  color: inherit;
+  background-color: transparent;
+  box-sizing: content-box;
+  padding: 10px 12px;
+  color: #f8f8f8;
+  background: rgba(51,51,51,0.4);
+  margin-bottom: 30px;
+  position: relative;
+}
+
+#coin-logo > img {
+  width: 120px;
+  margin: 10px 0px 10px 20px;
+}
+
+.jqplot-target {
+  color: white !important;
+}
+
+.jqplot-yaxis-label {
+  color: white !important;
+}
+
+span.green {
+  color: #56bc76 !important;
+  background-color: transparent !important;
+}
+
+span.orange {
+  color: #eac85e !important;
+  background-color: transparent !important;
+}
+
+span.red {
+  color: #FF734C !important;
+  background-color: transparent !important;
+}
+
+.width_full {
+width: 95%;
+float: left;
+}
+
+.width_half {
+width: 46%;
+float: left;
+margin-right: 10px;
+}
+
+.width_quarter {
+width: 26%;
+float: left;
+}
+
+.width_3_quarter {
+width: 66%;
+margin-right: 20px;
+float: left;
+}
+
+.article-header {
+  margin-top: 0px;
+}
+
+.panel {
+  margin-bottom: 0px !important;
+}
+
+.panel-body {
+  padding-bottom: 5px !important;
+}
+
+.module > header > h3 {
+  margin-top: 0px;
+}
+
+th {
+  padding-right: 20px;
+}
+
+td {
+  padding-right: 20px;
+}
+
+.module_content > li {
+  margin-bottom: 5px;
+}
+
+.table-hover tbody tr:hover > td,
+.table-hover tbody tr:hover > th {
+  background-color: rgba(64, 64, 64, 0.5) !important;
+}
+
+.table thead>tr>th, .table thead>tr>td, .table tbody>tr>th, .table tbody>tr>td, .table tfoot>tr>th, .table tfoot>tr>td {
+  border-top: 0 !important;
+}
+
+.anon-switch > .switch {
+  width: 55px;
+  position: relative;
+  right: 190px;
+}
+
+.has-switch {
+  right: 180px;
+}
+
+.login-widget input {
+  font-size: 13px !important;
+}

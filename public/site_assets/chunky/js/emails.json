@@ -1,0 +1,17 @@
+[
+    {"sender": "Philip Horbacheuski", "senderMail": "philip.horbacheuski@example.com","subject": "Hi, Welcome to Google Mail", "attachment": true, "read": false, "starred": true, "folderId": 1, "attachments": "img/10.jpg,img/12.jpg","body": "<p>Projecting surrounded literature yet delightful alteration but bed men. Open are from long why cold. If must snug by upon sang loud left. As me do preference entreaties compliment motionless ye literature. Day behaviour explained law remainder.</p>    <p><strong>On then sake home</strong> is am leaf. Of suspicion do departure at extremely he believing. Do know said mind do rent they oh hope of. General enquire picture letters garrets on offices of no on.</p> <p>All the best,</p> <p>Vitaut the Great, CEO, <br>Fooby Inc.</p>"},
+    {"sender": "StackExchange", "subject": "New Python questions for this week!",  "read": false, "attachment": true, "timestamp": 1376508566000, "folderId": 1, "attachments": "img/7.jpg", "body": "<h1>THIS IS HTML!!!!</h1>" },
+    {"senderMail": "notifications@facebook.com", "subject": "Someone just commented on your photo!", "timestamp": 1375877213000, "folderId": 1 },
+    {"sender": "Twitter", "subject": "@hackernews is now following you on Twitter", "starred": true, "read": false, "timestamp": 1375261974000, "folderId": 1 },
+    {"sender": "LinkedIn", "subject": "Jobs you may be interested in", "timestamp": 1373634231000, "folderId": 1 },
+
+    {"sender": "Naevius Victorsson", "subject": "Front no party young abode state up", "starred": true, "timestamp": 1373516566000, "folderId": 1},
+    {"sender": "Nikola Foley", "subject": "Quiet led own cause three him", "attachment": true, "attachments": "img/8.jpg, img/5.jpg", "timestamp": 1374508566000, "folderId": 1 },
+    {"sender": "Ernst Hardy", "subject": "Raising say express had chiefly detract demands she", "timestamp": 1373877213000, "folderId": 1 },
+
+    {"sender": "Lubbert Fuller", "subject": "Civility vicinity graceful is it at", "starred": true, "timestamp": 1376516566000, "folderId": 2},
+    {"sender": "Tatenda Guerra", "subject": "Improve up at to on mention perhaps raising", "attachment": true, "attachments": "img/11.jpg", "timestamp": 1376508566000, "folderId": 3 },
+    {"sender": "Ladislao Roche", "subject": "Way building not get formerly her peculiar", "timestamp": 1375877213000, "folderId": 2 },
+    {"senderMail": "Areli.Tanzi@gmail.com", "subject": "Up uncommonly prosperous sentiments simplicity", "starred": true, "attachment": true, "attachments": "img/6.jpg", "timestamp": 1375261974000, "folderId": 2 },
+    {"sender": "Oluwaseyi Tremble", "subject": "Reasonable appearance companions oh", "timestamp": 1373634231000, "folderId": 3 }
+]
