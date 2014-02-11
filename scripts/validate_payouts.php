@@ -57,13 +57,19 @@ $notfound=0;
 $mask = "| %-15.15s | %-34.34s | %20.20s | %10.10s | %-64.64s |" . PHP_EOL;
 printf($mask, 'Username', 'Address', 'Amount', 'Status', 'TXID');
 
+var_dump($aListTransactions);
 // Loop through our DB records
 foreach ($aAllDebitTxs as $aDebitTx) {
   $bFound = false;
   $txid = 'n/a';
   foreach($aListTransactions as $key => $aTransaction) {
-    // Search for match NOT by txid
-    if (isset($aTransaction['address']) && $aTransaction['address'] == $aDebitTx['coin_address'] && ((string)$aTransaction['amount'] == (string)($aDebitTx['amount'] * -1) || (string)$aTransaction['amount'] == (string)($aDebitTx['amount'] * -1 - $config['txfee_manual']) || (string)$aTransaction['amount'] == (string)($aDebitTx['amount'] * -1 - $config['txfee_auto']) )) {
+    if (isset($aTransaction['address']) &&
+      $aTransaction['address'] == $aDebitTx['coin_address'] &&
+      ((string)($aTransaction['amount'] + $aTransaction['fee'])    == (string)($aDebitTx['amount'] * -1) ||     // Check against transaction - Fee total
+       (string)($aTransaction['amount'] + $config['txfee_manual']) == (string)($aDebitTx['amount'] * -1) ||     // Check against txfee_manual deducted
+       (string)($aTransaction['amount'] + $config['txfee_auto'])   == (string)($aDebitTx['amount'] * -1) ||     // Check against txfee_auto deducted
+       (string)$aTransaction['amount']                             == (string)($aDebitTx['amount'] * -1))       // Check against actual value
+      ) {
       unset($aListTransactions[$key]);
       $found++;
       $bFound = true;
