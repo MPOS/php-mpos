@@ -32,7 +32,7 @@ CREATE TABLE IF NOT EXISTS `accounts` (
   UNIQUE KEY `username` (`username`),
   UNIQUE KEY `email` (`email`),
   UNIQUE KEY `coin_address` (`coin_address`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
+) ENGINE=FEDERATED  DEFAULT CHARSET=utf8 CONNECTION='mysql://.../chunky/accounts';
 
 CREATE TABLE IF NOT EXISTS `blocks` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
@@ -51,6 +51,15 @@ CREATE TABLE IF NOT EXISTS `blocks` (
   UNIQUE KEY `height` (`height`,`blockhash`),
   KEY `time` (`time`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='Discovered blocks persisted from Litecoin Service';
+
+CREATE TABLE IF NOT EXISTS `coin_addresses` (
+  `id` int(255) NOT NULL AUTO_INCREMENT,
+  `address` varchar(255) NOT NULL,
+  `coin` varchar(255) NOT NULL,
+  `account_id` int(255) NOT NULL,
+  `ap_threshold` float DEFAULT '0',
+  PRIMARY KEY (`id`),
+) ENGINE=FEDERATED DEFAULT CHARSET=utf8 CONNECTION='mysql://.../chunky/coin_addresses';
 
 CREATE TABLE IF NOT EXISTS `invitations` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
@@ -124,7 +133,7 @@ CREATE TABLE IF NOT EXISTS `pool_worker` (
   UNIQUE KEY `username` (`username`),
   KEY `account_id` (`account_id`),
   KEY `pool_worker_username` (`username`(10))
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
+) ENGINE=FEDERATED  DEFAULT CHARSET=utf8 CONNECTION='mysql://.../chunky/pool_worker';
 
 CREATE TABLE IF NOT EXISTS `settings` (
   `name` varchar(255) NOT NULL,
