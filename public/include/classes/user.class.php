@@ -102,6 +102,9 @@ class User extends Base {
     $field = array( 'name' => 'loggedIp', 'type' => 's', 'value' => $ip );
     return $this->updateSingle($id, $field);
   }
+  public function setCoinAddress($coinAddress) {
+    $this->coinAddress = $coinAddress;
+  }
 
   /**
    * Fetch all users for administrative tasks
@@ -283,23 +286,23 @@ class User extends Base {
   }
 
   /**
-   * Fetch users coin address
-   * @param userID int UserID
-   * @return data string Coin Address
-   **/
-  public function getCoinAddress($userID) {
-    $this->debug->append("STA " . __METHOD__, 4);
-    return $this->getSingle($userID, 'coin_address', 'id');
-  }
-
-  /**
    * Check if a coin address exists already
    * @param address string Coin Address
    * @return bool True of false
    **/
   public function existsCoinAddress($address) {
     $this->debug->append("STA " . __METHOD__, 4);
-    return $this->getSingle($address, 'coin_address', 'coin_address') === $address;
+    return $this->coinAddress->getCoinAddress($address);
+  }
+
+  /**
+   * Fetch users coin address
+   * @param userID int UserID
+   * @return data string Coin Address
+   **/
+  public function getCoinAddress($userID) {
+    $this->debug->append("STA " . __METHOD__, 4);
+    return $this->coinAddress->getCoinAddress($userID);
   }
 
   /**
@@ -485,13 +488,19 @@ class User extends Base {
         return false;
       }
     }
-    
-    // We passed all validation checks so update the account
-    $stmt = $this->mysqli->prepare("UPDATE $this->table SET coin_address = ?, ap_threshold = ?, donate_percent = ?, email = ?, is_anonymous = ? WHERE id = ?");
-    if ($this->checkStmt($stmt) && $stmt->bind_param('sddsii', $address, $threshold, $donate, $email, $is_anonymous, $userID) && $stmt->execute()) {
-      $this->log->log("info", $this->getUserName($userID)." updated their account details");
-      return true;
+
+    if ($this->bitcoin->can_connect() === true && !empty($address)) {
+      if ($this->coinAddress->insertOrUpdateCoinAddress($userID, $address, $threshold)) {
+        $str = "UPDATE $this->table SET donate_percent = ?, email = ?, is_anonymous = ? WHERE id = ?";
+        $stmt = $this->mysqli->prepare($str);
+
+        if ($this->checkStmt($stmt) && $stmt->bind_param('dsii', $donate, $email, $is_anonymous, $userID) && $stmt->execute()) {
+          $this->log->log("info", $this->getUserName($userID)." updated their account details");
+          return true;
+        }
+      }
     }
+
     // Catchall
     $this->setErrorMessage('Failed to update your account');
     $this->debug->append('Account update failed: ' . $this->mysqli->error);
@@ -633,10 +642,11 @@ class User extends Base {
     $this->debug->append("Fetching user information for user id: $userID");
     $stmt = $this->mysqli->prepare("
       SELECT
-      id, username, pin, api_key, is_admin, is_anonymous, email, no_fees,
-      IFNULL(donate_percent, '0') as donate_percent, coin_address, ap_threshold
-      FROM $this->table
-      WHERE id = ? LIMIT 0,1");
+      a.id, a.username, a.pin, a.api_key, a.is_admin, a.is_anonymous, a.email, a.no_fees,
+      IFNULL(a.donate_percent, '0') as donate_percent, c.address as coin_address, c.ap_threshold as ap_threshold
+      FROM $this->table AS a
+      LEFT JOIN " . $this->coinAddress->table . " AS c ON c.account_id = a.id AND c.coin = ?
+      WHERE a.id = ? LIMIT 0,1");
     if ($this->checkStmt($stmt)) {
       $stmt->bind_param('i', $userID);
       if (!$stmt->execute()) {
@@ -923,3 +933,5 @@ $user->setToken($oToken);
 $user->setBitcoin($bitcoin);
 $user->setSetting($setting);
 $user->setErrorCodes($aErrorCodes);
+$user->setCoinAddress($coinAddress);
+
