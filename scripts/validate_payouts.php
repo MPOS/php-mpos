@@ -63,7 +63,7 @@ foreach ($aAllDebitTxs as $aDebitTx) {
   $txid = 'n/a';
   foreach($aListTransactions as $key => $aTransaction) {
     // Search for match NOT by txid
-    if (isset($aTransaction['address']) && $aTransaction['address'] == $aDebitTx['coin_address'] && ($aTransaction['amount'] == ($aDebitTx['amount'] * -1) || $aTransaction['amount'] == ($aDebitTx['amount'] * -1 - $config['txfee_manual']) || $aTransaction['amount'] == ($aDebitTx['amount'] * -1 - $config['txfee_auto']) )) {
+    if (isset($aTransaction['address']) && $aTransaction['address'] == $aDebitTx['coin_address'] && ((string)$aTransaction['amount'] == (string)($aDebitTx['amount'] * -1) || (string)$aTransaction['amount'] == (string)($aDebitTx['amount'] * -1 - $config['txfee_manual']) || (string)$aTransaction['amount'] == (string)($aDebitTx['amount'] * -1 - $config['txfee_auto']) )) {
       unset($aListTransactions[$key]);
       $found++;
       $bFound = true;
