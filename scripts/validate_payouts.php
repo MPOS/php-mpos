@@ -57,7 +57,6 @@ $notfound=0;
 $mask = "| %-15.15s | %-34.34s | %20.20s | %10.10s | %-64.64s |" . PHP_EOL;
 printf($mask, 'Username', 'Address', 'Amount', 'Status', 'TXID');
 
-var_dump($aListTransactions);
 // Loop through our DB records
 foreach ($aAllDebitTxs as $aDebitTx) {
   $bFound = false;
