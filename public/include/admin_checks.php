@@ -68,7 +68,7 @@ if (@$_SESSION['USERDATA']['is_admin'] && $user->isAdmin(@$_SESSION['USERDATA'][
     else {
       // validate that the wallet service is not in test mode
       if ($bitcoin->is_testnet() == true) {
-        $error[] = "The coin daemon service is running as a testnet. Check the TESTNET seeing in your  coin daemon config and make sure the correct port is set in the MPOS config.";
+        $error[] = "The coin daemon service is running as a testnet. Check the TESTNET setting in your coin daemon config and make sure the correct port is set in the MPOS config.";
       }
 
       // if coldwallet is not empty, check if the address is valid -> error
