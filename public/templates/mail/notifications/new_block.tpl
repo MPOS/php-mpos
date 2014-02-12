@@ -1,5 +1,5 @@
 <html>
-<p>Block Number {nocache}{$DATA.height}{/nocache} has been discovered by {nocache}{$DATA.finder}{/nocache} with a total value of {nocache}{$DATA.amount}{/nocache}! The current difficulty is {nocache}{$DATA.difficulty}{/nocache}.</p>
+<p>{nocache}Block Number {$DATA.height} has been discovered by {$DATA.finder} with a total value of {$DATA.amount}! The current difficulty is {$DATA.difficulty}.{/nocache}</p>
 <body>
 <br/>
 <br/>
