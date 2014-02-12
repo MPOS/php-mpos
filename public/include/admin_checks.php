@@ -85,7 +85,7 @@ if (@$_SESSION['USERDATA']['is_admin'] && $user->isAdmin(@$_SESSION['USERDATA'][
       foreach ($accounts as $account => $balance) {
         if ($account == "") { $account = "Default"; }
           if ($balance <= 0) {
-            $error[] = "Account: <u>" . $account . "</u> has no liquid funds to pay your miners!";
+            $error[] = "Account: <u>" . $account . "</u> has liquid funds to pay your miners but it will not be used!";
           } else {
             $enotice[] = "Account: <u>" . $account . "</u> has liquid funds to pay your miners! - " . $balance . " " . $config['currency'];
           }
