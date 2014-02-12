@@ -145,6 +145,13 @@ $config['block_bonus'] = 0;
 $config['payout_system'] = 'prop';
 
 /**
+ * Sendmany Support
+ *  Enable/Disable Sendmany RPC method
+ *   tba
+ **/
+$config['sendmany']['enabled'] = false;
+
+/**
  * Round Purging
  *  Round share purging configuration
  *   https://github.com/MPOS/php-mpos/wiki/Config-Setup#wiki-round-purging

@@ -73,7 +73,7 @@ if ($setting->getValue('disable_manual_payouts') != 1 && $aManualPayouts) {
       if (!$transaction_id = $transaction->createDebitMPRecord($aUserData['id'], $aUserData['coin_address'], $aUserData['confirmed'] - $config['txfee_manual'])) {
         $log->logFatal('    failed to fullt debit user ' . $aUserData['username'] . ': ' . $transaction->getCronError());
         $monitoring->endCronjob($cron_name, 'E0064', 1, true);
-      } else if (!$sendmanyAvailable) {
+      } else if (!$config['sendmany']['enabled'] || !$sendmanyAvailable) {
         // Run the payouts from RPC now that the user is fully debited
         try {
           $rpc_txid = $bitcoin->sendtoaddress($aUserData['coin_address'], $aUserData['confirmed'] - $config['txfee_manual']);
@@ -96,7 +96,7 @@ if ($setting->getValue('disable_manual_payouts') != 1 && $aManualPayouts) {
       continue;
     }
   }
-  if ($sendmanyAvailable && is_array($aSendMany)) {
+  if ($config['sendmany']['enabled'] && $sendmanyAvailable && is_array($aSendMany)) {
     try {
       $rpc_txid = $bitcoin->sendmany('', $aSendMany);
     } catch (Exception $e) {
@@ -140,7 +140,7 @@ if ($setting->getValue('disable_auto_payouts') != 1 && $aAutoPayouts) {
       if (!$transaction_id = $transaction->createDebitAPRecord($aUserData['id'], $aUserData['coin_address'], $aUserData['confirmed'] - $config['txfee_manual'])) {
         $log->logFatal('    failed to fully debit user ' . $aUserData['username'] . ': ' . $transaction->getCronError());
         $monitoring->endCronjob($cron_name, 'E0064', 1, true);
-      } else if (!$sendmanyAvailable) {
+      } else if (!$config['sendmany']['enabled'] || !$sendmanyAvailable) {
         // Run the payouts from RPC now that the user is fully debited
         try {
           $rpc_txid = $bitcoin->sendtoaddress($aUserData['coin_address'], $aUserData['confirmed'] - $config['txfee_manual']);
@@ -163,7 +163,7 @@ if ($setting->getValue('disable_auto_payouts') != 1 && $aAutoPayouts) {
       continue;
     }
   }
-  if ($sendmanyAvailable && is_array($aSendMany)) {
+  if ($config['sendmany']['enabled'] && $sendmanyAvailable && is_array($aSendMany)) {
     try {
       $rpc_txid = $bitcoin->sendmany('', $aSendMany);
     } catch (Exception $e) {
