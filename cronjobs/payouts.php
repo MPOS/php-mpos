@@ -88,7 +88,7 @@ if ($setting->getValue('disable_manual_payouts') != 1 && $aManualPayouts) {
           $log->logError('Unable to add RPC transaction ID ' . $rpc_txid . ' to transaction record ' . $transaction_id . ': ' . $transaction->getCronError());
       } else {
         // We don't run sendtoaddress but run sendmany later
-        $aSendMany[$aUserData['coin_address']] = $aUserData['confirmed'];
+        $aSendMany[$aUserData['coin_address']] = $aUserData['confirmed'] - $config['txfee_manual'];
         $aTransactions[] = $transaction_id;
       }
     } else {
@@ -155,7 +155,7 @@ if ($setting->getValue('disable_auto_payouts') != 1 && $aAutoPayouts) {
           $log->logError('Unable to add RPC transaction ID ' . $rpc_txid . ' to transaction record ' . $transaction_id . ': ' . $transaction->getCronError());
       } else {
         // We don't run sendtoaddress but run sendmany later
-        $aSendMany[$aUserData['coin_address']] = $aUserData['confirmed'];
+        $aSendMany[$aUserData['coin_address']] = $aUserData['confirmed'] - $config['txfee_auto'];
         $aTransactions[] = $transaction_id;
       }
     } else {
