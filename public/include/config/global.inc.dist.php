@@ -222,6 +222,7 @@ $config['memcache']['port'] = 11211;
 $config['memcache']['keyprefix'] = 'mpos_';
 $config['memcache']['expiration'] = 90;
 $config['memcache']['splay'] = 15;
+$config['memcache']['force']['contrib_shares'] = false;
 
 /**
  * Cookies
