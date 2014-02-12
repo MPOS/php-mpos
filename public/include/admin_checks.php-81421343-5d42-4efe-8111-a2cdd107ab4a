@@ -79,16 +79,15 @@ if (@$_SESSION['USERDATA']['is_admin'] && $user->isAdmin(@$_SESSION['USERDATA'][
       
       // check if there is more than one account set on wallet
       $accounts = $bitcoin->listaccounts();
-      if (count($accounts) > 1) {
-        $error[] = "There is more than one Account (" . count($accounts) . ") set in local Wallet, please ensure that there is enough Balance on the Standard Account to pay your miners!";
-      }
+      $error[] = print_r($accounts,1);
+      $i = 0;
       foreach ($accounts as $account => $balance) {
-        if ($account == "") { $account = "Standard"; }
-          if ($balance <= 0) {
-            $error[] = "Account: <u>" . $account . "</u> has no liquid funds to pay your miners!";
-          } else {
-            $enotice[] = "Account: <u>" . $account . "</u> has liquid funds to pay your miners! - " . $balance;
-          }
+          if ($account == "") { $account = "Standard"; }
+          $account_names .= $account ." - ";
+          $i++;
+      }
+      if ($i > 1) {
+          $error[] = "There is more than one Account (" . $account_names . ") set in local Wallet, please ensure that there is enough Balance on the Standard Account to pay your miners!";
       }
       
     }
