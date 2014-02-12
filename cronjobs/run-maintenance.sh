@@ -10,7 +10,7 @@
 PHP_BIN=$( which php )
 
 # List of cruns to execute
-CRONS="tickerupdate.php notifications.php token_cleanup.php archive_cleanup.php"
+CRONS="tickerupdate.php notifications.php token_cleanup.php archive_cleanup.php notification_cleanup.php"
 
 # Output additional runtime information
 VERBOSE="0"

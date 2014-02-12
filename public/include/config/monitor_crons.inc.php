@@ -2,7 +2,7 @@
 
 // Small helper array that may be used on some page controllers to
 // fetch the crons we wish to monitor
-$aMonitorCrons = array('statistics','payouts','token_cleanup','archive_cleanup','blockupdate','findblock','notifications','tickerupdate','liquid_payout');
+$aMonitorCrons = array('statistics','payouts','token_cleanup','archive_cleanup','notification_cleanup','blockupdate','findblock','notifications','tickerupdate','liquid_payout');
 
 switch ($config['payout_system']) {
 case 'pplns':

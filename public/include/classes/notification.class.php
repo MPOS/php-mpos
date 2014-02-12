@@ -151,6 +151,27 @@ class Notification extends Mail {
     $this->setErrorMessage('Error sending mail notification');
     return false;
   }
+
+  /**
+   * Cleanup old notifications
+   * @param none
+   * @return bool true or false
+   **/
+  public function cleanupNotifications($days=7) {
+    $failed = 0;
+    $this->deleted = 0;
+    $stmt = $this->mysqli->prepare("DELETE FROM $this->table WHERE time < (NOW() - ? * 24 * 60 * 60)");
+    if (! ($this->checkStmt($stmt) && $stmt->bind_param('i', $days) && $stmt->execute())) {
+      $failed++;
+    } else {
+      $this->deleted += $stmt->affected_rows;
+    }
+    if ($failed > 0) {
+      $this->setCronMessage('Failed to delete ' . $failed . ' notifications from ' . $this->table . ' table');
+      return false;
+    }
+    return true;
+  }
 }
 
 $notification = new Notification();
