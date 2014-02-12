@@ -76,6 +76,21 @@ if (@$_SESSION['USERDATA']['is_admin'] && $user->isAdmin(@$_SESSION['USERDATA'][
         if (!$bitcoin->validateaddress($config['coldwallet']['address']))
           $error[] = "Your cold wallet address is <u>SET and INVALID</u>";
       }
+      
+      // check if there is more than one account set on wallet
+      $accounts = $bitcoin->listaccounts();
+      if (count($accounts) > 1) {
+        $error[] = "There are " . count($accounts) . " Accounts set in local Wallet. Please ensure that there is enough Balance on the Default Account to avoid issues with payouts done with sendtoaddress or sendmany!!!";
+      }
+      foreach ($accounts as $account => $balance) {
+        if ($account == "") { $account = "Default"; }
+          if ($balance <= 0) {
+            $error[] = "Account: <u>" . $account . "</u> has liquid funds to pay your miners but it will not be used!";
+          } else {
+            $enotice[] = "Account: <u>" . $account . "</u> has liquid funds to pay your miners! - " . $balance . " " . $config['currency'];
+          }
+      }
+      
     }
   } catch (Exception $e) {
   }
