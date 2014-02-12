@@ -2,7 +2,7 @@
 $defflip = (!cfip()) ? exit(header('HTTP/1.1 401 Unauthorized')) : 1;
 
 // ReCaptcha handling if enabled
-if ($setting->getValue('recaptcha_enabled') && $setting->getValue('recaptcha_enabled_contactform')) {
+if ($setting->getValue('recaptcha_enabled') && $setting->getValue('acl_contactform') != 2) {
   require_once(INCLUDE_DIR . '/lib/recaptchalib.php');
   // Load re-captcha specific data
   $rsp = recaptcha_check_answer (
@@ -15,9 +15,9 @@ if ($setting->getValue('recaptcha_enabled') && $setting->getValue('recaptcha_ena
   if (!$rsp->is_valid) $_SESSION['POPUP'][] = array('CONTENT' => 'Invalid Captcha, please try again.', 'TYPE' => 'errormsg');
 }
 
-if ($setting->getValue('disable_contactform')) {
+if ($setting->getValue('acl_contactform') == 2) {
   $_SESSION['POPUP'][] = array('CONTENT' => 'Contactform is currently disabled. Please try again later.', 'TYPE' => 'errormsg');
-} else if ($setting->getValue('disable_contactform') && !$user->isAuthenticated(false)) {
+} else if ($setting->getValue('acl_contactform') == 0 && !$user->isAuthenticated(false)) {
   $_SESSION['POPUP'][] = array('CONTENT' => 'Contactform is disabled for guests.', 'TYPE' => 'errormsg');
 } else {
   // Check if recaptcha is enabled, process form data if valid

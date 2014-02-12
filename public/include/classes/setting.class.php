@@ -9,14 +9,18 @@ class Setting extends Base {
    * @param name string Setting name
    * @return value string Value
    **/
-  public function getValue($name) {
+  public function getValue($name, $default="") {
     $stmt = $this->mysqli->prepare("SELECT value FROM $this->table WHERE name = ? LIMIT 1");
-    if ($this->checkStmt($stmt) && $stmt->bind_param('s', $name) && $stmt->execute() && $result = $stmt->get_result())
-      if ($result->num_rows > 0)
+    if ($this->checkStmt($stmt) && $stmt->bind_param('s', $name) && $stmt->execute() && $result = $stmt->get_result()) {
+      if ($result->num_rows > 0) {
         return $result->fetch_object()->value;
+      } else {
+        return $default;
+      }
+    }
     // Log error but return empty string
     $this->sqlError();
-    return "";
+    return $default;
   }
 
   /**
