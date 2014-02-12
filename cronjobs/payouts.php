@@ -105,6 +105,7 @@ if ($setting->getValue('disable_manual_payouts') != 1 && $aManualPayouts) {
       // Don't blame MPOS if you run into issues after commenting this out!
       $monitoring->endCronjob($cron_name, 'E0078', 1, true);
     }
+    $log->logInfo('  payout succeeded with RPC TXID: ' . $rpc_txid);
     foreach ($aTransactions as $iTransactionID) {
       if (empty($rpc_txid) || !$transaction->setRPCTxId($iTransactionID, $rpc_txid))
         $log->logError('Unable to add RPC transaction ID ' . $rpc_txid . ' to transaction record ' . $iTransactionID . ': ' . $transaction->getCronError());
@@ -172,6 +173,7 @@ if ($setting->getValue('disable_auto_payouts') != 1 && $aAutoPayouts) {
       // Don't blame MPOS if you run into issues after commenting this out!
       $monitoring->endCronjob($cron_name, 'E0078', 1, true);
     }
+    $log->logInfo('  payout succeeded with RPC TXID: ' . $rpc_txid);
     foreach ($aTransactions as $iTransactionID) {
       if (empty($rpc_txid) || !$transaction->setRPCTxId($iTransactionID, $rpc_txid))
         $log->logError('Unable to add RPC transaction ID ' . $rpc_txid . ' to transaction record ' . $iTransactionID . ': ' . $transaction->getCronError());
