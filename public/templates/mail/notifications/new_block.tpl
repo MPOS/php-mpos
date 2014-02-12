@@ -1,6 +1,6 @@
 <html>
+<p>Block Number {nocache}{$DATA.height}{/nocache} has been discovered by {nocache}{$DATA.finder}{/nocache} with a total value of {nocache}{$DATA.amount}{/nocache}! The current difficulty is {nocache}{$DATA.difficulty}{/nocache}.</p>
 <body>
-<p>A new block has been discovered!</p>
 <br/>
 <br/>
 </body>
