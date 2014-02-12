@@ -87,7 +87,7 @@ if (@$_SESSION['USERDATA']['is_admin'] && $user->isAdmin(@$_SESSION['USERDATA'][
           if ($balance <= 0) {
             $error[] = "Account: <u>" . $account . "</u> has no liquid funds to pay your miners!";
           } else {
-            $enotice[] = "Account: <u>" . $account . "</u> has liquid funds to pay your miners! - " . $balance;
+            $enotice[] = "Account: <u>" . $account . "</u> has liquid funds to pay your miners! - " . $balance . " " . $config['currency'];
           }
       }
       
