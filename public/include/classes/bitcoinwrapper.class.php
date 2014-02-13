@@ -31,6 +31,12 @@ class BitcoinWrapper extends BitcoinClient {
     if ($data = $this->memcache->get(__FUNCTION__)) return $data;
     return $this->memcache->setCache(__FUNCTION__, parent::getmininginfo(), 30);
   }
+  // Wrapper to check our wallet balance from the DEFAULT account only
+  public function getbalance() {
+    $this->oDebug->append("STA " . __METHOD__, 4);
+    $aAccounts = parent::listaccounts();
+    return $aAccounts[''];
+  }
   public function getblockcount() {
     $this->oDebug->append("STA " . __METHOD__, 4);
     if ($data = $this->memcache->get(__FUNCTION__)) return $data;
