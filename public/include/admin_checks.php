@@ -79,13 +79,8 @@ if (@$_SESSION['USERDATA']['is_admin'] && $user->isAdmin(@$_SESSION['USERDATA'][
       
       // check if there is more than one account set on wallet
       $accounts = $bitcoin->listaccounts();
-      if (count($accounts) > 1) {
-        $error[] = "There are " . count($accounts) . " Accounts set in local Wallet. Please ensure that there is enough Balance on the Default Account to avoid issues with payouts done with sendtoaddress or sendmany!!!";
-      }
-      foreach ($accounts as $account => $balance) {
-        if ($account == "" && $balance <= 0) {
-          $error[] = "Default Account has no liquid funds to pay your miners!";
-        }
+      if (count($accounts) > 1 && $accounts[''] <= 0) {
+        $error[] = "There are " . count($accounts) . " Accounts set in local Wallet and Default Account has no liquid funds to pay your miners!";
       }
     }
   } catch (Exception $e) {
