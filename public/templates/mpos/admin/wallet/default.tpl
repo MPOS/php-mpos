@@ -1,5 +1,5 @@
 <article class="module width_full">
-  <header><h3>Wallet Information - Number of Accounts in Wallet: {$ADDRESSCOUNT|default:"0"}</h3></header>
+  <header><h3>Wallet Information</h3></header>
   
   <article class="module width_quarter">
     <header><h3>Balance Summary</h3></header>
@@ -52,38 +52,39 @@
   </article>
 </article>
 
+{if $ADDRESSCOUNT > 1}
+<article class="module width_full">
+  <header><h3>Number of Accounts in Wallet: {$ADDRESSCOUNT|default:"0"}</h3></header>
 {foreach key=NAME item=VALUE from=$ACCOUNTS}
-<article class="module width_half">
-  <header><h3>Account: {$NAME|default:"Default"}</h3></header>
   <article class="module width_half">
-    <header><h3>Balance Info</h3></header>
-    <table width="40%" class="tablesorter" cellspacing="0">
-      <tr>
-        <td align="left">Balance</td>
-        <td align="left">{$VALUE|number_format:"8"}</td>
-      </tr>
-    </table>
-  </article>
-  
+    <header><h3>Account: {$NAME|default:"Default"}</h3></header>
+    <article class="module width_3_quarter">
+      <header><h3>Balance Info</h3></header>
+      <table width="40%" class="tablesorter" cellspacing="0">
+        <tr>
+          <td align="left">Balance</td>
+          <td align="left">{$VALUE|number_format:"8"}</td>
+        </tr>
+      </table>
+    </article>
 {foreach key=ACCOUNT item=ADDRESS from=$ACCOUNTADDRESSES}
 {if $ACCOUNT == $NAME}
-  <article class="module width_3_quarter">
-    <header><h3>Addresses assigned to Account {$ACCOUNT|default:"Default"}</h3></header>
-    <table class="tablesorter" cellspacing="0">
-      <tbody>
+    <article class="module width_3_quarter">
+      <header><h3>Addresses assigned to Account {$ACCOUNT|default:"Default"}</h3></header>
+      <table class="tablesorter" cellspacing="0">
+        <tbody>
 {foreach from=$ACCOUNTADDRESSES[$ACCOUNT] key=ACCOUNT1 item=ADDRESS1}
-        <tr>
-          <td align="left" style="padding-right: 25px;">{$ADDRESS1}</td>
-        </tr>
+          <tr>
+            <td align="left" style="padding-right: 25px;">{$ADDRESS1}</td>
+          </tr>
 {/foreach}
-      </tbody>
-    </table>
-  </article>
+        </tbody>
+      </table>
+    </article>
 {/if}
 {/foreach}
-  
-</article>
+  </article>
 {/foreach}
-
-
+</article>
+{/if}
 
