@@ -133,7 +133,7 @@ CREATE TABLE IF NOT EXISTS `settings` (
   UNIQUE KEY `setting` (`name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-INSERT INTO `settings` (`name`, `value`) VALUES ('DB_VERSION', '0.0.5');
+INSERT INTO `settings` (`name`, `value`) VALUES ('DB_VERSION', '0.0.6');
 
 CREATE TABLE IF NOT EXISTS `shares` (
   `id` bigint(30) NOT NULL AUTO_INCREMENT,
@@ -224,7 +224,8 @@ CREATE TABLE IF NOT EXISTS `transactions` (
   KEY `block_id` (`block_id`),
   KEY `account_id` (`account_id`),
   KEY `type` (`type`),
-  KEY `archived` (`archived`)
+  KEY `archived` (`archived`),
+  KEY `account_id_archived` (`account_id`,`archived`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
 CREATE TABLE IF NOT EXISTS `templates` (
