@@ -46,29 +46,21 @@
       </tr>
     </tbody>
   </table>
-  
 </article>
 
-<article class="width_half">
-  <!--
-    needed for showing below balance summary, because those modules are pretty dumb and auto-align
-  -->
-  <br /><br /><br /><br /><br /><br />
-</article>
-
-<article class="module width_quarter">
-  <header><h3>Addresses assigned to Default Wallet</h3></header>
+<article class="module width_3_quarter">
+  <header><h3>Wallet Address Information</h3></header>
   <table class="tablesorter" cellspacing="0">
     <thead>
       <th align="center">#</th>
-      <th align="left">Address</th>
+      <th align="center">Address</th>
     </thead>
     <tbody>
 {assign var=rank value=1}
-{section address $ADDRESSES}
+{section address $ADDRESSES
       <tr>
-        <td align="center">{$rank++}</td>
-        <td align="left" style="padding-right: 25px;">{$ADDRESSES[address]}</td>
+        <td align="center">#</td>
+        <td align="right" style="padding-right: 25px;">{$ADDRESSES[address]}</td>
       </tr>
 {/section}
     </tbody>
