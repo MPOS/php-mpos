@@ -147,7 +147,7 @@ $config['payout_system'] = 'prop';
 /**
  * Sendmany Support
  *  Enable/Disable Sendmany RPC method
- *   tba
+ *   https://github.com/MPOS/php-mpos/wiki/Config-Setup#wiki-sendmany-support
  **/
 $config['sendmany']['enabled'] = false;
 
