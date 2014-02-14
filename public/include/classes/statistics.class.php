@@ -671,8 +671,11 @@ class Statistics extends Base {
         }
       }
       // No cached data, fallback to SQL ONLY if we don't use memcache
-      if ($this->config['memcache']['enabled'])
+      if ($this->config['memcache']['enabled'] && $this->config['memcache']['force']['contrib_shares']) {
+        // Do not use SQL queries and a second layer of caching
+        $this->debug->append('Skipping SQL queries due to config option', 4);
         return false;
+      }
       $stmt = $this->mysqli->prepare("
         SELECT
           a.username AS account,

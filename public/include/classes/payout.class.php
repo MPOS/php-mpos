@@ -25,14 +25,13 @@ class Payout Extends Base {
   public function createPayout($account_id=NULL, $strToken) {
     $stmt = $this->mysqli->prepare("INSERT INTO $this->table (account_id) VALUES (?)");
     if ($stmt && $stmt->bind_param('i', $account_id) && $stmt->execute()) {
+      $insert_id = $stmt->insert_id;
       // twofactor - consume the token if it is enabled and valid
       if ($this->config['twofactor']['enabled'] && $this->config['twofactor']['options']['withdraw']) {
         $tValid = $this->token->isTokenValid($account_id, $strToken, 7);
         if ($tValid) {
           $delete = $this->token->deleteToken($strToken);
-          if ($delete) {
-            return true;
-          } else {
+          if (!$delete) {
             $this->log->log("info", "User $account_id requested manual payout but failed to delete payout token");
             $this->setErrorMessage('Unable to delete token');
             return false;
@@ -43,7 +42,7 @@ class Payout Extends Base {
           return false;
         }
       }
-      return $stmt->insert_id;
+      return $insert_id;
     }
     return $this->sqlError('E0049');
   }

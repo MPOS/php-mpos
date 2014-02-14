@@ -82,7 +82,10 @@ if ($monitoring->isDisabled($cron_name)) {
 
 // Mark cron as running for monitoring
 $log->logDebug('Marking cronjob as running for monitoring');
-$monitoring->setStatus($cron_name . '_starttime', 'date', time());
+if (!$monitoring->startCronjob($cron_name)) {
+  $log->logFatal('Unable to start cronjob: ' . $monitoring->getCronError());
+  exit;
+}
 
 // Check if we need to halt our crons due to an outstanding upgrade
 if ($setting->getValue('DB_VERSION') != DB_VERSION || $config['version'] != CONFIG_VERSION) {

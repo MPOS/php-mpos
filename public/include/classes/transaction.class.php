@@ -342,9 +342,11 @@ class Transaction extends Base {
     // Fetch the inserted record ID so we can return this at the end
     $transaction_id = $this->insert_id;
     // Add TXFee record
-    if (!$this->addTransaction($account_id, $txfee, 'TXFee', NULL, $coin_address)) {
-      $this->setErrorMessage('Failed to create TXFee transaction record in database: ' . $this->getError());
-      return false;
+    if ($txfee > 0) {
+      if (!$this->addTransaction($account_id, $txfee, 'TXFee', NULL, $coin_address)) {
+        $this->setErrorMessage('Failed to create TXFee transaction record in database: ' . $this->getError());
+        return false;
+      }
     }
     // Mark transactions archived
     if (!$this->setArchived($account_id, $this->insert_id)) {

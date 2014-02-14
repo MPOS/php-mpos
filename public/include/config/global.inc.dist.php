@@ -145,6 +145,13 @@ $config['block_bonus'] = 0;
 $config['payout_system'] = 'prop';
 
 /**
+ * Sendmany Support
+ *  Enable/Disable Sendmany RPC method
+ *   https://github.com/MPOS/php-mpos/wiki/Config-Setup#wiki-sendmany-support
+ **/
+$config['sendmany']['enabled'] = false;
+
+/**
  * Round Purging
  *  Round share purging configuration
  *   https://github.com/MPOS/php-mpos/wiki/Config-Setup#wiki-round-purging
@@ -222,6 +229,7 @@ $config['memcache']['port'] = 11211;
 $config['memcache']['keyprefix'] = 'mpos_';
 $config['memcache']['expiration'] = 90;
 $config['memcache']['splay'] = 15;
+$config['memcache']['force']['contrib_shares'] = false;
 
 /**
  * Cookies
