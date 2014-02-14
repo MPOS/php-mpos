@@ -30,7 +30,7 @@
   </article>
 
   <article class="module width_3_quarter">
-    <header><h3>Network Information</h3></header>
+    <header><h3>Wallet Status</h3></header>
     <table class="tablesorter" cellspacing="0">
       <thead>
         <th align="center">Version</th>
