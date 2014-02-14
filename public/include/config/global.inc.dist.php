@@ -51,15 +51,6 @@ $config['wallet']['username'] = 'testnet';
 $config['wallet']['password'] = 'testnet';
 
 /**
- * Cold Wallet / Liquid Assets
- *  Automatically send liquid assets to a cold wallet
- *   https://github.com/MPOS/php-mpos/wiki/Config-Setup#wiki-liquid-assets--cold-wallet
- **/
-$config['coldwallet']['address'] = '';
-$config['coldwallet']['reserve'] = 50;
-$config['coldwallet']['threshold'] = 5;
-
-/**
  * Getting Started Config
  *  Shown to users in the 'Getting Started' section
  *   https://github.com/MPOS/php-mpos/wiki/Config-Setup#wiki-getting-started
