@@ -153,7 +153,7 @@ if (empty($aAllBlocks)) {
         $aAccounts = $notification->getNotificationAccountIdByType('new_block');
         if (is_array($aAccounts)) {
 		
-		  $finder = $user->getUserName($aBlock['account_id']);
+          $finder = $user->getUserName($iAccountId);
           foreach ($aAccounts as $aData) {
             $aMailData['height'] = $aBlock['height'];
             $aMailData['subject'] = 'New Block';
@@ -162,6 +162,7 @@ if (empty($aAllBlocks)) {
             $aMailData['amount'] = $aBlock['amount'];
             $aMailData['difficulty'] = $aBlock['difficulty'];
             $aMailData['finder'] = $finder;
+            $aMailData['currency'] = $config['currency'];
             if (!$notification->sendNotification($aData['account_id'], 'new_block', $aMailData))
               $log->logError('Failed to notify user of new found block: ' . $user->getUserName($aData['account_id']));
           }
