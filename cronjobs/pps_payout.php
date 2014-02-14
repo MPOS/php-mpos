@@ -71,18 +71,24 @@ $log->logInfo("\tPPS value: " . $pps_value);
 // Find our last share accounted and last inserted share for PPS calculations
 
 if (!$iPreviousShareId = $setting->getValue('pps_last_share_id')) {
-  $log->logError("Failed to fetch Previous Share ID. ERROR: " . $setting->getCronError());
+  $log->logError("Failed to fetch Previous Share ID. This is okay on your first run or when without any shares. ERROR: " . $setting->getCronError());
+  $iPreviousShareId = 0;
 }
-$log->logInfo("\tPPS Last Share ID: " . $iPreviousShareId); 
+$log->logInfo("\tPPS last paid out share ID: " . $iPreviousShareId); 
 
 if (!$iLastShareId = $share->getLastInsertedShareId()) {
   $log->logError("Failed to fetch Last Inserted PPS Share ID. ERROR: " . $share->getCronError());
 }
-$log->logInfo("\tPPS Last Processed Share ID: " . $iLastShareId);
+$log->logInfo("\tPPS last inserted share ID: " . $iLastShareId);
+
+if ($iPreviousShareId >= $iLastShareId) {
+  $log->logInfo('Not enough shares to account for, aborting until next run');
+  $monitoring->endCronjob($cron_name, 'E0080', 0, true, false);
+}
 
 // Check for all new shares, we start one higher as our last accounted share to avoid duplicates
 $log->logInfo("\tQuery getSharesForAccounts... starting...");
-if (!$aAccountShares = $share->getSharesForAccounts($iPreviousShareId + 1, $iLastShareId)) {
+if (!$aAccountShares = $share->getSharesForAccounts($iPreviousShareId, $iLastShareId)) {
   $log->logError("Failed to fetch Account Shares. ERROR: " . $share->getCronError());
 }
 $log->logInfo("\tQuery Completed...");
