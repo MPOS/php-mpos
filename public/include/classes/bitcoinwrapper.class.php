@@ -48,7 +48,8 @@ class BitcoinWrapper extends BitcoinClient {
     } else {
       $dMainBalance = $aAccounts[''];
       $dUnconfirmed = $dMainBalance - $dBalance;
-      return $dMainBalance - $dUnconfirmed;
+      //return $dMainBalance - $dUnconfirmed;
+      return $dMainBalance - abs($dUnconfirmed)
     }
   }
   public function getdifficulty() {
