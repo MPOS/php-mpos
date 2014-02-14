@@ -391,6 +391,12 @@ $aSettings['monitoring'][] = array(
   'tooltip' => 'Create per-monitor API keys and save them here to propagate your uptime statistics.'
 );
 $aSettings['notifications'][] = array(
+  'display' => 'Notification Cleanup Time', 'type' => 'text',
+  'default' => 7,
+  'name' => 'notifications_cleanup_time', 'value' => $setting->getValue('notifications_cleanup_time'),
+  'tooltip' => 'Maximum age in days of notifications before cleaned from database.'
+);
+$aSettings['notifications'][] = array(
   'display' => 'Disable notifications', 'type' => 'select',
   'options' => array( 0 => 'No', 1 => 'Yes' ),
   'default' => 0,
