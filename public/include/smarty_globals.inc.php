@@ -120,6 +120,9 @@ $aGlobal['acl']['block']['statistics'] = $setting->getValue('acl_block_statistic
 $aGlobal['acl']['round']['statistics'] = $setting->getValue('acl_round_statistics');
 $aGlobal['acl']['blockfinder']['statistics'] = $setting->getValue('acl_blockfinder_statistics');
 $aGlobal['acl']['uptime']['statistics'] = $setting->getValue('acl_uptime_statistics');
+$aGlobal['acl']['donors']['page'] = $setting->getValue('acl_donors_page');
+$aGlobal['acl']['about']['page'] = $setting->getValue('acl_about_page');
+$aGlobal['acl']['contactform'] = $setting->getValue('acl_contactform');
 
 // We don't want these session infos cached
 if (@$_SESSION['USERDATA']['id']) {

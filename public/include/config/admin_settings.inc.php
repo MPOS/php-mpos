@@ -189,38 +189,59 @@ $aSettings['acl'][] = array(
 );
 $aSettings['acl'][] = array(
   'display' => 'Pool Statistics', 'type' => 'select',
-  'options' => array( 0 => 'Private', 1 => 'Public'),
+  'options' => array( 0 => 'Private', 1 => 'Public', 2 => 'Disabled' ),
   'default' => 1,
   'name' => 'acl_pool_statistics', 'value' => $setting->getValue('acl_pool_statistics'),
   'tooltip' => 'Make the pool statistics page private (users only) or public.'
 );
 $aSettings['acl'][] = array(
   'display' => 'Block Statistics', 'type' => 'select',
-  'options' => array( 0 => 'Private', 1 => 'Public'),
+  'options' => array( 0 => 'Private', 1 => 'Public', 2 => 'Disabled' ),
   'default' => 1,
   'name' => 'acl_block_statistics', 'value' => $setting->getValue('acl_block_statistics'),
   'tooltip' => 'Make the block statistics page private (users only) or public.'
 );
 $aSettings['acl'][] = array(
   'display' => 'Round Statistics', 'type' => 'select',
-  'options' => array( 0 => 'Private', 1 => 'Public'),
+  'options' => array( 0 => 'Private', 1 => 'Public', 2 => 'Disabled' ),
   'default' => 1,
   'name' => 'acl_round_statistics', 'value' => $setting->getValue('acl_round_statistics'),
   'tooltip' => 'Make the round statistics page private (users only) or public.'
 );
 $aSettings['acl'][] = array(
   'display' => 'Block Finder Statistics', 'type' => 'select',
-  'options' => array( 0 => 'Private', 1 => 'Public'),
+  'options' => array( 0 => 'Private', 1 => 'Public', 2 => 'Disabled' ),
   'default' => 1,
   'name' => 'acl_blockfinder_statistics', 'value' => $setting->getValue('acl_blockfinder_statistics'),
   'tooltip' => 'Make the Block Finder Statistics page private (users only) or public.'
 );
 $aSettings['acl'][] = array(
   'display' => 'Uptime Statistics', 'type' => 'select',
-  'options' => array( 0 => 'Private', 1 => 'Public'),
+  'options' => array( 0 => 'Private', 1 => 'Public', 2 => 'Disabled' ),
   'default' => 1,
   'name' => 'acl_uptime_statistics', 'value' => $setting->getValue('acl_uptime_statistics'),
   'tooltip' => 'Make the uptime statistics page private (users only) or public.'
+);
+$aSettings['acl'][] = array(
+  'display' => 'Donors Page', 'type' => 'select',
+  'options' => array( 0 => 'Private', 1 => 'Public', 2 => 'Disabled' ),
+  'default' => 1,
+  'name' => 'acl_donors_page', 'value' => $setting->getValue('acl_donors_page'),
+  'tooltip' => 'Make the donors page private (users only) or public.'
+);
+$aSettings['acl'][] = array(
+  'display' => 'About Page', 'type' => 'select',
+  'options' => array( 0 => 'Private', 1 => 'Public', 2 => 'Disabled' ),
+  'default' => 1,
+  'name' => 'acl_about_page', 'value' => $setting->getValue('acl_about_page'),
+  'tooltip' => 'Make the about page private (users only) or public.'
+);
+$aSettings['acl'][] = array(
+  'display' => 'Contactform', 'type' => 'select',
+  'options' => array( 0 => 'Private', 1 => 'Public', 2 => 'Disabled' ),
+  'default' => 1,
+  'name' => 'acl_contactform', 'value' => $setting->getValue('acl_contactform'),
+  'tooltip' => 'Make the contactform private (users only) or public.'
 );
 $aSettings['system'][] = array(
   'display' => 'E-mail address for system error notifications', 'type' => 'text',
@@ -277,34 +298,6 @@ $aSettings['system'][] = array(
   'default' => 0,
   'name' => 'disable_api', 'value' => $setting->getValue('disable_api'),
   'tooltip' => 'Enable or Disable the pool wide API functions. See API reference on Github for details.'
-);
-$aSettings['system'][] = array(
-  'display' => 'Disable Contactform', 'type' => 'select',
-  'options' => array( 0 => 'No', 1 => 'Yes' ),
-  'default' => 0,
-  'name' => 'disable_contactform', 'value' => $setting->getValue('disable_contactform'),
-  'tooltip' => 'Enable or Disable Contactform. Users will not be able to use the contact form.'
-);
-$aSettings['system'][] = array(
-  'display' => 'Disable Contactform for Guests', 'type' => 'select',
-  'options' => array( 0 => 'No', 1 => 'Yes' ),
-  'default' => 0,
-  'name' => 'disable_contactform_guest', 'value' => $setting->getValue('disable_contactform_guest'),
-  'tooltip' => 'Enable or Disable Contactform for guests. Guests will not be able to use the contact form.'
-);
-$aSettings['system'][] = array(
-  'display' => 'Disable Donors Page', 'type' => 'select',
-  'options' => array( 0 => 'No', 1 => 'Yes'),
-  'default' => 1,
-  'name' => 'disable_donors', 'value' => $setting->getValue('disable_donors'),
-  'tooltip' => 'Showing Donors page in Navigation.'
-);
-$aSettings['system'][] = array(
-  'display' => 'Disable About Page', 'type' => 'select',
-  'options' => array( 0 => 'No', 1 => 'Yes'),
-  'default' => 1,
-  'name' => 'disable_about', 'value' => $setting->getValue('disable_about'),
-  'tooltip' => 'Showing About page in Navigation.'
 );
 $aSettings['system'][] = array(
   'display' => 'Disable Live Dashboard', 'type' => 'select',

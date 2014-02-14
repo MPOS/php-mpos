@@ -1,10 +1,10 @@
 <?php
 $defflip = (!cfip()) ? exit(header('HTTP/1.1 401 Unauthorized')) : 1;
 
-if ($setting->getValue('disable_contactform')) {
+if ($setting->getValue('acl_contactform') == 2) {
   $_SESSION['POPUP'][] = array('CONTENT' => 'Contactform is currently disabled. Please try again later.', 'TYPE' => 'errormsg');
   $smarty->assign("CONTENT", "empty");
-} else if ($setting->getValue('disable_contactform_guest') && !$user->isAuthenticated(false)) {
+} else if ($setting->getValue('acl_contactform') == 0 && !$user->isAuthenticated(false)) {
   $_SESSION['POPUP'][] = array('CONTENT' => 'Contactform is disabled for guests.', 'TYPE' => 'errormsg');
   $smarty->assign("CONTENT", "disabled.tpl");
 } else {

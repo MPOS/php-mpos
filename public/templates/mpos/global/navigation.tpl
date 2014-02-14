@@ -28,63 +28,30 @@
       <li class="icon-pencil"><a href="{$smarty.server.SCRIPT_NAME}?page=admin&action=templates">Templates</a></li>
     </ul>
     {/if}
-    {if $smarty.session.AUTHENTICATED|default}
     <h3>Statistics</h3>
     <ul class="toggle">
-      <li class="icon-align-left"><a href="{$smarty.server.SCRIPT_NAME}?page=statistics&action=pool">Pool</a></li>
-      <li class="icon-th-large"><a href="{$smarty.server.SCRIPT_NAME}?page=statistics&action=blocks">Blocks</a></li>
-      <li class="icon-chart"><a href="{$smarty.server.SCRIPT_NAME}?page=statistics&action=graphs">Graphs</a></li>
-      <li class="icon-record"><a href="{$smarty.server.SCRIPT_NAME}?page=statistics&action=round">Round</a></li>
-      <li class="icon-search"><a href="{$smarty.server.SCRIPT_NAME}?page=statistics&action=blockfinder">Finder</a></li>
-      {if $GLOBAL.config.monitoring_uptimerobot_api_keys|default:"0"}<li class="icon-bell"><a href="{$smarty.server.SCRIPT_NAME}?page=statistics&action=uptime">Uptime</a></li>{/if}
+     {acl_check icon='icon-align-left' page='statistics' action='pool' name='Pool' acl=$GLOBAL.acl.pool.statistics fallback='page=statistics'}
+     {acl_check icon='icon-th-large' page='statistics' action='blocks' name='Blocks' acl=$GLOBAL.acl.block.statistics}
+     {acl_check icon='icon-chart' page='statistics' action='round' name='Round' acl=$GLOBAL.acl.round.statistics}
+     {acl_check icon='icon-search' page='statistics' action='blockfinder' name='Blockfinder' acl=$GLOBAL.acl.blockfinder.statistics}
+     {acl_check icon='icon-bell' page='statistics' action='uptime' name='Uptime' acl=$GLOBAL.acl.uptime.statistics}
     </ul>
-    {else}
-    <h3>Statistics</h3>
-    <ul class="toggle">
-     {if $GLOBAL.acl.pool.statistics}
-     <li class="icon-align-left"><a href="{$smarty.server.SCRIPT_NAME}?page=statistics&action=pool">Pool</a></li>
-     {else}
-     <li class="icon-align-left"><a href="{$smarty.server.SCRIPT_NAME}?page=statistics">Statistics</a>
-     {/if}
-     {if $GLOBAL.acl.block.statistics}
-     <li class="icon-th-large"><a href="{$smarty.server.SCRIPT_NAME}?page=statistics&action=blocks">Blocks</a></li>
-     {/if}
-     {if $GLOBAL.acl.round.statistics}
-     <li class="icon-chart"><a href="{$smarty.server.SCRIPT_NAME}?page=statistics&action=round">Round</a></li>
-     {/if}
-     {if $GLOBAL.acl.blockfinder.statistics}
-     <li class="icon-search"><a href="{$smarty.server.SCRIPT_NAME}?page=statistics&action=blockfinder">Finder</a></li>
-     {/if}
-     {if $GLOBAL.acl.uptime.statistics}
-     {if $GLOBAL.config.monitoring_uptimerobot_api_keys|default:"0"}<li class="icon-bell"><a href="{$smarty.server.SCRIPT_NAME}?page=statistics&action=uptime">Uptime</a></li>{/if}
-     {/if}
-    </ul>
-    {/if}
     <h3>Help</h3>
     <ul class="toggle">
       <li class="icon-desktop"><a href="{$smarty.server.SCRIPT_NAME}?page=gettingstarted">Getting Started</a></li>
-      {if !$GLOBAL.website.about.disabled}
-      <li class="icon-doc"><a href="{$smarty.server.SCRIPT_NAME}?page=about&action=pool">About</a></li>
-      {/if}
-      {if !$GLOBAL.website.donors.disabled}
-      <li class="icon-money"><a href="{$smarty.server.SCRIPT_NAME}?page=about&action=donors">Donors</a></li>
-      {/if}
+      {acl_check icon='icon-doc' page='about' action='pool' name='About' acl=$GLOBAL.acl.about.page}
+      {acl_check icon='icon-money' page='about' action='donors' name='Donors' acl=$GLOBAL.acl.donors.page}
     </ul>
     <h3>Other</h3>
     <ul class="toggle">
       {if $smarty.session.AUTHENTICATED|default:"0" == 1}
-      {if $GLOBAL.config.disable_contactform|default:"0" != 1}
-      <li class="icon-mail"><a href="{$smarty.server.SCRIPT_NAME}?page=contactform">Contact</a></li>
-      {/if}
       <li class="icon-off"><a href="{$smarty.server.SCRIPT_NAME}?page=logout">Logout</a></li>
       {else}
       <li class="icon-login"><a href="{$smarty.server.SCRIPT_NAME}?page=login">Login</a></li>
       <li class="icon-pencil"><a href="{$smarty.server.SCRIPT_NAME}?page=register">Sign Up</a></li>
-      {if $GLOBAL.config.disable_contactform|default:"0" != 1}
-      <li class="icon-mail"><a href="{$smarty.server.SCRIPT_NAME}?page=contactform">Contact</a></li>
       {/if}
+      {acl_check icon='icon-mail' page='contactform' action='' name='Contact' acl=$GLOBAL.acl.contactform}
       <li class="icon-doc"><a href="{$smarty.server.SCRIPT_NAME}?page=tac">Terms and Conditions</a></li>
-      {/if}
     </ul>
     <ul>
       <hr/>
