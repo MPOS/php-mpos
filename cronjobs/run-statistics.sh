@@ -115,7 +115,10 @@ if [[ -e $PIDFILE ]]; then
 fi
 
 # Write our PID file
-echo $PID > $PIDFILE
+echo $PID 2>/dev/null 1> $PIDFILE || {
+  echo 'Failed to create PID file, aborting';
+  exit 1
+}
 
 for cron in $CRONS; do
   [[ $VERBOSE == 1 ]] && echo "Running $cron, check logfile for details"
