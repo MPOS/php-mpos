@@ -25,27 +25,28 @@ chdir(dirname(__FILE__));
 // Include all settings and classes
 require_once('shared.inc.php');
 
+// Header
+$log->logInfo('Running statistical queries, errors may just mean no shares were available');
+$strLogMask = "| %-26.26s | %8.8s | %-6.6s |";
+$log->logInfo(sprintf($strLogMask, 'Method', 'Runtime', 'Status'));
+
 // Per user share statistics based on all shares submitted
 $start = microtime(true);
-if ( ! $statistics->getAllUserShares() )
-  $log->logError('getAllUserShares update failed');
-$log->logInfo("getAllUserShares " . number_format(microtime(true) - $start, 2) . " seconds");
+$statistics->getAllUserShares() ? $status = 'OK' : $status = 'ERROR';
+$log->logInfo(sprintf($strLogMask, 'getAllUserShares', number_format(microtime(true) - $start, 3), $status));
 
 // Get all user hashrate statistics for caching
 $start = microtime(true);
-if ( ! $statistics->getAllUserMiningStats() )
-  $log->logError('getAllUserMiningStats update failed');
-$log->logInfo("getAllUserMiningStats " . number_format(microtime(true) - $start, 2) . " seconds");
+$statistics->getAllUserMiningStats() ? $status = 'OK' : $status = 'ERROR';
+$log->logInfo(sprintf($strLogMask, 'getAllUserMiningStats', number_format(microtime(true) - $start, 3), $status));
 
 $start = microtime(true);
-if (!$statistics->getTopContributors('hashes'))
-  $log->logError("getTopContributors hashes update failed");
-$log->logInfo("getTopContributors hashes " . number_format(microtime(true) - $start, 2) . " seconds");
+$statistics->getTopContributors('hashes') ? $status = 'OK' : $status = 'ERROR';
+$log->logInfo(sprintf($strLogMask, 'getTopContributors(hashes)', number_format(microtime(true) - $start, 3), $status));
 
 $start = microtime(true);
-if (!$statistics->getCurrentHashrate())
-  $log->logError("getCurrentHashrate update failed");
-$log->logInfo("getCurrentHashrate " . number_format(microtime(true) - $start, 2) . " seconds");
+$statistics->getCurrentHashrate() ? $status = 'OK' : $status = 'ERROR';
+$log->logInfo(sprintf($strLogMask, 'getTopContributors(shares)', number_format(microtime(true) - $start, 3), $status));
 
 require_once('cron_end.inc.php');
 ?>
