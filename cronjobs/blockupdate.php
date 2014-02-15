@@ -48,7 +48,7 @@ foreach ($aAllBlocks as $iIndex => $aBlock) {
       $log->logError("    Block became orphaned but unable to update database entries");
     }
     if (!$header) {
-      $log->logInfo(sprintf($strLogMask, 'ID', 'Height', 'Blockhash', 'Old', 'New'));
+      $log->logInfo(sprintf($strLogMask, 'ID', 'Height', 'Blockhash', 'Old', 'New', 'Status'));
       $header = true;
     }
     $log->logInfo(sprintf($strLogMask, $aBlock['id'], $aBlock['height'], $aBlock['blockhash'], $aBlock['confirmations'], $aBlockInfo['confirmations'], $status));
@@ -64,7 +64,7 @@ foreach ($aAllBlocks as $iIndex => $aBlock) {
       $status = 'UPDATED';
     }
     if (!$header) {
-      $log->logInfo(sprintf($strLogMask, 'ID', 'Height', 'Blockhash', 'Old', 'New'));
+      $log->logInfo(sprintf($strLogMask, 'ID', 'Height', 'Blockhash', 'Old', 'New', 'Status'));
       $header = true;
     }
     $log->logInfo(sprintf($strLogMask, $aBlock['id'], $aBlock['height'], $aBlock['blockhash'], $aBlock['confirmations'], $aBlockInfo['confirmations'], $status));
