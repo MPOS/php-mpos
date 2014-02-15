@@ -28,27 +28,44 @@ require_once('shared.inc.php');
 // Include additional file not set in autoloader
 require_once(CLASS_DIR . '/tools.class.php');
 
+// Header and info
+$log->logInfo('Running periodic tasks to update database values for GUI access');
+$strLogMask = "| %-25.25s | %15.15s | %8.8s | %-6.6s | %-80.80s |";
+$log->logInfo(sprintf($strLogMask, 'Method', 'Value', 'Runtime', 'Status', 'Message'));
+
 // Fetch latest coin price via API call
+$start = microtime(true);
+$message = 'Updated latest ' . $config['currency'] . ' price from ' . $config['price']['url'] . ' API';
+$status = 'OK';
 if ($price = $tools->getPrice()) {
-  $log->logDebug("Price update: found $price as price");
-  if (!$setting->setValue('price', $price))
-    $log->logError("unable to update value in settings table");
+  if (!$setting->setValue('price', $price)) {
+    $message = 'Unable to store new price value: ' . $setting->getCronError();
+    $status = 'ERROR';
+  }
 } else {
-  $log->logError("failed to fetch API data: " . $tools->getCronError());
+  $message = 'Failed to fetch price from API: ' . $price->getCronError();
+  $status = 'ERROR';
 }
+$log->logInfo(sprintf($strLogMask, 'Price Update', $price, number_format(microtime(true) - $start, 3), $status, $message));
+
 
 // Update Uptime Robot status in Settings table via API call
+$start = microtime(true);
+$message = 'Updated Uptime Robot status from API';
+$status = 'OK';
 if ($api_keys = $setting->getValue('monitoring_uptimerobot_api_keys')) {
   if (!strstr($api_keys, 'MONITOR_API_KEY|MONITOR_NAME')) {
     $monitoring->setTools($tools);
     if (!$monitoring->storeUptimeRobotStatus()) {
-      $log->logError($monitoring->getCronError());
-      $monitoring->endCronjob($cron_name, 'E0017', 1, false, false);
+      $message = $monitoring->getCronError();
+      $status = 'ERROR';
     }
   }
 } else {
-  $log->logDebug('Skipped Uptime Robot API update, missing api keys');
+  $status = 'SKIPED';
+  $message = 'Missing API keys and monitor names';
 }
+$log->logInfo(sprintf($strLogMask, 'Uptime Robot', 'n/a', number_format(microtime(true) - $start, 3), $status, $message));
 
 require_once('cron_end.inc.php');
 ?>
