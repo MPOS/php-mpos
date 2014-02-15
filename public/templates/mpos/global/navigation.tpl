@@ -35,6 +35,7 @@
      {acl_check icon='icon-chart' page='statistics' action='round' name='Round' acl=$GLOBAL.acl.round.statistics}
      {acl_check icon='icon-search' page='statistics' action='blockfinder' name='Blockfinder' acl=$GLOBAL.acl.blockfinder.statistics}
      {acl_check icon='icon-bell' page='statistics' action='uptime' name='Uptime' acl=$GLOBAL.acl.uptime.statistics}
+     {acl_check icon='icon-chart' page='statistics' action='graphs' name='Graphs' acl=$GLOBAL.acl.graphs.statistics}
     </ul>
     <h3>Help</h3>
     <ul class="toggle">

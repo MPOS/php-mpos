@@ -223,6 +223,13 @@ $aSettings['acl'][] = array(
   'tooltip' => 'Make the uptime statistics page private (users only) or public.'
 );
 $aSettings['acl'][] = array(
+  'display' => 'Graphs', 'type' => 'select',
+  'options' => array( 0 => 'Private', 1 => 'Public', 2 => 'Disabled' ),
+  'default' => 1,
+  'name' => 'acl_graphs_statistics', 'value' => $setting->getValue('acl_graphs_statistics'),
+  'tooltip' => 'Make the graphs statistics page private (users only) or public.'
+);
+$aSettings['acl'][] = array(
   'display' => 'Donors Page', 'type' => 'select',
   'options' => array( 0 => 'Private', 1 => 'Public', 2 => 'Disabled' ),
   'default' => 1,
