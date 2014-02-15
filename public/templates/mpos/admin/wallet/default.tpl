@@ -1,6 +1,7 @@
+{if $ADDRESSCOUNT > 1}
 <article class="module width_full">
   <header><h3>Wallet Information</h3></header>
-  
+{/if}
   <article class="module width_quarter">
     <header><h3>Balance Summary</h3></header>
     <table width="25%" class="tablesorter" cellspacing="0">
@@ -50,9 +51,9 @@
       </tbody>
     </table>
   </article>
+{if $ADDRESSCOUNT > 1}
 </article>
 
-{if $ADDRESSCOUNT > 1}
 <article class="module width_full">
   <header><h3>Number of Accounts in Wallet: {$ADDRESSCOUNT|default:"0"}</h3></header>
 {foreach key=NAME item=VALUE from=$ACCOUNTS}
