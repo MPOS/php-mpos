@@ -38,7 +38,7 @@ These people have supported this project with a donation:
 * [xisi](https://github.com/xisi)
 * [PCFiL](https://github.com/PCFiL)
 * [rog1121](https://github.com/rog1121)(https://rapidhash.net)
-* [Wow, Much Pool](http://http://www.wowmuchpool.com/)
+* [Wow, Much Pool](http://www.wowmuchpool.com/)
 
 Pools running MPOS
 ==================
@@ -56,7 +56,7 @@ supported. They will never match an upstream share, solo miners do not create
 any shares, only blocks. Expect weird behavior if trying to mix them. See #299
 for full information.
 
-* 64 bit system
+* 64-bit system
  * Otherwise some coins will display wrong network hashrates
 * Apache2
  * libapache2-mod-php5
