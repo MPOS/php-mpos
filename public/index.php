@@ -148,11 +148,11 @@ $action = (isset($_REQUEST['action']) && !is_array($_REQUEST['action'])) && isse
 
 // Check csrf token validity if necessary
 if ($config['csrf']['enabled'] && isset($_REQUEST['ctoken']) && !empty($_REQUEST['ctoken']) && !is_array($_REQUEST['ctoken'])) {
-  $csrftoken->valid = ($csrftoken->checkBasic($user->getCurrentIP(), $arrPages[$page], $_REQUEST['ctoken'])) ? 1 : 0;
+  $csrftoken->valid = ($csrftoken->checkBasic(session_id(), $arrPages[$page], $_REQUEST['ctoken'])) ? 1 : 0;
 } else if ($config['csrf']['enabled'] && (!@$_REQUEST['ctoken'] || empty($_REQUEST['ctoken']))) {
   $csrftoken->valid = 0;
 }
-if ($config['csrf']['enabled']) $smarty->assign('CTOKEN', $csrftoken->getBasic($user->getCurrentIP(), $arrPages[$page]));
+if ($config['csrf']['enabled']) $smarty->assign('CTOKEN', $csrftoken->getBasic(session_id(), $arrPages[$page]));
 
 // Load the page code setting the content for the page OR the page action instead if set
 if (!empty($action)) {
