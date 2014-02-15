@@ -57,9 +57,9 @@
 <article class="module width_full">
   <header><h3>Number of Accounts in Wallet: {$ADDRESSCOUNT|default:"0"}</h3></header>
 {foreach key=NAME item=VALUE from=$ACCOUNTS}
-  <article class="module width_half">
+  <article class="module width_full">
     <header><h3>Account: {$NAME|default:"Default"}</h3></header>
-    <article class="module width_3_quarter">
+    <article class="module width_quarter">
       <header><h3>Balance Info</h3></header>
       <table width="40%" class="tablesorter" cellspacing="0">
         <tr>
@@ -75,9 +75,13 @@
       <table class="tablesorter" cellspacing="0">
         <tbody>
 {foreach from=$ACCOUNTADDRESSES[$ACCOUNT] key=ACCOUNT1 item=ADDRESS1}
-          <tr>
+{if $ADDRESS1@iteration is even by 1}
             <td align="left" style="padding-right: 25px;">{$ADDRESS1}</td>
           </tr>
+{else}
+          <tr>
+            <td align="left" style="padding-right: 25px;">{$ADDRESS1}</td>
+{/if}
 {/foreach}
         </tbody>
       </table>
