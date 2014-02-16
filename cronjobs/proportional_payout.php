@@ -40,8 +40,8 @@ if (empty($aAllBlocks)) {
 
 $count = 0;
 // Table header for account shares
-$strLogMask = "| %5.5s | %-15.15s | %15.15s | %15.15s | %12.12s | %20.20s | %20.20s | %20.20s |";
-$log->logInfo(sprintf($strLogMask, 'ID', 'Username', 'Valid', 'Invalid', 'Percentage', 'Payout', 'Donation', 'Fee'));
+$strLogMask = "| %10.10s | %-5.5s | %15.15s | %15.15s | %12.12s | %20.20s | %20.20s | %20.20s |";
+$log->logInfo(sprintf($strLogMask, 'Block', 'ID', 'Username', 'Valid', 'Invalid', 'Percentage', 'Payout', 'Donation', 'Fee'));
 foreach ($aAllBlocks as $iIndex => $aBlock) {
   // If we have unaccounted blocks without share_ids, they might not have been inserted yet
   if (!$aBlock['share_id']) {
@@ -96,7 +96,7 @@ foreach ($aAllBlocks as $iIndex => $aBlock) {
 
       // Verbose output of this users calculations
       $log->logInfo(
-        sprintf($strLogMask, $aData['id'], $aData['username'], $aData['valid'], $aData['invalid'],
+        sprintf($strLogMask, $aBlock['height'], $aData['id'], $aData['username'], $aData['valid'], $aData['invalid'],
                 number_format($aData['percentage'], 8), number_format($aData['payout'], 8), number_format($aData['donation'], 8), number_format($aData['fee'], 8))
       );
 
