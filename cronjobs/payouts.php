@@ -54,7 +54,7 @@ if ($setting->getValue('disable_manual_payouts') != 1 && $aManualPayouts) {
   $aSendMany = NULL;
   foreach ($aManualPayouts as $aUserData) $dMPTotalAmount += $aUserData['confirmed'];
   if ($dMPTotalAmount > $dWalletBalance) {
-    $log->logError(" Wallet does not cover MP payouts- Payout: " . $dMPTotalAmount . " - Balance: " . $dWalletBalance);
+    $log->logError(" Wallet does not cover MP payouts - Payout: " . $dMPTotalAmount . " - Balance: " . $dWalletBalance);
     $monitoring->endCronjob($cron_name, 'E0079', 0, true);
   }
 
