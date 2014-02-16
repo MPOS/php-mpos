@@ -44,6 +44,14 @@ if ($sendmanyAvailable)
 if (!$dWalletBalance = $bitcoin->getrealbalance())
   $dWalletBalance = 0;
 
+// Fetch unconfirmed amount from blocks table
+empty($config['network_confirmations']) ? $confirmations = 120 : $confirmations = $config['network_confirmations'];
+$aBlocksUnconfirmed = $block->getAllUnconfirmed($confirmations);
+$dBlocksUnconfirmedBalance = 0;
+  if (!empty($aBlocksUnconfirmed))foreach ($aBlocksUnconfirmed as $aData) $dBlocksUnconfirmedBalance += $aData['amount'];
+
+$dWalletBalance = $dWalletBalance - $dBlocksUnconfirmedBalance;
+
 // Fetch outstanding manual-payouts
 $aManualPayouts = $transaction->getMPQueue();
 
@@ -54,7 +62,7 @@ if ($setting->getValue('disable_manual_payouts') != 1 && $aManualPayouts) {
   $aSendMany = NULL;
   foreach ($aManualPayouts as $aUserData) $dMPTotalAmount += $aUserData['confirmed'];
   if ($dMPTotalAmount > $dWalletBalance) {
-    $log->logError(" Wallet does not cover MP payouts");
+    $log->logError(" Wallet does not cover MP payouts - Payout: " . $dMPTotalAmount . " - Balance: " . $dWalletBalance);
     $monitoring->endCronjob($cron_name, 'E0079', 0, true);
   }
 
@@ -116,6 +124,14 @@ if ($setting->getValue('disable_manual_payouts') != 1 && $aManualPayouts) {
 if (!$dWalletBalance = $bitcoin->getrealbalance())
   $dWalletBalance = 0;
 
+// Fetch unconfirmed amount from blocks table
+empty($config['network_confirmations']) ? $confirmations = 120 : $confirmations = $config['network_confirmations'];
+$aBlocksUnconfirmed = $block->getAllUnconfirmed($confirmations);
+$dBlocksUnconfirmedBalance = 0;
+  if (!empty($aBlocksUnconfirmed))foreach ($aBlocksUnconfirmed as $aData) $dBlocksUnconfirmedBalance += $aData['amount'];
+
+$dWalletBalance = $dWalletBalance - $dBlocksUnconfirmedBalance;
+
 // Fetch outstanding auto-payouts
 $aAutoPayouts = $transaction->getAPQueue();
 
@@ -126,7 +142,7 @@ if ($setting->getValue('disable_auto_payouts') != 1 && $aAutoPayouts) {
   $dAPTotalAmount = 0;
   foreach ($aAutoPayouts as $aUserData) $dAPTotalAmount += $aUserData['confirmed'];
   if ($dAPTotalAmount > $dWalletBalance) {
-    $log->logError(" Wallet does not cover AP payouts");
+    $log->logError(" Wallet does not cover AP payouts - Payout: " . $dAPTotalAmount . " - Balance: " . $dWalletBalance);
     $monitoring->endCronjob($cron_name, 'E0079', 0, true);
   }
 
