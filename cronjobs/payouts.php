@@ -41,7 +41,7 @@ $sendmanyAvailable = ((strpos($bitcoin->help('sendmany'), 'unknown') === FALSE) 
 if ($sendmanyAvailable)
   $log->logDebug('  sendmany available in coind help command');
 
-if (!$dWalletBalance = $bitcoin->getbalance())
+if (!$dWalletBalance = $bitcoin->getrealbalance())
   $dWalletBalance = 0;
 
 // Fetch outstanding manual-payouts
@@ -113,7 +113,7 @@ if ($setting->getValue('disable_manual_payouts') != 1 && $aManualPayouts) {
   }
 }
 
-if (!$dWalletBalance = $bitcoin->getbalance())
+if (!$dWalletBalance = $bitcoin->getrealbalance())
   $dWalletBalance = 0;
 
 // Fetch outstanding auto-payouts
