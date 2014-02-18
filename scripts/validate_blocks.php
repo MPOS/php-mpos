@@ -9,9 +9,9 @@
 	require_once('shared.inc.php');	
 
 	if ( $bitcoin->can_connect() !== true )
-	  die("Failed to connect to RPC server\n");
+	  die("Failed to connect to RPC server". PHP_EOL);
 	  
-	echo "Validating blocks in database against coind..\n";
+	echo "Validating blocks in database against coind..". PHP_EOL;
 	
 	$mask = "| %6s | %8s | %13s | %20s | %10s | \n";
 	printf($mask, 'DB-ID', 'Height', 'Confirmations', 'Time', 'Status');
@@ -46,5 +46,5 @@
 		}
 	}
 
-	echo "Done..\n";
+	echo "Done..". PHP_EOL;
 ?>

@@ -52,5 +52,5 @@
 					$staleAccount ? 'yes' : 'no'	);				
 	}
 
-	echo "Total balance of stale accounts: $totalSavings \n";
+	echo "Total balance of stale accounts: $totalSavings" . PHP_EOL;
 ?>
