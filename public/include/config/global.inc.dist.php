@@ -143,6 +143,13 @@ $config['payout_system'] = 'prop';
 $config['sendmany']['enabled'] = false;
 
 /**
+ * Transaction Limits
+ *  Number of transactions per payout run
+ **/
+$config['payout']['txlimit_manual'] = 1000;
+$config['payout']['txlimit_auto'] = 1000;
+
+/**
  * Round Purging
  *  Round share purging configuration
  *   https://github.com/MPOS/php-mpos/wiki/Config-Setup#wiki-round-purging
