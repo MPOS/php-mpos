@@ -16,7 +16,11 @@
  * @link    http://codefury.net
  * @version 0.2.0
  */
+//加入时区，上海时间，配合php.ini的配置
 
+
+
+	date_default_timezone_set('Asia/Shanghai');
 /**
  * Class documentation
  */
