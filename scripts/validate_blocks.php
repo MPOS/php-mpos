@@ -20,7 +20,6 @@
 	$allBlocks = $block->getAll();
 	foreach ($allBlocks as $block) 
 	{
-		//print_r($block);
 		$status = 'VALID';
 		
 		try {
