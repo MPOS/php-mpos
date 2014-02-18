@@ -43,7 +43,7 @@ if ($price = $tools->getPrice()) {
     $status = 'ERROR';
   }
 } else {
-  $message = 'Failed to fetch price from API: ' . $price->getCronError();
+  $message = 'Failed to fetch price from API: ' . $tools->getCronError();
   $status = 'ERROR';
 }
 $log->logInfo(sprintf($strLogMask, 'Price Update', $price, number_format(microtime(true) - $start, 3), $status, $message));
