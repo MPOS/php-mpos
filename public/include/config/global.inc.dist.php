@@ -146,8 +146,8 @@ $config['sendmany']['enabled'] = false;
  * Transaction Limits
  *  Number of transactions per payout run
  **/
-$config['payout']['txlimit_manual'] = 1000;
-$config['payout']['txlimit_auto'] = 1000;
+$config['payout']['txlimit_manual'] = 500;
+$config['payout']['txlimit_auto'] = 500;
 
 /**
  * Round Purging
