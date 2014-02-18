@@ -13,7 +13,7 @@
 	// Fetch all users
 	$users = $user->getAllAssoc();
 
-	$mask = "| %6s | %20s | %16s | %10s | %-12.12s | %5s | %5s | %12s | %5s | \n";
+	$mask = "| %6s | %20s | %16s | %20s | %12.12s | %5s | %5s | %12s | %5s | \n";
 	printf($mask, 'ID', 'Username', 'LoggedIP', 'Last Login','Days Since', 'Ever', 'Trans', 'Balance','Stale');
 
 	$currentTime = time();
@@ -30,7 +30,7 @@
 		
 		$everLoggedIn = !empty($lastLogin);
 		$timeDelta = $currentTime - $lastLogin;
-		$lastLoginInDays = abs($timeDelta)/60/60/24;
+		$lastLoginInDays = round(abs($timeDelta)/60/60/24, 0);
 		
 		if($lastLoginInDays < $timeLimitInDays)
 			continue;
@@ -47,8 +47,8 @@
 		$staleAccount  = $everLoggedIn == false && $transactions_exists == false;	
 		
 		printf($mask, $id, $username, 
-					$loggedIp, $lastLogin, $lastLoginInDays, $everLoggedIn ? 'yes' : 'no', 
-					$transactions_exists ? 'yes' : 'no', $confirmedBalance,
+					$loggedIp, strftime("%Y-%m-%d %H:%M:%S", $lastLogin), $lastLoginInDays, $everLoggedIn ? 'yes' : 'no', 
+					$transactions_exists ? 'yes' : 'no', round($confirmedBalance,8),
 					$staleAccount ? 'yes' : 'no'	);				
 	}
 
