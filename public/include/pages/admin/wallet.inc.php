@@ -10,7 +10,7 @@ if (!$user->isAuthenticated() || !$user->isAdmin($_SESSION['USERDATA']['id'])) {
 if (!$smarty->isCached('master.tpl', $smarty_cache_key)) {
   $debug->append('No cached version available, fetching from backend', 3);
   if ($bitcoin->can_connect() === true){
-    $dBalance = $bitcoin->getbalance();
+    $dBalance = $bitcoin->getrealbalance();
 
     $dWalletAccounts = $bitcoin->listaccounts();
     $dAddressCount = count($dWalletAccounts);
