@@ -148,7 +148,7 @@ class User extends Base {
       $lastLoginTime = $this->getLastLogin($uid);
       $this->updateLoginTimestamp($uid);
       $getIPAddress = $this->getUserIp($uid);
-      if ($getIPAddress !== $_SERVER['REMOTE_ADDR']) {
+      if ($getIPAddress !== $this->getCurrentIP()) {
         $this->log->log("warn", "$username has logged in with a different IP, saved is [$getIPAddress]");
       }
       $setIPAddress = $this->setUserIp($uid, $_SERVER['REMOTE_ADDR']);
@@ -883,7 +883,7 @@ public function isAuthenticated($logout=true) {
    * @param checkforwarded bool check HTTP_X_FORWARDED_FOR for a valid ip first
    * @return string IP address
    */
-  public function getCurrentIP($trustremote=true, $checkclient=false, $checkforwarded=false) {
+  public function getCurrentIP($trustremote=false, $checkclient=false, $checkforwarded=true) {
     $client = (isset($_SERVER['HTTP_CLIENT_IP'])) ? $_SERVER['HTTP_CLIENT_IP'] : false;
     $fwd = (isset($_SERVER['HTTP_X_FORWARDED_FOR'])) ? $_SERVER['HTTP_X_FORWARDED_FOR'] : false;
     $remote = (isset($_SERVER['REMOTE_ADDR'])) ? $_SERVER['REMOTE_ADDR'] : @$_SERVER['REMOTE_ADDR'];
@@ -893,13 +893,7 @@ public function isAuthenticated($logout=true) {
     } else if (strpos($fwd, ',') !== false && !$trustremote && $checkforwarded) {
       // multiple proxies
       $ips = explode(',', $fwd);
-      $path = array();
-      foreach ($ips as $ip) {
-        if (filter_var($ip, FILTER_VALIDATE_IP)) {
-          $path[] = $ip;
-        }
-      }
-      return array_pop($path);
+      return $ips[0];
     } else if (filter_var($fwd, FILTER_VALIDATE_IP) && !$trustremote && $checkforwarded) {
       // single
       return $fwd;
