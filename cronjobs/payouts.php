@@ -45,7 +45,7 @@ if (!$dWalletBalance = $bitcoin->getrealbalance())
   $dWalletBalance = 0;
 
 // Fetch outstanding manual-payouts
-$aManualPayouts = $transaction->getMPQueue();
+$aManualPayouts = $transaction->getMPQueue($config['payout']['txlimit_manual']);
 
 // Fetch our manual payouts, process them
 if ($setting->getValue('disable_manual_payouts') != 1 && $aManualPayouts) {
@@ -117,7 +117,7 @@ if (!$dWalletBalance = $bitcoin->getrealbalance())
   $dWalletBalance = 0;
 
 // Fetch outstanding auto-payouts
-$aAutoPayouts = $transaction->getAPQueue();
+$aAutoPayouts = $transaction->getAPQueue($config['payout']['txlimit_auto']);
 
 // Fetch our auto payouts, process them
 if ($setting->getValue('disable_auto_payouts') != 1 && $aAutoPayouts) {
