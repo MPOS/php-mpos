@@ -31,7 +31,8 @@ class Debug {
      * @param integer $DEBUG [optional] Enable (>=1) or disable (0) debugging
      * @return none
      */
-    function __construct($DEBUG=0) {
+    function __construct($log, $DEBUG=0) {
+      $this->log = $log;
         $this->DEBUG = $DEBUG;
         if ($DEBUG >= 1) {
             $this->floatStartTime = microtime(true);
@@ -82,6 +83,7 @@ class Debug {
                 'backtrace' => $this->getBacktrace(),
                 'message' => $msg,
             );
+            $this->log->log("debug", $msg);
         }
     }
 
@@ -108,5 +110,5 @@ class Debug {
 }
 
 // Instantiate this class
-$debug = new Debug($config['DEBUG']);
+$debug = new Debug($log, $config['DEBUG']);
 ?>
