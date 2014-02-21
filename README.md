@@ -1,7 +1,7 @@
 Description [ ![Codeship Status for TheSerapher/php-mpos](https://www.codeship.io/projects/40fa7600-61a6-0131-3fd3-367b94dc0d60/status?branch=next)](https://www.codeship.io/projects/12276)
 ===========
 
-MPOS is a web based Mining Portal for various crypto currencies. It was created by [TheSerapher](https://github.com/TheSerapher) and has hence grown quite large. Recently it was migrated into a Github Organization to make development easier. It's a community driven open source project: If you wish to participate contact the team on IRC: https://webchat.freenode.net/?channels=#mpos-dev
+MPOS is a web based Mining Portal for various crypto currencies. It was created by [TheSerapher](https://github.com/TheSerapher) and has hence grown quite large. Recently it was migrated into a Github Organization to make development easier. It's a community driven open source project. Support can be requested at https://webchat.freenode.net/?channels=#mpos
 
 
 **NOTE**: This project is still under development and commits are happening on a daily basis.
@@ -161,6 +161,8 @@ You can contribute to this project in different ways:
 * Report outstanding issues and bugs by creating an [Issue][1]
 * Suggest feature enhancements also via [Issues][1]
 * Fork the project, create a branch and file a pull request to improve the code itself
+
+If you wish to participate contact the team on IRC: https://webchat.freenode.net/?channels=#mpos-dev
 
 Contact
 =======
