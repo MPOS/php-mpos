@@ -9,14 +9,16 @@ define('PAGES_DIR', INCLUDE_DIR . '/pages');
 define('THEME_DIR', BASEPATH . 'templates');
 
 $quickstartlink = "<a href='https://github.com/MPOS/php-mpos/wiki/Quick-Start-Guide' title='MPOS Quick Start Guide'>Quick Start Guide</a>";
+$arr = explode("/", $_SERVER['PHP_SELF']);
+$currency_code = strtoupper($arr[1]);
 
 // Include our configuration (holding defines for the requires)
 if (!include_once(BASEPATH . 'include/config/global.inc.dist.php')) die('Unable to load base global config - '.$quickstartlink);
-if (!@include_once(BASEPATH . 'include/config/global.inc.php')) die('Unable to load your global config - '.$quickstartlink);
+if (!@include_once(BASEPATH . "include/config/$currency_code/global.inc.php")) die('Unable to load your global config - '.$quickstartlink);
 
 // load our security configs
 if (!include_once(BASEPATH . 'include/config/security.inc.dist.php')) die('Unable to load base security config - '.$quickstartlink);
-if (@file_exists(BASEPATH . 'include/config/security.inc.php')) include_once(BASEPATH . 'include/config/security.inc.php');
+if (@file_exists(BASEPATH . "include/config/$currency_code/security.inc.php")) include_once(BASEPATH . 'include/config/security.inc.php');
 
 // start our session, we need it for smarty caching
 $session_start = @session_start();
