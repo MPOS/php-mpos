@@ -46,8 +46,10 @@ $config['csrf']['enabled'] = true;
  * E-mail confirmations for user actions
  *  Two-factor confirmation for user actions
  *   https://github.com/MPOS/php-mpos/wiki/Config-Setup#wiki-e-mail-confirmations
+ * 是否启用邮件确认，一般linux邮件难调，所以最好禁用，官方是开启的
  */
-$config['twofactor']['enabled'] = true;
+#$config['twofactor']['enabled'] = true;
+$config['twofactor']['enabled'] = false;
 $config['twofactor']['options']['details'] = true;
 $config['twofactor']['options']['withdraw'] = true;
 $config['twofactor']['options']['changepw'] = true;

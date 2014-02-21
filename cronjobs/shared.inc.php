@@ -63,6 +63,7 @@ foreach ($argv as $option) {
   switch ($option) {
   case '-f':
     $monitoring->setStatus($cron_name . "_disabled", "yesno", 0);
+    $monitoring->setStatus($cron_name . "_active", "yesno", 0);
     break;
   }
 }

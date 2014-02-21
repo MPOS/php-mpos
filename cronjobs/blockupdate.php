@@ -35,24 +35,39 @@ $aAllBlocks = $block->getAllUnconfirmed(max($config['network_confirmations'],$co
 
 $header = false;
 foreach ($aAllBlocks as $iIndex => $aBlock) {
-  !$header ? $log->logInfo("ID\tHeight\tBlockhash\tConfirmations") : $header = true;
+  $strLogMask = "| %10.10s | %10.10s | %-64.64s | %5.5s | %5.5s | %-8.8s";
   $aBlockInfo = $bitcoin->getblock($aBlock['blockhash']);
   // Fetch this blocks transaction details to find orphan blocks
   $aTxDetails = $bitcoin->gettransaction($aBlockInfo['tx'][0]);
-  $log->logInfo($aBlock['id'] . "\t" . $aBlock['height'] .  "\t" . $aBlock['blockhash'] . "\t" . $aBlock['confirmations'] . " -> " . $aBlockInfo['confirmations']);
   if ($aTxDetails['details'][0]['category'] == 'orphan') {
     // We have an orphaned block, we need to invalidate all transactions for this one
     if ($block->setConfirmations($aBlock['id'], -1)) {
-      $log->logInfo("    Block marked as orphan");
+      $status = 'ORPHAN';
     } else {
+      $status = 'ERROR';
       $log->logError("    Block became orphaned but unable to update database entries");
     }
+    if (!$header) {
+      $log->logInfo(sprintf($strLogMask, 'ID', 'Height', 'Blockhash', 'Old', 'New', 'Status'));
+      $header = true;
+    }
+    $log->logInfo(sprintf($strLogMask, $aBlock['id'], $aBlock['height'], $aBlock['blockhash'], $aBlock['confirmations'], $aBlockInfo['confirmations'], $status));
     continue;
   }
   if ($aBlock['confirmations'] == $aBlockInfo['confirmations']) {
-    $log->logDebug('    No update needed');
-  } else if (!$block->setConfirmations($aBlock['id'], $aBlockInfo['confirmations'])) {
-    $log->logError('    Failed to update block confirmations: ' . $block->getCronMessage());
+    continue;
+  } else {
+    if (!$block->setConfirmations($aBlock['id'], $aBlockInfo['confirmations'])) {
+      $log->logError('    Failed to update block confirmations: ' . $block->getCronMessage());
+      $status = 'ERROR';
+    } else {
+      $status = 'UPDATED';
+    }
+    if (!$header) {
+      $log->logInfo(sprintf($strLogMask, 'ID', 'Height', 'Blockhash', 'Old', 'New', 'Status'));
+      $header = true;
+    }
+    $log->logInfo(sprintf($strLogMask, $aBlock['id'], $aBlock['height'], $aBlock['blockhash'], $aBlock['confirmations'], $aBlockInfo['confirmations'], $status));
   }
 }
 

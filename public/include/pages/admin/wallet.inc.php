@@ -10,7 +10,17 @@ if (!$user->isAuthenticated() || !$user->isAdmin($_SESSION['USERDATA']['id'])) {
 if (!$smarty->isCached('master.tpl', $smarty_cache_key)) {
   $debug->append('No cached version available, fetching from backend', 3);
   if ($bitcoin->can_connect() === true){
-    $dBalance = $bitcoin->getbalance();
+    $dBalance = $bitcoin->getrealbalance();
+
+    $dWalletAccounts = $bitcoin->listaccounts();
+    $dAddressCount = count($dWalletAccounts);
+
+    $dAccountAddresses = array();
+    foreach($dWalletAccounts as $key => $value)
+    {
+      $dAccountAddresses[$key] = $bitcoin->getaddressesbyaccount($key);
+    }
+    
     $aGetInfo = $bitcoin->getinfo();
     if (is_array($aGetInfo) && array_key_exists('newmint', $aGetInfo)) {
       $dNewmint = $aGetInfo['newmint'];
@@ -37,6 +47,9 @@ if (!$smarty->isCached('master.tpl', $smarty_cache_key)) {
   if (! $dColdCoins = $setting->getValue('wallet_cold_coins')) $dColdCoins = 0;
   $smarty->assign("UNCONFIRMED", $dBlocksUnconfirmedBalance);
   $smarty->assign("BALANCE", $dBalance);
+  $smarty->assign("ADDRESSCOUNT", $dAddressCount);
+  $smarty->assign("ACCOUNTADDRESSES", $dAccountAddresses);
+  $smarty->assign("ACCOUNTS", $dWalletAccounts);
   $smarty->assign("COLDCOINS", $dColdCoins);
   $smarty->assign("LOCKED", $dLockedBalance);
   $smarty->assign("NEWMINT", $dNewmint);

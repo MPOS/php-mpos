@@ -29,7 +29,7 @@ if ($setting->getValue('disable_payouts') == 1) {
   $log->logInfo(" payouts disabled via admin panel");
   $monitoring->endCronjob($cron_name, 'E0009', 0, true, false);
 }
-$log->logDebug("Starting Payout...");
+$log->logInfo("Starting Payout...");
 if ($bitcoin->can_connect() !== true) {
   $log->logFatal(" unable to connect to RPC server, exiting");
   $monitoring->endCronjob($cron_name, 'E0006', 1, true);
@@ -41,11 +41,19 @@ $sendmanyAvailable = ((strpos($bitcoin->help('sendmany'), 'unknown') === FALSE) 
 if ($sendmanyAvailable)
   $log->logDebug('  sendmany available in coind help command');
 
-if (!$dWalletBalance = $bitcoin->getbalance())
+if (!$dWalletBalance = $bitcoin->getrealbalance())
   $dWalletBalance = 0;
 
+// Fetch unconfirmed amount from blocks table
+empty($config['network_confirmations']) ? $confirmations = 120 : $confirmations = $config['network_confirmations'];
+$aBlocksUnconfirmed = $block->getAllUnconfirmed($confirmations);
+$dBlocksUnconfirmedBalance = 0;
+  if (!empty($aBlocksUnconfirmed))foreach ($aBlocksUnconfirmed as $aData) $dBlocksUnconfirmedBalance += $aData['amount'];
+
+$dWalletBalance = $dWalletBalance - $dBlocksUnconfirmedBalance;
+
 // Fetch outstanding manual-payouts
-$aManualPayouts = $transaction->getMPQueue();
+$aManualPayouts = $transaction->getMPQueue($config['payout']['txlimit_manual']);
 
 // Fetch our manual payouts, process them
 if ($setting->getValue('disable_manual_payouts') != 1 && $aManualPayouts) {
@@ -54,10 +62,11 @@ if ($setting->getValue('disable_manual_payouts') != 1 && $aManualPayouts) {
   $aSendMany = NULL;
   foreach ($aManualPayouts as $aUserData) $dMPTotalAmount += $aUserData['confirmed'];
   if ($dMPTotalAmount > $dWalletBalance) {
-    $log->logError(" Wallet does not cover MP payouts");
+    $log->logError(" Wallet does not cover MP payouts - Payout: " . $dMPTotalAmount . " - Balance: " . $dWalletBalance);
     $monitoring->endCronjob($cron_name, 'E0079', 0, true);
   }
-
+  
+  $log->logInfo("Manual Payout Sum: " . $dMPTotalAmount . " | Liquid Assets: " . $dWalletBalance . " | Wallet Balance: " . ($dWalletBalance + $dBlocksUnconfirmedBalance) . " | Unconfirmed: " . $dBlocksUnconfirmedBalance);
   $log->logInfo('  found ' . count($aManualPayouts) . ' queued manual payouts');
   $mask = '    | %-10.10s | %-25.25s | %-20.20s | %-40.40s | %-20.20s |';
   $log->logInfo(sprintf($mask, 'UserID', 'Username', 'Balance', 'Address', 'Payout ID'));
@@ -113,11 +122,19 @@ if ($setting->getValue('disable_manual_payouts') != 1 && $aManualPayouts) {
   }
 }
 
-if (!$dWalletBalance = $bitcoin->getbalance())
+if (!$dWalletBalance = $bitcoin->getrealbalance())
   $dWalletBalance = 0;
 
+// Fetch unconfirmed amount from blocks table
+empty($config['network_confirmations']) ? $confirmations = 120 : $confirmations = $config['network_confirmations'];
+$aBlocksUnconfirmed = $block->getAllUnconfirmed($confirmations);
+$dBlocksUnconfirmedBalance = 0;
+  if (!empty($aBlocksUnconfirmed))foreach ($aBlocksUnconfirmed as $aData) $dBlocksUnconfirmedBalance += $aData['amount'];
+
+$dWalletBalance = $dWalletBalance - $dBlocksUnconfirmedBalance;
+
 // Fetch outstanding auto-payouts
-$aAutoPayouts = $transaction->getAPQueue();
+$aAutoPayouts = $transaction->getAPQueue($config['payout']['txlimit_auto']);
 
 // Fetch our auto payouts, process them
 if ($setting->getValue('disable_auto_payouts') != 1 && $aAutoPayouts) {
@@ -126,10 +143,11 @@ if ($setting->getValue('disable_auto_payouts') != 1 && $aAutoPayouts) {
   $dAPTotalAmount = 0;
   foreach ($aAutoPayouts as $aUserData) $dAPTotalAmount += $aUserData['confirmed'];
   if ($dAPTotalAmount > $dWalletBalance) {
-    $log->logError(" Wallet does not cover AP payouts");
+    $log->logError(" Wallet does not cover AP payouts - Payout: " . $dAPTotalAmount . " - Balance: " . $dWalletBalance);
     $monitoring->endCronjob($cron_name, 'E0079', 0, true);
   }
-
+  
+  $log->logInfo("Auto Payout Sum: " . $dAPTotalAmount . " | Liquid Assets: " . $dWalletBalance . " | Wallet Balance: " . ($dWalletBalance + $dBlocksUnconfirmedBalance) . " | Unconfirmed: " . $dBlocksUnconfirmedBalance);
   $log->logInfo('  found ' . count($aAutoPayouts) . ' queued auto payouts');
   $mask = '    | %-10.10s | %-25.25s | %-20.20s | %-40.40s | %-20.20s |';
   $log->logInfo(sprintf($mask, 'UserID', 'Username', 'Balance', 'Address', 'Threshold'));

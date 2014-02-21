@@ -100,7 +100,7 @@ class Monitoring extends Base {
   public function startCronjob($cron_name) {
     $aStatus = $this->getStatus($cron_name . '_active');
     if ($aStatus['value'] == 1) {
-      $this->setErrorMessage('Cron is already active in database: ' . $cron_name . '_active is 1');
+      $this->setErrorMessage('Cron is already active in database: ' . $cron_name . '_active is 1, please force run with -f once ensured it\' not running');
       return false;
     }
     $this->setStatus($cron_name . "_active", "yesno", 1);

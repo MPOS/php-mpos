@@ -288,7 +288,7 @@ class Transaction extends Base {
    * @param none
    * @return data array Account settings and confirmed balances
    **/
-  public function getAPQueue() {
+  public function getAPQueue($limit=250) {
     $this->debug->append("STA " . __METHOD__, 4);
     $stmt = $this->mysqli->prepare("
       SELECT
@@ -312,8 +312,9 @@ class Transaction extends Base {
       ON t.account_id = a.id
       WHERE t.archived = 0 AND a.ap_threshold > 0 AND a.coin_address IS NOT NULL AND a.coin_address != ''
       GROUP BY t.account_id
-      HAVING confirmed > a.ap_threshold AND confirmed > " . $this->config['txfee_auto']);
-    if ($this->checkStmt($stmt) && $stmt->execute() && $result = $stmt->get_result())
+      HAVING confirmed > a.ap_threshold AND confirmed > " . $this->config['txfee_auto'] . "
+      LIMIT ?");
+    if ($this->checkStmt($stmt) && $stmt->bind_param('i', $limit) && $stmt->execute() && $result = $stmt->get_result())
       return $result->fetch_all(MYSQLI_ASSOC);
     return $this->sqlError();
   }
@@ -377,7 +378,7 @@ class Transaction extends Base {
    * @param none
    * @return data Associative array with DB Fields
    **/
-  public function getMPQueue() {
+  public function getMPQueue($limit=250) {
     $stmt = $this->mysqli->prepare("
       SELECT
       a.id,
@@ -403,8 +404,9 @@ class Transaction extends Base {
       ON t.block_id = b.id
       WHERE p.completed = 0 AND t.archived = 0 AND a.coin_address IS NOT NULL AND a.coin_address != ''
       GROUP BY t.account_id
-      HAVING confirmed > " . $this->config['txfee_manual']);
-    if ($this->checkStmt($stmt) && $stmt->execute() && $result = $stmt->get_result())
+      HAVING confirmed > " . $this->config['txfee_manual'] . "
+      LIMIT ?");
+    if ($this->checkStmt($stmt) && $stmt->bind_param('i', $limit) && $stmt->execute() && $result = $stmt->get_result())
       return $result->fetch_all(MYSQLI_ASSOC);
     return $this->sqlError('E0050');
   }

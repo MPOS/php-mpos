@@ -81,12 +81,17 @@ if (!$smarty->isCached('master.tpl', $smarty_cache_key)) {
   $debug->append('Using cached page', 3);
 }
 
-// Public / private page detection
-if ($setting->getValue('acl_pool_statistics')) {
+switch($setting->getValue('acl_pool_statistics', 1)) {
+case '0':
+  if ($user->isAuthenticated()) {
+    $smarty->assign("CONTENT", "default.tpl");
+  }
+  break;
+case '1':
   $smarty->assign("CONTENT", "default.tpl");
-} else if ($user->isAuthenticated() && ! $setting->getValue('acl_pool_statistics')) {
-  $smarty->assign("CONTENT", "default.tpl");
-} else {
-  $smarty->assign("CONTENT", "../default.tpl");
+  break;
+case '2':
+  $_SESSION['POPUP'][] = array('CONTENT' => 'Page currently disabled. Please try again later.', 'TYPE' => 'errormsg');
+  $smarty->assign("CONTENT", "");
+  break;
 }
-?>

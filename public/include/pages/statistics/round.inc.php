@@ -48,11 +48,17 @@ if (!$smarty->isCached('master.tpl', $smarty_cache_key)) {
   $debug->append('Using cached page', 3);
 }
 
-if ($setting->getValue('acl_round_statistics')) {
+switch($setting->getValue('acl_round_statistics', 1)) {
+case '0':
+  if ($user->isAuthenticated()) {
+    $smarty->assign("CONTENT", "default.tpl");
+  }
+  break;
+case '1':
   $smarty->assign("CONTENT", "default.tpl");
-} else if ($user->isAuthenticated(false)) {
-  $smarty->assign("CONTENT", "default.tpl");
-} else {
-  $smarty->assign("CONTENT", "empty");
+  break;
+case '2':
+  $_SESSION['POPUP'][] = array('CONTENT' => 'Page currently disabled. Please try again later.', 'TYPE' => 'errormsg');
+  $smarty->assign("CONTENT", "");
+  break;
 }
-?>
