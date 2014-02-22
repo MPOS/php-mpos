@@ -17,8 +17,10 @@ $config['skip_config_tests'] = false;
  * Defines
  *  Debug setting and salts for hashing passwords
  *   https://github.com/MPOS/php-mpos/wiki/Config-Setup#wiki-defines--salts
- * 24Î»ÊıµÄËæ»ú£¨µ±È»¿ÉÒÔ×Ô¼ºÂÒĞ´£©¼ÓÃÜ×Ö¶Î£¨´óĞ¡Ğ´×ÖÄ¸¼ÓÊı×Ö£©£¬µ«±ØĞëºÍSTµÄÕâ¸öÅäÖÃÒ»ÖÂ£¡
- * Á½¸öÖµ¿ÉÒÔÏàÍ¬£¬SALT=SALTY
+ * 24ä½æ•°çš„éšæœºï¼ˆå½“ç„¶å¯ä»¥è‡ªå·±ä¹±å†™ï¼‰åŠ å¯†å­—æ®µï¼ˆå¤§å°å†™å­—æ¯åŠ æ•°å­—ï¼‰ï¼Œä½†å¿…é¡»å’ŒSTçš„è¿™ä¸ªé…ç½®ä¸€è‡´ï¼
+ *dkeGHfkUYekfiooaQpzkerty|ç±»ä¼¼è¿™ç§å¯ä»¥å‚è€ƒï¼Œé•¿åº¦è·Ÿä»–ä¸€æ ·å³å¯
+ *
+ * ä¸¤ä¸ªå€¼å¯ä»¥ç›¸åŒï¼ŒSALT=SALTY
  */
 $config['DEBUG'] = 0;
 $config['SALT'] = 'PLEASEMAKEMESOMETHINGRANDOM';
@@ -28,7 +30,7 @@ $config['SALTY'] = 'THISSHOULDALSOBERRAANNDDOOM';
   * Coin Algorithm
   *  Algorithm used by this coin, sha256d or scrypt
   *   https://github.com/MPOS/php-mpos/wiki/Config-Setup#wiki-algorithm
-  * ±ÒÖÖµÄËã·¨
+  * å¸ç§çš„ç®—æ³•
   **/
 $config['algorithm'] = 'scrypt';
 
@@ -36,7 +38,7 @@ $config['algorithm'] = 'scrypt';
  * Database configuration
  *  MySQL database configuration
  *   https://github.com/MPOS/php-mpos/wiki/Config-Setup#wiki-database-configuration
- * Á¬½ÓÊı¾İ¿âµÄÅäÖÃ
+ * è¿æ¥æ•°æ®åº“çš„é…ç½®
  **/
 $config['db']['host'] = 'localhost';
 $config['db']['user'] = 'someuser';
@@ -48,7 +50,7 @@ $config['db']['name'] = 'mpos';
  * Local wallet RPC
  *  RPC configuration for your daemon/wallet
  *   https://github.com/MPOS/php-mpos/wiki/Config-Setup#wiki-local-wallet-rpc
- * Á¬½ÓÇ®°üµÄÅäÖÃ
+ * è¿æ¥é’±åŒ…çš„é…ç½®
  **/
 $config['wallet']['type'] = 'http';
 $config['wallet']['host'] = 'localhost:19334';
@@ -59,7 +61,7 @@ $config['wallet']['password'] = 'testnet';
  * Cold Wallet / Liquid Assets
  *  Automatically send liquid assets to a cold wallet
  *   https://github.com/MPOS/php-mpos/wiki/Config-Setup#wiki-liquid-assets--cold-wallet
- *ÊÕÇ®Ç®°üµÄÅäÖÃ£¬ĞÂ°æ±¾Ã»ÁË£¬²»ÖªµÀ×ªÒÆµ½ÄÄÀïÈ¥ÁË¡£¡£¡£¡£¡£¡£¡£¡£¡£¡£
+ *æ”¶é’±é’±åŒ…çš„é…ç½®ï¼Œæ–°ç‰ˆæœ¬æ²¡äº†ï¼Œä¸çŸ¥é“è½¬ç§»åˆ°å“ªé‡Œå»äº†ã€‚ã€‚ã€‚ã€‚ã€‚ã€‚ã€‚ã€‚ã€‚ã€‚
  **/
 #$config['coldwallet']['address'] = '';
 #$config['coldwallet']['reserve'] = 50;
@@ -69,7 +71,7 @@ $config['wallet']['password'] = 'testnet';
  * Getting Started Config
  *  Shown to users in the 'Getting Started' section
  *   https://github.com/MPOS/php-mpos/wiki/Config-Setup#wiki-getting-started
- * ±ÒµÄ½éÉÜ£¬Ç®±ÒÃû³Æ£¬¹Ù·½ÍøÖ·£¬ÍÚ¿óµØÖ·£¨Ä¬ÈÏÊÇstĞ­ÒéµÄ£©£¬ÍÚ¿ó¶Ë¿ÚºÅ
+ * å¸çš„ä»‹ç»ï¼Œé’±å¸åç§°ï¼Œå®˜æ–¹ç½‘å€ï¼ŒæŒ–çŸ¿åœ°å€ï¼ˆé»˜è®¤æ˜¯ståè®®çš„ï¼‰ï¼ŒæŒ–çŸ¿ç«¯å£å·
  **/
 $config['gettingstarted']['coinname'] = 'Litecoin';
 $config['gettingstarted']['coinurl'] = 'http://www.litecoin.org';
@@ -80,7 +82,7 @@ $config['gettingstarted']['stratumport'] = '3333';
  * Ticker API
  *  Fetch exchange rates via an API
  *   https://github.com/MPOS/php-mpos/wiki/Config-Setup#wiki-ticker-api
- * ±Ò»ãÂÊ»òÕß½»Ò×ËùÊı¾İÅäÖÃ£¬Ä¿Ç°»¹Íæ²»×ª¡£¡£¡£µ±È»ÁË¹Ù·½Ö§³ÖµÄ½»Ò×ËùÖ±½Ó¸²¸ÇÏÂÃæµÄÖµ¾ÍĞĞÁË£¬ÎÒµÄ±Ê¼Ç±¾ÓĞ×ÊÁÏÈçBTERµÈ
+ * å¸æ±‡ç‡æˆ–è€…äº¤æ˜“æ‰€æ•°æ®é…ç½®ï¼Œç›®å‰è¿˜ç©ä¸è½¬ã€‚ã€‚ã€‚å½“ç„¶äº†å®˜æ–¹æ”¯æŒçš„äº¤æ˜“æ‰€ç›´æ¥è¦†ç›–ä¸‹é¢çš„å€¼å°±è¡Œäº†ï¼Œæˆ‘çš„ç¬”è®°æœ¬æœ‰èµ„æ–™å¦‚BTERç­‰
  **/
 $config['price']['url'] = 'https://btc-e.com';
 $config['price']['target'] = '/api/2/ltc_usd/ticker';
@@ -90,7 +92,7 @@ $config['price']['currency'] = 'USD';
  * Automatic Payout Thresholds
  *  Minimum and Maximum auto payout amount
  *   https://github.com/MPOS/php-mpos/wiki/Config-Setup#wiki-automatic-payout-thresholds
- * ×Ô¶¯¸¶¿î×îĞ¡ÏŞ¶ÈºÍ×î´óÏŞ¶È
+ * è‡ªåŠ¨ä»˜æ¬¾æœ€å°é™åº¦å’Œæœ€å¤§é™åº¦
  **/
 $config['ap_threshold']['min'] = 1;
 $config['ap_threshold']['max'] = 250;
@@ -113,7 +115,7 @@ $config['accounts']['invitations']['count'] = 5;
  * Currency
  *  Shorthand name for the currency
  *   https://github.com/MPOS/php-mpos/wiki/Config-Setup#wiki-currency
- * ±Òµ¥Î»¡¢¼ò³Æ
+ * å¸å•ä½ã€ç®€ç§°
  */
 $config['currency'] = 'LTC';
 
@@ -121,7 +123,7 @@ $config['currency'] = 'LTC';
  * Coin Target
  *  Target time for coins to be generated
  *   https://github.com/MPOS/php-mpos/wiki/Config-Setup#wiki-coin-target
- * ±Ò£¬Ò»¸ö¿éµÄ³ö¿éÖÜÆÚ£¬ºÃ¶à¶¼ÊÇ60Ãë£¬¾ßÌå¶àÉÙ²Î¿¼µ±Ç°±Ò¹ÙÍø×ÊÁÏ
+ * å¸ï¼Œä¸€ä¸ªå—çš„å‡ºå—å‘¨æœŸï¼Œå¥½å¤šéƒ½æ˜¯60ç§’ï¼Œå…·ä½“å¤šå°‘å‚è€ƒå½“å‰å¸å®˜ç½‘èµ„æ–™
  **/
 $config['cointarget'] = '150';
 
@@ -129,8 +131,8 @@ $config['cointarget'] = '150';
  * Coin Diff Change
  *  Amount of blocks between difficulty changes
  *   https://github.com/MPOS/php-mpos/wiki/Config-Setup#wiki-coin-diff-change
- * ¿éÄÑ¶È£¬¾ßÌå¶àÉÙ¿ÉÒÔ²Î¿¼µ±Ç°±ÒÔ´´úÂësrc/rpcmining.cppÎÄ¼şÇ°¼¸ĞĞ£¬Ò»°ã¶¼Ğ´ÁË£¨Èç¹ûÃ»Ğ´¾Í±£³Ö¸ÃÖµÄ¬ÈÏ£©
- * ÕÒÔ´´úÂë/src/rpcmining.cpp
+ * å—éš¾åº¦ï¼Œå…·ä½“å¤šå°‘å¯ä»¥å‚è€ƒå½“å‰å¸æºä»£ç src/rpcmining.cppæ–‡ä»¶å‰å‡ è¡Œï¼Œä¸€èˆ¬éƒ½å†™äº†ï¼ˆå¦‚æœæ²¡å†™å°±ä¿æŒè¯¥å€¼é»˜è®¤ï¼‰
+ * æ‰¾æºä»£ç /src/rpcmining.cpp
  * Value GetNetworkHashPS(int lookup, int height) {
  * // If lookup is -1, then use blocks since last difficulty change.
  *     if (lookup <= 0)
@@ -142,7 +144,8 @@ $config['coindiffchangetarget'] = 2016;
  * TX Fees
  *  Fees applied to transactions
  *   https://github.com/MPOS/php-mpos/wiki/Config-Setup#wiki-tx-fees
- * ¸¶¸øÍøÂçÉÏµÄ±Ò·¢ËÍÊÖĞø·Ñ£¬»ù±¾¿ÉÒÔĞ´³É0£¬Îª±£ÏÕÆğ¼û£¬×îºÃ²Î¿¼Ç®°ü¿Í»§¶ËÉÏµÄËµÃ÷£¬´ó²¿·ÖÊÇ0£¬ÉÙ²¿·ÖĞèÒª0.01
+ * ä»˜ç»™ç½‘ç»œä¸Šçš„å¸å‘é€æ‰‹ç»­è´¹ï¼ŒåŸºæœ¬å¯ä»¥å†™æˆ0ï¼Œä¸ºä¿é™©èµ·è§ï¼Œæœ€å¥½å‚è€ƒé’±åŒ…å®¢æˆ·ç«¯ä¸Šçš„è¯´æ˜ï¼Œå¤§éƒ¨åˆ†æ˜¯0ï¼Œå°‘éƒ¨åˆ†éœ€è¦0.01
+ * å…¶å®ç†è®ºä¸Šæ¥è¯´ï¼Œå¯ä»¥ç›´æ¥ä¸ç»™é’±ä¹Ÿå°±æ˜¯0ï¼Œä½†æ”¶æ¬¾ç¡®è®¤é€Ÿåº¦ä¼šæ…¢ç‚¹
  **/
 #$config['txfee_auto'] = 0.1;
 #$config['txfee_manual'] = 0.1;
@@ -161,7 +164,7 @@ $config['block_bonus'] = 0;
  * Payout System
  *  Payout system chosen
  *   https://github.com/MPOS/php-mpos/wiki/Config-Setup#wiki-payout-system
- * ±ÒµÄ·Ö±Ò·½Ê½£¬»¹ÓĞ±ÈÈçPPNLµÈ£¬PROPÊÇ×îºÃµÄ
+ * å¸çš„åˆ†å¸æ–¹å¼ï¼Œè¿˜æœ‰æ¯”å¦‚PPNLç­‰ï¼ŒPROPæ˜¯æœ€å¥½çš„
  **/
 $config['payout_system'] = 'prop';
 
@@ -169,14 +172,14 @@ $config['payout_system'] = 'prop';
  * Sendmany Support
  *  Enable/Disable Sendmany RPC method
  *   https://github.com/MPOS/php-mpos/wiki/Config-Setup#wiki-sendmany-support
- * »¹²»ÖªµÀ¡£¡£¡£
+ * è¿˜ä¸çŸ¥é“ã€‚ã€‚ã€‚
  **/
 $config['sendmany']['enabled'] = false;
 
 /**
  * Transaction Limits
  *  Number of transactions per payout run
- * ½»Ò×ÏŞ¶î£¬¹À¼ÆÊÇÒ»´Î·Ö±Ò×î¶à·Ö¶àÉÙ´ÎµÄÒâË¼£¬¾ßÌå»¹ĞèÒª×ÁÄ¥¡£¡£¡£¡£
+ * äº¤æ˜“é™é¢ï¼Œä¼°è®¡æ˜¯ä¸€æ¬¡åˆ†å¸æœ€å¤šåˆ†å¤šå°‘æ¬¡çš„æ„æ€ï¼Œå…·ä½“è¿˜éœ€è¦ç¢ç£¨ã€‚ã€‚ã€‚ã€‚
  **/
 $config['payout']['txlimit_manual'] = 500;
 $config['payout']['txlimit_auto'] = 500;
@@ -202,7 +205,7 @@ $config['archive']['maxage'] = 60 * 24;
  * Pool Fees
  *  Fees applied to users
  *   https://github.com/MPOS/php-mpos/wiki/Config-Setup#wiki-pool-fees
- * ¿ó³ØÊÕÈ¡µÄ·ÑÓÃ£¬°Ù·Ö±È£¬%
+ * çŸ¿æ± æ”¶å–çš„è´¹ç”¨ï¼Œç™¾åˆ†æ¯”ï¼Œ%
  */
 #$config['fees'] = 0;
 $config['fees'] = 1;
@@ -222,11 +225,11 @@ $config['pplns']['dynamic']['percent'] = 30;
  * Difficulty
  *  Difficulty setting for stratum/pushpool
  *   https://github.com/MPOS/php-mpos/wiki/Config-Setup#wiki-pool-target-difficulty
- * ¿ó³ØÄÑ¶È£¬Õâ¸öÖµ±ØĞëºÍSTµÄÅäÖÃÖµĞÎ³É¶ÔÓ¦¹ØÏµ£¬¾ßÌå¿É²Î¿¼ÉÏÃæÍøÖ·¡£
- * Ò»°ã³£ÓÃÊÇ£¬ST 16 ÕâÀï 20¡¢ST 32 ÕâÀï 21¡¢ST 64 ÕâÀï 22£¬¼òµ¥À´Ëµ¾ÍÊÇSTµÄÖµ´Î·½·­±¶ÍùÉÏµ÷µÄ»°£¬ÕâÀï¾Í¼Ó1
- * Ò»°ã100MÒ»ÏÂ£¬¶¼ÓÃ20£¬µ«Èç¹ûËãÁ¦ºÜ´óÄÇÃ´¾Í»áÌá¸ßµ±Ç°±ÒÄÑ¶È£¬ÄÇÃ´ST×îºÃ¾Í·­±¶£¬ÕâÀïÒ²¼Ó1£¬Èç´Ë¿ÉÒÔÊÊÓ¦´óËãÁ¦²¢ÇÒ²»µ¢Îó³ö¿éÁ¿
- * ¾ßÌå£¬ĞèÒª¸ù¾İÊµ¼ÊÇé¿ö¶ø¶¨
- * ¸ÃÖµÔÚ½¨Á¢¿ó³ØÇ°ÆÚÒ»°ã¹Ì¶¨¾Í²»¸ÄÁË£¬Èç¹ûÒª¸Ä£¬ÄÇÃ´ĞèÒªÉı¼¶Êı¾İ¿âÄÚËùÓĞÓÃ»§µÄÄÑ¶ÈÎªĞÂÄÑ¶È£¬STÄÚµÄ»º´æÒ²ĞèÒª¸üĞÂÎªĞÂÄÑ¶È£¬²ÅÉúĞ§
+ * çŸ¿æ± éš¾åº¦ï¼Œè¿™ä¸ªå€¼å¿…é¡»å’ŒSTçš„é…ç½®å€¼å½¢æˆå¯¹åº”å…³ç³»ï¼Œå…·ä½“å¯å‚è€ƒä¸Šé¢ç½‘å€ã€‚
+ * ä¸€èˆ¬å¸¸ç”¨æ˜¯ï¼ŒST 16 è¿™é‡Œ 20ã€ST 32 è¿™é‡Œ 21ã€ST 64 è¿™é‡Œ 22ï¼Œç®€å•æ¥è¯´å°±æ˜¯STçš„å€¼æ¬¡æ–¹ç¿»å€å¾€ä¸Šè°ƒçš„è¯ï¼Œè¿™é‡Œå°±åŠ 1
+ * ä¸€èˆ¬100Mä¸€ä¸‹ï¼Œéƒ½ç”¨20ï¼Œä½†å¦‚æœç®—åŠ›å¾ˆå¤§é‚£ä¹ˆå°±ä¼šæé«˜å½“å‰å¸éš¾åº¦ï¼Œé‚£ä¹ˆSTæœ€å¥½å°±ç¿»å€ï¼Œè¿™é‡Œä¹ŸåŠ 1ï¼Œå¦‚æ­¤å¯ä»¥é€‚åº”å¤§ç®—åŠ›å¹¶ä¸”ä¸è€½è¯¯å‡ºå—é‡
+ * å…·ä½“ï¼Œéœ€è¦æ ¹æ®å®é™…æƒ…å†µè€Œå®š
+ * è¯¥å€¼åœ¨å»ºç«‹çŸ¿æ± å‰æœŸä¸€èˆ¬å›ºå®šå°±ä¸æ”¹äº†ï¼Œå¦‚æœè¦æ”¹ï¼Œé‚£ä¹ˆéœ€è¦å‡çº§æ•°æ®åº“å†…æ‰€æœ‰ç”¨æˆ·çš„éš¾åº¦ä¸ºæ–°éš¾åº¦ï¼ŒSTå†…çš„ç¼“å­˜ä¹Ÿéœ€è¦æ›´æ–°ä¸ºæ–°éš¾åº¦ï¼Œæ‰ç”Ÿæ•ˆ
  */
 $config['difficulty'] = 20;
 
@@ -234,7 +237,7 @@ $config['difficulty'] = 20;
  * Block Reward
  *  Block reward configuration details
  *   https://github.com/MPOS/php-mpos/wiki/Config-Setup#wiki-reward-settings
- * Ò»¸ö¿éÄÚµÄ±ÒÁ¿£¬Ò»°ã²»µ÷¡£¡£¡£µ«Ò²¿ÉÒÔµ÷£¬¾ßÌåÎÒÒ²²»ÖªµÀ¡£¡£
+ * ä¸€ä¸ªå—å†…çš„å¸é‡ï¼Œä¸€èˆ¬ä¸è°ƒã€‚ã€‚ã€‚ä½†ä¹Ÿå¯ä»¥è°ƒï¼Œå…·ä½“æˆ‘ä¹Ÿä¸çŸ¥é“ã€‚ã€‚
  **/
 $config['reward_type'] = 'block';
 $config['reward'] = 50;
@@ -243,10 +246,13 @@ $config['reward'] = 50;
  * Confirmations
  *  Credit and Network confirmation settings
  *   https://github.com/MPOS/php-mpos/wiki/Config-Setup#wiki-confirmations
- * Ò»¸ö¿éĞèÒª±»ÍøÂçºÍÇ®°ü½ÓÊÕµÄ´ÎÊı£¬Ò»°ãÓÃÄ¬ÈÏ¾ÍĞĞÁË£¬ÓĞµÄ±ÒĞèÒªÈ·ÈÏµÄÊıÁ¿ÉÙ£¬ÄÇÃ´Ò²¿ÉÒÔµ÷µÍ£¬¾ßÌåĞèÒª²Î¿¼±ÒËµÃ÷
+ * ä¸€ä¸ªå—éœ€è¦è¢«ç½‘ç»œå’Œé’±åŒ…æ¥æ”¶çš„æ¬¡æ•°ï¼Œä¸€èˆ¬ç”¨é»˜è®¤å°±è¡Œäº†ï¼Œæœ‰çš„å¸éœ€è¦ç¡®è®¤çš„æ•°é‡å°‘ï¼Œé‚£ä¹ˆä¹Ÿå¯ä»¥è°ƒä½ï¼Œå…·ä½“éœ€è¦å‚è€ƒå¸è¯´æ˜
+ * å¤§éƒ¨åˆ†å¸éƒ½åªéœ€è¦3ä¸ªï¼Œç›®å‰æµ‹è¯•ä¸­çœ‹çœ‹3æ˜¯å¦çœŸçš„å¯ä»¥æˆåŠŸï¼Œå¦‚æœå¯ä»¥ï¼Œé‚£ä¹ˆblockå—æµè§ˆé‚£é‡Œé€Ÿåº¦å°†ä¼šå¾ˆå¿«ï¼Œè€Œä¸”ç”¨æˆ·å¾—åˆ°å¯ææ¬¾çš„å¸é€Ÿåº¦ä¹Ÿä¼šå¾ˆå¿«
  */
-$config['confirmations'] = 120;
-$config['network_confirmations'] = 120;
+#$config['confirmations'] = 120;
+#$config['network_confirmations'] = 120;
+$config['confirmations'] = 30;
+$config['network_confirmations'] = 30;
 
 /**
  * PPS
@@ -261,8 +267,8 @@ $config['pps']['blockavg']['blockcount'] = 10;
  * Memcache
  *  Memcache configuration details
  *   https://github.com/MPOS/php-mpos/wiki/Config-Setup#wiki-memcache
- * ¿ó³ØÓÃµÄ»º´æ£¬Ò»°ã²»¶¯£¬µ«Èç¹ûÊÇ¶à¿ó³ØµÄ»°£¬Ò»¶¨ÒªÊÖ¶¯Ôö¼Ó±äÁ¿Ãû£¡£¡£¡
- * ±ÈÈç£ºÄ¬ÈÏÊÇmpos_£¬Èç¹û¶à¿ó³ØÁËÎªÁË²»Ïà»¥Ó°Ïì£¬ÄÇÃ´¾Í¸Ä³Émpos_±Ò¼ò³Æ£¬ÕâÑù
+ * çŸ¿æ± ç”¨çš„ç¼“å­˜ï¼Œä¸€èˆ¬ä¸åŠ¨ï¼Œä½†å¦‚æœæ˜¯å¤šçŸ¿æ± çš„è¯ï¼Œä¸€å®šè¦æ‰‹åŠ¨å¢åŠ å˜é‡åï¼ï¼ï¼
+ * æ¯”å¦‚ï¼šé»˜è®¤æ˜¯mpos_ï¼Œå¦‚æœå¤šçŸ¿æ± äº†ä¸ºäº†ä¸ç›¸äº’å½±å“ï¼Œé‚£ä¹ˆå°±æ”¹æˆmpos_å¸ç®€ç§°ï¼Œè¿™æ ·
  **/
 $config['memcache']['enabled'] = true;
 $config['memcache']['host'] = 'localhost';
