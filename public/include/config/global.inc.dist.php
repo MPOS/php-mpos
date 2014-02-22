@@ -249,11 +249,12 @@ $config['reward'] = 50;
  *   https://github.com/MPOS/php-mpos/wiki/Config-Setup#wiki-confirmations
  * 一个块需要被网络和钱包接收的次数，一般用默认就行了，有的币需要确认的数量少，那么也可以调低，具体需要参考币说明
  * 大部分币都只需要3个，目前测试中看看3是否真的可以成功，如果可以，那么block块浏览那里速度将会很快，而且用户得到可提款的币速度也会很快
+ * PS：不建议改动！！！亲身经历，因为确认的太快！导致发布不够发钱包关账了，我晕死，慢就慢点关键是稳定啊！
  */
-#$config['confirmations'] = 120;
-#$config['network_confirmations'] = 120;
-$config['confirmations'] = 30;
-$config['network_confirmations'] = 30;
+$config['confirmations'] = 120;
+$config['network_confirmations'] = 120;
+#$config['confirmations'] = 30;
+#$config['network_confirmations'] = 30;
 
 /**
  * PPS
