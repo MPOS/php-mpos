@@ -253,7 +253,7 @@ $aSettings['acl'][] = array(
 $aSettings['acl'][] = array(
   'display' => 'Live Chat Page', 'type' => 'select',
   'options' => array( 0 => 'Private', 1 => 'Public', 2 => 'Disabled' ),
-  'default' => 1,
+  'default' => 2,
   'name' => 'acl_chat_page', 'value' => $setting->getValue('acl_chat_page'),
   'tooltip' => 'Make the chat page private (users only) or public.'
 );
