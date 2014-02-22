@@ -61,7 +61,8 @@ $config['wallet']['password'] = 'testnet';
  * Cold Wallet / Liquid Assets
  *  Automatically send liquid assets to a cold wallet
  *   https://github.com/MPOS/php-mpos/wiki/Config-Setup#wiki-liquid-assets--cold-wallet
- *收钱钱包的配置，新版本没了，不知道转移到哪里去了。。。。。。。。。。
+ * 收钱钱包的配置，新版本没了，不知道转移到哪里去了。。。。。。。。。。
+ * 内容分别是：地址、储备、阀值。储备表示留在钱包的币量，阀值表示最低发送的币量（一旦超过就激活提款）
  **/
 #$config['coldwallet']['address'] = '';
 #$config['coldwallet']['reserve'] = 50;
