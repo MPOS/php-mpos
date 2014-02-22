@@ -250,6 +250,20 @@ $aSettings['acl'][] = array(
   'name' => 'acl_contactform', 'value' => $setting->getValue('acl_contactform'),
   'tooltip' => 'Make the contactform private (users only) or public.'
 );
+$aSettings['acl'][] = array(
+  'display' => 'Live Chat Page', 'type' => 'select',
+  'options' => array( 0 => 'Private', 1 => 'Public', 2 => 'Disabled' ),
+  'default' => 1,
+  'name' => 'acl_chat_page', 'value' => $setting->getValue('acl_chat_page'),
+  'tooltip' => 'Make the chat page private (users only) or public.'
+);
+$aSettings['acl'][] = array(
+  'display' => 'IRC Chat Channel', 'type' => 'text',
+  'size' => 25,
+  'default' => '#',
+  'name' => 'acl_irc_chat', 'value' => $setting->getValue('acl_irc_chat'),
+  'tooltip' => 'Your IRC support channel name.'
+);
 $aSettings['system'][] = array(
   'display' => 'E-mail address for system error notifications', 'type' => 'text',
   'size' => 25,
