@@ -64,6 +64,10 @@ $aRegistrationInfo = array(
 );
 $smarty->assign('USER_REGISTRATIONS', $aRegistrationInfo);
 
+// get last 10 Registrations
+$aLastRegisteredUsers = $user->getLastRegisteredUsers();
+$smarty->assign("LASTREGISTEREDUSERS", $aLastRegisteredUsers);
+
 // Fetch invitation information
 if (!$setting->getValue('disable_invitations')) {
   $aInvitationInfo = array(

@@ -116,6 +116,19 @@ class User extends Base {
   }
 
   /**
+   * Fetch last registered users for administrative tasks
+   * @param none
+   * @return data array All users with db columns as array fields
+   **/
+  public function getLastRegisteredUsers($limit=10) {
+    $this->debug->append("STA " . __METHOD__, 4);
+    $stmt = $this->mysqli->prepare("SELECT * FROM " . $this->getTableName() . " ORDER BY id DESC LIMIT ?");
+    if ($this->checkStmt($stmt) && $stmt->bind_param("i", $limit) && $stmt->execute() && $result = $stmt->get_result()) {
+      return $result->fetch_all(MYSQLI_ASSOC);
+    }
+  }
+  
+  /**
    * Check user login
    * @param username string Username
    * @param password string Password
