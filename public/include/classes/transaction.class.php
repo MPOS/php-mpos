@@ -5,6 +5,14 @@ class Transaction extends Base {
   protected $table = 'transactions';
   public $num_rows = 0, $insert_id = 0;
 
+  public function setCurrency($currency) {
+    $this->currency = $currency;
+  }
+
+  public function setCoinAddress($coinAddress) {
+    $this->coinAddress = $coinAddress;
+  }
+
   /**
    * Add a new transaction to our class table
    * We also store the inserted ID in case the user needs it
@@ -380,8 +388,8 @@ class Transaction extends Base {
       SELECT
       a.id,
       a.username,
-      a.ap_threshold,
-      a.coin_address,
+      c.ap_threshold,
+      c.address,
       p.id AS payout_id,
       IFNULL(
         ROUND(
@@ -399,7 +407,9 @@ class Transaction extends Base {
       ON t.account_id = p.account_id
       LEFT JOIN " . $this->block->getTableName() . " AS b
       ON t.block_id = b.id
-      WHERE p.completed = 0 AND t.archived = 0 AND a.coin_address IS NOT NULL AND a.coin_address != ''
+      LEFT JOIN " . $this->coinAddress->getTableName() . " AS c
+      ON a.id = c.account_id AND '$this->currency' = c.coin
+      WHERE p.completed = 0 AND t.archived = 0 AND c.address IS NOT NULL AND c.address != ''
       GROUP BY t.account_id
       HAVING confirmed > " . $this->config['txfee_manual']);
     if ($this->checkStmt($stmt) && $stmt->execute() && $result = $stmt->get_result())
@@ -418,4 +428,6 @@ $transaction->setBlock($block);
 $transaction->setUser($user);
 $transaction->setPayout($oPayout);
 $transaction->setErrorCodes($aErrorCodes);
+$transaction->setCurrency($currency);
+$transaction->setCoinAddress($coinAddress);
 ?>
