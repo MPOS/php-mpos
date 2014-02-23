@@ -22,3 +22,9 @@ public/include/config/global.inc.sha.php
 .buildpath
 .project
 .settings
+
+# Site specific Files
+robots.txt
+sitemap.xml
+sitemap.gz
+sitemap.tar.gz
