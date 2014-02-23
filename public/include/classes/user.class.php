@@ -122,7 +122,13 @@ class User extends Base {
    **/
   public function getLastRegisteredUsers($limit=10) {
     $this->debug->append("STA " . __METHOD__, 4);
-    $stmt = $this->mysqli->prepare("SELECT * FROM " . $this->getTableName() . " ORDER BY id DESC LIMIT ?");
+    $stmt = $this->mysqli->prepare("
+    	SELECT a.id,a.username as mposuser,a.email,a.signup_timestamp,u.username as inviter FROM " . $this->getTableName() . " AS a
+    	LEFT JOIN invitations AS i
+    	ON a.email = i.email
+    	LEFT JOIN " . $this->getTableName() . " as u
+    	ON i.account_id = u.id
+    	ORDER BY a.id DESC LIMIT ?");
     if ($this->checkStmt($stmt) && $stmt->bind_param("i", $limit) && $stmt->execute() && $result = $stmt->get_result()) {
       return $result->fetch_all(MYSQLI_ASSOC);
     }
