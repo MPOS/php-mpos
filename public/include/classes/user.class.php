@@ -105,6 +105,9 @@ class User extends Base {
   public function setCoinAddress($coinAddress) {
     $this->coinAddress = $coinAddress;
   }
+  public function setCurrency($currency) {
+    $this->currency = $currency;
+  }
 
   /**
    * Fetch all users for administrative tasks
@@ -273,10 +276,12 @@ class User extends Base {
     $this->debug->append("STA " . __METHOD__, 4);
     $stmt = $this->mysqli->prepare("
       SELECT
-        id, username, coin_address, ap_threshold
-      FROM " . $this->getTableName() . "
-      WHERE ap_threshold > 0
-      AND coin_address IS NOT NULL
+        t.id as id, t.username as username, c.address as coin_address, c.ap_threshold as ap_threshold
+      FROM " . $this->getTableName() . " AS t
+      LEFT JOIN coin_addresses AS c
+        ON t.id = c.account_id AND '$this->currency' = c.coin
+      WHERE c.ap_threshold > 0
+      AND c.address IS NOT NULL
       ");
     if ( $this->checkStmt($stmt) && $stmt->execute() && $result = $stmt->get_result()) {
       return $result->fetch_all(MYSQLI_ASSOC);
@@ -648,7 +653,7 @@ class User extends Base {
       LEFT JOIN " . $this->coinAddress->table . " AS c ON c.account_id = a.id AND c.coin = ?
       WHERE a.id = ? LIMIT 0,1");
     if ($this->checkStmt($stmt)) {
-      $stmt->bind_param('i', $userID);
+      $stmt->bind_param('si', $this->currency, $userID);
       if (!$stmt->execute()) {
         $this->debug->append('Failed to execute statement');
         return false;
@@ -934,4 +939,5 @@ $user->setBitcoin($bitcoin);
 $user->setSetting($setting);
 $user->setErrorCodes($aErrorCodes);
 $user->setCoinAddress($coinAddress);
+$user->setCurrency($currency);
 
