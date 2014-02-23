@@ -47,9 +47,13 @@ $dStartTime = microtime(true);
 // Our cron name
 $cron_name = basename($_SERVER['PHP_SELF'], '.php');
 
+$key = array_search("-d", $argv);
+$index = $key + 1;
+$coin = $argv[$index];
+
 // Include our configuration (holding defines for the requires)
 require_once(BASEPATH . 'include/config/global.inc.dist.php');
-require_once(BASEPATH . 'include/config/global.inc.php');
+require_once(BASEPATH . 'include/config/' . $coin . '/global.inc.php');
 
 require_once(BASEPATH . 'include/config/security.inc.dist.php');
 @include_once(BASEPATH . 'include/config/security.inc.php');

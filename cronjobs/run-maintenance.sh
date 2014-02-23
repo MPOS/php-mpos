@@ -119,7 +119,7 @@ echo $PID > $PIDFILE
 
 for cron in $CRONS; do
   [[ $VERBOSE == 1 ]] && echo "Running $cron, check logfile for details"
-  $PHP_BIN $cron $PHP_OPTS
+  $PHP_BIN $cron -d $SUBFOLDER $PHP_OPTS
 done
 
 # Remove pidfile
