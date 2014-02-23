@@ -388,8 +388,8 @@ class Transaction extends Base {
       SELECT
       a.id,
       a.username,
-      c.ap_threshold,
-      c.address,
+      c.ap_threshold as ap_threshold,
+      c.address as coin_address,
       p.id AS payout_id,
       IFNULL(
         ROUND(
