@@ -17,6 +17,7 @@
 # Test configs
 public/include/config/global.inc.scrypt.php
 public/include/config/global.inc.sha.php
+public/include/config/**/*.php
 
 # IDE Settings
 /.idea/*
