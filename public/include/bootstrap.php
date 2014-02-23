@@ -9,8 +9,13 @@ define('PAGES_DIR', INCLUDE_DIR . '/pages');
 define('THEME_DIR', BASEPATH . 'templates');
 
 $quickstartlink = "<a href='https://github.com/MPOS/php-mpos/wiki/Quick-Start-Guide' title='MPOS Quick Start Guide'>Quick Start Guide</a>";
-$arr = explode("/", $_SERVER['PHP_SELF']);
-$currency_code = strtoupper($arr[1]);
+
+if (isset($coin)) {
+  $currency_code = $coin;
+} else {
+  $arr = explode("/", $_SERVER['PHP_SELF']);
+  $currency_code = strtoupper($arr[1]);
+}
 
 // Include our configuration (holding defines for the requires)
 if (!include_once(BASEPATH . 'include/config/global.inc.dist.php')) die('Unable to load base global config - '.$quickstartlink);
