@@ -1,0 +1,5 @@
+User-agent: *
+Disallow: /templates/
+Disallow: /include/
+Disallow: /site_assets/
+Disallow: /*?page=
