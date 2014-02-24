@@ -1,7 +1,4 @@
 {nocache}
-<article class="module width_full">
-  <header><h3>MPOS Information</h3></header>
-  
 <article class="module width_quarter">
   <header><h3>MPOS Version Information</h3></header>
   <table width="25%" class="tablesorter" cellspacing="0">
@@ -66,8 +63,6 @@
       </tr>
     </tbody>
   </table>
-</article>
-
 </article>
 {/nocache}
 

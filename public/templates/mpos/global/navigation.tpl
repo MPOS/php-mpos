@@ -24,6 +24,8 @@
       <li class="icon-cog"><a href="{$smarty.server.SCRIPT_NAME}?page=admin&action=settings">Settings</a></li>
       <li class="icon-doc"><a href="{$smarty.server.SCRIPT_NAME}?page=admin&action=news">News</a></li>
       <li class="icon-chart"><a href="{$smarty.server.SCRIPT_NAME}?page=admin&action=reports">Reports</a></li>
+      <li class="icon-edit"><a href="{$smarty.server.SCRIPT_NAME}?page=admin&action=registrations">Registrations</a></li>
+      <li class="icon-users"><a href="{$smarty.server.SCRIPT_NAME}?page=admin&action=invitations">Invitations</a></li>
       <li class="icon-photo"><a href="{$smarty.server.SCRIPT_NAME}?page=admin&action=poolworkers">Pool Workers</a></li>
       <li class="icon-pencil"><a href="{$smarty.server.SCRIPT_NAME}?page=admin&action=templates">Templates</a></li>
     </ul>
