@@ -57,6 +57,7 @@ if (isset($_REQUEST['filter'])) {
     foreach ($aUsers as $iKey => $aUser) {
       $aBalance = $transaction->getBalance($aUser['id']);
       $aUser['balance'] = $aBalance['confirmed'];
+      $aUser['signup_timestamp'] = $user->getSignupTime($aUser['id']);
       $aUser['hashrate'] = $statistics->getUserHashrate($aUser['username'], $aUser['id']);
 
       if ($config['payout_system'] == 'pps') {

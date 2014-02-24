@@ -116,6 +116,54 @@ class User extends Base {
   }
 
   /**
+   * Fetch last registered users for administrative tasks
+   * @param none
+   * @return data array All users with db columns as array fields
+   **/
+  public function getLastRegisteredUsers($limit=10,$start=0) {
+    $this->debug->append("STA " . __METHOD__, 4);
+    $invitation = new Invitation();
+    $invitation->setMysql($this->mysqli);
+    $invitation->setDebug($this->debug);
+    $invitation->setLog($this->log);
+    $stmt = $this->mysqli->prepare("
+    	SELECT a.id,a.username as mposuser,a.email,a.signup_timestamp,u.username AS inviter FROM " . $this->getTableName() . " AS a
+    	LEFT JOIN " . $invitation->getTableName() . " AS i
+    	ON a.email = i.email
+    	LEFT JOIN " . $this->getTableName() . " AS u
+    	ON i.account_id = u.id
+    	ORDER BY a.id DESC LIMIT ?,?");
+    if ($this->checkStmt($stmt) && $stmt->bind_param("ii", $start, $limit) && $stmt->execute() && $result = $stmt->get_result()) {
+      return $result->fetch_all(MYSQLI_ASSOC);
+    }
+  }
+
+  /**
+   * Fetch Top 10 Inviters
+   * @param none
+   * @return data array All users with db columns as array fields
+   **/
+  public function getTopInviters($limit=10,$start=0) {
+    $this->debug->append("STA " . __METHOD__, 4);
+    $invitation = new Invitation();
+    $invitation->setMysql($this->mysqli);
+    $invitation->setDebug($this->debug);
+    $invitation->setLog($this->log);
+    $stmt = $this->mysqli->prepare("
+    	SELECT COUNT(i.account_id) AS invitationcount,a.id,a.username,a.email,    	
+    	(SELECT COUNT(account_id) FROM " . $invitation->getTableName() . " WHERE account_id = i.account_id AND is_activated = 1 GROUP BY account_id) AS activated
+    	FROM " . $invitation->getTableName() . " AS i
+    	LEFT JOIN " . $this->getTableName() . " AS a
+    	ON a.id = i.account_id
+    	GROUP BY i.account_id
+    	ORDER BY invitationcount ASC
+    	LIMIT ?,?");
+    if ($this->checkStmt($stmt) && $stmt->bind_param("ii", $start, $limit) && $stmt->execute() && $result = $stmt->get_result()) {
+      return $result->fetch_all(MYSQLI_ASSOC);
+    }
+  }
+  
+  /**
    * Check user login
    * @param username string Username
    * @param password string Password
