@@ -126,9 +126,6 @@ $aGlobal['acl']['about']['page'] = $setting->getValue('acl_about_page');
 $aGlobal['acl']['contactform'] = $setting->getValue('acl_contactform');
 $aGlobal['acl']['chat']['page'] = $setting->getValue('acl_chat_page', 2);
 
-// System
-$aGlobal['system']['irc']['chat'] = $setting->getValue('system_irc_chat');
-
 // We don't want these session infos cached
 if (@$_SESSION['USERDATA']['id']) {
   $aGlobal['userdata'] = $_SESSION['USERDATA']['id'] ? $user->getUserData($_SESSION['USERDATA']['id']) : array();
