@@ -133,6 +133,26 @@ class User extends Base {
       return $result->fetch_all(MYSQLI_ASSOC);
     }
   }
+
+  /**
+   * Fetch Top 10 Inviters
+   * @param none
+   * @return data array All users with db columns as array fields
+   **/
+  public function getTopInviters($limit=10) {
+    $this->debug->append("STA " . __METHOD__, 4);
+    $stmt = $this->mysqli->prepare("
+    	SELECT COUNT(i.account_id) as invitationcount,a.id,a.username,a.email,    	
+    	(SELECT COUNT(account_id) FROM invitations WHERE account_id = i.account_id AND is_activated = 1 GROUP BY account_id) AS activated
+    	FROM invitations AS i
+    	LEFT JOIN " . $this->getTableName() . " AS a
+    	ON a.id = i.account_id
+    	GROUP BY i.account_id
+    	LIMIT ?");
+    if ($this->checkStmt($stmt) && $stmt->bind_param("i", $limit) && $stmt->execute() && $result = $stmt->get_result()) {
+      return $result->fetch_all(MYSQLI_ASSOC);
+    }
+  }
   
   /**
    * Check user login

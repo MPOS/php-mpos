@@ -86,17 +86,17 @@
       <th align="center">ID</th>
       <th align="left">Username</th>
       <th align="left">E-Mail</th>
-      <th align="right">Shares&nbsp;&nbsp;</th>
-      <th align="right">Hashrate&nbsp;&nbsp;</th>
+      <th align="right" style="padding-right:10px">Shares</th>
+      <th align="right" style="padding-right:10px">Hashrate</th>
 {if $GLOBAL.config.payout_system != 'pps'}
-      <th align="right">Est. Donation&nbsp;&nbsp;</th>
-      <th align="right">Est. Payout&nbsp;&nbsp;&nbsp;</th>
+      <th align="right" style="padding-right:10px">Est. Donation</th>
+      <th align="right" style="padding-right:10px">Est. Payout</th>
 {else}
-      <th align="right" colspan="2">Est. 24 Hours&nbsp;&nbsp;&nbsp;</th>
+      <th align="right" colspan="2" style="padding-right:10px">Est. 24 Hours</th>
 {/if}
-      <th align="right">Balance&nbsp;&nbsp;&nbsp;</th>
-      <th align="right">Reg. Date&nbsp;&nbsp;&nbsp;</th>
-      <th align="right">Last Login&nbsp;&nbsp;&nbsp;</th>
+      <th align="right" style="padding-right:10px">Balance</th>
+      <th align="right" style="padding-right:10px">Reg. Date</th>
+      <th align="right" style="padding-right:10px">Last Login</th>
       <th align="center">Admin</th>
       <th align="center">Locked</th>
       <th align="center">No Fees</th>

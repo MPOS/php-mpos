@@ -25,7 +25,7 @@
     </table>
   </article>
 
-  <article class="module width_3_quarter" style="min-height: 350px">
+  <article class="module width_3_quarter" style="min-height: 150px">
     <header><h3>Last 10 registered Users</h3></header>
     <div>
     <table class="tablesorter" cellspacing="0">
@@ -46,11 +46,12 @@
           <td>{$LASTREGISTEREDUSERS[user].mposuser}</td>
           <td align="left">{$LASTREGISTEREDUSERS[user].email}</td>
           <td align="center">{$LASTREGISTEREDUSERS[user].signup_timestamp|date_format:"%d/%m %H:%M:%S"}</td>
-          <td align="center">{if !$LASTREGISTEREDUSERS[user].inviter}NO{else}YES{/if}</td>
-          <td align="center">{$LASTREGISTEREDUSERS[user].inviter}</td>
+          <td align="center">{if !$LASTREGISTEREDUSERS[user].inviter}<i class="icon-cancel">{else}<i class="icon-ok">{/if}</td>
+          <td align="center"><a href="{$smarty.server.SCRIPT_NAME}?page=admin&action=user&do=query&filter[account]={$LASTREGISTEREDUSERS[user].inviter}">{$LASTREGISTEREDUSERS[user].inviter}</a></td>
         </tr>
 {/section}
       </tbody>
     </table>
   </article>
+  
 </article>

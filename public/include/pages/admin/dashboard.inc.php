@@ -68,8 +68,13 @@ $smarty->assign('USER_REGISTRATIONS', $aRegistrationInfo);
 $aLastRegisteredUsers = $user->getLastRegisteredUsers();
 $smarty->assign("LASTREGISTEREDUSERS", $aLastRegisteredUsers);
 
-// Fetch invitation information
+// Fetching invitation Informations
 if (!$setting->getValue('disable_invitations')) {
+  // get last 10 Inviters
+  $aTopInviters = $user->getTopInviters();
+  $smarty->assign("TOPINVITERS", $aTopInviters);
+
+  // Fetch global invitation information
   $aInvitationInfo = array(
     'total' => $invitation->getCount(),
     'activated' => $invitation->getCountFiltered('is_activated', 1),
