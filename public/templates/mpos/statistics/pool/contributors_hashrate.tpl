@@ -39,4 +39,11 @@
 {/if}
     </tbody>
   </table>
+  <footer>
+    <ul>
+      <i class="icon-thumbs-down"> no Donation </i>
+      <i class="icon-thumbs-up"> 0&#37;&#45;2&#37; Donation </i>
+      <i class="icon-star-empty"> 2&#37; or more Donation </i>
+    </ul>
+  </footer>
 </article>
