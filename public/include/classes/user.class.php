@@ -127,10 +127,10 @@ class User extends Base {
     $invitation->setDebug($this->debug);
     $invitation->setLog($this->log);
     $stmt = $this->mysqli->prepare("
-    	SELECT a.id,a.username as mposuser,a.email,a.signup_timestamp,u.username as inviter FROM " . $this->getTableName() . " AS a
+    	SELECT a.id,a.username as mposuser,a.email,a.signup_timestamp,u.username AS inviter FROM " . $this->getTableName() . " AS a
     	LEFT JOIN " . $invitation->getTableName() . " AS i
     	ON a.email = i.email
-    	LEFT JOIN " . $this->getTableName() . " as u
+    	LEFT JOIN " . $this->getTableName() . " AS u
     	ON i.account_id = u.id
     	ORDER BY a.id DESC LIMIT ?");
     if ($this->checkStmt($stmt) && $stmt->bind_param("i", $limit) && $stmt->execute() && $result = $stmt->get_result()) {
@@ -150,7 +150,7 @@ class User extends Base {
     $invitation->setDebug($this->debug);
     $invitation->setLog($this->log);
     $stmt = $this->mysqli->prepare("
-    	SELECT COUNT(i.account_id) as invitationcount,a.id,a.username,a.email,    	
+    	SELECT COUNT(i.account_id) AS invitationcount,a.id,a.username,a.email,    	
     	(SELECT COUNT(account_id) FROM " . $invitation->getTableName() . " WHERE account_id = i.account_id AND is_activated = 1 GROUP BY account_id) AS activated
     	FROM " . $invitation->getTableName() . " AS i
     	LEFT JOIN " . $this->getTableName() . " AS a
