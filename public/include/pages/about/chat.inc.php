@@ -2,7 +2,7 @@
 $defflip = (!cfip()) ? exit(header('HTTP/1.1 401 Unauthorized')) : 1;
 
 // ACL check
-switch($setting->getValue('acl_chat_page', 1)) {
+switch($setting->getValue('system_chat_page', 2)) {
 case '0':
   if ($user->isAuthenticated()) {
     $smarty->assign("CONTENT", "default.tpl");
