@@ -122,9 +122,13 @@ class User extends Base {
    **/
   public function getLastRegisteredUsers($limit=10) {
     $this->debug->append("STA " . __METHOD__, 4);
+    $invitation = new Invitation();
+    $invitation->setMysql($this->mysqli);
+    $invitation->setDebug($this->debug);
+    $invitation->setLog($this->log);
     $stmt = $this->mysqli->prepare("
     	SELECT a.id,a.username as mposuser,a.email,a.signup_timestamp,u.username as inviter FROM " . $this->getTableName() . " AS a
-    	LEFT JOIN invitations AS i
+    	LEFT JOIN " . $invitation->getTableName() . " AS i
     	ON a.email = i.email
     	LEFT JOIN " . $this->getTableName() . " as u
     	ON i.account_id = u.id
@@ -141,10 +145,14 @@ class User extends Base {
    **/
   public function getTopInviters($limit=10) {
     $this->debug->append("STA " . __METHOD__, 4);
+    $invitation = new Invitation();
+    $invitation->setMysql($this->mysqli);
+    $invitation->setDebug($this->debug);
+    $invitation->setLog($this->log);
     $stmt = $this->mysqli->prepare("
     	SELECT COUNT(i.account_id) as invitationcount,a.id,a.username,a.email,    	
-    	(SELECT COUNT(account_id) FROM invitations WHERE account_id = i.account_id AND is_activated = 1 GROUP BY account_id) AS activated
-    	FROM invitations AS i
+    	(SELECT COUNT(account_id) FROM " . $invitation->getTableName() . " WHERE account_id = i.account_id AND is_activated = 1 GROUP BY account_id) AS activated
+    	FROM " . $invitation->getTableName() . " AS i
     	LEFT JOIN " . $this->getTableName() . " AS a
     	ON a.id = i.account_id
     	GROUP BY i.account_id
