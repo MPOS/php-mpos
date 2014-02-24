@@ -120,7 +120,7 @@ class User extends Base {
    * @param none
    * @return data array All users with db columns as array fields
    **/
-  public function getLastRegisteredUsers($limit=10) {
+  public function getLastRegisteredUsers($limit=10,$start=0) {
     $this->debug->append("STA " . __METHOD__, 4);
     $invitation = new Invitation();
     $invitation->setMysql($this->mysqli);
@@ -132,8 +132,8 @@ class User extends Base {
     	ON a.email = i.email
     	LEFT JOIN " . $this->getTableName() . " AS u
     	ON i.account_id = u.id
-    	ORDER BY a.id DESC LIMIT ?");
-    if ($this->checkStmt($stmt) && $stmt->bind_param("i", $limit) && $stmt->execute() && $result = $stmt->get_result()) {
+    	ORDER BY a.id DESC LIMIT ?,?");
+    if ($this->checkStmt($stmt) && $stmt->bind_param("ii", $start, $limit) && $stmt->execute() && $result = $stmt->get_result()) {
       return $result->fetch_all(MYSQLI_ASSOC);
     }
   }
@@ -143,7 +143,7 @@ class User extends Base {
    * @param none
    * @return data array All users with db columns as array fields
    **/
-  public function getTopInviters($limit=10) {
+  public function getTopInviters($limit=10,$start=0) {
     $this->debug->append("STA " . __METHOD__, 4);
     $invitation = new Invitation();
     $invitation->setMysql($this->mysqli);
@@ -157,8 +157,8 @@ class User extends Base {
     	ON a.id = i.account_id
     	GROUP BY i.account_id
     	ORDER BY invitationcount ASC
-    	LIMIT ?");
-    if ($this->checkStmt($stmt) && $stmt->bind_param("i", $limit) && $stmt->execute() && $result = $stmt->get_result()) {
+    	LIMIT ?,?");
+    if ($this->checkStmt($stmt) && $stmt->bind_param("ii", $start, $limit) && $stmt->execute() && $result = $stmt->get_result()) {
       return $result->fetch_all(MYSQLI_ASSOC);
     }
   }

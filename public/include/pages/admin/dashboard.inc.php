@@ -7,6 +7,12 @@ if (!$user->isAuthenticated() || !$user->isAdmin($_SESSION['USERDATA']['id'])) {
   die("404 Page not found");
 }
 
+// Some defaults
+$iLimit = 10;
+$smarty->assign('LIMIT', $iLimit);
+empty($_REQUEST['registeredstart']) ? $registeredstart = 0 : $registeredstart = $_REQUEST['registeredstart'];
+empty($_REQUEST['invitersstart']) ? $invitersstart = 0 : $invitersstart = $_REQUEST['invitersstart'];
+
 if ($bitcoin->can_connect() === true){
   $aGetInfo = $bitcoin->getinfo();
 } else {
@@ -65,13 +71,13 @@ $aRegistrationInfo = array(
 $smarty->assign('USER_REGISTRATIONS', $aRegistrationInfo);
 
 // get last 10 Registrations
-$aLastRegisteredUsers = $user->getLastRegisteredUsers();
+$aLastRegisteredUsers = $user->getLastRegisteredUsers($iLimit, $registeredstart);
 $smarty->assign("LASTREGISTEREDUSERS", $aLastRegisteredUsers);
 
 // Fetching invitation Informations
 if (!$setting->getValue('disable_invitations')) {
   // get last 10 Inviters
-  $aTopInviters = $user->getTopInviters();
+  $aTopInviters = $user->getTopInviters($iLimit, $invitersstart);
   $smarty->assign("TOPINVITERS", $aTopInviters);
 
   // Fetch global invitation information
