@@ -20,7 +20,7 @@
 {if $NEWMINT >= 0}
     <tr>
       <td align="left">Liquid Assets</td>
-      <td align="left">{($BALANCE - $LOCKED - $UNCONFIRMED + $NEWMMINT)|number_format:"8"}</td>
+      <td align="left">{($BALANCE - $LOCKED - $UNCONFIRMED + $NEWMINT)|number_format:"8"}</td>
     </tr>
     <tr>
       <td align="left">PoS New Mint</td>
