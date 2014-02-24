@@ -162,7 +162,7 @@ You can contribute to this project in different ways:
 * Suggest feature enhancements also via [Issues][1]
 * Fork the project, create a branch and file a pull request to improve the code itself
 
-If you wish to participate contact the team on IRC: https://webchat.freenode.net/?channels=#mpos-dev
+If you wish to participate contact the team on IRC: https://webchat.freenode.net/?channels=#mpos - we will point you to the proper channels!
 
 Contact
 =======
