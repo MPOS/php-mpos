@@ -50,12 +50,12 @@ $aBlocksUnconfirmed = $block->getAllUnconfirmed($confirmations);
 $dBlocksUnconfirmedBalance = 0;
   if (!empty($aBlocksUnconfirmed))foreach ($aBlocksUnconfirmed as $aData) $dBlocksUnconfirmedBalance += $aData['amount'];
 
+$dWalletBalance -= $dBlocksUnconfirmedBalance;
+
 // Fetch Newmint
 $aGetInfo = $bitcoin->getinfo();
 if (is_array($aGetInfo) && array_key_exists('newmint', $aGetInfo)) {
-  $dWalletBalance = $dWalletBalance - $dBlocksUnconfirmedBalance + $aGetInfo['newmint'];
-} else {
-  $dWalletBalance = $dWalletBalance - $dBlocksUnconfirmedBalance;
+  $dWalletBalance += $aGetInfo['newmint'];
 }
 
 // Fetch outstanding manual-payouts
@@ -137,12 +137,12 @@ $aBlocksUnconfirmed = $block->getAllUnconfirmed($confirmations);
 $dBlocksUnconfirmedBalance = 0;
   if (!empty($aBlocksUnconfirmed))foreach ($aBlocksUnconfirmed as $aData) $dBlocksUnconfirmedBalance += $aData['amount'];
 
+$dWalletBalance -= $dBlocksUnconfirmedBalance;
+
 // Fetch Newmint
 $aGetInfo = $bitcoin->getinfo();
 if (is_array($aGetInfo) && array_key_exists('newmint', $aGetInfo)) {
-  $dWalletBalance = $dWalletBalance - $dBlocksUnconfirmedBalance + $aGetInfo['newmint'];
-} else {
-  $dWalletBalance = $dWalletBalance - $dBlocksUnconfirmedBalance;
+  $dWalletBalance += $aGetInfo['newmint'];
 }
 
 // Fetch outstanding auto-payouts
