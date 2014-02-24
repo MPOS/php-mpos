@@ -351,7 +351,7 @@ $aSettings['system'][] = array(
 $aSettings['system'][] = array(
   'display' => 'IRC Chat Channel', 'type' => 'text',
   'size' => 25,
-  'default' => '#',
+  'default' => '#lazypoolop',
   'name' => 'system_irc_chat', 'value' => $setting->getValue('system_irc_chat'),
   'tooltip' => 'Your IRC support channel name.'
 );
