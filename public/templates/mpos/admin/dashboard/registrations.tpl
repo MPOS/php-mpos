@@ -1,6 +1,6 @@
 {nocache}
 <article class="module width_quarter">
-  <header><h3>Registrations</h3></header>
+  <header><h3><a href="{$smarty.server.SCRIPT_NAME}?page=admin&action=registrations">Registrations</a></h3></header>
   <table class="tablesorter" cellspacing="0">
     <thead>
       <tr>
