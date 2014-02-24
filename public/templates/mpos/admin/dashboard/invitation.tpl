@@ -23,7 +23,7 @@
   </article>
 
   <article class="module width_3_quarter" style="min-height: 150px">
-    <header><h3>Top 10 Inviters</h3></header>
+    <header><h3>Top Inviters</h3></header>
     <div>
     <table cellspacing="0" class="tablesorter">
     <tbody>
