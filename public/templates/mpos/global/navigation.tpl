@@ -42,7 +42,7 @@
       <li class="icon-desktop"><a href="{$smarty.server.SCRIPT_NAME}?page=gettingstarted">Getting Started</a></li>
       {acl_check icon='icon-doc' page='about' action='pool' name='About' acl=$GLOBAL.acl.about.page}
       {acl_check icon='icon-money' page='about' action='donors' name='Donors' acl=$GLOBAL.acl.donors.page}
-      {acl_check icon='icon-megaphone' page='about' action='chat' name='Web Chat' acl=$GLOBAL.system.chat.page}
+      {acl_check icon='icon-megaphone' page='about' action='chat' name='Web Chat' acl=$GLOBAL.acl.chat.page}
     </ul>
     <h3>Other</h3>
     <ul class="toggle">
