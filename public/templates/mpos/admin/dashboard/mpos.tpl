@@ -1,6 +1,6 @@
 {nocache}
 <article class="module width_full">
-  <header><h3>MPOS Informations</h3></header>
+  <header><h3>MPOS Information</h3></header>
   
 <article class="module width_quarter">
   <header><h3>MPOS Version Information</h3></header>
