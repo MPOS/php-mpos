@@ -250,6 +250,13 @@ $aSettings['acl'][] = array(
   'name' => 'acl_contactform', 'value' => $setting->getValue('acl_contactform'),
   'tooltip' => 'Make the contactform private (users only) or public.'
 );
+$aSettings['acl'][] = array(
+  'display' => 'Live Chat Page', 'type' => 'select',
+  'options' => array( 0 => 'Private', 1 => 'Public', 2 => 'Disabled' ),
+  'default' => 2,
+  'name' => 'acl_chat_page', 'value' => $setting->getValue('acl_chat_page'),
+  'tooltip' => 'Make the chat page private (users only) or public.'
+);
 $aSettings['system'][] = array(
   'display' => 'E-mail address for system error notifications', 'type' => 'text',
   'size' => 25,
@@ -340,13 +347,6 @@ $aSettings['system'][] = array(
   'default' => 0,
   'name' => 'disable_transactionsummary', 'value' => $setting->getValue('disable_transactionsummary'),
   'tooltip' => 'Disable transaction summaries. Helpful with large transaction tables.'
-);
-$aSettings['system'][] = array(
-  'display' => 'Live Chat Page', 'type' => 'select',
-  'options' => array( 0 => 'Private', 1 => 'Public', 2 => 'Disabled' ),
-  'default' => 2,
-  'name' => 'system_chat_page', 'value' => $setting->getValue('system_chat_page'),
-  'tooltip' => 'Make the chat page private (users only) or public.'
 );
 $aSettings['system'][] = array(
   'display' => 'IRC Chat Channel', 'type' => 'text',
