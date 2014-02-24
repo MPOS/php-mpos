@@ -156,6 +156,7 @@ class User extends Base {
     	LEFT JOIN " . $this->getTableName() . " AS a
     	ON a.id = i.account_id
     	GROUP BY i.account_id
+    	ORDER BY invitationcount ASC
     	LIMIT ?");
     if ($this->checkStmt($stmt) && $stmt->bind_param("i", $limit) && $stmt->execute() && $result = $stmt->get_result()) {
       return $result->fetch_all(MYSQLI_ASSOC);
