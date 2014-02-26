@@ -43,9 +43,10 @@ if ( ! $dNetworkHashrateModifier = $setting->getValue('statistics_network_hashra
 $statistics->setGetCache(false);
 $dPoolHashrate = $statistics->getCurrentHashrate($interval);
 if ($dPoolHashrate > $dNetworkHashrate) $dNetworkHashrate = $dPoolHashrate;
-$dPersonalHashrate = $statistics->getUserHashrate($username, $user_id, $interval);
-$dPersonalSharerate = $statistics->getUserSharerate($username, $user_id, $interval);
-$dPersonalShareDifficulty = $statistics->getUserShareDifficulty($username, $user_id, $interval);
+$aUserMiningStats = $statistics->getUserMiningStats($username, $user_id, $interval);
+$dPersonalHashrate = $aUserMiningStats['hashrate'];
+$dPersonalSharerate = $aUserMiningStats['sharerate'];
+$dPersonalShareDifficulty = $aUserMiningStats['avgsharediff'];
 $statistics->setGetCache(true);
 
 // Use caches for this one

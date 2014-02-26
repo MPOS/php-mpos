@@ -13,7 +13,8 @@ if ( ! $interval = $setting->getValue('statistics_ajax_data_interval')) $interva
 
 // Gather un-cached data
 $statistics->setGetCache(false);
-$hashrate = $statistics->getUserHashrate($username, $user_id, $interval);
+$aUserMiningStats = $statistics->getUserMiningStats($username, $user_id, $interval);
+$hashrate = $aUserMiningStats['hashrate'];
 $statistics->setGetCache(true);
 
 // Output JSON

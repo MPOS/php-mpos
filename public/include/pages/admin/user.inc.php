@@ -58,11 +58,12 @@ if (isset($_REQUEST['filter'])) {
       $aBalance = $transaction->getBalance($aUser['id']);
       $aUser['balance'] = $aBalance['confirmed'];
       $aUser['signup_timestamp'] = $user->getSignupTime($aUser['id']);
-      $aUser['hashrate'] = $statistics->getUserHashrate($aUser['username'], $aUser['id']);
+      $aUserMiningStats = $statistics->getUserMiningStats($aUser['username'], $aUser['id']);
+      $aUser['hashrate'] = $aUserMiningStats['hashrate'];
 
       if ($config['payout_system'] == 'pps') {
-        $aUser['sharerate'] = $statistics->getUserSharerate($aUser['username'], $aUser['id']);
-        $aUser['difficulty'] = $statistics->getUserShareDifficulty($aUser['username'], $aUser['id']);
+        $aUser['sharerate'] = $aUserMiningStats['sharerate'];
+        $aUser['difficulty'] = $aUserMiningStats['avgsharediff'];
         $aUser['estimates'] = $statistics->getUserEstimates($aUser['sharerate'], $aUser['difficulty'], $user->getUserDonatePercent($aUser['id']), $user->getUserNoFee($aUser['id']), $statistics->getPPSValue());
       } else {
         $aUser['estimates'] = $statistics->getUserEstimates($aRoundShares, $aUser['shares'], $aUser['donate_percent'], $aUser['no_fees']);
