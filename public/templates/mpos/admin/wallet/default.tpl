@@ -19,7 +19,7 @@
     </tr>
     <tr>
       <td align="left">Liquid Assets</td>
-      <td align="left">{($BALANCE - $LOCKED - $UNCONFIRMED)|number_format:"8"}</td>
+      <td align="left">{($BALANCE - $LOCKED - $UNCONFIRMED + $NEWMINT|default:"0")|number_format:"8"}</td>
     </tr>
 {if $NEWMINT >= 0}
     <tr>
@@ -92,4 +92,3 @@
 {/foreach}
 </article>
 {/if}
-

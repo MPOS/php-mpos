@@ -50,7 +50,13 @@ $aBlocksUnconfirmed = $block->getAllUnconfirmed($confirmations);
 $dBlocksUnconfirmedBalance = 0;
   if (!empty($aBlocksUnconfirmed))foreach ($aBlocksUnconfirmed as $aData) $dBlocksUnconfirmedBalance += $aData['amount'];
 
-$dWalletBalance = $dWalletBalance - $dBlocksUnconfirmedBalance;
+$dWalletBalance -= $dBlocksUnconfirmedBalance;
+
+// Fetch Newmint
+$aGetInfo = $bitcoin->getinfo();
+if (is_array($aGetInfo) && array_key_exists('newmint', $aGetInfo)) {
+  $dWalletBalance += $aGetInfo['newmint'];
+}
 
 // Fetch outstanding manual-payouts
 $aManualPayouts = $transaction->getMPQueue($config['payout']['txlimit_manual']);
@@ -131,7 +137,13 @@ $aBlocksUnconfirmed = $block->getAllUnconfirmed($confirmations);
 $dBlocksUnconfirmedBalance = 0;
   if (!empty($aBlocksUnconfirmed))foreach ($aBlocksUnconfirmed as $aData) $dBlocksUnconfirmedBalance += $aData['amount'];
 
-$dWalletBalance = $dWalletBalance - $dBlocksUnconfirmedBalance;
+$dWalletBalance -= $dBlocksUnconfirmedBalance;
+
+// Fetch Newmint
+$aGetInfo = $bitcoin->getinfo();
+if (is_array($aGetInfo) && array_key_exists('newmint', $aGetInfo)) {
+  $dWalletBalance += $aGetInfo['newmint'];
+}
 
 // Fetch outstanding auto-payouts
 $aAutoPayouts = $transaction->getAPQueue($config['payout']['txlimit_auto']);
