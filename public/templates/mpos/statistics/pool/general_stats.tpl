@@ -65,7 +65,6 @@
       </tbody>
     </table>
   </div>
-  </div>
   <footer>
 {if !$GLOBAL.website.api.disabled}<ul><li>These stats are also available in JSON format <a href="{$smarty.server.SCRIPT_NAME}?page=api&action=getpoolstatus&api_key={$GLOBAL.userdata.api_key|default:""}">HERE</a></li></ul>{/if}
   </footer>

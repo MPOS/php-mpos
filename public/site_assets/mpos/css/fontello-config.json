@@ -257,6 +257,18 @@
       "css": "users",
       "code": 59393,
       "src": "entypo"
+    },
+    {
+      "uid": "98d9c83c1ee7c2c25af784b518c522c5",
+      "css": "block",
+      "code": 59433,
+      "src": "fontawesome"
+    },
+    {
+      "uid": "ab656e280958018a7859eba9a1eabbc7",
+      "css": "award",
+      "code": 59399,
+      "src": "fontawesome"
     }
   ]
 }
