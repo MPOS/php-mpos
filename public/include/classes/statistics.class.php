@@ -521,6 +521,7 @@ class Statistics extends Base {
         $retData['avgsharediff'] = $data['data'][$account_id]['avgsharediff'];
         return $retData;
       }
+      return array('hashrate' => (float)0, 'sharerate' => (float)0, 'avgsharediff' => (float)0);
     }
     if ($this->getGetCache() && $data = $this->memcache->get(__FUNCTION__ . $account_id)) return $data;
     $stmt = $this->mysqli->prepare("
