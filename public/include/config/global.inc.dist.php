@@ -127,6 +127,14 @@ $config['txfee_manual'] = 0.1;
  */
 $config['block_bonus'] = 0;
 
+/**
+ * Referral System
+ *  Bonus for invited Users
+ *   https://github.com/MPOS/php-mpos/wiki/Config-Setup#referral-system
+ */
+$config['referral_system'] = "fixed";
+$config['referral_payout'] = 10;
+$config['referral_percent'] = 0.1;
 
 /**
  * Payout System
@@ -164,7 +172,6 @@ $config['purge']['shares'] = 25000;
  **/
 $config['archive']['maxrounds'] = 10; 
 $config['archive']['maxage'] = 60 * 24; 
-
 
 /**
  * Pool Fees
