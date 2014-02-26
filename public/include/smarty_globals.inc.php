@@ -133,9 +133,10 @@ if (@$_SESSION['USERDATA']['id']) {
 
   // Other userdata that we can cache savely
   $aGlobal['userdata']['shares'] = $statistics->getUserShares($_SESSION['USERDATA']['username'], $_SESSION['USERDATA']['id']);
-  $aGlobal['userdata']['rawhashrate'] = $statistics->getUserHashrate($_SESSION['USERDATA']['username'], $_SESSION['USERDATA']['id']);
+  $aUserMiningStats = $statistics->getUserMiningStats($_SESSION['USERDATA']['username'], $_SESSION['USERDATA']['id']);
+  $aGlobal['userdata']['rawhashrate'] = $aUserMiningStats['hashrate'];
   $aGlobal['userdata']['hashrate'] = $aGlobal['userdata']['rawhashrate'] * $dPersonalHashrateModifier;
-  $aGlobal['userdata']['sharerate'] = $statistics->getUserSharerate($_SESSION['USERDATA']['username'], $_SESSION['USERDATA']['id']);
+  $aGlobal['userdata']['sharerate'] = $aUserMiningStats['sharerate'];
 
   switch ($config['payout_system']) {
   case 'prop':
