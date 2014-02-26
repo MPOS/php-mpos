@@ -16,14 +16,14 @@
       <tr{if $GLOBAL.userdata.username|default:""|lower == $CONTRIBSHARES[shares].account|lower}{assign var=listed value=1} style="background-color:#99EB99;"{else} class="{cycle values="odd,even"}"{/if}>
         <td align="center">{$rank++}</td>
         <td align="center">
-		{if $CONTRIBSHARES[shares].donate_percent > 2}
-			<i class="icon-award">
-		{else if $CONTRIBSHARES[shares].donate_percent < 2 AND $CONTRIBSHARES[shares].donate_percent > 0}
-			<i class="icon-star-empty">
-		{else}
-			<i class="icon-block"></i>
-		{/if}
-	</td>
+    		{if $CONTRIBSHARES[shares].donate_percent > 2}
+		    	<i class="icon-award">
+		    {else if $CONTRIBSHARES[shares].donate_percent < 2 AND $CONTRIBSHARES[shares].donate_percent > 0}
+			    <i class="icon-star-empty">
+		    {else}
+			    <i class="icon-block"></i>
+		    {/if}
+      	</td>
         <td align="center">{if $CONTRIBSHARES[shares].is_anonymous|default:"0" == 1 && $GLOBAL.userdata.is_admin|default:"0" == 0}anonymous{else}{$CONTRIBSHARES[shares].account|escape}{/if}</td>
         <td align="right" style="padding-right: 30px;">{$CONTRIBSHARES[shares].shares|number_format}</td>
       </tr>
