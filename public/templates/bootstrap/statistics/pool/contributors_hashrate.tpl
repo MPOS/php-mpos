@@ -50,8 +50,6 @@
           <i class="fa fa-trophy fa-fw"></i> 2&#37; or more Donation 
         </ul>
       </div>
-      <!-- /.panel -->
     </div>
-    <!-- /.col-lg-12 -->
   </div>
 
