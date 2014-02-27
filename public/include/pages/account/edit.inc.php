@@ -57,7 +57,7 @@ if ($user->isAuthenticated()) {
       $ptc++;
     }
     // display global notice about tokens being in use and for which bits they're active
-    $_SESSION['POPUP'][] = array('CONTENT' => $popupmsg, 'TYPE' => 'alert alert-info');
+    $_SESSION['POPUP'][] = array('CONTENT' => $popupmsg, 'TYPE' => 'alert alert-warning');
   }
   
   if (isset($_POST['do']) && $_POST['do'] == 'genPin') {
@@ -68,7 +68,7 @@ if ($user->isAuthenticated()) {
         $_SESSION['POPUP'][] = array('CONTENT' => $user->getError(), 'TYPE' => 'alert alert-danger');
       }
     } else {
-      $_SESSION['POPUP'][] = array('CONTENT' => $csrftoken->getErrorWithDescriptionHTML(), 'TYPE' => 'alert alert-info');
+      $_SESSION['POPUP'][] = array('CONTENT' => $csrftoken->getErrorWithDescriptionHTML(), 'TYPE' => 'alert alert-warning');
     }
   }
   else {
@@ -88,14 +88,14 @@ if ($user->isAuthenticated()) {
               $_SESSION['POPUP'][] = array('CONTENT' => $user->getError(), 'TYPE' => 'alert alert-danger');
             }
           } else {
-            $_SESSION['POPUP'][] = array('CONTENT' => $csrftoken->getErrorWithDescriptionHTML(), 'TYPE' => 'alert alert-info');
+            $_SESSION['POPUP'][] = array('CONTENT' => $csrftoken->getErrorWithDescriptionHTML(), 'TYPE' => 'alert alert-warning');
           }
         }
       } else {
         switch (@$_POST['do']) {
           case 'cashOut':
         	if ($setting->getValue('disable_payouts') == 1 || $setting->getValue('disable_manual_payouts') == 1) {
-        	  $_SESSION['POPUP'][] = array('CONTENT' => 'Manual payouts are disabled.', 'TYPE' => 'alert alert-info');
+        	  $_SESSION['POPUP'][] = array('CONTENT' => 'Manual payouts are disabled.', 'TYPE' => 'alert alert-warning');
           } else if (!$user->getCoinAddress($_SESSION['USERDATA']['id'])) {
             $_SESSION['POPUP'][] = array('CONTENT' => 'You have no payout address set.', 'TYPE' => 'alert alert-danger');
         	} else {
@@ -111,7 +111,7 @@ if ($user->isAuthenticated()) {
         	          $_SESSION['POPUP'][] = array('CONTENT' => $iPayoutId->getError(), 'TYPE' => 'alert alert-danger');
         	        }
         	      } else {
-        	        $_SESSION['POPUP'][] = array('CONTENT' => $csrftoken->getErrorWithDescriptionHTML(), 'TYPE' => 'alert alert-info');
+        	        $_SESSION['POPUP'][] = array('CONTENT' => $csrftoken->getErrorWithDescriptionHTML(), 'TYPE' => 'alert alert-warning');
         	      }
         	    } else {
         	      $_SESSION['POPUP'][] = array('CONTENT' => 'You already have one active manual payout request.', 'TYPE' => 'alert alert-danger');
@@ -130,7 +130,7 @@ if ($user->isAuthenticated()) {
             	$_SESSION['POPUP'][] = array('CONTENT' => 'Failed to update your account: ' . $user->getError(), 'TYPE' => 'alert alert-danger');
               }
             } else {
-              $_SESSION['POPUP'][] = array('CONTENT' => $csrftoken->getErrorWithDescriptionHTML(), 'TYPE' => 'alert alert-info');
+              $_SESSION['POPUP'][] = array('CONTENT' => $csrftoken->getErrorWithDescriptionHTML(), 'TYPE' => 'alert alert-warning');
             }
         	break;
 
@@ -142,7 +142,7 @@ if ($user->isAuthenticated()) {
                 $_SESSION['POPUP'][] = array('CONTENT' => $user->getError(), 'TYPE' => 'alert alert-danger');
               }
             } else {
-              $_SESSION['POPUP'][] = array('CONTENT' => $csrftoken->getErrorWithDescriptionHTML(), 'TYPE' => 'alert alert-info');
+              $_SESSION['POPUP'][] = array('CONTENT' => $csrftoken->getErrorWithDescriptionHTML(), 'TYPE' => 'alert alert-warning');
             }
         	break;
         }
