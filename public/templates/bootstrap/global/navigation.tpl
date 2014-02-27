@@ -9,7 +9,7 @@
                         <a href="{$smarty.server.SCRIPT_NAME}?page=dashboard"><i class="fa fa-dashboard fa-fw"></i> Dashboard</a>
                     </li>
                     
-                    <li {if $smarty.get.page eq "account"}class="active"{/if}>
+                    <li {if isset($smarty.get.page) eq "account"}class="active"{/if}>
                         <a href="#"><i class="fa fa-user-md fa-fw"></i> My Account<span class="fa arrow"></span></a>
                         <ul class="nav nav-second-level">
                           <li><a href="{$smarty.server.SCRIPT_NAME}?page=account&action=edit"><i class="fa fa-edit fa-fw"></i> Edit Account</a></li>
@@ -23,7 +23,7 @@
                     </li>
                     {/if}
                     {if $smarty.session.AUTHENTICATED|default:"0" == 1 && $GLOBAL.userdata.is_admin == 1}
-                    <li {if $smarty.get.page eq "admin"}class="active"{/if}>
+                    <li {if isset($smarty.get.page) eq "admin"}class="active"{/if}>
                         <a href="#"><i class="fa fa-wrench fa-fw"></i> Admin Panel<span class="fa arrow"></span></a>
                         <ul class="nav nav-second-level">
                           <li><a href="{$smarty.server.SCRIPT_NAME}?page=admin&action=dashboard"><i class="fa fa-dashboard fa-fw"></i> Dashboard</a></li>
@@ -42,7 +42,7 @@
                         <!-- /.nav-second-level -->
                     </li>
                     {/if}
-                    <li {if $smarty.get.page eq "statistics"}class="active"{/if}>
+                    <li {if isset($smarty.get.page) eq "statistics"}class="active"{/if}>
                         <a href="#"><i class="fa fa-bar-chart-o fa-fw"></i> Statistics<span class="fa arrow"></span></a>
                         <ul class="nav nav-second-level">
                           {acl_check page='statistics' action='pool' name='<i class="fa fa-align-left fa-fw"></i> Pool' acl=$GLOBAL.acl.pool.statistics fallback='page=statistics'}
@@ -54,7 +54,7 @@
                         </ul>
                         <!-- /.nav-second-level -->
                     </li>
-                    <li {if $smarty.get.page eq "gettingstarted" || $smarty.get.page eq "about"}class="active"{/if}>
+                    <li {if isset($smarty.get.page) eq "gettingstarted" || isset($smarty.get.page) eq "about"}class="active"{/if}>
                         <a href="#"><i class="fa fa-question fa-fw"></i> Help<span class="fa arrow"></span></a>
                         <ul class="nav nav-second-level">
                           <li><a href="{$smarty.server.SCRIPT_NAME}?page=gettingstarted"><i class="fa fa-question fa-fw"></i> Getting Started</a></li>
@@ -64,7 +64,7 @@
                         </ul>
                         <!-- /.nav-second-level -->
                     </li>
-                    <li {if $smarty.get.page eq "register" || $smarty.get.page eq "login" || $smarty.get.page eq "logout" || $smarty.get.page eq "tac" || $smarty.get.page eq "contactform"}class="active"{/if}>
+                    <li {if isset($smarty.get.page) eq "register" || isset($smarty.get.page) eq "login" || isset($smarty.get.page) eq "logout" || isset($smarty.get.page) eq "tac" || isset($smarty.get.page) eq "contactform"}class="active"{/if}>
                         <a href="#"><i class="fa fa-tasks fa-fw"></i> Other<span class="fa arrow"></span></a>
                         <ul class="nav nav-second-level">
                           {if $smarty.session.AUTHENTICATED|default:"0" == 1}
