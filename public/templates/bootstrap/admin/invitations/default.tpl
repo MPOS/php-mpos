@@ -1,8 +1,13 @@
 {nocache}
-  <article class="module width_full" style="min-height: 150px" name="invitations" id="invitations">
-    <header><h3>Top Inviters</h3></header>
-    <div>
-    <table cellspacing="0" class="tablesorter">
+<div class="row">
+  <div class="col-lg-12">
+    <div class="panel panel-info">
+      <div class="panel-heading">
+        Top Inviters
+      </div>
+      <div class="panel-body">
+        <table class="table">
+
     <tbody>
       <tr>
         <td align="left">
@@ -18,7 +23,7 @@
     </tbody>
   </table>
     
-    <table class="tablesorter" cellspacing="0">
+    <table class="table">
       <thead>
         <tr>
           <th>Username</th>
@@ -38,7 +43,10 @@
           <td align="center">{$TOPINVITERS[inviter].activated}</td>
         </tr>
 {/section}
-      </tbody>
-    </table>
-  </article>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
 {/nocache}

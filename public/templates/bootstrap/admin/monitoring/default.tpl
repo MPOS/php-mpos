@@ -1,6 +1,12 @@
-<article class="module width_full"> 
-  <header><h3>Monitoring</h3></header>
-    <table class="tablesorter" cellspacing="0">
+<div class="row">
+  <div class="col-lg-12">
+    <div class="panel panel-info">
+      <div class="panel-heading">
+        Monitoring
+      </div>
+      <div class="panel-body">
+        <table class="table">
+        
       <thead>
         <th>Cronjob</th>
         <th align="center">Disabled</th>
@@ -26,7 +32,7 @@
             {else if $event.type == 'message'}
               <i>{$event.value}</i>
             {else if $event.type == 'yesno'}
-              <i class="icon-{if $event.value == 1}ok{else}cancel{/if}"></i>
+              <i class="fa fa-{if $event.value == 1}check{else}times{/if} fa-fw"></i>
             {else if $event.type == 'time'}
               {if $event.value > 60}
                 <font color="orange">
@@ -55,5 +61,8 @@
         </tr>
 {/foreach}
       </tbody>
-    </table>
-</article>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>

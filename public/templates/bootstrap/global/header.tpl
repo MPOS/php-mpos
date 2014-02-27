@@ -26,7 +26,7 @@
                         </li>
                         {else}
                         <li><a href="{$smarty.server.SCRIPT_NAME}?page=login"><i class="fa fa-sign-in fa-fw"></i> Login</a>
-                        <li><a href="{$smarty.server.SCRIPT_NAME}?page=register"><i class="fa fa-sign-out fa-fw"></i> Sign Up</a>
+                        <li><a href="{$smarty.server.SCRIPT_NAME}?page=register"><i class="fa fa-pencil fa-fw"></i> Sign Up</a>
                         </li>
                         {/if}
                     </ul>

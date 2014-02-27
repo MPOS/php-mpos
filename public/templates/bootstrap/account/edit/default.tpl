@@ -1,4 +1,3 @@
-
 <div class="row">
 {include file="account/edit/detail.tpl"}
 {include file="account/edit/password.tpl"}
