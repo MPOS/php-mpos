@@ -11,7 +11,7 @@ if ($bitcoin->can_connect() === true){
   $aGetInfo = $bitcoin->getinfo();
 } else {
   $aGetInfo = array('errors' => 'Unable to connect');
-  $_SESSION['POPUP'][] = array('CONTENT' => 'Unable to connect to wallet RPC service: ' . $bitcoin->can_connect(), 'TYPE' => 'errormsg');
+  $_SESSION['POPUP'][] = array('CONTENT' => 'Unable to connect to wallet RPC service: ' . $bitcoin->can_connect(), 'TYPE' => 'alert alert-danger');
 }
 
 // Fetch version information

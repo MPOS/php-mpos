@@ -11,7 +11,7 @@ if ($bitcoin->can_connect() === true){
   $dDifficulty = 1;
   $dNetworkHashrate = 1;
   $iBlock = 0;
-  $_SESSION['POPUP'][] = array('CONTENT' => 'Unable to connect to wallet RPC service: ' . $bitcoin->can_connect(), 'TYPE' => 'errormsg');
+  $_SESSION['POPUP'][] = array('CONTENT' => 'Unable to connect to wallet RPC service: ' . $bitcoin->can_connect(), 'TYPE' => 'alert alert-danger');
 }
 
 if (!$smarty->isCached('master.tpl', $smarty_cache_key)) {
@@ -91,7 +91,7 @@ case '1':
   $smarty->assign("CONTENT", "default.tpl");
   break;
 case '2':
-  $_SESSION['POPUP'][] = array('CONTENT' => 'Page currently disabled. Please try again later.', 'TYPE' => 'errormsg');
+  $_SESSION['POPUP'][] = array('CONTENT' => 'Page currently disabled. Please try again later.', 'TYPE' => 'alert alert-danger');
   $smarty->assign("CONTENT", "");
   break;
 }

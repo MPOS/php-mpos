@@ -74,7 +74,7 @@ if (isset($_REQUEST['filter'])) {
     // Assign our variables
     $smarty->assign("USERS", $aUsers);
   } else {
-    $_SESSION['POPUP'][] = array('CONTENT' => 'Could not find any users', 'TYPE' => 'errormsg');
+    $_SESSION['POPUP'][] = array('CONTENT' => 'Could not find any users', 'TYPE' => 'alert alert-danger');
   }
 }
 

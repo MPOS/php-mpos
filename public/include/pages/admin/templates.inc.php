@@ -29,7 +29,7 @@ if (@$_REQUEST['do'] == 'save') {
   if ($template->updateEntry(@$_REQUEST['template'], @$_REQUEST['content'], @$_REQUEST['active'])) {
     $_SESSION['POPUP'][] = array('CONTENT' => 'Page updated', 'TYPE' => 'success');
   } else {
-    $_SESSION['POPUP'][] = array('CONTENT' => 'Page update failed: ' . $template->getError(), 'TYPE' => 'errormsg');
+    $_SESSION['POPUP'][] = array('CONTENT' => 'Page update failed: ' . $template->getError(), 'TYPE' => 'alert alert-danger');
   }
 }
 

@@ -3,7 +3,7 @@ $defflip = (!cfip()) ? exit(header('HTTP/1.1 401 Unauthorized')) : 1;
 
 if ($user->isAuthenticated()) {
   if ($setting->getValue('disable_notifications') == 1) {
-    $_SESSION['POPUP'][] = array('CONTENT' => 'Notification system disabled by admin.', 'TYPE' => 'alert alert-info');
+    $_SESSION['POPUP'][] = array('CONTENT' => 'Notification system disabled by admin.', 'TYPE' => 'alert alert-warning');
     $smarty->assign('CONTENT', 'empty');
   } else {
     if (@$_REQUEST['do'] == 'save') {
@@ -14,7 +14,7 @@ if ($user->isAuthenticated()) {
           $_SESSION['POPUP'][] = array('CONTENT' => $notification->getError(), 'TYPE' => 'alert alert-danger');
         }
       } else {
-        $_SESSION['POPUP'][] = array('CONTENT' => $csrftoken->getErrorWithDescriptionHTML(), 'TYPE' => 'alert alert-info');
+        $_SESSION['POPUP'][] = array('CONTENT' => $csrftoken->getErrorWithDescriptionHTML(), 'TYPE' => 'alert alert-warning');
       }
     }
 
