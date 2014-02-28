@@ -334,6 +334,7 @@ class Transaction extends Base {
     return $this->createDebitRecord($account_id, $coin_address, $amount, 'Debit_AP');
   }
   private function createDebitRecord($account_id, $coin_address, $amount, $type) {
+    // Calculate and deduct txfee from amount
     $type == 'Debit_MP' ? $txfee = $this->config['txfee_manual'] : $txfee = $this->config['txfee_auto'];
     $amount = $amount - $txfee;
     // Add Debit record
