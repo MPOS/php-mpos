@@ -1,5 +1,9 @@
-<article class="module width_quarter">
-  <header><h3>Account Information</h3></header>
+<div class="col-lg-4">
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h4 class="panel-title">Account Information</h4>
+    </div>
+    <div class="panel-body">
     <table class="tablesorter" cellspacing="0">
       <tr>
         <td colspan="2">
@@ -46,4 +50,6 @@
       </tr>
     </table>
     {/if}
-</article>
+    </div>
+  </div>
+</div>

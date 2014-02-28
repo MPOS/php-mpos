@@ -1,7 +1,10 @@
- <article class="module width_quarter">
-   <header><h3>{$GLOBAL.config.payout_system|capitalize} Stats</h3></header>
-   <div class="module_content">
-     <table width="100%">
+<div class="col-lg-4">
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <h4 class="panel-title">{$GLOBAL.config.payout_system|capitalize} Stats</h4>
+    </div>
+    <div class="panel-body">
+      <table class="tablesorter" cellspacing="0">
        <tbody>
 {if $GLOBAL.config.payout_system == 'pplns'}
          <tr>
@@ -36,5 +39,8 @@
        </tbody>
       </table>
     </div>
- </article>
-
+    <div class="panel-footer">
+      Refresh interval: {$GLOBAL.config.statistics_ajax_refresh_interval|default:"10"} seconds. Hashrate based on shares submitted in the past {$INTERVAL|default:"5"} minutes.
+    </div>
+  </div>
+</div>

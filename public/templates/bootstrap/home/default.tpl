@@ -1,11 +1,9 @@
-    <!-- /.row -->
     <div class="row">
       <div class="col-lg-12">
         <div class="panel panel-default">
           <div class="panel-heading">
             <h4 class="panel-title">latest News</h4>
           </div>
-          <!-- .panel-heading -->
           <div class="panel-body">
             <div class="panel-group" id="accordion">
 {section name=news loop=$NEWS}
@@ -24,9 +22,6 @@
 {/section}
             </div>
           </div>
-          <!-- .panel-body -->
         </div>
-        <!-- /.panel -->
       </div>
-      <!-- /.col-lg-12 -->
     </div>
