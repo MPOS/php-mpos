@@ -9,7 +9,7 @@ if (!$user->isAuthenticated() || !$user->isAdmin($_SESSION['USERDATA']['id'])) {
 
 if (!$smarty->isCached('master.tpl', $smarty_cache_key)) {
   $debug->append('No cached version available, fetching from backend', 3);
-  if ($bitcoin->can_connect() === true){
+  if ($bitcoin->can_connect() === true) {
     $dBalance = $bitcoin->getrealbalance();
 
     $dWalletAccounts = $bitcoin->listaccounts();
@@ -20,7 +20,7 @@ if (!$smarty->isCached('master.tpl', $smarty_cache_key)) {
     {
       $dAccountAddresses[$key] = $bitcoin->getaddressesbyaccount($key);
     }
-    
+
     $aGetInfo = $bitcoin->getinfo();
     if (is_array($aGetInfo) && array_key_exists('newmint', $aGetInfo)) {
       $dNewmint = $aGetInfo['newmint'];
@@ -28,6 +28,9 @@ if (!$smarty->isCached('master.tpl', $smarty_cache_key)) {
       $dNewmint = -1;
     }
   } else {
+    $dWalletAccounts = array();
+    $dAddressCount = 0;
+    $dAccountAddresses = array();
     $aGetInfo = array('errors' => 'Unable to connect');
     $dBalance = 0;
     $dNewmint = -1;
