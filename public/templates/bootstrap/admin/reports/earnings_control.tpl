@@ -1,4 +1,4 @@
-<form action="{$smarty.server.SCRIPT_NAME}" method="post">
+<form action="{$smarty.server.SCRIPT_NAME}" method="post" role="form">
   <input type="hidden" name="page" value="{$smarty.request.page|escape|escape}">
   <input type="hidden" name="action" value="{$smarty.request.action|escape|escape}">
 <div class="row">
