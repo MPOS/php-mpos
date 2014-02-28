@@ -42,29 +42,22 @@
               </label>
             </div>
           </div>
-
-            <div class="panel-body">
-              <!-- Button trigger modal -->
-              <!-- Modal -->
-              <div class="modal fade" id="TAC" tabindex="-1" role="dialog" aria-labelledby="TACLabel" aria-hidden="true">
-                <div class="modal-dialog modal-lg">
-                  <div class="modal-content">
-                    <div class="modal-header">
-                      <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                      <h4 class="modal-title" id="TACLabel">Terms and Conditions</h4>
-                    </div>
-                    <div class="modal-body">
-                      {include file="tac/default.tpl"}
-                    </div>
-                    <div class="modal-footer">
-                      <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                    </div>
+          <div class="panel-body">
+            <div class="modal fade" id="TAC" tabindex="-1" role="dialog" aria-labelledby="TACLabel" aria-hidden="true">
+              <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title" id="TACLabel">Terms and Conditions</h4>
                   </div>
-                <!-- /.modal-content -->
+                  <div class="modal-body">
+                    {include file="tac/default.tpl"}
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                  </div>
                 </div>
-              <!-- /.modal-dialog -->
               </div>
-              <!-- /.modal -->
             </div>
           </div>
           <center>{nocache}{$RECAPTCHA|default:"" nofilter}{/nocache}</center>
