@@ -1,36 +1,56 @@
 <script type="text/javascript">
 $(function() {
-
+        var blk = [
+                   {section block $BLOCKSFOUND step=-1}
+                     [{$smarty.section.block.iteration}, "{$BLOCKSFOUND[block].height}"],
+                   {/section}
+                  ];
         var exp = [
                    {section block $BLOCKSFOUND step=-1}
-                     [{$BLOCKSFOUND[block].time * 1000}, {$BLOCKSFOUND[block].estshares}],
+                     [{$smarty.section.block.iteration}, {$BLOCKSFOUND[block].estshares}],
                    {/section}
                   ];
         var act = [
                    {section block $BLOCKSFOUND step=-1}
-                     [{$BLOCKSFOUND[block].time * 1000}, {$BLOCKSFOUND[block].shares|default:"0"}],
+                     [{$smarty.section.block.iteration}, {$BLOCKSFOUND[block].shares|default:"0"}],
                    {/section}
                   ];
+{if $USEBLOCKAVERAGE}
         var avg = [
                    {section block $BLOCKSFOUND step=-1}
-                     [{$BLOCKSFOUND[block].time * 1000}, {$BLOCKSFOUND[block].block_avg}],
+                     [{$smarty.section.block.iteration}, {$BLOCKSFOUND[block].block_avg|default:"0"}],
                    {/section}
                   ];
+{/if}
+{if $GLOBAL.config.payout_system == 'pplns'}
+        var pplns = [
+                     {section block $BLOCKSFOUND step=-1}
+                       [{$smarty.section.block.iteration}, {$BLOCKSFOUND[block].pplns_shares|default:"0"}],
+                     {/section}
+                    ];
+{/if}
 
     function doPlot(position) {
         $.plot($("#block-line-chart"), [{
             data: exp,
             label: "Expected Shares"
         }, {
+            data: act,
+            label: "Actual Shares"
+{if $USEBLOCKAVERAGE}
+        }, {
             data: avg,
             label: "Average Shares"
+{/if}
+{if $GLOBAL.config.payout_system == 'pplns'}
         }, {
-            data: act,
-            label: "Actual Shares",
-            yaxis: 2
+            data: pplns,
+            label: "PPLNS Shares"
+{/if}
         }], {
             xaxes: [{
-                mode: 'time'
+                ticks: blk,
+                mode: null
             }],
             yaxes: [{
                 min: 0
@@ -44,12 +64,7 @@ $(function() {
             },
             tooltip: true,
             tooltipOpts: {
-                content: "%s for %x was %y",
-                xDateFormat: "%y-%0m-%0d",
-
-                onHover: function(flotItem, $tooltipEl) {
-                    // console.log(flotItem, $tooltipEl);
-                }
+                content: "%y %s",
             }
 
         });
@@ -72,7 +87,6 @@ $(function() {
       <div class="panel-body">
         <div class="panel-group">
           <div class="panel panel-default">
-          
             <div class="panel-body">
               <div class="flot-chart">
                 <div class="flot-chart-content" id="block-line-chart"></div>
