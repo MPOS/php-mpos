@@ -19,7 +19,7 @@
                     <ul class="dropdown-menu dropdown-user">
                     	{if $smarty.session.AUTHENTICATED|default:"0" == 1}
                         <li><a href="{$smarty.server.SCRIPT_NAME}?page=account&action=edit"><i class="fa fa-gear fa-fw"></i> Settings</a>
-                        <li><a href="{$smarty.server.SCRIPT_NAME}?page=account&action=workers"><i class="fa fa-gear fa-fw"></i> Workers</a>
+                        <li><a href="{$smarty.server.SCRIPT_NAME}?page=account&action=workers"><i class="fa fa-desktop fa-fw"></i> Workers</a>
                         </li>
                         <li class="divider"></li>
                         <li><a href="{$smarty.server.SCRIPT_NAME}?page=logout"><i class="fa fa-sign-out fa-fw"></i> Logout</a>
