@@ -28,3 +28,4 @@ public/include/config/global.inc.sha.php
 /public/sitemap.xml
 /public/sitemap.gz
 /public/sitemap.tar.gz
+/public/.htaccess
