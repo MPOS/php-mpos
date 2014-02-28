@@ -36,7 +36,7 @@ if (@$_REQUEST['do'] == 'save') {
 $oDatabaseTemplate = $template->getEntry($sTemplate);
 
 if ( $oDatabaseTemplate === false ) {
-  $_SESSION['POPUP'][] = array('CONTENT' => 'Can\'t fetch template from Database. Have you created `templates` table? Run 005_create_templates_table.sql from sql folder', 'TYPE' => 'errormsg');
+  $_SESSION['POPUP'][] = array('CONTENT' => 'Can\'t fetch template from Database. Have you created `templates` table? Run 005_create_templates_table.sql from sql folder', 'TYPE' => 'danger');
 }
 
 $smarty->assign("TEMPLATES", $aTemplates);
