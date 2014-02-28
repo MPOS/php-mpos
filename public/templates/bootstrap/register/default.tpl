@@ -35,17 +35,16 @@
             <input type="password" class="form-control" name="pin" value="" size="4" maxlength="4"><font size="1"> (4 digit number. <b>Remember this pin!</b>)</font>
           </div>
           <div class="form-group">
+            <label>TERMS AND CONDITIONS</label>
+            <div class="checkbox">
+              <label>
+                <input type="checkbox" value="1" name="tac" id="tac"><button type="button" class="btn btn-outline btn-link" data-toggle="modal" data-target="#TAC">Accept Terms and Conditions</button>
+              </label>
+            </div>
+          </div>
 
             <div class="panel-body">
               <!-- Button trigger modal -->
-              <div class="form-group">
-              <label>TERMS AND CONDITIONS</label>
-              <div class="checkbox">
-                <label>
-                  <input type="checkbox" value="1" name="tac" id="tac"><button type="button" class="btn btn-outline btn-link" data-toggle="modal" data-target="#TAC">Accept Terms and Conditions</button>
-                </label>
-              </div>
-              </div>
               <!-- Modal -->
               <div class="modal fade" id="TAC" tabindex="-1" role="dialog" aria-labelledby="TACLabel" aria-hidden="true">
                 <div class="modal-dialog modal-lg">
@@ -54,7 +53,6 @@
                       <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                       <h4 class="modal-title" id="TACLabel">Terms and Conditions</h4>
                     </div>
-                    
                     <div class="modal-body">
                       {include file="tac/default.tpl"}
                     </div>
