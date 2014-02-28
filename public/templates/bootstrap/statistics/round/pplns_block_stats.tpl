@@ -6,24 +6,24 @@
       </div>
       <div class="panel-body">
         <div class="table-responsive">
-          <table class="table">
+          <table class="table table-striped table-bordered table-hover">
 
             <tbody>
               <tr>
-                <td align="left">
+                <td>
                   <a href="{$smarty.server.SCRIPT_NAME}?page={$smarty.request.page|escape}&action={$smarty.request.action|escape}&height={$BLOCKDETAILS.height}&prev=1"><i class="fa fa-chevron-left fa-fw"></i></a>
                 </td>
-                <td align="right" colspan="4">
+                <td colspan="4">
                   <a href="{$smarty.server.SCRIPT_NAME}?page={$smarty.request.page|escape}&action={$smarty.request.action|escape}&height={$BLOCKDETAILS.height}&next=1"><i class="fa fa-chevron-right fa-fw"></i></a>
                 </td>
               </tr>
             </tbody>
           </table>
-          <table class="table">
+          <table class="table table-striped table-bordered table-hover">
             <thead>
               <tr>
-                <th align="center" colspan="2">Block Statistics</th>
-                <th align="center" colspan="2">PPLNS Round Statistics</th>
+                <th colspan="2">Block Statistics</th>
+                <th colspan="2">PPLNS Round Statistics</th>
               </tr>
             </thead>
             <tbody>

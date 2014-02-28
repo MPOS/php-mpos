@@ -4,23 +4,23 @@
         Top 25 Blockfinder
       </div>
       <div class="panel-body">
-        <table class="table">
+        <table class="table table-striped table-bordered table-hover">
           <thead>
             <tr>
-              <th align="center">Rank</th>
+              <th>Rank</th>
               <th>Username</th>
-              <th align="center">Blocks</th>
-              <th align="right" style="padding-right: 25px;">Coins Generated</th>
+              <th>Blocks</th>
+              <th style="padding-right: 25px;">Coins Generated</th>
             </tr>
           </thead>
           <tbody>
 {assign var=rank value=1}
 {section block $BLOCKSSOLVEDBYACCOUNT}
-      <tr class="{cycle values="odd,even"}">
-              <td align="center">{$rank++}</td>
+      <tr>
+              <td>{$rank++}</td>
               <td>{if $BLOCKSSOLVEDBYACCOUNT[block].is_anonymous|default:"0" == 1 && $GLOBAL.userdata.is_admin|default:"0" == 0}anonymous{else}{$BLOCKSSOLVEDBYACCOUNT[block].finder|default:"unknown"|escape}{/if}</td>
-              <td align="center">{$BLOCKSSOLVEDBYACCOUNT[block].solvedblocks}</td>
-              <td align="right" style="padding-right: 25px;">{$BLOCKSSOLVEDBYACCOUNT[block].generatedcoins|number_format}</td>
+              <td>{$BLOCKSSOLVEDBYACCOUNT[block].solvedblocks}</td>
+              <td style="padding-right: 25px;">{$BLOCKSSOLVEDBYACCOUNT[block].generatedcoins|number_format}</td>
             </tr>
 {/section}
           </tbody>

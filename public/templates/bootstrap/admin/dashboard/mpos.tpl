@@ -5,33 +5,33 @@
         MPOS Version Information
       </div>
       <div class="panel-body">
-        <table class="table">
+        <table class="table table-striped table-bordered table-hover">
           <thead>
             <tr>
               <th>Component</th>
-              <th align="center">Current</th>
-              <th align="center">Installed</th>
+              <th>Current</th>
+              <th>Installed</th>
             </tr>
           </thead>
           <tbody>
             <tr>
               <td><strong>MPOS</strong></td>
-              <td align="center"><font color="green">{$VERSION['CURRENT']['CORE']}</font></td>
-              <td align="center">
+              <td><font color="green">{$VERSION['CURRENT']['CORE']}</font></td>
+              <td>
                 <font color="{if $VERSION['INSTALLED']['CORE'] == $VERSION['CURRENT']['CORE']}green{else}red{/if}">{$VERSION['INSTALLED']['CORE']}</font>
               </td>
             </tr>
             <tr>
               <td><strong>Config</strong></td>
-              <td align="center"><font color="green">{$VERSION['CURRENT']['CONFIG']}</font></td>
-              <td align="center">
+              <td><font color="green">{$VERSION['CURRENT']['CONFIG']}</font></td>
+              <td>
                 <font color="{if $VERSION['INSTALLED']['CONFIG'] == $VERSION['CURRENT']['CONFIG']}green{else}red{/if}">{$VERSION['INSTALLED']['CONFIG']}</font>
               </td>
             </tr>
             <tr>
               <td><strong>Database</strong></td>
-              <td align="center"><font color="green">{$VERSION['CURRENT']['DB']}</font></td>
-              <td align="center">
+              <td><font color="green">{$VERSION['CURRENT']['DB']}</font></td>
+              <td>
                 <font color="{if $VERSION['INSTALLED']['DB'] == $VERSION['CURRENT']['DB']}green{else}red{/if}">{$VERSION['INSTALLED']['DB']}</font>
               </td>
             </tr>
@@ -47,11 +47,11 @@
         MPOS Status
       </div>
       <div class="panel-body">
-        <table class="table">
+        <table class="table table-striped table-bordered table-hover">
           <thead>
             <tr>
-              <th colspan="2" align="center">Cronjobs</th>
-              <th align="center">Wallet</th>
+              <th colspan="2">Cronjobs</th>
+              <th>Wallet</th>
             </tr>
             <tr>
               <th><strong>Errors</strong></th>
@@ -61,13 +61,13 @@
           </thead>
           <tbody>
             <tr>
-              <td align="center">
+              <td>
                 <a href="{$smarty.server.SCRIPT_NAME}?page=admin&action=monitoring">{if $CRON_ERROR == 0}None - OK{else}{$CRON_ERROR}{/if}</a>
               </td>
-              <td align="center">
+              <td>
                 <a href="{$smarty.server.SCRIPT_NAME}?page=admin&action=monitoring">{if $CRON_DISABLED == 0}None - OK{else}{$CRON_DISABLED}{/if}</a>
               </td>
-              <td align="center">
+              <td>
                 <a href="{$smarty.server.SCRIPT_NAME}?page=admin&action=wallet">{$WALLET_ERROR|default:"None - OK"}</a>
               </td>
             </tr>

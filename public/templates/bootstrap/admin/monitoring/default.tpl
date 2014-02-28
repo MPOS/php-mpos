@@ -5,24 +5,24 @@
         Monitoring
       </div>
       <div class="panel-body">
-        <table class="table">
+        <table class="table table-striped table-bordered table-hover">
         
       <thead>
         <th>Cronjob</th>
-        <th align="center">Disabled</th>
-        <th align="center">Exit Code</th>
-        <th align="center">Active</th>
-        <th align="center">Runtime</th>
-        <th align="center">Start Time</th>
-        <th align="center">End Time</th>
-        <th align="center">Message</th>
+        <th>Disabled</th>
+        <th>Exit Code</th>
+        <th>Active</th>
+        <th>Runtime</th>
+        <th>Start Time</th>
+        <th>End Time</th>
+        <th>Message</th>
       </thead>
       <tbody>
 {foreach $CRONSTATUS as $cron => $data}
         <tr>
           <td>{$cron}</td>
   {foreach $data as $name => $event}
-          <td align="center">
+          <td>
             {if $event.type == 'okerror'}
               {if $event.value == 0}
                 <font color="green">OK</font>

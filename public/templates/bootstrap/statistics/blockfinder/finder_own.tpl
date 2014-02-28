@@ -4,23 +4,23 @@
         Blocks found by own Workers
       </div>
       <div class="panel-body">
-        <table class="table">
+        <table class="table table-striped table-bordered table-hover">
           <thead>
             <tr>
-              <th align="center">Rank</th>
+              <th>Rank</th>
               <th>Worker</th>
-              <th align="center">Blocks</th>
-              <th align="right" style="padding-right: 25px;">Coins Generated</th>
+              <th>Blocks</th>
+              <th style="padding-right: 25px;">Coins Generated</th>
             </tr>
           </thead>
           <tbody>
 {assign var=rank value=1}
 {section block $BLOCKSSOLVEDBYWORKER}
-            <tr class="{cycle values="odd,even"}">
-              <td align="center">{$rank++}</td>
+            <tr>
+              <td>{$rank++}</td>
               <td>{$BLOCKSSOLVEDBYWORKER[block].finder|default:"unknown/deleted"|escape}</td>
-              <td align="center">{$BLOCKSSOLVEDBYWORKER[block].solvedblocks}</td>
-              <td align="right" style="padding-right: 25px;">{$BLOCKSSOLVEDBYWORKER[block].generatedcoins|number_format}</td>
+              <td>{$BLOCKSSOLVEDBYWORKER[block].solvedblocks}</td>
+              <td style="padding-right: 25px;">{$BLOCKSSOLVEDBYWORKER[block].generatedcoins|number_format}</td>
             </tr>
 {/section}
           </tbody>

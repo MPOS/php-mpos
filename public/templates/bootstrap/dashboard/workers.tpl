@@ -3,13 +3,13 @@
     <table class="tablesorter" cellspacing="0">
      <thead>
       <tr>
-        <th align="left">Worker</th>
-        <th align="right">Hashrate</th>
-        <th align="right">Difficulty</th>
+        <th>Worker</th>
+        <th>Hashrate</th>
+        <th>Difficulty</th>
       </tr>
       </thead>
       <tbody id="b-workers">
-        <td colspan="3" align="center">Loading worker information</td>
+        <td colspan="3">Loading worker information</td>
       </tbody>
       </tr>
     </table>

@@ -41,13 +41,13 @@
           <table class="table table-hover">
              <thead>
                 <tr>
-                  <th align="left">Worker Login</th>
-                  <th align="left">Worker Password</th>
-                  <th align="center">Active</th>
-                  {if $GLOBAL.config.disable_notifications != 1}<th align="center">Monitor</th>{/if}
-                  <th align="right">Khash/s</th>
-                  <th align="right">Difficulty</th>
-                  <th align="center" style="padding-right: 25px;">Action</th>
+                  <th>Worker Login</th>
+                  <th>Worker Password</th>
+                  <th>Active</th>
+                  {if $GLOBAL.config.disable_notifications != 1}<th>Monitor</th>{/if}
+                  <th>Khash/s</th>
+                  <th>Difficulty</th>
+                  <th style="padding-right: 25px;">Action</th>
                 </tr>
              </thead>
              <tbody>
@@ -55,19 +55,19 @@
                {section worker $WORKERS}
                {assign var="username" value="."|escape|explode:$WORKERS[worker].username:2} 
                <tr>
-                 <td align="left"{if $WORKERS[worker].hashrate > 0} style="color: orange"{/if}>{$username.0|escape}.<input class="form-control" name="data[{$WORKERS[worker].id}][username]" value="{$username.1|escape}" size="10" required/></td>
-                 <td align="left"><input class="form-control" type="text" name="data[{$WORKERS[worker].id}][password]" value="{$WORKERS[worker].password|escape}" size="10" required></td>
-                 <td align="center"><i class="fa fa-{if $WORKERS[worker].hashrate > 0}check{else}times {/if}fa-fw"></i></td>
+                 <td{if $WORKERS[worker].hashrate > 0} style="color: orange"{/if}>{$username.0|escape}.<input class="form-control" name="data[{$WORKERS[worker].id}][username]" value="{$username.1|escape}" size="10" required/></td>
+                 <td><input class="form-control" type="text" name="data[{$WORKERS[worker].id}][password]" value="{$WORKERS[worker].password|escape}" size="10" required></td>
+                 <td><i class="fa fa-{if $WORKERS[worker].hashrate > 0}check{else}times {/if}fa-fw"></i></td>
                  {if $GLOBAL.config.disable_notifications != 1}
-                 <td align="center">
+                 <td>
                    <label for="data[{$WORKERS[worker].id}][monitor]">
                      <input type="checkbox" name="data[{$WORKERS[worker].id}][monitor]" value="1" id="data[{$WORKERS[worker].id}][monitor]" {if $WORKERS[worker].monitor}checked{/if} />
                    </label>
                  </td>
                  {/if}
-                 <td align="right">{$WORKERS[worker].hashrate|number_format}</td>
-                 <td align="right">{$WORKERS[worker].difficulty|number_format:"2"}</td>
-                 <td align="center" style="padding-right: 25px;"><a href="{$smarty.server.SCRIPT_NAME}?page={$smarty.request.page|escape}&action={$smarty.request.action|escape}&do=delete&id={$WORKERS[worker].id|escape}&ctoken={$CTOKEN}"><i class="fa fa-trash-o fa-fw"></i></a></td>
+                 <td>{$WORKERS[worker].hashrate|number_format}</td>
+                 <td>{$WORKERS[worker].difficulty|number_format:"2"}</td>
+                 <td style="padding-right: 25px;"><a href="{$smarty.server.SCRIPT_NAME}?page={$smarty.request.page|escape}&action={$smarty.request.action|escape}&do=delete&id={$WORKERS[worker].id|escape}&ctoken={$CTOKEN}"><i class="fa fa-trash-o fa-fw"></i></a></td>
                </tr>
                {/section}
                {/nocache}

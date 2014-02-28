@@ -5,27 +5,27 @@
         Balance Summary
       </div>
       <div class="panel-body">
-        <table class="table">
+        <table class="table table-striped table-bordered table-hover">
           <tr>
-            <td align="left">Wallet Balance</td>
-            <td align="left">{$BALANCE|number_format:"8"}</td>
+            <td>Wallet Balance</td>
+            <td>{$BALANCE|number_format:"8"}</td>
           </tr>
           <tr>
-            <td align="left">Locked for users</td>
-            <td align="left">{$LOCKED|number_format:"8"}</td>
+            <td>Locked for users</td>
+            <td>{$LOCKED|number_format:"8"}</td>
           </tr>
           <tr>
-            <td align="left">Unconfirmed</td>
-            <td align="left">{$UNCONFIRMED|number_format:"8"}</td>
+            <td>Unconfirmed</td>
+            <td>{$UNCONFIRMED|number_format:"8"}</td>
           </tr>
           <tr>
-            <td align="left">Liquid Assets</td>
-            <td align="left">{($BALANCE - $LOCKED - $UNCONFIRMED + $NEWMINT|default:"0")|number_format:"8"}</td>
+            <td>Liquid Assets</td>
+            <td>{($BALANCE - $LOCKED - $UNCONFIRMED + $NEWMINT|default:"0")|number_format:"8"}</td>
           </tr>
 {if $NEWMINT >= 0}
           <tr>
-            <td align="left">PoS New Mint</td>
-            <td align="left">{$NEWMINT|number_format:"8"}</td>
+            <td>PoS New Mint</td>
+            <td>{$NEWMINT|number_format:"8"}</td>
           </tr>
 {/if}
         </table>
@@ -39,21 +39,21 @@
         Wallet Status
       </div>
       <div class="panel-body">
-        <table class="table">
+        <table class="table table-striped table-bordered table-hover">
           <thead>
-            <th align="center">Version</th>
-            <th align="center">Protocol Version</th>
-            <th align="center">Wallet Version</th>
-            <th align="center">Connections</th>
-            <th align="center">Errors</th>
+            <th>Version</th>
+            <th>Protocol Version</th>
+            <th>Wallet Version</th>
+            <th>Connections</th>
+            <th>Errors</th>
           </thead>
           <tbody>
             <tr>
-              <td align="center">{$COININFO.version|default:""}</td>
-              <td align="center">{$COININFO.protocolversion|default:""}</td>
-              <td align="center">{$COININFO.walletversion|default:""}</td>
-              <td align="center">{$COININFO.connections|default:""}</td>
-              <td align="center"><font color="{if $COININFO.errors}red{else}green{/if}">{$COININFO.errors|default:"OK"}</font></td>
+              <td>{$COININFO.version|default:""}</td>
+              <td>{$COININFO.protocolversion|default:""}</td>
+              <td>{$COININFO.walletversion|default:""}</td>
+              <td>{$COININFO.connections|default:""}</td>
+              <td><font color="{if $COININFO.errors}red{else}green{/if}">{$COININFO.errors|default:"OK"}</font></td>
             </tr>
             </tbody>
           </table>
@@ -88,10 +88,10 @@
                       </h4>
                     </div>
                     <div class="panel-body">
-                      <table class="table">
+                      <table class="table table-striped table-bordered table-hover">
                         <tr>
-                          <td align="left">Balance</td>
-                          <td align="left">{$VALUE|number_format:"8"}</td>
+                          <td>Balance</td>
+                          <td>{$VALUE|number_format:"8"}</td>
                         </tr>
                       </table>
                     </div>
@@ -109,15 +109,15 @@
                       </h4>
                     </div>
                     <div class="panel-body">
-                      <table class="table">
+                      <table class="table table-striped table-bordered table-hover">
                         <tbody>
 {foreach from=$ACCOUNTADDRESSES[$ACCOUNT] key=ACCOUNT1 item=ADDRESS1}
 {if $ADDRESS1@iteration is even by 1}
-                            <td align="left" style="padding-right: 25px;">{$ADDRESS1}</td>
+                            <td style="padding-right: 25px;">{$ADDRESS1}</td>
                           </tr>
 {else}
                           <tr>
-                            <td align="left" style="padding-right: 25px;">{$ADDRESS1}</td>
+                            <td style="padding-right: 25px;">{$ADDRESS1}</td>
 {/if}
 {/foreach}
                         <tbody>

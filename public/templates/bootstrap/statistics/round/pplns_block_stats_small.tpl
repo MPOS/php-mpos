@@ -3,10 +3,10 @@
   <table class="tablesorter">
     <tbody>
       <tr>
-        <td align="left">
+        <td>
           <a href="{$smarty.server.SCRIPT_NAME}?page={$smarty.request.page|escape}&action={$smarty.request.action|escape}&height={$BLOCKDETAILS.height}&prev=1"><i class="icon-left-open"></i></a>
         </td>
-        <td align="right" colspan="4">
+        <td colspan="4">
           <a href="{$smarty.server.SCRIPT_NAME}?page={$smarty.request.page|escape}&action={$smarty.request.action|escape}&height={$BLOCKDETAILS.height}&next=1"><i class="icon-right-open"></i></a>
         </td>
       </tr>
@@ -16,8 +16,8 @@
     <tbody>
      <thead>
       <tr>
-        <th align="center" colspan="4">Block Statistics</th>
-        <th align="center" colspan="4">PPLNS Round Statistics</th>
+        <th colspan="4">Block Statistics</th>
+        <th colspan="4">PPLNS Round Statistics</th>
       </tr>
      </thead>
       <tr class="odd">

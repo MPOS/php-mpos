@@ -5,7 +5,7 @@
         Pool Donors
       </div>
       <div class="panel-body">
-      <table class="table">
+      <table class="table table-striped table-bordered table-hover">
         <thead>
           <tr>
             <th>Name</th>
@@ -22,7 +22,7 @@
           </tr>
 {sectionelse}
           <tr>
-            <td align="center" colspan="3">No confirmed donations yet, please be patient!</td>
+            <td colspan="3">No confirmed donations yet, please be patient!</td>
           </tr>
 {/section}
         </tbody>

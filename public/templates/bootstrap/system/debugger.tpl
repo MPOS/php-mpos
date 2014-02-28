@@ -16,17 +16,17 @@
                 </thead>
                 <tbody>
                     {section name=debug loop=$DebuggerInfo}
-                        <tr class="{cycle values="even,odd"}">
-                            <td align="center">{$DebuggerInfo[debug].level}</td>
-                            <td align="right">{$DebuggerInfo[debug].time}</td>
-                            <td align="left">{$DebuggerInfo[debug].message}</td>
-                            <td align="left">
+                        <tr>
+                            <td>{$DebuggerInfo[debug].level}</td>
+                            <td>{$DebuggerInfo[debug].time}</td>
+                            <td>{$DebuggerInfo[debug].message}</td>
+                            <td>
                                 <table border="0">
                                 {foreach from=$DebuggerInfo[debug].backtrace item=backtrace}
                                     <tr>
-                                        <td style="display:inline-block; width:25px;">{$backtrace.line}</td>
-                                        <td style="display:inline-block; width:200px">{$backtrace.file}</td>
-                                        <td style="display:inline-block;">{$backtrace.function}</td>
+                                        <td>{$backtrace.line}</td>
+                                        <td>{$backtrace.file}</td>
+                                        <td>{$backtrace.function}</td>
                                     </tr>
                                 {/foreach}
                                 </table>

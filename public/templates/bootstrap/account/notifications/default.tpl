@@ -14,11 +14,11 @@
 
           <table width="100%">
             <tr>
-              <th align="left">Type</th>
-              <th align="center">Active</th>
+              <th>Type</th>
+              <th>Active</th>
             </tr>
             <tr>
-              <td align="left">IDLE Worker</td>
+              <td>IDLE Worker</td>
               <td>
                 <label for="data[idle_worker]">
                 <input type="hidden" name="data[idle_worker]" value="0" />
@@ -28,7 +28,7 @@
             </tr>
       {if $DISABLE_BLOCKNOTIFICATIONS|default:"" != 1}
             <tr>
-              <td align="left">New Blocks</td>
+              <td>New Blocks</td>
               <td>
                 <label for="data[new_block]">
                 <input type="hidden" name="data[new_block]" value="0" />
@@ -38,7 +38,7 @@
             </tr>
       {/if}
             <tr>
-              <td align="left">Payout</td>
+              <td>Payout</td>
               <td>
                 <label for="data[payout]">
                 <input type="hidden" name="data[payout]" value="0" />
@@ -47,7 +47,7 @@
               </td>
             </tr>
             <tr>
-              <td align="left">Successful Login</td>
+              <td>Successful Login</td>
               <td>
                 <span class="toggle">
                 <label for="data[success_login]">
@@ -76,18 +76,18 @@
           <table class="table table-hover">
             <thead>
               <tr>
-                <th align="center">ID</th>
-                <th align="center">Time</th>
-                <th align="center">Type</th>
-                <th align="center">Active</th>
+                <th>ID</th>
+                <th>Time</th>
+                <th>Type</th>
+                <th>Active</th>
               </tr>
             </thead>
             <tbody style="font-size:12px;">
 {section notification $NOTIFICATIONS}
-              <tr class="{cycle values="odd,even"}">
-                <td align="center">{$NOTIFICATIONS[notification].id}</td>
-                <td align="center">{$NOTIFICATIONS[notification].time}</td>
-                <td align="center">
+              <tr>
+                <td>{$NOTIFICATIONS[notification].id}</td>
+                <td>{$NOTIFICATIONS[notification].time}</td>
+                <td>
 {if $NOTIFICATIONS[notification].type == new_block}New Block
 {else if $NOTIFICATIONS[notification].type == auto_payout}Auto Payout
 {else if $NOTIFICATIONS[notification].type == idle_worker}IDLE Worker
@@ -95,7 +95,7 @@
 {else if $NOTIFICATIONS[notification].type == success_login}Successful Login
 {/if}
                 </td>
-                <td align="center">
+                <td>
                  <i class="fa-{if $NOTIFICATIONS[notification].active}check{else}times{/if} fa-fw"></i>
                 </td>
               </tr>

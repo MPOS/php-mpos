@@ -39,10 +39,10 @@
   <table class="tablesorter">
     <tbody>
       <tr>
-        <td align="left">
+        <td>
           <a href="{$smarty.server.SCRIPT_NAME}?page={$smarty.request.page|escape}&action={$smarty.request.action|escape}&height={if is_array($BLOCKSFOUND) && count($BLOCKSFOUND) > ($BLOCKLIMIT - 1)}{$BLOCKSFOUND[$BLOCKLIMIT - 1].height}{/if}&prev=1"><i class="fa fa-chevron-left fa"></i></a>
         </td>
-        <td align="right">
+        <td>
           <a href="{$smarty.server.SCRIPT_NAME}?page={$smarty.request.page|escape}&action={$smarty.request.action|escape}&height={if is_array($BLOCKSFOUND) && count($BLOCKSFOUND) > 0}{$BLOCKSFOUND[0].height}{/if}&next=1"><i class="fa fa-chevron-right fa"></i></a>
         </td>
       </tr>

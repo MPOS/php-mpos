@@ -7,7 +7,7 @@
       </div>
       <div class="panel-body">
         <div class="table-responsive">
-          <table class="table">
+          <table class="table table-striped table-bordered table-hover">
             <thead>
               <tr>
               {foreach $SUMMARY as $type=>$total}
@@ -43,14 +43,14 @@
           <table cellspacing="0" class="tablesorter">
             <tbody>
               <tr>
-                <td align="left">
+                <td>
                   {if $smarty.request.start|default:"0" > 0}
                   <a href="{$smarty.server.SCRIPT_NAME}?page={$smarty.request.page|escape}&action={$smarty.request.action|escape}&start={$smarty.request.start|escape|default:"0" - $LIMIT}{if $FILTERS|default:""}{$FILTERS}{/if}"><i class="icon-left-open"></i></a>
                   {else}
                   <i class="icon-left-open"></i>
                   {/if}
                 </td>
-                <td align="right">
+                <td>
                   <a href="{$smarty.server.SCRIPT_NAME}?page={$smarty.request.page|escape}&action={$smarty.request.action|escape}&start={$smarty.request.start|escape|default:"0" + $LIMIT}{if $FILTERS|default:""}{$FILTERS}{/if}"><i class="icon-right-open"></i></a>
                 </td>
               </tr>
@@ -91,11 +91,11 @@
           <table class="table table-hover">
             <thead>
               <tr>
-                <th align="center">ID</th>
+                <th>ID</th>
                 <th>Account</th>
                 <th>Date</th>
                 <th>TX Type</th>
-                <th align="center">Status</th>
+                <th>Status</th>
                 <th>Payment Address</th>
                 <th>TX #</th>
                 <th>Block #</th>
@@ -104,12 +104,12 @@
             </thead>
             <tbody style="font-size:12px;">
               {section transaction $TRANSACTIONS}
-              <tr class="{cycle values="odd,even"}">
-                <td align="center">{$TRANSACTIONS[transaction].id}</td>
+              <tr>
+                <td>{$TRANSACTIONS[transaction].id}</td>
                 <td>{$TRANSACTIONS[transaction].username}</td>
                 <td>{$TRANSACTIONS[transaction].timestamp}</td>
                 <td>{$TRANSACTIONS[transaction].type}</td>
-                <td align="center">
+                <td>
                 {if $TRANSACTIONS[transaction].type == 'Credit_PPS' OR
                   $TRANSACTIONS[transaction].type == 'Fee_PPS' OR
                   $TRANSACTIONS[transaction].type == 'Donation_PPS' OR

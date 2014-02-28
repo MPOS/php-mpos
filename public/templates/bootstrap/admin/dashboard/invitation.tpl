@@ -4,19 +4,19 @@
         <a href="{$smarty.server.SCRIPT_NAME}?page=admin&action=invitations">Invitations</a>
       </div>
       <div class="panel-body">
-        <table class="table">
+        <table class="table table-striped table-bordered table-hover">
           <thead>
             <tr>
-              <th align="center">Total</th>
-              <th align="center">Activated</th>
-              <th align="center">Outstanding</th>
+              <th>Total</th>
+              <th>Activated</th>
+              <th>Outstanding</th>
             </tr>
           </thead>
           <tbody>
             <tr>
-              <td align="center">{$INVITATION_INFO.total}</td>
-              <td align="center">{$INVITATION_INFO.activated}</td>
-              <td align="center">{$INVITATION_INFO.outstanding}</td>
+              <td>{$INVITATION_INFO.total}</td>
+              <td>{$INVITATION_INFO.activated}</td>
+              <td>{$INVITATION_INFO.outstanding}</td>
             </tr>
           </tbody>
         </table>

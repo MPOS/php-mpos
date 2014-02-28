@@ -6,41 +6,41 @@
         Top Inviters
       </div>
       <div class="panel-body">
-        <table class="table">
+        <table class="table table-striped table-bordered table-hover">
 
     <tbody>
       <tr>
-        <td align="left">
+        <td>
 {if $smarty.request.invitersstart|default:"0" > 0}
           <a href="{$smarty.server.SCRIPT_NAME}?page={$smarty.request.page|escape}&action={$smarty.request.action|escape}&invitersstart={$smarty.request.invitersstart|escape|default:"0" - $LIMIT}{if $FILTERS|default:""}{$FILTERS}{/if}#invitations"><i class="icon-left-open"></i> Previous 10</a>
 {else}
           <i class="icon-left-open"></i>
 {/if}
         </td>
-        <td align="right">
+        <td>
           <a href="{$smarty.server.SCRIPT_NAME}?page={$smarty.request.page|escape}&action={$smarty.request.action|escape}&invitersstart={$smarty.request.invitersstart|escape|default:"0" + $LIMIT}{if $FILTERS|default:""}{$FILTERS}{/if}#invitations">Next 10 <i class="icon-right-open"></i></a>
         </td>
     </tbody>
   </table>
     
-    <table class="table">
+    <table class="table table-striped table-bordered table-hover">
       <thead>
         <tr>
           <th>Username</th>
-          <th align="left">eMail</th>
-          <th align="center">Amount</th>
-          <th align="center">Outstanding</th>
-          <th align="center">Activated</th>
+          <th>eMail</th>
+          <th>Amount</th>
+          <th>Outstanding</th>
+          <th>Activated</th>
         </tr>
       </thead>
       <tbody>
 {section inviter $TOPINVITERS}
-        <tr class="{cycle values="odd,even"}">
-          <td align="left">{$TOPINVITERS[inviter].username|escape}</td>
-          <td align="left">{$TOPINVITERS[inviter].email}</td>
-          <td align="center">{$TOPINVITERS[inviter].invitationcount}</td>
-          <td align="center">{($TOPINVITERS[inviter].invitationcount - $TOPINVITERS[inviter].activated)|number_format:"0"}</td>
-          <td align="center">{$TOPINVITERS[inviter].activated}</td>
+        <tr>
+          <td>{$TOPINVITERS[inviter].username|escape}</td>
+          <td>{$TOPINVITERS[inviter].email}</td>
+          <td>{$TOPINVITERS[inviter].invitationcount}</td>
+          <td>{($TOPINVITERS[inviter].invitationcount - $TOPINVITERS[inviter].activated)|number_format:"0"}</td>
+          <td>{$TOPINVITERS[inviter].activated}</td>
         </tr>
 {/section}
           </tbody>

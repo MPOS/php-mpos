@@ -5,11 +5,11 @@
   <table class="tablesorter" width="80%" cellspacing="0">
     <thead>
       <tr>
-        <th align="center">Location</th>
-        <th align="center">Service</th>
-        <th align="center">Status</th>
-        <th align="center">Status Since</th>
-        <th align="center" colspan="4" style="padding-right: 10px">Uptime</th>
+        <th>Location</th>
+        <th>Service</th>
+        <th>Status</th>
+        <th>Status Since</th>
+        <th colspan="4" style="padding-right: 10px">Uptime</th>
       </tr>
       <tr>
         <th colspan="4"></th>
@@ -23,14 +23,14 @@
 {foreach key=key item=item from=$STATUS}
 {assign var=node value="."|explode:$item.friendlyname}
       <tr>
-        <td align="center"><img src="{$GLOBALASSETS}/images/flags/{$node.0}.png"/></td>
-        {if $node|count > 1}<td align="center">{$node.1}</td>{/if}
-        <td align="center"><span class="ur-status-{$CODES[$item.status]|lower}">{$CODES[$item.status]}</span></td>
-        <td align="center">{$item.log.1.datetime|date_format:"%b %d, %Y %H:%M"}</td>
-        <td align="center"><span class="chart" data-percent="{$item.customuptimeratio.0}"><span class="percent"></span></span></td>
-        <td align="center"><span class="chart" data-percent="{$item.customuptimeratio.1}"><span class="percent"></span></span></td>
-        <td align="center"><span class="chart" data-percent="{$item.customuptimeratio.2}"><span class="percent"></span></span></td>
-        <td align="center"><span class="chart" data-percent="{$item.alltimeuptimeratio}"><span class="percent"></span></span></td>
+        <td><img src="{$GLOBALASSETS}/images/flags/{$node.0}.png"/></td>
+        {if $node|count > 1}<td>{$node.1}</td>{/if}
+        <td><span class="ur-status-{$CODES[$item.status]|lower}">{$CODES[$item.status]}</span></td>
+        <td>{$item.log.1.datetime|date_format:"%b %d, %Y %H:%M"}</td>
+        <td><span class="chart" data-percent="{$item.customuptimeratio.0}"><span class="percent"></span></span></td>
+        <td><span class="chart" data-percent="{$item.customuptimeratio.1}"><span class="percent"></span></span></td>
+        <td><span class="chart" data-percent="{$item.customuptimeratio.2}"><span class="percent"></span></span></td>
+        <td><span class="chart" data-percent="{$item.alltimeuptimeratio}"><span class="percent"></span></span></td>
       </tr>
 {/foreach}
     </tbody>

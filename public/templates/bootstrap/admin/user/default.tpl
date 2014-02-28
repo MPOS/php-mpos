@@ -32,14 +32,14 @@
     <table cellspacing="0" class="tablesorter">
     <tbody>
       <tr>
-        <td align="left">
+        <td>
 {if $smarty.request.start|default:"0" > 0}
           <a href="{$smarty.server.SCRIPT_NAME}?page={$smarty.request.page|escape}&action={$smarty.request.action|escape}&start={$smarty.request.start|escape|default:"0" - $LIMIT}{if $FILTERS|default:""}{$FILTERS}{/if}"><i class="icon-left-open"></i> Previous 30</a>
 {else}
           <i class="icon-left-open"></i>
 {/if}
         </td>
-        <td align="right">
+        <td>
           <a href="{$smarty.server.SCRIPT_NAME}?page={$smarty.request.page|escape}&action={$smarty.request.action|escape}&start={$smarty.request.start|escape|default:"0" + $LIMIT}{if $FILTERS|default:""}{$FILTERS}{/if}">Next 30 <i class="icon-right-open"></i></a>
         </td>
     </tbody>
@@ -83,54 +83,54 @@
 <table cellspacing="0" width="100%" class="tablesorter">
   <thead>
     <tr>
-      <th align="center">ID</th>
-      <th align="left">Username</th>
-      <th align="left">E-Mail</th>
-      <th align="right" style="padding-right:10px">Shares</th>
-      <th align="right" style="padding-right:10px">Hashrate</th>
+      <th>ID</th>
+      <th>Username</th>
+      <th>E-Mail</th>
+      <th style="padding-right:10px">Shares</th>
+      <th style="padding-right:10px">Hashrate</th>
 {if $GLOBAL.config.payout_system != 'pps'}
-      <th align="right" style="padding-right:10px">Est. Donation</th>
-      <th align="right" style="padding-right:10px">Est. Payout</th>
+      <th style="padding-right:10px">Est. Donation</th>
+      <th style="padding-right:10px">Est. Payout</th>
 {else}
-      <th align="right" colspan="2" style="padding-right:10px">Est. 24 Hours</th>
+      <th colspan="2" style="padding-right:10px">Est. 24 Hours</th>
 {/if}
-      <th align="right" style="padding-right:10px">Balance</th>
-      <th align="right" style="padding-right:10px">Reg. Date</th>
-      <th align="right" style="padding-right:10px">Last Login</th>
-      <th align="center">Admin</th>
-      <th align="center">Locked</th>
-      <th align="center">No Fees</th>
+      <th style="padding-right:10px">Balance</th>
+      <th style="padding-right:10px">Reg. Date</th>
+      <th style="padding-right:10px">Last Login</th>
+      <th>Admin</th>
+      <th>Locked</th>
+      <th>No Fees</th>
     </tr>
   </thead>
   <tbody>
 {nocache}
 {section name=user loop=$USERS|default}
     <tr>
-      <td align="center">{$USERS[user].id}</td>
-      <td align="left">{$USERS[user].username|escape}</td>
-      <td align="left">{$USERS[user].email|escape}</td>
-      <td align="right">{$USERS[user].shares.valid}</td>
-      <td align="right">{$USERS[user].hashrate}</td>
+      <td>{$USERS[user].id}</td>
+      <td>{$USERS[user].username|escape}</td>
+      <td>{$USERS[user].email|escape}</td>
+      <td>{$USERS[user].shares.valid}</td>
+      <td>{$USERS[user].hashrate}</td>
 {if $GLOBAL.config.payout_system != 'pps'}
-      <td align="right">{$USERS[user].estimates.donation|number_format:"8"}</td>
-      <td align="right">{$USERS[user].estimates.payout|number_format:"8"}</td>
+      <td>{$USERS[user].estimates.donation|number_format:"8"}</td>
+      <td>{$USERS[user].estimates.payout|number_format:"8"}</td>
 {else}
-      <td align="right" colspan="2">{$USERS[user].estimates.hours24|number_format:"8"}</td>
+      <td colspan="2">{$USERS[user].estimates.hours24|number_format:"8"}</td>
 {/if}
-      <td align="right">{$USERS[user].balance|number_format:"8"}</td>
-      <td align="right">{$USERS[user].signup_timestamp|date_format:"%d/%m %H:%M:%S"}</td>
-      <td align="right">{$USERS[user].last_login|date_format:"%d/%m %H:%M:%S"}</td>
-      <td align="center">
+      <td>{$USERS[user].balance|number_format:"8"}</td>
+      <td>{$USERS[user].signup_timestamp|date_format:"%d/%m %H:%M:%S"}</td>
+      <td>{$USERS[user].last_login|date_format:"%d/%m %H:%M:%S"}</td>
+      <td>
         <input type="hidden" name="admin[{$USERS[user].id}]" value="0"/>
         <input type="checkbox" onclick="storeAdmin({$USERS[user].id})" name="admin[{$USERS[user].id}]" value="1" id="admin[{$USERS[user].id}]" {if $USERS[user].is_admin}checked{/if} />
         <label for="admin[{$USERS[user].id}]"></label>
       </td>
-      <td align="center">
+      <td>
         <input type="hidden" name="locked[{$USERS[user].id}]" value="0"/>
         <input type="checkbox" onclick="storeLock({$USERS[user].id})" name="locked[{$USERS[user].id}]" value="1" id="locked[{$USERS[user].id}]" {if $USERS[user].is_locked}checked{/if} />
         <label for="locked[{$USERS[user].id}]"></label>
       </td>
-      <td align="center">
+      <td>
         <input type="hidden" name="nofee[{$USERS[user].id}]" value="0"/>
         <input type="checkbox" onclick="storeFee({$USERS[user].id})" name="nofee[{$USERS[user].id}]" value="1" id="nofee[{$USERS[user].id}]" {if $USERS[user].no_fees}checked{/if} />
         <label for="nofee[{$USERS[user].id}]"></label>

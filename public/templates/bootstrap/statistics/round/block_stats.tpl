@@ -3,10 +3,10 @@
   <table class="tablesorter">
     <tbody>
       <tr>
-        <td align="left">
+        <td>
           <a href="{$smarty.server.SCRIPT_NAME}?page={$smarty.request.page}&action={$smarty.request.action}&height={$BLOCKDETAILS.height}&prev=1"><i class="icon-left-open"></i></a>
         </td>
-        <td colspan="7" align="right">
+        <td colspan="7">
           <a href="{$smarty.server.SCRIPT_NAME}?page={$smarty.request.page}&action={$smarty.request.action}&height={$BLOCKDETAILS.height}&next=1"><i class="icon-right-open"></i></a>
         </td>
       </tr>

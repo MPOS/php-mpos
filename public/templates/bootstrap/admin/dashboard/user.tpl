@@ -5,23 +5,23 @@
         Users
       </div>
       <div class="panel-body">
-        <table class="table">
+        <table class="table table-striped table-bordered table-hover">
           <thead>
             <tr>
-              <th align="center">Total</th>
-              <th align="center">Active</th>
-              <th align="center">Locked</th>
-              <th align="center">Admins</th>
-              <th align="center">No Fees</th>
+              <th>Total</th>
+              <th>Active</th>
+              <th>Locked</th>
+              <th>Admins</th>
+              <th>No Fees</th>
             </tr>
           </thead>
           <tbody>
             <tr>
-              <td align="center">{$USER_INFO.total}</td>
-              <td align="center">{$USER_INFO.active}</td>
-              <td align="center">{$USER_INFO.locked}</td>
-              <td align="center">{$USER_INFO.admins}</td>
-              <td align="center">{$USER_INFO.nofees}</td>
+              <td>{$USER_INFO.total}</td>
+              <td>{$USER_INFO.active}</td>
+              <td>{$USER_INFO.locked}</td>
+              <td>{$USER_INFO.admins}</td>
+              <td>{$USER_INFO.nofees}</td>
             </tr>
           </tbody>
         </table>
@@ -35,23 +35,23 @@
         Logins
       </div>
       <div class="panel-body">
-        <table class="table">
+        <table class="table table-striped table-bordered table-hover">
           <thead>
             <tr>
-              <th align="center">24 hours</th>
-              <th align="center">7 days</th>
-              <th align="center">1 month</th>
-              <th align="center">6 months</th>
-              <th align="center">1 year</th>
+              <th>24 hours</th>
+              <th>7 days</th>
+              <th>1 month</th>
+              <th>6 months</th>
+              <th>1 year</th>
             </tr>
           </thead>
           <tbody>
             <tr>
-              <td align="center">{$USER_LOGINS.24hours}</td>
-              <td align="center">{$USER_LOGINS.7days}</td>
-              <td align="center">{$USER_LOGINS.1month}</td>
-              <td align="center">{$USER_LOGINS.6month}</td>
-              <td align="center">{$USER_LOGINS.1year}</td>
+              <td>{$USER_LOGINS.24hours}</td>
+              <td>{$USER_LOGINS.7days}</td>
+              <td>{$USER_LOGINS.1month}</td>
+              <td>{$USER_LOGINS.6month}</td>
+              <td>{$USER_LOGINS.1year}</td>
             </tr>
           </tbody>
         </table>

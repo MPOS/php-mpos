@@ -23,25 +23,25 @@
         <tr><th colspan="2"><b>{$GLOBAL.config.currency} Account Balance</b></th></tr>
       </thead>
       <tr>
-        <td align="left" style="font-weight: bold;">Confirmed</td>
-        <td align="right"><span id="b-confirmed" class="confirmed" style="width: calc(140px); font-size: 12px;">{$GLOBAL.userdata.balance.confirmed|number_format:"6"}</span></td>
+        <td style="font-weight: bold;">Confirmed</td>
+        <td><span id="b-confirmed" class="confirmed" style="width: calc(140px); font-size: 12px;">{$GLOBAL.userdata.balance.confirmed|number_format:"6"}</span></td>
       </tr>
       <tr>
-        <td align="left" style="font-weight: bold;">Unconfirmed</td>
-        <td align="right"><span id="b-unconfirmed" class="unconfirmed" style="width: calc(140px); font-size: 12px;">{$GLOBAL.userdata.balance.unconfirmed|number_format:"6"}</span></td>
+        <td style="font-weight: bold;">Unconfirmed</td>
+        <td><span id="b-unconfirmed" class="unconfirmed" style="width: calc(140px); font-size: 12px;">{$GLOBAL.userdata.balance.unconfirmed|number_format:"6"}</span></td>
       </tr>
     </table>
     {if !$DISABLED_DASHBOARD and !$DISABLED_DASHBOARD_API}
     <table class="tablesorter" cellspacing="0">
      <thead>
       <tr>
-        <th align="left">Worker</th>
-        <th align="right">Hashrate</th>
-        <th align="right" style="padding-right: 10px;">Difficulty</th>
+        <th>Worker</th>
+        <th>Hashrate</th>
+        <th style="padding-right: 10px;">Difficulty</th>
       </tr>
       </thead>
       <tbody id="b-workers">
-        <td colspan="3" align="center">No worker information available</td>
+        <td colspan="3">No worker information available</td>
       </tbody>
       </tr>
     </table>

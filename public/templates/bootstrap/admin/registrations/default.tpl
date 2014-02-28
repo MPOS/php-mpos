@@ -7,17 +7,17 @@
       </div>
       <div class="panel-body">
         <div class="table-responsive">
-          <table class="table">
+          <table class="table table-striped table-bordered table-hover">
             <tbody>
               <tr>
-                <td align="left">
+                <td>
                 {if $smarty.request.registeredstart|default:"0" > 0}
                   <a href="{$smarty.server.SCRIPT_NAME}?page={$smarty.request.page|escape}&action={$smarty.request.action|escape}&registeredstart={$smarty.request.registeredstart|escape|default:"0" - $LIMIT}{if $FILTERS|default:""}{$FILTERS}{/if}#registrations"><i class="fa fa-chevron-left fa-fw"></i> Previous 10</a>
                 {else}
                   <i class="fa fa-chevron-left fa-fw"></i>
                 {/if}
                 </td>
-                <td align="right">
+                <td>
                   <a href="{$smarty.server.SCRIPT_NAME}?page={$smarty.request.page|escape}&action={$smarty.request.action|escape}&registeredstart={$smarty.request.registeredstart|escape|default:"0" + $LIMIT}{if $FILTERS|default:""}{$FILTERS}{/if}#registrations">Next 10 <i class="fa fa-chevron-right fa-fw"></i></a>
                 </td>
               </tr>
@@ -26,26 +26,26 @@
         </div>
     
         <div class="table-responsive">
-          <table class="table">
+          <table class="table table-striped table-bordered table-hover">
             <thead>
               <tr>
-                <th align="center">ID</th>
+                <th>ID</th>
                 <th>Username</th>
-                <th align="left">eMail</th>
-                <th align="center">Reg. Date</th>
-                <th align="center">Invite</th>
-                <th align="center">Invited from</th>
+                <th>eMail</th>
+                <th>Reg. Date</th>
+                <th>Invite</th>
+                <th>Invited from</th>
               </tr>
             </thead>
             <tbody>
               {section user $LASTREGISTEREDUSERS}
-              <tr class="{cycle values="odd,even"}">
-                <td align="center">{$LASTREGISTEREDUSERS[user].id|escape}</td>
+              <tr>
+                <td>{$LASTREGISTEREDUSERS[user].id|escape}</td>
                 <td>{$LASTREGISTEREDUSERS[user].mposuser}</td>
-                <td align="left">{$LASTREGISTEREDUSERS[user].email}</td>
-                <td align="center">{$LASTREGISTEREDUSERS[user].signup_timestamp|date_format:"%d/%m %H:%M:%S"}</td>
-                <td align="center">{if !$LASTREGISTEREDUSERS[user].inviter}<i class="icon-cancel">{else}<i class="icon-ok">{/if}</td>
-                <td align="center"><a href="{$smarty.server.SCRIPT_NAME}?page=admin&action=user&do=query&filter[account]={$LASTREGISTEREDUSERS[user].inviter}">{$LASTREGISTEREDUSERS[user].inviter}</a></td>
+                <td>{$LASTREGISTEREDUSERS[user].email}</td>
+                <td>{$LASTREGISTEREDUSERS[user].signup_timestamp|date_format:"%d/%m %H:%M:%S"}</td>
+                <td>{if !$LASTREGISTEREDUSERS[user].inviter}<i class="icon-cancel">{else}<i class="icon-ok">{/if}</td>
+                <td><a href="{$smarty.server.SCRIPT_NAME}?page=admin&action=user&do=query&filter[account]={$LASTREGISTEREDUSERS[user].inviter}">{$LASTREGISTEREDUSERS[user].inviter}</a></td>
               </tr>
               {/section}
             </tbody>

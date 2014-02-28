@@ -6,20 +6,20 @@
       </div>
       <div class="panel-body">
         <div class="table-responsive">
-          <table class="table">
+          <table class="table table-striped table-bordered table-hover">
             <form action="{$smarty.server.SCRIPT_NAME}">
               <input type="hidden" name="page" value="{$smarty.request.page|escape}" />
               <input type="hidden" name="action" value="{$smarty.request.action|escape}" />
               <tbody>
                 <tr>
-                  <td align="left">
+                  <td>
                     {if $smarty.request.start|default:"0" > 0}
                     <a href="{$smarty.server.SCRIPT_NAME}?page={$smarty.request.page|escape}&action={$smarty.request.action|escape}&start={$smarty.request.start|escape|default:"0" - $LIMIT}{if $FILTERS|default:""}{$FILTERS}{/if}"><i class="icon-left-open"></i></a>
                     {else}
                     <i class="icon-left-open"></i>
                     {/if}
                     </td>
-                    <td align="right">
+                    <td>
                       <a href="{$smarty.server.SCRIPT_NAME}?page={$smarty.request.page|escape}&action={$smarty.request.action|escape}&start={$smarty.request.start|escape|default:"0" + $LIMIT}{if $FILTERS|default:""}{$FILTERS}{/if}"><i class="icon-right-open"></i></a>
                   </td>
                 </tr>
@@ -29,31 +29,31 @@
         </div>
     
         <div class="table-responsive">
-          <table class="table">
+          <table class="table table-striped table-bordered table-hover">
             <thead>
               <tr>
-                <th align="left">Worker Name</th>
-                <th align="left">Password</th>
-                <th align="center">Active</th>
-                {if $GLOBAL.config.disable_notifications != 1}<th align="center">Monitor</th>{/if}
-                <th align="right">Khash/s</th>
-                <th align="right">Difficulty</th>
-                <th align="right" style="padding-right: 25px;">Avg Difficulty</th>
+                <th>Worker Name</th>
+                <th>Password</th>
+                <th>Active</th>
+                {if $GLOBAL.config.disable_notifications != 1}<th>Monitor</th>{/if}
+                <th>Khash/s</th>
+                <th>Difficulty</th>
+                <th style="padding-right: 25px;">Avg Difficulty</th>
               </tr>
             </thead>
             {nocache}
             {section worker $WORKERS}
             <tbody>
               <tr>
-                <td align="left">{$WORKERS[worker].username|escape}</td>
-                <td align="left">{$WORKERS[worker].password|escape}</td>
-                <td align="center"><i class="icon-{if $WORKERS[worker].hashrate > 0}ok{else}cancel{/if}"></i></td>
+                <td>{$WORKERS[worker].username|escape}</td>
+                <td>{$WORKERS[worker].password|escape}</td>
+                <td><i class="icon-{if $WORKERS[worker].hashrate > 0}ok{else}cancel{/if}"></i></td>
                 {if $GLOBAL.config.disable_notifications != 1}
-                <td align="center"><i class="icon-{if $WORKERS[worker].monitor}ok{else}cancel{/if}"></i></td>
+                <td><i class="icon-{if $WORKERS[worker].monitor}ok{else}cancel{/if}"></i></td>
                 {/if}
-                <td align="right">{$WORKERS[worker].hashrate|number_format|default:"0"}</td>
-                <td align="right">{if $WORKERS[worker].hashrate > 0}{$WORKERS[worker].difficulty|number_format:"2"|default:"0"}{else}0{/if}</td>
-                <td align="right" style="padding-right: 25px;">{if $WORKERS[worker].hashrate > 0}{$WORKERS[worker].avg_difficulty|number_format:"2"|default:"0"}{else}0{/if}</td>
+                <td>{$WORKERS[worker].hashrate|number_format|default:"0"}</td>
+                <td>{if $WORKERS[worker].hashrate > 0}{$WORKERS[worker].difficulty|number_format:"2"|default:"0"}{else}0{/if}</td>
+                <td style="padding-right: 25px;">{if $WORKERS[worker].hashrate > 0}{$WORKERS[worker].avg_difficulty|number_format:"2"|default:"0"}{else}0{/if}</td>
               </tr>
               {/section}
               {/nocache}

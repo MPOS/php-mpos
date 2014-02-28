@@ -4,7 +4,7 @@
         General Statistics
       </div>
       <div class="panel-body">
-        <table class="table">
+        <table class="table table-striped table-bordered table-hover">
           <tbody>
             <tr>
               <td class="leftheader">Pool Hash Rate</td>
