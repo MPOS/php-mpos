@@ -72,14 +72,16 @@
     <script src="{$PATH}/js/jquery-1.10.2.js"></script>
     <script src="{$PATH}/js/bootstrap.min.js"></script>
     <script src="{$PATH}/js/plugins/metisMenu/jquery.metisMenu.js"></script>
-    <!--[if lte IE 8]><script src="js/excanvas.min.js"></script><![endif]-->
     <script src="{$PATH}/js/plugins/flot/jquery.flot.js"></script>
     <script src="{$PATH}/js/plugins/flot/jquery.flot.tooltip.min.js"></script>
     <script src="{$PATH}/js/plugins/flot/jquery.flot.resize.js"></script>
     <script src="{$PATH}/js/plugins/flot/jquery.flot.pie.js"></script>
     <script src="{$PATH}/js/plugins/morris/raphael-2.1.0.min.js"></script>
     <script src="{$PATH}/js/mpos.js"></script>
-  <script type="text/javascript" src="{$PATH}/js/justgage.1.0.1.min.js"></script>
+    <script type="text/javascript" src="{$PATH}/js/justgage.1.0.1.min.js"></script>
+
+    <!-- Page-Level Plugin Scripts - Flot -->
+    <!--[if lte IE 8]><script src="{$PATH}/js/excanvas.min.js"></script><![endif]-->
 
 </body>
 </html>
