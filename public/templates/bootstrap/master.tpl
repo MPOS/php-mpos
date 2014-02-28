@@ -37,16 +37,10 @@
     {if $GLOBAL.statistics.analytics.enabled}
       {$GLOBAL.statistics.analytics.code nofilter}
     {/if}
-
-    <!-- Core CSS - Include with every page -->
     <link href="{$PATH}/css/bootstrap.min.css" rel="stylesheet">
     <link href="{$PATH}/font-awesome/css/font-awesome.css" rel="stylesheet">
-
-    <!-- Page-Level Plugin CSS - Dashboard -->
     <link href="{$PATH}/css/plugins/morris/morris-0.4.3.min.css" rel="stylesheet">
     <link href="{$PATH}/css/plugins/timeline/timeline.css" rel="stylesheet">
-
-    <!-- MPOS CSS - Include with every page -->
     <link href="{$PATH}/css/mpos.css" rel="stylesheet">
     
 </head>
@@ -73,32 +67,19 @@
         {/if}
       {/if}
       </div>
-      <!-- /#page-wrapper -->
-
     </div>
-    <!-- /#wrapper -->
 
-    <!-- Core Scripts - Include with every page -->
     <script src="{$PATH}/js/jquery-1.10.2.js"></script>
     <script src="{$PATH}/js/bootstrap.min.js"></script>
     <script src="{$PATH}/js/plugins/metisMenu/jquery.metisMenu.js"></script>
-
-    <!-- Page-Level Plugin Scripts - Flot -->
     <!--[if lte IE 8]><script src="js/excanvas.min.js"></script><![endif]-->
     <script src="{$PATH}/js/plugins/flot/jquery.flot.js"></script>
     <script src="{$PATH}/js/plugins/flot/jquery.flot.tooltip.min.js"></script>
     <script src="{$PATH}/js/plugins/flot/jquery.flot.resize.js"></script>
     <script src="{$PATH}/js/plugins/flot/jquery.flot.pie.js"></script>
-    
-    <!-- Page-Level Plugin Scripts - Dashboard -->
     <script src="{$PATH}/js/plugins/morris/raphael-2.1.0.min.js"></script>
-    <script src="{$PATH}/js/plugins/morris/morris.js"></script>
-
-    <!-- MPOS Scripts - Include with every page -->
     <script src="{$PATH}/js/mpos.js"></script>
-
-    <!-- Page-Level Demo Scripts - Dashboard - Use for reference -->
-    <script src="{$PATH}/js/demo/dashboard-demo.js"></script>
+  <script type="text/javascript" src="{$PATH}/js/justgage.1.0.1.min.js"></script>
 
 </body>
 </html>

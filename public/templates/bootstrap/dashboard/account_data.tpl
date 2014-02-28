@@ -4,7 +4,7 @@
       <h4 class="panel-title">Account Information</h4>
     </div>
     <div class="panel-body">
-    <table class="tablesorter" cellspacing="0">
+    <table class="table table-bordered table-hover table-striped">
       <tr>
         <td colspan="2">
 {if $GLOBAL.userdata.no_fees}
@@ -22,7 +22,7 @@
         </td>
       </tr>
     </table>
-    <table class="tablesorter" cellspacing="0">
+    <table class="table table-bordered table-hover table-striped">
       <thead>
         <tr><th colspan="2"><b>{$GLOBAL.config.currency} Account Balance</b></th></tr>
       </thead>

@@ -4,7 +4,7 @@
       <h4 class="panel-title">{$GLOBAL.config.payout_system|capitalize} Stats</h4>
     </div>
     <div class="panel-body">
-      <table class="tablesorter" cellspacing="0">
+      <table class="table table-bordered table-hover table-striped">
        <tbody>
 {if $GLOBAL.config.payout_system == 'pplns'}
          <tr>
@@ -29,18 +29,11 @@
           <td id="b-ppsdiff">{$GLOBAL.userdata.sharedifficulty|number_format:"2"}</td>
         </tr>
 {/if}
-         <tr><td colspan="2">&nbsp;</td></tr>
          {include file="dashboard/round_shares.tpl"}
-         <tr><td colspan="2">&nbsp;</td></tr>
          {include file="dashboard/payout_estimates.tpl"}
-         <tr><td colspan="2">&nbsp;</td></tr>
          {include file="dashboard/network_info.tpl"}
-         <tr><td colspan="2">&nbsp;</td></tr>
        </tbody>
       </table>
-    </div>
-    <div class="panel-footer">
-      Refresh interval: {$GLOBAL.config.statistics_ajax_refresh_interval|default:"10"} seconds. Hashrate based on shares submitted in the past {$INTERVAL|default:"5"} minutes.
     </div>
   </div>
 </div>

@@ -4,7 +4,8 @@
       <h4 class="panel-title">Round Information</h4>
     </div>
     <div class="panel-body">
-      <!--INSERT SHARES PIE CHART HERE-->
+      <div class="flot" id="personalround"></div>
+      <div class="flot" id="poolround"></div>
     </div>
   </div>
 </div>
