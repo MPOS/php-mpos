@@ -115,11 +115,11 @@
                         <tbody>
 {foreach from=$ACCOUNTADDRESSES[$ACCOUNT] key=ACCOUNT1 item=ADDRESS1}
 {if $ADDRESS1@iteration is even by 1}
-                            <td style="padding-right: 25px;">{$ADDRESS1}</td>
+                            <td>{$ADDRESS1}</td>
                           </tr>
 {else}
                           <tr>
-                            <td style="padding-right: 25px;">{$ADDRESS1}</td>
+                            <td>{$ADDRESS1}</td>
 {/if}
 {/foreach}
                         <tbody>
