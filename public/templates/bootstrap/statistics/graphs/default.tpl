@@ -1,6 +1,11 @@
 <script>
 $(function () {
 
+  // needed for automatic activation of first tab
+  $(function () {
+    $('#hashrategraph a:first').tab('show')
+  })
+
   // You can't draw here chart directly, because it's on hidden tab, instead let's do the workaround
   $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
     // this ain't pretty, but you should get the idea
