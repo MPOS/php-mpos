@@ -24,7 +24,8 @@ public/include/config/global.inc.sha.php
 .settings
 
 # Site specific Files
-robots.txt
-sitemap.xml
-sitemap.gz
-sitemap.tar.gz
+/public/robots.txt
+/public/sitemap.xml
+/public/sitemap.gz
+/public/sitemap.tar.gz
+/public/.htaccess
