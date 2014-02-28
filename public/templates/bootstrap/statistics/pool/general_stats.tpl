@@ -23,7 +23,7 @@
               {if ! $GLOBAL.website.chaininfo.disabled}
               <td><a href="{$GLOBAL.website.chaininfo.url}" target="_new"><font size="2"><span id="b-diff">{$NETWORK.difficulty}</span></font></a></td>
               {else}
-              <td><font size="2"><span id="b-diff">{$NETWORK.difficulty}</span></font></td>
+              <td><span id="b-diff">{$NETWORK.difficulty}</span></td>
               {/if}
             </tr>
             <tr>
@@ -69,9 +69,7 @@
         </table>
       </div>
       <div class="panel-footer">
-        {if !$GLOBAL.website.api.disabled}<ul><li>These stats are also available in JSON format <a href="{$smarty.server.SCRIPT_NAME}?page=api&action=getpoolstatus&api_key={$GLOBAL.userdata.api_key|default:""}">HERE</a></li></ul>{/if}
+        {if !$GLOBAL.website.api.disabled}These stats are also available in JSON format <a href="{$smarty.server.SCRIPT_NAME}?page=api&action=getpoolstatus&api_key={$GLOBAL.userdata.api_key|default:""}">HERE</a>{/if}
       </div>
-      <!-- /.panel -->
     </div>
-    <!-- /.col-lg-12 -->
   </div>

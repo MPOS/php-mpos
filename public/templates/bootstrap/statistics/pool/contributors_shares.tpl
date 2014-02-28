@@ -36,13 +36,9 @@
         </table>
       </div>
       <div class="panel-footer">
-        <ul>
           <i class="fa fa-ban fa-fw"></i>no Donation
           <i class="fa fa-star-o fa-fw"></i> 0&#37;&#45;2&#37; Donation 
           <i class="fa fa-trophy fa-fw"></i> 2&#37; or more Donation 
-        </ul>
       </div>
-      <!-- /.panel -->
     </div>
-    <!-- /.col-lg-12 -->
   </div>
