@@ -80,6 +80,8 @@
                 <h4 class="panel-title">
                   Account: {$NAME|default:"Default"}
                 </h4>
+              </div>
+              <div class="panel-body">
                 <div class="col-lg-4">
                   <div class="panel panel-default">
                     <div class="panel-heading">
