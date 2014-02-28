@@ -1,23 +1,10 @@
 {if is_array($YOURHASHRATES)}
-  <div class="tab_content" id="mine">
-    <table class="visualize" rel="area">
-      <caption>Your Hashrate</caption>
-      <thead>
-        <tr>
-          <td></td>
-{foreach $YOURHASHRATES as $hour=>$hashrate}
-          <th scope="col">{$hour|default:"0"}:00</th>
-{/foreach}
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <th scope="row">{$smarty.session.USERDATA.username}</th>
-{foreach $YOURHASHRATES as $hour=>$hashrate}
-          <td>{$hashrate|default:"0"}</td>
-{/foreach}
-        </tr>
-      </tbody>
-    </table>
+  <div class="tab-pane fade in" id="mine">
+    <div class="panel-heading">
+      Your Hashrate
+    </div>
+    <div class="panel-body">
+      <div id="mine-area-chart"></div>
+    </div>
   </div>
 {/if}
