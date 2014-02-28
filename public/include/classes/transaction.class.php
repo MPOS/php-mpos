@@ -335,6 +335,7 @@ class Transaction extends Base {
   }
   private function createDebitRecord($account_id, $coin_address, $amount, $type) {
     $type == 'Debit_MP' ? $txfee = $this->config['txfee_manual'] : $txfee = $this->config['txfee_auto'];
+    $amount = $amount - $txfee;
     // Add Debit record
     if (!$this->addTransaction($account_id, $amount, $type, NULL, $coin_address, NULL)) {
       $this->setErrorMessage('Failed to create ' . $type . ' transaction record in database');
@@ -366,7 +367,7 @@ class Transaction extends Base {
     // Notify user via  mail
     $aMailData['email'] = $this->user->getUserEmailById($account_id);
     $aMailData['subject'] = $type . ' Completed';
-    $aMailData['amount'] = $amount - $txfee;
+    $aMailData['amount'] = $amount;
     if (!$this->notification->sendNotification($account_id, 'payout', $aMailData)) {
       $this->setErrorMessage('Failed to send notification email to users address: ' . $aMailData['email'] . 'ERROR: ' . $this->notification->getCronError());
     }
