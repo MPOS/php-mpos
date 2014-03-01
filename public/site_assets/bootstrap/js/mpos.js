@@ -16,3 +16,8 @@ $(function() {
         }
     })
 })
+
+// Make all table with "datatable" class a datatable
+$(document).ready(function() {
+  $('.datatable').dataTable();
+});

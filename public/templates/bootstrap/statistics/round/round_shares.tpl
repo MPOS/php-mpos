@@ -3,9 +3,9 @@
       <div class="panel-heading">
         <i class="fa fa-refresh fa-fw"></i> Round Shares
       </div>
-      <div class="panel-body no-padding">
+      <div class="panel-body">
         <div class="table-responsive">
-          <table class="table table-striped table-bordered table-hover">
+          <table class="table table-striped table-bordered table-hover datatable">
             <thead>
               <tr>
                 <th>Rank</th>
