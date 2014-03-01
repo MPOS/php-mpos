@@ -23,6 +23,8 @@ $(function () {
         ykeys : ['estShares', {if $USEBLOCKAVERAGE}'avgShares', {/if}{if $GLOBAL.config.payout_system == 'pplns'}'pplnsShares', {/if} 'actShares'],
         labels : ['Expected Shares', {if $USEBLOCKAVERAGE}'Average Shares', {/if}{if $GLOBAL.config.payout_system == 'pplns'}'PPLNS Shares',{/if} 'Actual Shares'],
         pointSize: 2,
+        lineColors: ['#2D9C2F','#D58665','#2D619C','#FF0000'],
+        pointFillColors: ['#FFFFFF'],
         hideHover: 'auto',
         resize: true
       });
