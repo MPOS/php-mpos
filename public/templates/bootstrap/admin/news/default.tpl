@@ -14,7 +14,7 @@
       <div class="panel-body">
         <div class="row">
           <div class="col-lg-12">
-            <form method="POST" action="{$smarty.server.SCRIPT_NAME}">
+            <form method="POST" action="{$smarty.server.SCRIPT_NAME}" role="form">
               <input type="hidden" name="page" value="{$smarty.request.page|escape}">
               <input type="hidden" name="action" value="{$smarty.request.action|escape}">
               <input type="hidden" name="do" value="add">
@@ -47,7 +47,7 @@
           <div class="col-lg-12">
             <div class="panel panel-info">
               <div class="panel-heading">
-                <i class="fa fa-info fa-fw"></i> <a data-toggle="collapse" data-parent="#accordion" href="#collapse{$smarty.section.news.index}">{$NEWS[news].header}</a>
+                <i class="fa fa-info fa-fw"></i> {$NEWS[news].header}</a>
                 <br />
                 <font size="1px">posted {$NEWS[news].time|date_format:"%b %e, %Y at %H:%M"}{if $HIDEAUTHOR|default:"0" == 0} by <b>{$NEWS[news].author}</b>{/if}</font>
               </div>
@@ -55,12 +55,12 @@
               <div class="panel-body">
                 {$NEWS[news].content nofilter}
               </div>
-              <footer>
-              <div class="submit_link">
-                <a href='{$smarty.server.SCRIPT_NAME}?page={$smarty.request.page|escape}&action=news_edit&id={$NEWS[news].id}'><i class="icon-wrench"></i></a>&nbsp;
-                <a href='{$smarty.server.SCRIPT_NAME}?page={$smarty.request.page|escape}&action={$smarty.request.action|escape}&do=delete&id={$NEWS[news].id}'><i class="icon-trash"></i></a>
+              <div class="panel-footer">
+                <div  style="text-align:right">
+                  <a href='{$smarty.server.SCRIPT_NAME}?page={$smarty.request.page|escape}&action=news_edit&id={$NEWS[news].id}'><i class="fa fa-wrench fa-fw"></i></a>&nbsp;
+                  <a href='{$smarty.server.SCRIPT_NAME}?page={$smarty.request.page|escape}&action={$smarty.request.action|escape}&do=delete&id={$NEWS[news].id}'><i class="fw fa-trash-o fa-fw"></i></a>
+                </div>
               </div>
-              </footer>
             </div>
           </div>
 {/section}
