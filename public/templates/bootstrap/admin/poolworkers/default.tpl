@@ -4,7 +4,7 @@
       <div class="panel-heading">
         {$GLOBAL.workers} Current Active Pool Workers
       </div>
-      <div class="panel-body">
+      <div class="panel-body no-padding">
         <div class="table-responsive">
           <table class="table table-striped table-bordered table-hover">
             <form action="{$smarty.server.SCRIPT_NAME}">

@@ -2,7 +2,7 @@
 <div class="col-lg-6">
     <div class="panel panel-info">
       <div class="panel-heading"><i class="fa fa-clock-o fa-fw"></i> UptimeRobot Status</div>
-      <div class="panel-body">
+      <div class="panel-body no-padding">
         <table class="table table-striped table-bordered table-hover">
           <thead>
             <tr>

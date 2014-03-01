@@ -4,7 +4,7 @@
       <div class="panel-heading">
         <i class="fa fa-user fa-fw"></i> Users
       </div>
-      <div class="panel-body">
+      <div class="panel-body no-padding">
         <table class="table table-striped table-bordered table-hover">
           <thead>
             <tr>
@@ -34,7 +34,7 @@
       <div class="panel-heading">
         <i class="fa fa-sign-in fa-fw"></i> Logins
       </div>
-      <div class="panel-body">
+      <div class="panel-body no-padding">
         <table class="table table-striped table-bordered table-hover">
           <thead>
             <tr>

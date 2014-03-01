@@ -5,7 +5,7 @@
       <div class="panel-heading">
         Transaction Summary
       </div>
-      <div class="panel-body">
+      <div class="panel-body no-padding">
         <div class="table-responsive">
           <table class="table table-striped table-bordered table-hover">
             <thead>
@@ -85,10 +85,10 @@
       <div class="panel-heading">
         Transaction History
       </div>
-      <div class="panel-body">
+      <div class="panel-body no-padding">
 
         <div class="table-responsive">
-          <table class="table table-hover">
+          <table class="table table-striped table-bordered table-hover">
             <thead>
               <tr>
                 <th>ID</th>
@@ -102,7 +102,7 @@
                 <th>Amount</th>
               </tr>
             </thead>
-            <tbody style="font-size:12px;">
+            <tbody>
               {section transaction $TRANSACTIONS}
               <tr>
                 <td>{$TRANSACTIONS[transaction].id}</td>

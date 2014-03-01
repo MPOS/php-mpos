@@ -4,7 +4,7 @@
       <div class="panel-heading">
         <i class="fa fa-credit-card fa-fw"></i> Round Transactions
       </div>
-      <div class="panel-body">
+      <div class="panel-body no-padding">
         <div class="table-responsive">
           <table class="table table-striped table-bordered table-hover">
             <thead>
@@ -15,7 +15,7 @@
                 <th>PPLNS Shares</th>
                 <th>PPLNS Round %</th>
                 <th>Variance</th>
-                <th style="padding-right: 25px;">Amount</th>
+                <th>Amount</th>
               </tr>
             </thead>
             <tbody>
@@ -29,7 +29,7 @@
                 <td>{if $PPLNSROUNDSHARES[txs].pplns_valid > 0 }{(( 100 / $PPLNSSHARES) * $PPLNSROUNDSHARES[txs].pplns_valid)|number_format:"2"|default:"0"}{else}0{/if}</td>
                 <td>{if $ROUNDSHARES[$ROUNDTRANSACTIONS[txs].uid].valid > 0  && $PPLNSROUNDSHARES[txs].pplns_valid > 0}{math assign="percentage1" equation=(100 / ((( 100 / $BLOCKDETAILS.shares) * $ROUNDSHARES[$ROUNDTRANSACTIONS[txs].uid].valid) / (( 100 / $PPLNSSHARES) * $PPLNSROUNDSHARES[txs].pplns_valid)))}{else if $PPLNSROUNDSHARES[txs].pplns_valid == 0}{assign var=percentage1 value=0}{else}{assign var=percentage1 value=100}{/if}
                   <font color="{if ($percentage1 >= 100)}green{else}red{/if}">{$percentage1|number_format:"2"}</font></b></td>
-                <td style="padding-right: 25px;">{$ROUNDTRANSACTIONS[txs].amount|default:"0"|number_format:"8"}</td>
+                <td>{$ROUNDTRANSACTIONS[txs].amount|default:"0"|number_format:"8"}</td>
                 {assign var=percentage1 value=0}
               </tr>
 {/section}

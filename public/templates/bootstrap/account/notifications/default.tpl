@@ -61,12 +61,10 @@
                 </script>
               </td>
             </tr>
-            <tr>
-              <td colspan="2">
-                <input type="submit" value="Update" class="btn btn-outline btn-success btn-lg btn-block">
-              </td>
-            </tr>
           </table>
+          </div>
+          <div class="panel-footer">
+          <input type="submit" value="Update" class="btn btn-success">
         </form>
       </div>
     </div>
@@ -77,7 +75,7 @@
       <div class="panel-heading">
         <i class="fa fa-clock-o fa-fw"></i> Notification History
       </div>
-      <div class="panel-body">
+      <div class="panel-body no-padding">
         <div class="table-responsive">
           <table class="table table-striped table-bordered table-hover">
             <thead>

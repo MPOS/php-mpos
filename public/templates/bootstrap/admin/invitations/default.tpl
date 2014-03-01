@@ -5,7 +5,7 @@
       <div class="panel-heading">
         Top Inviters
       </div>
-      <div class="panel-body">
+      <div class="panel-body no-padding">
         <table class="table table-striped table-bordered table-hover">
 
     <tbody>

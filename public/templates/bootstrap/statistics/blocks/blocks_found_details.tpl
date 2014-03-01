@@ -4,7 +4,7 @@
       <div class="panel-heading">
         <i class="fa fa-tasks fa-fw"></i> Last {$BLOCKLIMIT} Blocks Found
       </div>
-      <div class="panel-body">
+      <div class="panel-body no-padding">
         <div class="table-responsive">
           <table class="table table-striped table-bordered table-hover" id="dataTables-example">
             <thead>
@@ -77,10 +77,8 @@
         </div>
       </div>
       <div class="panel-footer">
-        {if $GLOBAL.config.payout_system != 'pps'}<ul><li>Note: Round Earnings are not credited until <font color="orange">{$GLOBAL.confirmations}</font> confirms.</li></ul>{/if}
+        {if $GLOBAL.config.payout_system != 'pps'}Round Earnings are not credited until <font color="orange">{$GLOBAL.confirmations}</font> confirms.{/if}
       </div>
-    <!-- /.panel -->
     </div>
-  <!-- /.col-lg-12 -->
   </div>
 </div>

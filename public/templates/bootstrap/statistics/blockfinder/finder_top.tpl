@@ -3,14 +3,14 @@
       <div class="panel-heading">
         <i class="fa fa-search fa-fw"></i> Top 25 Blockfinder
       </div>
-      <div class="panel-body">
+      <div class="panel-body no-padding">
         <table class="table table-striped table-bordered table-hover">
           <thead>
             <tr>
               <th>Rank</th>
               <th>Username</th>
               <th>Blocks</th>
-              <th style="padding-right: 25px;">Coins Generated</th>
+              <th>Coins Generated</th>
             </tr>
           </thead>
           <tbody>
@@ -20,7 +20,7 @@
               <td>{$rank++}</td>
               <td>{if $BLOCKSSOLVEDBYACCOUNT[block].is_anonymous|default:"0" == 1 && $GLOBAL.userdata.is_admin|default:"0" == 0}anonymous{else}{$BLOCKSSOLVEDBYACCOUNT[block].finder|default:"unknown"|escape}{/if}</td>
               <td>{$BLOCKSSOLVEDBYACCOUNT[block].solvedblocks}</td>
-              <td style="padding-right: 25px;">{$BLOCKSSOLVEDBYACCOUNT[block].generatedcoins|number_format}</td>
+              <td>{$BLOCKSSOLVEDBYACCOUNT[block].generatedcoins|number_format}</td>
             </tr>
 {/section}
           </tbody>

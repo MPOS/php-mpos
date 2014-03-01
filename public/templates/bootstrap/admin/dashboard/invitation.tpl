@@ -3,7 +3,7 @@
       <div class="panel-heading">
         <i class="fa fa-users fa-fw"></i> <a href="{$smarty.server.SCRIPT_NAME}?page=admin&action=invitations">Invitations</a>
       </div>
-      <div class="panel-body">
+      <div class="panel-body no-padding">
         <table class="table table-striped table-bordered table-hover">
           <thead>
             <tr>

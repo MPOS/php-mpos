@@ -4,7 +4,7 @@
       <div class="panel-heading">
         Earnings Report Last {$BLOCKLIMIT} Blocks For User: {$USERNAME}
       </div>
-      <div class="panel-body">
+      <div class="panel-body no-padding">
         <div class="table-responsive">
           <table class="table table-striped table-bordered table-hover">
             <thead>

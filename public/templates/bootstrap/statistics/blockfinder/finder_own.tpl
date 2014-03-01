@@ -3,14 +3,14 @@
       <div class="panel-heading">
         <i class="fa fa-search fa-fw"></i> Blocks found by own Workers
       </div>
-      <div class="panel-body">
+      <div class="panel-body no-padding">
         <table class="table table-striped table-bordered table-hover">
           <thead>
             <tr>
               <th>Rank</th>
               <th>Worker</th>
               <th>Blocks</th>
-              <th style="padding-right: 25px;">Coins Generated</th>
+              <th>Coins Generated</th>
             </tr>
           </thead>
           <tbody>
@@ -20,7 +20,7 @@
               <td>{$rank++}</td>
               <td>{$BLOCKSSOLVEDBYWORKER[block].finder|default:"unknown/deleted"|escape}</td>
               <td>{$BLOCKSSOLVEDBYWORKER[block].solvedblocks}</td>
-              <td style="padding-right: 25px;">{$BLOCKSSOLVEDBYWORKER[block].generatedcoins|number_format}</td>
+              <td>{$BLOCKSSOLVEDBYWORKER[block].generatedcoins|number_format}</td>
             </tr>
 {/section}
           </tbody>
