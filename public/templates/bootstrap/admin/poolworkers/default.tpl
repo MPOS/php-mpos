@@ -2,9 +2,9 @@
   <div class="col-lg-12">
     <div class="panel panel-info">
       <div class="panel-heading">
-        {$GLOBAL.workers} Current Active Pool Workers
+        <i class="fa fa-desktop fa-fw"></i> {$GLOBAL.workers} Current Active Pool Workers
       </div>
-      <div class="panel-body">
+      <div class="panel-body no-padding">
         <div class="table-responsive">
           <table class="table table-striped table-bordered table-hover">
             <form action="{$smarty.server.SCRIPT_NAME}">

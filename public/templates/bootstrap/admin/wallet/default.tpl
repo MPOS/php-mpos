@@ -4,7 +4,7 @@
       <div class="panel-heading">
         <i class="fa fa-money fa-fw"></i> Balance Summary
       </div>
-      <div class="panel-body">
+      <div class="panel-body no-padding">
         <table class="table table-striped table-bordered table-hover">
           <tr>
             <td>Wallet Balance</td>
@@ -38,7 +38,7 @@
       <div class="panel-heading">
         <i class="fa fa-info fa-fw"></i> Wallet Status
       </div>
-      <div class="panel-body">
+      <div class="panel-body no-padding">
         <table class="table table-striped table-bordered table-hover">
           <thead>
             <th>Version</th>
@@ -71,7 +71,7 @@
           <i class="fa fa-users fa-fw"></i> Number of Accounts in Wallet: {$ADDRESSCOUNT|default:"0"}
         </div>
         
-        <div class="panel-body">
+        <div class="panel-body ">
           <div class="panel-group">
 
 {foreach key=NAME item=VALUE from=$ACCOUNTS}
@@ -87,7 +87,7 @@
                         <i class="fa fa-money fa-fw"></i> Balance Info
                       </div>
                     </div>
-                    <div class="panel-body">
+                    <div class="panel-body no-padding">
                       <table class="table table-striped table-bordered table-hover">
                         <tr>
                           <td>Balance</td>
@@ -106,7 +106,7 @@
                     <div class="panel-heading">
                       <i class="fa fa-money fa-fw"></i> Addresses assigned to Account {$ACCOUNT|default:"Default"}
                     </div>
-                    <div class="panel-body">
+                    <div class="panel-body no-padding">
                       <table class="table table-striped table-bordered table-hover">
                         <tbody>
 {foreach from=$ACCOUNTADDRESSES[$ACCOUNT] key=ACCOUNT1 item=ADDRESS1}

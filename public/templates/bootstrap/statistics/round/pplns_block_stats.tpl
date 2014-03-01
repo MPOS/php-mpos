@@ -1,10 +1,10 @@
 <div class="row">
-  <div class="col-lg-6">
+  <div class="col-lg-12">
     <div class="panel panel-info">
       <div class="panel-heading">
         <i class="fa fa-refresh fa-fw"></i> Round Statistics
       </div>
-      <div class="panel-body">
+      <div class="panel-body no-padding">
         <div class="table-responsive">
           <table class="table table-striped table-bordered table-hover">
 

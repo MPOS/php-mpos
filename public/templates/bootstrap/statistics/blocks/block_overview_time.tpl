@@ -4,7 +4,7 @@
       <div class="panel-heading">
         <i class="fa fa-clock-o fa-fw"></i> Block Overview
       </div>
-      <div class="panel-body">
+      <div class="panel-body no-padding">
         <div class="table-responsive">
           <table class="table table-striped table-bordered table-hover">
             <thead>
@@ -178,10 +178,8 @@
         </div>
       </div>
       <div class="panel-footer">
-        {if $GLOBAL.config.payout_system != 'pps'}<ul><li>note: round earnings are not credited until <font color="orange">{$GLOBAL.confirmations}</font> confirms.</li></ul>{/if}
+        {if $GLOBAL.config.payout_system != 'pps'}Round earnings are not credited until <font color="orange">{$GLOBAL.confirmations}</font> confirms.{/if}
       </div>
-      <!-- /.panel -->
     </div>
-  <!-- /.col-lg-12 -->
   </div>
 </div>

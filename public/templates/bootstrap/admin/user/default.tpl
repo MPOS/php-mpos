@@ -93,7 +93,7 @@
       <div class="panel-heading">
         <i class="fa fa-info fa-fw"></i> User Information
       </div>
-      <div class="panel-body">
+      <div class="panel-body no-padding">
         <div class="table-responsive">
           <table class="table table-striped table-bordered table-hover">
             <thead>
@@ -150,10 +150,6 @@
                   <input type="checkbox" onclick="storeFee({$USERS[user].id})" name="nofee[{$USERS[user].id}]" value="1" id="nofee[{$USERS[user].id}]" {if $USERS[user].no_fees}checked{/if} />
                   <label for="nofee[{$USERS[user].id}]"></label>
                 </td>
-              </tr>
-{sectionelse}
-              <tr>
-                <td colspan="13"></td>
               </tr>
 {/section}
 {/nocache}

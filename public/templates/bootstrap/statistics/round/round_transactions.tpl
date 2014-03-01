@@ -3,7 +3,7 @@
       <div class="panel-heading">
         Round Transactions
       </div>
-      <div class="panel-body">
+      <div class="panel-body no-padding">
         <div class="table-responsive">
           <table class="table table-striped table-bordered table-hover">
             <thead>
@@ -22,7 +22,7 @@
         <td>{$ROUNDTRANSACTIONS[txs].type|default:""}</td>
         <td>{$ROUNDSHARES[$ROUNDTRANSACTIONS[txs].uid].valid|number_format}</td>
         <td>{(( 100 / $BLOCKDETAILS.shares) * $ROUNDSHARES[$ROUNDTRANSACTIONS[txs].uid].valid)|default:"0"|number_format:"2"}</td>
-        <td style="padding-right: 25px;">{$ROUNDTRANSACTIONS[txs].amount|default:"0"|number_format:"8"}</td>
+        <td>{$ROUNDTRANSACTIONS[txs].amount|default:"0"|number_format:"8"}</td>
       </tr>
 {/section}
             </tbody>

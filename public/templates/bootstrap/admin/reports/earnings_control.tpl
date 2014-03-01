@@ -10,13 +10,15 @@
         <div class="panel-body">
           <div class="table-responsive">
             <table class="table table-striped table-bordered table-hover">
-              <tbody>
+              <thead>
                 <tr>
                   <td colspan="4">
                     <a href="{$smarty.server.SCRIPT_NAME}?page={$smarty.request.page|escape}&action={$smarty.request.action|escape}&height={if is_array($REPORTDATA) && count($REPORTDATA) > ($BLOCKLIMIT - 1)}{$REPORTDATA[$BLOCKLIMIT - 1].height}{/if}&prev=1&limit={$BLOCKLIMIT}&id={$USERID}&filter={$FILTER}"<i class="fa fa-chevron-left fa-fw"></i></a>
                     <a href="{$smarty.server.SCRIPT_NAME}?page={$smarty.request.page|escape}&action={$smarty.request.action|escape}&height={if is_array($REPORTDATA) && count($REPORTDATA) > 0}{$REPORTDATA[0].height}{/if}&next=1&limit={$BLOCKLIMIT}&id={$USERID}&filter={$FILTER}"><i class="fa fa-chevron-right fa-fw pull-right"></i></a>
                   </td>
                 </tr>
+              </thead>
+              <tbody>
                 <tr>
                   <td>
                     <div class="form-group">

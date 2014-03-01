@@ -1,8 +1,8 @@
 <div class="row">
   <div class="col-lg-12">
-    <div class="panel panel-default">
+    <div class="panel panel-info">
       <div class="panel-heading">
-        Settings
+        <i class="fa fa-gear fa-fw"></i> Settings
       </div>           
       <form method="POST" role="form">
         <input type="hidden" name="page" value="{$smarty.request.page|escape}" />
