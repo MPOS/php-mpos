@@ -6,7 +6,7 @@
       </div>
       <div class="panel-body ">
         <div class="table-responsive">
-          <table class="table table-striped table-bordered table-hover">
+          <table class="table table-striped table-bordered table-hover datatable">
             <thead>
               <tr>
                 <th>User Name</th>
@@ -23,7 +23,7 @@
 {section txs $ROUNDTRANSACTIONS}
               <tr{if $GLOBAL.userdata.username|default:"" == $ROUNDTRANSACTIONS[txs].username}{assign var=listed value=1} style="background-color:#99EB99;"{else}{/if}>
                 <td>{if $ROUNDTRANSACTIONS[txs].is_anonymous|default:"0" == 1 && $GLOBAL.userdata.is_admin|default:"0" == 0}anonymous{else}{$ROUNDTRANSACTIONS[txs].username|default:"unknown"|escape}{/if}</td>
-                <td>{$ROUNDSHARES[$ROUNDTRANSACTIONS[txs].uid].valid|number_format}</td>
+                <td>{$ROUNDSHARES[$ROUNDTRANSACTIONS[txs].uid].valid|number_format|default:0}</td>
                 <td>{if $ROUNDSHARES[$ROUNDTRANSACTIONS[txs].uid].valid > 0 }{(( 100 / $BLOCKDETAILS.shares) * $ROUNDSHARES[$ROUNDTRANSACTIONS[txs].uid].valid)|number_format:"2"}{else}0.00{/if}</td>
                 <td>{$PPLNSROUNDSHARES[txs].pplns_valid|number_format|default:"0"}</td>
                 <td>{if $PPLNSROUNDSHARES[txs].pplns_valid|default:"0" > 0 }{(( 100 / $PPLNSSHARES) * $PPLNSROUNDSHARES[txs].pplns_valid)|number_format:"2"|default:"0"}{else}0{/if}</td>
