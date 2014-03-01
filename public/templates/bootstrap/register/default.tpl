@@ -1,3 +1,8 @@
+<script>
+  var zxcvbnPath = "{$PATH}/js/zxcvbn/zxcvbn.js";
+</script>
+<script type="text/javascript" src="{$PATH}/js/pwcheck.js"></script>
+
 <div class="row">
   <div class="col-lg-6">
     <div class="panel panel-info">
@@ -18,10 +23,10 @@
             </div>
             <div class="form-group">
               <label>Password</label>
-              <p style="padding-right:10px;display:block;margin-top:0px;float:right;color:#999;" id="pw_strength">Strength</p>
+              <span style="padding-right:10px;display:block;margin-top:1px;float:right;color:#999;" id="pw_strength">Strength</span>
               <input type="password" class="form-control" name="password1" value="" size="15" maxlength="100" id="pw_field" required>
               <label>Repeat Password</label>
-              <p style="padding-right:10px;display:block;margin-top:0px;float:right;" id="pw_match"></p>
+              <span style="padding-right:10px;display:block;margin-top:1px;float:right;" id="pw_match"></span>
               <input type="password" class="form-control" name="password2" value="" size="15" maxlength="100" id="pw_field2" required>
             </div>
             <div class="form-group">
