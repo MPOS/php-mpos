@@ -35,13 +35,6 @@
   </div>
 </div>
 <div class="row">
-  <div class="col-lg-12">
-    <div class="panel panel-info">
-      <div class="panel-heading">
-        <i class="fa fa-edit fa-fw"></i> Previous News
-      </div>
-      <div class="panel-body">
-        <div class="row">
 {nocache}
 {section name=news loop=$NEWS}
           <div class="col-lg-12">
@@ -65,8 +58,3 @@
           </div>
 {/section}
 {/nocache}
-
-      </div>
-    </div>
-  </div>
-</div>
