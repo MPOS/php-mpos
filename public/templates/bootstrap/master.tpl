@@ -5,12 +5,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>{$GLOBAL.website.title} I {$smarty.request.page|escape|default:"home"|capitalize}</title>
 	
-<<<<<<< Updated upstream
   <!--[if lt IE 9]>
   <link rel="stylesheet" href="{$PATH}/css/ie.css" type="text/css" media="screen" />
   <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
   <![endif]-->
-=======
 	<!--[if lt IE 9]>
 	<link rel="stylesheet" href="{$PATH}/css/ie.css" type="text/css" media="screen" />
 	<script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
@@ -38,7 +36,6 @@
     <link href="{$PATH}/css/plugins/morris/morris-0.4.3.min.css" rel="stylesheet">
     <link href="{$PATH}/css/plugins/timeline/timeline.css" rel="stylesheet">
     <link href="{$PATH}/css/mpos.css" rel="stylesheet">
->>>>>>> Stashed changes
 
   <!--[if IE]><script type="text/javascript" src="{$PATH}/js/excanvas.js"></script><![endif]-->
   {if $GLOBAL.statistics.analytics.enabled}
@@ -94,25 +91,16 @@
       </div>
     </div>
 
-<<<<<<< Updated upstream
     <div id="footer">
       {include file="global/footer.tpl"}
     </div>
-=======
+
     <script src="{$PATH}/js/jquery-1.10.2.js"></script>
     <script src="{$PATH}/js/bootstrap.min.js"></script>
     <script src="{$PATH}/js/plugins/metisMenu/jquery.metisMenu.js"></script>
-    
-    <!-- Page-Level Plugin Scripts - Morris -->
     <script src="{$PATH}/js/plugins/morris/raphael-2.1.0.min.js"></script>
     <script src="{$PATH}/js/plugins/morris/morris.js"></script>
-    
     <script src="{$PATH}/js/mpos.js"></script>
     <script type="text/javascript" src="{$PATH}/js/justgage.1.0.1.min.js"></script>
-
-    <!-- Page-Level Plugin Scripts - Flot -->
-    <!--[if lte IE 8]><script src="{$PATH}/js/excanvas.min.js"></script><![endif]-->
->>>>>>> Stashed changes
-
   </body>
 </html>
