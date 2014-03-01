@@ -1,5 +1,4 @@
-<div class="row">
-  <div class="col-lg-12">
+  <div class="col-lg-8">
     <div class="panel panel-default">
       <div class="panel-heading">
         <h4 class="panel-title">Overview {if $GLOBAL.config.price.currency}{$GLOBAL.config.currency}/{$GLOBAL.config.price.currency}: <span id="b-price">{$GLOBAL.price|number_format:"8"|default:"0"}</span>{/if} / Pool Workers: <span id="b-dworkers">{$GLOBAL.workers}</span></h4>
@@ -28,5 +27,8 @@
         Refresh interval: {$GLOBAL.config.statistics_ajax_refresh_interval|default:"10"} seconds. Hashrate based on shares submitted in the past {$INTERVAL|default:"5"} minutes.
       </div>
     </div>
+    <div class="col-lg-12">
+      {include file="dashboard/round_data.tpl"}
+      {include file="dashboard/account_data.tpl"}
+    </div>
   </div>
-</div>
