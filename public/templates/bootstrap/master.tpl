@@ -64,3 +64,9 @@
       </div>
     </div>
 
+    <div id="footer">
+      {include file="global/footer.tpl"}
+    </div>
+
+  </body>
+</html>
