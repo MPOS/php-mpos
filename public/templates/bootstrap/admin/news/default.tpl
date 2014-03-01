@@ -4,7 +4,7 @@
   $(document).ready(function () { $(".cleditor").cleditor(); });
 </script>
 <div class="row">
-  <div class="col-lg-12">
+  <form class="col-lg-12" method="POST" action="{$smarty.server.SCRIPT_NAME}" role="form">
     <div class="panel panel-info">
       <div class="panel-heading">
         <i class="fa fa-edit fa-fw"></i> Write News 
@@ -14,7 +14,6 @@
       <div class="panel-body">
         <div class="row">
           <div class="col-lg-12">
-            <form method="POST" action="{$smarty.server.SCRIPT_NAME}" role="form">
               <input type="hidden" name="page" value="{$smarty.request.page|escape}">
               <input type="hidden" name="action" value="{$smarty.request.action|escape}">
               <input type="hidden" name="do" value="add">
@@ -26,7 +25,6 @@
                 <label>Content</label>
                 <textarea class="form-control cleditor" name="data[content]" rows="5" required></textarea>
               </div>
-            </form>
           </div>
         </div>
       </div>
@@ -34,7 +32,7 @@
         <input type="submit" value="Add" class="btn btn-success">
       </div>
     </div>
-  </div>
+  </form>
 </div>
 <div class="row">
 {nocache}
