@@ -3,7 +3,7 @@ $(function () {
 
       var blockdata = [
         {section block $BLOCKSFOUND step=-1}{ldelim}
-          blockHeight:   "{$BLOCKSFOUND[block].height}",
+          blockHeight:    {$BLOCKSFOUND[block].height},
           estShares:      {$BLOCKSFOUND[block].estshares},
           actShares:      {$BLOCKSFOUND[block].shares|default:"0"},
           {if $USEBLOCKAVERAGE}
