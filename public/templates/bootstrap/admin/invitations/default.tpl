@@ -3,7 +3,7 @@
   <div class="col-lg-12">
     <div class="panel panel-info">
       <div class="panel-heading">
-        Top Inviters
+        <i class="fa fa-envelope fa-fw"></i> Top Inviters
       </div>
       <div class="panel-body">
         <table class="table table-striped table-bordered table-hover">

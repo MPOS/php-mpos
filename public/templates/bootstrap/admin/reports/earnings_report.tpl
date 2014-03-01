@@ -2,7 +2,7 @@
   <div class="col-lg-12">
     <div class="panel panel-info">
       <div class="panel-heading">
-        Earnings Report Last {$BLOCKLIMIT} Blocks For User: {$USERNAME}
+        <i class="fa fa-info fa-fw"></i> Earnings Report Last {$BLOCKLIMIT} Blocks For User: {$USERNAME}
       </div>
       <div class="panel-body">
         <div class="table-responsive">

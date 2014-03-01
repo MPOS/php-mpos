@@ -2,7 +2,7 @@
   <div class="col-lg-12">
     <div class="panel panel-info">
       <div class="panel-heading">
-        {$GLOBAL.workers} Current Active Pool Workers
+        <i class="fa fa-desktop fa-fw"></i> {$GLOBAL.workers} Current Active Pool Workers
       </div>
       <div class="panel-body">
         <div class="table-responsive">

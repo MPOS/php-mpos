@@ -48,7 +48,7 @@
             <div class="form-group">
               <label>Anonymous Account</label>
               <input type="hidden" name="is_anonymous" value="0" />
-              <input type="checkbox" data-size="mini"  name="is_anonymous" id="is_anonymous" value="1" {if $GLOBAL.userdata.is_anonymous}checked{/if} {if $GLOBAL.twofactor.enabled && $GLOBAL.twofactor.options.details && !$DETAILSUNLOCKED}id="disabledInput" disabled{/if}/>{/nocache} 
+              <input type="checkbox" data-size="mini"  name="is_anonymous" id="is_anonymous" value="1" {if $GLOBAL.userdata.is_anonymous}checked{/if} {if $GLOBAL.twofactor.enabled && $GLOBAL.twofactor.options.details && !$DETAILSUNLOCKED}id="disabledInput" disabled{/if}/>
               <script>
               $("[id='is_anonymous']").bootstrapSwitch();
               </script>
