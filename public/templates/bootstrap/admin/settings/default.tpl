@@ -36,7 +36,10 @@
             </div>
             {/foreach}
           </div>
-          <input type="submit" value="Save" class="btn btn-outline btn-success btn-lg btn-block">
+          
+        </div>
+        <div class="panel-footer">
+          <input type="submit" value="Save" class="btn btn-success">
         </div>
       </form>
     </div>
