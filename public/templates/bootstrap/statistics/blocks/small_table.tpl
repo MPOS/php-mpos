@@ -10,7 +10,7 @@
               <th>Block</th>
               <th>Finder</th>
               <th>Time</th>
-              <th>Actual Shares</th>
+              <th class="text-right">Actual Shares</th>
             </tr>
           </thead>
           <tbody>
@@ -24,7 +24,7 @@
               {/if}
               <td>{if $BLOCKSFOUND[block].is_anonymous|default:"0" == 1 && $GLOBAL.userdata.is_admin|default:"0" == 0}anonymous{else}{$BLOCKSFOUND[block].finder|default:"unknown"|escape}{/if}</td>
               <td>{$BLOCKSFOUND[block].time|date_format:"%d/%m %H:%M:%S"}</td>
-              <td>{$BLOCKSFOUND[block].shares|number_format}</td>
+              <td class="text-right">{$BLOCKSFOUND[block].shares|number_format}</td>
             </tr>
 {/section}
           </tbody>
