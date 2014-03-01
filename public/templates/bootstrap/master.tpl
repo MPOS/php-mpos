@@ -4,38 +4,11 @@
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>{$GLOBAL.website.title} I {$smarty.request.page|escape|default:"home"|capitalize}</title>
-	
+  
   <!--[if lt IE 9]>
   <link rel="stylesheet" href="{$PATH}/css/ie.css" type="text/css" media="screen" />
   <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
   <![endif]-->
-	<!--[if lt IE 9]>
-	<link rel="stylesheet" href="{$PATH}/css/ie.css" type="text/css" media="screen" />
-	<script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
-	<![endif]-->
-	<script type="text/javascript" src="{$PATH}/js/jquery-2.0.3.min.js"></script>
-	<script type="text/javascript" src="{$PATH}/js/jquery-migrate-1.2.1.min.js"></script>
-	<script type="text/javascript" src="{$PATH}/js/hideshow.js" type="text/javascript"></script>
-	<script type="text/javascript" src="{$PATH}/js/jquery.visualize.js"></script>
-	<script type="text/javascript" src="{$PATH}/js/jquery.jqplot.min.js"></script>
-	<script type="text/javascript" src="{$PATH}/js/jquery.tablesorter.min.js" type="text/javascript"></script>
-	<script type="text/javascript" src="{$PATH}/js/jquery.equalHeight.js"></script>
-	<script type="text/javascript" src="{$PATH}/js/custom.js"></script>
-	<script type="text/javascript" src="{$PATH}/js/tinybox.js"></script>
-	<script type="text/javascript" src="{$PATH}/../global/js/number_format.js"></script>
-	<!--[if IE]><script type="text/javascript" src="{$PATH}/js/excanvas.js"></script><![endif]-->
-	{literal}<script>
-    var zxcvbnPath = "{/literal}{$PATH}{literal}/js/zxcvbn/zxcvbn.js";
-	</script>{/literal}
-	<script type="text/javascript" src="{$PATH}/js/pwcheck.js"></script>
-    {if $GLOBAL.statistics.analytics.enabled}
-      {$GLOBAL.statistics.analytics.code nofilter}
-    {/if}
-    <link href="{$PATH}/css/bootstrap.min.css" rel="stylesheet">
-    <link href="{$PATH}/font-awesome/css/font-awesome.css" rel="stylesheet">
-    <link href="{$PATH}/css/plugins/morris/morris-0.4.3.min.css" rel="stylesheet">
-    <link href="{$PATH}/css/plugins/timeline/timeline.css" rel="stylesheet">
-    <link href="{$PATH}/css/mpos.css" rel="stylesheet">
 
   <!--[if IE]><script type="text/javascript" src="{$PATH}/js/excanvas.js"></script><![endif]-->
   {if $GLOBAL.statistics.analytics.enabled}
@@ -51,6 +24,7 @@
   
   <link href="{$PATH}/css/plugins/morris/morris-0.4.3.min.css" rel="stylesheet">
   <link href="{$PATH}/css/plugins/timeline/timeline.css" rel="stylesheet">
+  <link href="{$PATH}/css/plugins/dataTables/dataTables.bootstrap.css" rel="stylesheet">
   <link href="{$PATH}/css/mpos.css" rel="stylesheet">
   
   <script src="{$PATH}/js/jquery-2.0.3.min.js"></script>
@@ -95,12 +69,5 @@
       {include file="global/footer.tpl"}
     </div>
 
-    <script src="{$PATH}/js/jquery-1.10.2.js"></script>
-    <script src="{$PATH}/js/bootstrap.min.js"></script>
-    <script src="{$PATH}/js/plugins/metisMenu/jquery.metisMenu.js"></script>
-    <script src="{$PATH}/js/plugins/morris/raphael-2.1.0.min.js"></script>
-    <script src="{$PATH}/js/plugins/morris/morris.js"></script>
-    <script src="{$PATH}/js/mpos.js"></script>
-    <script type="text/javascript" src="{$PATH}/js/justgage.1.0.1.min.js"></script>
   </body>
 </html>
