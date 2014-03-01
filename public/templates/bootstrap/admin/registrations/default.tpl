@@ -3,7 +3,7 @@
   <div class="col-lg-12">
     <div class="panel panel-info">
       <div class="panel-heading">
-        Last registered Users
+        <i class="fa fa-user fa-fw"></i> Last registered Users
       </div>
       <div class="panel-body no-padding">
         <div class="table-responsive">

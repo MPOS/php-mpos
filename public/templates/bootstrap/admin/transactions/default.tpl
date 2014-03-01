@@ -3,7 +3,7 @@
   <div class="col-lg-12">
     <div class="panel panel-info">
       <div class="panel-heading">
-        Transaction Summary
+        <i class="fa fa-money fa-fw"></i> Transaction Summary
       </div>
       <div class="panel-body no-padding">
         <div class="table-responsive">
@@ -34,7 +34,7 @@
   <div class="col-lg-4">
     <div class="panel panel-info">
       <div class="panel-heading">
-        Transaction Filter
+        <i class="fa fa-search fa-fw"></i> Transaction Filter
       </div>
       <div class="panel-body">
         <form action="{$smarty.server.SCRIPT_NAME}" role="form">
@@ -83,7 +83,7 @@
   <div class="col-lg-8">
     <div class="panel panel-info">
       <div class="panel-heading">
-        Transaction History
+        <i class="fa fa-clock-o fa-fw"></i> Transaction History
       </div>
       <div class="panel-body no-padding">
 
