@@ -76,16 +76,17 @@
               </tr>
             </tbody>
           </table>
-          <div class="panel">
-            <div class="panel-body">
+            
+            <table class="table borderless">
+            <tr>
+            <td>
               <ul class="pager">
                 <li class="previous">
                   <a href="{$smarty.server.SCRIPT_NAME}?page={$smarty.request.page|escape}&action={$smarty.request.action|escape}&height={$BLOCKDETAILS.height}&prev=1"> &larr; </a>
                 </li>
-                <li class="next">
-                  <a href="{$smarty.server.SCRIPT_NAME}?page={$smarty.request.page|escape}&action={$smarty.request.action|escape}&height={$BLOCKDETAILS.height}&next=1"> &rarr; </a>
-                </li>
               </ul>
+            </td>
+            <td>
               <form action="{$smarty.server.SCRIPT_NAME}" method="POST" id='search' role="form">
                 <input type="hidden" name="page" value="{$smarty.request.page|escape}">
                 <input type="hidden" name="action" value="{$smarty.request.action|escape}">
@@ -97,8 +98,17 @@
                   </span>
                 </div>
               </form>
-            </div>
-          </div>
+            </td>
+            <td>
+              <ul class="pager">
+                <li class="next">
+                  <a href="{$smarty.server.SCRIPT_NAME}?page={$smarty.request.page|escape}&action={$smarty.request.action|escape}&height={$BLOCKDETAILS.height}&next=1"> &rarr; </a>
+                </li>
+              </ul>
+            </td>
+            </tr>
+            </table>
+
         </div>
       </div>
     </div>
