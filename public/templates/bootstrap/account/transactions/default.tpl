@@ -31,15 +31,14 @@
 {/if}
 
 <div class="row">
-  <div class="col-lg-4">
+  <form class="col-lg-4" role="form">
+    <input type="hidden" name="page" value="{$smarty.request.page|escape}">
+    <input type="hidden" name="action" value="{$smarty.request.action|escape}">
     <div class="panel panel-info">
       <div class="panel-heading">
         <i class="fa fa-search fa-fw"></i> Transaction Filter
       </div>
       <div class="panel-body">
-        <form action="{$smarty.server.SCRIPT_NAME}" role="form">
-          <input type="hidden" name="page" value="{$smarty.request.page|escape}" />
-          <input type="hidden" name="action" value="{$smarty.request.action|escape}" />
             <ul class="pager">
               <li class="previous {if $smarty.get.start <= 0}disabled{/if}">
                 <a href="{if $smarty.get.start|default:"0" <= 0}#{else}{$smarty.server.SCRIPT_NAME}?page={$smarty.request.page|escape}&action={$smarty.request.action|escape}&start={$smarty.request.start|escape|default:"0" - $LIMIT}{if $FILTERS|default:""}{$FILTERS}{/if}{/if}">&larr; Prev</a>
@@ -56,11 +55,12 @@
               <label>Status</label>
               {html_options class="form-control" name="filter[status]" options=$TXSTATUS selected=$smarty.request.filter.status|default:""}
             </div>
-            <input type="submit" value="Filter" class="btn btn-outline btn-success btn-lg btn-block">
-        </form>
+      </div>
+      <div class="panel-footer">
+        <input type="submit" value="Filter" class="btn btn-success">
       </div>
     </div>
-  </div>
+  </form>
       
   <div class="col-lg-8">
     <div class="panel panel-info">

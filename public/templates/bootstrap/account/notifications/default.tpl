@@ -1,15 +1,14 @@
 <div class="row">
-  <div class="col-lg-4">
+  <form class="col-lg-4" method="POST" role="form">
+    <input type="hidden" name="page" value="{$smarty.request.page|escape}">
+    <input type="hidden" name="action" value="{$smarty.request.action|escape}">
+    <input type="hidden" name="do" value="save">
+    <input type="hidden" name="ctoken" value="{$CTOKEN|escape|default:""}">
     <div class="panel panel-info">
       <div class="panel-heading">
         <i class="fa fa-gear fa-fw"></i> Notification Settings
       </div>
       <div class="panel-body no-padding">
-        <form action="{$smarty.server.SCRIPT_NAME}" method="POST" role="form">
-          <input type="hidden" name="page" value="{$smarty.request.page|escape}">
-          <input type="hidden" name="action" value="{$smarty.request.action|escape}">
-          <input type="hidden" name="do" value="save">
-          <input type="hidden" name="ctoken" value="{$CTOKEN|escape|default:""}" />
           <table class="table table-striped table-bordered table-hover">
             <tr>
               <td>
@@ -53,9 +52,8 @@
           </div>
           <div class="panel-footer">
           <input type="submit" value="Update" class="btn btn-success">
-        </form>
       </div>
-    </div>
+    </form>
   </div>
 
   <div class="col-lg-8">

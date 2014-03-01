@@ -1,14 +1,13 @@
 <div class="row">
-  <form class="col-lg-3" action="{$smarty.server.SCRIPT_NAME}" method="post" role="form">
+  <form class="col-lg-3" method="POST" role="form">
+    <input type="hidden" name="page" value="{$smarty.request.page|escape}">
+    <input type="hidden" name="action" value="{$smarty.request.action|escape}">
+    <input type="hidden" name="do" value="add">
+    <input type="hidden" name="ctoken" value="{$CTOKEN|escape|default:""}">
     <div class="panel panel-info">
       <div class="panel-heading">
         <i class="fa fa-plus-square-o fa-fw"></i> Add New Worker
       </div>
-      <div class="panel-body">
-        <input type="hidden" name="page" value="{$smarty.request.page|escape}">
-        <input type="hidden" name="action" value="{$smarty.request.action|escape}">
-        <input type="hidden" name="do" value="add">
-        <input type="hidden" name="ctoken" value="{$CTOKEN|escape|default:""}" />
         <div class="panel-body">
           <div class="form-group">
             <label>Worker Name</label>
@@ -19,7 +18,6 @@
             <input class="form-control" type="text" name="password" value="password" size="10" maxlength="20" required>
           </div>
         </div>
-      </div>
       <div class="panel-footer">
         <input type="submit" value="Add New Worker" class="btn btn-success">
       </div>
@@ -38,7 +36,7 @@
         <input type="hidden" name="ctoken" value="{$CTOKEN|escape|default:""}" />
         <div class="panel-body no-padding">
           <div class="table-responsive">
-          <table class="table table-striped table-bordered table-hover">
+          <table class="table">
              <thead>
                 <tr>
                   <th>Worker Login</th>
