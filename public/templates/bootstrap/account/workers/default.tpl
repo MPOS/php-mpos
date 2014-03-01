@@ -30,7 +30,6 @@
       <div class="panel-heading">
         <i class="fa fa-gears fa-fw"></i> Worker Configuration
       </div>
-      
       <form action="{$smarty.server.SCRIPT_NAME}" method="post" role="form">
         <input type="hidden" name="page" value="{$smarty.request.page|escape}">
         <input type="hidden" name="action" value="{$smarty.request.action|escape}">
@@ -43,11 +42,11 @@
                 <tr>
                   <th>Worker Login</th>
                   <th>Worker Password</th>
-                  <th>Active</th>
+                  <th class="text-center">Active</th>
                   {if $GLOBAL.config.disable_notifications != 1}<th>Monitor</th>{/if}
-                  <th>Khash/s</th>
-                  <th>Difficulty</th>
-                  <th>Action</th>
+                  <th class="text-right">Khash/s</th>
+                  <th class="text-right">Difficulty</th>
+                  <th class="text-center">Action</th>
                 </tr>
              </thead>
              <tbody>
@@ -57,24 +56,24 @@
                <tr>
                  <td>
                   <div class="input-group">
-                    <span {if $WORKERS[worker].hashrate > 0} style="color: orange"{/if} class="input-group-addon">{$username.0|escape}.</span>
-                  <input type="text" name="data[{$WORKERS[worker].id}][username]" value="{$username.1|escape}" size="10" required class="form-control">
+                    <span{if $WORKERS[worker].hashrate > 0} style="color: orange"{/if} class="input-group-addon">{$username.0|escape}.</span>
+                    <input type="text" name="data[{$WORKERS[worker].id}][username]" value="{$username.1|escape}" size="10" required class="form-control" />
                   </div>
                  </td>
                  <td><input class="form-control" type="text" name="data[{$WORKERS[worker].id}][password]" value="{$WORKERS[worker].password|escape}" size="10" required></td>
-                 <td><i class="fa fa-{if $WORKERS[worker].hashrate > 0}check{else}times {/if}fa-fw"></i></td>
+                 <td class="text-center"><i class="fa fa-{if $WORKERS[worker].hashrate > 0}check{else}times{/if} fa-fw"></i></td>
                  {if $GLOBAL.config.disable_notifications != 1}
                  <td>
-                     <input type="hidden" name="data[{$WORKERS[worker].id}][monitor]" value="0" />
-                     <input type="checkbox" data-size="small"  name="data[{$WORKERS[worker].id}][monitor]" id="data[{$WORKERS[worker].id}][monitor]" value="1" {if $WORKERS[worker].monitor}checked{/if}/>
-                     <script>
-                     $("[id='data[{$WORKERS[worker].id}][monitor]']").bootstrapSwitch();
-                     </script>
+                   <input type="hidden" name="data[{$WORKERS[worker].id}][monitor]" value="0" />
+                   <input type="checkbox" data-size="small"  name="data[{$WORKERS[worker].id}][monitor]" id="data[{$WORKERS[worker].id}][monitor]" value="1" {if $WORKERS[worker].monitor}checked{/if}/>
+                   <script>
+                   $("[id='data[{$WORKERS[worker].id}][monitor]']").bootstrapSwitch();
+                   </script>
                  </td>
                  {/if}
-                 <td>{$WORKERS[worker].hashrate|number_format}</td>
-                 <td>{$WORKERS[worker].difficulty|number_format:"2"}</td>
-                 <td style="padding-right: 25px;"><a href="{$smarty.server.SCRIPT_NAME}?page={$smarty.request.page|escape}&action={$smarty.request.action|escape}&do=delete&id={$WORKERS[worker].id|escape}&ctoken={$CTOKEN}"><i class="fa fa-trash-o fa-fw"></i></a></td>
+                 <td class="text-right">{$WORKERS[worker].hashrate|number_format}</td>
+                 <td class="text-right">{$WORKERS[worker].difficulty|number_format:"2"}</td>
+                 <td class="text-center"><a href="{$smarty.server.SCRIPT_NAME}?page={$smarty.request.page|escape}&action={$smarty.request.action|escape}&do=delete&id={$WORKERS[worker].id|escape}&ctoken={$CTOKEN}"><i class="fa fa-trash-o fa-fw"></i></a></td>
                </tr>
                {/section}
                {/nocache}
