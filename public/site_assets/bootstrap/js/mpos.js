@@ -17,7 +17,12 @@ $(function() {
     })
 })
 
-// Make all table with "datatable" class a datatable
+// Several JS Glocal Classes
 $(document).ready(function() {
-  $('.datatable').dataTable();
+    // Make all tables with database class sortable
+    $('.datatable').dataTable();
+
+    // Bootstrap iOS style switches for checkboxes with switch class
+    $('.switch').bootstrapSwitch();
 });
+

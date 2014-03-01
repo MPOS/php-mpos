@@ -65,8 +65,7 @@
                  {if $GLOBAL.config.disable_notifications != 1}
                  <td>
                    <input type="hidden" name="data[{$WORKERS[worker].id}][monitor]" value="0" />
-                   <input type="checkbox" data-size="small"  name="data[{$WORKERS[worker].id}][monitor]" id="data[{$WORKERS[worker].id}][monitor]" value="1" {if $WORKERS[worker].monitor}checked{/if}/>
-                   
+                   <input type="checkbox" class="switch" data-size="small"  name="data[{$WORKERS[worker].id}][monitor]" id="data[{$WORKERS[worker].id}][monitor]" value="1" {if $WORKERS[worker].monitor}checked{/if}/>
                  </td>
                  {/if}
                  <td class="text-right">{$WORKERS[worker].hashrate|number_format}</td>
@@ -86,7 +85,3 @@
     </div>
   </div>
 </div>
-
-<script>
-  $("[id='data[{$WORKERS[worker].id}][monitor]']").bootstrapSwitch();
-</script>
