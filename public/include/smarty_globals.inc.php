@@ -42,9 +42,6 @@ $iCurrentPoolShareRate = $statistics->getCurrentShareRate();
 // Active workers
 if (!$iCurrentActiveWorkers = $worker->getCountAllActiveWorkers()) $iCurrentActiveWorkers = 0;
 
-// Fetch Last 5 notifications
-$iLastNotifications = $notification->getNofifications($_SESSION['USERDATA']['id'], 5);
-
 // Some settings to propagate to template
 if (! $statistics_ajax_refresh_interval = $setting->getValue('statistics_ajax_refresh_interval')) $statistics_ajax_refresh_interval = 10;
 if (! $statistics_ajax_long_refresh_interval = $setting->getValue('statistics_ajax_long_refresh_interval')) $statistics_ajax_long_refresh_interval = 10;
@@ -132,6 +129,9 @@ $aGlobal['acl']['chat']['page'] = $setting->getValue('acl_chat_page', 2);
 
 // We don't want these session infos cached
 if (@$_SESSION['USERDATA']['id']) {
+  // Fetch Last 5 notifications
+  $iLastNotifications = $notification->getNofifications($_SESSION['USERDATA']['id'], 5);
+
   $aGlobal['userdata'] = $_SESSION['USERDATA']['id'] ? $user->getUserData($_SESSION['USERDATA']['id']) : array();
   $aGlobal['userdata']['balance'] = $transaction->getBalance($_SESSION['USERDATA']['id']);
 
