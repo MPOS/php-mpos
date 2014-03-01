@@ -27,7 +27,7 @@
         Refresh interval: {$GLOBAL.config.statistics_ajax_refresh_interval|default:"10"} seconds. Hashrate based on shares submitted in the past {$INTERVAL|default:"5"} minutes.
       </div>
     </div>
-    <div class="col-lg-12">
+    <div class="row">
       {include file="dashboard/round_data.tpl"}
       {include file="dashboard/account_data.tpl"}
     </div>
