@@ -20,7 +20,8 @@ $(function () {
         },
         {/foreach}
         ],
-
+        parseTime: false,
+        behaveLikeLine: true,
         xkey: 'period',
         ykeys: ['Pool'],
         labels: ['Hashrate'],
@@ -43,7 +44,8 @@ $(function () {
         },
         {/foreach}
         ],
-
+        parseTime: false,
+        behaveLikeLine: true,
         xkey: 'period',
         ykeys: ['Mine'],
         labels: ['Hashrate'],
@@ -71,7 +73,8 @@ $(function () {
         },
         {/foreach}
         ],
-
+        parseTime: false,
+        behaveLikeLine: true,
         xkey: 'period',
         ykeys: ['Mine', 'Pool'],
         labels: ['Your Hashrate', 'Pool Hashrate'],
