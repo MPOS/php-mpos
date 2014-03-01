@@ -33,24 +33,27 @@
               <label>4 digit PIN</label>
               <input class="form-control" type="password" name="authPin" size="4" maxlength="4" />
             </div>
-            {nocache}
-            <input type="hidden" name="cp_token" value="{$smarty.request.cp_token|escape|default:""}">
-            <input type="hidden" name="ctoken" value="{$CTOKEN|escape|default:""}" />
-            <input type="hidden" name="utype" value="change_pw">
-            {if $GLOBAL.twofactor.enabled && $GLOBAL.twofactor.options.changepw}
-            {if $CHANGEPASSSENT == 1 && $CHANGEPASSUNLOCKED == 1}
-            <input type="submit" value="Change Password" class="btn btn-outline btn-success btn-lg btn-block">
-            {elseif $CHANGEPASSSENT == 0 && $CHANGEPASSUNLOCKED == 1 || $CHANGEPASSSENT == 1 && $CHANGEPASSUNLOCKED == 0}
-            <input type="submit" value="Change Password" class="btn btn-outline btn-danger btn-lg btn-block" disabled>
-            {elseif $CHANGEPASSSENT == 0 && $CHANGEPASSUNLOCKED == 0}
-            <input type="submit" value="Unlock" class="btn btn-outline btn-warning btn-lg btn-block" name="unlock">
-            {/if}
-            {else}
-            <input type="submit" value="Change Password" class="btn btn-outline btn-success btn-lg btn-block">
-            {/if}
-            {/nocache}
+
           </div>
         </div>
+      </div>
+      <div class="panel-footer">
+        {nocache}
+        <input type="hidden" name="cp_token" value="{$smarty.request.cp_token|escape|default:""}">
+        <input type="hidden" name="ctoken" value="{$CTOKEN|escape|default:""}" />
+        <input type="hidden" name="utype" value="change_pw">
+        {if $GLOBAL.twofactor.enabled && $GLOBAL.twofactor.options.changepw}
+        {if $CHANGEPASSSENT == 1 && $CHANGEPASSUNLOCKED == 1}
+        <input type="submit" value="Change Password" class="btn btn-success">
+        {elseif $CHANGEPASSSENT == 0 && $CHANGEPASSUNLOCKED == 1 || $CHANGEPASSSENT == 1 && $CHANGEPASSUNLOCKED == 0}
+        <input type="submit" value="Change Password" class="btn btn-danger" disabled>
+        {elseif $CHANGEPASSSENT == 0 && $CHANGEPASSUNLOCKED == 0}
+        <input type="submit" value="Unlock" class="btn btn-warning" name="unlock">
+        {/if}
+        {else}
+        <input type="submit" value="Change Password" class="btn btn-success">
+        {/if}
+        {/nocache}
       </div>
     </div>
   </div>

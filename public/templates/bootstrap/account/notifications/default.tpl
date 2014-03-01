@@ -10,7 +10,7 @@
           <input type="hidden" name="action" value="{$smarty.request.action|escape}">
           <input type="hidden" name="do" value="save">
           <input type="hidden" name="ctoken" value="{$CTOKEN|escape|default:""}" />
-          <table class="table borderless">
+          <table class="table table-striped table-bordered table-hover">
             <tr>
               <td>
                 <label>IDLE Worker</label>
@@ -86,7 +86,7 @@
                 <th>Active</th>
               </tr>
             </thead>
-            <tbody style="font-size:12px;">
+            <tbody>
 {section notification $NOTIFICATIONS}
               <tr>
                 <td>{$NOTIFICATIONS[notification].id}</td>

@@ -11,13 +11,15 @@
       <div class="panel-body">
         <div class="row">
           <div class="col-lg-12">
-            <div class="form-group"">
+            <div class="form-group">
               <label>Current Password</label>
-              <input class="form-control" type="password" name="currentPassword" />
+              <input class="form-control" type="password" name="currentPassword">
             </div>
-            <input type="submit" class="btn btn-outline btn-success btn-lg btn-block" value="Reset PIN">
           </div>
         </div>
+      </div>
+      <div class="panel-footer">
+        <input type="submit" class="btn btn-success" value="Reset PIN">
       </div>
     </div>
   </div>

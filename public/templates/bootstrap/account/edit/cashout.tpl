@@ -28,25 +28,27 @@
               <label>4 digit PIN</label>
               <input class="form-control" type="password" name="authPin" size="4" maxlength="4" />
             </div>
-            {nocache}
-            <input type="hidden" name="wf_token" value="{$smarty.request.wf_token|escape|default:""}">
-            <input type="hidden" name="ctoken" value="{$CTOKEN|escape|default:""}" />
-            <input type="hidden" name="utype" value="withdraw_funds">
-            {if $GLOBAL.twofactor.enabled && $GLOBAL.twofactor.options.withdraw}
-            {if $WITHDRAWSENT == 1 && $WITHDRAWUNLOCKED == 1}
-            <input type="submit" value="Cash Out" class="btn btn-outline btn-success btn-lg btn-block">
-            {elseif $WITHDRAWSENT == 0 && $WITHDRAWUNLOCKED == 1 || $WITHDRAWSENT == 1 && $WITHDRAWUNLOCKED == 0}
-            <input type="submit" value="Cash Out" class="btn btn-outline btn-danger btn-lg btn-block" disabled>
-            {elseif $WITHDRAWSENT == 0 && $WITHDRAWUNLOCKED == 0}
-            <input type="submit" value="Unlock" class="btn btn-outline btn-warning btn-lg btn-block" name="unlock">
-            {/if}
-            {else}
-            <input type="submit" value="Cash Out" class="btn btn-outline btn-success btn-lg btn-block">
-            {/if}
-            {/nocache}
           </div>
         </div>
-      </div>      
+      </div>
+      <div class="panel-footer">
+      {nocache}
+      <input type="hidden" name="wf_token" value="{$smarty.request.wf_token|escape|default:""}">
+      <input type="hidden" name="ctoken" value="{$CTOKEN|escape|default:""}" />
+      <input type="hidden" name="utype" value="withdraw_funds">
+      {if $GLOBAL.twofactor.enabled && $GLOBAL.twofactor.options.withdraw}
+      {if $WITHDRAWSENT == 1 && $WITHDRAWUNLOCKED == 1}
+      <input type="submit" value="Cash Out" class="btn btn-success">
+      {elseif $WITHDRAWSENT == 0 && $WITHDRAWUNLOCKED == 1 || $WITHDRAWSENT == 1 && $WITHDRAWUNLOCKED == 0}
+      <input type="submit" value="Cash Out" class="btn btn-danger" disabled>
+      {elseif $WITHDRAWSENT == 0 && $WITHDRAWUNLOCKED == 0}
+      <input type="submit" value="Unlock" class="btn btn-warning" name="unlock">
+      {/if}
+      {else}
+      <input type="submit" value="Cash Out" class="btn btn-success">
+      {/if}
+      {/nocache}
+      </div>
     </div>
   </div>
 </form>
