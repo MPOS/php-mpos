@@ -7,7 +7,7 @@
         <div class="table-responsive">
           <table class="table table-striped table-bordered table-hover datatable">
             <thead>
-              <tr>        
+              <tr>
                 <th>Rank</th>
                 <th >User Name</th>
                 <th >Valid</th>

@@ -26,8 +26,8 @@
                 <td>{$ROUNDSHARES[$ROUNDTRANSACTIONS[txs].uid].valid|number_format}</td>
                 <td>{if $ROUNDSHARES[$ROUNDTRANSACTIONS[txs].uid].valid > 0 }{(( 100 / $BLOCKDETAILS.shares) * $ROUNDSHARES[$ROUNDTRANSACTIONS[txs].uid].valid)|number_format:"2"}{else}0.00{/if}</td>
                 <td>{$PPLNSROUNDSHARES[txs].pplns_valid|number_format|default:"0"}</td>
-                <td>{if $PPLNSROUNDSHARES[txs].pplns_valid > 0 }{(( 100 / $PPLNSSHARES) * $PPLNSROUNDSHARES[txs].pplns_valid)|number_format:"2"|default:"0"}{else}0{/if}</td>
-                <td>{if $ROUNDSHARES[$ROUNDTRANSACTIONS[txs].uid].valid > 0  && $PPLNSROUNDSHARES[txs].pplns_valid > 0}{math assign="percentage1" equation=(100 / ((( 100 / $BLOCKDETAILS.shares) * $ROUNDSHARES[$ROUNDTRANSACTIONS[txs].uid].valid) / (( 100 / $PPLNSSHARES) * $PPLNSROUNDSHARES[txs].pplns_valid)))}{else if $PPLNSROUNDSHARES[txs].pplns_valid == 0}{assign var=percentage1 value=0}{else}{assign var=percentage1 value=100}{/if}
+                <td>{if $PPLNSROUNDSHARES[txs].pplns_valid|default:"0" > 0 }{(( 100 / $PPLNSSHARES) * $PPLNSROUNDSHARES[txs].pplns_valid)|number_format:"2"|default:"0"}{else}0{/if}</td>
+                <td>{if $ROUNDSHARES[$ROUNDTRANSACTIONS[txs].uid].valid|default:"0" > 0  && $PPLNSROUNDSHARES[txs].pplns_valid|default:"0" > 0}{math assign="percentage1" equation=(100 / ((( 100 / $BLOCKDETAILS.shares) * $ROUNDSHARES[$ROUNDTRANSACTIONS[txs].uid].valid) / (( 100 / $PPLNSSHARES) * $PPLNSROUNDSHARES[txs].pplns_valid)))}{else if $PPLNSROUNDSHARES[txs].pplns_valid|default:"0" == 0}{assign var=percentage1 value=0}{else}{assign var=percentage1 value=100}{/if}
                   <font color="{if ($percentage1 >= 100)}green{else}red{/if}">{$percentage1|number_format:"2"}</font></b></td>
                 <td>{$ROUNDTRANSACTIONS[txs].amount|default:"0"|number_format:"8"}</td>
                 {assign var=percentage1 value=0}
