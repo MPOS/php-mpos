@@ -305,3 +305,11 @@ table.dataTable thead .sorting:after {
 .show-grid {
     margin: 15px 0;
 }
+
+.no-padding {
+    padding:0
+}
+
+.no-padding table {
+    margin: 0
+}

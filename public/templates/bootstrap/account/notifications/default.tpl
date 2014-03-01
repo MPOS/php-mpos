@@ -77,7 +77,7 @@
       <div class="panel-heading">
         <i class="fa fa-clock-o fa-fw"></i> Notification History
       </div>
-      <div class="panel-body">
+      <div class="panel-body no-padding">
         <div class="table-responsive">
           <table class="table table-striped table-bordered table-hover">
             <thead>
