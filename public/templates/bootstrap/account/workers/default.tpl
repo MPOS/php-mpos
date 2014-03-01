@@ -55,13 +55,12 @@
                {section worker $WORKERS}
                {assign var="username" value="."|escape|explode:$WORKERS[worker].username:2} 
                <tr>
-                <td>
-                <div class="input-group">
-                  <span {if $WORKERS[worker].hashrate > 0} style="color: orange"{/if} class="input-group-addon">{$username.0|escape}.</span>
+                 <td>
+                  <div class="input-group">
+                    <span {if $WORKERS[worker].hashrate > 0} style="color: orange"{/if} class="input-group-addon">{$username.0|escape}.</span>
                   <input type="text" name="data[{$WORKERS[worker].id}][username]" value="{$username.1|escape}" size="10" required class="form-control">
-                </div>
-                </td>
-                 <td><input class="form-control" /></td>
+                  </div>
+                 </td>
                  <td><input class="form-control" type="text" name="data[{$WORKERS[worker].id}][password]" value="{$WORKERS[worker].password|escape}" size="10" required></td>
                  <td><i class="fa fa-{if $WORKERS[worker].hashrate > 0}check{else}times {/if}fa-fw"></i></td>
                  {if $GLOBAL.config.disable_notifications != 1}
