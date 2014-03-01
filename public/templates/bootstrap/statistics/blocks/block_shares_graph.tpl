@@ -12,11 +12,13 @@ $(function () {
           {if $GLOBAL.config.payout_system == 'pplns'}
           pplnsShares:    {$BLOCKSFOUND[block].pplns_shares|default:"0"},
           {/if}
-          {rdelim},                
+          {rdelim},
         {/section}
       ];
-                  
+
       Morris.Area({
+        parseTime: false,
+        behaveLikeLine: true,
         element: 'block-area-chart',
         data: blockdata,
         xkey: 'blockHeight',
@@ -26,9 +28,9 @@ $(function () {
         lineColors: ['#2D9C2F','#D58665','#2D619C','#FF0000'],
         pointFillColors: ['#FFFFFF'],
         hideHover: 'auto',
-        resize: true
+        resize: true,
+        fillOpacity: 0.25
       });
-      
 });
 </script>
 
