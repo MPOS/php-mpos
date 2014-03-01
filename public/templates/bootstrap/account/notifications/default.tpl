@@ -11,56 +11,60 @@
           <input type="hidden" name="action" value="{$smarty.request.action|escape}">
           <input type="hidden" name="do" value="save">
           <input type="hidden" name="ctoken" value="{$CTOKEN|escape|default:""}" />
-
           <table width="100%">
             <tr>
-              <th>Type</th>
-              <th>Active</th>
-            </tr>
-            <tr>
-              <td>IDLE Worker</td>
               <td>
-                <label for="data[idle_worker]">
-                <input type="hidden" name="data[idle_worker]" value="0" />
-                <input type="checkbox" name="data[idle_worker]" id="data[idle_worker]" value="1"{nocache}{if $SETTINGS['idle_worker']|default:"0" == 1}checked{/if}{/nocache} />
-                </label>
-                <input type="checkbox" checked data-size="large">
+                <label>IDLE Worker</label>
+              </td>
+              <td>
+                <input type="checkbox" data-size="mini" name="data[idle_worker]" value="1"{nocache}{if $SETTINGS['idle_worker']|default:"0" == 1}checked{/if}{/nocache} />
+                <script>
+                  $("[name='data[idle_worker]']").bootstrapSwitch();
+                </script>
               </td>
             </tr>
+            
       {if $DISABLE_BLOCKNOTIFICATIONS|default:"" != 1}
             <tr>
-              <td>New Blocks</td>
               <td>
-                <label for="data[new_block]">
-                <input type="hidden" name="data[new_block]" value="0" />
-                <input type="checkbox" name="data[new_block]" id="data[new_block]" value="1"{nocache}{if $SETTINGS['new_block']|default:"0" == 1}checked{/if}{/nocache} />
-                </label>
+                <label>New Blocks</label>
+              </td>
+              <td>
+                <input type="checkbox" data-size="mini" name="data[new_block]" id="data[new_block]" value="1"{nocache}{if $SETTINGS['new_block']|default:"0" == 1}checked{/if}{/nocache} />
+                <script>
+                $("[name='data[new_block]']").bootstrapSwitch();
+                </script>
               </td>
             </tr>
       {/if}
             <tr>
-              <td>Payout</td>
               <td>
-                <label for="data[payout]">
-                <input type="hidden" name="data[payout]" value="0" />
-                <input type="checkbox" name="data[payout]" id="data[payout]" value="1"{nocache}{if $SETTINGS['payout']|default:"0" == 1}checked{/if}{/nocache} />
-                </label>
+                <label>Payout</label>
+              </td>
+              <td>
+                <input type="checkbox" data-size="mini" name="data[payout]" id="data[payout]" value="1"{nocache}{if $SETTINGS['payout']|default:"0" == 1}checked{/if}{/nocache} />
+                <script>
+                $("[name='data[payout]']").bootstrapSwitch();
+                </script>
               </td>
             </tr>
             <tr>
-              <td>Successful Login</td>
               <td>
-                <span class="toggle">
-                <label for="data[success_login]">
-                <input type="hidden" name="data[success_login]" value="0" />
-                <input type="checkbox" class="ios-switch" name="data[success_login]" id="data[success_login]" value="1"{nocache}{if $SETTINGS['success_login']|default:"0" == 1}checked{/if}{/nocache} />
-                <div class="switch"></div>
-                </label>
-                </span>
+                <label>Successful Login</label>
+              </td>
+              <td>
+                <input type="checkbox" data-size="mini"  name="data[success_login]" id="data[success_login]" value="1"{nocache}{if $SETTINGS['success_login']|default:"0" == 1}checked{/if}{/nocache} />
+                <script>
+                $("[name='data[success_login]']").bootstrapSwitch();
+                </script>
+              </td>
+            </tr>
+            <tr>
+              <td colspan="2">
+                <input type="submit" value="Update" class="btn btn-outline btn-success btn-lg btn-block">
               </td>
             </tr>
           </table>
-          <input type="submit" value="Update" class="btn btn-outline btn-success btn-lg btn-block">
         </form>
       </div>
     </div>
