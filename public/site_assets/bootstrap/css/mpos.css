@@ -319,3 +319,7 @@ table.dataTable thead .sorting:after {
 .no-padding .table-bordered {
     border: 0;
 }
+
+.borderless > tbody > tr > td {
+    border: none;
+}
