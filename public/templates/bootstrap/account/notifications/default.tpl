@@ -89,9 +89,8 @@
                 <td>{$NOTIFICATIONS[notification].time}</td>
                 <td>
 {if $NOTIFICATIONS[notification].type == new_block}New Block
-{else if $NOTIFICATIONS[notification].type == auto_payout}Auto Payout
+{else if $NOTIFICATIONS[notification].type == payout}Payout
 {else if $NOTIFICATIONS[notification].type == idle_worker}IDLE Worker
-{else if $NOTIFICATIONS[notification].type == manual_payout}Manual Payout
 {else if $NOTIFICATIONS[notification].type == success_login}Successful Login
 {/if}
                 </td>
