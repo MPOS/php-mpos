@@ -56,7 +56,6 @@ $aGlobal = array(
   'hashrate' => $iCurrentPoolHashrate,
   'nethashrate' => $dNetworkHashrate,
   'sharerate' => $iCurrentPoolShareRate,
-  'lastnotifications' => $iLastNotifications,
   'workers' => $iCurrentActiveWorkers,
   'roundshares' => $aRoundShares,
   'fees' => $config['fees'],
@@ -130,7 +129,8 @@ $aGlobal['acl']['chat']['page'] = $setting->getValue('acl_chat_page', 2);
 // We don't want these session infos cached
 if (@$_SESSION['USERDATA']['id']) {
   // Fetch Last 5 notifications
-  $iLastNotifications = $notification->getNofifications($_SESSION['USERDATA']['id'], 5);
+  $aLastNotifications = $notification->getNofifications($_SESSION['USERDATA']['id'], 5);
+  $aGlobal['userdata']['lastnotifications'] = $aLastNotifications;
 
   $aGlobal['userdata'] = $_SESSION['USERDATA']['id'] ? $user->getUserData($_SESSION['USERDATA']['id']) : array();
   $aGlobal['userdata']['balance'] = $transaction->getBalance($_SESSION['USERDATA']['id']);

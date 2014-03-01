@@ -11,7 +11,7 @@
             <!-- /.navbar-header -->
 
             <ul class="nav navbar-top-links navbar-right">
-				{if $smarty.session.AUTHENTICATED|default:"0" == 1 && $GLOBAL.lastnotifications|@count != 0}
+				{if $smarty.session.AUTHENTICATED|default:"0" == 1 && $GLOBAL.userdata.lastnotifications|@count|default:"0" != 0}
                 <!-- /.dropdown -->
                 <li class="dropdown">
                     <a class="dropdown-toggle" data-toggle="dropdown" href="#">
@@ -20,7 +20,7 @@
                     <ul class="dropdown-menu dropdown-alerts">
                     
 
-{section notification $GLOBAL.lastnotifications}
+{section notification $GLOBAL.userdata.lastnotifications}
                         <li>
                             <a href="#">
                                 <div>
