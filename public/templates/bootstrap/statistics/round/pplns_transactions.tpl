@@ -2,7 +2,7 @@
   <div class="col-lg-12">
     <div class="panel panel-info">
       <div class="panel-heading">
-        Round Transactions
+        <i class="fa fa-credit-card fa-fw"></i> Round Transactions
       </div>
       <div class="panel-body">
         <div class="table-responsive">

@@ -2,7 +2,7 @@
   <div class="col-lg-6">
     <div class="panel panel-info">
       <div class="panel-heading">
-        Round Statistics
+        <i class="fa fa-refresh fa-fw"></i> Round Statistics
       </div>
       <div class="panel-body">
         <div class="table-responsive">

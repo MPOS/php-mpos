@@ -1,7 +1,7 @@
   <div class="col-lg-6">
     <div class="panel panel-info">
       <div class="panel-heading">
-        Last Found Blocks
+        <i class="fa fa-th fa-fw"></i> Last Found Blocks
       </div>
       <div class="panel-body">
         <table class="table table-striped table-bordered table-hover">

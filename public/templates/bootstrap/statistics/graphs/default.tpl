@@ -92,7 +92,7 @@ $(function () {
   <div class="col-lg-12">
     <div class="panel panel-default">
       <div class="panel-heading">
-        Stats
+        <i class="fa fa-signal fa-fw"></i> Stats
       </div>           
       <div class="panel-body">
         <ul class="nav nav-pills" id="hashrategraph">

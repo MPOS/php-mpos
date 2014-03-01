@@ -1,7 +1,7 @@
   <div class="col-lg-6">
     <div class="panel panel-info">
       <div class="panel-heading">
-        Top 25 Blockfinder
+        <i class="fa fa-search fa-fw"></i> Top 25 Blockfinder
       </div>
       <div class="panel-body">
         <table class="table table-striped table-bordered table-hover">

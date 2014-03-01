@@ -1,7 +1,7 @@
   <div class="col-lg-6">
     <div class="panel panel-info">
       <div class="panel-heading">
-        Contributor Shares
+        <i class="fa fa-tachometer fa-fw"></i> Contributor Shares
       </div>
       <div class="panel-body">
         <table class="table table-striped table-bordered table-hover">

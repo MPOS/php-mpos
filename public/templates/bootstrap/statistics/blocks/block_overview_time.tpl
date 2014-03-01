@@ -2,7 +2,7 @@
   <div class="col-lg-12">
     <div class="panel panel-info">
       <div class="panel-heading">
-        Block Overview
+        <i class="fa fa-clock-o fa-fw"></i> Block Overview
       </div>
       <div class="panel-body">
       

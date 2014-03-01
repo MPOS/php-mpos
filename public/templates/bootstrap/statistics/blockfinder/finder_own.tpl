@@ -1,7 +1,7 @@
   <div class="col-lg-6">
     <div class="panel panel-info">
       <div class="panel-heading">
-        Blocks found by own Workers
+        <i class="fa fa-search fa-fw"></i> Blocks found by own Workers
       </div>
       <div class="panel-body">
         <table class="table table-striped table-bordered table-hover">

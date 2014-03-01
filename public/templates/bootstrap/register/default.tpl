@@ -2,7 +2,7 @@
   <div class="col-lg-6">
     <div class="panel panel-info">
       <div class="panel-heading">
-        Register new account
+        <i class="fa fa-edit fa-fw"></i> Register new account
       </div>
       <div class="panel-body">
         <form action="{$smarty.server.SCRIPT_NAME}" method="post" role="form">
