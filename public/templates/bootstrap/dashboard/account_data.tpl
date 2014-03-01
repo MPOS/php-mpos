@@ -1,4 +1,4 @@
-<div class="col-lg-4">
+<div class="col-lg-6">
   <div class="panel panel-default">
     <div class="panel-heading">
       <h4 class="panel-title">Account Information</h4>
