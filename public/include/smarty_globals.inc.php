@@ -128,12 +128,12 @@ $aGlobal['acl']['chat']['page'] = $setting->getValue('acl_chat_page', 2);
 
 // We don't want these session infos cached
 if (@$_SESSION['USERDATA']['id']) {
+  $aGlobal['userdata'] = $_SESSION['USERDATA']['id'] ? $user->getUserData($_SESSION['USERDATA']['id']) : array();
+  $aGlobal['userdata']['balance'] = $transaction->getBalance($_SESSION['USERDATA']['id']);
+
   // Fetch Last 5 notifications
   $aLastNotifications = $notification->getNofifications($_SESSION['USERDATA']['id'], 5);
   $aGlobal['userdata']['lastnotifications'] = $aLastNotifications;
-
-  $aGlobal['userdata'] = $_SESSION['USERDATA']['id'] ? $user->getUserData($_SESSION['USERDATA']['id']) : array();
-  $aGlobal['userdata']['balance'] = $transaction->getBalance($_SESSION['USERDATA']['id']);
 
   // Other userdata that we can cache savely
   $aGlobal['userdata']['shares'] = $statistics->getUserShares($_SESSION['USERDATA']['username'], $_SESSION['USERDATA']['id']);

@@ -15,7 +15,7 @@
                 <!-- /.dropdown -->
                 <li class="dropdown">
                     <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                        <i class="fa fa-bell fa-fw"></i>  <i class="fa fa-caret-down"></i>
+                        <i class="fa fa-bullhorn fa-fw"></i>  <i class="fa fa-caret-down"></i>
                     </a>
                     <ul class="dropdown-menu dropdown-alerts">
                     
@@ -24,14 +24,12 @@
                         <li>
                             <a href="#">
                                 <div>
-                                    {if $GLOBAL.lastnotifications[notification].type == new_block}<i class="fa fa-th-large fa-fw"></i> New Block
-                                    {else if $GLOBAL.lastnotifications[notification].type == auto_payout}<i class="fa fa-money fa-fw"></i> Auto Payout
-                                    {else if $GLOBAL.lastnotifications[notification].type == payout}<i class="fa fa-money fa-fw"></i> Manual Payout
-                                    {else if $GLOBAL.lastnotifications[notification].type == idle_worker}<i class="fa fa-desktop fa-fw"></i> IDLE Worker
-                                    {else if $GLOBAL.lastnotifications[notification].type == manual_payout}<i class="fa fa-money fa-fw"></i> Manual Payout
-                                    {else if $GLOBAL.lastnotifications[notification].type == success_login}<i class="fa fa-sign-in fa-fw"></i> Successful Login
+                                    {if $GLOBAL.userdata.lastnotifications[notification].type == new_block}<i class="fa fa-th-large fa-fw"></i> New Block
+                                    {else if $GLOBAL.userdata.lastnotifications[notification].type == payout}<i class="fa fa-money fa-fw"></i> Payout
+                                    {else if $GLOBAL.userdata.lastnotifications[notification].type == idle_worker}<i class="fa fa-desktop fa-fw"></i> IDLE Worker
+                                    {else if $GLOBAL.userdata.lastnotifications[notification].type == success_login}<i class="fa fa-sign-in fa-fw"></i> Successful Login
                                     {/if}
-                                    <span class="pull-right text-muted small">{$GLOBAL.lastnotifications[notification].time|relative_date}</span>
+                                    <span class="pull-right text-muted small">{$GLOBAL.userdata.lastnotifications[notification].time|relative_date}</span>
                                 </div>
                             </a>
                         </li>
