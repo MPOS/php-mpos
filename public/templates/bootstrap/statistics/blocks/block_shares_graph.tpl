@@ -44,6 +44,8 @@ $(function () {
         <div class="panel-group">
           <div class="panel panel-default">
             <div class="panel-body">
+              <a href="{$smarty.server.SCRIPT_NAME}?page={$smarty.request.page|escape}&action={$smarty.request.action|escape}&height={if is_array($BLOCKSFOUND) && count($BLOCKSFOUND) > ($BLOCKLIMIT - 1)}{$BLOCKSFOUND[$BLOCKLIMIT - 1].height}{/if}&prev=1"><i class="fa fa-chevron-left"></i></a>
+              <a href="{$smarty.server.SCRIPT_NAME}?page={$smarty.request.page|escape}&action={$smarty.request.action|escape}&height={if is_array($BLOCKSFOUND) && count($BLOCKSFOUND) > 0}{$BLOCKSFOUND[0].height}{/if}&next=1"><i class="fa fa-chevron-right pull-right"></i></a>
               <div class="flot-chart">
                 <div id="block-area-chart"></div>
               </div>
