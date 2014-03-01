@@ -11,6 +11,43 @@
             <!-- /.navbar-header -->
 
             <ul class="nav navbar-top-links navbar-right">
+				{if $smarty.session.AUTHENTICATED|default:"0" == 1 && $GLOBAL.lastnotifications|@count != 0}
+                <!-- /.dropdown -->
+                <li class="dropdown">
+                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                        <i class="fa fa-bell fa-fw"></i>  <i class="fa fa-caret-down"></i>
+                    </a>
+                    <ul class="dropdown-menu dropdown-alerts">
+                    
+
+{section notification $GLOBAL.lastnotifications}
+                        <li>
+                            <a href="#">
+                                <div>
+                                    {if $GLOBAL.lastnotifications[notification].type == new_block}<i class="fa fa-th-large fa-fw"></i> New Block
+                                    {else if $GLOBAL.lastnotifications[notification].type == auto_payout}<i class="fa fa-money fa-fw"></i> Auto Payout
+                                    {else if $GLOBAL.lastnotifications[notification].type == payout}<i class="fa fa-money fa-fw"></i> Manual Payout
+                                    {else if $GLOBAL.lastnotifications[notification].type == idle_worker}<i class="fa fa-desktop fa-fw"></i> IDLE Worker
+                                    {else if $GLOBAL.lastnotifications[notification].type == manual_payout}<i class="fa fa-money fa-fw"></i> Manual Payout
+                                    {else if $GLOBAL.lastnotifications[notification].type == success_login}<i class="fa fa-sign-in fa-fw"></i> Successful Login
+                                    {/if}
+                                    <span class="pull-right text-muted small">{$GLOBAL.lastnotifications[notification].time|relative_date}</span>
+                                </div>
+                            </a>
+                        </li>
+                        <li class="divider"></li>
+{/section}
+
+                        <li>
+                            <a class="text-center" href="{$smarty.server.SCRIPT_NAME}?page=account&action=notifications">
+                                <strong>See All Notifications</strong>
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+                        </li>
+                    </ul>
+                    <!-- /.dropdown-alerts -->
+                </li>
+                {/if}
                 <!-- /.dropdown -->
                 <li class="dropdown">
                     <a class="dropdown-toggle" data-toggle="dropdown" href="#">

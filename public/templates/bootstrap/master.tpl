@@ -11,10 +11,7 @@
   <![endif]-->
   <script type="text/javascript" src="{$PATH}/js/jquery-2.0.3.min.js"></script>
   <script type="text/javascript" src="{$PATH}/js/jquery-migrate-1.2.1.min.js"></script>
-  <script type="text/javascript" src="{$PATH}/js/hideshow.js" type="text/javascript"></script>
   <script type="text/javascript" src="{$PATH}/js/jquery.equalHeight.js"></script>
-  <script type="text/javascript" src="{$PATH}/js/custom.js"></script>
-  <script type="text/javascript" src="{$PATH}/js/tinybox.js"></script>
   <script type="text/javascript" src="{$PATH}/../global/js/number_format.js"></script>
   <!--[if IE]><script type="text/javascript" src="{$PATH}/js/excanvas.js"></script><![endif]-->
   {literal}<script>
@@ -64,5 +61,4 @@
     <script src="{$PATH}/js/plugins/morris/morris.js"></script>
     
     <script src="{$PATH}/js/mpos.js"></script>
-    <script type="text/javascript" src="{$PATH}/js/justgage.1.0.1.min.js"></script>
 

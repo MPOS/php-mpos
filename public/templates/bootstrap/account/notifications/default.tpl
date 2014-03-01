@@ -96,7 +96,7 @@
 {/if}
                 </td>
                 <td>
-                 <i class="fa-{if $NOTIFICATIONS[notification].active}check{else}times{/if} fa-fw"></i>
+                 <i class="fa fa-{if $NOTIFICATIONS[notification].active}check{else}times{/if} fa-fw"></i>
                 </td>
               </tr>
 {/section}

@@ -42,6 +42,9 @@ $iCurrentPoolShareRate = $statistics->getCurrentShareRate();
 // Active workers
 if (!$iCurrentActiveWorkers = $worker->getCountAllActiveWorkers()) $iCurrentActiveWorkers = 0;
 
+// Fetch Last 5 notifications
+$iLastNotifications = $notification->getNofifications($_SESSION['USERDATA']['id'], 5);
+
 // Some settings to propagate to template
 if (! $statistics_ajax_refresh_interval = $setting->getValue('statistics_ajax_refresh_interval')) $statistics_ajax_refresh_interval = 10;
 if (! $statistics_ajax_long_refresh_interval = $setting->getValue('statistics_ajax_long_refresh_interval')) $statistics_ajax_long_refresh_interval = 10;
@@ -56,6 +59,7 @@ $aGlobal = array(
   'hashrate' => $iCurrentPoolHashrate,
   'nethashrate' => $dNetworkHashrate,
   'sharerate' => $iCurrentPoolShareRate,
+  'lastnotifications' => $iLastNotifications,
   'workers' => $iCurrentActiveWorkers,
   'roundshares' => $aRoundShares,
   'fees' => $config['fees'],
