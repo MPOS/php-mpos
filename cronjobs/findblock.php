@@ -25,7 +25,6 @@ chdir(dirname(__FILE__));
 // Include all settings and classes
 require_once('shared.inc.php');
 
-
 // Fetch our last block found from the DB as a starting point
 $aLastBlock = @$block->getLast();
 $strLastBlockHash = $aLastBlock['blockhash'];
@@ -66,7 +65,8 @@ if (empty($aTransactions['transactions'])) {
         continue;
       }
       if (!$block->addBlock($aData) ) {
-        $log->logFatal('Unable to add block: ' . $aData['height'] . ': ' . $block->getCronError());
+        $log->logFatal('Unable to add block: (' . $aData['height'] . ') ' . $aData['blockhash'] . ': ' . $block->getCronError());
+        $monitoring->endCronjob($cron_name, 'E0081', 1, true);
       }
     }
   }
