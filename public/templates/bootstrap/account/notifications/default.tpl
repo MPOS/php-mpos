@@ -43,10 +43,7 @@
               </td>
               <td>
                 <input type="hidden" name="data[payout]" value="0" />
-                <input type="checkbox" data-size="small" name="data[payout]" id="payout" value="1"{nocache}{if $SETTINGS['payout']|default:"0" == 1}checked{/if}{/nocache} />
-                <script>
-                $("[id='payout']").bootstrapSwitch();
-                </script>
+                <input type="checkbox" class="switch" data-size="small" name="data[payout]" id="payout" value="1"{nocache}{if $SETTINGS['payout']|default:"0" == 1}checked{/if}{/nocache} />
               </td>
             </tr>
             <tr>
