@@ -36,9 +36,9 @@
         <input type="hidden" name="action" value="{$smarty.request.action|escape}">
         <input type="hidden" name="do" value="update">
         <input type="hidden" name="ctoken" value="{$CTOKEN|escape|default:""}" />
-        <div class="panel-body">
+        <div class="panel-body no-padding">
           <div class="table-responsive">
-          <table class="table table-hover">
+          <table class="table table-striped table-bordered table-hover">
              <thead>
                 <tr>
                   <th>Worker Login</th>
@@ -78,7 +78,9 @@
                {/nocache}
              </tbody>
           </table>
-          <input type="submit" class="btn btn-outline btn-success btn-lg btn-block" value="Update Workers">
+          </div>
+          <div class="panel-footer">
+          <input type="submit" class="btn btn-success" value="Update Workers">
           </div>
         </div>
       </form>
