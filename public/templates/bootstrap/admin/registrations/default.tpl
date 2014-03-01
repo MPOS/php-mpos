@@ -8,25 +8,6 @@
       <div class="panel-body no-padding">
         <div class="table-responsive">
           <table class="table table-striped table-bordered table-hover">
-            <tbody>
-              <tr>
-                <td>
-                {if $smarty.request.registeredstart|default:"0" > 0}
-                  <a href="{$smarty.server.SCRIPT_NAME}?page={$smarty.request.page|escape}&action={$smarty.request.action|escape}&registeredstart={$smarty.request.registeredstart|escape|default:"0" - $LIMIT}{if $FILTERS|default:""}{$FILTERS}{/if}#registrations"><i class="fa fa-chevron-left fa-fw"></i> Previous 10</a>
-                {else}
-                  <i class="fa fa-chevron-left fa-fw"></i>
-                {/if}
-                </td>
-                <td>
-                  <a href="{$smarty.server.SCRIPT_NAME}?page={$smarty.request.page|escape}&action={$smarty.request.action|escape}&registeredstart={$smarty.request.registeredstart|escape|default:"0" + $LIMIT}{if $FILTERS|default:""}{$FILTERS}{/if}#registrations">Next 10 <i class="fa fa-chevron-right fa-fw"></i></a>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-    
-        <div class="table-responsive">
-          <table class="table table-striped table-bordered table-hover">
             <thead>
               <tr>
                 <th>ID</th>
@@ -52,6 +33,24 @@
           </table>
         </div>
       </div>
+
+
+            <table class="table borderless">
+            <tr>
+            <td>
+            <ul class="pager">
+              <li class="previous {if $smarty.get.start <= 0}disabled{/if}">
+                <a href="{if $smarty.get.start|default:"0" <= 0}#{else}{$smarty.server.SCRIPT_NAME}?page={$smarty.request.page|escape}&action={$smarty.request.action|escape}&registeredstart={$smarty.request.registeredstart|escape|default:"0" - $LIMIT}{if $FILTERS|default:""}{$FILTERS}{/if}{/if}">&larr; Prev</a>
+              </li>
+              <li class="next">
+                <a href="{$smarty.server.SCRIPT_NAME}?page={$smarty.request.page|escape}&action={$smarty.request.action|escape}&registeredstart={$smarty.request.registeredstart|escape|default:"0" + $LIMIT}{if $FILTERS|default:""}{$FILTERS}{/if}#registrations">Next &rarr;</a>
+              </li>
+            </ul>
+            </td>
+            </tr>
+            </table>
+
+
     </div>
   </div>
 </div> 

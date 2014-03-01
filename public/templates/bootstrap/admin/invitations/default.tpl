@@ -6,23 +6,9 @@
         <i class="fa fa-envelope fa-fw"></i> Top Inviters
       </div>
       <div class="panel-body no-padding">
-        <table class="table table-striped table-bordered table-hover">
 
-    <tbody>
-      <tr>
-        <td>
-{if $smarty.request.invitersstart|default:"0" > 0}
-          <a href="{$smarty.server.SCRIPT_NAME}?page={$smarty.request.page|escape}&action={$smarty.request.action|escape}&invitersstart={$smarty.request.invitersstart|escape|default:"0" - $LIMIT}{if $FILTERS|default:""}{$FILTERS}{/if}#invitations"><i class="icon-left-open"></i> Previous 10</a>
-{else}
-          <i class="icon-left-open"></i>
-{/if}
-        </td>
-        <td>
-          <a href="{$smarty.server.SCRIPT_NAME}?page={$smarty.request.page|escape}&action={$smarty.request.action|escape}&invitersstart={$smarty.request.invitersstart|escape|default:"0" + $LIMIT}{if $FILTERS|default:""}{$FILTERS}{/if}#invitations">Next 10 <i class="icon-right-open"></i></a>
-        </td>
-    </tbody>
-  </table>
-    
+
+
     <table class="table table-striped table-bordered table-hover">
       <thead>
         <tr>
@@ -46,7 +32,22 @@
           </tbody>
         </table>
       </div>
+
+    
+            <table class="table borderless">
+            <tr>
+            <td>
+            <ul class="pager">
+              <li class="previous {if $smarty.get.start <= 0}disabled{/if}">
+                <a href="{if $smarty.get.start|default:"0" <= 0}#{else}{$smarty.server.SCRIPT_NAME}?page={$smarty.request.page|escape}&action={$smarty.request.action|escape}&invitersstart={$smarty.request.invitersstart|escape|default:"0" - $LIMIT}{if $FILTERS|default:""}{$FILTERS}{/if}{/if}">&larr; Prev</a>
+              </li>
+              <li class="next">
+                <a href="{$smarty.server.SCRIPT_NAME}?page={$smarty.request.page|escape}&action={$smarty.request.action|escape}&invitersstart={$smarty.request.invitersstart|escape|default:"0" + $LIMIT}{if $FILTERS|default:""}{$FILTERS}{/if}">Next &rarr;</a>
+              </li>
+            </ul>
+            </td>
+            </tr>
+            </table>  
     </div>
   </div>
 </div>
-{/nocache}
