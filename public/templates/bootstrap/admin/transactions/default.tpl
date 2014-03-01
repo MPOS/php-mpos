@@ -42,11 +42,8 @@
           <input type="hidden" name="action" value="{$smarty.request.action|escape}" />
             <ul class="pager">
               <li class="previous {if $smarty.get.start <= 0}disabled{/if}">
-<<<<<<< HEAD
                 <a href="{if $smarty.get.start <= 0}#{else}{$smarty.server.SCRIPT_NAME}?page={$smarty.request.page|escape}&action={$smarty.request.action|escape}&start={$smarty.request.start|escape|default:"0" - $LIMIT}{if $FILTERS|default:""}{$FILTERS}{/if}{/if}">&larr; Prev</a>
-=======
                 <a href="{if $smarty.get.start|default:"0" <= 0}#{else}{$smarty.server.SCRIPT_NAME}?page={$smarty.request.page|escape}&action={$smarty.request.action|escape}&start={$smarty.request.start|escape|default:"0" - $LIMIT}{if $FILTERS|default:""}{$FILTERS}{/if}{/if}">&larr; Prev</a>
->>>>>>> 3139333a3d84d1aa3053a0806a7e32e11bbbaa49
               </li>
               <li class="next">
                 <a href="{$smarty.server.SCRIPT_NAME}?page={$smarty.request.page|escape}&action={$smarty.request.action|escape}&start={$smarty.request.start|escape|default:"0" + $LIMIT}{if $FILTERS|default:""}{$FILTERS}{/if}">Next &rarr;</a>
