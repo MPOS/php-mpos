@@ -29,7 +29,7 @@ $(function () {
         pointFillColors: ['#FFFFFF'],
         hideHover: 'auto',
         resize: true,
-        fillOpacity: 0.25
+        fillOpacity: 0.05
       });
 });
 </script>
