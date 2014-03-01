@@ -4,21 +4,31 @@
       <div class="panel-heading">
         <i class="fa fa-refresh fa-fw"></i> Round Statistics
       </div>
+      <div class="panel-body">
+        <form action="{$smarty.server.SCRIPT_NAME}" method="POST" id='search' role="form">
+          <input type="hidden" name="page" value="{$smarty.request.page|escape}">
+          <input type="hidden" name="action" value="{$smarty.request.action|escape}">
+          <label>Search Block Height</label>
+          <div class="form-group input-group">
+            <input type="text" class="form-control" name="search" value="{$smarty.request.height|default:"%"|escape}">
+            <span class="input-group-btn">
+              <button class="btn btn-default" type="submit" value="Search"><i class="fa fa-search"></i>
+              </button>
+            </span>
+          </div>
+        </form>
+        <ul class="pager">
+          <li class="previous">
+            <a href="{$smarty.server.SCRIPT_NAME}?page={$smarty.request.page|escape}&action={$smarty.request.action|escape}&height={$BLOCKDETAILS.height}&prev=1"> &larr; </a>
+          </li>
+          <li class="next">
+            <a href="{$smarty.server.SCRIPT_NAME}?page={$smarty.request.page|escape}&action={$smarty.request.action|escape}&height={$BLOCKDETAILS.height}&next=1"> &rarr; </a>
+          </li>
+        </ul>
+      </div>
+      
       <div class="panel-body no-padding">
         <div class="table-responsive">
-          <table class="table table-striped table-bordered table-hover">
-
-            <tbody>
-              <tr>
-                <td>
-                  <a href="{$smarty.server.SCRIPT_NAME}?page={$smarty.request.page|escape}&action={$smarty.request.action|escape}&height={$BLOCKDETAILS.height}&prev=1"><i class="fa fa-chevron-left fa-fw"></i></a>
-                </td>
-                <td colspan="4">
-                  <a href="{$smarty.server.SCRIPT_NAME}?page={$smarty.request.page|escape}&action={$smarty.request.action|escape}&height={$BLOCKDETAILS.height}&next=1"><i class="fa fa-chevron-right fa-fw"></i></a>
-                </td>
-              </tr>
-            </tbody>
-          </table>
           <table class="table table-striped table-bordered table-hover">
             <thead>
               <tr>
@@ -89,24 +99,7 @@
               </tr>
             </tbody>
           </table>
-
-  
-          <footer>
-            <form action="{$smarty.server.SCRIPT_NAME}" method="POST" id='search' role="form">
-              <input type="hidden" name="page" value="{$smarty.request.page|escape}">
-              <input type="hidden" name="action" value="{$smarty.request.action|escape}">
-              <div class="form-group input-group">
-                <input type="text" class="form-control" name="search" value="{$smarty.request.height|default:"%"|escape}">
-                <span class="input-group-btn">
-                  <button class="btn btn-default" type="submit" value="Search"><i class="fa fa-search"></i>
-                  </button>
-                </span>
-              </div>
-            </form>
-          </footer>
-  
         </div>
       </div>
     </div>
-  </div>
-</div>
+  </d

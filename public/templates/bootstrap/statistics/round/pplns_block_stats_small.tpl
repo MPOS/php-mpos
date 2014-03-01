@@ -4,18 +4,14 @@
       <div class="panel-heading">
         <i class="fa fa-bar-chart fa-fw"></i> Block Statistics
       </div>
-      <table class="table table-striped table-bordered table-hover">
-        <tbody>
-          <tr>
-            <td>
-              <a href="{$smarty.server.SCRIPT_NAME}?page={$smarty.request.page|escape}&action={$smarty.request.action|escape}&height={$BLOCKDETAILS.height}&prev=1"><i class="icon-left-open"></i></a>
-            </td>
-            <td colspan="4">
-              <a href="{$smarty.server.SCRIPT_NAME}?page={$smarty.request.page|escape}&action={$smarty.request.action|escape}&height={$BLOCKDETAILS.height}&next=1"><i class="icon-right-open"></i></a>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+      <ul class="pager">
+        <li class="previous">
+          <a href="{$smarty.server.SCRIPT_NAME}?page={$smarty.request.page|escape}&action={$smarty.request.action|escape}&height={$BLOCKDETAILS.height}&prev=1">&larr; Prev</a>
+        </li>
+        <li class="next">
+          <a href="{$smarty.server.SCRIPT_NAME}?page={$smarty.request.page|escape}&action={$smarty.request.action|escape}&height={$BLOCKDETAILS.height}&next=1">Next &rarr;</a>
+        </li>
+      </ul>
       <table class="tablesorter">
         <thead>
           <tr>
