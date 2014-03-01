@@ -4,7 +4,7 @@
       <div class="panel-heading">
         <i class="fa fa-gear fa-fw"></i> Notification Settings
       </div>
-      <div class="panel-body">
+      <div class="panel-body no-padding">
         <form action="{$smarty.server.SCRIPT_NAME}" method="POST" role="form">
           <input type="hidden" name="page" value="{$smarty.request.page|escape}">
           <input type="hidden" name="action" value="{$smarty.request.action|escape}">
