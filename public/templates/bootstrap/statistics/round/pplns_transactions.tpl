@@ -4,9 +4,9 @@
       <div class="panel-heading">
         <i class="fa fa-credit-card fa-fw"></i> Round Transactions
       </div>
-      <div class="panel-body no-padding">
+      <div class="panel-body">
         <div class="table-responsive">
-          <table class="table table-striped table-bordered table-hover">
+          <table class="table table-striped table-bordered table-hover datatable">
             <thead>
               <tr>
                 <th >User Name</th>

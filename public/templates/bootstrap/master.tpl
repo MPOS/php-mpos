@@ -29,10 +29,10 @@
   <script src="{$PATH}/js/jquery-2.0.3.min.js"></script>
   <script src="{$PATH}/js/bootstrap.min.js"></script>
   <script src="{$PATH}/js/bootstrap-switch.min.js"></script>
+  <script src="{$PATH}/js/plugins/dataTables/jquery.dataTables.js"></script>
+  <script src="{$PATH}/js/plugins/dataTables/dataTables.bootstrap.js"></script>
     
   <script src="{$PATH}/js/plugins/metisMenu/jquery.metisMenu.js"></script>
-    
-  <!-- Page-Level Plugin Scripts - Morris -->
   <script src="{$PATH}/js/plugins/morris/raphael-2.1.0.min.js"></script>
   <script src="{$PATH}/js/plugins/morris/morris.js"></script>
     
