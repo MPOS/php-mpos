@@ -76,7 +76,6 @@
               </tr>
             </tbody>
           </table>
-            
             <table class="table borderless">
             <tr>
             <td>
@@ -87,17 +86,19 @@
               </ul>
             </td>
             <td>
-              <form action="{$smarty.server.SCRIPT_NAME}" method="POST" id='search' role="form">
-                <input type="hidden" name="page" value="{$smarty.request.page|escape}">
-                <input type="hidden" name="action" value="{$smarty.request.action|escape}">
-                <div class="form-group input-group">
-                  <span class="input-group-addon">Search Block Height</span>
-                  <input type="text" class="form-control" name="search" value="{$smarty.request.height|default:"%"|escape}">
-                  <span class="input-group-btn">
-                    <button class="btn btn-default" type="submit" value="Search"><i class="fa fa-search"></i></button>
-                  </span>
-                </div>
-              </form>
+              <ul class="pager">
+                <form action="{$smarty.server.SCRIPT_NAME}" method="POST" id='search' role="form">
+                  <input type="hidden" name="page" value="{$smarty.request.page|escape}">
+                  <input type="hidden" name="action" value="{$smarty.request.action|escape}">
+                  <div class="form-group input-group">
+                    <span class="input-group-addon">Search Block Height</span>
+                    <input type="text" class="form-control" name="search" value="{$smarty.request.height|default:"%"|escape}">
+                    <span class="input-group-btn">
+                      <button class="btn btn-default" type="submit" value="Search"><i class="fa fa-search"></i></button>
+                    </span>
+                  </div>
+                </form>
+              </ul>
             </td>
             <td>
               <ul class="pager">
