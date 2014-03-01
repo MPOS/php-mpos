@@ -17,7 +17,7 @@
           </div>
           <div class="form-group">
             <label>Worker Password</label>
-            <input class="form-control" type="text" name="password" value="password" size="10" maxlength="20" required>&nbsp;
+            <input class="form-control" type="text" name="password" value="password" size="10" maxlength="20" required>
           </div>
           <input type="submit" value="Add New Worker" class="btn btn-outline btn-success btn-lg btn-block">
         </div>

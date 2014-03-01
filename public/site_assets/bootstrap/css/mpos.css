@@ -306,10 +306,16 @@ table.dataTable thead .sorting:after {
     margin: 15px 0;
 }
 
+/* No Padding for Tables */
+
 .no-padding {
     padding:0
 }
 
 .no-padding table {
     margin: 0
+}
+
+.no-padding .table-bordered {
+    border: 0;
 }
