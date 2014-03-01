@@ -81,5 +81,5 @@
           </table>
           </div>
           <div class="panel-footer">
-          <input type="submit" class="btn btn-success" value="Update Workers">
-          </di
+            <input type="submit" class="btn btn-success" value="Update Workers">
+          </div>
