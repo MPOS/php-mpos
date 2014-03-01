@@ -26,9 +26,9 @@
   <link href="{$PATH}/css/plugins/timeline/timeline.css" rel="stylesheet">
   <link href="{$PATH}/css/mpos.css" rel="stylesheet">
   
-  <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
-  <script src="http://netdna.bootstrapcdn.com/bootstrap/3.1.0/js/bootstrap.min.js"></script>
-  <script src="{$PATH}/js/bootstrap-switch.js"></script>
+  <script src="{$PATH}/js/jquery-2.0.3.min.js"></script>
+  <script src="{$PATH}/js/bootstrap.min.js"></script>
+  <script src="{$PATH}/js/bootstrap-switch.min.js"></script>
     
   <script src="{$PATH}/js/plugins/metisMenu/jquery.metisMenu.js"></script>
     
