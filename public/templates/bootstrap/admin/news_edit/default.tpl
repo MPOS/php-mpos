@@ -6,7 +6,7 @@
 
 
 <div class="row">
-  <div class="col-lg-12">
+  <form class="col-lg-12" method="POST" action="{$smarty.server.SCRIPT_NAME}" role="form">
     <div class="panel panel-info">
       <div class="panel-heading">
         <i class="fa fa-edit fa-fw"></i> Edit news entry #{$NEWS.id}
@@ -14,7 +14,6 @@
       <div class="panel-body">
         <div class="row">
           <div class="col-lg-12">
-            <form method="POST" action="{$smarty.server.SCRIPT_NAME}" role="form">
               <input type="hidden" name="page" value="{$smarty.request.page|escape}">
               <input type="hidden" name="action" value="{$smarty.request.action|escape}">
               <input type="hidden" name="id" value="{$NEWS.id}">
@@ -36,11 +35,12 @@
                   <th>Content</th>
                   <td><textarea class="cleditor form-control" name="content" rows="15" cols="150" type="text" required>{nocache}{$NEWS.content nofilter}{/nocache}</textarea></td>
               </div>
-              <input type="submit" value="Save" class="btn btn-outline btn-success btn-lg btn-block">
-            </form>
           </div>
         </div>  
       </div>
+      <div class="panel-footer">
+        <input type="submit" value="Save" class="btn btn-success">
+      </div>
     </div>
-  </div>
+  </form>
 </div>
