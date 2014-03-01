@@ -47,7 +47,7 @@
                   {if $GLOBAL.config.disable_notifications != 1}<th>Monitor</th>{/if}
                   <th>Khash/s</th>
                   <th>Difficulty</th>
-                  <th style="padding-right: 25px;">Action</th>
+                  <th>Action</th>
                 </tr>
              </thead>
              <tbody>
@@ -55,7 +55,13 @@
                {section worker $WORKERS}
                {assign var="username" value="."|escape|explode:$WORKERS[worker].username:2} 
                <tr>
-                 <td{if $WORKERS[worker].hashrate > 0} style="color: orange"{/if}>{$username.0|escape}.<input class="form-control" name="data[{$WORKERS[worker].id}][username]" value="{$username.1|escape}" size="10" required/></td>
+                <td>
+                <div class="input-group">
+                  <span {if $WORKERS[worker].hashrate > 0} style="color: orange"{/if} class="input-group-addon">{$username.0|escape}.</span>
+                  <input type="text" name="data[{$WORKERS[worker].id}][username]" value="{$username.1|escape}" size="10" required class="form-control">
+                </div>
+                </td>
+                 <td><input class="form-control" /></td>
                  <td><input class="form-control" type="text" name="data[{$WORKERS[worker].id}][password]" value="{$WORKERS[worker].password|escape}" size="10" required></td>
                  <td><i class="fa fa-{if $WORKERS[worker].hashrate > 0}check{else}times {/if}fa-fw"></i></td>
                  {if $GLOBAL.config.disable_notifications != 1}
