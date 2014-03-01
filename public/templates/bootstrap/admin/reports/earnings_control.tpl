@@ -45,7 +45,12 @@
                 <td>
                   <div class="form-group">
                     <label>SHOW EMPTY ROUNDS</label>
-                    <input type="checkbox" class="form-control" name="filter" value="1" id="filter" {if $FILTER}checked{/if} />
+                    <br>
+                    <input type="hidden" name="filter" value="0" />
+                    <input type="checkbox" data-size="small"  name="filter" id="filter" value="1" {if $FILTER}checked{/if}/>
+                    <script>
+                    $("[id='filter']").bootstrapSwitch();
+                    </script>
                   </div>
                 </td>
             </tbody>

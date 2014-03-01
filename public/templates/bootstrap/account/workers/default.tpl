@@ -65,9 +65,11 @@
                  <td><i class="fa fa-{if $WORKERS[worker].hashrate > 0}check{else}times {/if}fa-fw"></i></td>
                  {if $GLOBAL.config.disable_notifications != 1}
                  <td>
-                   <label for="data[{$WORKERS[worker].id}][monitor]">
-                     <input type="checkbox" name="data[{$WORKERS[worker].id}][monitor]" value="1" id="data[{$WORKERS[worker].id}][monitor]" {if $WORKERS[worker].monitor}checked{/if} />
-                   </label>
+                     <input type="hidden" name="data[{$WORKERS[worker].id}][monitor]" value="0" />
+                     <input type="checkbox" data-size="small"  name="data[{$WORKERS[worker].id}][monitor]" id="data[{$WORKERS[worker].id}][monitor]" value="1" {if $WORKERS[worker].monitor}checked{/if}/>
+                     <script>
+                     $("[id='data[{$WORKERS[worker].id}][monitor]']").bootstrapSwitch();
+                     </script>
                  </td>
                  {/if}
                  <td>{$WORKERS[worker].hashrate|number_format}</td>
@@ -81,9 +83,4 @@
           </div>
           <div class="panel-footer">
           <input type="submit" class="btn btn-success" value="Update Workers">
-          </div>
-        </div>
-      </form>
-    </div>
-  </div>
-</div>
+          </di
