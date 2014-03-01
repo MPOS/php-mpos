@@ -5,7 +5,7 @@
   <div class="col-lg-6">
     <div class="panel panel-info">
       <div class="panel-heading">
-        Change Password
+        <i class="fa fa-key fa-fw"></i> Change Password
       </div>
       <div class="panel-body">
         <div class="row">

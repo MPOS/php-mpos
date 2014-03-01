@@ -2,7 +2,7 @@
     <div class="col-lg-12">
       <div class="panel panel-info">
         <div class="panel-heading">
-          Terms &amp; Conditions
+          <i class="fa fa-book fa-fw"></i> Terms &amp; Conditions
         </div>
         <div class="panel-body">
           <p>This Agreement governs your use of {$GLOBAL.website.name}.</p>

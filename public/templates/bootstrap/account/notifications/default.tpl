@@ -2,7 +2,7 @@
   <div class="col-lg-4">
     <div class="panel panel-info">
       <div class="panel-heading">
-        Notification Settings
+        <i class="fa fa-gear fa-fw"></i> Notification Settings
       </div>
       <div class="panel-body">
       
@@ -24,6 +24,7 @@
                 <input type="hidden" name="data[idle_worker]" value="0" />
                 <input type="checkbox" name="data[idle_worker]" id="data[idle_worker]" value="1"{nocache}{if $SETTINGS['idle_worker']|default:"0" == 1}checked{/if}{/nocache} />
                 </label>
+                <input type="checkbox" checked data-size="large">
               </td>
             </tr>
       {if $DISABLE_BLOCKNOTIFICATIONS|default:"" != 1}
@@ -68,7 +69,7 @@
   <div class="col-lg-8">
     <div class="panel panel-info">
       <div class="panel-heading">
-        Notification History
+        <i class="fa fa-clock-o fa-fw"></i> Notification History
       </div>
       <div class="panel-body">
       

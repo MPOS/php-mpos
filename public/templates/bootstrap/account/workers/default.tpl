@@ -2,7 +2,7 @@
   <div class="col-lg-3">
     <div class="panel panel-info">
       <div class="panel-heading">
-        Add New Worker
+        <i class="fa fa-plus-square-o fa-fw"></i> Add New Worker
       </div>
 
       <form action="{$smarty.server.SCRIPT_NAME}" method="post" role="form">
@@ -28,7 +28,7 @@
   <div class="col-lg-9">
     <div class="panel panel-info">
       <div class="panel-heading">
-        Worker Configuration
+        <i class="fa fa-gears fa-fw"></i> Worker Configuration
       </div>
       
       <form action="{$smarty.server.SCRIPT_NAME}" method="post" role="form">

@@ -6,7 +6,7 @@
   <div class="col-lg-6">
     <div class="panel panel-info">
       <div class="panel-heading">
-        Reset PIN
+        <i class="fa fa-lock fa-fw"></i> Reset PIN
       </div>
       <div class="panel-body">
         <div class="row">

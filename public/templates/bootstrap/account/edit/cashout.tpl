@@ -6,7 +6,7 @@
   <div class="col-lg-6">
     <div class="panel panel-info">
       <div class="panel-heading">
-        Cash Out
+        <i class="fa fa-money fa-fw"></i> Cash Out
       </div>
       <div class="panel-body">
         <div class="row">

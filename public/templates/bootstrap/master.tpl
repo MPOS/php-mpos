@@ -9,10 +9,7 @@
   <link rel="stylesheet" href="{$PATH}/css/ie.css" type="text/css" media="screen" />
   <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
   <![endif]-->
-  <script type="text/javascript" src="{$PATH}/js/jquery-2.0.3.min.js"></script>
-  <script type="text/javascript" src="{$PATH}/js/jquery-migrate-1.2.1.min.js"></script>
-  <script type="text/javascript" src="{$PATH}/js/jquery.equalHeight.js"></script>
-  <script type="text/javascript" src="{$PATH}/../global/js/number_format.js"></script>
+
   <!--[if IE]><script type="text/javascript" src="{$PATH}/js/excanvas.js"></script><![endif]-->
   {literal}<script>
     var zxcvbnPath = "{/literal}{$PATH}{literal}/js/zxcvbn/zxcvbn.js";
@@ -21,11 +18,30 @@
   {if $GLOBAL.statistics.analytics.enabled}
   {$GLOBAL.statistics.analytics.code nofilter}
   {/if}
-  <link href="{$PATH}/css/bootstrap.min.css" rel="stylesheet">
-  <link href="{$PATH}/font-awesome/css/font-awesome.css" rel="stylesheet">
+  
+  
+  <!--<link href="{$PATH}/css/bootstrap.min.css" rel="stylesheet">-->
+  <link rel="stylesheet" href="http://netdna.bootstrapcdn.com/bootstrap/3.1.0/css/bootstrap.min.css">
+  <link href="{$PATH}/css/bootstrap-switch.css" rel="stylesheet">
+  <!--<link href="{$PATH}/font-awesome/css/font-awesome.css" rel="stylesheet">-->
+  <link rel="stylesheet" href="http://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css">
+  
   <link href="{$PATH}/css/plugins/morris/morris-0.4.3.min.css" rel="stylesheet">
   <link href="{$PATH}/css/plugins/timeline/timeline.css" rel="stylesheet">
   <link href="{$PATH}/css/mpos.css" rel="stylesheet">
+  
+  <script src="http://cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+  <script src="http://netdna.bootstrapcdn.com/bootstrap/3.1.0/js/bootstrap.min.js"></script>
+  <script src="{$PATH}/js/bootstrap-switch.js"></script>
+    
+  <script src="{$PATH}/js/plugins/metisMenu/jquery.metisMenu.js"></script>
+    
+  <!-- Page-Level Plugin Scripts - Morris -->
+  <script src="{$PATH}/js/plugins/morris/raphael-2.1.0.min.js"></script>
+  <script src="{$PATH}/js/plugins/morris/morris.js"></script>
+    
+  <script src="{$PATH}/js/mpos.js"></script>
+    
 </head>
 <body>
 
@@ -51,14 +67,4 @@
       {/if}
       </div>
     </div>
-
-    <script src="{$PATH}/js/jquery-1.10.2.js"></script>
-    <script src="{$PATH}/js/bootstrap.min.js"></script>
-    <script src="{$PATH}/js/plugins/metisMenu/jquery.metisMenu.js"></script>
-    
-    <!-- Page-Level Plugin Scripts - Morris -->
-    <script src="{$PATH}/js/plugins/morris/raphael-2.1.0.min.js"></script>
-    <script src="{$PATH}/js/plugins/morris/morris.js"></script>
-    
-    <script src="{$PATH}/js/mpos.js"></script>
 

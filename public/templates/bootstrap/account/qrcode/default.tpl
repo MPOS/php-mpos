@@ -14,11 +14,16 @@
   });
   {/literal}
 </script>
-<article class="module width_quarter">
-  <header><h3>API String</h3></header>
-  <div class="module_content">
-    <p>This code will allow you to import the full API string into your mobile application.</p>
-    <div id="qrcodeholder"></div>
+<div class="row">
+  <div class="col-lg-4">
+    <div class="panel panel-info">
+      <div class="panel-heading">
+        <i class="fa fa-qrcode fa-fw"></i> API String
+      </div>
+      <div class="panel-body">
+        <p>This code will allow you to import the full API string into your mobile application.</p>
+      <div id="qrcodeholder"></div>
+    </div>
   </div>
-</article>
+</div>
 {/if}

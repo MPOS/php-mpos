@@ -2,14 +2,14 @@
       <div class="col-lg-12">
         <div class="panel panel-default">
           <div class="panel-heading">
-            <h4 class="panel-title">latest News</h4>
+            <h4><i class="fa fa-info-circle fa-fw"></i> latest News</h4>
           </div>
           <div class="panel-body">
             <div class="panel-group" id="accordion">
 {section name=news loop=$NEWS}
               <div class="panel panel-default">
                 <div class="panel-heading">
-                  <a data-toggle="collapse" data-parent="#accordion" href="#collapse{$smarty.section.news.index}">{$NEWS[news].header}</a>
+                  <i class="fa fa-info fa-fw"></i> <a data-toggle="collapse" data-parent="#accordion" href="#collapse{$smarty.section.news.index}">{$NEWS[news].header}</a>
                   <br />
                   <font size="1px">posted {$NEWS[news].time|date_format:"%b %e, %Y at %H:%M"}{if $HIDEAUTHOR|default:"0" == 0} by <b>{$NEWS[news].author}</b>{/if}</font>
                 </div>

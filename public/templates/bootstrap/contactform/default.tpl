@@ -5,7 +5,7 @@
     <div class="col-lg-6">
       <div class="panel panel-info">
         <div class="panel-heading">
-          Contact Us
+          <i class="fa fa-envelope fa-fw"></i> Contact Us
       </div>
       <div class="panel-body">
         <div class="row">

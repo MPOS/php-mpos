@@ -5,7 +5,7 @@
   <div class="col-lg-6">
     <div class="panel panel-info">
       <div class="panel-heading">
-        Account Details
+        <i class="fa fa-edit fa-fw"></i> Account Details
       </div>
       <div class="panel-body">
         <div class="row">

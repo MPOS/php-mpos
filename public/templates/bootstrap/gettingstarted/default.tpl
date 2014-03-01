@@ -2,7 +2,7 @@
     <div class="col-lg-12">
       <div class="panel panel-info">
         <div class="panel-heading">
-          Getting Started Guide
+          <i class="fa fa-question fa-fw"></i> Getting Started Guide
         </div>
         <div class="panel-body">
         

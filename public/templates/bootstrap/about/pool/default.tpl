@@ -2,7 +2,7 @@
     <div class="col-lg-12">
       <div class="panel panel-info">
         <div class="panel-heading">
-          {$GLOBAL.website.name}
+          <i class="fa fa-info fa-fw"></i> {$GLOBAL.website.name}
         </div>
         <div class="panel-body">
 Below is a standard FAQ.
