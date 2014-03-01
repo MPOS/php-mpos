@@ -7,7 +7,7 @@
   <div class="col-lg-12">
     <div class="panel panel-info">
       <div class="panel-heading">
-        <i class="fa fa-edit fa-fw"></i> News Posts 
+        <i class="fa fa-edit fa-fw"></i> Write News 
         <br>
         <font size="1px">News posts support the Markdown syntax</font>
       </div>
@@ -38,7 +38,7 @@
   <div class="col-lg-12">
     <div class="panel panel-info">
       <div class="panel-heading">
-        <i class="fa fa-edit fa-fw"></i> News Posts
+        <i class="fa fa-edit fa-fw"></i> Previous News
       </div>
       <div class="panel-body">
         <div class="row">
