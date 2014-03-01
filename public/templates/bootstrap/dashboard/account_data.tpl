@@ -3,7 +3,7 @@
     <div class="panel-heading">
       <h4 class="panel-title">Account Information</h4>
     </div>
-    <div class="panel-body">
+    <div class="panel-body no-padding">
     <table class="table table-bordered table-hover table-striped">
       <tr>
         <td colspan="2">

@@ -3,7 +3,7 @@
     <div class="panel-heading">
       <h4 class="panel-title">{$GLOBAL.config.payout_system|capitalize} Stats</h4>
     </div>
-    <div class="panel-body">
+    <div class="panel-body no-padding">
       <table class="table table-bordered table-hover table-striped">
        <tbody>
 {if $GLOBAL.config.payout_system == 'pplns'}
