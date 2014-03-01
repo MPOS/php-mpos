@@ -5,7 +5,7 @@
       <div class="panel-heading">
         <i class="fa fa-money fa-fw"></i> Transaction Summary
       </div>
-      <div class="panel-body">
+      <div class="panel-body no-padding">
         <div class="table-responsive">
           <table class="table table-striped table-bordered table-hover">
             <thead>
@@ -68,10 +68,10 @@
       <div class="panel-heading">
         <i class="fa fa-clock-o fa-fw"></i> Transaction History
       </div>
-      <div class="panel-body">
+      <div class="panel-body no-padding">
 
         <div class="table-responsive">
-        <table class="table table-hover">
+        <table class="table table-striped table-bordered table-hover">
           <thead>
             <tr>
               <th>ID</th>
@@ -84,7 +84,7 @@
               <th>Amount</th>
             </tr>
           </thead>
-          <tbody style="font-size:12px;">
+          <tbody>
 {section transaction $TRANSACTIONS}
             <tr>
               <td>{$TRANSACTIONS[transaction].id}</td>
@@ -114,7 +114,10 @@
 {/section}
           </tbody>
         </table>
-        <footer><p style="margin-left: 25px; font-size: 9px;"><b>Debit_AP</b> = Auto Threshold Payment, <b>Debit_MP</b> = Manual Payment, <b>Donation</b> = Donation, <b>Fee</b> = Pool Fees (if applicable)</p></footer>
+        </div>
+        <div class="panel-footer">
+        <b>Debit_AP</b> = Auto Threshold Payment, <b>Debit_MP</b> = Manual Payment, <b>Donation</b> = Donation, <b>Fee</b> = Pool Fees (if applicable)
+        </div>
         </div>
       </div>
     </div>
