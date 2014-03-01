@@ -17,7 +17,7 @@
               </td>
               <td>
                 <input type="hidden" name="data[idle_worker]" value="0" />
-                <input type="checkbox" data-size="small" name="data[idle_worker]" id="idle_worker" value="1"{nocache}{if $SETTINGS['idle_worker']|default:"0" == 1}checked{/if}{/nocache} />
+                <input type="checkbox" class="switch" data-size="small" name="data[idle_worker]" id="idle_worker" value="1"{nocache}{if $SETTINGS['idle_worker']|default:"0" == 1}checked{/if}{/nocache} />
                 <script>
                   $("[id='idle_worker']").bootstrapSwitch();
                 </script>
@@ -30,7 +30,7 @@
               </td>
               <td>
                 <input type="hidden" name="data[new_block]" value="0" />
-                <input type="checkbox" data-size="small" name="data[new_block]" id="new_block" value="1"{nocache}{if $SETTINGS['new_block']|default:"0" == 1}checked{/if}{/nocache} />
+                <input type="checkbox"class="switch" data-size="small" name="data[new_block]" id="new_block" value="1"{nocache}{if $SETTINGS['new_block']|default:"0" == 1}checked{/if}{/nocache} />
                 <script>
                 $("[id='new_block']").bootstrapSwitch();
                 </script>
@@ -52,7 +52,7 @@
               </td>
               <td>
                 <input type="hidden" name="data[success_login]" value="0" />
-                <input type="checkbox" data-size="small"  name="data[success_login]" id="success_login" value="1"{nocache}{if $SETTINGS['success_login']|default:"0" == 1}checked{/if}{/nocache} />
+                <input type="checkbox" class="switch" data-size="small"  name="data[success_login]" id="success_login" value="1"{nocache}{if $SETTINGS['success_login']|default:"0" == 1}checked{/if}{/nocache} />
                 <script>
                 $("[id='success_login']").bootstrapSwitch();
                 </script>

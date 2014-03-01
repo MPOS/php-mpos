@@ -1,11 +1,10 @@
 <div class="row">
-  <div class="col-lg-3">
+  <form class="col-lg-3" action="{$smarty.server.SCRIPT_NAME}" method="post" role="form">
     <div class="panel panel-info">
       <div class="panel-heading">
         <i class="fa fa-plus-square-o fa-fw"></i> Add New Worker
       </div>
-
-      <form action="{$smarty.server.SCRIPT_NAME}" method="post" role="form">
+      <div class="panel-body">
         <input type="hidden" name="page" value="{$smarty.request.page|escape}">
         <input type="hidden" name="action" value="{$smarty.request.action|escape}">
         <input type="hidden" name="do" value="add">
@@ -19,11 +18,13 @@
             <label>Worker Password</label>
             <input class="form-control" type="text" name="password" value="password" size="10" maxlength="20" required>
           </div>
-          <input type="submit" value="Add New Worker" class="btn btn-outline btn-success btn-lg btn-block">
         </div>
-      </form>
+      </div>
+      <div class="panel-footer">
+        <input type="submit" value="Add New Worker" class="btn btn-success">
+      </div>
     </div>
-  </div>
+  </form>
 
   <div class="col-lg-9">
     <div class="panel panel-info">
