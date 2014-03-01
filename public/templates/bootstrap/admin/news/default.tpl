@@ -3,41 +3,70 @@
 <script type="text/javascript">
   $(document).ready(function () { $(".cleditor").cleditor(); });
 </script>
-<article class="module width_full">
-  <header><h3>News Posts</h3></header>
-  <ul><li>News posts support the Markdown syntax</li></ul>
-  <form method="POST" action="{$smarty.server.SCRIPT_NAME}">
-    <input type="hidden" name="page" value="{$smarty.request.page|escape}">
-    <input type="hidden" name="action" value="{$smarty.request.action|escape}">
-    <input type="hidden" name="do" value="add">
-    <div class="module_content">
-      <fieldset>
-        <label>Header</label>
-        <input size="30" type="text" name="data[header]" required />
-      </fieldset>
-      <label>Content</label>
-      <textarea class="cleditor" name="data[content]" rows="5" required></textarea>
-    </div>
-    <footer>
-      <div class="submit_link">
-        <input type="submit" value="Add" class="alt_btn">
+<div class="row">
+  <div class="col-lg-12">
+    <div class="panel panel-info">
+      <div class="panel-heading">
+        <i class="fa fa-edit fa-fw"></i> News Posts 
+        <br>
+        <font size="1px">News posts support the Markdown syntax</font>
       </div>
-    </footer>
-  </form>
-</article>
-
+      <div class="panel-body">
+        <div class="row">
+          <div class="col-lg-12">
+            <form method="POST" action="{$smarty.server.SCRIPT_NAME}">
+              <input type="hidden" name="page" value="{$smarty.request.page|escape}">
+              <input type="hidden" name="action" value="{$smarty.request.action|escape}">
+              <input type="hidden" name="do" value="add">
+              <div class="form-group">
+                <label>Header</label>
+                <input class="form-control" size="30" type="text" name="data[header]" required />
+              </div>
+              <div class="form-group">
+                <label>Content</label>
+                <textarea class="form-control cleditor" name="data[content]" rows="5" required></textarea>
+              </div>
+              <input type="submit" value="Add" class="btn btn-outline btn-success btn-lg btn-block">
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="row">
+  <div class="col-lg-12">
+    <div class="panel panel-info">
+      <div class="panel-heading">
+        <i class="fa fa-edit fa-fw"></i> News Posts
+      </div>
+      <div class="panel-body">
+        <div class="row">
 {nocache}
 {section name=news loop=$NEWS}
-<article class="module width_full">
-  <header><h3>{$NEWS[news].header} posted {$NEWS[news].time} by {$NEWS[news].author}</h3>
-{if $NEWS[news].active == 0}<font size="2px"><font color="red"><b>inactive</b></font><br /><br />{/if}</header>
-  <div class="module_content">{$NEWS[news].content nofilter}</div>
-  <footer>
-    <div class="submit_link">
-      <a href='{$smarty.server.SCRIPT_NAME}?page={$smarty.request.page|escape}&action=news_edit&id={$NEWS[news].id}'><i class="icon-wrench"></i></a>&nbsp;
-      <a href='{$smarty.server.SCRIPT_NAME}?page={$smarty.request.page|escape}&action={$smarty.request.action|escape}&do=delete&id={$NEWS[news].id}'><i class="icon-trash"></i></a>
-    </div>
-  </footer>
-</article>
+          <div class="col-lg-12">
+            <div class="panel panel-info">
+              <div class="panel-heading">
+                <i class="fa fa-info fa-fw"></i> <a data-toggle="collapse" data-parent="#accordion" href="#collapse{$smarty.section.news.index}">{$NEWS[news].header}</a>
+                <br />
+                <font size="1px">posted {$NEWS[news].time|date_format:"%b %e, %Y at %H:%M"}{if $HIDEAUTHOR|default:"0" == 0} by <b>{$NEWS[news].author}</b>{/if}</font>
+              </div>
+  
+              <div class="panel-body">
+                {$NEWS[news].content nofilter}
+              </div>
+              <footer>
+              <div class="submit_link">
+                <a href='{$smarty.server.SCRIPT_NAME}?page={$smarty.request.page|escape}&action=news_edit&id={$NEWS[news].id}'><i class="icon-wrench"></i></a>&nbsp;
+                <a href='{$smarty.server.SCRIPT_NAME}?page={$smarty.request.page|escape}&action={$smarty.request.action|escape}&do=delete&id={$NEWS[news].id}'><i class="icon-trash"></i></a>
+              </div>
+              </footer>
+            </div>
+          </div>
 {/section}
 {/nocache}
+
+      </div>
+    </div>
+  </div>
+</div>
