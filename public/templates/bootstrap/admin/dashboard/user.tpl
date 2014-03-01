@@ -2,7 +2,7 @@
   <div class="col-lg-6">
     <div class="panel panel-info">
       <div class="panel-heading">
-        Users
+        <i class="fa fa-user fa-fw"></i> Users
       </div>
       <div class="panel-body">
         <table class="table table-striped table-bordered table-hover">
@@ -32,7 +32,7 @@
   <div class="col-lg-6">
     <div class="panel panel-info">
       <div class="panel-heading">
-        Logins
+        <i class="fa fa-sign-in fa-fw"></i> Logins
       </div>
       <div class="panel-body">
         <table class="table table-striped table-bordered table-hover">

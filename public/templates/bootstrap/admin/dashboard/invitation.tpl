@@ -1,7 +1,7 @@
   <div class="col-lg-6">
     <div class="panel panel-info">
       <div class="panel-heading">
-        <a href="{$smarty.server.SCRIPT_NAME}?page=admin&action=invitations">Invitations</a>
+        <i class="fa fa-users fa-fw"></i> <a href="{$smarty.server.SCRIPT_NAME}?page=admin&action=invitations">Invitations</a>
       </div>
       <div class="panel-body">
         <table class="table table-striped table-bordered table-hover">

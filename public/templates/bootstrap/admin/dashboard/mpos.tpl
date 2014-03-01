@@ -2,7 +2,7 @@
   <div class="col-lg-6">
     <div class="panel panel-info">
       <div class="panel-heading">
-        MPOS Version Information
+        <i class="fa fa-info fa-fw"></i> MPOS Version Information
       </div>
       <div class="panel-body">
         <table class="table table-striped table-bordered table-hover">
@@ -44,7 +44,7 @@
   <div class="col-lg-6">
     <div class="panel panel-info">
       <div class="panel-heading">
-        MPOS Status
+        <i class="fa fa-question fa-fw"></i> MPOS Status
       </div>
       <div class="panel-body">
         <table class="table table-striped table-bordered table-hover">

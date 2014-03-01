@@ -26,7 +26,7 @@
   <div class="col-lg-12">
     <div class="panel panel-info">
       <div class="panel-heading">
-        User Search
+        <i class="fa fa-search fa-fw"></i> User Search
       </div>
       <form action="{$smarty.server.SCRIPT_NAME}" role="form">
         <input type="hidden" name="page" value="{$smarty.request.page|escape}" />
@@ -91,7 +91,7 @@
   <div class="col-lg-12">
     <div class="panel panel-info">
       <div class="panel-heading">
-        User Information
+        <i class="fa fa-info fa-fw"></i> User Information
       </div>
       <div class="panel-body">
         <div class="table-responsive">

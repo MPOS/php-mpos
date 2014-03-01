@@ -2,7 +2,7 @@
   <div class="col-lg-12">
     <div class="panel panel-info">
       <div class="panel-heading">
-        Monitoring
+        <i class="fa fa-bell-o fa-fw"></i> Monitoring
       </div>
       <div class="panel-body">
         <table class="table table-striped table-bordered table-hover">

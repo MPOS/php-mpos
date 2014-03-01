@@ -2,7 +2,7 @@
   <div class="col-lg-4">
     <div class="panel panel-info">
       <div class="panel-heading">
-        Balance Summary
+        <i class="fa fa-money fa-fw"></i> Balance Summary
       </div>
       <div class="panel-body">
         <table class="table table-striped table-bordered table-hover">
@@ -36,7 +36,7 @@
   <div class="col-lg-8">
     <div class="panel panel-info">
       <div class="panel-heading">
-        Wallet Status
+        <i class="fa fa-info fa-fw"></i> Wallet Status
       </div>
       <div class="panel-body">
         <table class="table table-striped table-bordered table-hover">
@@ -68,7 +68,7 @@
     <div class="col-lg-12">
       <div class="panel panel-info">
         <div class="panel-heading">
-          Number of Accounts in Wallet: {$ADDRESSCOUNT|default:"0"}
+          <i class="fa fa-users fa-fw"></i> Number of Accounts in Wallet: {$ADDRESSCOUNT|default:"0"}
         </div>
         
         <div class="panel-body">
@@ -77,17 +77,15 @@
 {foreach key=NAME item=VALUE from=$ACCOUNTS}
             <div class="panel panel-default">
               <div class="panel-heading">
-                <h4 class="panel-title">
-                  Account: {$NAME|default:"Default"}
-                </h4>
+                <i class="fa fa-user fa-fw"></i> Account: {$NAME|default:"Default"}
               </div>
               <div class="panel-body">
                 <div class="col-lg-4">
                   <div class="panel panel-default">
                     <div class="panel-heading">
-                      <h4 class="panel-title">
-                        Balance Info
-                      </h4>
+                      <div class="panel-title">
+                        <i class="fa fa-money fa-fw"></i> Balance Info
+                      </div>
                     </div>
                     <div class="panel-body">
                       <table class="table table-striped table-bordered table-hover">
@@ -106,9 +104,7 @@
                 <div class="col-lg-8">
                   <div class="panel panel-default">
                     <div class="panel-heading">
-                      <h4 class="panel-title">
-                        Addresses assigned to Account {$ACCOUNT|default:"Default"}
-                      </h4>
+                      <i class="fa fa-money fa-fw"></i> Addresses assigned to Account {$ACCOUNT|default:"Default"}
                     </div>
                     <div class="panel-body">
                       <table class="table table-striped table-bordered table-hover">
