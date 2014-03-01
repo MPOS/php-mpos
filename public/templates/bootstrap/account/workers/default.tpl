@@ -56,7 +56,7 @@
                <tr>
                  <td>
                   <div class="input-group">
-                    <span{if $WORKERS[worker].hashrate > 0} style="color: orange"{/if} class="input-group-addon">{$username.0|escape}.</span>
+                    <span {if $WORKERS[worker].hashrate > 0}style="color: orange"{/if} class="input-group-addon">{$username.0|escape}.</span>
                     <input type="text" name="data[{$WORKERS[worker].id}][username]" value="{$username.1|escape}" size="10" required class="form-control" />
                   </div>
                  </td>
@@ -66,9 +66,7 @@
                  <td>
                    <input type="hidden" name="data[{$WORKERS[worker].id}][monitor]" value="0" />
                    <input type="checkbox" data-size="small"  name="data[{$WORKERS[worker].id}][monitor]" id="data[{$WORKERS[worker].id}][monitor]" value="1" {if $WORKERS[worker].monitor}checked{/if}/>
-                   <script>
-                   $("[id='data[{$WORKERS[worker].id}][monitor]']").bootstrapSwitch();
-                   </script>
+                   
                  </td>
                  {/if}
                  <td class="text-right">{$WORKERS[worker].hashrate|number_format}</td>
@@ -78,8 +76,17 @@
                {/section}
                {/nocache}
              </tbody>
-          </table>
+            </table>
           </div>
           <div class="panel-footer">
             <input type="submit" class="btn btn-success" value="Update Workers">
           </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<script>
+  $("[id='data[{$WORKERS[worker].id}][monitor]']").bootstrapSwitch();
+</script>
