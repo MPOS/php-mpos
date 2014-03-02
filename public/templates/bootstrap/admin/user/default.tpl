@@ -23,67 +23,54 @@
 </script>
 
 <div class="row">
-  <div class="col-lg-12">
+  <form class="col-lg-12" role="form">
+    <input type="hidden" name="page" value="{$smarty.request.page|escape}">
+    <input type="hidden" name="action" value="{$smarty.request.action|escape}">
+    <input type="hidden" name="do" value="query">
     <div class="panel panel-info">
       <div class="panel-heading">
         <i class="fa fa-search fa-fw"></i> User Search
       </div>
-      <form action="{$smarty.server.SCRIPT_NAME}" role="form">
-        <input type="hidden" name="page" value="{$smarty.request.page|escape}" />
-        <input type="hidden" name="action" value="{$smarty.request.action|escape}" />
-        <input type="hidden" name="do" value="query" />
-        <div class="panel-body">
-          <div class="table-responsive">
-            <table class="table table-striped table-bordered table-hover">
-              <thead>
-                <tr>
-                  <td>
-                    {if $smarty.request.start|default:"0" > 0}
-                    <a href="{$smarty.server.SCRIPT_NAME}?page={$smarty.request.page|escape}&action={$smarty.request.action|escape}&start={$smarty.request.start|escape|default:"0" - $LIMIT}{if $FILTERS|default:""}{$FILTERS}{/if}"><i class="icon-left-open"></i> Previous 30</a>
-                    {else}
-                    <i class="icon-left-open"></i>
-                    {/if}
-                  </td>
-                  <td>
-                    <a href="{$smarty.server.SCRIPT_NAME}?page={$smarty.request.page|escape}&action={$smarty.request.action|escape}&start={$smarty.request.start|escape|default:"0" + $LIMIT}{if $FILTERS|default:""}{$FILTERS}{/if}">Next 30 <i class="icon-right-open"></i></a>
-                  </td>
-                </tr>
-            </thead>
-          </table>
+      <div class="panel-body">
+        <ul class="pager">
+          {if $smarty.request.start|default:"0" > 0} 
+          <li class="previous" disabled>
+            <a href="{$smarty.server.SCRIPT_NAME}?page={$smarty.request.page|escape}&action={$smarty.request.action|escape}&start={$smarty.request.start|escape|default:"0" - $LIMIT}{if $FILTERS|default:""}{$FILTERS}{/if}">← Prev</a>
+          {else}
+          <li class="previous disabled">
+            <a href="#">← Prev</a>
+          {/if}
+          </li>
+          <li class="next">
+            <a href="{$smarty.server.SCRIPT_NAME}?page={$smarty.request.page|escape}&action={$smarty.request.action|escape}&start={$smarty.request.start|escape|default:"0" + $LIMIT}{if $FILTERS|default:""}{$FILTERS}{/if}">Next →</a>
+          </li>
+        </ul>
+        <div class="form-group">
+          <label>Account</label>
+          <input size="20" class="form-control" type="text" name="filter[account]" value="{$smarty.request.filter.account|default:""}" />
         </div>
-        <div class="table-responsive">
-          <table class="table table-striped table-bordered table-hover">
-            <tbody>
-              <div class="form-group">
-                <label>Account</label>
-                <input size="20" class="form-control" type="text" name="filter[account]" value="{$smarty.request.filter.account|default:""}" />
-              </div>
-              <div class="form-group">
-                <label>E-Mail</label>
-                <input size="20" class="form-control" type="text" name="filter[email]" value="{$smarty.request.filter.email|default:""}" />
-              </div>
-              <div class="form-group">
-                <label>Is Admin</label>
-                {html_options class="form-control" name="filter[is_admin]" options=$ADMIN selected=$smarty.request.filter.is_admin|default:""}
-              </div>
-              <div class="form-group">
-                <label>Is Locked</label>
-                {html_options class="form-control" name="filter[is_locked]" options=$LOCKED selected=$smarty.request.filter.is_locked|default:""}
-              </div>
-              <div class="form-group">
-                <label>No Fees</label>
-                {html_options class="form-control" name="filter[no_fees]" options=$NOFEE selected=$smarty.request.filter.no_fees|default:""}
-              </div>
-              <ul>
-                <li>Note: Text search fields support '%' as wildcard.</li>
-              </ul>
-            </tbody>
-          </table>
-          <input type="submit" value="Search" class="btn btn-outline btn-success btn-lg btn-block">
+        <div class="form-group">
+          <label>E-Mail</label>
+          <input size="20" class="form-control" type="text" name="filter[email]" value="{$smarty.request.filter.email|default:""}" />
         </div>
-      </form>
+        <div class="form-group">
+          <label>Is Admin</label>
+          {html_options class="form-control" name="filter[is_admin]" options=$ADMIN selected=$smarty.request.filter.is_admin|default:""}
+        </div>
+        <div class="form-group">
+          <label>Is Locked</label>
+          {html_options class="form-control" name="filter[is_locked]" options=$LOCKED selected=$smarty.request.filter.is_locked|default:""}
+        </div>
+        <div class="form-group">
+          <label>No Fees</label>
+          {html_options class="form-control" name="filter[no_fees]" options=$NOFEE selected=$smarty.request.filter.no_fees|default:""}
+        </div>
+      </div>
+      <div class="panel-footer">
+        <input type="submit" value="Search" class="btn btn-success">
+      </div>
     </div>
-  </div>
+  </form>
 </div>
 
 

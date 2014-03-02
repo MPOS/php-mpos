@@ -31,44 +31,44 @@
 {/if}
 
 <div class="row">
-  <div class="col-lg-4">
+  <form class="col-lg-4" role="form">
+    <input type="hidden" name="page" value="{$smarty.request.page|escape}">
+    <input type="hidden" name="action" value="{$smarty.request.action|escape}">
     <div class="panel panel-info">
       <div class="panel-heading">
         <i class="fa fa-search fa-fw"></i> Transaction Filter
       </div>
       <div class="panel-body">
-        <form action="{$smarty.server.SCRIPT_NAME}" role="form">
-          <input type="hidden" name="page" value="{$smarty.request.page|escape}" />
-          <input type="hidden" name="action" value="{$smarty.request.action|escape}" />
-            <ul class="pager">
-              <li class="previous {if $smarty.get.start <= 0}disabled{/if}">
-                <a href="{if $smarty.get.start|default:"0" <= 0}#{else}{$smarty.server.SCRIPT_NAME}?page={$smarty.request.page|escape}&action={$smarty.request.action|escape}&start={$smarty.request.start|escape|default:"0" - $LIMIT}{if $FILTERS|default:""}{$FILTERS}{/if}{/if}">&larr; Prev</a>
-              </li>
-              <li class="next">
-                <a href="{$smarty.server.SCRIPT_NAME}?page={$smarty.request.page|escape}&action={$smarty.request.action|escape}&start={$smarty.request.start|escape|default:"0" + $LIMIT}{if $FILTERS|default:""}{$FILTERS}{/if}">Next &rarr;</a>
-              </li>
-            </ul>
-          <div class="form-group">
-            <label>Type</label>
-            {html_options class="form-control select2-bootstrap-append" name="filter[type]" options=$TRANSACTIONTYPES selected=$smarty.request.filter.type|default:""}
-          </div>
-          <div class="form-group">
-            <label>Status</label>
-            {html_options class="form-control" name="filter[status]" options=$TXSTATUS selected=$smarty.request.filter.status|default:""}
-          </div>
-          <div class="form-group">
-            <label>Account</label>
-            <input class="form-control" size="20" type="text" name="filter[account]" value="{$smarty.request.filter.account|default:""}" />
-          </div>
-          <div class="form-group">
-            <label>Address</label>
-            <input class="form-control" size="20" type="text" name="filter[address]" value="{$smarty.request.filter.address|default:""}" />
-          </div>
-          <input type="submit" value="Filter" class="btn btn-outline btn-success btn-lg btn-block">
-        </form>
+        <ul class="pager">
+          <li class="previous {if $smarty.get.start <= 0}disabled{/if}">
+            <a href="{if $smarty.get.start|default:"0" <= 0}#{else}{$smarty.server.SCRIPT_NAME}?page={$smarty.request.page|escape}&action={$smarty.request.action|escape}&start={$smarty.request.start|escape|default:"0" - $LIMIT}{if $FILTERS|default:""}{$FILTERS}{/if}{/if}">&larr; Prev</a>
+          </li>
+          <li class="next">
+            <a href="{$smarty.server.SCRIPT_NAME}?page={$smarty.request.page|escape}&action={$smarty.request.action|escape}&start={$smarty.request.start|escape|default:"0" + $LIMIT}{if $FILTERS|default:""}{$FILTERS}{/if}">Next &rarr;</a>
+          </li>
+        </ul>
+        <div class="form-group">
+          <label>Type</label>
+          {html_options class="form-control select2-bootstrap-append" name="filter[type]" options=$TRANSACTIONTYPES selected=$smarty.request.filter.type|default:""}
+        </div>
+        <div class="form-group">
+          <label>Status</label>
+          {html_options class="form-control" name="filter[status]" options=$TXSTATUS selected=$smarty.request.filter.status|default:""}
+        </div>
+        <div class="form-group">
+          <label>Account</label>
+          <input class="form-control" size="20" type="text" name="filter[account]" value="{$smarty.request.filter.account|default:""}" />
+        </div>
+        <div class="form-group">
+          <label>Address</label>
+          <input class="form-control" size="20" type="text" name="filter[address]" value="{$smarty.request.filter.address|default:""}" />
+        </div>
+      </div>
+      <div class="panel-footer">
+        <input type="submit" value="Filter" class="btn btn-success">
       </div>
     </div>
-  </div>
+  </form>
 
 
 
@@ -78,7 +78,6 @@
         <i class="fa fa-clock-o fa-fw"></i> Transaction History
       </div>
       <div class="panel-body no-padding">
-
         <div class="table-responsive">
           <table class="table table-striped table-bordered table-hover">
             <thead>
@@ -125,8 +124,10 @@
               {/section}
             </tbody>
           </table>
-          <footer><font size="1"><b>Credit_AP</b> = Auto Threshold Payment, <b>Credit_MP</b> = Manual Payment, <b>Donation</b> = Donation, <b>Fee</b> = Pool Fees (if applicable)</font></footer>
         </div>
+      </div>
+      <div class="panel-footer">
+        <b>Credit_AP</b> = Auto Threshold Payment, <b>Credit_MP</b> = Manual Payment, <b>Donation</b> = Donation, <b>Fee</b> = Pool Fees (if applicable)
       </div>
     </div>
   </div>
