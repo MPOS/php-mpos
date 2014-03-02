@@ -1,5 +1,5 @@
 <div class="col-lg-4">
-  <div class="panel panel-default">
+  <div class="panel panel-info">
     <div class="panel-heading">
       <h4 class="panel-title">{$GLOBAL.config.payout_system|capitalize} Stats</h4>
     </div>

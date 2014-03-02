@@ -1,5 +1,5 @@
   <div class="col-lg-8">
-    <div class="panel panel-default">
+    <div class="panel panel-info">
       <div class="panel-heading">
         <h4 class="panel-title">Overview {if $GLOBAL.config.price.currency}{$GLOBAL.config.currency}/{$GLOBAL.config.price.currency}: <span id="b-price">{$GLOBAL.price|number_format:"8"|default:"0"}</span>{/if} / Pool Workers: <span id="b-dworkers">{$GLOBAL.workers}</span></h4>
       </div>
