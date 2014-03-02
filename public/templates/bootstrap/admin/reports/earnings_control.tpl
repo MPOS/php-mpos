@@ -51,10 +51,12 @@
                   </td>
                 </tbody>
               </table>
-            <input type="submit" value="Submit" class="btn btn-outline btn-success btn-lg btn-block">
+            </div>
+          </div>
+          <div class="panel-footer">
+            <input type="submit" value="Submit" class="btn btn-success">
           </div>
         </div>
       </div>
     </div>
-  </div>
-</form>
+  </form>

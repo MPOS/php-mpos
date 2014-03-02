@@ -9,7 +9,7 @@
         <i class="fa fa-gear fa-fw"></i> Notification Settings
       </div>
       <div class="panel-body no-padding">
-          <table class="table table-striped table-bordered table-hover">
+        <table class="table table-striped table-bordered table-hover">
             <tr>
               <td>
                 <label>IDLE Worker</label>
@@ -48,10 +48,10 @@
                 <input type="checkbox" class="switch" data-size="small"  name="data[success_login]" id="success_login" value="1"{nocache}{if $SETTINGS['success_login']|default:"0" == 1}checked{/if}{/nocache} />
               </td>
             </tr>
-          </table>
-          </div>
-          <div class="panel-footer">
-          <input type="submit" value="Update" class="btn btn-success">
+        </table>
+      </div>
+      <div class="panel-footer">
+        <input type="submit" value="Update" class="btn btn-success">
       </div>
     </form>
   </div>

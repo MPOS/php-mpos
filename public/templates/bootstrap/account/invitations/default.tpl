@@ -5,7 +5,6 @@
         <i class="fa fa-envelope fa-fw"></i> Invitation
       </div>
       <div class="panel-body">
-      
         <form action="{$smarty.server.SCRIPT_NAME}" method="POST" role="form">
           <input type="hidden" name="page" value="{$smarty.request.page|escape}">
           <input type="hidden" name="action" value="{$smarty.request.action|escape}">
@@ -20,8 +19,10 @@
             <label>Message</label>
             <textarea class="form-control" name="data[message]" rows="5">{$smarty.request.data.message|escape|default:"Please accept my invitation to this awesome pool."}</textarea>
           </div>
-          <input type="submit" value="Invite" class="btn btn-outline btn-success btn-lg btn-block">
         </form>
+      </div>
+      <div class="panel-footer">
+        <input type="submit" value="Invite" class="btn btn-success">
       </div>
     </div>
   </div>
