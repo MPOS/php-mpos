@@ -101,6 +101,47 @@ class Transaction extends Base {
   }
 
   /**
+   * Fetch a transaction summary by user with total amounts
+   * @param account_id int Account ID, NULL for all
+   * @return data array type and total
+   **/
+  public function getTransactionSummarybyTime($account_id=NULL) {
+    if ($data = $this->memcache->get(__FUNCTION__ . $account_id)) return $data;
+    $sql = "
+      SELECT
+        SUM(t.amount) AS total,
+        t.type AS type
+      FROM transactions AS t
+      LEFT OUTER JOIN blocks AS b
+      ON b.id = t.block_id
+      WHERE ( b.confirmations > 0 OR b.id IS NULL )";
+    if (!empty($account_id)) {
+      $sql .= " AND t.account_id = ? ";
+      $this->addParam('i', $account_id);
+    }
+    $sql .= " GROUP BY t.type";
+    $stmt = $this->mysqli->prepare($sql);
+    if (!empty($account_id)) {
+      if (!($this->checkStmt($stmt) && call_user_func_array( array($stmt, 'bind_param'), $this->getParam()) && $stmt->execute()))
+        return false;
+      $result = $stmt->get_result();
+    } else {
+      if (!($this->checkStmt($stmt) && $stmt->execute()))
+        return false;
+      $result = $stmt->get_result();
+    }
+    if ($result) {
+      $aData = NULL;
+      while ($row = $result->fetch_assoc()) {
+        $aData[$row['type']] = $row['total'];
+      }
+      // Cache data for a while, query takes long on many rows
+      return $this->memcache->setCache(__FUNCTION__ . $account_id, $aData, 60);
+    }
+    return $this->sqlError();
+  }
+
+  /**
    * Get all transactions from start for account_id
    * @param start int Starting point, id of transaction
    * @param filter array Filter to limit transactions
