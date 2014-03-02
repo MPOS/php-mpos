@@ -8,9 +8,12 @@ $(document).ready(function(){
   var url_worker = "{/literal}{$smarty.server.SCRIPT_NAME}?page=api&action=getuserworkers&api_key={$GLOBAL.userdata.api_key}&id={$GLOBAL.userdata.id}{literal}";
   var url_balance = "{/literal}{$smarty.server.SCRIPT_NAME}?page=api&action=getuserbalance&api_key={$GLOBAL.userdata.api_key}&id={$GLOBAL.userdata.id}{literal}";
 
-  var storedPersonalHashrate = [ 0, 0, 0, 0, {/literal}{$GLOBAL.userdata.hashrate}{literal} ];
-  var storedPoolHashrate = [ 0, 0, 0, 0, {/literal}{$GLOBAL.hashrate}{literal} ];
+  // Load initial sparkline values
+  var storedPersonalHashrate = [ 0, 0, 0, 0, {/literal}{$GLOBAL.userdata.hashrate|number_format:"2"}{literal} ];
+  var storedPoolHashrate = [ 0, 0, 0, 0, {/literal}{$GLOBAL.hashrate|number_format:"2"}{literal} ];
   var storedPoolWorkers = [ 0, 0, 0, 0, {/literal}{$GLOBAL.workers}{literal} ];
+
+  // Sparkline options applied to all graphs
   var sparklineOptions = {
     type: 'bar',
     barColor: 'green',
@@ -18,8 +21,10 @@ $(document).ready(function(){
     width: '150px',
     barWidth: 10
   };
+
+  // Draw our sparkline graphs
   $('.personal-hashrate-bar').sparkline(storedPersonalHashrate, sparklineOptions);
-  $('.pool-hasrate-bar').sparkline(storedPoolHashrate, sparklineOptions);
+  $('.pool-hashrate-bar').sparkline(storedPoolHashrate, sparklineOptions);
   $('.pool-workers-bar').sparkline(storedPoolWorkers, sparklineOptions);
 
   function refreshInformation(data) {
@@ -39,6 +44,7 @@ $(document).ready(function(){
     $('#b-price').html((parseFloat(data.getdashboarddata.data.pool.price).toFixed(8)));
     $('#b-dworkers').html(data.getdashboarddata.data.pool.workers);
     $('#b-hashrate').html((parseFloat(data.getdashboarddata.data.personal.hashrate).toFixed(2)));
+    $('#b-poolhashrate').html((parseFloat(data.getdashboarddata.data.pool.hashrate).toFixed(2)));
     $('#b-sharerate').html((parseFloat(data.getdashboarddata.data.personal.sharerate).toFixed(2)));
     $('#b-yvalid').html(number_format(data.getdashboarddata.data.personal.shares.valid));
     $('#b-yivalid').html(number_format(data.getdashboarddata.data.personal.shares.invalid) + " (" + number_format(data.getdashboarddata.data.personal.shares.invalid_percent, 2) + "%)" );
