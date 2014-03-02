@@ -8,7 +8,7 @@ $api->isActive();
 $user_id = $api->checkAccess($user->checkApiKey($_REQUEST['api_key']), @$_REQUEST['id']);
 
 // Fetch transactions
-if (isset($_REQUEST['limit']) && $_REQUEST['limit'] =< 100) {
+if (isset($_REQUEST['limit']) && $_REQUEST['limit'] <= 100) {
   $limit = $_REQUEST['limit'];
 } else {
   // Force limit
