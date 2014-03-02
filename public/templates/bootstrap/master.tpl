@@ -33,33 +33,30 @@
   <script src="{$PATH}/js/mpos.js"></script>
 </head>
 <body>
+  <div id="wrapper">
+    {include file="global/header.tpl"}
+    {include file="global/navigation.tpl"}
 
-    <div id="wrapper">
-
-      {include file="global/header.tpl"}
-      {include file="global/navigation.tpl"}
-
-      <div id="page-wrapper"><br />
-      {nocache}
-      {if is_array($smarty.session.POPUP|default)}
-        {section popup $smarty.session.POPUP}
-        <div class="{$smarty.session.POPUP[popup].TYPE|default:"alert alert-info"}">{$smarty.session.POPUP[popup].CONTENT nofilter}</div>
-        {/section}
+    <div id="page-wrapper"><br />
+    {nocache}
+    {if is_array($smarty.session.POPUP|default)}
+      {section popup $smarty.session.POPUP}
+      <div class="{$smarty.session.POPUP[popup].TYPE|default:"alert alert-info"}">{$smarty.session.POPUP[popup].CONTENT nofilter}</div>
+      {/section}
+    {/if}
+    {/nocache}
+    {if $CONTENT != "empty" && $CONTENT != ""}
+      {if file_exists($smarty.current_dir|cat:"/$PAGE/$ACTION/$CONTENT")}
+        {include file="$PAGE/$ACTION/$CONTENT"}
+      {else}
+        Missing template for this page
       {/if}
-      {/nocache}
-      {if $CONTENT != "empty" && $CONTENT != ""}
-        {if file_exists($smarty.current_dir|cat:"/$PAGE/$ACTION/$CONTENT")}
-          {include file="$PAGE/$ACTION/$CONTENT"}
-        {else}
-          Missing template for this page
-        {/if}
-      {/if}
-      </div>
-    </div>
-
-    <div id="footer">
+    {/if}
+    <footer>
       {include file="global/footer.tpl"}
+    </footer>
     </div>
+  </div>
 
   </body>
 </html>
