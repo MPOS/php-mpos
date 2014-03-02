@@ -53,11 +53,7 @@
         Missing template for this page
       {/if}
     {/if}
-    <footer>
-      {include file="global/footer.tpl"}
-    </footer>
     </div>
-  </div>
-
+    {include file="global/footer.tpl"}
   </body>
 </html>
