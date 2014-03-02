@@ -24,6 +24,8 @@
       <li class="icon-cog"><a href="{$smarty.server.SCRIPT_NAME}?page=admin&action=settings">Settings</a></li>
       <li class="icon-doc"><a href="{$smarty.server.SCRIPT_NAME}?page=admin&action=news">News</a></li>
       <li class="icon-chart"><a href="{$smarty.server.SCRIPT_NAME}?page=admin&action=reports">Reports</a></li>
+      <li class="icon-edit"><a href="{$smarty.server.SCRIPT_NAME}?page=admin&action=registrations">Registrations</a></li>
+      <li class="icon-users"><a href="{$smarty.server.SCRIPT_NAME}?page=admin&action=invitations">Invitations</a></li>
       <li class="icon-photo"><a href="{$smarty.server.SCRIPT_NAME}?page=admin&action=poolworkers">Pool Workers</a></li>
       <li class="icon-pencil"><a href="{$smarty.server.SCRIPT_NAME}?page=admin&action=templates">Templates</a></li>
     </ul>
@@ -42,6 +44,7 @@
       <li class="icon-desktop"><a href="{$smarty.server.SCRIPT_NAME}?page=gettingstarted">Getting Started</a></li>
       {acl_check icon='icon-doc' page='about' action='pool' name='About' acl=$GLOBAL.acl.about.page}
       {acl_check icon='icon-money' page='about' action='donors' name='Donors' acl=$GLOBAL.acl.donors.page}
+      {acl_check icon='icon-megaphone' page='about' action='chat' name='Web Chat' acl=$GLOBAL.acl.chat.page}
     </ul>
     <h3>Other</h3>
     <ul class="toggle">

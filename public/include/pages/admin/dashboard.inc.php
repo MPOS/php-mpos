@@ -54,8 +54,19 @@ $aLoginInfo = array(
 );
 $smarty->assign('USER_LOGINS', $aLoginInfo);
 
-// Fetch invitation information
+// Fetch registration information
+$aRegistrationInfo = array(
+  '24hours' => $user->getCountFiltered('signup_timestamp', time() - 86400, 'i', '>='),
+  '7days' => $user->getCountFiltered('signup_timestamp', (time() - (86400 * 7)), 'i', '>='),
+  '1month' => $user->getCountFiltered('signup_timestamp', (time() - (86400 * 7 * 4)), 'i', '>='),
+  '6month' => $user->getCountFiltered('signup_timestamp', (time() - (86400 * 7 * 4 * 6)), 'i', '>='),
+  '1year' => $user->getCountFiltered('signup_timestamp', (time() - (86400 * 365)), 'i', '>=')
+);
+$smarty->assign('USER_REGISTRATIONS', $aRegistrationInfo);
+
+// Fetching invitation Informations
 if (!$setting->getValue('disable_invitations')) {
+  // Fetch global invitation information
   $aInvitationInfo = array(
     'total' => $invitation->getCount(),
     'activated' => $invitation->getCountFiltered('is_activated', 1),

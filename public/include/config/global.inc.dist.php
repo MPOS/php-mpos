@@ -219,7 +219,7 @@ $config['fees'] = 1;
 $config['pplns']['shares']['default'] = 4000000;
 $config['pplns']['shares']['type'] = 'blockavg';
 $config['pplns']['blockavg']['blockcount'] = 10;
-$config['pplns']['reverse_payout'] = false;
+$config['pplns']['reverse_payout'] = true;
 $config['pplns']['dynamic']['percent'] = 30;
 
 /**
