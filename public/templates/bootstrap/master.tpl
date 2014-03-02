@@ -30,6 +30,7 @@
   <script src="{$PATH}/js/plugins/metisMenu/jquery.metisMenu.js"></script>
   <script src="{$PATH}/js/plugins/morris/raphael-2.1.0.min.js"></script>
   <script src="{$PATH}/js/plugins/morris/morris.js"></script>
+  <script src="{$PATH}/js/plugins/sparkline/jquery.sparkline.min.js"></script>
   <script src="{$PATH}/js/mpos.js"></script>
 </head>
 <body>
