@@ -22,7 +22,8 @@
       </div>
       <div class="panel-body">
         <p>This code will allow you to import the full API string into your mobile application.</p>
-      <div id="qrcodeholder"></div>
+        <div id="qrcodeholder"></div>
+      </div>
     </div>
   </div>
 </div>
