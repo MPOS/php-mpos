@@ -100,7 +100,6 @@
                 <td>{$TRANSACTIONS[transaction].username}</td>
                 <td>{$TRANSACTIONS[transaction].timestamp}</td>
                 <td>{$TRANSACTIONS[transaction].type}</td>
-                <td>
                 {if $TRANSACTIONS[transaction].type == 'Credit_PPS' OR
                   $TRANSACTIONS[transaction].type == 'Fee_PPS' OR
                   $TRANSACTIONS[transaction].type == 'Donation_PPS' OR
@@ -108,10 +107,9 @@
                   $TRANSACTIONS[transaction].type == 'Debit_AP' OR
                   $TRANSACTIONS[transaction].type == 'TXFee' OR
                   $TRANSACTIONS[transaction].confirmations >= $GLOBAL.confirmations
-                }<span class="confirmed">Confirmed</span>
-                {else if $TRANSACTIONS[transaction].confirmations == -1}<span class="orphan">Orphaned</span>
-                {else}<span class="unconfirmed">Unconfirmed</span>{/if}
-                </td>
+                }<td class="success">Confirmed</td>
+                {else if $TRANSACTIONS[transaction].confirmations == -1}<td class="danger">Orphaned</td>
+                {else}<td class="warning">Unconfirmed</td>{/if}
                 <td><a href="#" onClick="alert('{$TRANSACTIONS[transaction].coin_address|escape}')">{$TRANSACTIONS[transaction].coin_address|truncate:20:"...":true:true}</a></td>
                 {if ! $GLOBAL.website.transactionexplorer.disabled}
                 <td><a href="{$GLOBAL.website.transactionexplorer.url}{$TRANSACTIONS[transaction].txid|escape}" title="{$TRANSACTIONS[transaction].txid|escape}">{$TRANSACTIONS[transaction].txid|truncate:20:"...":true:true}</a></td>
