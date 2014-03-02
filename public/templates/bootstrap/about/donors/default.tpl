@@ -5,7 +5,7 @@
         <i class="fa fa-bitbucket fa-fw"></i> Pool Donors
       </div>
       <div class="panel-body">
-      <table class="table table-striped table-bordered table-hover">
+      <table class="table table-striped table-bordered table-hover datatable">
         <thead>
           <tr>
             <th>Name</th>
