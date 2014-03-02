@@ -40,9 +40,8 @@
 				$status = 'UNKNOWN';	
 			}
 		}
-		finally {
-			printf($mask, $block['id'], $block['height'], $block['confirmations'], strftime("%Y-%m-%d %H:%M:%S", $block['time']), $status);
-		}
+		
+		printf($mask, $block['id'], $block['height'], $block['confirmations'], strftime("%Y-%m-%d %H:%M:%S", $block['time']), $status);
 	}
 
 	echo "Done..". PHP_EOL;
