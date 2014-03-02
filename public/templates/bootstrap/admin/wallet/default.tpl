@@ -104,7 +104,7 @@
                 <div class="col-lg-8">
                   <div class="panel panel-default">
                     <div class="panel-heading">
-                      <i class="fa fa-money fa-fw"></i> Addresses assigned to Account {$ACCOUNT|default:"Default"}
+                      <i class="fa fa-book fa-fw"></i> Addresses assigned to Account {$ACCOUNT|default:"Default"}
                     </div>
                     <div class="panel-body no-padding">
                       <table class="table table-striped table-bordered table-hover">

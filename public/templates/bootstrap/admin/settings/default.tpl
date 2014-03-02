@@ -25,7 +25,7 @@
               {if $SETTINGS.$TAB[setting].type == 'select'}
                 {html_options class="form-control" name="data[{$SETTINGS.$TAB[setting].name}]" options=$SETTINGS.$TAB[setting].options selected=$SETTINGS.$TAB[setting].value|default:$SETTINGS.$TAB[setting].default}
               {else if $SETTINGS.$TAB[setting].type == 'text'}
-                <input class="form-control" type="text" size="{$SETTINGS.$TAB[setting].size}" name="data[{$SETTINGS.$TAB[setting].name}]" value="{$SETTINGS.$TAB[setting].value|default:$SETTINGS.$TAB[setting].default|escape:"html"}" />
+                <input class="form-control" type="text" size="{$SETTINGS.$TAB[setting].size|default:"1"}" name="data[{$SETTINGS.$TAB[setting].name}]" value="{$SETTINGS.$TAB[setting].value|default:$SETTINGS.$TAB[setting].default|escape:"html"}" />
               {else if $SETTINGS.$TAB[setting].type == 'textarea'}
                 <textarea class="form-control" name="data[{$SETTINGS.$TAB[setting].name}]" cols="{$SETTINGS.$TAB[setting].size|default:"1"}" rows="{$SETTINGS.$TAB[setting].height|default:"1"}">{$SETTINGS.$TAB[setting].value|default:$SETTINGS.$TAB[setting].default}</textarea>
               {else}

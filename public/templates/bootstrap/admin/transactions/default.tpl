@@ -40,7 +40,7 @@
       </div>
       <div class="panel-body">
         <ul class="pager">
-          <li class="previous {if $smarty.get.start <= 0}disabled{/if}">
+          <li class="previous {if $smarty.get.start|default:"0" <= 0}disabled{/if}">
             <a href="{if $smarty.get.start|default:"0" <= 0}#{else}{$smarty.server.SCRIPT_NAME}?page={$smarty.request.page|escape}&action={$smarty.request.action|escape}&start={$smarty.request.start|escape|default:"0" - $LIMIT}{if $FILTERS|default:""}{$FILTERS}{/if}{/if}">&larr; Prev</a>
           </li>
           <li class="next">
