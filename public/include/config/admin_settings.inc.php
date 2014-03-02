@@ -47,6 +47,13 @@ $aSettings['website'][] = array(
   'tooltip' => 'The email address for your pool, used in mail templates and notifications.'
 );
 $aSettings['website'][] = array(
+  'display' => 'Website News Style', 'type' => 'select',
+  'options' => array( 0 => 'Show all news in one Page', 1 => 'Show Responsive News Table' ),
+  'default' => 0,
+  'name' => 'website_news_style', 'value' => $setting->getValue('website_news_style'),
+  'tooltip' => 'How News are displayed on Main Page.'
+);
+$aSettings['website'][] = array(
   'display' => 'Website theme', 'type' => 'select',
   'options' => $aThemes,
   'default' => 'mpos',

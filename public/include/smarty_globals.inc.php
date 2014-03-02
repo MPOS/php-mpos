@@ -100,6 +100,7 @@ $aGlobal['website']['name'] = $setting->getValue('website_name');
 $aGlobal['website']['title'] = $setting->getValue('website_title');
 $aGlobal['website']['slogan'] = $setting->getValue('website_slogan');
 $aGlobal['website']['email'] = $setting->getValue('website_email');
+$aGlobal['website']['newsstyle'] = $setting->getValue('website_news_style');
 $aGlobal['website']['api']['disabled'] = $setting->getValue('disable_api');
 $aGlobal['website']['blockexplorer']['disabled'] = $setting->getValue('website_blockexplorer_disabled');
 $aGlobal['website']['transactionexplorer']['disabled'] = $setting->getValue('website_transactionexplorer_disabled');
