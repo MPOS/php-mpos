@@ -9,9 +9,10 @@ $(document).ready(function(){
   var url_balance = "{/literal}{$smarty.server.SCRIPT_NAME}?page=api&action=getuserbalance&api_key={$GLOBAL.userdata.api_key}&id={$GLOBAL.userdata.id}{literal}";
 
   // Load initial sparkline values
-  var storedPersonalHashrate = [ 0, 0, 0, 0, {/literal}{$GLOBAL.userdata.hashrate|number_format:"2"}{literal} ];
-  var storedPoolHashrate = [ 0, 0, 0, 0, {/literal}{$GLOBAL.hashrate|number_format:"2"}{literal} ];
-  var storedPoolWorkers = [ 0, 0, 0, 0, {/literal}{$GLOBAL.workers}{literal} ];
+  var storedPersonalHashrate = [ 0, 0, 0, 0, 0, 0, 0, {/literal}{$GLOBAL.userdata.hashrate|number_format:"2"}{literal} ];
+  var storedPersonalSharerate = [ 0, 0, 0, 0, 0, 0, 0, {/literal}{$GLOBAL.userdata.sharerate|number_format:"2"}{literal} ];
+  var storedPoolHashrate = [ 0, 0, 0, 0, 0, 0, 0, {/literal}{$GLOBAL.hashrate|number_format:"2"}{literal} ];
+  var storedPoolWorkers = [ 0, 0, 0, 0, 0, 0, 0, {/literal}{$GLOBAL.workers}{literal} ];
 
   // Sparkline options applied to all graphs
   var sparklineOptions = {
@@ -22,19 +23,25 @@ $(document).ready(function(){
     barWidth: 10
   };
 
-  // Draw our sparkline graphs
+  // Draw our sparkline graphs with our current static content
   $('.personal-hashrate-bar').sparkline(storedPersonalHashrate, sparklineOptions);
+  $('.personal-sharerate-bar').sparkline(storedPersonalSharerate, sparklineOptions);
   $('.pool-hashrate-bar').sparkline(storedPoolHashrate, sparklineOptions);
   $('.pool-workers-bar').sparkline(storedPoolWorkers, sparklineOptions);
 
   function refreshInformation(data) {
+    // Drop one value, add the latest new one to each array
     storedPersonalHashrate.shift();
     storedPersonalHashrate.push(parseFloat(data.getdashboarddata.data.personal.hashrate).toFixed(2))
+    storedPersonalSharerate.shift();
+    storedPersonalSharerate.push(parseFloat(data.getdashboarddata.data.personal.sharerate).toFixed(2))
     storedPoolHashrate.shift();
     storedPoolHashrate.push(parseFloat(data.getdashboarddata.data.pool.hashrate).toFixed(2))
     storedPoolWorkers.shift();
     storedPoolWorkers.push(data.getdashboarddata.data.pool.workers);
+    // Redraw all bar graphs
     $('.personal-hashrate-bar').sparkline(storedPersonalHashrate, sparklineOptions);
+    $('.personal-sharerate-bar').sparkline(storedPersonalSharerate, sparklineOptions);
     $('.pool-hashrate-bar').sparkline(storedPoolHashrate, sparklineOptions);
     $('.pool-workers-bar').sparkline(storedPoolWorkers, sparklineOptions);
   }
