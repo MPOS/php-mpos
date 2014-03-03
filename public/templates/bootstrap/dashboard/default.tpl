@@ -2,6 +2,7 @@
 <div class="row">
   {include file="dashboard/overview.tpl"}
   {include file="dashboard/system_stats.tpl"}
+  {include file="dashboard/account_data.tpl"}
 </div>
   {if !$DISABLED_DASHBOARD and !$DISABLED_DASHBOARD_API}
   {include file="dashboard/js_api.tpl"}

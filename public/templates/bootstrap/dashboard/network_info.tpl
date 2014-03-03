@@ -1,19 +1,15 @@
          <tr>
-           <td colspan="2"><b><u>Network Info</u></b></td>
+           <td colspan="4">Network Info</td>
          </tr>
          <tr>
-           <td><b>Difficulty</b></td>
-           <td id="b-diff" class="right">{$NETWORK.difficulty|number_format:"8"}</td>
+           <td>Difficulty</td>
+           <td id="b-diff" class="text-right">{$NETWORK.difficulty|number_format:"8"}</td>
+           <td>Est Next Difficulty</td>
+           <td id="b-nextdiff" class="text-right">{$NETWORK.EstNextDifficulty|number_format:"8"} (Change in {$NETWORK.BlocksUntilDiffChange} Blocks)</td>
          </tr>
          <tr>
-           <td><b>Est Next Difficulty</b></td>
-           <td id="b-nextdiff" class="right">{$NETWORK.EstNextDifficulty|number_format:"8"} (Change in {$NETWORK.BlocksUntilDiffChange} Blocks)</td>
-         </tr>
-         <tr>
-           <td><b>Est. Avg. Time per Block</b></td>
-           <td id="b-esttimeperblock" class="right">{$NETWORK.EstTimePerBlock|seconds_to_words}</td>
-         </tr>
-         <tr>
-           <td><b>Current Block</b></td>
-           <td id="b-nblock" class="right">{$NETWORK.block}</td>
+           <td>Est. Avg. Time per Block</td>
+           <td id="b-esttimeperblock" class="text-right">{$NETWORK.EstTimePerBlock|seconds_to_words}</td>
+           <td>Current Block</td>
+           <td id="b-nblock" class="text-right">{$NETWORK.block}</td>
          </tr>
