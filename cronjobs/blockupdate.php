@@ -54,10 +54,18 @@ foreach ($aAllBlocks as $iIndex => $aBlock) {
     $log->logInfo(sprintf($strLogMask, $aBlock['id'], $aBlock['height'], $aBlock['blockhash'], $aBlock['confirmations'], $aBlockInfo['confirmations'], $status));
     continue;
   }
-  if ($aBlock['confirmations'] == $aBlockInfo['confirmations']) {
+  if (isset($aBlockInfo['confirmations'])) {
+    $iRPCConfirmations = $aBlockInfo['confirmations'];
+  } else if (isset($aTxDetails['confirmations'])) {
+    $iRPCConfirmations = $aTxDetails['confirmations'];
+  } else {
+    $log->logFatal('    RPC does not return any usable block confirmation information');
+    $monitoring->endCronjob($cron_name, 'E0082', 1, true);
+  }
+  if ($iRPCConfirmations == $aBlock['confirmations']) {
     continue;
   } else {
-    if (!$block->setConfirmations($aBlock['id'], $aBlockInfo['confirmations'])) {
+    if (!$block->setConfirmations($aBlock['id'], $iRPCConfirmations)) {
       $log->logError('    Failed to update block confirmations: ' . $block->getCronMessage());
       $status = 'ERROR';
     } else {
@@ -67,7 +75,7 @@ foreach ($aAllBlocks as $iIndex => $aBlock) {
       $log->logInfo(sprintf($strLogMask, 'ID', 'Height', 'Blockhash', 'Old', 'New', 'Status'));
       $header = true;
     }
-    $log->logInfo(sprintf($strLogMask, $aBlock['id'], $aBlock['height'], $aBlock['blockhash'], $aBlock['confirmations'], $aBlockInfo['confirmations'], $status));
+    $log->logInfo(sprintf($strLogMask, $aBlock['id'], $aBlock['height'], $aBlock['blockhash'], $aBlock['confirmations'], $iRPCConfirmations, $status));
   }
 }
 
