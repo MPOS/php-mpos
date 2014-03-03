@@ -133,7 +133,7 @@ if (@$_SESSION['USERDATA']['id']) {
   $aGlobal['userdata']['balance'] = $transaction->getBalance($_SESSION['USERDATA']['id']);
 
   // Fetch Last 5 notifications
-  $aLastNotifications = $notification->getNofifications($_SESSION['USERDATA']['id'], 5);
+  $aLastNotifications = $notification->getNotifications($_SESSION['USERDATA']['id'], 5);
   $aGlobal['userdata']['lastnotifications'] = $aLastNotifications;
 
   // Other userdata that we can cache savely
