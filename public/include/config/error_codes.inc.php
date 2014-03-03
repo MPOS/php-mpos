@@ -77,4 +77,5 @@ $aErrorCodes['E0078'] = 'RPC method did not return 200 OK';
 $aErrorCodes['E0079'] = 'Wallet does not cover payouts total amount';
 $aErrorCodes['E0080'] = 'No new unaccounted shares since last run';
 $aErrorCodes['E0081'] = 'Failed to insert new block into database';
+$aErrorCodes['E0082'] = 'Block does not supply any usable confirmation information';
 ?>

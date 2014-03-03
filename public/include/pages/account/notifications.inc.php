@@ -19,7 +19,7 @@ if ($user->isAuthenticated()) {
     }
 
     // Fetch notifications
-    $aNotifications = $notification->getNofifications($_SESSION['USERDATA']['id']);
+    $aNotifications = $notification->getNotifications($_SESSION['USERDATA']['id']);
     if (!$aNotifications) $_SESSION['POPUP'][] = array('CONTENT' => 'Could not find any notifications', 'TYPE' => 'alert alert-danger');
 
     // Fetch global settings
