@@ -48,68 +48,68 @@
                       <th>Credit</th>
                       <th>Debit AP</th>
                       <th>Debit MP</th>
-                      <th>TXFee</th>
+                      <th>Donation</th>
                       {if $GLOBAL.fees > 0}
                       <th>Fee</th>
                       {/if}
-                      <th>Donation</th>
+                      <th>TXFee</th>
                     </tr>
                   </thead>
                   <tbody>
                     <tr>
                       <td>Last Hour</th>
-                      <td>{$CREDIT.HourlyTrans|number_format:"8"}</td>
-                      <td>{$DEBITAP.HourlyTrans|number_format:"8"}</td>
-                      <td>{$DEBITMP.HourlyTrans|number_format:"8"}</td>
-                      <td>{$TXFEE.HourlyTrans|number_format:"8"}</td>
+                      <td>{$BYTIME.1HourCredit|number_format:"8"}</td>
+                      <td>{$BYTIME.1HourDebitAP|number_format:"8"}</td>
+                      <td>{$BYTIME.1HourDebitMP|number_format:"8"}</td>
+                      <td>{$BYTIME.1HourDonation|number_format:"8"}</td>
                       {if $GLOBAL.fees|default:"0" > 0}
-                      <td>{$FEE.HourlyTrans|number_format:"8"}</td>
+                      <td>{$BYTIME.1HourFee|number_format:"8"}</td>
                       {/if}
-                      <td>{$DONATION.HourlyTrans|number_format:"8"}</td>
+                      <td>{$BYTIME.1HourTXFee|number_format:"8"}</td>
                     </tr>
                     <tr>
                       <td>Last Day</th>
-                      <td>{$CREDIT.DailyTrans|number_format:"8"}</td>
-                      <td>{$DEBITAP.DailyTrans|number_format:"8"}</td>
-                      <td>{$DEBITMP.DailyTrans|number_format:"8"}</td>
-                      <td>{$TXFEE.DailyTrans|number_format:"8"}</td>
+                      <td>{$BYTIME.24HourCredit|number_format:"8"}</td>
+                      <td>{$BYTIME.24HourDebitAP|number_format:"8"}</td>
+                      <td>{$BYTIME.24HourDebitMP|number_format:"8"}</td>
+                      <td>{$BYTIME.24HourDonation|number_format:"8"}</td>
                       {if $GLOBAL.fees|default:"0" > 0}
-                      <td>{$FEE.DailyTrans|number_format:"8"}</td>
+                      <td>{$BYTIME.24HourFee|number_format:"8"}</td>
                       {/if}
-                      <td>{$DONATION.DailyTrans|number_format:"8"}</td>
+                      <td>{$BYTIME.24HourTXFee|number_format:"8"}</td>
                     </tr>
                     <tr>
                       <td>Last Week</th>
-                      <td>{$CREDIT.WeeklyTrans|number_format:"8"}</td>
-                      <td>{$DEBITAP.WeeklyTrans|number_format:"8"}</td>
-                      <td>{$DEBITMP.WeeklyTrans|number_format:"8"}</td>
-                      <td>{$TXFEE.WeeklyTrans|number_format:"8"}</td>
+                      <td>{$BYTIME.1WeekCredit|number_format:"8"}</td>
+                      <td>{$BYTIME.1WeekDebitAP|number_format:"8"}</td>
+                      <td>{$BYTIME.1WeekDebitMP|number_format:"8"}</td>
+                      <td>{$BYTIME.1WeekDonation|number_format:"8"}</td>
                       {if $GLOBAL.fees|default:"0" > 0}
-                      <td>{$FEE.WeeklyTrans|number_format:"8"}</td>
+                      <td>{$BYTIME.1WeekFee|number_format:"8"}</td>
                       {/if}
-                      <td>{$DONATION.WeeklyTrans|number_format:"8"}</td>
+                      <td>{$BYTIME.1WeekTXFee|number_format:"8"}</td>
                     </tr>
                     <tr>
                       <td>Last Month</th>
-                      <td>{$CREDIT.MonthlyTrans|number_format:"8"}</td>
-                      <td>{$DEBITAP.MonthlyTrans|number_format:"8"}</td>
-                      <td>{$DEBITMP.MonthlyTrans|number_format:"8"}</td>
-                      <td>{$TXFEE.MonthlyTrans|number_format:"8"}</td>
+                      <td>{$BYTIME.1MonthCredit|number_format:"8"}</td>
+                      <td>{$BYTIME.1MonthDebitAP|number_format:"8"}</td>
+                      <td>{$BYTIME.1MonthDebitMP|number_format:"8"}</td>
+                      <td>{$BYTIME.1MonthDonation|number_format:"8"}</td>
                       {if $GLOBAL.fees|default:"0" > 0}
-                      <td>{$FEE.MonthlyTrans|number_format:"8"}</td>
+                      <td>{$BYTIME.1MonthFee|number_format:"8"}</td>
                       {/if}
-                      <td>{$DONATION.MonthlyTrans|number_format:"8"}</td>
+                      <td>{$BYTIME.1MonthTXFee|number_format:"8"}</td>
                     </tr>
                     <tr>
                       <td>Last Year</th>
-                      <td>{$CREDIT.YearlyTrans|number_format:"8"}</td>
-                      <td>{$DEBITAP.YearlyTrans|number_format:"8"}</td>
-                      <td>{$DEBITMP.YearlyTrans|number_format:"8"}</td>
-                      <td>{$TXFEE.YearlyTrans|number_format:"8"}</td>
+                      <td>{$BYTIME.1YearCredit|number_format:"8"}</td>
+                      <td>{$BYTIME.1YearDebitAP|number_format:"8"}</td>
+                      <td>{$BYTIME.1YearDebitMP|number_format:"8"}</td>
+                      <td>{$BYTIME.1YearDonation|number_format:"8"}</td>
                       {if $GLOBAL.fees|default:"0" > 0}
-                      <td>{$FEE.YearlyTrans|number_format:"8"}</td>
+                      <td>{$BYTIME.1YearFee|number_format:"8"}</td>
                       {/if}
-                      <td>{$DONATION.YearlyTrans|number_format:"8"}</td>
+                      <td>{$BYTIME.1YearTXFee|number_format:"8"}</td>
                     </tr>
                   </tbody>
                 </table>
@@ -117,14 +117,11 @@
             </div>
           </div>
         </div>
+
       </div>
     </div>
   </div>
 </div>
 {/if}
-
-
-
-
 
 
