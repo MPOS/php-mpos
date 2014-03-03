@@ -100,44 +100,28 @@ class Transaction extends Base {
     return $this->sqlError();
   }
 
+
   /**
    * Fetch a transaction summary by user with total amounts
    * @param account_id int Account ID, NULL for all
    * @return data array type and total
    **/
-  public function getTransactionSummarybyTime($account_id=NULL) {
-    if ($data = $this->memcache->get(__FUNCTION__ . $account_id)) return $data;
-    $sql = "
-      SELECT
-        SUM(t.amount) AS total,
-        t.type AS type
+  public function getTransactionTypebyTime($account_id=NULL, $type=NULL) {
+    $this->debug->append("STA " . __METHOD__, 4);
+    if ($data = $this->memcache->get(__FUNCTION__)) return $data;
+    $stmt = $this->mysqli->prepare(" 
+      SELECT 
+        IFNULL(SUM(IF(t.type = '" . $type ."' AND timestamp >= DATE_SUB(now(), INTERVAL 3600 SECOND), t.amount, 0)), 0) AS HourlyTrans,
+        IFNULL(SUM(IF(t.type = '" . $type ."' AND timestamp >= DATE_SUB(now(), INTERVAL 3600 * 24 SECOND), t.amount, 0)), 0) AS DailyTrans,
+        IFNULL(SUM(IF(t.type = '" . $type ."' AND timestamp >= DATE_SUB(now(), INTERVAL 3600 * 24 * 7 SECOND), t.amount, 0)), 0) AS WeeklyTrans,
+        IFNULL(SUM(IF(t.type = '" . $type ."' AND timestamp >= DATE_SUB(now(), INTERVAL 3600 * 24 * 30 SECOND), t.amount, 0)), 0) AS MonthlyTrans,
+        IFNULL(SUM(IF(t.type = '" . $type ."' AND timestamp >= DATE_SUB(now(), INTERVAL 3600 * 24 * 30 * 12 SECOND), t.amount, 0)), 0) AS YearlyTrans
       FROM transactions AS t
-      LEFT OUTER JOIN blocks AS b
-      ON b.id = t.block_id
-      WHERE ( b.confirmations > 0 OR b.id IS NULL )";
-    if (!empty($account_id)) {
-      $sql .= " AND t.account_id = ? ";
-      $this->addParam('i', $account_id);
-    }
-    $sql .= " GROUP BY t.type";
-    $stmt = $this->mysqli->prepare($sql);
-    if (!empty($account_id)) {
-      if (!($this->checkStmt($stmt) && call_user_func_array( array($stmt, 'bind_param'), $this->getParam()) && $stmt->execute()))
-        return false;
-      $result = $stmt->get_result();
-    } else {
-      if (!($this->checkStmt($stmt) && $stmt->execute()))
-        return false;
-      $result = $stmt->get_result();
-    }
-    if ($result) {
-      $aData = NULL;
-      while ($row = $result->fetch_assoc()) {
-        $aData[$row['type']] = $row['total'];
-      }
-      // Cache data for a while, query takes long on many rows
-      return $this->memcache->setCache(__FUNCTION__ . $account_id, $aData, 60);
-    }
+      LEFT OUTER JOIN blocks AS b ON b.id = t.block_id
+      WHERE
+        t.account_id = ? AND (b.confirmations > 120 OR b.id IS NULL)");
+    if ($this->checkStmt($stmt) && $stmt->bind_param("i", $account_id) && $stmt->execute() && $result = $stmt->get_result())
+    	return $this->memcache->setCache(__FUNCTION__, $result->fetch_assoc());
     return $this->sqlError();
   }
 
