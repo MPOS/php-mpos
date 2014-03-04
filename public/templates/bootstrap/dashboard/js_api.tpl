@@ -13,22 +13,31 @@ $(document).ready(function(){
   var storedPersonalSharerate = [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, {/literal}{$GLOBAL.userdata.sharerate|number_format:"2"}{literal} ];
   var storedPoolHashrate = [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, {/literal}{$GLOBAL.hashrate|number_format:"0"}{literal} ];
   var storedPoolWorkers = [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, {/literal}{$GLOBAL.workers}{literal} ];
+  var storedCoinPrice = [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, {/literal}{$GLOBAL.price}{literal} ];
 
   // Sparkline options applied to all graphs
-  var sparklineOptions = {
+  var sparklineBarOptions = {
     type: 'bar',
-    barColor: 'green',
     height: '35',
     barWidth: 6,
     barSpacing: 2,
     chartRangeMin: 0
   };
 
+  // Sparkline options applied to line graphs
+  var sparklineLineOptions = {
+    height: '35',
+    chartRangeMin: 0,
+    composite: false,
+    lineColor: 'black'
+  };
+
   // Draw our sparkline graphs with our current static content
-  $('.personal-hashrate-bar').sparkline(storedPersonalHashrate, sparklineOptions);
-  $('.personal-sharerate-bar').sparkline(storedPersonalSharerate, sparklineOptions);
-  $('.pool-hashrate-bar').sparkline(storedPoolHashrate, sparklineOptions);
-  $('.pool-workers-bar').sparkline(storedPoolWorkers, sparklineOptions);
+  $('.personal-hashrate-bar').sparkline(storedPersonalHashrate, sparklineBarOptions);
+  $('.personal-sharerate-bar').sparkline(storedPersonalSharerate, sparklineBarOptions);
+  $('.pool-hashrate-bar').sparkline(storedPoolHashrate, sparklineBarOptions);
+  $('.pool-workers-bar').sparkline(storedPoolWorkers, sparklineBarOptions);
+  $('.coin-price-line').sparkline(storedCoinPrice, sparklineLineOptions);
 
   function refreshInformation(data) {
     // Drop one value, add the latest new one to each array
@@ -39,12 +48,15 @@ $(document).ready(function(){
     storedPoolHashrate.shift();
     storedPoolHashrate.push(parseFloat(data.getdashboarddata.data.pool.hashrate).toFixed(0))
     storedPoolWorkers.shift();
-    storedPoolWorkers.push(data.getdashboarddata.data.pool.workers);
+    storedPoolWorkers.push(parseFloat(data.getdashboarddata.data.pool.workers).toFixed(8));
+    storedCoinPrice.shift();
+    storedCoinPrice.push(parseFloat(data.getdashboarddata.data.pool.price).toFixed(8));
     // Redraw all bar graphs
-    $('.personal-hashrate-bar').sparkline(storedPersonalHashrate, sparklineOptions);
-    $('.personal-sharerate-bar').sparkline(storedPersonalSharerate, sparklineOptions);
-    $('.pool-hashrate-bar').sparkline(storedPoolHashrate, sparklineOptions);
-    $('.pool-workers-bar').sparkline(storedPoolWorkers, sparklineOptions);
+    $('.personal-hashrate-bar').sparkline(storedPersonalHashrate, sparklineBarOptions);
+    $('.personal-sharerate-bar').sparkline(storedPersonalSharerate, sparklineBarOptions);
+    $('.pool-hashrate-bar').sparkline(storedPoolHashrate, sparklineBarOptions);
+    $('.pool-workers-bar').sparkline(storedPoolWorkers, sparklineBarOptions);
+    $('.coin-price-line').sparkline(storedCoinPrice, sparklineLineOptions);
   }
 
   // Refresh other static numbers on the template
@@ -55,16 +67,18 @@ $(document).ready(function(){
     $('#b-poolhashrate').html((parseFloat(data.getdashboarddata.data.pool.hashrate).toFixed(0)));
     $('#b-sharerate').html((parseFloat(data.getdashboarddata.data.personal.sharerate).toFixed(2)));
     $('#b-yvalid').html(number_format(data.getdashboarddata.data.personal.shares.valid));
-    $('#b-yivalid').html(number_format(data.getdashboarddata.data.personal.shares.invalid) + " (" + number_format(data.getdashboarddata.data.personal.shares.invalid_percent, 2) + "%)" );
+    $('#b-yivalid').html(number_format(data.getdashboarddata.data.personal.shares.invalid));
+    $('#b-yefficiency').html(number_format(100 - data.getdashboarddata.data.personal.shares.invalid_percent, 2) + "%");
     $('#b-pvalid').html(number_format(data.getdashboarddata.data.pool.shares.valid));
-    $('#b-pivalid').html(number_format(data.getdashboarddata.data.pool.shares.invalid) + " (" + number_format(data.getdashboarddata.data.pool.shares.invalid_percent, 2) + "%)" );
+    $('#b-pivalid').html(number_format(data.getdashboarddata.data.pool.shares.invalid));
+    $('#b-pefficiency').html(number_format(100 - data.getdashboarddata.data.pool.shares.invalid_percent, 2) + "%");
     $('#b-diff').html(number_format(data.getdashboarddata.data.network.difficulty, 8));
     $('#b-nextdiff').html(number_format(data.getdashboarddata.data.network.nextdifficulty, 8) + " (Change in " + data.getdashboarddata.data.network.blocksuntildiffchange + " Blocks)");
     var minutes = Math.floor(data.getdashboarddata.data.network.esttimeperblock / 60);
     var seconds = Math.floor(data.getdashboarddata.data.network.esttimeperblock - minutes * 60);
     $('#b-esttimeperblock').html(minutes + " minutes " + seconds + " seconds"); // <- this needs some nicer format
     $('#b-nblock').html(data.getdashboarddata.data.network.block);
-    $('#b-target').html(number_format(data.getdashboarddata.data.pool.shares.estimated) + " (done: " + data.getdashboarddata.data.pool.shares.progress + "%)" );
+    $('#b-roundprogress').html(number_format(data.getdashboarddata.data.pool.shares.progress + "%" ));
     {/literal}{if $GLOBAL.config.payout_system != 'pps'}{literal }
     $('#b-payout').html(number_format(data.getdashboarddata.data.personal.estimates.payout, 8));
     $('#b-block').html(number_format(data.getdashboarddata.data.personal.estimates.block, 8));

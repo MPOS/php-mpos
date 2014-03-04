@@ -1,7 +1,7 @@
   <div class="col-lg-12">
     <div class="panel panel-info">
       <div class="panel-heading">
-        <h4 class="panel-title"><i class="fa fa-align-left fa-fw"></i> Overview {if $GLOBAL.config.price.currency}{$GLOBAL.config.currency}/{$GLOBAL.config.price.currency}: <span id="b-price">{$GLOBAL.price|number_format:"8"|default:"0"}</span>{/if}</h4>
+        <h4 class="panel-title"><i class="fa fa-align-left fa-fw"></i> Statistics
       </div>
       <div class="panel-body">
         <ul class="sparklines-stats list-justified">
@@ -33,10 +33,19 @@
             </div>
             <div class="pool-workers-bar chart"></div>
           </li>
+          {if $GLOBAL.config.price.currency != ""}
+          <li class="bg-default">
+            <div class="sparklines-stats-showcase">
+              <span>{$GLOBAL.config.currency}/{$GLOBAL.config.price.currency}</span>
+              <h2 id="b-price">{$GLOBAL.price|default:"0"|number_format:"8"}</h2>
+            </div>
+            <div class="coin-price-line chart"></div>
+          </li>
+          {/if}
         </ul>
       </div>
       <div class="panel-footer">
-        Refresh interval: {$GLOBAL.config.statistics_ajax_refresh_interval|default:"10"} seconds. Hashrate based on shares submitted in the past {$INTERVAL|default:"5"} minutes.
+        Refresh interval: {$GLOBAL.config.statistics_ajax_refresh_interval|default:"10"} seconds. Estimates, based on shares submitted in the past {$INTERVAL|default:"5"} minutes.
       </div>
     </div>
   </div>
