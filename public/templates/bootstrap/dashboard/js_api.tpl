@@ -18,9 +18,9 @@ $(document).ready(function(){
   var sparklineOptions = {
     type: 'bar',
     barColor: 'green',
-    height: '25px',
-    width: '150px',
-    barWidth: 10
+    height: '25',
+    barWidth: 25,
+    barSpacing: 1,
   };
 
   // Draw our sparkline graphs with our current static content

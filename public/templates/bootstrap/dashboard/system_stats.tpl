@@ -1,7 +1,7 @@
-  <div class="col-lg-12">
+  <div class="col-lg-8">
     <div class="panel panel-info">
       <div class="panel-heading">
-        <h4 class="panel-title">Round Statistics</h4>
+        <h4 class="panel-title"><i class="fa fa-refresh fa-fw"></i> Round Statistics</h4>
       </div>
       <div class="panel-body no-padding">
         <table class="table table-bordered table-hover table-striped">
@@ -9,7 +9,7 @@
   {if $GLOBAL.config.payout_system == 'pplns'}
            <tr>
              <td><b>PPLNS Target</b></td>
-             <td id="b-pplns" class="right">{$GLOBAL.pplns.target}</td>
+             <td id="b-pplns" class="text-left" colspan="4">{$GLOBAL.pplns.target}</td>
            </tr>
   {elseif $GLOBAL.config.payout_system == 'pps'}
           <tr>
