@@ -65,6 +65,7 @@ $(document).ready(function(){
     $('#b-poolworkers').html(data.getdashboarddata.data.pool.workers);
     $('#b-hashrate').html((parseFloat(data.getdashboarddata.data.personal.hashrate).toFixed(2)));
     $('#b-poolhashrate').html((parseFloat(data.getdashboarddata.data.pool.hashrate).toFixed(2)));
+    $('#b-nethashrate').html((parseFloat(data.getdashboarddata.data.network.hashrate).toFixed(2)));
     $('#b-sharerate').html((parseFloat(data.getdashboarddata.data.personal.sharerate).toFixed(2)));
     $('#b-yvalid').html(number_format(data.getdashboarddata.data.personal.shares.valid));
     $('#b-yivalid').html(number_format(data.getdashboarddata.data.personal.shares.invalid));
@@ -98,6 +99,20 @@ $(document).ready(function(){
 {/literal}{/if}{literal}
   }
 
+  // Refresh worker information
+  function refreshWorkerData(data) {
+    workers = data.getuserworkers.data;
+    length = workers.length;
+    $('#b-workers').html('');
+    for (var i = j = 0; i < length; i++) {
+      if (workers[i].hashrate > 0) {
+        j++;
+        $('#b-workers').append('<tr><td>' + workers[i].username + '</td><td class="text-right">' + workers[i].hashrate + '</td><td class="text-right">' + workers[i].difficulty + '</td></tr>');
+      }
+    }
+    if (j == 0) { $('#b-workers').html('<tr><td colspan="3" class="text-center">No active workers</td></tr>'); }
+  }
+
   // Our worker process to keep gauges and graph updated
   (function worker1() {
     $.ajax({
@@ -112,6 +127,22 @@ $(document).ready(function(){
       },
       complete: function() {
         setTimeout(worker1, {/literal}{($GLOBAL.config.statistics_ajax_refresh_interval * 1000)|default:"10000"}{literal})
+      }
+    });
+  })();
+
+  (function worker2() {
+    $.ajax({
+      url: url_worker,
+      dataType: 'json',
+      cache : false,
+      contentType : 'application/json; charset=utf-8',
+      type : 'GET',
+      success: function(data) {
+        refreshWorkerData(data);
+      },
+      complete: function() {
+        setTimeout(worker2, {/literal}{($GLOBAL.config.statistics_ajax_long_refresh_interval * 1000)|default:"10000"}{literal})
       }
     });
   })();

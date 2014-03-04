@@ -29,7 +29,7 @@
           <li class="bg-default">
             <div class="sparklines-stats-showcase">
               <span>Pool Workers</span>
-              <h2 id="b-poolhashrate">{$GLOBAL.workers}</h2>
+              <h2 id="b-poolworkers">{$GLOBAL.workers}</h2>
             </div>
             <div class="pool-workers-bar chart"></div>
           </li>
