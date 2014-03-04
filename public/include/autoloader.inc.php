@@ -24,20 +24,14 @@ require_once(INCLUDE_DIR . '/config/error_codes.inc.php');
 require_once(CLASS_DIR . '/base.class.php');
 require_once(CLASS_DIR . '/setting.class.php');
 
-// We need this one in here to properly set our theme
-require_once(INCLUDE_DIR . '/lib/Mobile_Detect.php');
-
 // Detect device
-if ($detect->isMobile() && $setting->getValue('website_mobile_theme')) {
-  // Set to mobile theme
-  $setting->getValue('website_mobile_theme') ? $theme = $setting->getValue('website_mobile_theme') : $theme = 'mobile';
-} else if ( PHP_SAPI == 'cli') {
+if ( PHP_SAPI == 'cli') {
   // Create a new compile folder just for crons
   // We call mail templates directly anyway
   $theme = 'cron';
 } else {
   // Use configured theme, fallback to default theme
-  $setting->getValue('website_theme') ? $theme = $setting->getValue('website_theme') : $theme = 'mpos';
+  $setting->getValue('website_theme') ? $theme = $setting->getValue('website_theme') : $theme = 'bootstrap';
 }
 define('THEME', $theme);
 
