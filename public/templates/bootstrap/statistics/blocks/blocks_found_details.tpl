@@ -36,13 +36,15 @@
               {else}
                 <td>{$BLOCKSFOUND[block].height}</td>
               {/if}
+              <td>
               {if $BLOCKSFOUND[block].confirmations >= $GLOBAL.confirmations}
-                <td class="success">Confirmed</td>
+                <span class="label label-success">Confirmed</span>
               {else if $BLOCKSFOUND[block].confirmations == -1}
-                <td class="danger">Orphan</td>
+                <span class="label label-danger">Orphan</span>
               {else}
-                <td class="warning">{$GLOBAL.confirmations - $BLOCKSFOUND[block].confirmations} left</td>
+                <span class="label label-warning">{$GLOBAL.confirmations - $BLOCKSFOUND[block].confirmations} left</span>
               {/if}
+              </td>
                 <td>{if $BLOCKSFOUND[block].is_anonymous|default:"0" == 1 && $GLOBAL.userdata.is_admin|default:"0" == 0}anonymous{else}{$BLOCKSFOUND[block].finder|default:"unknown"|escape}{/if}</td>
                 <td>{$BLOCKSFOUND[block].time|date_format:"%d/%m %H:%M:%S"}</td>
                 <td>{$BLOCKSFOUND[block].difficulty|number_format:"2"}</td>
