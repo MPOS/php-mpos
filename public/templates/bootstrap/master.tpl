@@ -42,7 +42,10 @@
     {nocache}
     {if is_array($smarty.session.POPUP|default)}
       {section popup $smarty.session.POPUP}
-      <div class="{$smarty.session.POPUP[popup].TYPE|default:"alert alert-info"}">{$smarty.session.POPUP[popup].CONTENT nofilter}</div>
+      <div class="{$smarty.session.POPUP[popup].TYPE|default:"alert alert-info alert-dismissable"}">
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+        {$smarty.session.POPUP[popup].CONTENT nofilter}
+      </div>
       {/section}
     {/if}
     {/nocache}
