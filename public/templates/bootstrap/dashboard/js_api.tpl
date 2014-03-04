@@ -9,9 +9,9 @@ $(document).ready(function(){
   var url_balance = "{/literal}{$smarty.server.SCRIPT_NAME}?page=api&action=getuserbalance&api_key={$GLOBAL.userdata.api_key}&id={$GLOBAL.userdata.id}{literal}";
 
   // Load initial sparkline values
-  var storedPersonalHashrate = [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, {/literal}{$GLOBAL.userdata.hashrate|number_format:"0"}{literal} ];
+  var storedPersonalHashrate = [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, {/literal}{$GLOBAL.userdata.hashrate|number_format:"2"}{literal} ];
   var storedPersonalSharerate = [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, {/literal}{$GLOBAL.userdata.sharerate|number_format:"2"}{literal} ];
-  var storedPoolHashrate = [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, {/literal}{$GLOBAL.hashrate|number_format:"0"}{literal} ];
+  var storedPoolHashrate = [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, {/literal}{$GLOBAL.hashrate|number_format:"2"}{literal} ];
   var storedPoolWorkers = [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, {/literal}{$GLOBAL.workers}{literal} ];
   var storedCoinPrice = [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, {/literal}{$GLOBAL.price}{literal} ];
 
@@ -42,11 +42,11 @@ $(document).ready(function(){
   function refreshInformation(data) {
     // Drop one value, add the latest new one to each array
     storedPersonalHashrate.shift();
-    storedPersonalHashrate.push(parseFloat(data.getdashboarddata.data.personal.hashrate).toFixed(0))
+    storedPersonalHashrate.push(parseFloat(data.getdashboarddata.data.personal.hashrate).toFixed(2))
     storedPersonalSharerate.shift();
     storedPersonalSharerate.push(parseFloat(data.getdashboarddata.data.personal.sharerate).toFixed(2))
     storedPoolHashrate.shift();
-    storedPoolHashrate.push(parseFloat(data.getdashboarddata.data.pool.hashrate).toFixed(0))
+    storedPoolHashrate.push(parseFloat(data.getdashboarddata.data.pool.hashrate).toFixed(2))
     storedPoolWorkers.shift();
     storedPoolWorkers.push(parseFloat(data.getdashboarddata.data.pool.workers).toFixed(8));
     storedCoinPrice.shift();
@@ -63,8 +63,8 @@ $(document).ready(function(){
   function refreshStaticData(data) {
     $('#b-price').html((parseFloat(data.getdashboarddata.data.pool.price).toFixed(8)));
     $('#b-poolworkers').html(data.getdashboarddata.data.pool.workers);
-    $('#b-hashrate').html((parseFloat(data.getdashboarddata.data.personal.hashrate).toFixed(0))) + " " + data.getdashboarddata.data.personal.modifier;
-    $('#b-poolhashrate').html((parseFloat(data.getdashboarddata.data.pool.hashrate).toFixed(0)));
+    $('#b-hashrate').html((parseFloat(data.getdashboarddata.data.personal.hashrate).toFixed(2)));
+    $('#b-poolhashrate').html((parseFloat(data.getdashboarddata.data.pool.hashrate).toFixed(2)));
     $('#b-sharerate').html((parseFloat(data.getdashboarddata.data.personal.sharerate).toFixed(2)));
     $('#b-yvalid').html(number_format(data.getdashboarddata.data.personal.shares.valid));
     $('#b-yivalid').html(number_format(data.getdashboarddata.data.personal.shares.invalid));

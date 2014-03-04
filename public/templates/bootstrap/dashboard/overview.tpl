@@ -8,7 +8,7 @@
           <li class="bg-default">
             <div class="sparklines-stats-showcase">
               <span>My Hashrate {$GLOBAL.hashunits.personal}</span>
-              <h2 id="b-hashrate">{$GLOBAL.userdata.hashrate|number_format:"0"}</h2>
+              <h2 id="b-hashrate">{$GLOBAL.userdata.hashrate|number_format:"2"}</h2>
             </div>
             <div class="personal-hashrate-bar chart"></div>
           </li>
@@ -22,7 +22,7 @@
           <li class="bg-default">
             <div class="sparklines-stats-showcase">
               <span>Pool Hashrate {$GLOBAL.hashunits.pool}</span>
-              <h2 id="b-poolhashrate">{$GLOBAL.hashrate|number_format:"0"}</h2>
+              <h2 id="b-poolhashrate">{$GLOBAL.hashrate|number_format:"2"}</h2>
             </div>
             <div class="pool-hashrate-bar chart"></div>
           </li>
