@@ -51,9 +51,9 @@
 	</aside>
 	<section id="main" class="column">
     {nocache}
-    {if is_array($smarty.session.POPUP|default)}
-      {section popup $smarty.session.POPUP}
-        <h4 class="{$smarty.session.POPUP[popup].TYPE|default:"info"}">{$smarty.session.POPUP[popup].CONTENT nofilter}</h4>
+    {if is_array($POPUPS|default)}
+      {section popup $POPUPS}
+        <h4 class="{$POPUPS[popup].TYPE|default:"info"}">{$POPUPS[popup].CONTENT nofilter}</h4>
       {/section}
     {/if}
     {/nocache}

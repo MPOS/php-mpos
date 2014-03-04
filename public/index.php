@@ -178,10 +178,13 @@ $debug->append("Loading debug information into template", 4);
 $smarty->assign('DebuggerInfo', $debug->getDebugInfo());
 $smarty->assign('RUNTIME', (microtime(true) - $dStartTime) * 1000);
 
-// Display our page
-if (!@$supress_master) $smarty->display($master_template, $smarty_cache_key);
+// Load our flash messages/popups
+if (isset($_SESSION['POPUP'])) $smarty->assign('POPUPS', $_SESSION['POPUP']);
 
 // Unset any temporary values here
 unset($_SESSION['POPUP']);
+
+// Display our page
+if (!@$supress_master) $smarty->display($master_template, $smarty_cache_key);
 
 ?>
