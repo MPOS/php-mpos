@@ -35,7 +35,7 @@
           </li>
         </ul>
       </div>
-      <div class="panel-footer">
+      <div class="panel-footer" style="margin: -15px 0px 0px;">
         Refresh interval: {$GLOBAL.config.statistics_ajax_refresh_interval|default:"10"} seconds. Hashrate based on shares submitted in the past {$INTERVAL|default:"5"} minutes.
       </div>
     </div>
