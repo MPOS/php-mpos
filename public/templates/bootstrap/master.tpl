@@ -24,6 +24,7 @@
   <link href="{$PATH}/css/sparklines.css" rel="stylesheet">
 
   <script src="{$PATH}/js/jquery-2.0.3.min.js"></script>
+  <script src="{$PATH}/js/jquery.cookie.js"></script>
   <script src="{$PATH}/js/bootstrap.min.js"></script>
   <script src="{$PATH}/js/bootstrap-switch.min.js"></script>
   <script src="{$PATH}/js/plugins/dataTables/jquery.dataTables.js"></script>
@@ -43,8 +44,10 @@
     {nocache}
     {if is_array($smarty.session.POPUP|default)}
       {section popup $smarty.session.POPUP}
-      <div class="{$smarty.session.POPUP[popup].TYPE|default:"alert alert-info alert-dismissable"}">
-        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+      <div class="{if $smarty.session.POPUP[popup].DISMISS|default:"" == "yes"}alert-dismissable{/if} {$smarty.session.POPUP[popup].TYPE|default:"alert alert-info"}" id="{$smarty.session.POPUP[popup].ID|default:"static"}">
+        {if $smarty.session.POPUP[popup].DISMISS|default:"no" == "yes"}
+        <button id="{$smarty.session.POPUP[popup].ID|default:"static"}" type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+        {/if}
         {$smarty.session.POPUP[popup].CONTENT nofilter}
       </div>
       {/section}

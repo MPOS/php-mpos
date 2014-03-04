@@ -1,7 +1,5 @@
 $(function() {
-
     $('#side-menu').metisMenu();
-
 });
 
 //Loads the correct sidebar on window load,
@@ -24,5 +22,21 @@ $(document).ready(function() {
 
     // Bootstrap iOS style switches for checkboxes with switch class
     $('.switch').bootstrapSwitch();
+
 });
 
+$(function() {
+
+    // Check if lastlogin alert has been closed
+    if( $.cookie('lastlogin-box') === 'closed' ){
+        $('#lastlogin').hide();
+    }
+    
+    // Grab your button (based on your posted html)
+    $('.close').click(function( e ){
+        e.preventDefault();
+        //alert($(this).attr("id"));
+        $.cookie('lastlogin-box', 'closed', { path: '/' });
+    });
+
+});
