@@ -21,6 +21,7 @@ $(document).ready(function(){
     height: '25',
     barWidth: 25,
     barSpacing: 1,
+    chartRangeMin: 0
   };
 
   // Draw our sparkline graphs with our current static content
@@ -88,6 +89,9 @@ $(document).ready(function(){
     $.ajax({
       url: url_dashboard,
       dataType: 'json',
+      cache : false,
+      contentType : 'application/json; charset=utf-8',
+      type : 'GET',
       success: function(data) {
         refreshInformation(data);
         refreshStaticData(data);
