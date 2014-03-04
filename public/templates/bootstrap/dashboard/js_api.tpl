@@ -113,7 +113,14 @@ $(document).ready(function(){
     if (j == 0) { $('#b-workers').html('<tr><td colspan="3" class="text-center">No active workers</td></tr>'); }
   }
 
-  // Our worker process to keep gauges and graph updated
+  // Refresh balance information
+  function refreshBalanceData(data) {
+    balance = data.getuserbalance.data
+    $('#b-confirmed').html(number_format(balance.confirmed, 6));
+    $('#b-unconfirmed').html(number_format(balance.unconfirmed, 6));
+  }
+
+  // Worker progess for overview graphs
   (function worker1() {
     $.ajax({
       url: url_dashboard,
@@ -131,6 +138,7 @@ $(document).ready(function(){
     });
   })();
 
+  // Worker process to update active workers in the account details table
   (function worker2() {
     $.ajax({
       url: url_worker,
@@ -143,6 +151,21 @@ $(document).ready(function(){
       },
       complete: function() {
         setTimeout(worker2, {/literal}{($GLOBAL.config.statistics_ajax_long_refresh_interval * 1000)|default:"10000"}{literal})
+      }
+    });
+  })();
+
+  // Worker process to update user account balances
+  // Our worker process to keep worker information updated
+  (function worker3() {
+    $.ajax({
+      url: url_balance,
+      dataType: 'json',
+      success: function(data) {
+        refreshBalanceData(data);
+      },
+      complete: function() {
+        setTimeout(worker3, {/literal}{($GLOBAL.config.statistics_ajax_long_refresh_interval * 1000)|default:"10000"}{literal})
       }
     });
   })();
