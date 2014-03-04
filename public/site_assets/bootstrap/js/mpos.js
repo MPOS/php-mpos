@@ -31,12 +31,26 @@ $(function() {
     if( $.cookie('lastlogin-box') === 'closed' ){
         $('#lastlogin').hide();
     }
+    if( $.cookie('motd-box') === 'closed' ){
+        $('#motd').hide();
+    }
+    if( $.cookie('backend-box') === 'closed' ){
+        $('#backend').hide();
+    }
     
     // Grab your button (based on your posted html)
     $('.close').click(function( e ){
         e.preventDefault();
         //alert($(this).attr("id"));
-        $.cookie('lastlogin-box', 'closed', { path: '/' });
+        if ($(this).attr("id") === 'motd') {
+        	$.cookie('motd-box', 'closed', { path: '/' });
+        } else if ($(this).attr("id") === 'lastlogin') {
+        	$.cookie('lastlogin-box', 'closed', { path: '/' });
+        } else if ($(this).attr("id") === 'backend') {
+        	$.cookie('backend-box', 'closed', { path: '/' });
+        } else {
+            //alert($(this).attr("id"));
+        }
     });
 
 });

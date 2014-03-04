@@ -178,7 +178,7 @@ if (@$_SESSION['USERDATA']['id']) {
 if ($setting->getValue('maintenance'))
   $_SESSION['POPUP'][] = array('CONTENT' => 'This pool is currently in maintenance mode.', 'TYPE' => 'alert alert-warning');
 if ($motd = $setting->getValue('system_motd'))
-  $_SESSION['POPUP'][] = array('CONTENT' => $motd, 'TYPE' => 'alert alert-info');
+  $_SESSION['POPUP'][] = array('CONTENT' => $motd, 'DISMISS' => 'yes', 'ID' => 'motd', 'TYPE' => 'alert alert-info');
 
 // So we can display additional info
 $smarty->assign('DEBUG', $config['DEBUG']);
@@ -213,7 +213,7 @@ foreach ($aMonitorCrons as $strCron) {
   }
 }
 if ($bMessage)
-  $_SESSION['POPUP'][] = array('CONTENT' => implode($aCronMessage, ''));
+  $_SESSION['POPUP'][] = array('CONTENT' => implode($aCronMessage, ''), 'DISMISS' => 'yes', 'ID' => 'backend', 'TYPE' => 'alert alert-warning');
 
 // Make it available in Smarty
 $smarty->assign('PATH', 'site_assets/' . THEME);
