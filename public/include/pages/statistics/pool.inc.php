@@ -24,7 +24,7 @@ if (!$smarty->isCached('master.tpl', $smarty_cache_key)) {
   $aContributorsHashes = $statistics->getTopContributors('hashes', 15);
 
   // Grab the last 5 blocks found as a quick overview
-  $iLimit = 5;
+  $iLimit = 10;
   $aBlocksFoundData = $statistics->getBlocksFound($iLimit);
   count($aBlocksFoundData) > 0 ? $aBlockData = $aBlocksFoundData[0] : $aBlockData = array();
 
