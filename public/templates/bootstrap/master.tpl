@@ -21,6 +21,7 @@
   <link href="{$PATH}/css/plugins/timeline/timeline.css" rel="stylesheet">
   <link href="{$PATH}/css/plugins/dataTables/dataTables.bootstrap.css" rel="stylesheet">
   <link href="{$PATH}/css/mpos.css" rel="stylesheet">
+  <link href="{$PATH}/css/sparklines.css" rel="stylesheet">
 
   <script src="{$PATH}/js/jquery-2.0.3.min.js"></script>
   <script src="{$PATH}/js/bootstrap.min.js"></script>
