@@ -78,7 +78,7 @@ $(document).ready(function(){
     var seconds = Math.floor(data.getdashboarddata.data.network.esttimeperblock - minutes * 60);
     $('#b-esttimeperblock').html(minutes + " minutes " + seconds + " seconds"); // <- this needs some nicer format
     $('#b-nblock').html(data.getdashboarddata.data.network.block);
-    $('#b-roundprogress').html(number_format(data.getdashboarddata.data.pool.shares.progress + "%" ));
+    $('#b-roundprogress').html(number_format(data.getdashboarddata.data.pool.shares.progress) + "%");
     {/literal}{if $GLOBAL.config.payout_system != 'pps'}{literal }
     $('#b-payout').html(number_format(data.getdashboarddata.data.personal.estimates.payout, 8));
     $('#b-block').html(number_format(data.getdashboarddata.data.personal.estimates.block, 8));

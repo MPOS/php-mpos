@@ -12,7 +12,7 @@
             <p class="text-muted">Current Block</p>
           </div>
           <div class="col-xs-4 b-r">
-            <p id="b-roundprogress" class="h4 font-bold m-t">{$ESTIMATES.percent}</p>
+            <p id="b-roundprogress" class="h4 font-bold m-t">{$ESTIMATES.percent|number_format}%</p>
             <p class="text-muted">Of Expected Shares</p>
           </div>
           <div class="col-xs-4 b-r">
