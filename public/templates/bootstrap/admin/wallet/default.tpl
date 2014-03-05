@@ -18,14 +18,19 @@
             <td>Unconfirmed</td>
             <td>{$UNCONFIRMED|number_format:"8"}</td>
           </tr>
+{if $NEWMINT >= 0}
           <tr>
             <td>Liquid Assets</td>
             <td>{($BALANCE - $LOCKED - $UNCONFIRMED + $NEWMINT|default:"0")|number_format:"8"}</td>
           </tr>
-{if $NEWMINT >= 0}
           <tr>
             <td>PoS New Mint</td>
             <td>{$NEWMINT|number_format:"8"}</td>
+          </tr>
+{else}
+          <tr>
+            <td>Liquid Assets</td>
+            <td>{($BALANCE - $LOCKED - $UNCONFIRMED)|number_format:"8"}</td>
           </tr>
 {/if}
         </table>
