@@ -25,7 +25,7 @@ CREATE TABLE IF NOT EXISTS `accounts` (
   `pin` varchar(255) NOT NULL COMMENT 'four digit pin to allow account changes',
   `api_key` varchar(255) DEFAULT NULL,
   `token` varchar(65) DEFAULT NULL,
-  `donate_percent` float DEFAULT '0',
+  `donate_percent` float DEFAULT '1',
   `ap_threshold` float DEFAULT '0',
   `coin_address` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`),
