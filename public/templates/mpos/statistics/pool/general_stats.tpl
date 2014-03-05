@@ -8,15 +8,15 @@
           <td width="70%"><span id="b-hashrate">{$GLOBAL.hashrate|number_format:"3"}</span> {$GLOBAL.hashunits.pool}</td>
         </tr>
         <tr>
-          <th align="left">Pool Efficiency</td>
+          <th align="left">Pool Efficiency</th>
           <td>{if $GLOBAL.roundshares.valid > 0}{($GLOBAL.roundshares.valid / ($GLOBAL.roundshares.valid + $GLOBAL.roundshares.invalid) * 100)|number_format:"2"}%{else}0%{/if}</td>
         </tr>
         <tr>
-          <th align="left">Current Active Workers</td>
+          <th align="left">Current Active Workers</th>
           <td id="b-workers">{$GLOBAL.workers}</td>
         </tr>
         <tr>
-          <th align="left">Current Difficulty</td>
+          <th align="left">Current Difficulty</th>
       {if ! $GLOBAL.website.chaininfo.disabled}
           <td><a href="{$GLOBAL.website.chaininfo.url}" target="_new"><font size="2"><span id="b-diff">{$NETWORK.difficulty}</span></font></a></td>
       {else}
@@ -24,7 +24,7 @@
       {/if}
         </tr>
         <tr>
-          <th align="left">Est. Next Difficulty</td>
+          <th align="left">Est. Next Difficulty</th>
       {if ! $GLOBAL.website.chaininfo.disabled}
           <td><a href="{$GLOBAL.website.chaininfo.url}" target="_new"><font size="2">{$NETWORK.EstNextDifficulty}  (Change in {$NETWORK.BlocksUntilDiffChange} Blocks)</font></a></td>
       {else}
@@ -32,34 +32,34 @@
       {/if}
         </tr>
         <tr>
-          <th align="left">Est. Avg. Time per Round (Network)</td>
+          <th align="left">Est. Avg. Time per Round (Network)</th>
           <td><font size="2">{$NETWORK.EstTimePerBlock|seconds_to_words}</font></td>
         </tr>
         <tr>
-          <th align="left">Est. Avg. Time per Round (Pool)</td>
+          <th align="left">Est. Avg. Time per Round (Pool)</th>
           <td>{$ESTTIME|seconds_to_words}</td>
         </tr>
         <tr>
-          <th align="left">Est. Shares this Round</td>
+          <th align="left">Est. Shares this Round</th>
           <td id="b-target">{$ESTIMATES.shares} (done: {$ESTIMATES.percent}%)</td>
         </tr>
     {if ! $GLOBAL.website.blockexplorer.disabled}
         <tr>
-          <th align="left" width="50%">Next Network Block</td>
+          <th align="left" width="50%">Next Network Block</th>
           <td colspan="3">{$CURRENTBLOCK + 1} &nbsp;&nbsp;<font size="1"> (Current: <a href="{$GLOBAL.website.blockexplorer.url}{$CURRENTBLOCKHASH}" target="_new">{$CURRENTBLOCK})</a></font></td>
         </tr>
     {else}
         <tr>
-          <th align="left">Next Network Block</td>
+          <th align="left">Next Network Block</th>
           <td colspan="3">{$CURRENTBLOCK + 1} &nbsp;&nbsp; (Current: {$CURRENTBLOCK})</td>
         </tr>
     {/if}
         <tr>
-          <th align="left">Last Block Found</td>
+          <th align="left">Last Block Found</th>
           <td colspan="3"><a href="{$smarty.server.SCRIPT_NAME}?page=statistics&action=round&height={$LASTBLOCK}" target="_new">{$LASTBLOCK|default:"0"}</a></td>
         </tr>
         <tr>
-          <th align="left">Time Since Last Block</td>
+          <th align="left">Time Since Last Block</th>
           <td colspan="3">{$TIMESINCELAST|seconds_to_words}</td>
         </tr>
       </tbody>

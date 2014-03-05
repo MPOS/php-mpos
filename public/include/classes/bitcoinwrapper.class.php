@@ -74,6 +74,10 @@ class BitcoinWrapper extends BitcoinClient {
       if (is_array($dNetworkHashrate)) {
         if (array_key_exists('networkhashps', $dNetworkHashrate)) {
           $dNetworkHashrate = $dNetworkHashrate['networkhashps'];
+        } else if (array_key_exists('networkmhps', $dNetworkHashrate)) {
+          $dNetworkHashrate = $dNetworkHashrate['networkmhps'] * 1000 * 1000;
+        } else if (array_key_exists('networkghps', $dNetworkHashrate)) {
+          $dNetworkHashrate = $dNetworkHashrate['networkghps'] * 1000 * 1000 * 1000;
         } else if (array_key_exists('hashespersec', $dNetworkHashrate)) {
           $dNetworkHashrate = $dNetworkHashrate['hashespersec'];
         } else if (array_key_exists('netmhashps', $dNetworkHashrate)) {

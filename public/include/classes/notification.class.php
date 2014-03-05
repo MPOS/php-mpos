@@ -58,7 +58,7 @@ class Notification extends Mail {
    * @param id int Account ID
    * @return array Notification data
    **/
-  public function getNofifications($account_id) {
+  public function getNotifications($account_id) {
     $this->debug->append("STA " . __METHOD__, 4);
     $stmt = $this->mysqli->prepare("SELECT * FROM $this->table WHERE account_id = ? ORDER BY time DESC");
     if ($stmt && $stmt->bind_param('i', $account_id) && $stmt->execute() && $result = $stmt->get_result())

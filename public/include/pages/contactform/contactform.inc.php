@@ -2,7 +2,7 @@
 $defflip = (!cfip()) ? exit(header('HTTP/1.1 401 Unauthorized')) : 1;
 
 // ReCaptcha handling if enabled
-if ($setting->getValue('recaptcha_enabled') && $setting->getValue('acl_contactform') != 2) {
+if ($setting->getValue('recaptcha_enabled') && $setting->getValue('recaptcha_enabled_contactform') && $setting->getValue('acl_contactform') != 2) {
   require_once(INCLUDE_DIR . '/lib/recaptchalib.php');
   // Load re-captcha specific data
   $rsp = recaptcha_check_answer (

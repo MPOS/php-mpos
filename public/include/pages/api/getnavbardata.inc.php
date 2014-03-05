@@ -37,6 +37,9 @@ $dPoolHashrate = $statistics->getCurrentHashrate($interval);
 if ($dPoolHashrate > $dNetworkHashrate) $dNetworkHashrate = $dPoolHashrate;
 $statistics->setGetCache(true);
 
+// Small helper
+$aHashunits = array( '1' => 'KH/s', '0.001' => 'MH/s', '0.000001' => 'GH/s', '0.000000001' => 'TH/s' );
+
 // Apply pool modifiers
 $dPoolHashrateAdjusted = $dPoolHashrate * $dPoolHashrateModifier;
 $dNetworkHashrateAdjusted = $dNetworkHashrate / 1000 * $dNetworkHashrateModifier;
@@ -63,8 +66,8 @@ if ($iEstShares > 0 && $aRoundShares['valid'] > 0) {
 // Output JSON format
 $data = array(
   'raw' => array( 'workers' => $worker->getCountAllActiveWorkers(), 'pool' => array( 'hashrate' => $dPoolHashrate ) ),
-  'pool' => array( 'workers' => $worker->getCountAllActiveWorkers(), 'hashrate' => $dPoolHashrateAdjusted, 'estimated' => $iEstShares, 'progress' => $dEstPercent ),
-  'network' => array( 'hashrate' => $dNetworkHashrateAdjusted, 'difficulty' => $dDifficulty, 'block' => $iBlock ),
+  'pool' => array( 'hashratemodifiername' => $aHashunits[$dPoolHashrateModifier], 'hashratemodifier' => $dPoolHashrateModifier, 'workers' => $worker->getCountAllActiveWorkers(), 'hashrate' => $dPoolHashrateAdjusted, 'estimated' => $iEstShares, 'progress' => $dEstPercent ),
+  'network' => array( 'hashratemodifiername' => $aHashunits[$dNetworkHashrateModifier], 'hashratemodifier' => $dNetworkHashrateModifier, 'hashrate' => $dNetworkHashrateAdjusted, 'difficulty' => $dDifficulty, 'block' => $iBlock ),
 );
 echo $api->get_json($data);
 

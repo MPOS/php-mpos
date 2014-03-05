@@ -85,7 +85,7 @@ if ($setting->getValue('disable_manual_payouts') != 1 && $aManualPayouts) {
       $monitoring->endCronjob($cron_name, 'E0010', 1, true);
     }
     if ($bitcoin->validateaddress($aUserData['coin_address'])) {
-      if (!$transaction_id = $transaction->createDebitMPRecord($aUserData['id'], $aUserData['coin_address'], $aUserData['confirmed'] - $config['txfee_manual'])) {
+      if (!$transaction_id = $transaction->createDebitMPRecord($aUserData['id'], $aUserData['coin_address'], $aUserData['confirmed'])) {
         $log->logFatal('    failed to fullt debit user ' . $aUserData['username'] . ': ' . $transaction->getCronError());
         $monitoring->endCronjob($cron_name, 'E0064', 1, true);
       } else if (!$config['sendmany']['enabled'] || !$sendmanyAvailable) {
@@ -168,13 +168,13 @@ if ($setting->getValue('disable_auto_payouts') != 1 && $aAutoPayouts) {
     $rpc_txid = NULL;
     $log->logInfo(sprintf($mask, $aUserData['id'], $aUserData['username'], $aUserData['confirmed'], $aUserData['coin_address'], $aUserData['ap_threshold']));
     if ($bitcoin->validateaddress($aUserData['coin_address'])) {
-      if (!$transaction_id = $transaction->createDebitAPRecord($aUserData['id'], $aUserData['coin_address'], $aUserData['confirmed'] - $config['txfee_manual'])) {
+      if (!$transaction_id = $transaction->createDebitAPRecord($aUserData['id'], $aUserData['coin_address'], $aUserData['confirmed'])) {
         $log->logFatal('    failed to fully debit user ' . $aUserData['username'] . ': ' . $transaction->getCronError());
         $monitoring->endCronjob($cron_name, 'E0064', 1, true);
       } else if (!$config['sendmany']['enabled'] || !$sendmanyAvailable) {
         // Run the payouts from RPC now that the user is fully debited
         try {
-          $rpc_txid = $bitcoin->sendtoaddress($aUserData['coin_address'], $aUserData['confirmed'] - $config['txfee_manual']);
+          $rpc_txid = $bitcoin->sendtoaddress($aUserData['coin_address'], $aUserData['confirmed'] - $config['txfee_auto']);
         } catch (Exception $e) {
           $log->logError('E0078: RPC method did not return 200 OK: Address: ' . $aUserData['coin_address'] . ' ERROR: ' . $e->getMessage());
           // Remove this line below if RPC calls are failing but transactions are still added to it

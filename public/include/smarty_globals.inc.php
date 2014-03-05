@@ -137,6 +137,7 @@ if (@$_SESSION['USERDATA']['id']) {
   $aGlobal['userdata']['rawhashrate'] = $aUserMiningStats['hashrate'];
   $aGlobal['userdata']['hashrate'] = $aGlobal['userdata']['rawhashrate'] * $dPersonalHashrateModifier;
   $aGlobal['userdata']['sharerate'] = $aUserMiningStats['sharerate'];
+  $aGlobal['userdata']['sharedifficulty'] = $aUserMiningStats['avgsharediff'];
 
   switch ($config['payout_system']) {
   case 'prop':
@@ -158,7 +159,6 @@ if (@$_SESSION['USERDATA']['id']) {
     $aGlobal['userdata']['pps']['unpaidshares'] = $statistics->getUserUnpaidPPSShares($_SESSION['USERDATA']['username'], $_SESSION['USERDATA']['id'], $setting->getValue('pps_last_share_id'));
     $aGlobal['ppsvalue'] = number_format($statistics->getPPSValue(), 12);
     $aGlobal['poolppsvalue'] = $aGlobal['ppsvalue'] * pow(2, $config['difficulty'] - 16);
-    $aGlobal['userdata']['sharedifficulty'] = $statistics->getUserShareDifficulty($_SESSION['USERDATA']['username'], $_SESSION['USERDATA']['id']);
     $aGlobal['userdata']['estimates'] = $statistics->getUserEstimates($aGlobal['userdata']['sharerate'], $aGlobal['userdata']['sharedifficulty'], $aGlobal['userdata']['donate_percent'], $aGlobal['userdata']['no_fees'], $aGlobal['ppsvalue']);
     break;
   }

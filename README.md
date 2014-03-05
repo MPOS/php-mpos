@@ -39,6 +39,7 @@ These people have supported this project with a donation:
 * [PCFiL](https://github.com/PCFiL)
 * [rog1121](https://github.com/rog1121)(https://rapidhash.net)
 * [Wow, Much Pool](http://www.wowmuchpool.com/)
+* webxassDE (https://www.suchcoins.com/)
 
 Pools running MPOS
 ==================
