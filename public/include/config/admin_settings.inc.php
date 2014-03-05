@@ -60,6 +60,13 @@ $aSettings['website'][] = array(
   'name' => 'website_news_style', 'value' => $setting->getValue('website_news_style'),
   'tooltip' => 'How News are displayed on Main Page.'
 );
+$aSettings['website'][] = array(
+  'display' => 'Auto Hide Notifications', 'type' => 'select',
+  'options' => array( 0 => 'Notifications always visible', 1 => 'Hide Notifications automatically' ),
+  'default' => 0,
+  'name' => 'website_notification_autohide', 'value' => $setting->getValue('website_notification_autohide'),
+  'tooltip' => 'Hides Notifications after 5 seconds.'
+);
 $aSettings['blockchain'][] = array(
   'display' => 'Disable Blockexplorer', 'type' => 'select',
   'options' => array( 0 => 'No', 1 => 'Yes' ),

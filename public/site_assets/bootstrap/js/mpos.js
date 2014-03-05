@@ -27,13 +27,26 @@ $(document).ready(function() {
 
 $(function() {
 
+	// auto hide notification messages if set in config
+	// starting timeout in ms before first message is hidden
+    var hide_delay = 3000;
+    // time in ms to wait before hiding next message
+    var hide_next = 800;
+    $(".autohide").slideDown().each( function(index,el) {
+        window.setTimeout( function(){
+        	$(el).slideUp();  // hide the message
+        }, hide_delay + hide_next*index);
+    });
+   
     // Check if lastlogin alert has been closed
     if( $.cookie('lastlogin-box') === 'closed' ){
         $('#lastlogin').hide();
     }
+    // Check if MOTD alert has been closed
     if( $.cookie('motd-box') === 'closed' ){
         $('#motd').hide();
     }
+    // Check if Backend Issues alert has been closed
     if( $.cookie('backend-box') === 'closed' ){
         $('#backend').hide();
     }
