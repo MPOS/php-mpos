@@ -56,7 +56,7 @@
                 <td>{$LASTBLOCKSBYTIME.1HourOrphan}</td>
                 <td>
                 {if $LASTBLOCKSBYTIME.1HourValid > 0}
-                  {($LASTBLOCKSBYTIME.1HourDifficulty / $LASTBLOCKSBYTIME.HHourValid)|number_format:"4"}
+                  {($LASTBLOCKSBYTIME.1HourDifficulty / $LASTBLOCKSBYTIME.1HourValid)|number_format:"4"}
                 {else}
                   0
                 {/if}
