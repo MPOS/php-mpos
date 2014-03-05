@@ -21,6 +21,7 @@ $(document).ready(function(){
     height: '35',
     barWidth: 6,
     barSpacing: 2,
+    tooltipFormat: '<span style="color: {{color}}">&#9679;</span> {{offset:names}}',
     chartRangeMin: 0
   };
 

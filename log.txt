@@ -1,0 +1,16 @@
+/mnt/backup/mpos_alphacoin_01-28-2014.sql.gz
+/mnt/backup/mpos_elephantcoin_01-23-2014.sql.gz
+/mnt/backup/mpos_alphacoin_01-23-2014.sql.gz
+/mnt/backup/mpos_elephantcoin_01-24-2014.sql.gz
+/mnt/backup/mpos_elephantcoin_01-29-2014.sql.gz
+/mnt/backup/mpos_elephantcoin_01-22-2014.sql.gz
+/mnt/backup/mpos_elephantcoin_01-27-2014.sql.gz
+/mnt/backup/mpos_alphacoin_01-29-2014.sql.gz
+/mnt/backup/mpos_alphacoin_01-24-2014.sql.gz
+/mnt/backup/mpos_elephantcoin_01-26-2014.sql.gz
+/mnt/backup/mpos_alphacoin_01-27-2014.sql.gz
+/mnt/backup/mpos_alphacoin_01-26-2014.sql.gz
+/mnt/backup/mpos_alphacoin_01-22-2014.sql.gz
+/mnt/backup/mpos_alphacoin_01-25-2014.sql.gz
+/mnt/backup/mpos_elephantcoin_01-28-2014.sql.gz
+/mnt/backup/mpos_elephantcoin_01-25-2014.sql.gz
