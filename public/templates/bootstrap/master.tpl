@@ -48,6 +48,15 @@
         {if $smarty.session.POPUP[popup].DISMISS|default:"no" == "yes"}
         <button id="{$smarty.session.POPUP[popup].ID|default:"static"}" type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
         {/if}
+        {if $smarty.session.POPUP[popup].TYPE|default:"alert alert-info" == "alert alert-info"}
+        <span class="glyphicon glyphicon-info-sign">&nbsp;</span>
+        {elseif $smarty.session.POPUP[popup].TYPE|default:"alert alert-info" == "alert alert-warning"}
+        <span class="glyphicon glyphicon-info-sign">&nbsp;</span>
+        {elseif $smarty.session.POPUP[popup].TYPE|default:"alert alert-info" == "alert alert-danger"}
+        <span class="glyphicon glyphicon-remove-circle">&nbsp;</span>
+        {elseif $smarty.session.POPUP[popup].TYPE|default:"alert alert-info" == "alert alert-success"}
+        <span class="glyphicon glyphicon-ok-circle">&nbsp;</span>
+        {/if}
         {$smarty.session.POPUP[popup].CONTENT nofilter}
       </div>
       {/section}
