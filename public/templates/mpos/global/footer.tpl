@@ -1,4 +1,5 @@
     <p><strong>MPOS</strong> by TheSerapher, available on <a href="https://github.com/MPOS/php-mpos">GitHub</a></p>
+    <p>Please <strong>Donate</strong> to support contests and giveaways here on AwesomeHash: DOGE DTSSpy6S1Xut6VH2mJ9VH5TDQqmHfDhUPY</p>
     <p>Please <strong>Donate</strong> to TheSerapher LTC: Lge95QR2frp9y1wJufjUPCycVsg5gLJPW8</p>
     <p><strong>Copyright &copy; 2013 Sebastian Grewe</strong>, Theme by <a href="http://www.medialoot.com">MediaLoot</a></p>
     {literal}
@@ -7,7 +8,7 @@
         var _paq = _paq || [];
         _paq.push(["trackPageView"]);
         _paq.push(["enableLinkTracking"]);
-      
+
         (function() {
           var u=(("https:" == document.location.protocol) ? "https" : "http") + "://stats.foodtrucksomfg.com/";
           _paq.push(["setTrackerUrl", u+"piwik.php"]);
