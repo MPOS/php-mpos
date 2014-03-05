@@ -89,6 +89,30 @@ class Statistics extends Base {
     return $this->sqlError();
   }
 
+/**
+   * Get a specific block that we've found, by I
+   * Mostly copypasta from getBlocksFound for now.
+   * @param limit int Last limit blocks
+   * @return array
+   **/
+  public function getBlockFoundById($id) {
+    $this->debug->append("STA " . __METHOD__, 4);
+    if ($data = $this->memcache->get(__FUNCTION__ . $id)) return $data;
+    $stmt = $this->mysqli->prepare("
+      SELECT
+        b.*,
+        a.username AS finder,
+        a.is_anonymous AS is_anonymous,
+        ROUND((difficulty * POW(2, 32 - " . $this->config['target_bits'] . ")) / POW(2, (" . $this->config['difficulty'] . " -16)), 0) AS estshares
+      FROM " . $this->block->getTableName() . " AS b
+      LEFT JOIN " . $this->user->getTableName() . " AS a
+      ON b.account_id = a.id
+      WHERE b.id = ?");
+    if ($this->checkStmt($stmt) && $stmt->bind_param("i", $id) && $stmt->execute() && $result = $stmt->get_result())
+      return $this->memcache->setCache(__FUNCTION__ . $limit, $result->fetch_all(MYSQLI_ASSOC), 5);
+    return $this->sqlError();
+  }
+
   /**
    * Get our last $limit blocks found
    * @param limit int Last limit blocks
@@ -127,7 +151,7 @@ class Statistics extends Base {
         a.is_anonymous AS is_anonymous,
         ROUND((difficulty * POW(2, 32 - " . $this->config['target_bits'] . ")) / POW(2, (" . $this->config['difficulty'] . " -16)), 0) AS estshares
       FROM " . $this->block->getTableName() . " AS b
-      LEFT JOIN " . $this->user->getTableName() . " AS a 
+      LEFT JOIN " . $this->user->getTableName() . " AS a
       ON b.account_id = a.id
       WHERE b.height <= ?
       ORDER BY height DESC LIMIT ?");
@@ -149,10 +173,10 @@ class Statistics extends Base {
         b.*,
         a.username AS finder,
         a.is_anonymous AS is_anonymous,
-        COUNT(b.id) AS solvedblocks, 
+        COUNT(b.id) AS solvedblocks,
         SUM(b.amount) AS generatedcoins
       FROM " . $this->block->getTableName() . " AS b
-      LEFT JOIN " . $this->user->getTableName() . " AS a 
+      LEFT JOIN " . $this->user->getTableName() . " AS a
       ON b.account_id = a.id
       WHERE confirmations > 0
       GROUP BY finder
@@ -161,7 +185,7 @@ class Statistics extends Base {
       return $this->memcache->setCache(__FUNCTION__ . $limit, $result->fetch_all(MYSQLI_ASSOC), 5);
     return $this->sqlError();
   }
-  
+
   /**
    * Get SUM of blocks found and generated Coins for each worker
    * @param limit int Last limit blocks
@@ -173,7 +197,7 @@ class Statistics extends Base {
     $stmt = $this->mysqli->prepare("
       SELECT
       	worker_name AS finder,
-        COUNT(id) AS solvedblocks, 
+        COUNT(id) AS solvedblocks,
         SUM(amount) AS generatedcoins
       FROM " . $this->block->getTableName() . "
       WHERE account_id = ? AND worker_name != 'unknown'
@@ -183,7 +207,7 @@ class Statistics extends Base {
       return $this->memcache->setCache(__FUNCTION__ . $account_id . $limit, $result->fetch_all(MYSQLI_ASSOC), 5);
     return $this->sqlError();
   }
-  
+
   /**
    * Currently the only function writing to the database
    * Stored per block user statistics of valid and invalid shares
@@ -367,8 +391,8 @@ class Statistics extends Base {
         ROUND(IFNULL(SUM(IF(our_result='N', IF(difficulty=0, POW(2, (" . $this->config['difficulty'] . " - 16)), difficulty), 0)), 0) / POW(2, (" . $this->config['difficulty'] . " - 16)), 0) AS invalid
       FROM " . $this->share->getTableName() . "
       WHERE username LIKE ?
-        AND UNIX_TIMESTAMP(time) >IFNULL((SELECT MAX(b.time) FROM " . $this->block->getTableName() . " AS b),0)");  
-    $username = $username . ".%";   
+        AND UNIX_TIMESTAMP(time) >IFNULL((SELECT MAX(b.time) FROM " . $this->block->getTableName() . " AS b),0)");
+    $username = $username . ".%";
    if ($stmt && $stmt->bind_param("s", $username) && $stmt->execute() && $result = $stmt->get_result())
       return $this->memcache->setCache(__FUNCTION__ . $account_id, $result->fetch_assoc());
     return $this->sqlError();
@@ -508,7 +532,7 @@ class Statistics extends Base {
   /**
    * Get Shares per x interval by user
    * @param username string username
-   * @param $account_id int account id   
+   * @param $account_id int account id
    * @return data integer Current Sharerate in shares/s
    **/
   public function getUserMiningStats($username, $account_id=NULL, $interval=180) {
@@ -695,7 +719,7 @@ class Statistics extends Base {
   }
 
   /**
-   * get Hourly hashrate for the pool 
+   * get Hourly hashrate for the pool
    * @param none
    * @return data array NOT FINISHED YET
    **/
@@ -788,12 +812,12 @@ class Statistics extends Base {
     $this->debug->append("STA " . __METHOD__, 4);
     if ($data = $this->memcache->get(__FUNCTION__ . $hour)) return $data;
     $stmt = $this->mysqli->prepare("
-      SELECT 
-      IFNULL(COUNT(id), 0) as count, 
+      SELECT
+      IFNULL(COUNT(id), 0) as count,
       IFNULL(AVG(difficulty), 0) as average,
       IFNULL(ROUND(SUM((POW(2, ( 32 - " . $this->config['target_bits'] . " )) * difficulty) / POW(2, (" . $this->config['difficulty'] . " -16))), 0), 0) AS expected,
       IFNULL(ROUND(SUM(shares)), 0) as shares,
-      IFNULL(SUM(amount), 0) as rewards 
+      IFNULL(SUM(amount), 0) as rewards
       FROM " . $this->block->getTableName() . "
       WHERE FROM_UNIXTIME(time) > DATE_SUB(now(), INTERVAL ? HOUR)
       AND confirmations >= 1");
