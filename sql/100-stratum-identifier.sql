@@ -1,0 +1,3 @@
+ALTER TABLE shares ADD COLUMN stratum VARCHAR(50);
+ALTER TABLE shares_archive ADD COLUMN stratum VARCHAR(50);
+
