@@ -37,7 +37,9 @@ $(document).ready(function(){
   $('.personal-sharerate-bar').sparkline(storedPersonalSharerate, sparklineBarOptions);
   $('.pool-hashrate-bar').sparkline(storedPoolHashrate, sparklineBarOptions);
   $('.pool-workers-bar').sparkline(storedPoolWorkers, sparklineBarOptions);
+{/literal}{if $config.tickerupdate.enabled}{literal}
   $('.coin-price-line').sparkline(storedCoinPrice, sparklineLineOptions);
+{/literal}{/if}{literal}
 
   function refreshInformation(data) {
     // Drop one value, add the latest new one to each array
@@ -56,12 +58,16 @@ $(document).ready(function(){
     $('.personal-sharerate-bar').sparkline(storedPersonalSharerate, sparklineBarOptions);
     $('.pool-hashrate-bar').sparkline(storedPoolHashrate, sparklineBarOptions);
     $('.pool-workers-bar').sparkline(storedPoolWorkers, sparklineBarOptions);
+{/literal}{if $config.tickerupdate.enabled}{literal}
     $('.coin-price-line').sparkline(storedCoinPrice, sparklineLineOptions);
+{/literal}{/if}{literal}
   }
 
   // Refresh other static numbers on the template
   function refreshStaticData(data) {
+{/literal}{if $config.tickerupdate.enabled}{literal}
     $('#b-price').html((parseFloat(data.getdashboarddata.data.pool.price).toFixed(8)));
+{/literal}{/if}{literal}
     $('#b-poolworkers').html(data.getdashboarddata.data.pool.workers);
     $('#b-hashrate').html((parseFloat(data.getdashboarddata.data.personal.hashrate).toFixed(2)));
     $('#b-poolhashrate').html((parseFloat(data.getdashboarddata.data.pool.hashrate).toFixed(2)));

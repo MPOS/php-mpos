@@ -83,6 +83,7 @@ $aGlobal = array(
     'statistics_ajax_refresh_interval' => $statistics_ajax_refresh_interval,
     'statistics_ajax_long_refresh_interval' => $statistics_ajax_long_refresh_interval,
     'price' => array( 'currency' => $config['price']['currency'] ),
+    'tickerupdate' => array( 'enabled' => $config['price']['enabled'] ),
     'targetdiff' => $config['difficulty'],
     'currency' => $config['currency'],
     'txfee_manual' => $config['txfee_manual'],

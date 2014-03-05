@@ -1,4 +1,4 @@
-  <div class="col-lg-12">
+  <div class="col-lg-8">
     <div class="panel panel-info">
       <div class="panel-heading">
         <h4 class="panel-title">
