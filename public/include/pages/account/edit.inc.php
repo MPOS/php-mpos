@@ -94,15 +94,15 @@ if ($user->isAuthenticated()) {
       } else {
         switch (@$_POST['do']) {
           case 'cashOut':
+        	$aBalance = $transaction->getBalance($_SESSION['USERDATA']['id']);
+        	$dBalance = $aBalance['confirmed'];
         	if ($setting->getValue('disable_payouts') == 1 || $setting->getValue('disable_manual_payouts') == 1) {
         	  $_SESSION['POPUP'][] = array('CONTENT' => 'Manual payouts are disabled.', 'TYPE' => 'info');
-          } else if ($aBalance['confirmed'] < $config['mp_threshold']) {
-            $_SESSION['POPUP'][] = array('CONTENT' => 'Payout must be greater or equal than ' . $config['mp_threshold'] . '.', 'TYPE' => 'info');
-          } else if (!$user->getCoinAddress($_SESSION['USERDATA']['id'])) {
-            $_SESSION['POPUP'][] = array('CONTENT' => 'You have no payout address set.', 'TYPE' => 'errormsg');
+            } else if ($dBalance < $config['mp_threshold']) {
+              $_SESSION['POPUP'][] = array('CONTENT' => 'Payout must be greater or equal than ' . $config['mp_threshold'] . '.', 'TYPE' => 'info');
+            } else if (!$user->getCoinAddress($_SESSION['USERDATA']['id'])) {
+              $_SESSION['POPUP'][] = array('CONTENT' => 'You have no payout address set.', 'TYPE' => 'errormsg');
         	} else {
-        	  $aBalance = $transaction->getBalance($_SESSION['USERDATA']['id']);
-        	  $dBalance = $aBalance['confirmed'];
         	  $user->log->log("info", $_SESSION['USERDATA']['username']." requesting manual payout");
         	  if ($dBalance > $config['txfee_manual']) {
         	    if (!$oPayout->isPayoutActive($_SESSION['USERDATA']['id'])) {
