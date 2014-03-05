@@ -78,6 +78,13 @@ $config['ap_threshold']['min'] = 1;
 $config['ap_threshold']['max'] = 250;
 
 /**
+ * Minimum manual Payout Threshold
+ *  Minimum manual payout amount
+ *   https://github.com/MPOS/php-mpos/wiki/Config-Setup#wiki-automatic-payout-thresholds
+ **/
+$config['mp_threshold'] = 1;
+
+/**
  * Donation thresholds
  *  Minimum donation amount in percent
  *   https://github.com/MPOS/php-mpos/wiki/Config-Setup#wiki-donation-thresholds
