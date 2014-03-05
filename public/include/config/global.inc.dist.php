@@ -80,7 +80,7 @@ $config['ap_threshold']['max'] = 250;
 /**
  * Minimum manual Payout Threshold
  *  Minimum manual payout amount
- *   https://github.com/MPOS/php-mpos/wiki/Config-Setup#wiki-automatic-payout-thresholds
+ *   https://github.com/MPOS/php-mpos/wiki/Config-Setup#wiki-manual-payout-threshold
  **/
 $config['mp_threshold'] = 1;
 
