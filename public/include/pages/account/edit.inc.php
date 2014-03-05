@@ -96,6 +96,8 @@ if ($user->isAuthenticated()) {
           case 'cashOut':
         	if ($setting->getValue('disable_payouts') == 1 || $setting->getValue('disable_manual_payouts') == 1) {
         	  $_SESSION['POPUP'][] = array('CONTENT' => 'Manual payouts are disabled.', 'TYPE' => 'alert alert-warning');
+          } else if ($aBalance['confirmed'] < $config['mp_threshold']) {
+            $_SESSION['POPUP'][] = array('CONTENT' => 'Payout must be greater or equal than ' . $config['mp_threshold'] . '.', 'TYPE' => 'info');
           } else if (!$user->getCoinAddress($_SESSION['USERDATA']['id'])) {
             $_SESSION['POPUP'][] = array('CONTENT' => 'You have no payout address set.', 'TYPE' => 'alert alert-danger');
         	} else {
