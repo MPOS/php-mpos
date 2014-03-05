@@ -17,6 +17,7 @@
       </div>
       <div class="panel-footer">
         <input type="submit" class="btn btn-success" value="Login" >
+        <a href="{$smarty.server.SCRIPT_NAME}?page=password"><font size="1">Forgot your password?</font></a>
       </div>
     </div>
   </form>
