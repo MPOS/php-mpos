@@ -271,6 +271,8 @@ $config['pps']['blockavg']['blockcount'] = 10;
  *   https://github.com/MPOS/php-mpos/wiki/Config-Setup#wiki-memcache
  * 矿池用的缓存，一般不动，但如果是多矿池的话，一定要手动增加变量名！！！
  * 比如：默认是mpos_，如果多矿池了为了不相互影响，那么就改成mpos_币简称，这样
+ * 在此之前请检查你是否安装了memcache服务软件，一般ubuntu安装mysql的时候默认就会安装，不过还是检查一下比较好
+ * ps aux | gerp memcache
  **/
 $config['memcache']['enabled'] = true;
 $config['memcache']['host'] = 'localhost';
