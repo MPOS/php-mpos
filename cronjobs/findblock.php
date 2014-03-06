@@ -26,7 +26,7 @@ chdir(dirname(__FILE__));
 require_once('shared.inc.php');
 
 // Fetch our last block found from the DB as a starting point
-$aLastBlock = @$block->getLast();
+$aLastBlock = @$block->getLastValid();
 $strLastBlockHash = $aLastBlock['blockhash'];
 if (!$strLastBlockHash) $strLastBlockHash = '';
 
