@@ -3,7 +3,7 @@
       <div class="panel-heading">
         <h4 class="panel-title"><i class="fa fa-align-left fa-fw"></i> Overview</span></h4>
       </div>
-      <div class="panel-body text-center {if !$GLOBAL.config.tickerupdate.enalbed}col-md-offset-2{/if}">
+      <div class="panel-body text-center {if !$GLOBAL.config.price.enabled}col-md-offset-2{/if}">
         <div class="row show-grid ">
           <div class="col-md-spark">
               <b>My Hashrate {$GLOBAL.hashunits.personal}</b>
@@ -29,7 +29,7 @@
               <br>
               <span class="pool-workers-bar"></span>
           </div>
-          {if $GLOBAL.config.tickerupdate.enabled}
+          {if $GLOBAL.config.price.enabled}
           <div class="col-md-spark">
               <b>{$GLOBAL.config.currency}/{$GLOBAL.config.price.currency}</b>
               <span id="b-price">{$GLOBAL.price|default:"0"|number_format:"8"}</span>

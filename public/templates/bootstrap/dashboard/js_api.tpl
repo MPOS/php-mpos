@@ -13,7 +13,7 @@ $(document).ready(function(){
   var storedPersonalSharerate = [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, {/literal}{$GLOBAL.userdata.sharerate|number_format:"2"}{literal} ];
   var storedPoolHashrate = [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, {/literal}{$GLOBAL.hashrate|number_format:"2"}{literal} ];
   var storedPoolWorkers = [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, {/literal}{$GLOBAL.workers}{literal} ];
-  var storedCoinPrice = [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, {/literal}{$GLOBAL.price}{literal} ];
+  var storedCoinPrice = [ {/literal}{$GLOBAL.price}, {$GLOBAL.price},{$GLOBAL.price},{$GLOBAL.price},{$GLOBAL.price},{$GLOBAL.price},{$GLOBAL.price},{$GLOBAL.price},{$GLOBAL.price},{$GLOBAL.price},{$GLOBAL.price},{literal} ];
 
   // Sparkline options applied to all graphs
   var sparklineBarOptions = {
@@ -27,7 +27,7 @@ $(document).ready(function(){
   // Sparkline options applied to line graphs
   var sparklineLineOptions = {
     height: '35',
-    chartRangeMin: 0,
+    chartRangeMin: {/literal}{$GLOBAL.price}{literal}/2,
     composite: false,
     lineColor: 'black'
   };
@@ -37,7 +37,7 @@ $(document).ready(function(){
   $('.personal-sharerate-bar').sparkline(storedPersonalSharerate, sparklineBarOptions);
   $('.pool-hashrate-bar').sparkline(storedPoolHashrate, sparklineBarOptions);
   $('.pool-workers-bar').sparkline(storedPoolWorkers, sparklineBarOptions);
-{/literal}{if $config.tickerupdate.enabled}{literal}
+{/literal}{if $GLOBAL.config.price.enabled}{literal}
   $('.coin-price-line').sparkline(storedCoinPrice, sparklineLineOptions);
 {/literal}{/if}{literal}
 
@@ -58,14 +58,14 @@ $(document).ready(function(){
     $('.personal-sharerate-bar').sparkline(storedPersonalSharerate, sparklineBarOptions);
     $('.pool-hashrate-bar').sparkline(storedPoolHashrate, sparklineBarOptions);
     $('.pool-workers-bar').sparkline(storedPoolWorkers, sparklineBarOptions);
-{/literal}{if $config.tickerupdate.enabled}{literal}
+{/literal}{if $GLOBAL.config.price.enabled}{literal}
     $('.coin-price-line').sparkline(storedCoinPrice, sparklineLineOptions);
 {/literal}{/if}{literal}
   }
 
   // Refresh other static numbers on the template
   function refreshStaticData(data) {
-{/literal}{if $config.tickerupdate.enabled}{literal}
+{/literal}{if $GLOBAL.config.price.enabled}{literal}
     $('#b-price').html((parseFloat(data.getdashboarddata.data.pool.price).toFixed(8)));
 {/literal}{/if}{literal}
     $('#b-poolworkers').html(data.getdashboarddata.data.pool.workers);
