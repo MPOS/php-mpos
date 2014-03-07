@@ -13,7 +13,7 @@ $(document).ready(function(){
   var storedPersonalSharerate = [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, {/literal}{$GLOBAL.userdata.sharerate|number_format:"2"}{literal} ];
   var storedPoolHashrate = [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, {/literal}{$GLOBAL.hashrate|number_format:"2"}{literal} ];
   var storedPoolWorkers = [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, {/literal}{$GLOBAL.workers}{literal} ];
-  var storedCoinPrice = [ {/literal}{$GLOBAL.price}, {$GLOBAL.price},{$GLOBAL.price},{$GLOBAL.price},{$GLOBAL.price},{$GLOBAL.price},{$GLOBAL.price},{$GLOBAL.price},{$GLOBAL.price},{$GLOBAL.price},{$GLOBAL.price},{literal} ];
+  var storedCoinPrice = [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, {/literal}{$GLOBAL.price}{literal} ];
 
   // Sparkline options applied to all graphs
   var sparklineBarOptions = {
@@ -27,7 +27,8 @@ $(document).ready(function(){
   // Sparkline options applied to line graphs
   var sparklineLineOptions = {
     height: '35',
-    chartRangeMin: {/literal}{$GLOBAL.price}{literal}/2,
+    chartRangeMin: {/literal}{$GLOBAL.price}{literal} - 5,
+    chartRangeMax: {/literal}{$GLOBAL.price}{literal} + 5,
     composite: false,
     lineColor: 'black'
   };
