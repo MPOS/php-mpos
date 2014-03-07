@@ -15,6 +15,18 @@ class Block extends Base {
       return $result->fetch_assoc();
     return $this->sqlError();
   }
+  
+  /**
+   * Specific method to fetch the latest block found that is VALID
+   * @param none
+   * @return data array Array with database fields as keys
+   **/
+  public function getLastValid() {
+    $stmt = $this->mysqli->prepare("SELECT * FROM $this->table WHERE confirmations > -1 ORDER BY height DESC LIMIT 1");
+    if ($this->checkStmt($stmt) && $stmt->execute() && $result = $stmt->get_result())
+      return $result->fetch_assoc();
+    return $this->sqlError();
+  }
 
   /**
    * Get a specific block, by block height
