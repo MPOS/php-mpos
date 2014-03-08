@@ -406,6 +406,7 @@ $aSettings['monitoring'][] = array(
 );
 $aSettings['notifications'][] = array(
   'display' => 'Notification Cleanup Time', 'type' => 'text',
+  'size' => 10,
   'default' => 7,
   'name' => 'notifications_cleanup_time', 'value' => $setting->getValue('notifications_cleanup_time'),
   'tooltip' => 'Maximum age in days of notifications before cleaned from database.'
