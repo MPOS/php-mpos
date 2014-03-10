@@ -22,14 +22,14 @@ $(document).ready(function(){
     height: '35',
     barWidth: 6,
     barSpacing: 2,
-    chartRangeMin: {/literal}{$GLOBAL.price}{literal} - 5,
-    chartRangeMax: {/literal}{$GLOBAL.price}{literal} + 5,
+    chartRangeMin: 0
   };
 
   // Sparkline options applied to line graphs
   var sparklineLineOptions = {
     height: '35',
-    chartRangeMin: 0,
+    chartRangeMin: {/literal}{$GLOBAL.price}{literal} - 5,
+    chartRangeMax: {/literal}{$GLOBAL.price}{literal} + 5,
     composite: false,
     lineColor: 'black'
   };
