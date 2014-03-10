@@ -1,6 +1,6 @@
           <div class="col-md-spark">
-              <p class="overview">My Hashrate {$GLOBAL.hashunits.personal}</p>
-              <span class="overview" id="b-hashrate">{$GLOBAL.userdata.hashrate|number_format:"2"}</span>
+              <p class="overview">My Hashrate</p>
+              <span class="overview" id="b-hashrate">{$GLOBAL.userdata.hashrate|number_format:"2"}</span><span> {$GLOBAL.hashunits.personal}</span>
               <br>
               <span class="personal-hashrate-bar"></span>
           </div>
@@ -11,8 +11,8 @@
               <span class="personal-sharerate-bar"></span>
           </div>
           <div class="col-md-spark">
-              <p class="overview">Pool Hashrate {$GLOBAL.hashunits.pool}</p>
-              <span class="overview" id="b-poolhashrate">{$GLOBAL.hashrate|number_format:"2"}</span>
+              <p class="overview">Pool Hashrate</p>
+              <span class="overview" id="b-poolhashrate">{$GLOBAL.hashrate|number_format:"2"}</span><span> {$GLOBAL.hashunits.pool}</span>
               <br>
               <span class="pool-hashrate-bar"></span>
           </div>
@@ -23,8 +23,8 @@
               <span class="pool-workers-bar"></span>
           </div>
           <div class="col-md-spark">
-              <p class="overview">Net Hashrate {$GLOBAL.hashunits.pool}</p>
-              <span class="overview" id="b-nethashrate">{$GLOBAL.nethashrate|number_format:"2"}</span>
+              <p class="overview">Net Hashrate</p>
+              <span class="overview" id="b-nethashrate">{$GLOBAL.nethashrate|number_format:"2"}</span><span> {$GLOBAL.hashunits.network}</span>
               <br>
               <span class="pool-nethashrate-bar"></span>
           </div>
