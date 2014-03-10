@@ -182,6 +182,10 @@ if ($setting->getValue('maintenance'))
 if ($motd = $setting->getValue('system_motd'))
   $_SESSION['POPUP'][] = array('CONTENT' => $motd, 'DISMISS' => 'yes', 'ID' => 'motd', 'TYPE' => 'alert alert-info');
 
+// check for deprecated theme
+if ($setting->getValue('website_theme') == "mpos")
+  $_SESSION['POPUP'][] = array('CONTENT' => 'You are using an old Theme that will not be maintained in the future.', 'TYPE' => 'alert alert-warning');
+
 // So we can display additional info
 $smarty->assign('DEBUG', $config['DEBUG']);
 
