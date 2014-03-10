@@ -30,13 +30,13 @@
             <tr>
               <th>Confirmed</th>
               <th>
-                <span class="confirmed" id="b-confirmed">{$GLOBAL.userdata.balance.confirmed|number_format:"6"}</span>
+                <span class="label label-success pull-right" id="b-confirmed">{$GLOBAL.userdata.balance.confirmed|number_format:"6"}</span>
               </th>
             </tr>
             <tr>
               <th>Unconfirmed</th>
               <th>
-                <span class="unconfirmed" id="b-unconfirmed">{$GLOBAL.userdata.balance.unconfirmed|number_format:"6"}</span>
+                <span class="label label-warning pull-right" id="b-unconfirmed">{$GLOBAL.userdata.balance.unconfirmed|number_format:"6"}</span>
               </th>
             </tr>
           </tbody>
