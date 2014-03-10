@@ -5,29 +5,20 @@
         <i class="fa fa-desktop fa-fw"></i> {$GLOBAL.workers} Current Active Pool Workers
       </div>
       <div class="panel-body no-padding">
-        <div class="table-responsive">
-          <table class="table table-striped table-bordered table-hover">
-            <form action="{$smarty.server.SCRIPT_NAME}">
-              <input type="hidden" name="page" value="{$smarty.request.page|escape}" />
-              <input type="hidden" name="action" value="{$smarty.request.action|escape}" />
-              <tbody>
-                <tr>
-                  <td>
-                    {if $smarty.request.start|default:"0" > 0}
-                    <a href="{$smarty.server.SCRIPT_NAME}?page={$smarty.request.page|escape}&action={$smarty.request.action|escape}&start={$smarty.request.start|escape|default:"0" - $LIMIT}{if $FILTERS|default:""}{$FILTERS}{/if}"><i class="icon-left-open"></i></a>
-                    {else}
-                    <i class="icon-left-open"></i>
-                    {/if}
-                    </td>
-                    <td>
-                      <a href="{$smarty.server.SCRIPT_NAME}?page={$smarty.request.page|escape}&action={$smarty.request.action|escape}&start={$smarty.request.start|escape|default:"0" + $LIMIT}{if $FILTERS|default:""}{$FILTERS}{/if}"><i class="icon-right-open"></i></a>
-                  </td>
-                </tr>
-              </tbody>
-            </form>
-          </table>
+        <div class="panel-body">
+          <form action="{$smarty.server.SCRIPT_NAME}">
+            <input type="hidden" name="page" value="{$smarty.request.page|escape}" />
+            <input type="hidden" name="action" value="{$smarty.request.action|escape}" />
+            <ul class="pager">
+              <li class="previous">
+                <a href="{$smarty.server.SCRIPT_NAME}?page={$smarty.request.page|escape}&action={$smarty.request.action|escape}&start={$smarty.request.start|escape|default:"0" - $LIMIT}{if $FILTERS|default:""}{$FILTERS}{/if}"> &larr;</a>
+              </li>
+              <li class="next">
+                <a href="{$smarty.server.SCRIPT_NAME}?page={$smarty.request.page|escape}&action={$smarty.request.action|escape}&start={$smarty.request.start|escape|default:"0" + $LIMIT}{if $FILTERS|default:""}{$FILTERS}{/if}"> &rarr;</a>
+              </li>
+            </ul>
+          </form>
         </div>
-    
         <div class="table-responsive">
           <table class="table table-striped table-bordered table-hover">
             <thead>
