@@ -387,3 +387,21 @@ th.shareswarning {
   background-color:#F2DEDE;
 }
 
+.col-md-spark, .col-md-spark-2 {
+  position:relative;
+  min-height:1px;
+  padding-left:15px;
+  padding-right:15px
+}
+
+@media (min-width:992px) {
+  .col-md-spark, .col-md-spark-2 {
+    float: left;
+  }
+  .col-md-spark {
+    width:16.65%
+  }
+  .col-md-spark-2 {
+    width:20%
+  }
+}
