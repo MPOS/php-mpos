@@ -125,16 +125,16 @@ if (@$_SESSION['USERDATA']['is_admin'] && $user->isAdmin(@$_SESSION['USERDATA'][
   
   // display the errors
   foreach ($enotice as $en) {
-    $_SESSION['POPUP'][] = array('CONTENT' => $en, 'TYPE' => 'info');
+    $_SESSION['POPUP'][] = array('CONTENT' => $en, 'TYPE' => 'alert alert-info');
   }
   if (!count($notice) && !count($error)) {
-    $_SESSION['POPUP'][] = array('CONTENT' => 'The config options we checked seem OK', 'TYPE' => 'success');
+    $_SESSION['POPUP'][] = array('CONTENT' => 'The config options we checked seem OK', 'TYPE' => 'alert alert-success');
   } else {
     foreach ($notice as $n) {
-      $_SESSION['POPUP'][] = array('CONTENT' => $n, 'TYPE' => 'warning');
+      $_SESSION['POPUP'][] = array('CONTENT' => $n, 'TYPE' => 'alert alert-warning');
     }
     foreach ($error as $e) {
-      $_SESSION['POPUP'][] = array('CONTENT' => $e, 'TYPE' => 'errormsg');
+      $_SESSION['POPUP'][] = array('CONTENT' => $e, 'TYPE' => 'alert alert-danger');
     }
   }
 }
