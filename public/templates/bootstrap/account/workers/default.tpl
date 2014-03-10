@@ -39,8 +39,8 @@
           <table class="table">
              <thead>
                 <tr>
-                  <th>Worker Login</th>
-                  <th>Worker Password</th>
+                  <th class="smallwidth">Worker Login</th>
+                  <th class="smallwidth">Worker Password</th>
                   <th class="text-center">Active</th>
                   {if $GLOBAL.config.disable_notifications != 1}<th>Monitor</th>{/if}
                   <th class="text-right">Khash/s</th>
@@ -69,7 +69,7 @@
                  {/if}
                  <td class="text-right">{$WORKERS[worker].hashrate|number_format}</td>
                  <td class="text-right">{$WORKERS[worker].difficulty|number_format:"2"}</td>
-                 <td class="text-center"><a href="{$smarty.server.SCRIPT_NAME}?page={$smarty.request.page|escape}&action={$smarty.request.action|escape}&do=delete&id={$WORKERS[worker].id|escape}&ctoken={$CTOKEN}"><i class="fa fa-trash-o fa-fw"></i></a></td>
+                 <td class="text-center"><a href="{$smarty.server.SCRIPT_NAME}?page={$smarty.request.page|escape}&action={$smarty.request.action|escape}&do=delete&id={$WORKERS[worker].id|escape}&ctoken={$CTOKEN|escape|default:""}"><i class="fa fa-trash-o fa-fw"></i></a></td>
                </tr>
                {/section}
                {/nocache}

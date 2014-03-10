@@ -377,6 +377,11 @@ th.shareswarning {
   background-color:#F2DEDE;
 }
 
+th.smallwidth {
+  width: 250px;
+}
+
+
 .col-md-spark, .col-md-spark-2 {
   position:relative;
   min-height:1px;
