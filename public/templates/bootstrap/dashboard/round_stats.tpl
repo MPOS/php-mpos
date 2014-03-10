@@ -24,7 +24,7 @@
           </div>
         </div>
       </div>
-      <table class="table m-b-none text-small">
+      <table class="table borderless m-b-none text-small">
         <thead>
           <tr>
             <th><h4><i class="fa fa-cloud fa-fw"></i> Round Shares</h4></th>

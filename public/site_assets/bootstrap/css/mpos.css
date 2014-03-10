@@ -324,22 +324,8 @@ table.dataTable thead .sorting:after {
     border: none;
 }
 
-span.confirmed {
-  width: auto;
-  color: #468847;
-  background-color: #DFF0D8;
-  padding: 0px 4px;
-  border-radius: 4px;
-  float: right;
-}
-
-span.unconfirmed {
-  width: auto;
-  color: #B94A48;
-  background-color: #F2DEDE;
-  padding: 0px 4px;
-  border-radius: 4px;
-  float: right;
+.borderless > thead > tr > th {
+    border: none;
 }
 
 .footer {
