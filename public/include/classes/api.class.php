@@ -15,6 +15,7 @@ class Api extends Base {
       return true;
     } else {
       if ($error == true) {
+        unset($_SESSION['POPUP']);
         header('HTTP/1.1 501 Not implemented');
         die('501 Not implemented');
       }

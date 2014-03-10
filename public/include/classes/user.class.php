@@ -624,15 +624,12 @@ class User extends Base {
     // Unset all of the session variables
     $_SESSION = array();
     // As we're killing the sesison, also kill the cookie!
-    if (ini_get("session.use_cookies")) {
-        $params = session_get_cookie_params();
-        setcookie(session_name(), '', time() - 42000, $params["path"], $params["domain"], $params["secure"], $params["httponly"]);
-    }
+    setcookie(session_name(), '', time() - 42000);
     // Destroy the session.
     session_destroy();
     // Enforce generation of a new Session ID and delete the old
     session_regenerate_id(true);
-    
+
     // Enforce a page reload and point towards login with referrer included, if supplied
     $port = ($_SERVER["SERVER_PORT"] == "80" || $_SERVER["SERVER_PORT"] == "443") ? "" : (":".$_SERVER["SERVER_PORT"]);
     $pushto = $_SERVER['SCRIPT_NAME'].'?page=login';
