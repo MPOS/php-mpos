@@ -22,22 +22,24 @@
       </ul>
     </li>
     <p>3. <strong>Configure your miner.</strong></p>
+    <ul>
       <p>Settings for Stratum (recommended):</p>
       <table width="50%">
         <tbody>
-          <tr><td>STRATUM:</td><td><kbd>stratum+tcp://{$SITESTRATUMURL|default:$smarty.server.SERVER_NAME}</kbd></td></tr>
-          <tr><td>PORT:</td><td><kbd>{$SITESTRATUMPORT|default:"3333"}</kbd></td></tr>
-          <tr><td>Username:</td><td><kbd><em>Weblogin.Worker</em></kbd></td></tr>
-          <tr><td>Password:</td><td><kbd><em>Worker Password</em></kbd></td></tr>
+          <tr><td>STRATUM:</td><td>stratum+tcp://{$SITESTRATUMURL|default:$smarty.server.SERVER_NAME}</td></tr>
+          <tr><td>PORT:</td><td>{$SITESTRATUMPORT|default:"3333"}</td></tr>
+          <tr><td>Username:</td><td>Weblogin.Worker</td></tr>
+          <tr><td>Password:</td><td>Worker Password</td></tr>
         </tbody>
       </table>
+      <br>
       <p>If you use a command-line miner, type:</p>
       <li>CGMiner</li>
       <pre>./cgminer {if $GLOBAL.config.algorithm == 'scrypt'}--scrypt{/if} -o stratum+tcp://{$SITESTRATUMURL|default:$smarty.server.SERVER_NAME}:{$SITESTRATUMPORT|default:"3333"} -u <em>Weblogin</em>.<em>Worker</em> -p <em>Worker password</em></pre>
       <li>BFGMiner</li>
       <pre>./bfgminer {if $GLOBAL.config.algorithm == 'scrypt'}--scrypt{/if} -o stratum+tcp://{$SITESTRATUMURL|default:$smarty.server.SERVER_NAME}:{$SITESTRATUMPORT|default:"3333"} -u <em>Weblogin</em>.<em>Worker</em> -p <em>Worker password</em></pre>
       <p>If you want, you can create additional workers with usernames and passwords of your choice <a href="{$smarty.server.SCRIPT_NAME}?page=account&action=workers">here</a></p>
-    </li>
+    </ul>
     <p>4. <strong>Create a {$SITECOINNAME|default:"Litecoin"} address to recieve payments.</strong></p>
       <ul>
         <li> Downloading the client &amp; block chain: 	Download the {$SITECOINNAME|default:"Litecoin"} client from <a href="{$SITECOINURL|default:"http://www.litecoin.org"}" target="_blank">here</a>.
