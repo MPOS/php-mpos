@@ -26,7 +26,7 @@ chdir(dirname(__FILE__));
 require_once('shared.inc.php');
 
 // Fetch our last block found from the DB as a starting point
-$aLastBlock = @$block->getLast();
+$aLastBlock = @$block->getLastValid();
 $strLastBlockHash = $aLastBlock['blockhash'];
 if (!$strLastBlockHash) $strLastBlockHash = '';
 
@@ -58,6 +58,15 @@ if (empty($aTransactions['transactions'])) {
       $aBlockRPCInfo = $bitcoin->getblock($aData['blockhash']);
       $config['reward_type'] == 'block' ? $aData['amount'] = $aData['amount'] : $aData['amount'] = $config['reward'];
       $aData['height'] = $aBlockRPCInfo['height'];
+      $aTxDetails = $bitcoin->gettransaction($aBlockRPCInfo['tx'][0]);
+      if (!isset($aBlockRPCInfo['confirmations'])) {
+        $aData['confirmations'] = $aBlockRPCInfo['confirmations'];
+      } else if (isset($aTxDetails['confirmations'])) {
+        $aData['confirmations'] = $aTxDetails['confirmations'];
+      } else {
+        $log->logFatal('    RPC does not return any usable block confirmation information');
+        $monitoring->endCronjob($cron_name, 'E0082', 1, true);
+      }
       $aData['difficulty'] = $aBlockRPCInfo['difficulty'];
       $log->logInfo(sprintf($strLogMask, substr($aData['blockhash'], 0, 17)."...", $aData['height'], $aData['amount'], $aData['confirmations'], $aData['difficulty'], strftime("%Y-%m-%d %H:%M:%S", $aData['time'])));
       if ( ! empty($aBlockRPCInfo['flags']) && preg_match('/proof-of-stake/', $aBlockRPCInfo['flags']) ) {
