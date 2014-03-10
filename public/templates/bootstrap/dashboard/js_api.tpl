@@ -12,8 +12,9 @@ $(document).ready(function(){
   var storedPersonalHashrate = [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, {/literal}{$GLOBAL.userdata.hashrate|number_format:"2"}{literal} ];
   var storedPersonalSharerate = [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, {/literal}{$GLOBAL.userdata.sharerate|number_format:"2"}{literal} ];
   var storedPoolHashrate = [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, {/literal}{$GLOBAL.hashrate|number_format:"2"}{literal} ];
+  var storedNetHashrate = [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, {/literal}{$GLOBAL.nethashrate|number_format:"2"}{literal} ];
   var storedPoolWorkers = [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, {/literal}{$GLOBAL.workers}{literal} ];
-  var storedCoinPrice = [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, {/literal}{$GLOBAL.price}{literal} ];
+  var storedCoinPrice = [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, {/literal}{$GLOBAL.price}{literal} ];
 
   // Sparkline options applied to all graphs
   var sparklineBarOptions = {
@@ -27,8 +28,7 @@ $(document).ready(function(){
   // Sparkline options applied to line graphs
   var sparklineLineOptions = {
     height: '35',
-    chartRangeMin: {/literal}{$GLOBAL.price}{literal} - 5,
-    chartRangeMax: {/literal}{$GLOBAL.price}{literal} + 5,
+    chartRangeMin: 0,
     composite: false,
     lineColor: 'black'
   };
@@ -37,10 +37,9 @@ $(document).ready(function(){
   $('.personal-hashrate-bar').sparkline(storedPersonalHashrate, sparklineBarOptions);
   $('.personal-sharerate-bar').sparkline(storedPersonalSharerate, sparklineBarOptions);
   $('.pool-hashrate-bar').sparkline(storedPoolHashrate, sparklineBarOptions);
+  $('.pool-nethashrate-bar').sparkline(storedNetHashrate, sparklineBarOptions);
   $('.pool-workers-bar').sparkline(storedPoolWorkers, sparklineBarOptions);
-{/literal}{if $GLOBAL.config.price.enabled}{literal}
   $('.coin-price-line').sparkline(storedCoinPrice, sparklineLineOptions);
-{/literal}{/if}{literal}
 
   function refreshInformation(data) {
     // Drop one value, add the latest new one to each array
@@ -50,6 +49,8 @@ $(document).ready(function(){
     storedPersonalSharerate.push(parseFloat(data.getdashboarddata.data.personal.sharerate).toFixed(2))
     storedPoolHashrate.shift();
     storedPoolHashrate.push(parseFloat(data.getdashboarddata.data.pool.hashrate).toFixed(2))
+    storedNetHashrate.shift();
+    storedNetHashrate.push(parseFloat(data.getdashboarddata.data.network.hashrate).toFixed(2))
     storedPoolWorkers.shift();
     storedPoolWorkers.push(parseFloat(data.getdashboarddata.data.pool.workers).toFixed(8));
     storedCoinPrice.shift();
@@ -58,17 +59,14 @@ $(document).ready(function(){
     $('.personal-hashrate-bar').sparkline(storedPersonalHashrate, sparklineBarOptions);
     $('.personal-sharerate-bar').sparkline(storedPersonalSharerate, sparklineBarOptions);
     $('.pool-hashrate-bar').sparkline(storedPoolHashrate, sparklineBarOptions);
+    $('.pool-nethashrate-bar').sparkline(storedNetHashrate, sparklineBarOptions);
     $('.pool-workers-bar').sparkline(storedPoolWorkers, sparklineBarOptions);
-{/literal}{if $GLOBAL.config.price.enabled}{literal}
     $('.coin-price-line').sparkline(storedCoinPrice, sparklineLineOptions);
-{/literal}{/if}{literal}
   }
 
   // Refresh other static numbers on the template
   function refreshStaticData(data) {
-{/literal}{if $GLOBAL.config.price.enabled}{literal}
     $('#b-price').html((parseFloat(data.getdashboarddata.data.pool.price).toFixed(8)));
-{/literal}{/if}{literal}
     $('#b-poolworkers').html(data.getdashboarddata.data.pool.workers);
     $('#b-hashrate').html((parseFloat(data.getdashboarddata.data.personal.hashrate).toFixed(2)));
     $('#b-poolhashrate').html((parseFloat(data.getdashboarddata.data.pool.hashrate).toFixed(2)));

@@ -10,12 +10,13 @@
       <div class="panel-body">
         <fieldset>
          <p>If you have an email set for your account, enter your username to get your password reset</p>
-          <div class="form-group">
+          <div class="input-group margin-bottom-sm">
+            <span class="input-group-addon"><i class="fa fa-envelope-o fa-fw"></i></span>
             <input class="form-control" placeholder="Username or E-mail" name="username" type="text" maxlength="100" autofocus required>
           </div>
         </fieldset>
       </div>
-      <div class="panel-footer">
+      <div class="panel-footer" style="margin-top: 10px;">
         <input type="submit" class="btn btn-success" value="Reset" >
       </div>
     </div>

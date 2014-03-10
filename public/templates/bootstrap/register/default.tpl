@@ -46,7 +46,7 @@
             </label>
           </div>
         </div>
-        <center>{nocache}{$RECAPTCHA|default:"" nofilter}{/nocache}</center>
+        <center>{nocache}{$RECAPTCHA|default:""}{/nocache}</center>
       </div>
       <div class="panel-footer">
         <input type="submit" value="Register" class="btn btn-success">

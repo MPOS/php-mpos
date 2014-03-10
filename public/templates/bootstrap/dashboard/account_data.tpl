@@ -29,11 +29,15 @@
           <tbody>
             <tr>
               <th>Confirmed</th>
-              <td class="text-right" id="b-confirmed">{$GLOBAL.userdata.balance.confirmed|number_format:"6"}</th>
+              <th>
+                <span class="confirmed" id="b-confirmed">{$GLOBAL.userdata.balance.confirmed|number_format:"6"}</span>
+              </th>
             </tr>
             <tr>
               <th>Unconfirmed</th>
-              <td class="text-right" id="b-unconfirmed">{$GLOBAL.userdata.balance.unconfirmed|number_format:"6"}</th>
+              <th>
+                <span class="unconfirmed" id="b-unconfirmed">{$GLOBAL.userdata.balance.unconfirmed|number_format:"6"}</span>
+              </th>
             </tr>
           </tbody>
         </table>
