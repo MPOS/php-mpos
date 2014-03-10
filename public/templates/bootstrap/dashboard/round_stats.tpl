@@ -18,7 +18,7 @@
             <p class="text-muted">Of Expected Shares</p>
           </div>
           <div class="col-xs-4 b-r">
-            <i class="fa fa-btc fa-2x"></i>
+            <i class="fa fa-money fa-2x"></i>
             <p id="b-payout" class="h4 font-bold m-t">{$GLOBAL.userdata.estimates.payout|number_format:"8"}</p>
             <p class="text-muted">{$GLOBAL.config.currency} Estimated Earnings</p>
           </div>
