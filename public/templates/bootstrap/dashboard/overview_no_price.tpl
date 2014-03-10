@@ -18,13 +18,13 @@
           </div>
           <div class="col-md-spark-2">
               <p class="overview">Pool Workers</p>
-              <span class="overview">{$GLOBAL.workers}</span>
+              <span class="overview" id="b-poolworkers">{$GLOBAL.workers}</span>
               <br>
               <span class="pool-workers-bar"></span>
           </div>
           <div class="col-md-spark-2">
               <p class="overview">Net Hashrate {$GLOBAL.hashunits.pool}</p>
-              <span class="overview">{$GLOBAL.nethashrate|number_format:"2"}</span>
+              <span class="overview" id="b-nethashrate">{$GLOBAL.nethashrate|number_format:"2"}</span>
               <br>
               <span class="pool-nethashrate-bar"></span>
           </div>
