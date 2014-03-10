@@ -341,12 +341,16 @@ table.dataTable thead .sorting:after {
 }
 
 p.overview {
-  font-weight: bold; 
-  margin: 0px 0px -3px;
+  font-family: 'Open Sans',sans-serif;
+  font-weight: 600;
+  font-size: 11px;
+  text-transform: uppercase;
+  display: block;
+  margin-bottom: 4px;
 }
 
 span.overview {
-  font-size: 24px;
+  font-size: 20px;
   font-weight: bold;
 }
 
