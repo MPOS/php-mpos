@@ -9,6 +9,7 @@
           <form action="{$smarty.server.SCRIPT_NAME}">
             <input type="hidden" name="page" value="{$smarty.request.page|escape}" />
             <input type="hidden" name="action" value="{$smarty.request.action|escape}" />
+            <input type="hidden" name="ctoken" value="{$CTOKEN|escape|default:""}" />
             <ul class="pager">
               <li class="previous">
                 <a href="{$smarty.server.SCRIPT_NAME}?page={$smarty.request.page|escape}&action={$smarty.request.action|escape}&start={$smarty.request.start|escape|default:"0" - $LIMIT}{if $FILTERS|default:""}{$FILTERS}{/if}"> &larr;</a>

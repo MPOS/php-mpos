@@ -1,6 +1,7 @@
 <form action="{$smarty.server.SCRIPT_NAME}" method="post" role="form">
   <input type="hidden" name="page" value="{$smarty.request.page|escape|escape}">
   <input type="hidden" name="action" value="{$smarty.request.action|escape|escape}">
+  <input type="hidden" name="ctoken" value="{$CTOKEN|escape|default:""}" />
   <div class="row">
     <div class="col-lg-12">
       <div class="panel panel-info">

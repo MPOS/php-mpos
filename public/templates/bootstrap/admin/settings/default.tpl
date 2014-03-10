@@ -8,6 +8,7 @@
         <input type="hidden" name="page" value="{$smarty.request.page|escape}" />
         <input type="hidden" name="action" value="{$smarty.request.action|escape}" />
         <input type="hidden" name="do" value="save" />
+        <input type="hidden" name="ctoken" value="{$CTOKEN|escape|default:""}" />
         <div class="panel-body">
           <ul class="nav nav-pills">
             {foreach item=TAB from=array_keys($SETTINGS)}

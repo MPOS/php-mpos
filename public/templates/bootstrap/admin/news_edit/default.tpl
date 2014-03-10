@@ -18,6 +18,7 @@
               <input type="hidden" name="action" value="{$smarty.request.action|escape}">
               <input type="hidden" name="id" value="{$NEWS.id}">
               <input type="hidden" name="do" value="save">
+              <input type="hidden" name="ctoken" value="{$CTOKEN|escape|default:""}" />
               
               <div class="form-group">
                 <th>Active</th>

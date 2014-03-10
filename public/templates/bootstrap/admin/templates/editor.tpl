@@ -3,6 +3,7 @@
       <input type="hidden" name="action" value="{$smarty.request.action}">
       <input type="hidden" name="template" value="{$CURRENT_TEMPLATE}">
       <input type="hidden" name="do" value="save">
+      <input type="hidden" name="ctoken" value="{$CTOKEN|escape|default:""}" />
       <div class="panel panel-info">
         <div class="panel-heading">
           <i class="fa fa-pencil fa-fw"></i> Edit template '{$CURRENT_TEMPLATE}'

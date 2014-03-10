@@ -17,6 +17,7 @@
               <input type="hidden" name="page" value="{$smarty.request.page|escape}">
               <input type="hidden" name="action" value="{$smarty.request.action|escape}">
               <input type="hidden" name="do" value="add">
+              <input type="hidden" name="ctoken" value="{$CTOKEN|escape|default:""}" />
               <div class="form-group">
                 <label>Header</label>
                 <input class="form-control" size="30" type="text" name="data[header]" required />
