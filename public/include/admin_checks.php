@@ -9,7 +9,7 @@ if (@$_SESSION['USERDATA']['is_admin'] && $user->isAdmin(@$_SESSION['USERDATA'][
   
   // setup some basic stuff for checking - getuid/getpwuid not available on mac/windows
   $apache_user = 'unknown';
-  if (substr_count(strtolower(PHP_OS), 'nix') > 0) {
+  if (substr_count(strtolower(PHP_OS), 'nix') > 0 || substr_count(strtolower(PHP_OS), 'linux') > 0) {
     $apache_user = (function_exists('posix_getuid')) ? posix_getuid() : 'unknown';
     $apache_user = (function_exists('posix_getpwuid')) ? posix_getpwuid($apache_user) : $apache_user;
   }
@@ -100,7 +100,7 @@ if (@$_SESSION['USERDATA']['is_admin'] && $user->isAdmin(@$_SESSION['USERDATA'][
     if ($socket !== false) {
       $address = @gethostbyname($config['gettingstarted']['stratumurl']);
       $result = @socket_connect($socket, $address, $config['gettingstarted']['stratumport']);
-      if ($result !== 1) {
+      if ($result !== true) {
         $enotice[] = "We tried to poke your Stratum server using config->gettingstarted details but it didn't respond";
       }
       $close = @socket_close($socket);
