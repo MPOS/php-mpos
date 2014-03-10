@@ -27,13 +27,13 @@
       <table class="table m-b-none text-small">
         <thead>
           <tr>
-            <th><h4><i class="fa fa-cloud fa-hw"></i> Round Shares</h4></th>
+            <th><h4><i class="fa fa-cloud fa-fw"></i> Round Shares</h4></th>
             <th style="color:#468847;background-color:rgb(223, 240, 216);"><h4><i class="fa fa-thumbs-up fa-hw"></i> Valid</h4></th>
             <th style="color:#B94A48;background-color:#F2DEDE;"><h4><i class="fa fa-thumbs-down fa-hw"></i> Invalid</h4></th>
             <th style="color:#3A87AD;background-color:#D9EDF7;"><h4><i class="fa fa-dot-circle-o fa-hw"></i> Efficiency</h4></th>
           </tr>
           <tr>
-            <th><h4><i class="fa fa-user fa-hw"></i>  My Shares</h4></td>
+            <th><h4><i class="fa fa-user fa-fw"></i> My Shares</h4></td>
             <th style="color:#468847;background-color:rgb(223, 240, 216);"><h4 id="b-yvalid">{$GLOBAL.userdata.shares.valid|number_format}</h4></th>
             <th style="color:#B94A48;background-color:#F2DEDE;"><h4 id="b-yivalid">{$GLOBAL.userdata.shares.invalid|number_format}</h4></th>
             <th style="color:#3A87AD;background-color:#D9EDF7;">
@@ -41,7 +41,7 @@
             </th>
           </tr>
           <tr>
-            <th><h4><i class="fa fa-users fa-hw"></i> Pool Shares</h4></th>
+            <th><h4><i class="fa fa-users fa-fw"></i> Pool Shares</h4></th>
             <th style="color:#468847;background-color:rgb(223, 240, 216);"><h4 id="b-pvalid">{$GLOBAL.roundshares.valid|number_format}</h4></th>
             <th style="color:#B94A48;background-color:#F2DEDE;"><h4 id="b-pivalid">{$GLOBAL.roundshares.invalid|number_format}</h4></th>
             <th style="color:#3A87AD;background-color:#D9EDF7;">
