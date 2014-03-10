@@ -367,3 +367,7 @@ span.overview {
 div.overview {
   margin: 20px 0px 0px;
 }
+
+span.bigfont {
+  font-size: 100%;
+}
