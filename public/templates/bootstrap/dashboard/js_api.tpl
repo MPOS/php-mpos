@@ -14,7 +14,7 @@ $(document).ready(function(){
   var storedPoolHashrate = [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, {/literal}{$GLOBAL.hashrate|number_format:"2"}{literal} ];
   var storedNetHashrate = [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, {/literal}{$GLOBAL.nethashrate|number_format:"2"}{literal} ];
   var storedPoolWorkers = [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, {/literal}{$GLOBAL.workers}{literal} ];
-  var storedCoinPrice = [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, {/literal}{$GLOBAL.price}{literal} ];
+  var storedCoinPrice = [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, {/literal}{$GLOBAL.price}{literal} ];
 
   // Sparkline options applied to all graphs
   var sparklineBarOptions = {
@@ -22,7 +22,8 @@ $(document).ready(function(){
     height: '35',
     barWidth: 6,
     barSpacing: 2,
-    chartRangeMin: 0
+    chartRangeMin: {/literal}{$GLOBAL.price}{literal} - 5,
+    chartRangeMax: {/literal}{$GLOBAL.price}{literal} + 5,
   };
 
   // Sparkline options applied to line graphs
@@ -39,7 +40,9 @@ $(document).ready(function(){
   $('.pool-hashrate-bar').sparkline(storedPoolHashrate, sparklineBarOptions);
   $('.pool-nethashrate-bar').sparkline(storedNetHashrate, sparklineBarOptions);
   $('.pool-workers-bar').sparkline(storedPoolWorkers, sparklineBarOptions);
+{/literal}{if $GLOBAL.config.price.enabled}{literal}
   $('.coin-price-line').sparkline(storedCoinPrice, sparklineLineOptions);
+{/literal}{/if}{literal}
 
   function refreshInformation(data) {
     // Drop one value, add the latest new one to each array
@@ -61,12 +64,16 @@ $(document).ready(function(){
     $('.pool-hashrate-bar').sparkline(storedPoolHashrate, sparklineBarOptions);
     $('.pool-nethashrate-bar').sparkline(storedNetHashrate, sparklineBarOptions);
     $('.pool-workers-bar').sparkline(storedPoolWorkers, sparklineBarOptions);
+  {/literal}{if $GLOBAL.config.price.enabled}{literal}
     $('.coin-price-line').sparkline(storedCoinPrice, sparklineLineOptions);
+  {/literal}{/if}{literal}
   }
 
   // Refresh other static numbers on the template
   function refreshStaticData(data) {
+  {/literal}{if $GLOBAL.config.price.enabled}{literal}
     $('#b-price').html((parseFloat(data.getdashboarddata.data.pool.price).toFixed(8)));
+  {/literal}{/if}{literal}
     $('#b-poolworkers').html(data.getdashboarddata.data.pool.workers);
     $('#b-hashrate').html((parseFloat(data.getdashboarddata.data.personal.hashrate).toFixed(2)));
     $('#b-poolhashrate').html((parseFloat(data.getdashboarddata.data.pool.hashrate).toFixed(2)));
