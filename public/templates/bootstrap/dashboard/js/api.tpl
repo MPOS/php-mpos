@@ -90,7 +90,8 @@ $(document).ready(function(){
     $('#b-pivalid').html(number_format(data.getdashboarddata.data.pool.shares.invalid));
     $('#b-pefficiency').html(number_format(100 - data.getdashboarddata.data.pool.shares.invalid_percent, 2) + "%");
     $('#b-diff').html(number_format(data.getdashboarddata.data.network.difficulty, 8));
-    $('#b-nextdiff').html(number_format(data.getdashboarddata.data.network.nextdifficulty, 8) + " (Change in " + data.getdashboarddata.data.network.blocksuntildiffchange + " Blocks)");
+    $('#b-nextdiff').html(number_format(data.getdashboarddata.data.network.nextdifficulty, 8));
+    $('#b-nextdiffc').html(" Change in " + data.getdashboarddata.data.network.blocksuntildiffchange + " Blocks");
     var minutes = Math.floor(data.getdashboarddata.data.network.esttimeperblock / 60);
     var seconds = Math.floor(data.getdashboarddata.data.network.esttimeperblock - minutes * 60);
     $('#b-esttimeperblock').html(minutes + " minutes " + seconds + " seconds"); // <- this needs some nicer format

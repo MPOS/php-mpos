@@ -22,7 +22,8 @@
           </div>
           <div class="col-xs-2 b-r">
             <i class="fa fa-sitemap fa-2x"></i>
-            <p id="b-nextdiff" class="h6 font-bold m-t">{$NETWORK.EstNextDifficulty|number_format:"8"} (Change in {$NETWORK.BlocksUntilDiffChange} Blocks)</p>
+            <p id="b-nextdiff" class="h6 font-bold m-t">{$NETWORK.EstNextDifficulty|number_format:"8"}</p>
+            <p id="b-nextdiffc" class="h6 font-bold m-t">Change in {$NETWORK.BlocksUntilDiffChange} Blocks</p>
             <p class="h6 text-muted">Est Next Difficulty</p>
           </div>
           <div class="col-xs-2 b-r">
