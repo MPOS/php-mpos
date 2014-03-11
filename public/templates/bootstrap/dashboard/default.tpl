@@ -12,12 +12,8 @@
           {assign var=PAYOUT_SYSTEM value=$GLOBAL.config.payout_system}
           {include file="dashboard/overview/default.tpl"}
           {include file="dashboard/round_statistics/$PAYOUT_SYSTEM/default.tpl"}
-          </div>
-        </div>
-        <div class="row">
-          <div class="col-lg-12">
-            {include file="dashboard/account_data/default.tpl"}
-            {include file="dashboard/worker_information/default.tpl"}
+          {include file="dashboard/account_data/default.tpl"}
+          {include file="dashboard/worker_information/default.tpl"}
           </div>
         </div>
       </div>
