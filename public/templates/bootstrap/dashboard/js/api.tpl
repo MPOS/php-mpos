@@ -9,12 +9,15 @@ $(document).ready(function(){
   var url_balance = "{/literal}{$smarty.server.SCRIPT_NAME}?page=api&action=getuserbalance&api_key={$GLOBAL.userdata.api_key}&id={$GLOBAL.userdata.id}{literal}";
 
   // Load initial sparkline values
-  var storedPersonalHashrate = [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, {/literal}{$GLOBAL.userdata.hashrate|round:"2"}{literal} ];
-  var storedPersonalSharerate = [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, {/literal}{$GLOBAL.userdata.sharerate|round:"2"}{literal} ];
-  var storedPoolHashrate = [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, {/literal}{$GLOBAL.hashrate|round:"2"}{literal} ];
-  var storedNetHashrate = [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, {/literal}{$GLOBAL.nethashrate|round:"2"}{literal} ];
-  var storedPoolWorkers = [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, {/literal}{$GLOBAL.workers}{literal} ];
-  var storedCoinPrice = [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, {/literal}{$GLOBAL.price}{literal} ];
+  var storedPersonalHashrate = [ null, null, null, null, null, null, null, null, null, null, null, null, {/literal}{$GLOBAL.userdata.hashrate|round:"2"}{literal} ];
+  var storedPersonalSharerate = [ null, null, null, null, null, null, null, null, null, null, null, null, {/literal}{$GLOBAL.userdata.sharerate|round:"2"}{literal} ];
+  var storedPoolHashrate = [ null, null, null, null, null, null, null, null, null, null, null, null, {/literal}{$GLOBAL.hashrate|round:"2"}{literal} ];
+  var storedNetHashrate = [ null, null, null, null, null, null, null, null, null, null, null, null, {/literal}{$GLOBAL.nethashrate|round:"2"}{literal} ];
+  var storedPoolWorkers = [ null, null, null, null, null, null, null, null, null, null, null, null, {/literal}{$GLOBAL.workers}{literal} ];
+  var storedCoinPrice = [ null, null, null, null, null, null, null, null, null, null, null, null,
+                          null, null, null, null, null, null, null, null, null, null, null, null,
+                          null, null, null, null, null, null, null, null, null, null, null, null,
+                          {/literal}{$GLOBAL.price}{literal} ];
 
   // Sparkline options applied to all graphs
   var sparklineBarOptions = {
@@ -31,7 +34,8 @@ $(document).ready(function(){
     chartRangeMin: {/literal}{$GLOBAL.price}{literal} - 5,
     chartRangeMax: {/literal}{$GLOBAL.price}{literal} + 5,
     composite: false,
-    lineColor: 'black'
+    lineColor: 'black',
+    chartRangeClip: true
   };
 
   // Draw our sparkline graphs with our current static content
