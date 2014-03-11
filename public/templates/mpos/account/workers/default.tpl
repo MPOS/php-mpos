@@ -37,7 +37,7 @@
           <th align="left">Worker Login</th>
           <th align="left">Worker Password</th>
           <th align="center">Active</th>
-          {if $GLOBAL.config.disable_notifications != 1}<th align="center">Monitor</th>{/if}
+          {if $GLOBAL.config.disable_notifications != 1 && $DISABLE_IDLEWORKERNOTIFICATIONS != 1}<th align="center">Monitor</th>{/if}
           <th align="right">Khash/s</th>
           <th align="right">Difficulty</th>
           <th align="center" style="padding-right: 25px;">Action</th>
@@ -51,7 +51,7 @@
           <td align="left"{if $WORKERS[worker].hashrate > 0} style="color: orange"{/if}>{$username.0|escape}.<input name="data[{$WORKERS[worker].id}][username]" value="{$username.1|escape}" size="10" required/></td>
           <td align="left"><input type="text" name="data[{$WORKERS[worker].id}][password]" value="{$WORKERS[worker].password|escape}" size="10" required></td>
           <td align="center"><i class="icon-{if $WORKERS[worker].hashrate > 0}ok{else}cancel{/if}"></i></td>
-          {if $GLOBAL.config.disable_notifications != 1}
+          {if $GLOBAL.config.disable_notifications != 1 && $DISABLE_IDLEWORKERNOTIFICATIONS != 1}
           <td>
             <span class="toggle">
             <label for="data[{$WORKERS[worker].id}][monitor]">

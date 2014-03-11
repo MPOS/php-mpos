@@ -13,6 +13,7 @@
         <th align="left">Type</th>
         <th align="center">Active</th>
       </tr>
+      {if $DISABLE_IDLEWORKERNOTIFICATIONS|default:"" != 1}
       <tr>
         <td align="left">IDLE Worker</td>
         <td>
@@ -25,6 +26,7 @@
           </span>
         </td>
       </tr>
+      {/if}
       {if $DISABLE_BLOCKNOTIFICATIONS|default:"" != 1}
       <tr>
         <td align="left">New Blocks</td>
