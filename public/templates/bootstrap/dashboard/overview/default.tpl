@@ -5,10 +5,11 @@
       </div>
       <div class="panel-body text-center">
        <div class="row show-grid">
+          {* Depending on the price option we need to load a different template so it aligns properly *}
           {if $GLOBAL.config.price.enabled}
-          {include file="dashboard/overview_price.tpl"}
+          {include file="dashboard/overview/_with_price_graph.tpl"}
           {else}
-          {include file="dashboard/overview_no_price.tpl"}
+          {include file="dashboard/overview/_without_price_graph.tpl"}
           {/if}
        </div>
       </div>
