@@ -24,6 +24,7 @@ if ($user->isAuthenticated()) {
 
     // Fetch global settings
     $smarty->assign('DISABLE_BLOCKNOTIFICATIONS', $setting->getValue('notifications_disable_block'));
+    $smarty->assign('DISABLE_IDLEWORKERNOTIFICATIONS', $setting->getValue('notifications_disable_idle_worker'));
 
     // Fetch user notification settings
     $aSettings = $notification->getNotificationSettings($_SESSION['USERDATA']['id']);
