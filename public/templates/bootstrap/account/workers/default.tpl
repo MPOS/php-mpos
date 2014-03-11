@@ -42,7 +42,7 @@
                   <th class="smallwidth">Worker Login</th>
                   <th class="smallwidth">Worker Password</th>
                   <th class="text-center">Active</th>
-                  {if $GLOBAL.config.disable_notifications != 1}<th>Monitor</th>{/if}
+                  {if $GLOBAL.config.disable_notifications != 1 && $DISABLE_IDLEWORKERNOTIFICATIONS != 1}<th>Monitor</th>{/if}
                   <th class="text-right">Khash/s</th>
                   <th class="text-right">Difficulty</th>
                   <th class="text-center">Action</th>
@@ -61,7 +61,7 @@
                  </td>
                  <td><input class="form-control" type="text" name="data[{$WORKERS[worker].id}][password]" value="{$WORKERS[worker].password|escape}" size="10" required></td>
                  <td class="text-center"><i class="fa fa-{if $WORKERS[worker].hashrate > 0}check{else}times{/if} fa-fw"></i></td>
-                 {if $GLOBAL.config.disable_notifications != 1}
+                 {if $GLOBAL.config.disable_notifications != 1 && $DISABLE_IDLEWORKERNOTIFICATIONS != 1}
                  <td>
                    <input type="hidden" name="data[{$WORKERS[worker].id}][monitor]" value="0" />
                    <input type="checkbox" class="switch" data-size="small"  name="data[{$WORKERS[worker].id}][monitor]" id="data[{$WORKERS[worker].id}][monitor]" value="1" {if $WORKERS[worker].monitor}checked{/if}/>

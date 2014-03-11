@@ -27,7 +27,7 @@
                 <th>Worker Name</th>
                 <th>Password</th>
                 <th>Active</th>
-                {if $GLOBAL.config.disable_notifications != 1}<th>Monitor</th>{/if}
+                {if $GLOBAL.config.disable_notifications != 1 && $DISABLE_IDLEWORKERNOTIFICATIONS != 1}<th>Monitor</th>{/if}
                 <th>Khash/s</th>
                 <th>Difficulty</th>
                 <th style="padding-right: 25px;">Avg Difficulty</th>
@@ -40,7 +40,7 @@
                 <td>{$WORKERS[worker].username|escape}</td>
                 <td>{$WORKERS[worker].password|escape}</td>
                 <td><i class="icon-{if $WORKERS[worker].hashrate > 0}ok{else}cancel{/if}"></i></td>
-                {if $GLOBAL.config.disable_notifications != 1}
+                {if $GLOBAL.config.disable_notifications != 1 && $DISABLE_IDLEWORKERNOTIFICATIONS != 1}
                 <td><i class="icon-{if $WORKERS[worker].monitor}ok{else}cancel{/if}"></i></td>
                 {/if}
                 <td>{$WORKERS[worker].hashrate|number_format|default:"0"}</td>
