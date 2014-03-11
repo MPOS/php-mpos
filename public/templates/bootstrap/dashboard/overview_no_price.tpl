@@ -6,7 +6,7 @@
           </div>
           <div class="col-md-spark-2">
               <p class="overview">My Sharerate</p>
-              <span class="overview" id="b-sharerate">{$GLOBAL.userdata.sharerate|number_format:"2"}</span>
+              <span class="overview" id="b-sharerate">{$GLOBAL.userdata.sharerate|number_format:"2"}</span><span class="overview-mhs"> S/s</span>
               <br>
               <span class="personal-sharerate-bar"></span>
           </div>
