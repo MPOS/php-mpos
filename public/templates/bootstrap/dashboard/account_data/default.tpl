@@ -1,7 +1,7 @@
   <div class="col-lg-4">
     <div class="panel panel-info">
       <div class="panel-heading">
-        <h4 class="panel-title"><i class="fa fa-desktop fa-fw"></i> Account Information</h4>
+        <h4 class="panel-title"><i class="fa fa-user-md fa-fw"></i> Account Information</h4>
       </div>
       <div class="panel-body no-padding">
         <table class="table table-bordered table-hover table-striped">
