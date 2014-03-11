@@ -4,6 +4,8 @@
   {assign var=PAYOUT_SYSTEM value=$GLOBAL.config.payout_system}
   {include file="dashboard/overview/default.tpl"}
   {include file="dashboard/round_statistics/$PAYOUT_SYSTEM/default.tpl"}
+</div>
+<div class="row">
   {include file="dashboard/account_data/default.tpl"}
   {include file="dashboard/worker_information/default.tpl"}
 </div>
