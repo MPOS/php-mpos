@@ -1,7 +1,9 @@
   <div class="col-lg-12">
     <div class="panel panel-info">
       <div class="panel-heading">
-        <h4 class="panel-title"><i class="fa fa-align-left fa-fw"></i> Overview</span></h4>
+        <h4 class="panel-title">
+          <i class="fa fa-dot-circle-o fa-fw"></i> Pool Information
+        </h4>
       </div>
       <div class="panel-body text-center">
        <div class="row show-grid">
@@ -12,9 +14,6 @@
           {include file="dashboard/overview/_without_price_graph.tpl"}
           {/if}
        </div>
-      </div>
-      <div class="panel-footer overview">
-        <h6>Refresh interval: {$GLOBAL.config.statistics_ajax_refresh_interval|default:"10"} seconds. Hashrate based on shares submitted in the past {$INTERVAL|default:"5"} minutes.</h6>
       </div>
     </div>
   </div>
