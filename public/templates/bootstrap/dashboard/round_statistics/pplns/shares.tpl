@@ -6,13 +6,13 @@
             <th><span class="pull-right"><h5><i class="fa fa-users fa-fw"></i> Pool</h6></span></th>
           </tr>
           <tr>
-            <th><h5><i class="fa fa-check fa-fw"></i> Valid</h6></th>
+            <th><h5><i class="fa fa-smile-o fa-fw"></i> Valid</h6></th>
             <th><span class="pull-right"><h5 id="b-yvalid">{$GLOBAL.userdata.shares.valid|number_format}</h5></span></th>
             <th><span class="pull-right"><h5 id="b-pvalid">{$GLOBAL.roundshares.valid|number_format}</h5></span></th>
             
           </tr>
           <tr>
-            <th><h5><i class="fa fa-times fa-fw"></i> Invalid</h6></th>
+            <th><h5><i class="fa fa-frown-o fa-fw"></i> Invalid</h6></th>
             <th><span class="pull-right"><h5 id="b-yivalid">{$GLOBAL.userdata.shares.invalid|number_format}</h5></span></th>
             <th><span class="pull-right"><h5 id="b-pivalid">{$GLOBAL.roundshares.invalid|number_format}</h5></span></th>
           </tr>
