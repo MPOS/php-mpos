@@ -9,12 +9,12 @@
             <th><h5><i class="fa fa-smile-o fa-fw"></i> Valid</h6></th>
             <th>
             <div class="progress progress-striped progress-fix">
-               <div id="b-yvalid" class="progress-bar progress-bar-info black" style="width: 100%" aria-valuemax="100" aria-valuemin="0" aria-valuenow="{$GLOBAL.userdata.shares.valid|number_format}" role="progressbar"></div>
+               <div id="b-yvalid" class="progress-bar progress-bar-success black" style="width: 100%" aria-valuemax="100" aria-valuemin="0" aria-valuenow="{$GLOBAL.userdata.shares.valid|number_format}" role="progressbar"></div>
             </div>
             </th>
             <th>
             <div class="progress progress-striped progress-fix">
-               <div id="b-pvalid" class="progress-bar progress-bar-info black" style="width: 100%" aria-valuemax="100" aria-valuemin="0" aria-valuenow="{$GLOBAL.roundshares.valid|number_format}" role="progressbar"></div>
+               <div id="b-pvalid" class="progress-bar progress-bar-success black" style="width: 100%" aria-valuemax="100" aria-valuemin="0" aria-valuenow="{$GLOBAL.roundshares.valid|number_format}" role="progressbar"></div>
             </div>
             </th>
           </tr>
@@ -22,12 +22,12 @@
             <th><h5><i class="fa fa-frown-o fa-fw"></i> Invalid</h6></th>
             <th>
             <div class="progress progress-striped progress-fix">
-               <div id="b-yivalid" class="progress-bar progress-bar-info black" style="width: 100%" aria-valuemax="100" aria-valuemin="0" aria-valuenow="{$GLOBAL.roundshares.invalid|number_format}" role="progressbar"></div>
+               <div id="b-yivalid" class="progress-bar progress-bar-danger black" style="width: 100%" aria-valuemax="100" aria-valuemin="0" aria-valuenow="{$GLOBAL.roundshares.invalid|number_format}" role="progressbar"></div>
             </div>
             </th>
             <th>
             <div class="progress progress-striped progress-fix">
-               <div id="b-pivalid" class="progress-bar progress-bar-info black" style="width: 100%" aria-valuemax="100" aria-valuemin="0" aria-valuenow="{$GLOBAL.roundshares.invalid|number_format}" role="progressbar"></div>
+               <div id="b-pivalid" class="progress-bar progress-bar-danger black" style="width: 100%" aria-valuemax="100" aria-valuemin="0" aria-valuenow="{$GLOBAL.roundshares.invalid|number_format}" role="progressbar"></div>
             </div>
             </th>
           </tr>
