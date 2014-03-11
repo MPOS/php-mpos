@@ -74,10 +74,10 @@ $(document).ready(function(){
   {/literal}{if $GLOBAL.config.price.enabled}{literal}
     $('#b-price').html((parseFloat(data.getdashboarddata.data.pool.price).toFixed(8)));
   {/literal}{/if}{literal}
-    $('#b-poolworkers').html(data.getdashboarddata.data.pool.workers);
-    $('#b-hashrate').html((parseFloat(data.getdashboarddata.data.personal.hashrate).toFixed(2)));
-    $('#b-poolhashrate').html((parseFloat(data.getdashboarddata.data.pool.hashrate).toFixed(2)));
-    $('#b-nethashrate').html((parseFloat(data.getdashboarddata.data.network.hashrate).toFixed(2)));
+    $('#b-poolworkers').html(number_format(data.getdashboarddata.data.pool.workers));
+    $('#b-hashrate').html((number_format(data.getdashboarddata.data.personal.hashrate, 2)));
+    $('#b-poolhashrate').html(number_format(data.getdashboarddata.data.pool.hashrate, 2));
+    $('#b-nethashrate').html(number_format(data.getdashboarddata.data.network.hashrate, 2));
     $('#b-sharerate').html((parseFloat(data.getdashboarddata.data.personal.sharerate).toFixed(2)));
     $('#b-yvalid').html(number_format(data.getdashboarddata.data.personal.shares.valid));
     $('#b-yivalid').html(number_format(data.getdashboarddata.data.personal.shares.invalid));
