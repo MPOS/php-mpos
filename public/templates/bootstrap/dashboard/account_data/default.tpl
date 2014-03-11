@@ -41,8 +41,6 @@
             </tr>
           </tbody>
         </table>
-        {* Load our worker information template for live-updates on worker status *}
-        {include file="dashboard/account_data/_workers.tpl"}
       </div>
     </div>
   </div>

@@ -5,6 +5,7 @@
   {include file="dashboard/overview/default.tpl"}
   {include file="dashboard/round_statistics/$PAYOUT_SYSTEM/default.tpl"}
   {include file="dashboard/account_data/default.tpl"}
+  {include file="dashboard/worker_information/default.tpl"}
 </div>
   {* Include our JS libraries, we allow a live updating JS and a static one *}
   {if !$DISABLED_DASHBOARD and !$DISABLED_DASHBOARD_API}
