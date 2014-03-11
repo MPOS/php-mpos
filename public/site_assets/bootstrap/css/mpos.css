@@ -362,25 +362,9 @@ span.bigfont {
   font-size: 100%;
 }
 
-th.sharesvalid {
-  color:#468847;
-  background-color:rgb(223, 240, 216);
-}
-
-th.sharesefficiency {
-  color:#3A87AD;
-  background-color:#D9EDF7;
-}
-
-th.shareswarning {
-  color:#B94A48;
-  background-color:#F2DEDE;
-}
-
 th.smallwidth {
   width: 250px;
 }
-
 
 .col-md-spark, .col-md-spark-2 {
   position:relative;
