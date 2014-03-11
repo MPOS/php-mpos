@@ -69,7 +69,7 @@
         </table>
       </div>
       <div class="panel-footer">
-        {if !$GLOBAL.website.api.disabled}These stats are also available in JSON format <a href="{$smarty.server.SCRIPT_NAME}?page=api&action=getpoolstatus&api_key={$GLOBAL.userdata.api_key|default:""}">HERE</a>{/if}
+        <h6>{if !$GLOBAL.website.api.disabled}These stats are also available in JSON format <a href="{$smarty.server.SCRIPT_NAME}?page=api&action=getpoolstatus&api_key={$GLOBAL.userdata.api_key|default:""}">HERE</a>{/if}</h6>
       </div>
     </div>
   </div>

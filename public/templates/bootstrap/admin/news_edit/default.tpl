@@ -24,7 +24,7 @@
                 <th>Active</th>
                 <td>
                   <input type="hidden" name="active" value="0" />
-                  <input type="checkbox" class="switch" name="active" value="1" id="active" {nocache}{if $NEWS.active}checked{/if}{/nocache}>
+                  <input type="checkbox" class="switch" data-size="mini" name="active" value="1" id="active" {nocache}{if $NEWS.active}checked{/if}{/nocache}>
                 </td>
               </div>
               <div class="form-group">

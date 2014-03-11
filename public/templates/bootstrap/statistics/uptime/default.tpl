@@ -58,7 +58,7 @@
         </table>
       </div>
       <div class="panel-footer">
-        Last update {$UPDATED|date_format:"%b %d, %Y %H:%M"}
+        <h6>Last update {$UPDATED|date_format:"%b %d, %Y %H:%M"}</h6>
       </div>
     </div>
   </div>

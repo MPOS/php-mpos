@@ -77,7 +77,7 @@
         </div>
       </div>
       <div class="panel-footer">
-        {if $GLOBAL.config.payout_system != 'pps'}Round Earnings are not credited until <font color="orange">{$GLOBAL.confirmations}</font> confirms.{/if}
+        <h6>{if $GLOBAL.config.payout_system != 'pps'}Round Earnings are not credited until <font color="orange">{$GLOBAL.confirmations}</font> confirms.{/if}</h6>
       </div>
     </div>
   </div>

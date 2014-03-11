@@ -10,7 +10,7 @@
       {include file="dashboard/round_statistics/$PAYOUT_SYSTEM/_content.tpl"}
       {include file="dashboard/round_statistics/$PAYOUT_SYSTEM/_footer.tpl"}
       <div class="panel-footer">
-        Refresh interval: {$GLOBAL.config.statistics_ajax_refresh_interval|default:"10"} seconds.
+        <h6>Refresh interval: {$GLOBAL.config.statistics_ajax_refresh_interval|default:"10"} seconds.</h6>
       </div>
     </div>
   </div>

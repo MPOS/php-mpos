@@ -2,9 +2,9 @@
         <thead>
           <tr>
             <th><h4><i class="fa fa-cloud fa-fw"></i> Round Shares</h4></th>
-            <th><h4><i class="fa fa-thumbs-up fa-hw"></i> Valid</h4></th>
-            <th><h4><i class="fa fa-thumbs-down fa-hw"></i> Invalid</h4></th>
-            <th><h4><i class="fa fa-dot-circle-o fa-hw"></i> Efficiency</h4></th>
+            <th><h4><i class="fa fa-thumbs-up fa-fw"></i> Valid</h4></th>
+            <th><h4><i class="fa fa-thumbs-down fa-fw"></i> Invalid</h4></th>
+            <th><h4><i class="fa fa-dot-circle-o fa-fw"></i> Efficiency</h4></th>
           </tr>
           <tr>
             <th><h4><i class="fa fa-user fa-fw"></i> My Shares</h4></td>

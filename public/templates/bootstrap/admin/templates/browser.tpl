@@ -42,7 +42,7 @@
         .templates-tree span.dynatree-activated a { font-weight: bold; }
       </style>
       <div class="panel-footer">
-        <ul><li>Bold templates are activated</li></ul>
+        <h6><ul><li>Bold templates are activated</li></ul></h6>
       </div>
     </div>
   </div>
