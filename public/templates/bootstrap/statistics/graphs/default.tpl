@@ -29,7 +29,9 @@ $(function () {
         hideHover: 'auto',
         lineColors: ['#0b62a4'],
         pointFillColors: ['#FFFFFF'],
-        resize: true
+        resize: true,
+        fillOpacity: 1.00,
+        postUnits: ' KH/s'
       });
     }
     
@@ -53,7 +55,9 @@ $(function () {
         hideHover: 'auto',
         lineColors: ['#24A665'],
         pointFillColors: ['#FFFFFF'],
-        resize: true
+        resize: true,
+        fillOpacity: 1.00,
+        postUnits: ' KH/s'
       });
     }
 
@@ -80,7 +84,9 @@ $(function () {
         labels: ['Your Hashrate', 'Pool Hashrate'],
         pointSize: 2,
         hideHover: 'auto',
-        resize: true
+        resize: true,
+        fillOpacity: 0.1,
+        postUnits: ' KH/s'
       });
     }
     
