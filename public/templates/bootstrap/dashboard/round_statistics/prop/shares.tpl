@@ -22,7 +22,7 @@
             <th><h5><i class="fa fa-frown-o fa-fw"></i> Invalid</h6></th>
             <th>
             <div class="progress progress-striped progress-fix">
-               <div id="b-yivalid" class="progress-bar progress-bar-danger black" style="width: 100%" aria-valuemax="100" aria-valuemin="0" aria-valuenow="{$GLOBAL.roundshares.invalid|number_format}" role="progressbar">{$GLOBAL.roundshares.invalid|number_format}</div>
+               <div id="b-yivalid" class="progress-bar progress-bar-danger black" style="width: 100%" aria-valuemax="100" aria-valuemin="0" aria-valuenow="{$GLOBAL.userdata.share.invalid|number_format}" role="progressbar">{$GLOBAL.userdata.shares.invalid|number_format}</div>
             </div>
             </th>
             <th>
