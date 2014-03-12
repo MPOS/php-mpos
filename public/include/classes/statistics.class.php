@@ -469,7 +469,7 @@ class Statistics extends Base {
           share_id,
           IF(difficulty = 0, POW(2, (" . $this->config['difficulty'] . " - 16)), difficulty) AS difficulty,
           username
-        FROM shares_archive
+        FROM " . $this->share->getArchiveTableName() . "
         WHERE time > DATE_SUB(now(), INTERVAL ? SECOND) AND our_result = 'Y'
       ) AS t1
       LEFT JOIN " . $this->user->getTableName() . " AS a
