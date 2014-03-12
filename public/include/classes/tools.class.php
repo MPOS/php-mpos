@@ -55,6 +55,8 @@ class Tools extends Base {
       return 'btce';
     } else if (preg_match('/cryptsy.com/', $url)) {
       return 'cryptsy';
+    } else if (preg_match('/cryptorush.in/', $url)) {
+      return 'cryptorush';
     }
     $this->setErrorMessage("API URL unknown");
     return false;
@@ -66,6 +68,7 @@ class Tools extends Base {
   public function getPrice() {
     $aData = $this->getApi($this->config['price']['url'], $this->config['price']['target']);
     $strCurrency = $this->config['currency'];
+    $strCurrencyBTC = "$strCurrency/BTC";
     // Check the API type for configured URL
     if (!$strApiType = $this->getApiType($this->config['price']['url']))
       return false;
@@ -83,6 +86,9 @@ class Tools extends Base {
       	  break;
       	case 'cryptsy':
       	  return @$aData['return']['markets'][$strCurrency]['lasttradeprice'];
+      	  break;
+      	case 'cryptorush':
+      	  return @$aData[$strCurrencyBTC]['last_trade'];
       	  break;
       }
     } else {
