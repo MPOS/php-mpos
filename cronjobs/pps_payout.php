@@ -113,9 +113,10 @@ foreach ($aAccountShares as $aData) {
   $aData['fee' ] = 0;
   $aData['donation'] = 0;
 
-  // Calculate block fees
-  if ($config['fees'] > 0 && $aData['no_fees'] == 0)
+  // Check if we either have a fee or a negative fee (bonus) and user has to pay fees
+  if (($config['fees'] > 0 || $config['fees'] < 0) && $aData['no_fees'] == 0)
     $aData['fee'] = round($config['fees'] / 100 * $aData['payout'], 12);
+
   // Calculate donation amount
   $aData['donation'] = round($user->getDonatePercent($user->getUserId($aData['username'])) / 100 * ( $aData['payout'] - $aData['fee']), 12);
 

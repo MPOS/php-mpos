@@ -89,8 +89,10 @@ foreach ($aAllBlocks as $iIndex => $aBlock) {
       $aData['percentage'] = round(( 100 / $iRoundShares ) * $aData['valid'], 8);
       $aData['payout'] = round(( $aData['percentage'] / 100 ) * $dReward, 8);
 
-      if ($config['fees'] > 0 && $aData['no_fees'] == 0)
+      // Check if we either have a fee or a negative fee (bonus) and user has to pay fees
+      if (($config['fees'] > 0 || $config['fees'] < 0) && $aData['no_fees'] == 0)
         $aData['fee'] = round($config['fees'] / 100 * $aData['payout'], 8);
+
       // Calculate donation amount, fees not included
       $aData['donation'] = round($user->getDonatePercent($user->getUserId($aData['username'])) / 100 * ( $aData['payout'] - $aData['fee']), 8);
 
