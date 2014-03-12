@@ -2,7 +2,7 @@
 $defflip = (!cfip()) ? exit(header('HTTP/1.1 401 Unauthorized')) : 1;
 
 // Check user authentication status
-if (!$user->isAuthenticated()) {
+if ($user->isAuthenticated()) {
   if (!$smarty->isCached('master.tpl', $smarty_cache_key)) {
     $iLimit = 30;
     $debug->append('No cached version available, fetching from backend', 3);
