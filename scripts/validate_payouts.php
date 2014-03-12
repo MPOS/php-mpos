@@ -29,9 +29,18 @@ chdir(dirname(__FILE__));
 // Include all settings and classes
 require_once('shared.inc.php');
 // Command line options
-$options = getopt("l:r:");
+$options = getopt("hl:r:t:");
 isset($options['l']) ? $limit = (int)$options['l'] : $limit = (int)1000;
 isset($options['r']) ? $rpclimit = (int)$options['r'] : $rpclimit = (int)10000;
+isset($options['t']) ? $customtxfee = (float)$options['t'] : $customtxfee = (float)0.1;
+if (isset($options['h'])) {
+  echo "Usage " . basename($argv[0]) . " [-l #] [-c #]:" . PHP_EOL;
+  echo "  -h       :  Show this help" . PHP_EOL;
+  echo "  -l #     :  Limit to # last database debit AP/MP transactions, default 1000" . PHP_EOL;
+  echo "  -c #     :  Limit to # last transactions, default 10000" . PHP_EOL;
+  echo "  -t #     :  Check against a custom TX Fee too, default 0.1" . PHP_EOL;
+  exit(0);
+}
 
 // Fetch and merge MP and AP payouts
 $aAllMPDebitTxs = $transaction->getTransactions(0, array('type' => 'Debit_MP'), $limit);
@@ -67,6 +76,7 @@ foreach ($aAllDebitTxs as $aDebitTx) {
       ((string)($aTransaction['amount'] + $aTransaction['fee'])    == (string)($aDebitTx['amount'] * -1) ||     // Check against transaction - Fee total
        (string)($aTransaction['amount'] + $config['txfee_manual']) == (string)($aDebitTx['amount'] * -1) ||     // Check against txfee_manual deducted
        (string)($aTransaction['amount'] + $config['txfee_auto'])   == (string)($aDebitTx['amount'] * -1) ||     // Check against txfee_auto deducted
+       (string)($aTransaction['amount'] + $customtxfee)            == (string)($aDebitTx['amount'] * -1) ||     // Check against transaction - default fee in MPOS
        (string)$aTransaction['amount']                             == (string)($aDebitTx['amount'] * -1))       // Check against actual value
       ) {
       unset($aListTransactions[$key]);
@@ -81,7 +91,12 @@ foreach ($aAllDebitTxs as $aDebitTx) {
 }
 
 // Small summary
+echo PHP_EOL . 'Please be aware that transaction prior to a transaction fee change may be marked as MISSING.' . PHP_EOL;
+echo 'See help on how to apply a custom transaction fee that can also be checked against.' . PHP_EOL;
 echo PHP_EOL . 'Summary: ' . PHP_EOL;
-echo '  Total Send TX Records:   ' . $total . PHP_EOL;
-echo '  Total Debit Records:     ' . count($aAllDebitTxs) . PHP_EOL;
-echo '  Total Records Found:     ' . $found . PHP_EOL;
+echo '  DB Debit Transaction Limit:   ' . $limit . PHP_EOL;
+echo '  RPC Transaction Limit:        ' . $rpclimit . PHP_EOL;
+echo '  Custom TX Fee Checked:        ' . $customtxfee . PHP_EOL;
+echo '  Total Send TX Records:        ' . $total . PHP_EOL;
+echo '  Total Debit Records:          ' . count($aAllDebitTxs) . PHP_EOL;
+echo '  Total Records Found:          ' . $found . PHP_EOL;
