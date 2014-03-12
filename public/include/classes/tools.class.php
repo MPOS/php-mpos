@@ -68,7 +68,6 @@ class Tools extends Base {
   public function getPrice() {
     $aData = $this->getApi($this->config['price']['url'], $this->config['price']['target']);
     $strCurrency = $this->config['currency'];
-    $strCurrencyBTC = "$strCurrency/BTC";
     // Check the API type for configured URL
     if (!$strApiType = $this->getApiType($this->config['price']['url']))
       return false;
@@ -88,7 +87,7 @@ class Tools extends Base {
       	  return @$aData['return']['markets'][$strCurrency]['lasttradeprice'];
       	  break;
       	case 'cryptorush':
-      	  return @$aData[$strCurrencyBTC]['last_trade'];
+      	  return @$aData["$strCurrency/BTC"]['last_trade'];
       	  break;
       }
     } else {
