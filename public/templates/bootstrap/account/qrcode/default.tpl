@@ -20,7 +20,7 @@
       <div class="panel-heading">
         <i class="fa fa-qrcode fa-fw"></i> API String
       </div>
-      <div class="panel-body">
+      <div class="panel-body text-center">
         <p>This code will allow you to import the full API string into your mobile application.</p>
         <div id="qrcodeholder"></div>
       </div>
