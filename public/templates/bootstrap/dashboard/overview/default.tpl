@@ -5,7 +5,7 @@
           <i class="fa fa-dot-circle-o fa-fw"></i> Pool Information
         </h4>
       </div>
-      <div class="panel-body text-center">
+      <div class="panel-footer">
        <div class="row show-grid">
           {* Depending on the price option we need to load a different template so it aligns properly *}
           {if $GLOBAL.config.price.enabled}
