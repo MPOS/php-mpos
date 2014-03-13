@@ -85,10 +85,18 @@ $(document).ready(function(){
     $('#b-sharerate').html((parseFloat(data.getdashboarddata.data.personal.sharerate).toFixed(2)));
     $('#b-yvalid').html(number_format(data.getdashboarddata.data.personal.shares.valid));
     $('#b-yivalid').html(number_format(data.getdashboarddata.data.personal.shares.invalid));
-    $('#b-yefficiency').html(number_format(100 - data.getdashboarddata.data.personal.shares.invalid_percent, 2) + "%");
+    if ( data.getdashboarddata.data.personal.shares.valid > 0 ) {
+      $('#b-yefficiency').html(number_format(100 - data.getdashboarddata.data.personal.shares.invalid_percent, 2) + "%");
+    } else {
+      $('#b-yefficiency').html(number_format(0, 2) + "%");
+    }
     $('#b-pvalid').html(number_format(data.getdashboarddata.data.pool.shares.valid));
     $('#b-pivalid').html(number_format(data.getdashboarddata.data.pool.shares.invalid));
-    $('#b-pefficiency').html(number_format(100 - data.getdashboarddata.data.pool.shares.invalid_percent, 2) + "%");
+    if ( data.getdashboarddata.data.pool.shares.valid > 0 ) {
+      $('#b-pefficiency').html(number_format(100 - data.getdashboarddata.data.pool.shares.invalid_percent, 2) + "%");
+    } else {
+      $('#b-pefficiency').html(number_format(0, 2) + "%");
+    }
     $('#b-diff').html(number_format(data.getdashboarddata.data.network.difficulty, 8));
     $('#b-nextdiff').html(number_format(data.getdashboarddata.data.network.nextdifficulty, 8));
     $('#b-nextdiffc').html(" Change in " + data.getdashboarddata.data.network.blocksuntildiffchange + " Blocks");
