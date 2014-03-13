@@ -201,14 +201,20 @@ foreach ($aAllBlocks as $iIndex => $aBlock) {
       // Defaults
       $aData['fee' ] = 0;
       $aData['donation'] = 0;
+      $aData['pool_bonus'] = 0;
 
       // Calculate pool fees
       if ($config['fees'] > 0 && $aData['no_fees'] == 0)
         $aData['fee'] = round($config['fees'] / 100 * $aData['payout'], 8);
 
       // Calculate pool bonus if it applies, will be paid from liquid assets!
-      if ($config['pool_bonus'] > 0)
-        $aData['pool_bonus'] = round(( $config['pool_bonus'] / 100 ) * $dReward, 8);
+      if ($config['pool_bonus'] > 0) {
+        if ($config['pool_bonus_type'] == 'block') {
+          $aData['pool_bonus'] = round(( $config['pool_bonus'] / 100 ) * $dReward, 8);
+        } else {
+          $aData['pool_bonus'] = round(( $config['pool_bonus'] / 100 ) * $aData['payout'], 8);
+        }
+      }
 
       // Calculate donation amount, fees not included
       $aData['donation'] = round($user->getDonatePercent($user->getUserId($aData['username'])) / 100 * ( $aData['payout'] - $aData['fee']), 8);

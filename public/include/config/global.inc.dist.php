@@ -135,6 +135,7 @@ $config['txfee_manual'] = 0.1;
  */
 $config['block_bonus'] = 0;
 $config['pool_bonus'] = 0;
+$config['pool_bonus_type'] = 'payout';
 
 /**
  * Payout System
