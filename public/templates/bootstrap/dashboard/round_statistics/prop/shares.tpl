@@ -35,12 +35,12 @@
             <th><h5><i class="fa fa-bolt fa-fw"></i> Efficiency</h5></th>
             <th>
             <div class="progress progress-striped active progress-fix">
-              <div id="b-yefficiency" class="progress-bar progress-bar-info black" style="width: {if $GLOBAL.userdata.shares.valid > 0}{(100 - ($GLOBAL.userdata.shares.invalid / ($GLOBAL.userdata.shares.valid + $GLOBAL.userdata.shares.invalid) * 100))|number_format:"2"}%{else}0.00%{/if}" aria-valuemax="100" aria-valuemin="0" aria-valuenow="20" role="progressbar">{if $GLOBAL.userdata.shares.valid > 0}{(100 - ($GLOBAL.userdata.shares.invalid / ($GLOBAL.userdata.shares.valid + $GLOBAL.userdata.shares.invalid) * 100))|number_format:"2"}%{else}0.00%{/if}</div>
+              <div id="b-yefficiency" class="progress-bar {if $GLOBAL.userdata.shares.valid > 0}progress-bar-info{else}progress-bar-warning{/if} black" style="width:{if $GLOBAL.userdata.shares.valid > 0}{(100 - ($GLOBAL.userdata.shares.invalid / ($GLOBAL.userdata.shares.valid + $GLOBAL.userdata.shares.invalid) * 100))|number_format:"2"}%{else}100.00%{/if}" aria-valuemax="100" aria-valuemin="0" aria-valuenow="20" role="progressbar">{if $GLOBAL.userdata.shares.valid > 0}{(100 - ($GLOBAL.userdata.shares.invalid / ($GLOBAL.userdata.shares.valid + $GLOBAL.userdata.shares.invalid) * 100))|number_format:"2"}%{else}0.00%{/if}</div>
             </div>
             </th>
             <th>
             <div class="progress progress-striped active progress-fix">
-               <div id="b-pefficiency" class="progress-bar progress-bar-info black" style="width:{if $GLOBAL.roundshares.valid > 0}{(100 - ($GLOBAL.roundshares.invalid / ($GLOBAL.roundshares.valid + $GLOBAL.roundshares.invalid) * 100))|number_format:"2"}%{else}0.00%{/if}" aria-valuemax="100" aria-valuemin="0" aria-valuenow="20" role="progressbar">{if $GLOBAL.roundshares.valid > 0}{(100 - ($GLOBAL.roundshares.invalid / ($GLOBAL.roundshares.valid + $GLOBAL.roundshares.invalid) * 100))|number_format:"2"}%{else}0.00%{/if}</div>
+               <div id="b-pefficiency" class="progress-bar {if $GLOBAL.roundshares.valid > 0}progress-bar-info{else}progress-bar-warning{/if} black" style="width:{if $GLOBAL.roundshares.valid > 0}{(100 - ($GLOBAL.roundshares.invalid / ($GLOBAL.roundshares.valid + $GLOBAL.roundshares.invalid) * 100))|number_format:"2"}%{else}100.00%{/if}" aria-valuemax="100" aria-valuemin="0" aria-valuenow="20" role="progressbar">{if $GLOBAL.roundshares.valid > 0}{(100 - ($GLOBAL.roundshares.invalid / ($GLOBAL.roundshares.valid + $GLOBAL.roundshares.invalid) * 100))|number_format:"2"}%{else}0.00%{/if}</div>
             </div>
           </tr>
         </thead>
