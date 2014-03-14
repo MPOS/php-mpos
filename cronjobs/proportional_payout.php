@@ -40,7 +40,7 @@ if (empty($aAllBlocks)) {
 
 $count = 0;
 // Table header for account shares
-$strLogMask = "| %10.10s | %-5.5s | %15.15s | %15.15s | %12.12s | %15.15s | %15.15s | %15.15s | %15.15s | %15.15s |";
+$strLogMask = "| %10.10s | %-5.5s | %15.15s | %15.15s | %12.12s | %12.12s | %15.15s | %15.15s | %15.15s | %15.15s |";
 $log->logInfo(sprintf($strLogMask, 'Block', 'ID', 'Username', 'Valid', 'Invalid', 'Percentage', 'Payout', 'Donation', 'Fee', 'Bonus'));
 foreach ($aAllBlocks as $iIndex => $aBlock) {
   // If we have unaccounted blocks without share_ids, they might not have been inserted yet
