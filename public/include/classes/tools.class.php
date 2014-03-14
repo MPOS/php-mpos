@@ -87,7 +87,7 @@ class Tools extends Base {
       	  return @$aData['return']['markets'][$strCurrency]['lasttradeprice'];
       	  break;
       	case 'cryptorush':
-      	  return @$aData["$strCurrency/BTC"]['last_trade'];
+      	  return @$aData["$strCurrency/" . $this->config['price']['target']]['last_trade'];
       	  break;
       }
     } else {
