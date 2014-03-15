@@ -55,6 +55,8 @@ class Tools extends Base {
       return 'btce';
     } else if (preg_match('/cryptsy.com/', $url)) {
       return 'cryptsy';
+    } else if (preg_match('/cryptorush.in/', $url)) {
+      return 'cryptorush';
     }
     $this->setErrorMessage("API URL unknown");
     return false;
@@ -83,6 +85,9 @@ class Tools extends Base {
       	  break;
       	case 'cryptsy':
       	  return @$aData['return']['markets'][$strCurrency]['lasttradeprice'];
+      	  break;
+      	case 'cryptorush':
+      	  return @$aData["$strCurrency/" . $this->config['price']['target']]['last_trade'];
       	  break;
       }
     } else {

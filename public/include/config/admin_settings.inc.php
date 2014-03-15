@@ -425,3 +425,10 @@ $aSettings['notifications'][] = array(
   'name' => 'notifications_disable_block', 'value' => $setting->getValue('notifications_disable_block'),
   'tooltip' => 'Enable/Disable block notifications globally. Will remove the user option too.'
 );
+$aSettings['notifications'][] = array(
+  'display' => 'Disable IDLE Worker Notifications', 'type' => 'select',
+  'options' => array( 0 => 'No', 1 => 'Yes'),
+  'default' => 0,
+  'name' => 'notifications_disable_idle_worker', 'value' => $setting->getValue('notifications_disable_idle_worker'),
+  'tooltip' => 'Enable/Disable IDLE worker notifications globally. Will remove the user option too.'
+);

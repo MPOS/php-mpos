@@ -15,6 +15,7 @@ empty($_REQUEST['start']) ? $start = 0 : $start = $_REQUEST['start'];
 
 $aWorkers = $worker->getAllWorkers($iLimit, $interval, $start);
 
+$smarty->assign('DISABLE_IDLEWORKERNOTIFICATIONS', $setting->getValue('notifications_disable_idle_worker'));
 $smarty->assign('LIMIT', $iLimit);
 $smarty->assign('WORKERS', $aWorkers);
 $smarty->assign('CONTENT', 'default.tpl');

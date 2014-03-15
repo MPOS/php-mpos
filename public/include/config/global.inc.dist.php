@@ -128,12 +128,14 @@ $config['txfee_auto'] = 0.1;
 $config['txfee_manual'] = 0.1;
 
 /**
- * Block Bonus
- *  Bonus in coins of block bonus
+ * Block & Pool Bonus
+ *  Bonus coins for blockfinder or a pool bonus for everyone
  *   https://github.com/MPOS/php-mpos/wiki/Config-Setup#wiki-block-bonus
+ *   https://github.com/MPOS/php-mpos/wiki/Config-Setup#wiki-pool-bonus
  */
 $config['block_bonus'] = 0;
-
+$config['pool_bonus'] = 0;
+$config['pool_bonus_type'] = 'payout';
 
 /**
  * Payout System
