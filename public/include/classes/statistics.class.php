@@ -46,42 +46,42 @@ class Statistics extends Base {
         IFNULL(SUM(IF(confirmations = -1, 1, 0)), 0) AS TotalOrphan,
         IFNULL(SUM(IF(confirmations > 0, difficulty, 0)), 0) AS TotalDifficulty,
         IFNULL(ROUND(SUM(IF(confirmations > -1, shares, 0))), 0) AS TotalShares,
-        IFNULL(ROUND(SUM(IF(confirmations > -1, POW(2, ( 32 - " . $this->config['target_bits'] . " )) * difficulty / POW(2, (" . $this->config['difficulty'] . " -16)), 0))), 0) AS TotalEstimatedShares,
+        IFNULL(ROUND(SUM(IF(confirmations > -1, POW(2, ( 32 - " . $this->coin->target_bits . " )) * difficulty / POW(2, (" . $this->config['difficulty'] . " -16)), 0))), 0) AS TotalEstimatedShares,
         IFNULL(SUM(IF(confirmations > -1, amount, 0)), 0) AS TotalAmount,
         IFNULL(SUM(IF(FROM_UNIXTIME(time) >= DATE_SUB(now(), INTERVAL 3600 SECOND), 1, 0)), 0) AS 1HourTotal,
         IFNULL(SUM(IF(confirmations > 0 AND FROM_UNIXTIME(time) >= DATE_SUB(now(), INTERVAL 3600 SECOND), 1, 0)), 0) AS 1HourValid,
         IFNULL(SUM(IF(confirmations = -1 AND FROM_UNIXTIME(time) >= DATE_SUB(now(), INTERVAL 3600 SECOND), 1, 0)), 0) AS 1HourOrphan,
         IFNULL(SUM(IF(confirmations > 0 AND FROM_UNIXTIME(time) >= DATE_SUB(now(), INTERVAL 3600 SECOND), difficulty, 0)), 0) AS 1HourDifficulty,
         IFNULL(ROUND(SUM(IF(confirmations > -1 AND FROM_UNIXTIME(time) >= DATE_SUB(now(), INTERVAL 3600 SECOND), shares, 0))), 0) AS 1HourShares,
-        IFNULL(ROUND(SUM(IF(confirmations > -1 AND FROM_UNIXTIME(time) >= DATE_SUB(now(), INTERVAL 3600 SECOND), POW(2, ( 32 - " . $this->config['target_bits'] . " )) * difficulty / POW(2, (" . $this->config['difficulty'] . " -16)), 0))), 0) AS 1HourEstimatedShares,
+        IFNULL(ROUND(SUM(IF(confirmations > -1 AND FROM_UNIXTIME(time) >= DATE_SUB(now(), INTERVAL 3600 SECOND), POW(2, ( 32 - " . $this->coin->target_bits . " )) * difficulty / POW(2, (" . $this->config['difficulty'] . " -16)), 0))), 0) AS 1HourEstimatedShares,
         IFNULL(SUM(IF(confirmations > -1 AND FROM_UNIXTIME(time) >= DATE_SUB(now(), INTERVAL 3600 SECOND), amount, 0)), 0) AS 1HourAmount,
         IFNULL(SUM(IF(FROM_UNIXTIME(time)    >= DATE_SUB(now(), INTERVAL 86400 SECOND), 1, 0)), 0) AS 24HourTotal,
         IFNULL(SUM(IF(confirmations > 0 AND FROM_UNIXTIME(time) >= DATE_SUB(now(), INTERVAL 86400 SECOND), 1, 0)), 0) AS 24HourValid,
         IFNULL(SUM(IF(confirmations = -1 AND FROM_UNIXTIME(time) >= DATE_SUB(now(), INTERVAL 86400 SECOND), 1, 0)), 0) AS 24HourOrphan,
         IFNULL(SUM(IF(confirmations > 0 AND FROM_UNIXTIME(time) >= DATE_SUB(now(), INTERVAL 86400 SECOND), difficulty, 0)), 0) AS 24HourDifficulty,
         IFNULL(ROUND(SUM(IF(confirmations > -1 AND FROM_UNIXTIME(time) >= DATE_SUB(now(), INTERVAL 86400 SECOND), shares, 0))), 0) AS 24HourShares,
-        IFNULL(ROUND(SUM(IF(confirmations > -1 AND FROM_UNIXTIME(time) >= DATE_SUB(now(), INTERVAL 86400 SECOND), POW(2, ( 32 - " . $this->config['target_bits'] . " )) * difficulty / POW(2, (" . $this->config['difficulty'] . " -16)), 0))), 0) AS 24HourEstimatedShares,
+        IFNULL(ROUND(SUM(IF(confirmations > -1 AND FROM_UNIXTIME(time) >= DATE_SUB(now(), INTERVAL 86400 SECOND), POW(2, ( 32 - " . $this->coin->target_bits . " )) * difficulty / POW(2, (" . $this->config['difficulty'] . " -16)), 0))), 0) AS 24HourEstimatedShares,
         IFNULL(SUM(IF(confirmations > -1 AND FROM_UNIXTIME(time) >= DATE_SUB(now(), INTERVAL 86400 SECOND), amount, 0)), 0) AS 24HourAmount,
         IFNULL(SUM(IF(FROM_UNIXTIME(time) >= DATE_SUB(now(), INTERVAL 604800 SECOND), 1, 0)), 0) AS 7DaysTotal,
         IFNULL(SUM(IF(confirmations > 0 AND FROM_UNIXTIME(time) >= DATE_SUB(now(), INTERVAL 604800 SECOND), 1, 0)), 0) AS 7DaysValid,
         IFNULL(SUM(IF(confirmations = -1 AND FROM_UNIXTIME(time) >= DATE_SUB(now(), INTERVAL 604800 SECOND), 1, 0)), 0) AS 7DaysOrphan,
         IFNULL(SUM(IF(confirmations > 0 AND FROM_UNIXTIME(time) >= DATE_SUB(now(), INTERVAL 604800 SECOND), difficulty, 0)), 0) AS 7DaysDifficulty,
         IFNULL(ROUND(SUM(IF(confirmations > -1 AND FROM_UNIXTIME(time) >= DATE_SUB(now(), INTERVAL 604800 SECOND), shares, 0))), 0) AS 7DaysShares,
-        IFNULL(ROUND(SUM(IF(confirmations > -1 AND FROM_UNIXTIME(time) >= DATE_SUB(now(), INTERVAL 604800 SECOND), POW(2, ( 32 - " . $this->config['target_bits'] . " )) * difficulty / POW(2, (" . $this->config['difficulty'] . " -16)), 0))), 0) AS 7DaysEstimatedShares,
+        IFNULL(ROUND(SUM(IF(confirmations > -1 AND FROM_UNIXTIME(time) >= DATE_SUB(now(), INTERVAL 604800 SECOND), POW(2, ( 32 - " . $this->coin->target_bits . " )) * difficulty / POW(2, (" . $this->config['difficulty'] . " -16)), 0))), 0) AS 7DaysEstimatedShares,
         IFNULL(SUM(IF(confirmations > -1 AND FROM_UNIXTIME(time) >= DATE_SUB(now(), INTERVAL 604800 SECOND), amount, 0)), 0) AS 7DaysAmount,
         IFNULL(SUM(IF(FROM_UNIXTIME(time) >= DATE_SUB(now(), INTERVAL 2419200 SECOND), 1, 0)), 0) AS 4WeeksTotal,
         IFNULL(SUM(IF(confirmations > 0 AND FROM_UNIXTIME(time) >= DATE_SUB(now(), INTERVAL 2419200 SECOND), 1, 0)), 0) AS 4WeeksValid,
         IFNULL(SUM(IF(confirmations = -1 AND FROM_UNIXTIME(time) >= DATE_SUB(now(), INTERVAL 2419200 SECOND), 1, 0)), 0) AS 4WeeksOrphan,
         IFNULL(SUM(IF(confirmations > 0 AND FROM_UNIXTIME(time) >= DATE_SUB(now(), INTERVAL 2419200 SECOND), difficulty, 0)), 0) AS 4WeeksDifficulty,
         IFNULL(ROUND(SUM(IF(confirmations > -1 AND FROM_UNIXTIME(time) >= DATE_SUB(now(), INTERVAL 2419200 SECOND), shares, 0))), 0) AS 4WeeksShares,
-        IFNULL(ROUND(SUM(IF(confirmations > -1 AND FROM_UNIXTIME(time) >= DATE_SUB(now(), INTERVAL 2419200 SECOND), POW(2, ( 32 - " . $this->config['target_bits'] . " )) * difficulty / POW(2, (" . $this->config['difficulty'] . " -16)), 0))), 0) AS 4WeeksEstimatedShares,
+        IFNULL(ROUND(SUM(IF(confirmations > -1 AND FROM_UNIXTIME(time) >= DATE_SUB(now(), INTERVAL 2419200 SECOND), POW(2, ( 32 - " . $this->coin->target_bits . " )) * difficulty / POW(2, (" . $this->config['difficulty'] . " -16)), 0))), 0) AS 4WeeksEstimatedShares,
         IFNULL(SUM(IF(confirmations > -1 AND FROM_UNIXTIME(time) >= DATE_SUB(now(), INTERVAL 2419200 SECOND), amount, 0)), 0) AS 4WeeksAmount,
         IFNULL(SUM(IF(FROM_UNIXTIME(time) >= DATE_SUB(now(), INTERVAL 29030400 SECOND), 1, 0)), 0) AS 12MonthTotal,
         IFNULL(SUM(IF(confirmations > 0 AND FROM_UNIXTIME(time) >= DATE_SUB(now(), INTERVAL 29030400 SECOND), 1, 0)), 0) AS 12MonthValid,
         IFNULL(SUM(IF(confirmations = -1 AND FROM_UNIXTIME(time) >= DATE_SUB(now(), INTERVAL 29030400 SECOND), 1, 0)), 0) AS 12MonthOrphan,
         IFNULL(SUM(IF(confirmations > 0 AND FROM_UNIXTIME(time) >= DATE_SUB(now(), INTERVAL 29030400 SECOND), difficulty, 0)), 0) AS 12MonthDifficulty,
         IFNULL(ROUND(SUM(IF(confirmations > -1 AND FROM_UNIXTIME(time) >= DATE_SUB(now(), INTERVAL 29030400 SECOND), shares, 0))), 0) AS 12MonthShares,
-        IFNULL(ROUND(SUM(IF(confirmations > -1 AND FROM_UNIXTIME(time) >= DATE_SUB(now(), INTERVAL 29030400 SECOND), POW(2, ( 32 - " . $this->config['target_bits'] . " )) * difficulty / POW(2, (" . $this->config['difficulty'] . " -16)), 0))), 0) AS 12MonthEstimatedShares,
+        IFNULL(ROUND(SUM(IF(confirmations > -1 AND FROM_UNIXTIME(time) >= DATE_SUB(now(), INTERVAL 29030400 SECOND), POW(2, ( 32 - " . $this->coin->target_bits . " )) * difficulty / POW(2, (" . $this->config['difficulty'] . " -16)), 0))), 0) AS 12MonthEstimatedShares,
         IFNULL(SUM(IF(confirmations > -1 AND FROM_UNIXTIME(time) >= DATE_SUB(now(), INTERVAL 29030400 SECOND), amount, 0)), 0) AS 12MonthAmount
       FROM " . $this->block->getTableName());
     if ($this->checkStmt($stmt) && $stmt->execute() && $result = $stmt->get_result())
@@ -102,7 +102,7 @@ class Statistics extends Base {
         b.*,
         a.username AS finder,
         a.is_anonymous AS is_anonymous,
-        ROUND((difficulty * POW(2, 32 - " . $this->config['target_bits'] . ")) / POW(2, (" . $this->config['difficulty'] . " -16)), 0) AS estshares
+        ROUND((difficulty * POW(2, 32 - " . $this->coin->target_bits . ")) / POW(2, (" . $this->config['difficulty'] . " -16)), 0) AS estshares
       FROM " . $this->block->getTableName() . " AS b
       LEFT JOIN " . $this->user->getTableName() . " AS a
       ON b.account_id = a.id
@@ -125,7 +125,7 @@ class Statistics extends Base {
         b.*,
         a.username AS finder,
         a.is_anonymous AS is_anonymous,
-        ROUND((difficulty * POW(2, 32 - " . $this->config['target_bits'] . ")) / POW(2, (" . $this->config['difficulty'] . " -16)), 0) AS estshares
+        ROUND((difficulty * POW(2, 32 - " . $this->coin->target_bits . ")) / POW(2, (" . $this->config['difficulty'] . " -16)), 0) AS estshares
       FROM " . $this->block->getTableName() . " AS b
       LEFT JOIN " . $this->user->getTableName() . " AS a 
       ON b.account_id = a.id
@@ -890,7 +890,7 @@ class Statistics extends Base {
         $pps_reward = $this->config['pps']['reward']['default'];
       }
     }
-    return round($pps_reward / (pow(2, $this->config['target_bits']) * $dDifficulty), 12);
+    return round($pps_reward / (pow(2, $this->coin->target_bits) * $dDifficulty), 12);
   }
 
   /**

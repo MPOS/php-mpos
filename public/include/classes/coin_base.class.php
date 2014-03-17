@@ -9,12 +9,15 @@ $defflip = (!cfip()) ? exit(header('HTTP/1.1 401 Unauthorized')) : 1;
  * must be extended for customized coins.
  **/
 class CoinBase extends Base {
+  // Our coins target bits
+  protected $target_bits = NULL;
+
   /**
    * Calculate our hashrate based on shares inserted to DB
    * We use diff1 share values, not a baseline one
    **/
   public function calcHashrate($shares, $interval) {
-    return $shares * pow(2, $this->config['target_bits']) / $interval / 1000;
+    return $shares * pow(2, $this->target_bits) / $interval / 1000;
   }
 
   /**
@@ -22,7 +25,7 @@ class CoinBase extends Base {
    * according to our configuration difficulty
    **/
   public function calcEstaimtedShares($dDifficulty) {
-    return (int)round((pow(2, (32 - $this->config['target_bits'])) * $dDifficulty) / pow(2, ($this->config['difficulty'] - 16)));
+    return (int)round((pow(2, (32 - $this->target_bits)) * $dDifficulty) / pow(2, ($this->config['difficulty'] - 16)));
   }
 
   /**

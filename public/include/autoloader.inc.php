@@ -2,13 +2,6 @@
 (SECURITY == "*)WT#&YHfd" && SECHASH_CHECK) ? die("public/index.php -> Set a new SECURITY value to continue") : 0;
 $defflip = (!cfip()) ? exit(header('HTTP/1.1 401 Unauthorized')) : 1;
 
-// SHA/Scrypt check
-if (empty($config['algorithm']) || $config['algorithm'] == 'scrypt') {
-  $config['target_bits'] = 16;
-} else {
-  $config['target_bits'] = 32;
-}
-
 // Default classes
 require_once(INCLUDE_DIR . '/lib/KLogger.php');
 require_once(CLASS_DIR . '/logger.class.php');
