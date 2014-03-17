@@ -63,8 +63,10 @@ if ($config['pps']['reward']['type'] == 'blockavg' && $block->getBlockCount() > 
 }
 
 // Per-share value to be paid out to users
-$pps_value = round($pps_reward / (pow(2, $coin->target_bits) * $dDifficulty), 12);
+$pps_value = round($pps_reward / (pow(2, $coin->getTargetBits()) * $dDifficulty), 12);
 
+echo $pps_value;
+exit;
 // Find our last share accounted and last inserted share for PPS calculations
 if (!$iPreviousShareId = $setting->getValue('pps_last_share_id')) {
   $log->logError("Failed to fetch Previous Share ID. This is okay on your first run or when without any shares. ERROR: " . $setting->getCronError());

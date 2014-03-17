@@ -13,6 +13,13 @@ class CoinBase extends Base {
   protected $target_bits = NULL;
 
   /**
+   * Read our target bits
+   **/
+  public function getTargetBits() {
+    return $this->target_bits;
+  }
+
+  /**
    * Calculate our hashrate based on shares inserted to DB
    * We use diff1 share values, not a baseline one
    **/
