@@ -15,12 +15,12 @@ require_once(INCLUDE_DIR . '/config/error_codes.inc.php');
 
 // We need to load these first
 require_once(CLASS_DIR . '/base.class.php');
-require_once(CLASS_DIR . '/coin_base.class.php');
+require_once(CLASS_DIR . '/coins/coin_base.class.php');
 require_once(CLASS_DIR . '/setting.class.php');
 
 // Now decide on which coin class to load and instantiate
-if (file_exists(CLASS_DIR . '/coin_' . $config['algorithm'] . '.class.php')) {
-  require_once(CLASS_DIR . '/coin_' . $config['algorithm'] . '.class.php');
+if (file_exists(CLASS_DIR . '/coins/coin_' . $config['algorithm'] . '.class.php')) {
+  require_once(CLASS_DIR . '/coins/coin_' . $config['algorithm'] . '.class.php');
   $coin = new Coin();
   $coin->setConfig($config);
 } else {
@@ -48,9 +48,6 @@ define('THEME', $theme);
 require_once(CLASS_DIR . '/template.class.php');
 // Load smarty now that we have our theme defined
 require_once(INCLUDE_DIR . '/smarty.inc.php');
-
-// Load our base coin class
-// require_once(CLASS_DIR . '/coin_base.class.php');
 
 // Load everything else in proper order
 require_once(CLASS_DIR . '/mail.class.php');
