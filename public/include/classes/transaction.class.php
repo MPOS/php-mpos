@@ -70,8 +70,8 @@ class Transaction extends Base {
     $sql = "
       SELECT
         SUM(t.amount) AS total, t.type AS type
-      FROM transactions AS t
-      LEFT OUTER JOIN blocks AS b
+      FROM $this->table AS t
+      LEFT OUTER JOIN " . $this->block->getTableName() . " AS b
       ON b.id = t.block_id
       WHERE ( b.confirmations > 0 OR b.id IS NULL )";
     if (!empty($account_id)) {
@@ -211,7 +211,7 @@ class Transaction extends Base {
       FROM $this->table AS t
       LEFT JOIN " . $this->user->getTableName() . " AS a
       ON t.account_id = a.id
-      LEFT JOIN blocks AS b
+      LEFT JOIN " . $this->block->getTableName() . " AS b
       ON t.block_id = b.id
       WHERE
       (
@@ -306,9 +306,9 @@ class Transaction extends Base {
           ), 0
         ) AS confirmed
       FROM $this->table AS t
-      LEFT JOIN blocks AS b
+      LEFT JOIN " . $this->block->getTableName() . " AS b
       ON t.block_id = b.id
-      LEFT JOIN accounts AS a
+      LEFT JOIN " . $this->user->getTableName() . " AS a
       ON t.account_id = a.id
       WHERE t.archived = 0 AND a.ap_threshold > 0 AND a.coin_address IS NOT NULL AND a.coin_address != ''
       GROUP BY t.account_id
