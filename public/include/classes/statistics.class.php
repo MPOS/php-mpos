@@ -467,7 +467,7 @@ class Statistics extends Base {
           id,
           IF(difficulty = 0, POW(2, (" . $this->config['difficulty'] . " - 16)), difficulty) AS difficulty,
           username
-        FROM shares
+        FROM " . $this->share->getTableName() . "
         WHERE time > DATE_SUB(now(), INTERVAL ? SECOND) AND our_result = 'Y'
         UNION
         SELECT
@@ -539,7 +539,7 @@ class Statistics extends Base {
         SELECT
           id, our_result, IF(difficulty = 0, POW(2, (" . $this->config['difficulty'] . " - 16)), difficulty) AS difficulty
         FROM
-          shares
+          " . $this->share->getTableName() . "
         WHERE username LIKE ?
           AND time > DATE_SUB(now(), INTERVAL ? SECOND)
           AND our_result = 'Y'
@@ -547,7 +547,7 @@ class Statistics extends Base {
         SELECT
           share_id, our_result, IF(difficulty = 0, POW(2, (" . $this->config['difficulty'] . " - 16)), difficulty) AS difficulty
         FROM
-          shares_archive
+          " . $this->share->getArchiveTableName() . "
         WHERE username LIKE ?
           AND time > DATE_SUB(now(), INTERVAL ? SECOND)
           AND our_result = 'Y'
