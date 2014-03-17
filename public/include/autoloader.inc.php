@@ -20,9 +20,19 @@ require_once(INCLUDE_DIR . '/database.inc.php');
 require_once(INCLUDE_DIR . '/config/memcache_keys.inc.php');
 require_once(INCLUDE_DIR . '/config/error_codes.inc.php');
 
-// We need to load these two first
+// We need to load these first
 require_once(CLASS_DIR . '/base.class.php');
+require_once(CLASS_DIR . '/coin_base.class.php');
 require_once(CLASS_DIR . '/setting.class.php');
+
+// Now decide on which coin class to load and instantiate
+if (file_exists(CLASS_DIR . '/coin_' . $config['algorithm'] . '.class.php')) {
+  require_once(CLASS_DIR . '/coin_' . $config['algorithm'] . '.class.php');
+  $coin = new Coin();
+  $coin->setConfig($config);
+} else {
+  die('Unable to load your coins class definition for ' . $config['algorithm']);
+}
 
 // We need this one in here to properly set our theme
 require_once(INCLUDE_DIR . '/lib/Mobile_Detect.php');
@@ -45,6 +55,9 @@ define('THEME', $theme);
 require_once(CLASS_DIR . '/template.class.php');
 // Load smarty now that we have our theme defined
 require_once(INCLUDE_DIR . '/smarty.inc.php');
+
+// Load our base coin class
+// require_once(CLASS_DIR . '/coin_base.class.php');
 
 // Load everything else in proper order
 require_once(CLASS_DIR . '/mail.class.php');
