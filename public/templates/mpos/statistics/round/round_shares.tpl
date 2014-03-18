@@ -19,7 +19,7 @@
         <td>{if $data.is_anonymous|default:"0" == 1 && $GLOBAL.userdata.is_admin|default:"0" == 0}anonymous{else}{$data.username|default:"unknown"|escape}{/if}</td>
         <td align="right">{$data.valid|number_format}</td>
         <td align="right">{$data.invalid|number_format}</td>
-      	<td align="right" style="padding-right: 25px;">{if $data.invalid > 0 }{(($data.invalid / ($data.valid + $data.invalid) * 100)|number_format:"2"|default:"0"}{else}0.00{/if}</td>
+      	<td align="right" style="padding-right: 25px;">{if $data.invalid > 0 }{($data.invalid / $data.valid * 100)|number_format:"2"|default:"0"}{else}0.00{/if}</td>
       </tr>
 {/foreach}
     </tbody>
