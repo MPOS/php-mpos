@@ -55,7 +55,7 @@
       <li class="icon-pencil"><a href="{$smarty.server.SCRIPT_NAME}?page=register">Sign Up</a></li>
       {/if}
       {acl_check icon='icon-mail' page='contactform' action='' name='Contact' acl=$GLOBAL.acl.contactform}
-      <li class="icon-doc"><a href="{$smarty.server.SCRIPT_NAME}?page=tac">Terms and Conditions</a></li>
+      <li class="icon-doc"><a href="{$smarty.server.SCRIPT_NAME}?page=tac">Terms & Conditions</a></li>
     </ul>
     <ul>
       <hr/>
