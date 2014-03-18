@@ -11,6 +11,9 @@ padding: 0;
 font-family: "Helvetica Neue", Helvetica, Arial, Verdana, sans-serif;
 background: #F8F8F8;
 font-size: 12px;
+min-width: 1269px;
+/* The panel starts to do all sorts of weird things when you re-size without this, 
+This won't be enforced in some older browsers */
 }
 
 .clear {
