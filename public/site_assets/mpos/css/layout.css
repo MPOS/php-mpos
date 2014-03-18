@@ -11,6 +11,8 @@ padding: 0;
 font-family: "Helvetica Neue", Helvetica, Arial, Verdana, sans-serif;
 background: #F8F8F8;
 font-size: 12px;
+min-width: 1323px;
+/* Allows resizing without distortion of graphs and the like, some older browsers will ingnore this */
 }
 
 .clear {
