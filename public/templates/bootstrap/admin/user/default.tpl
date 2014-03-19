@@ -81,9 +81,9 @@
       <div class="panel-heading">
         <i class="fa fa-info fa-fw"></i> User Information
       </div>
-      <div class="panel-body no-padding">
+      <div class="panel-body">
         <div class="table-responsive">
-          <table class="table table-striped table-bordered table-hover">
+          <table class="table table-striped table-bordered table-hover {if $USERS}datatable{/if}">
             <thead>
               <tr>
                 <th>ID</th>

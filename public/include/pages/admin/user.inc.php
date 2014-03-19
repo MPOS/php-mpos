@@ -8,7 +8,7 @@ if (!$user->isAuthenticated() || !$user->isAdmin($_SESSION['USERDATA']['id'])) {
 }
 
 // Some defaults
-$iLimit = 30;
+$iLimit = 100;
 $smarty->assign('LIMIT', $iLimit);
 empty($_REQUEST['start']) ? $start = 0 : $start = $_REQUEST['start'];
 $smarty->assign('ADMIN', array('' => '', '0' => 'No', '1' => 'Yes'));
