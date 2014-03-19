@@ -6,7 +6,7 @@
       </div>
       <div class="panel-body no-padding">
         <div class="table-responsive">
-          <table class="table table-striped table-bordered table-hover" id="dataTables-example">
+          <table class="table table-striped table-bordered table-hover">
             <thead>
               <tr>
                 <th>Block</th>

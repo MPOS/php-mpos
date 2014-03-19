@@ -6,7 +6,7 @@
       </div>
       <div class="panel-body">
         <div class="table-responsive">
-          <table class="table table-striped table-bordered table-hover datatable">
+          <table class="table table-striped table-bordered table-hover {if $ROUNDTRANSACTIONS}datatable{/if}">
             <thead>
               <tr>
                 <th >User Name</th>

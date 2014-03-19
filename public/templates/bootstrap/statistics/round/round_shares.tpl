@@ -5,7 +5,7 @@
       </div>
       <div class="panel-body">
         <div class="table-responsive">
-          <table class="table table-striped table-bordered table-hover datatable">
+          <table class="table table-striped table-bordered table-hover {if $ROUNDSHARES}datatable{/if}">
             <thead>
               <tr>
                 <th>Rank</th>
