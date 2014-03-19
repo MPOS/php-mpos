@@ -29,9 +29,9 @@
             <tr>
               <th>Est. Next Difficulty</td>
               {if ! $GLOBAL.website.chaininfo.disabled}
-              <td><a href="{$GLOBAL.website.chaininfo.url}" target="_new"><font size="2">{$NETWORK.EstNextDifficulty}  (Change in {$NETWORK.BlocksUntilDiffChange} Blocks)</font></a></td>
+              <td><a href="{$GLOBAL.website.chaininfo.url}" target="_new"><font size="2">{$NETWORK.EstNextDifficulty|number_format:"8"} (Change in {$NETWORK.BlocksUntilDiffChange} Blocks)</font></a></td>
               {else}
-              <td><font size="2">{$NETWORK.EstNextDifficulty} (Change in {$NETWORK.BlocksUntilDiffChange} Blocks)</font></td>
+              <td><font size="2">{$NETWORK.EstNextDifficulty|number_format:"8"} (Change in {$NETWORK.BlocksUntilDiffChange} Blocks)</font></td>
               {/if}
             </tr>
             <tr>
