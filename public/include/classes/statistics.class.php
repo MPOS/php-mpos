@@ -892,7 +892,7 @@ class Statistics extends Base {
         $pps_reward = $this->config['pps']['reward']['default'];
       }
     }
-    return round($pps_reward / (pow(2, $this->coin->getTargetBits()) * $dDifficulty), 12);
+    return round($this->coin->calcPPSValue($pps_reward, $dDifficulty), 12);
   }
 
   /**
