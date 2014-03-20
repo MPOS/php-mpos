@@ -13,7 +13,6 @@ class Coin extends CoinBase {
   protected $target_bits = 18;
 }
 
-?>
 
 /**
    * Calculate our hashrate based on shares inserted to DB
@@ -30,3 +29,18 @@ class Coin extends CoinBase {
   public function calcEstaimtedShares($dDifficulty) {
     return (int)round((pow(2, (32 - $this->target_bits)) * $dDifficulty) / pow(2, ($this->config['difficulty'] - 16)) / 4.5);
   }
+  
+   /**
+   * Calculate our networks expected time per block
+   **/
+  public function calcNetworkExpectedTimePerBlock($dDifficulty, $dNetworkHashrate) {
+    return pow(2, 32) * $dDifficulty / $dNetworkHashrate / 4.5;
+  }
+  
+  /**
+   * Calculate next expected difficulty based on current difficulty
+   **/
+  public function calcExpectedNextDifficulty($dDifficulty, $dNetworkHashrate) {
+    return round(($dDifficulty * $this->config['cointarget'] / $this->calcNetworkExpectedTimePerBlock($dDifficulty, $dNetworkHashrate), 8) / 4.5);
+  }
+}
