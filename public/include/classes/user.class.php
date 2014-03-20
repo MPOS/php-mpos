@@ -863,7 +863,7 @@ class User extends Base {
     $this->debug->append("STA " . __METHOD__, 4);
     // Fetch the users mail address
     if (empty($username)) {
-      $this->serErrorMessage("Username must not be empty");
+      $this->setErrorMessage("Username must not be empty");
       return false;
     }
     if (filter_var($username, FILTER_VALIDATE_EMAIL)) {
