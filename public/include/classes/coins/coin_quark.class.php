@@ -6,7 +6,7 @@ $defflip = (!cfip()) ? exit(header('HTTP/1.1 401 Unauthorized')) : 1;
  * Quark
  * Calculated using the FAQ and the difference between stratum and mpos
  * This will give you Stratum Difficulty of 4
- * With a target difficulty of 18 in MPOS
+ * With a target bit of 18 in MPOS
  * Not finished - Possibly not right.
  **/
 class Coin extends CoinBase {
