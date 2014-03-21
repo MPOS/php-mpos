@@ -20,6 +20,14 @@ class CoinBase extends Base {
   }
 
   /**
+   * Calculate the PPS value for this coin
+   * WARNING: Get this wrong and you will over- or underpay your miners!
+   **/
+  public function calcPPSValue($pps_reward, $dDifficulty) {
+    return ($pps_reward / (pow(2, $this->target_bits) * $dDifficulty));
+  }
+
+  /**
    * Calculate our hashrate based on shares inserted to DB
    * We use diff1 share values, not a baseline one
    **/
@@ -32,7 +40,7 @@ class CoinBase extends Base {
    * according to our configuration difficulty
    **/
   public function calcEstaimtedShares($dDifficulty) {
-    return (int)round((pow(2, (32 - $this->target_bits)) * $dDifficulty) / pow(2, ($this->config['difficulty'] - 16)));
+    return (int)round(pow(2, (32 - $this->target_bits)) * $dDifficulty, 0);
   }
 
   /**
