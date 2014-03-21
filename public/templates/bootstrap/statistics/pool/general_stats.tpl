@@ -3,7 +3,7 @@
       <div class="panel-heading">
         <i class="fa fa-bar-chart-o fa-fw"></i> General Statistics
       </div>
-      <div class="panel-body no-padding">
+      <div class="panel-body no-padding table-responsive">
         <table class="table table-striped table-bordered table-hover">
           <tbody>
             <tr>

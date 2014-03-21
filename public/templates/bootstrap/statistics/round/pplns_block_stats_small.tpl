@@ -1,6 +1,6 @@
 <div class="row">
   <div class="col-lg-6">
-    <div class="panel panel-info">
+    <div class="panel panel-info table-responsive">
       <div class="panel-heading">
         <i class="fa fa-bar-chart fa-fw"></i> Block Statistics
       </div>
@@ -12,7 +12,7 @@
           <a href="{$smarty.server.SCRIPT_NAME}?page={$smarty.request.page|escape}&action={$smarty.request.action|escape}&height={$BLOCKDETAILS.height}&next=1">Next &rarr;</a>
         </li>
       </ul>
-      <table class="tablesorter">
+      <table>
         <thead>
           <tr>
         <th colspan="4">Block Statistics</th>

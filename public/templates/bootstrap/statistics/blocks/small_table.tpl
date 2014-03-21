@@ -3,7 +3,7 @@
       <div class="panel-heading">
         <i class="fa fa-th fa-fw"></i> Last Found Blocks
       </div>
-      <div class="panel-body no-padding">
+      <div class="panel-body no-padding table-responsive">
         <table class="table table-striped table-bordered table-hover">
           <thead>
             <tr>

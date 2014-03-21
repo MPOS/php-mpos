@@ -3,7 +3,7 @@
       <div class="panel-heading">
         <i class="fa fa-user fa-fw"></i> Top 25 Blockfinder
       </div>
-      <div class="panel-body no-padding">
+      <div class="panel-body no-padding table-responsive">
         <table class="table table-striped table-bordered table-hover">
           <thead>
             <tr>
