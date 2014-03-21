@@ -54,11 +54,18 @@ $aSettings['website'][] = array(
   'tooltip' => 'The default theme used on your pool.'
 );
 $aSettings['website'][] = array(
-  'display' => 'Website mobile theme', 'type' => 'select',
-  'options' => $aThemes,
-  'default' => 'mobile',
-  'name' => 'website_mobile_theme', 'value' => $setting->getValue('website_mobile_theme'),
-  'tooltip' => 'The mobile theme used for your pool.'
+  'display' => 'Website News Style', 'type' => 'select',
+  'options' => array( 0 => 'Show all news in one Page', 1 => 'Show Responsive News Table' ),
+  'default' => 0,
+  'name' => 'website_news_style', 'value' => $setting->getValue('website_news_style'),
+  'tooltip' => 'How News are displayed on Main Page.'
+);
+$aSettings['website'][] = array(
+  'display' => 'Auto Hide Notifications', 'type' => 'select',
+  'options' => array( 0 => 'Notifications always visible', 1 => 'Hide Notifications automatically' ),
+  'default' => 0,
+  'name' => 'website_notification_autohide', 'value' => $setting->getValue('website_notification_autohide'),
+  'tooltip' => 'Hides Notifications after 5 seconds.'
 );
 $aSettings['blockchain'][] = array(
   'display' => 'Disable Blockexplorer', 'type' => 'select',

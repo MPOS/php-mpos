@@ -15,7 +15,7 @@ if (!$smarty->isCached('master.tpl', $smarty_cache_key)) {
     ));
     $content = 'default.tpl';
   } else {
-    $_SESSION['POPUP'][] = array('CONTENT' => 'UptimeRobot API Key not configured.', 'TYPE' => 'info');
+    $_SESSION['POPUP'][] = array('CONTENT' => 'UptimeRobot API Key not configured.', 'TYPE' => 'alert alert-warning');
     $content = '';
   }
 } else {
@@ -32,7 +32,7 @@ case '1':
   $smarty->assign("CONTENT", $content);
   break;
 case '2':
-  $_SESSION['POPUP'][] = array('CONTENT' => 'Page currently disabled. Please try again later.', 'TYPE' => 'errormsg');
+  $_SESSION['POPUP'][] = array('CONTENT' => 'Page currently disabled. Please try again later.', 'TYPE' => 'alert alert-danger');
   $smarty->assign("CONTENT", "");
   break;
 }

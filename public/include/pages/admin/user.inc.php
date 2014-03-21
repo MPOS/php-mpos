@@ -8,7 +8,7 @@ if (!$user->isAuthenticated() || !$user->isAdmin($_SESSION['USERDATA']['id'])) {
 }
 
 // Some defaults
-$iLimit = 30;
+$iLimit = 100;
 $smarty->assign('LIMIT', $iLimit);
 empty($_REQUEST['start']) ? $start = 0 : $start = $_REQUEST['start'];
 $smarty->assign('ADMIN', array('' => '', '0' => 'No', '1' => 'Yes'));
@@ -74,7 +74,7 @@ if (isset($_REQUEST['filter'])) {
     // Assign our variables
     $smarty->assign("USERS", $aUsers);
   } else {
-    $_SESSION['POPUP'][] = array('CONTENT' => 'Could not find any users', 'TYPE' => 'errormsg');
+    $_SESSION['POPUP'][] = array('CONTENT' => 'Could not find any users', 'TYPE' => 'alert alert-danger');
   }
 }
 

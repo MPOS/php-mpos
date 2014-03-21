@@ -82,7 +82,7 @@ $aGlobal = array(
     'monitoring_uptimerobot_api_keys' => $setting->getValue('monitoring_uptimerobot_api_keys'),
     'statistics_ajax_refresh_interval' => $statistics_ajax_refresh_interval,
     'statistics_ajax_long_refresh_interval' => $statistics_ajax_long_refresh_interval,
-    'price' => array( 'currency' => $config['price']['currency'] ),
+    'price' => $config['price'],
     'targetdiff' => $config['difficulty'],
     'currency' => $config['currency'],
     'txfee_manual' => $config['txfee_manual'],
@@ -101,6 +101,8 @@ $aGlobal['website']['name'] = $setting->getValue('website_name');
 $aGlobal['website']['title'] = $setting->getValue('website_title');
 $aGlobal['website']['slogan'] = $setting->getValue('website_slogan');
 $aGlobal['website']['email'] = $setting->getValue('website_email');
+$aGlobal['website']['newsstyle'] = $setting->getValue('website_news_style');
+$aGlobal['website']['notificationshide'] = $setting->getValue('website_notification_autohide');
 $aGlobal['website']['api']['disabled'] = $setting->getValue('disable_api');
 $aGlobal['website']['blockexplorer']['disabled'] = $setting->getValue('website_blockexplorer_disabled');
 $aGlobal['website']['transactionexplorer']['disabled'] = $setting->getValue('website_transactionexplorer_disabled');
@@ -131,6 +133,10 @@ $aGlobal['acl']['chat']['page'] = $setting->getValue('acl_chat_page', 2);
 if (@$_SESSION['USERDATA']['id']) {
   $aGlobal['userdata'] = $_SESSION['USERDATA']['id'] ? $user->getUserData($_SESSION['USERDATA']['id']) : array();
   $aGlobal['userdata']['balance'] = $transaction->getBalance($_SESSION['USERDATA']['id']);
+
+  // Fetch Last 5 notifications
+  $aLastNotifications = $notification->getNotifications($_SESSION['USERDATA']['id'], 5);
+  $aGlobal['userdata']['lastnotifications'] = $aLastNotifications;
 
   // Other userdata that we can cache savely
   $aGlobal['userdata']['shares'] = $statistics->getUserShares($_SESSION['USERDATA']['username'], $_SESSION['USERDATA']['id']);
@@ -166,15 +172,19 @@ if (@$_SESSION['USERDATA']['id']) {
 
   // Site-wide notifications, based on user events
   if ($aGlobal['userdata']['balance']['confirmed'] >= $config['ap_threshold']['max'])
-    $_SESSION['POPUP'][] = array('CONTENT' => 'You have exceeded the pools configured ' . $config['currency'] . ' warning threshold. Please initiate a transfer!', 'TYPE' => 'errormsg');
+    $_SESSION['POPUP'][] = array('CONTENT' => 'You have exceeded the pools configured ' . $config['currency'] . ' warning threshold. Please initiate a transfer!', 'TYPE' => 'alert alert-danger');
   if ($user->getUserFailed($_SESSION['USERDATA']['id']) > 0)
-    $_SESSION['POPUP'][] = array('CONTENT' => 'You have ' . $user->getUserFailed($_SESSION['USERDATA']['id']) . ' failed login attempts! <a href="?page=account&action=reset_failed">Reset Counter</a>', 'TYPE' => 'errormsg');
+    $_SESSION['POPUP'][] = array('CONTENT' => 'You have ' . $user->getUserFailed($_SESSION['USERDATA']['id']) . ' failed login attempts! <a href="?page=account&action=reset_failed">Reset Counter</a>', 'TYPE' => 'alert alert-danger');
 }
 
 if ($setting->getValue('maintenance'))
-  $_SESSION['POPUP'][] = array('CONTENT' => 'This pool is currently in maintenance mode.', 'TYPE' => 'warning');
+  $_SESSION['POPUP'][] = array('CONTENT' => 'This pool is currently in maintenance mode.', 'TYPE' => 'alert alert-warning');
 if ($motd = $setting->getValue('system_motd'))
-  $_SESSION['POPUP'][] = array('CONTENT' => $motd, 'TYPE' => 'info');
+  $_SESSION['POPUP'][] = array('CONTENT' => $motd, 'DISMISS' => 'yes', 'ID' => 'motd', 'TYPE' => 'alert alert-info');
+
+// check for deprecated theme
+if ($setting->getValue('website_theme') == "mpos")
+  $_SESSION['POPUP'][] = array('CONTENT' => 'You are using an old Theme that will not be maintained in the future.', 'TYPE' => 'alert alert-warning');
 
 // So we can display additional info
 $smarty->assign('DEBUG', $config['DEBUG']);
@@ -209,7 +219,7 @@ foreach ($aMonitorCrons as $strCron) {
   }
 }
 if ($bMessage)
-  $_SESSION['POPUP'][] = array('CONTENT' => implode($aCronMessage, ''));
+  $_SESSION['POPUP'][] = array('CONTENT' => implode($aCronMessage, ''), 'DISMISS' => 'yes', 'ID' => 'backend', 'TYPE' => 'alert alert-warning');
 
 // Make it available in Smarty
 $smarty->assign('PATH', 'site_assets/' . THEME);

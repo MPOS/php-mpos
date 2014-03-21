@@ -33,13 +33,13 @@ if ($setting->getValue('maintenance') && !$user->isAdmin($user->getUserIdByEmail
         if (!headers_sent()) header('Location: ' . $location);
         exit('<meta http-equiv="refresh" content="0; url=' . htmlspecialchars($location) . '"/>');
       } else {
-        $_SESSION['POPUP'][] = array('CONTENT' => 'Unable to login: '.$user->getError(), 'TYPE' => 'errormsg');
+        $_SESSION['POPUP'][] = array('CONTENT' => 'Unable to login: '.$user->getError(), 'TYPE' => 'alert alert-danger');
       }
     } else {
-      $_SESSION['POPUP'][] = array('CONTENT' => $csrftoken->getErrorWithDescriptionHTML(), 'TYPE' => 'info');
+      $_SESSION['POPUP'][] = array('CONTENT' => $csrftoken->getErrorWithDescriptionHTML(), 'TYPE' => 'alert alert-warning');
     }
   } else {
-    $_SESSION['POPUP'][] = array('CONTENT' => 'Invalid Captcha, please try again.', 'TYPE' => 'errormsg');
+    $_SESSION['POPUP'][] = array('CONTENT' => 'Invalid Captcha, please try again.', 'TYPE' => 'alert alert-danger');
   }
 }
 // Load login template

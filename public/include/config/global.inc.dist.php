@@ -65,6 +65,7 @@ $config['gettingstarted']['stratumport'] = '3333';
  *  Fetch exchange rates via an API
  *   https://github.com/MPOS/php-mpos/wiki/Config-Setup#wiki-ticker-api
  **/
+$config['price']['enabled'] = false;
 $config['price']['url'] = 'https://btc-e.com';
 $config['price']['target'] = '/api/2/ltc_usd/ticker';
 $config['price']['currency'] = 'USD';
@@ -76,6 +77,13 @@ $config['price']['currency'] = 'USD';
  **/
 $config['ap_threshold']['min'] = 1;
 $config['ap_threshold']['max'] = 250;
+
+/**
+ * Minimum manual Payout Threshold
+ *  Minimum manual payout amount
+ *   https://github.com/MPOS/php-mpos/wiki/Config-Setup#wiki-manual-payout-threshold
+ **/
+$config['mp_threshold'] = 1;
 
 /**
  * Minimum manual Payout Threshold
