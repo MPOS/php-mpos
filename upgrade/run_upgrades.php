@@ -11,7 +11,7 @@ require_once('shared.inc.php');
 // Fetch current version
 $db_version_now = $setting->getValue('DB_VERSION');
 
-// Helper function
+// Helper functions
 function run_db_upgrade($db_version_now) {
   // Find upgrades
   $files = glob(dirname(__FILE__) . "/definitions/${db_version_now}_to_*");
@@ -25,6 +25,21 @@ function run_db_upgrade($db_version_now) {
     $run = "run_$run_string";
     $run();
     run_db_upgrade($db_version_to);
+  }
+}
+function execute_db_upgrade($aSql) {
+  global $mysqli;
+  // Run the upgrade
+  echo '- Starting database migration to version ' . $db_version_new . PHP_EOL;
+  foreach ($aSql as $sql) {
+    echo '-  Preparing: ' . $sql . PHP_EOL;
+    $stmt = $mysqli->prepare($sql);
+    if ($stmt && $stmt->execute()) {
+      echo '-    success' . PHP_EOL;
+    } else {
+      echo '-    failed: ' . $mysqli->error . PHP_EOL;
+      exit(1);
+    }
   }
 }
 
