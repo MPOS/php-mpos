@@ -10,8 +10,8 @@ function run_008() {
 
   // Upgrade specific variables
   $dDifficulty = POW(2, ($config['difficulty'] - 16));
-  $aSql[] = "UPDATE " . $statistics->getTableName() . " SET valid = valid / $dDifficulty, invalid = invalid / $dDifficulty, pplns_valid = pplns_valid / $dDifficulty, pplns_invalid = pplns_invalid / $dDifficulty";
-  $aSql[] = "UPDATE " . $block->getTableName() . "      SET shares = shares / $dDifficulty";
+  $aSql[] = "UPDATE " . $statistics->getTableName() . " SET valid = valid * $dDifficulty, invalid = invalid * $dDifficulty, pplns_valid = pplns_valid * $dDifficulty, pplns_invalid = pplns_invalid * $dDifficulty";
+  $aSql[] = "UPDATE " . $block->getTableName() . "      SET shares = shares * $dDifficulty";
   $aSql[] = "UPDATE " . $setting->getTableName() . "    SET value = '0.0.8' WHERE name = 'DB_VERSION'";
 
   if ($db_version_now == $db_version_old && version_compare($db_version_now, DB_VERSION, '<')) {
