@@ -13,37 +13,37 @@
 
 
 		//DELETE USER ACCOUNT
-		$stmt = $mysqli->prepare("DELETE FROM accounts WHERE username LIKE ? and id LIKE ?");
+		$stmt = $mysqli->prepare("DELETE FROM accounts WHERE username LIKE ? and id = ?");
 		if ($stmt->bind_param('si', $username, $id) && $stmt->execute() && $result = $stmt->get_result()) {
 			print_r ($result->fetch_all(MYSQLI_ASSOC));
 		}
 
 		//DELETE USER TRANSACTIONS
-		$stmt = $mysqli->prepare("DELETE FROM transactions WHERE account_id LIKE ?");
+		$stmt = $mysqli->prepare("DELETE FROM transactions WHERE account_id = ?");
 		if ($stmt->bind_param('i', $id) && $stmt->execute() && $result = $stmt->get_result()) {
 			print_r ($result->fetch_all(MYSQLI_ASSOC));
 		}
 
 		//DELETE USER NOTIFICATIONS
-		$stmt = $mysqli->prepare("DELETE FROM notifications WHERE account_id LIKE ?");
+		$stmt = $mysqli->prepare("DELETE FROM notifications WHERE account_id = ?");
 		if ($stmt->bind_param('i', $id) && $stmt->execute() && $result = $stmt->get_result()) {
 			print_r ($result->fetch_all(MYSQLI_ASSOC));
 		}
 
 		//DELETE USER PAYOUTS
-		$stmt = $mysqli->prepare("DELETE FROM payouts WHERE account_id LIKE ?");
+		$stmt = $mysqli->prepare("DELETE FROM payouts WHERE account_id = ?");
 		if ($stmt->bind_param('i', $id) && $stmt->execute() && $result = $stmt->get_result()) {
 			print_r ($result->fetch_all(MYSQLI_ASSOC));
 		}
 
 		//DELETE USER POOL_WORKER
-		$stmt = $mysqli->prepare("DELETE FROM pool_worker WHERE account_id LIKE ?");
+		$stmt = $mysqli->prepare("DELETE FROM pool_worker WHERE account_id = ?");
 		if ($stmt->bind_param('i', $id) && $stmt->execute() && $result = $stmt->get_result()) {
 			print_r ($result->fetch_all(MYSQLI_ASSOC));
 		}
 
 		//DELETE USER STATISTICS_SHARES
-		$stmt = $mysqli->prepare("DELETE FROM statistics_shares WHERE account_id LIKE ?");
+		$stmt = $mysqli->prepare("DELETE FROM statistics_shares WHERE account_id = ?");
 		if ($stmt->bind_param('i', $id) && $stmt->execute() && $result = $stmt->get_result()) {
 		print_r ($result->fetch_all(MYSQLI_ASSOC));
 		}
