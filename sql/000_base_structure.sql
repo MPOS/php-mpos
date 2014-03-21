@@ -111,7 +111,7 @@ CREATE TABLE IF NOT EXISTS `payouts` (
   `completed` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   KEY `account_id` (`account_id`,`completed`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE IF NOT EXISTS `pool_worker` (
   `id` int(255) NOT NULL AUTO_INCREMENT,
