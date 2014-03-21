@@ -40,7 +40,7 @@ class CoinBase extends Base {
    * according to our configuration difficulty
    **/
   public function calcEstaimtedShares($dDifficulty) {
-    return (int)round((pow(2, (32 - $this->target_bits)) * $dDifficulty) / pow(2, ($this->config['difficulty'] - 16)));
+    return (int)round(pow(2, (32 - $this->target_bits)) * $dDifficulty, 0);
   }
 
   /**
