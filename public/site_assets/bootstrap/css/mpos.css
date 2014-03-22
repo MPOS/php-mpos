@@ -354,7 +354,7 @@ p.overview {
 }
 
 span.overview {
-  font-size: 20px;
+  font-size: 14px;
   font-weight: bold;
 }
 
@@ -460,7 +460,7 @@ span.spark-25 {
 }
 
 p.up {
-  margin: -14px 0px 0px 0px;
+  margin: -10px 0px 0px 0px;
 }
 
 div.up {
