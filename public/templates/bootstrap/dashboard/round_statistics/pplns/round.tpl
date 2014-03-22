@@ -71,7 +71,7 @@
                   <p class="h6" id="b-nextdiffc">Change in {$NETWORK.BlocksUntilDiffChange} Blocks</p>
                 </div>
                 <div class="circle-tile-number text-faded">
-                  <p class="h6">Est Next Difficulty</p>
+                  <p class="h6 up-more2">Est Next Difficulty</p>
                 </div>
               </div>
             </div> 
