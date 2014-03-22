@@ -360,8 +360,6 @@ class Share Extends Base {
    * Fetch the lowest needed share ID from shares
    **/
   function getMinimumShareId($iCount, $current_upstream) {
-    // We don't use baseline here to be more accurate
-    $iCount = $iCount * pow(2, ($this->config['difficulty'] - 16));
     $stmt = $this->mysqli->prepare("
       SELECT MIN(b.id) AS id FROM
       (
