@@ -9,16 +9,16 @@
           <table class="table table-striped table-bordered table-hover">
             <thead>
               <tr>
-                <th>Block</th>
-                <th>Validity</th>
-                <th>Finder</th>
-                <th>Time</th>
-                <th>Difficulty</th>
-                <th>Amount</th>
-                <th>Expected Shares</th>
-                {if $GLOBAL.config.payout_system == 'pplns'}<th>PPLNS Shares</th>{/if}
-                <th>Actual Shares</th>
-                <th style="padding-right: 25px;">Percentage</th>
+                <th class="text-right">Block</th>
+                <th class="text-center">Validity</th>
+                <th class="text-left">Finder</th>
+                <th class="text-right">Time</th>
+                <th class="text-right">Difficulty</th>
+                <th class="text-right">Amount</th>
+                <th class="text-right">Expected Shares</th>
+                {if $GLOBAL.config.payout_system == 'pplns'}<th class="text-right">PPLNS Shares</th>{/if}
+                <th class="text-right">Actual Shares</th>
+                <th  class="text-right">Percentage</th>
               </tr>
             </thead>
             <tbody>
@@ -32,11 +32,11 @@
               {assign var="count" value=$count+1}
               {if $GLOBAL.config.payout_system == 'pplns'}{assign var="pplnsshares" value=$pplnsshares+$BLOCKSFOUND[block].pplns_shares}{/if}
               {if ! $GLOBAL.website.blockexplorer.disabled}
-                <td><a href="{$smarty.server.SCRIPT_NAME}?page=statistics&action=round&height={$BLOCKSFOUND[block].height}">{$BLOCKSFOUND[block].height}</a></td>
+                <td class="text-right"><a href="{$smarty.server.SCRIPT_NAME}?page=statistics&action=round&height={$BLOCKSFOUND[block].height}">{$BLOCKSFOUND[block].height}</a></td>
               {else}
-                <td>{$BLOCKSFOUND[block].height}</td>
+                <td class="text-right">{$BLOCKSFOUND[block].height}</td>
               {/if}
-              <td>
+              <td class="text-center">
               {if $BLOCKSFOUND[block].confirmations >= $GLOBAL.confirmations}
                 <span class="label label-success">Confirmed</span>
               {else if $BLOCKSFOUND[block].confirmations == -1}
@@ -46,18 +46,18 @@
               {/if}
               </td>
                 <td>{if $BLOCKSFOUND[block].is_anonymous|default:"0" == 1 && $GLOBAL.userdata.is_admin|default:"0" == 0}anonymous{else}{$BLOCKSFOUND[block].finder|default:"unknown"|escape}{/if}</td>
-                <td>{$BLOCKSFOUND[block].time|date_format:"%d/%m %H:%M:%S"}</td>
-                <td>{$BLOCKSFOUND[block].difficulty|number_format:"2"}</td>
-                <td>{$BLOCKSFOUND[block].amount|number_format:"2"}</td>
-                <td>
+                <td class="text-right">{$BLOCKSFOUND[block].time|date_format:"%d/%m %H:%M:%S"}</td>
+                <td class="text-right">{$BLOCKSFOUND[block].difficulty|number_format:"4"}</td>
+                <td class="text-right">{$BLOCKSFOUND[block].amount|number_format:"2"}</td>
+                <td class="text-right">
                 {assign var="totalexpectedshares" value=$totalexpectedshares+$BLOCKSFOUND[block].estshares}
                   {$BLOCKSFOUND[block].estshares|number_format}
                 </td>
                 {if $GLOBAL.config.payout_system == 'pplns'}
-                <td>{$BLOCKSFOUND[block].pplns_shares|number_format}</td>
+                <td class="text-right">{$BLOCKSFOUND[block].pplns_shares|number_format}</td>
                 {/if}
-                <td>{$BLOCKSFOUND[block].shares|number_format}</td>
-                <td style="padding-right: 25px;">
+                <td class="text-right">{$BLOCKSFOUND[block].shares|number_format}</td>
+                <td class="text-right">
                   {math assign="percentage" equation="shares / estshares * 100" shares=$BLOCKSFOUND[block].shares|default:"0" estshares=$BLOCKSFOUND[block].estshares}
                   <font color="{if ($percentage <= 100)}green{else}red{/if}">{$percentage|number_format:"2"}</font>
                 </td>
@@ -65,12 +65,12 @@
               {/section}
               <tr>
                 <td colspan="6"><b>Totals</b></td>
-                <td>{$totalexpectedshares|number_format}</td>
+                <td class="text-right">{$totalexpectedshares|number_format}</td>
                 {if $GLOBAL.config.payout_system == 'pplns'}
-                <td>{$pplnsshares|number_format}</td>
+                <td class="text-right">{$pplnsshares|number_format}</td>
                 {/if}
-                <td>{$totalshares|number_format}</td>
-                <td style="padding-right: 25px;">{if $count > 0}<font color="{if (($totalshares / $totalexpectedshares * 100) <= 100)}green{else}red{/if}">{($totalshares / $totalexpectedshares * 100)|number_format:"2"}</font>{else}0{/if}</td>
+                <td class="text-right">{$totalshares|number_format}</td>
+                <td class="text-right">{if $count > 0}<font color="{if (($totalshares / $totalexpectedshares * 100) <= 100)}green{else}red{/if}">{($totalshares / $totalexpectedshares * 100)|number_format:"2"}</font>{else}0{/if}</td>
               </tr>
             </tbody>
           </table>
