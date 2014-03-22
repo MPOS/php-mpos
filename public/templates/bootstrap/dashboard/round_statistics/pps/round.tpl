@@ -2,7 +2,7 @@
         <div class="row text-center">
           <div class="col-md-spark">
             <i class="fa fa-money fa-2x"></i>
-            <p id="b-payout" class="h6 font-bold m-t">{$GLOBAL.userdata.estimates.hours1|number_format:"12"}</p>
+            <p id="b-payout" class="h5 font-bold m-t">{$GLOBAL.userdata.estimates.hours1|number_format:"12"}</p>
             <p class="h6 text-muted">{$GLOBAL.config.currency} 1 Hour Estimated Earnings</p>
           </div>
           <div class="col-md-spark">
@@ -12,22 +12,22 @@
           </div>
           <div class="col-md-spark">
             <i class="fa fa-money fa-2x"></i>
-            <p id="b-payout" class="h6 font-bold m-t">{$GLOBAL.userdata.estimates.days7|number_format:"12"}</p>
+            <p id="b-payout" class="h5 font-bold m-t">{$GLOBAL.userdata.estimates.days7|number_format:"12"}</p>
             <p class="h6 text-muted">{$GLOBAL.config.currency} 7 Days Estimated Earnings</p>
           </div>
           <div class="col-md-spark">
             <i class="fa fa-money fa-2x"></i>
-            <p id="b-payout" class="h6 font-bold m-t">{$GLOBAL.userdata.estimates.days14|number_format:"12"}</p>
+            <p id="b-payout" class="h5 font-bold m-t">{$GLOBAL.userdata.estimates.days14|number_format:"12"}</p>
             <p class="h6 text-muted">{$GLOBAL.config.currency} 14 Days Estimated Earnings</p>
           </div>
           <div class="col-md-spark">
             <i class="fa fa-money fa-2x"></i>
-            <p id="b-payout" class="h6 font-bold m-t">{$GLOBAL.userdata.estimates.days30|number_format:"12"}</p>
+            <p id="b-payout" class="h5 font-bold m-t">{$GLOBAL.userdata.estimates.days30|number_format:"12"}</p>
             <p class="h6 text-muted">{$GLOBAL.config.currency} 30 Days Estimated Earnings</p>
           </div>
           <div class="col-md-spark">
             <i class="fa fa-th-large fa-2x"></i>
-            <p id="b-nblock" class="h6 font-bold m-t">{$GLOBAL.ppsvalue}</p>
+            <p id="b-nblock" class="h5 font-bold m-t">{$GLOBAL.ppsvalue}</p>
             <p class="h6 text-muted">PPS Value</p>
           </div>
           <div class="col-md-spark">
@@ -37,18 +37,18 @@
           </div>
           <div class="col-md-spark">
             <i class="fa fa-map-marker fa-2x"></i>
-            <p id="b-diff" class="h6 font-bold m-t">{$NETWORK.difficulty|number_format:"8"}</p>
+            <p id="b-diff" class="h5 font-bold m-t">{$NETWORK.difficulty|number_format:"8"}</p>
             <p class="h6 text-muted">Difficulty</p>
           </div>
           <div class="col-md-spark">
             <i class="fa fa-sitemap fa-2x"></i>
-            <p id="b-nextdiff" class="h6 font-bold m-t">{$NETWORK.EstNextDifficulty|number_format:"8"}</p>
+            <p id="b-nextdiff" class="h5 font-bold m-t">{$NETWORK.EstNextDifficulty|number_format:"8"}</p>
             <p id="b-nextdiffc" class="h6 font-bold m-t">Change in {$NETWORK.BlocksUntilDiffChange} Blocks</p>
             <p class="h6 text-muted">Est Next Difficulty</p>
           </div>
           <div class="col-md-spark">
             <i class="fa fa-clock-o fa-2x"></i>
-            <p id="b-esttimeperblock" class="h6 font-bold m-t">{$NETWORK.EstTimePerBlock|seconds_to_words}</p>
+            <p id="b-esttimeperblock" class="h5 font-bold m-t">{$NETWORK.EstTimePerBlock|seconds_to_words}</p>
             <p class="h6 text-muted">Est. Avg. Time per Block</p>
           </div>
         </div>

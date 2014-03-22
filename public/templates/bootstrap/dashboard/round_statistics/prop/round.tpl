@@ -1,35 +1,95 @@
       <div class="panel-footer">
-        <div class="row text-center">
-          <div class="col-md-spark">
-            <i class="fa fa-th-large fa-2x"></i>
-            <p id="b-nblock" class="h6 font-bold m-t">{$NETWORK.block}</p>
-            <p class="h6 text-muted">Current Block</p>
+        <div class="row">
+          <div class="col-lg-2 col-sm-6">
+            <div class="circle-tile">
+              <div class="circle-tile-heading blue">
+                <i class="fa fa-th-large fa-fw fa-2x"></i>
+              </div>
+              <div class="circle-tile-content blue">
+                <div class="circle-tile-description text-faded">
+                  <p class="h5" id="b-nblock">{$NETWORK.block}</p>
+                </div>
+                <div class="circle-tile-number text-faded">
+                  <p class="h6">Current Block</p>
+                </div>
+              </div>
+            </div>
           </div>
-          <div class="col-md-spark">
-            <i class="fa fa-bar-chart-o fa-flip-horizontal fa-2x"></i>
-            <p id="b-roundprogress" class="h6 font-bold m-t">{$ESTIMATES.percent|number_format:"2"}%</p>
-            <p class="h6 text-muted">Of Expected Shares</p>
+          <div class="col-lg-2 col-sm-6">
+            <div class="circle-tile">
+              <div class="circle-tile-heading blue">
+                <i class="fa fa-bar-chart-o fa-flip-horizontal fa-fw fa-2x"></i>
+              </div>
+              <div class="circle-tile-content blue">
+                <div class="circle-tile-description text-faded">
+                  <p class="h5" id="b-roundprogress">{$ESTIMATES.percent|number_format:"2"}%</p>
+                </div>
+                <div class="circle-tile-number text-faded">
+                  <p class="h6">Of Expected Shares</p>
+                </div>
+              </div>
+            </div>
           </div>
-          <div class="col-md-spark">
-            <i class="fa fa-money fa-2x"></i>
-            <p id="b-payout" class="h6 font-bold m-t">{$GLOBAL.userdata.estimates.payout|number_format:"8"}</p>
-            <p class="h6 text-muted">{$GLOBAL.config.currency} Estimated Earnings</p>
+          <div class="col-lg-2 col-sm-6">
+            <div class="circle-tile">
+              <div class="circle-tile-heading blue">
+                <i class="fa fa-money fa-fw fa-2x"></i>
+              </div>
+              <div class="circle-tile-content blue">
+                <div class="circle-tile-description text-faded">
+                  <p class="h5" id="b-payout">{$GLOBAL.userdata.estimates.payout|number_format:"8"}</p>
+                </div>
+                <div class="circle-tile-number text-faded">
+                  <p class="h6">{$GLOBAL.config.currency} Estimated Earnings</p>
+                </div>
+              </div>
+            </div>
           </div>
-          <div class="col-md-spark">
-            <i class="fa fa-map-marker fa-2x"></i>
-            <p id="b-diff" class="h6 font-bold m-t">{$NETWORK.difficulty|number_format:"8"}</p>
-            <p class="h6 text-muted">Difficulty</p>
+          <div class="col-lg-2 col-sm-6">
+            <div class="circle-tile">
+              <div class="circle-tile-heading blue">
+                <i class="fa fa-map-marker fa-fw fa-2x"></i>
+              </div>
+              <div class="circle-tile-content blue">
+                <div class="circle-tile-description text-faded">
+                  <p class="h5" id="b-diff">{$NETWORK.difficulty|number_format:"8"}</p>
+                </div>
+                <div class="circle-tile-number text-faded">
+                  <p class="h6">Difficulty</p>
+                </div>
+              </div>
+            </div>
           </div>
-          <div class="col-md-spark">
-            <i class="fa fa-sitemap fa-2x"></i>
-            <p id="b-nextdiff" class="h6 font-bold m-t">{$NETWORK.EstNextDifficulty|number_format:"8"}</p>
-            <p id="b-nextdiffc" class="h6 font-bold m-t">Change in {$NETWORK.BlocksUntilDiffChange} Blocks</p>
-            <p class="h6 text-muted">Est Next Difficulty</p>
+          <div class="col-lg-2 col-sm-6">
+            <div class="circle-tile">
+              <div class="circle-tile-heading blue">
+                <i class="fa fa-sitemap fa-fw fa-2x"></i>
+              </div>
+              <div class="circle-tile-content blue">
+                <div class="circle-tile-description text-faded">
+                  <p class="h5 up" id="b-nextdiff">{$NETWORK.EstNextDifficulty|number_format:"8"}</p>
+                  <p class="h6" id="b-nextdiffc">Change in {$NETWORK.BlocksUntilDiffChange} Blocks</p>
+                </div>
+                <div class="circle-tile-number text-faded">
+                  <p class="h6">Est Next Difficulty</p>
+                </div>
+              </div>
+            </div>
           </div>
-          <div class="col-md-spark">
-            <i class="fa fa-clock-o fa-2x"></i>
-            <p id="b-esttimeperblock" class="h6 font-bold m-t">{$NETWORK.EstTimePerBlock|seconds_to_words}</p>
-            <p class="h6 text-muted">Est. Avg. Time per Block</p>
+          <div class="col-lg-2 col-sm-6">
+            <div class="circle-tile">
+              <div class="circle-tile-heading blue">
+                <i class="fa fa-clock-o fa-fw fa-2x"></i>
+              </div>
+              <div class="circle-tile-content blue">
+                <div class="circle-tile-description text-faded">
+                  <p class="h5" id="b-esttimeperblock">{$NETWORK.EstTimePerBlock|seconds_to_words}</p>
+                </div>
+                <div class="circle-tile-number text-faded">
+                  <p class="h6">Est. Avg. Time per Block</p>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>

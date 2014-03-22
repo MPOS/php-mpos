@@ -83,25 +83,25 @@
           <table class="table table-striped table-bordered table-hover">
             <thead>
               <tr>
-                <th>ID</th>
-                <th>Account</th>
-                <th>Date</th>
-                <th>TX Type</th>
-                <th>Status</th>
-                <th>Payment Address</th>
-                <th>TX #</th>
-                <th>Block #</th>
-                <th>Amount</th>
+                <th class="h6">ID</th>
+                <th class="h6">Account</th>
+                <th class="h6">Date</th>
+                <th class="h6">TX Type</th>
+                <th class="h6">Status</th>
+                <th class="h6">Payment Address</th>
+                <th class="h6">TX #</th>
+                <th class="h6">Block #</th>
+                <th class="h6">Amount</th>
               </tr>
             </thead>
             <tbody>
               {section transaction $TRANSACTIONS}
               <tr>
-                <td>{$TRANSACTIONS[transaction].id}</td>
-                <td>{$TRANSACTIONS[transaction].username}</td>
-                <td>{$TRANSACTIONS[transaction].timestamp}</td>
-                <td>{$TRANSACTIONS[transaction].type}</td>
-                <td>
+                <td class="h6">{$TRANSACTIONS[transaction].id}</td>
+                <td class="h6">{$TRANSACTIONS[transaction].username}</td>
+                <td class="h6">{$TRANSACTIONS[transaction].timestamp}</td>
+                <td class="h6">{$TRANSACTIONS[transaction].type}</td>
+                <td class="h6">
                 {if $TRANSACTIONS[transaction].type == 'Credit_PPS' OR
                   $TRANSACTIONS[transaction].type == 'Fee_PPS' OR
                   $TRANSACTIONS[transaction].type == 'Donation_PPS' OR
@@ -113,14 +113,14 @@
                 {else if $TRANSACTIONS[transaction].confirmations == -1}<span class="label label-danger">Orphaned</span>
                 {else}<span class="label label-warning">Unconfirmed</span>{/if}
                 </td>
-                <td><a href="#" onClick="alert('{$TRANSACTIONS[transaction].coin_address|escape}')">{$TRANSACTIONS[transaction].coin_address|truncate:20:"...":true:true}</a></td>
+                <td class="h6"><a href="#" onClick="alert('{$TRANSACTIONS[transaction].coin_address|escape}')">{$TRANSACTIONS[transaction].coin_address|truncate:20:"...":true:true}</a></td>
                 {if ! $GLOBAL.website.transactionexplorer.disabled}
-                <td><a href="{$GLOBAL.website.transactionexplorer.url}{$TRANSACTIONS[transaction].txid|escape}" title="{$TRANSACTIONS[transaction].txid|escape}">{$TRANSACTIONS[transaction].txid|truncate:20:"...":true:true}</a></td>
+                <td class="h6"><a href="{$GLOBAL.website.transactionexplorer.url}{$TRANSACTIONS[transaction].txid|escape}" title="{$TRANSACTIONS[transaction].txid|escape}">{$TRANSACTIONS[transaction].txid|truncate:20:"...":true:true}</a></td>
                 {else}
-                <td><a href="#" onClick="alert('{$TRANSACTIONS[transaction].txid|escape}')" title="{$TRANSACTIONS[transaction].txid|escape}">{$TRANSACTIONS[transaction].txid|truncate:20:"...":true:true}</a></td>
+                <td class="h6"><a href="#" onClick="alert('{$TRANSACTIONS[transaction].txid|escape}')" title="{$TRANSACTIONS[transaction].txid|escape}">{$TRANSACTIONS[transaction].txid|truncate:20:"...":true:true}</a></td>
                 {/if}
-                <td>{if $TRANSACTIONS[transaction].height == 0}n/a{else}<a href="{$smarty.server.SCRIPT_NAME}?page=statistics&action=round&height={$TRANSACTIONS[transaction].height}">{/if}{$TRANSACTIONS[transaction].height}</a></td>
-                <td><font color="{if $TRANSACTIONS[transaction].type == 'Credit' or $TRANSACTIONS[transaction].type == 'Credit_PPS' or $TRANSACTIONS[transaction].type == 'Bonus'}green{else}red{/if}">{$TRANSACTIONS[transaction].amount|number_format:"8"}</td>
+                <td class="h6">{if $TRANSACTIONS[transaction].height == 0}n/a{else}<a href="{$smarty.server.SCRIPT_NAME}?page=statistics&action=round&height={$TRANSACTIONS[transaction].height}">{/if}{$TRANSACTIONS[transaction].height}</a></td>
+                <td class="h6"><font color="{if $TRANSACTIONS[transaction].type == 'Credit' or $TRANSACTIONS[transaction].type == 'Credit_PPS' or $TRANSACTIONS[transaction].type == 'Bonus'}green{else}red{/if}">{$TRANSACTIONS[transaction].amount|number_format:"8"}</td>
               </tr>
               {/section}
             </tbody>
