@@ -459,6 +459,10 @@ span.spark-25 {
   color: rgba(255, 255, 255, 0.7);
 }
 
+.text-link {
+  color: #FFFFFF;
+}
+
 p.up {
   margin: -5px 0px -8px;
 }

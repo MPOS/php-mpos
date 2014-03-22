@@ -90,7 +90,7 @@
           <div class="col-lg-2 col-sm-6">
             <div class="circle-tile">
               <div class="circle-tile-heading blue">
-               <i class="fa fa-usd fa-fw fa-2x"></i>
+               <a class="text-link" href="{$GLOBAL.config.exchangeurl}" target="_blank"><i class="fa fa-usd fa-fw fa-2x"></i></a>
               </div>
               <div class="circle-tile-content blue">
                 <div class="circle-tile-description text-faded">
