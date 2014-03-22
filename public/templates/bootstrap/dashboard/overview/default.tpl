@@ -6,7 +6,7 @@
         </h4>
       </div>
       <div class="panel-footer">
-       <div class="row show-grid">
+       <div class="row">
           {* Depending on the price option we need to load a different template so it aligns properly *}
           {if $GLOBAL.config.price.enabled}
           {include file="dashboard/overview/_with_price_graph.tpl"}

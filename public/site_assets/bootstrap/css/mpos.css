@@ -409,3 +409,61 @@ span.spark-18 {
 span.spark-25 {
   margin: -25%;
 }
+
+/* Test Edit */
+
+.circle-tile {
+  margin-bottom: 30px;
+}
+
+.circle-tile {
+  margin-bottom: 15px;
+  text-align: center;
+}
+
+.circle-tile-content {
+  padding-top: 50px;
+  border-radius: 8px;
+  border: 3px solid rgba(255, 255, 255, 0.3);
+}
+
+.circle-tile-description {
+  font-weight: bold;
+  font-size: 16px;
+}
+
+.circle-tile-number {
+  padding: 0px 1px 4px;
+}
+
+.circle-tile-heading {
+  position: relative;
+  width: 80px;
+  height: 80px;
+  margin: 0px auto -40px;
+  border: 3px solid rgba(255, 255, 255, 0.3);
+  border-radius: 100%;
+  color: #FFF;
+  transition: all 0.3s ease-in-out 0s;
+}
+
+.circle-tile-heading .fa {
+  line-height: 80px;
+}
+
+.blue {
+  background-color: #428BCA;
+}
+
+.text-faded {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+p.up {
+  margin: -14px 0px 0px 0px;
+}
+
+div.up {
+  margin: -10px 0px 6px 0px;
+}
+/* End Test */
