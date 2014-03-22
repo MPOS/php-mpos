@@ -132,7 +132,7 @@ $(document).ready(function(){
     for (var i = j = 0; i < length; i++) {
       if (workers[i].hashrate > 0) {
         j++;
-        $('#b-workers').append('<tr><td>' + workers[i].username + '</td><td class="text-right">' + workers[i].hashrate + '</td><td class="text-right">' + workers[i].difficulty + '</td></tr>');
+        $('#b-workers').append('<tr><td class="text-left">' + workers[i].username + '</td><td class="text-right">' + workers[i].hashrate + '</td><td class="text-right">' + workers[i].difficulty + '</td></tr>');
       }
     }
     if (j == 0) { $('#b-workers').html('<tr><td colspan="3" class="text-center">No active workers</td></tr>'); }

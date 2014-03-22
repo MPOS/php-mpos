@@ -4,7 +4,7 @@
       <div class="panel-heading">
         <h4 class="panel-title"><i class="fa fa-desktop fa-fw"></i> Worker Information</h4>
       </div>
-      <div class="panel-body no-padding">
+      <div class="panel-body no-padding table-responsive">
         <table class="table table-bordered table-hover table-striped"> 
          <thead>
           <tr>
