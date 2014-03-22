@@ -86,54 +86,54 @@
           <table class="table table-striped table-bordered table-hover {if $USERS}datatable{/if}">
             <thead>
               <tr>
-                <th>ID</th>
-                <th>Username</th>
-                <th>E-Mail</th>
-                <th style="padding-right:10px">Shares</th>
-                <th style="padding-right:10px">Hashrate</th>
+                <th class="h6">ID</th>
+                <th class="h6">Username</th>
+                <th class="h6">E-Mail</th>
+                <th class="h6" style="padding-right:10px">Shares</th>
+                <th class="h6" style="padding-right:10px">Hashrate</th>
 {if $GLOBAL.config.payout_system != 'pps'}
-                <th style="padding-right:10px">Est. Donation</th>
-                <th style="padding-right:10px">Est. Payout</th>
+                <th class="h6" style="padding-right:10px">Est. Donation</th>
+                <th class="h6" style="padding-right:10px">Est. Payout</th>
 {else}
-                <th colspan="2" style="padding-right:10px">Est. 24 Hours</th>
+                <th class="h6" colspan="2" style="padding-right:10px">Est. 24 Hours</th>
 {/if}
-                <th style="padding-right:10px">Balance</th>
-                <th style="padding-right:10px">Reg. Date</th>
-                <th style="padding-right:10px">Last Login</th>
-                <th>Admin</th>
-                <th>Locked</th>
-                <th>No Fees</th>
+                <th class="h6" style="padding-right:10px">Balance</th>
+                <th class="h6" style="padding-right:10px">Reg. Date</th>
+                <th class="h6" style="padding-right:10px">Last Login</th>
+                <th class="h6">Admin</th>
+                <th class="h6">Locked</th>
+                <th class="h6">No Fees</th>
               </tr>
             </thead>
             <tbody>
 {nocache}
 {section name=user loop=$USERS|default}
               <tr>
-                <td>{$USERS[user].id}</td>
-                <td>{$USERS[user].username|escape}</td>
-                <td>{$USERS[user].email|escape}</td>
-                <td>{$USERS[user].shares.valid}</td>
-                <td>{$USERS[user].hashrate}</td>
+                <td class="h6">{$USERS[user].id}</td>
+                <td class="h6">{$USERS[user].username|escape}</td>
+                <td class="h6">{$USERS[user].email|escape}</td>
+                <td class="h6">{$USERS[user].shares.valid}</td>
+                <td class="h6">{$USERS[user].hashrate}</td>
 {if $GLOBAL.config.payout_system != 'pps'}
-                <td>{$USERS[user].estimates.donation|number_format:"8"}</td>
-                <td>{$USERS[user].estimates.payout|number_format:"8"}</td>
+                <td class="h6">{$USERS[user].estimates.donation|number_format:"8"}</td>
+                <td class="h6">{$USERS[user].estimates.payout|number_format:"8"}</td>
 {else}
-                <td colspan="2">{$USERS[user].estimates.hours24|number_format:"8"}</td>
+                <td class="h6" colspan="2">{$USERS[user].estimates.hours24|number_format:"8"}</td>
 {/if}
-                <td>{$USERS[user].balance|number_format:"8"}</td>
-                <td>{$USERS[user].signup_timestamp|date_format:"%d/%m %H:%M:%S"}</td>
-                <td>{$USERS[user].last_login|date_format:"%d/%m %H:%M:%S"}</td>
-                <td>
+                <td class="h6">{$USERS[user].balance|number_format:"8"}</td>
+                <td class="h6">{$USERS[user].signup_timestamp|date_format:"%d/%m %H:%M:%S"}</td>
+                <td class="h6">{$USERS[user].last_login|date_format:"%d/%m %H:%M:%S"}</td>
+                <td class="h6">
                   <input type="hidden" name="admin[{$USERS[user].id}]" value="0"/>
                   <input type="checkbox" onclick="storeAdmin({$USERS[user].id})" name="admin[{$USERS[user].id}]" value="1" id="admin[{$USERS[user].id}]" {if $USERS[user].is_admin}checked{/if} />
                   <label for="admin[{$USERS[user].id}]"></label>
                 </td>
-                <td>
+                <td class="h6">
                   <input type="hidden" name="locked[{$USERS[user].id}]" value="0"/>
                   <input type="checkbox" onclick="storeLock({$USERS[user].id})" name="locked[{$USERS[user].id}]" value="1" id="locked[{$USERS[user].id}]" {if $USERS[user].is_locked}checked{/if} />
                   <label for="locked[{$USERS[user].id}]"></label>
                 </td>
-                <td>
+                <td class="h6">
                   <input type="hidden" name="nofee[{$USERS[user].id}]" value="0"/>
                   <input type="checkbox" onclick="storeFee({$USERS[user].id})" name="nofee[{$USERS[user].id}]" value="1" id="nofee[{$USERS[user].id}]" {if $USERS[user].no_fees}checked{/if} />
                   <label for="nofee[{$USERS[user].id}]"></label>

@@ -25,7 +25,8 @@ $(document).ready(function(){
     height: '35',
     barWidth: 6,
     barSpacing: 2,
-    chartRangeMin: 0
+    chartRangeMin: 0,
+    barColor: '#41fc41'
   };
 
   // Sparkline options applied to line graphs
@@ -35,6 +36,7 @@ $(document).ready(function(){
     chartRangeMax: {/literal}{$GLOBAL.price}{literal} + 5,
     composite: false,
     lineColor: 'black',
+    fillColor: '#41fc41',
     chartRangeClip: true
   };
 
