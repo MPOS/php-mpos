@@ -7,7 +7,7 @@
               </div>
               <div class="circle-tile-content blue">
                 <div class="circle-tile-description text-faded">
-                  <p class="h5" id="b-nblock">{$NETWORK.block}</p>
+                  <p class="h5 up-more" id="b-nblock">{$NETWORK.block}</p>
                 </div>
                 <div class="circle-tile-number text-faded">
                   <p class="h6">Current Block</p>
@@ -22,7 +22,7 @@
               </div>
               <div class="circle-tile-content blue">
                 <div class="circle-tile-description text-faded">
-                  <p class="h5" id="b-roundprogress">{$ESTIMATES.percent|number_format:"2"}%</p>
+                  <p class="h5 up-more" id="b-roundprogress">{$ESTIMATES.percent|number_format:"2"}%</p>
                 </div>
                 <div class="circle-tile-number text-faded">
                   <p class="h6">Of Expected Shares</p>
@@ -37,7 +37,7 @@
               </div>
               <div class="circle-tile-content blue">
                 <div class="circle-tile-description text-faded">
-                  <p class="h5" id="b-payout">{$GLOBAL.userdata.estimates.payout|number_format:"8"}</p>
+                  <p class="h5 up-more" id="b-payout">{$GLOBAL.userdata.estimates.payout|number_format:"8"}</p>
                 </div>
                 <div class="circle-tile-number text-faded">
                   <p class="h6">{$GLOBAL.config.currency} Estimated Earnings</p>
@@ -52,7 +52,7 @@
               </div>
               <div class="circle-tile-content blue">
                 <div class="circle-tile-description text-faded">
-                  <p class="h5" id="b-diff">{$NETWORK.difficulty|number_format:"8"}</p>
+                  <p class="h5 up-more" id="b-diff">{$NETWORK.difficulty|number_format:"8"}</p>
                 </div>
                 <div class="circle-tile-number text-faded">
                   <p class="h6">Difficulty</p>
@@ -83,7 +83,7 @@
               </div>
               <div class="circle-tile-content blue">
                 <div class="circle-tile-description text-faded">
-                  <p class="h5" id="b-esttimeperblock">{$NETWORK.EstTimePerBlock|seconds_to_words}</p>
+                  <p class="h5 up-more" id="b-esttimeperblock">{$NETWORK.EstTimePerBlock|seconds_to_words}</p>
                 </div>
                 <div class="circle-tile-number text-faded">
                   <p class="h6">Est. Avg. Time per Block</p>

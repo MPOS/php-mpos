@@ -460,10 +460,15 @@ span.spark-25 {
 }
 
 p.up {
-  margin: -10px 0px 0px 0px;
+  margin: -5px 0px -8px;
 }
 
 div.up {
   margin: -10px 0px 6px 0px;
 }
+
+p.up-more {
+  margin: -6px 0px 10px;
+}
+
 /* End Test */
