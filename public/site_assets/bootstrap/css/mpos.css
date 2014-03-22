@@ -53,6 +53,10 @@
     min-height: 50px;
 }
 
+.dropdown-user { min-width:100px;
+
+}
+
 .navbar-top-links .dropdown-menu li {
     display: block;
 }
