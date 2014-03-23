@@ -1,9 +1,9 @@
           <div class="col-lg-2 col-sm-6">
             <div class="circle-tile">
-              <div class="circle-tile-heading blue">
+              <div class="circle-tile-heading teal">
                 <i class="fa fa-male fa-fw fa-2x"></i>
               </div>
-              <div class="circle-tile-content blue">
+              <div class="circle-tile-content teal">
                 <div class="circle-tile-description text-faded">
                   <p class="h5 up-more">My Hashrate</p>
                   <div class="circle-tile-number text-faded up">
@@ -18,10 +18,10 @@
           </div>
           <div class="col-lg-2 col-sm-6">
             <div class="circle-tile">
-              <div class="circle-tile-heading blue">
+              <div class="circle-tile-heading teal">
                 <i class="fa fa-users fa-fw fa-2x"></i>
               </div>
-              <div class="circle-tile-content blue">
+              <div class="circle-tile-content teal">
                 <div class="circle-tile-description text-faded">
                   <p class="h5 up-more">Pool Hashrate</p>
                   <div class="circle-tile-number text-faded up">
@@ -36,10 +36,10 @@
           </div>
           <div class="col-lg-2 col-sm-6">
             <div class="circle-tile">
-              <div class="circle-tile-heading blue">
+              <div class="circle-tile-heading teal">
                 <i class="fa fa-share-square fa-fw fa-2x"></i>
               </div>
-              <div class="circle-tile-content blue">
+              <div class="circle-tile-content teal">
                 <div class="circle-tile-description text-faded">
                   <p class="h5 up-more">My Sharerate</p>
                   <div class="circle-tile-number text-faded up">
@@ -54,10 +54,10 @@
           </div>
           <div class="col-lg-2 col-sm-6">
             <div class="circle-tile">
-              <div class="circle-tile-heading blue">
+              <div class="circle-tile-heading teal">
                <i class="fa fa-truck fa-fw fa-2x"></i>
               </div>
-              <div class="circle-tile-content blue">
+              <div class="circle-tile-content teal">
                 <div class="circle-tile-description text-faded">
                   <p class="h5 up-more">Pool Workers</p>
                   <div class="circle-tile-number text-faded up">
@@ -71,10 +71,10 @@
           </div>
           <div class="col-lg-2 col-sm-6">
             <div class="circle-tile">
-              <div class="circle-tile-heading blue">
+              <div class="circle-tile-heading teal">
                <i class="fa fa-h-square fa-fw fa-2x"></i>
               </div>
-              <div class="circle-tile-content blue">
+              <div class="circle-tile-content teal">
                 <div class="circle-tile-description text-faded">
                   <p class="h5 up-more">Net Hashrate</p>
                   <div class="circle-tile-number text-faded up">
@@ -89,10 +89,10 @@
           </div>
           <div class="col-lg-2 col-sm-6">
             <div class="circle-tile">
-              <div class="circle-tile-heading blue">
+              <div class="circle-tile-heading teal">
                <a class="text-link" href="{$GLOBAL.config.exchangeurl}" target="_blank"><i class="fa fa-usd fa-fw fa-2x"></i></a>
               </div>
-              <div class="circle-tile-content blue">
+              <div class="circle-tile-content teal">
                 <div class="circle-tile-description text-faded">
                   <p class="h5 up-more">{$GLOBAL.config.currency}/{$GLOBAL.config.price.currency}</p>
                   <div class="circle-tile-number text-faded up">
