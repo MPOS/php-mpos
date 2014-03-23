@@ -16,7 +16,7 @@
             </tr>
             <tr>
               <th>Current Active Workers</th>
-              <td id="b-workers">{$GLOBAL.workers}</td>
+              <td id="b-workers">{$GLOBAL.workers|number_format}</td>
             </tr>
             <tr>
               <th>Current Difficulty</th>
@@ -44,22 +44,22 @@
             </tr>
             <tr>
               <th>Est. Shares this Round</th>
-              <td id="b-target">{$ESTIMATES.shares} (done: {$ESTIMATES.percent}%)</td>
+              <td id="b-target">{$ESTIMATES.shares|number_format} (done: {$ESTIMATES.percent}%)</td>
             </tr>
             {if ! $GLOBAL.website.blockexplorer.disabled}
             <tr>
               <th width="50%">Next Network Block</th>
-              <td colspan="3">{$CURRENTBLOCK + 1} &nbsp;&nbsp;<font size="1"> (Current: <a href="{$GLOBAL.website.blockexplorer.url}{$CURRENTBLOCKHASH}" target="_new">{$CURRENTBLOCK})</a></font></td>
+              <td colspan="3">{($CURRENTBLOCK + 1)|number_format} &nbsp;&nbsp;<font size="1"> (Current: <a href="{$GLOBAL.website.blockexplorer.url}{$CURRENTBLOCKHASH}" target="_new">{$CURRENTBLOCK|number_format})</a></font></td>
             </tr>
             {else}
             <tr>
               <th>Next Network Block</th>
-              <td colspan="3">{$CURRENTBLOCK + 1} &nbsp;&nbsp; (Current: {$CURRENTBLOCK})</td>
+              <td colspan="3">{($CURRENTBLOCK + 1)|number_format} &nbsp;&nbsp; (Current: {$CURRENTBLOCK|number_format})</td>
             </tr>
             {/if}
             <tr>
               <th>Last Block Found</th>
-              <td colspan="3"><a href="{$smarty.server.SCRIPT_NAME}?page=statistics&action=round&height={$LASTBLOCK}" target="_new">{$LASTBLOCK|default:"0"}</a></td>
+              <td colspan="3"><a href="{$smarty.server.SCRIPT_NAME}?page=statistics&action=round&height={$LASTBLOCK}" target="_new">{$LASTBLOCK|default:"0"|number_format}</a></td>
             </tr>
             <tr>
               <th>Time Since Last Block</th>
