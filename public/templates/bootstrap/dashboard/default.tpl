@@ -3,7 +3,7 @@
   <div class="col-lg-12">
     <div class="panel panel-info">
       <div class="panel-heading">
-        <h4 class="panel-title"><i class="fa fa-align-left fa-fw"></i> Overview</span></h4>
+        <h4 class="panel-title"><i class="fa fa-align-left fa-fw"></i> Overview</h4>
       </div>
       <div class="panel-body text-center">
         <div class="row">
