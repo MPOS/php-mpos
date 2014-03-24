@@ -33,7 +33,7 @@ if ($iCurrentPoolHashrate > $dNetworkHashrate) $dNetworkHashrate = $iCurrentPool
 
 // Time in seconds, not hours, using modifier in smarty to translate
 $iCurrentPoolHashrate > 0 ? $iEstTime = $dDifficulty * pow(2,32) / ($iCurrentPoolHashrate * 1000) : $iEstTime = 0;
-$iEstShares = (pow(2, 32 - $config['difficulty']) * $dDifficulty);
+$iEstShares = $statistics->getEstimatedShares($dDifficulty);
 
 // Time since last
 $now = new DateTime( "now" );
