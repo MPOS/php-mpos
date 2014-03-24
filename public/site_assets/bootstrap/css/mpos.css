@@ -40,7 +40,7 @@
 
 /* Top Right Navigation Dropdown Styles */
 
- .navbar-top-links li {
+.navbar-top-links li {
     display: inline-block;
 }
 
@@ -53,8 +53,8 @@
     min-height: 50px;
 }
 
-.dropdown-user { min-width:100px;
-
+.dropdown-user { 
+    min-width:100px;
 }
 
 .navbar-top-links .dropdown-menu li {
