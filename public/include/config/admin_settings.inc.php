@@ -439,3 +439,18 @@ $aSettings['notifications'][] = array(
   'name' => 'notifications_disable_idle_worker', 'value' => $setting->getValue('notifications_disable_idle_worker'),
   'tooltip' => 'Enable/Disable IDLE worker notifications globally. Will remove the user option too.'
 );
+$aSettings['pools'][] = array(
+  'display' => 'Enable Pool Navigation', 'type' => 'select',
+  'options' => array( 0 => 'No', 1 => 'Yes' ),
+  'default' => 0,
+  'name' => 'poolnav_enabled', 'value' => $setting->getValue('poolnav_enabled'),
+  'tooltip' => 'Enable or Disable Pool Navigation.'
+);
+$aSettings['pools'][] = array(
+  'display' => 'Pools for Pool Navigation', 'type' => 'textarea',
+  'size' => 20,
+  'height' => 12,
+  'default' => 'Pool Name|Pool URL',
+  'name' => 'poolnav_pools', 'value' => $setting->getValue('poolnav_pools'),
+  'tooltip' => '.'
+);
