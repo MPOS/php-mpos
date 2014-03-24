@@ -444,7 +444,7 @@ $aSettings['pools'][] = array(
   'options' => array( 0 => 'No', 1 => 'Yes' ),
   'default' => 0,
   'name' => 'poolnav_enabled', 'value' => $setting->getValue('poolnav_enabled'),
-  'tooltip' => 'Enable or Disable Pool Navigation.'
+  'tooltip' => 'Enable or Disable Pool Navigation for multiple Pools in Header.'
 );
 $aSettings['pools'][] = array(
   'display' => 'Pools for Pool Navigation', 'type' => 'textarea',
