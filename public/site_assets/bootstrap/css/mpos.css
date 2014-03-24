@@ -451,12 +451,8 @@ span.spark-25 {
   line-height: 80px;
 }
 
-.blue {
-  background-color: #428BCA;
-}
-
-.teal {
-  background-color: #008080
+.lightblue {
+  background-color: #2FAACE;
 }
 
 .text-faded {
@@ -469,6 +465,7 @@ span.spark-25 {
 
 p.up {
   margin: -5px 0px -8px;
+  font-weight: 600;
 }
 
 div.up {
@@ -477,10 +474,15 @@ div.up {
 
 p.up-more {
   margin: -6px 0px 10px;
+  font-weight: 600;
 }
 
 p.up-more2 {
   margin: -6px 0px 0px;
 }
+
+div.fade {
+  opacity: 0.8;
+}  
 
 /* End Test */
