@@ -1,4 +1,4 @@
-        <nav class="navbar navbar-default navbar-static-top" role="navigation">
+        <nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0">
             <div class="navbar-header">
                 <button type="button" class="navbar-toggle" data-toggle="collapse">
                     <span class="sr-only">Toggle navigation</span>
@@ -6,7 +6,7 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                {if $GLOBAL.config.poolnav_enabled}
+                {if $GLOBAL.config.poolnav_enabled|default:"false"}
                 <ul class="nav navbar-nav navbar-top-links">
                   <li class="dropdown">
                     <a href="#" class="navbar-brand dropdown-toggle" data-toggle="dropdown">{$GLOBAL.website.name} <b class="caret"></b></a>
