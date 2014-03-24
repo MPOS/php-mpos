@@ -15,7 +15,7 @@
                       {foreach from=$PoolArray item=pooldata}
                       {assign var="PoolURL" value="|"|explode:$pooldata}
                       {if $PoolURL|count > 1}
-                      <li><a href="{$PoolURL[1]}">{$PoolURL[0]}</a></li>
+                      <li class="h4"><a href="{$PoolURL[1]}"><i class="fa fa-angle-double-right fa-fw"></i> {$PoolURL[0]}</a></li>
                       {/if}
                       {/foreach}
                     </ul>
