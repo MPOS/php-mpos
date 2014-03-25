@@ -923,23 +923,28 @@ public function isAuthenticated($logout=true) {
 
   /**
    * Convenience function to get IP address, no params is the same as REMOTE_ADDR
-   * @param trustremote bool must be FALSE to checkclient or checkforwarded
+   * @param trustremote bool must be FALSE to checkcloudflare, checkclient or checkforwarded
+   * @param checkcloudflare bool check HTTP_CF_CONNECTING_IP for a valid ip first
    * @param checkclient bool check HTTP_CLIENT_IP for a valid ip first
    * @param checkforwarded bool check HTTP_X_FORWARDED_FOR for a valid ip first
    * @return string IP address
    */
-  public function getCurrentIP($trustremote=false, $checkclient=false, $checkforwarded=true) {
+  public function getCurrentIP($trustremote=false, $checkcloudflare=true, $checkclient=false, $checkforwarded=true) {
+    $cf = (isset($_SERVER['HTTP_CF_CONNECTING_IP'])) ? $_SERVER['HTTP_CF_CONNECTING_IP'] : false;
     $client = (isset($_SERVER['HTTP_CLIENT_IP'])) ? $_SERVER['HTTP_CLIENT_IP'] : false;
     $fwd = (isset($_SERVER['HTTP_X_FORWARDED_FOR'])) ? $_SERVER['HTTP_X_FORWARDED_FOR'] : false;
     $remote = (isset($_SERVER['REMOTE_ADDR'])) ? $_SERVER['REMOTE_ADDR'] : @$_SERVER['REMOTE_ADDR'];
     // shared internet
-    if (filter_var($client, FILTER_VALIDATE_IP) && !$trustremote && $checkclient) {
+    if (!$trustremote && $checkcloudflare && filter_var($cf, FILTER_VALIDATE_IP)) {
+      // cloudflare
+      return $cf;
+    } else if (!$trustremote && $checkclient && filter_var($client, FILTER_VALIDATE_IP)) {
       return $client;
-    } else if (strpos($fwd, ',') !== false && !$trustremote && $checkforwarded) {
+    } else if (!$trustremote && $checkforwarded && strpos($fwd, ',') !== false) {
       // multiple proxies
       $ips = explode(',', $fwd);
       return $ips[0];
-    } else if (filter_var($fwd, FILTER_VALIDATE_IP) && !$trustremote && $checkforwarded) {
+    } else if (!$trustremote && $checkforwarded && filter_var($fwd, FILTER_VALIDATE_IP)) {
       // single
       return $fwd;
     } else {
