@@ -49,7 +49,7 @@ $aSettings['website'][] = array(
 $aSettings['website'][] = array(
   'display' => 'Website theme', 'type' => 'select',
   'options' => $aThemes,
-  'default' => 'mpos',
+  'default' => 'bootstrap',
   'name' => 'website_theme', 'value' => $setting->getValue('website_theme'),
   'tooltip' => 'The default theme used on your pool.'
 );
