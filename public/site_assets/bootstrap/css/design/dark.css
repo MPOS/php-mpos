@@ -87,9 +87,11 @@ a:focus {
     color: #FFFFFF;
 }
 
-
-.table tbody tr:hover td, .table tbody tr:hover th {
+.table tbody tr:hover a,
+.table tbody tr:hover td,
+.table tbody tr:hover th {
     background-color: #999999;
+    color: #FFFFFF;
 }
 
 
