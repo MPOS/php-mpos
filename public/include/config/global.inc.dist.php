@@ -30,6 +30,13 @@ $config['SALTY'] = 'THISSHOULDALSOBERRAANNDDOOM';
 $config['algorithm'] = 'scrypt';
 
 /**
+  * Getbalance API Calls
+  *  System used for getting actual Balance from Wallet
+  *   https://github.com/MPOS/php-mpos/wiki/Config-Setup#getbalance-api-calls
+  **/
+$config['getbalancewithunconfirmed'] = true;
+
+/**
  * Database configuration
  *  MySQL database configuration
  *   https://github.com/MPOS/php-mpos/wiki/Config-Setup#wiki-database-configuration

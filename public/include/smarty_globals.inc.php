@@ -75,6 +75,7 @@ $aGlobal = array(
     'disable_contactform' => $setting->getValue('disable_contactform'),
     'disable_contactform_guest' => $setting->getValue('disable_contactform_guest'),
     'algorithm' => $config['algorithm'],
+    'getbalancewithunconfirmed' => $config['getbalancewithunconfirmed'],
     'target_bits' => $coin->getTargetBits(),
     'accounts' => $config['accounts'],
     'disable_invitations' => $setting->getValue('disable_invitations'),
