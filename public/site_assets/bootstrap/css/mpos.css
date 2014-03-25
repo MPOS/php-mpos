@@ -2,10 +2,15 @@
 
 /* ------------------------------- */
 
- body {
+body {
     background-color: #f8f8f8;
     min-width: 350px;
+    font-size: 12px;
     /* Design constraint */
+}
+
+p {
+  font-size: 12px;
 }
 
 /* Wrappers */
@@ -20,6 +25,7 @@
     padding: 0 15px;
     min-height: 568px;
     background-color: #fff;
+    font-size: 12px;
 }
 
 @media(min-width:768px) {
@@ -29,6 +35,7 @@
         padding: 0 30px;
         min-height: 1300px;
         border-left: 1px solid #e7e7e7;
+        font-size: 12px;
     }
 }
 
@@ -226,13 +233,13 @@
 
 /* Login Page */
 
- .login-panel {
+.login-panel {
     margin-top: 25%;
 }
 
 /* Flot Chart Containers */
 
- .flot-chart {
+.flot-chart {
     display: block;
     height: 400px;
 }
@@ -244,7 +251,7 @@
 
 /* DataTables Overrides */
 
- table.dataTable thead .sorting,
+table.dataTable thead .sorting,
 table.dataTable thead .sorting_asc:after,
 table.dataTable thead .sorting_desc,
 table.dataTable thead .sorting_asc_disabled,

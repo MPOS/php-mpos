@@ -2,6 +2,7 @@
 $defflip = (!cfip()) ? exit(header('HTTP/1.1 401 Unauthorized')) : 1;
 
 $aThemes = $template->getThemes();
+$aDesigns = $template->getDesigns();
 
 // Load the settings available in this system
 $aSettings['website'][] = array(
@@ -52,6 +53,13 @@ $aSettings['website'][] = array(
   'default' => 'bootstrap',
   'name' => 'website_theme', 'value' => $setting->getValue('website_theme'),
   'tooltip' => 'The default theme used on your pool.'
+);
+$aSettings['website'][] = array(
+  'display' => 'Website Design', 'type' => 'select',
+  'options' => $aDesigns,
+  'default' => 'default',
+  'name' => 'website_design', 'value' => $setting->getValue('website_design'),
+  'tooltip' => 'The default design used on your pool.'
 );
 $aSettings['website'][] = array(
   'display' => 'Website News Style', 'type' => 'select',
