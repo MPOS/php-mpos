@@ -1,4 +1,4 @@
-      <table class="table borderless m-b-none text-small">
+      <table class="table borderless m-b-none text-small lightgrey">
         <thead>
           <tr>
             <th></th>

@@ -94,7 +94,6 @@ a:focus {
     color: #FFFFFF;
 }
 
-
 .nav > li > a:hover, 
 .nav > li > a:focus {
     background-color: #000000;
@@ -107,8 +106,6 @@ a:focus {
     color: #FFFFFF;
 }
 
-
-
 /* Tables */
 
 .panel-footer {
@@ -119,5 +116,19 @@ a:focus {
 .panel-body {
     color: #000;
     background-color: #BDBFBF;
+}
+
+.panel-info > .panel-heading {
+    background-color: #808080;
+    border-color: #808080;
+    color: #D3D3D3;
+}
+
+.panel-info {
+    border-color: #D3D3D3;
+}
+
+.lightgrey {
+  background-color: #D3D3D3;
 }
 
