@@ -344,7 +344,7 @@ class Statistics extends Base {
           $data['data'][$row['id']]['is_anonymous'] = $row['is_anonymous'];
         }
       }
-      $data['share_id'] = $this->share->getMaxShareId();
+      $data['share_id'] = $this->share->getLastInsertedShareId();
       return $this->memcache->setCache(STATISTICS_ALL_USER_SHARES, $data);
     }
     return $this->sqlError();
