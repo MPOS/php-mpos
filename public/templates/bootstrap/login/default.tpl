@@ -1,7 +1,7 @@
 <div class="row">
   <form class="col-md-4" role="form" action="{$smarty.server.SCRIPT_NAME}?page=login" method="post" id="loginForm">
     <input type="hidden" name="ctoken" value="{$CTOKEN|escape|default:""}">
-    <div class="panel panel-default">
+    <div class="panel panel-info">
       <div class="panel-heading">
         <h3 class="panel-title">Login with existing account</h3>
       </div>
