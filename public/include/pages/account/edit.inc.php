@@ -57,23 +57,23 @@ if ($user->isAuthenticated()) {
       $ptc++;
     }
     // display global notice about tokens being in use and for which bits they're active
-    $_SESSION['POPUP'][] = array('CONTENT' => $popupmsg, 'TYPE' => 'info');
+    $_SESSION['POPUP'][] = array('CONTENT' => $popupmsg, 'TYPE' => 'alert alert-warning');
   }
   
   if (isset($_POST['do']) && $_POST['do'] == 'genPin') {
     if (!$config['csrf']['enabled'] || $config['csrf']['enabled'] && $csrftoken->valid) {
       if ($user->generatePin($_SESSION['USERDATA']['id'], $_POST['currentPassword'])) {
-        $_SESSION['POPUP'][] = array('CONTENT' => 'Your PIN # has been sent to your email.', 'TYPE' => 'success');
+        $_SESSION['POPUP'][] = array('CONTENT' => 'Your PIN # has been sent to your email.', 'TYPE' => 'alert alert-success');
       } else {
-        $_SESSION['POPUP'][] = array('CONTENT' => $user->getError(), 'TYPE' => 'errormsg');
+        $_SESSION['POPUP'][] = array('CONTENT' => $user->getError(), 'TYPE' => 'alert alert-danger');
       }
     } else {
-      $_SESSION['POPUP'][] = array('CONTENT' => $csrftoken->getErrorWithDescriptionHTML(), 'TYPE' => 'info');
+      $_SESSION['POPUP'][] = array('CONTENT' => $csrftoken->getErrorWithDescriptionHTML(), 'TYPE' => 'alert alert-warning');
     }
   }
   else {
     if ( @$_POST['do'] && !$user->checkPin($_SESSION['USERDATA']['id'], @$_POST['authPin'])) {
-      $_SESSION['POPUP'][] = array('CONTENT' => 'Invalid PIN. ' . ($config['maxfailed']['pin'] - $user->getUserPinFailed($_SESSION['USERDATA']['id'])) . ' attempts remaining.', 'TYPE' => 'errormsg');
+      $_SESSION['POPUP'][] = array('CONTENT' => 'Invalid PIN. ' . ($config['maxfailed']['pin'] - $user->getUserPinFailed($_SESSION['USERDATA']['id'])) . ' attempts remaining.', 'TYPE' => 'alert alert-danger');
     } else {
       if (isset($_POST['unlock']) && isset($_POST['utype'])) {
         $validtypes = array('account_edit','change_pw','withdraw_funds');
@@ -83,12 +83,12 @@ if ($user->isAuthenticated()) {
           if (!$config['csrf']['enabled'] || $config['csrf']['enabled'] && $csrftoken->valid) {
             $send = $user->sendChangeConfigEmail($ctype, $_SESSION['USERDATA']['id']);
             if ($send) {
-              $_SESSION['POPUP'][] = array('CONTENT' => 'A confirmation was sent to your e-mail, follow that link to continue', 'TYPE' => 'success');
+              $_SESSION['POPUP'][] = array('CONTENT' => 'A confirmation was sent to your e-mail, follow that link to continue', 'TYPE' => 'alert alert-success');
             } else {
-              $_SESSION['POPUP'][] = array('CONTENT' => $user->getError(), 'TYPE' => 'errormsg');
+              $_SESSION['POPUP'][] = array('CONTENT' => $user->getError(), 'TYPE' => 'alert alert-danger');
             }
           } else {
-            $_SESSION['POPUP'][] = array('CONTENT' => $csrftoken->getErrorWithDescriptionHTML(), 'TYPE' => 'info');
+            $_SESSION['POPUP'][] = array('CONTENT' => $csrftoken->getErrorWithDescriptionHTML(), 'TYPE' => 'alert alert-warning');
           }
         }
       } else {
@@ -97,11 +97,11 @@ if ($user->isAuthenticated()) {
         	$aBalance = $transaction->getBalance($_SESSION['USERDATA']['id']);
         	$dBalance = $aBalance['confirmed'];
         	if ($setting->getValue('disable_payouts') == 1 || $setting->getValue('disable_manual_payouts') == 1) {
-        	  $_SESSION['POPUP'][] = array('CONTENT' => 'Manual payouts are disabled.', 'TYPE' => 'info');
-            } else if ($dBalance < $config['mp_threshold']) {
-              $_SESSION['POPUP'][] = array('CONTENT' => 'Payout must be greater or equal than ' . $config['mp_threshold'] . '.', 'TYPE' => 'info');
-            } else if (!$user->getCoinAddress($_SESSION['USERDATA']['id'])) {
-              $_SESSION['POPUP'][] = array('CONTENT' => 'You have no payout address set.', 'TYPE' => 'errormsg');
+        	  $_SESSION['POPUP'][] = array('CONTENT' => 'Manual payouts are disabled.', 'TYPE' => 'alert alert-warning');
+          } else if ($aBalance['confirmed'] < $config['mp_threshold']) {
+            $_SESSION['POPUP'][] = array('CONTENT' => 'Payout must be greater or equal than ' . $config['mp_threshold'] . '.', 'TYPE' => 'info');
+          } else if (!$user->getCoinAddress($_SESSION['USERDATA']['id'])) {
+            $_SESSION['POPUP'][] = array('CONTENT' => 'You have no payout address set.', 'TYPE' => 'alert alert-danger');
         	} else {
         	  $user->log->log("info", $_SESSION['USERDATA']['username']." requesting manual payout");
         	  if ($dBalance > $config['txfee_manual']) {
@@ -110,16 +110,16 @@ if ($user->isAuthenticated()) {
         	        if ($iPayoutId = $oPayout->createPayout($_SESSION['USERDATA']['id'], $oldtoken_wf)) {
         	          $_SESSION['POPUP'][] = array('CONTENT' => 'Created new manual payout request with ID #' . $iPayoutId);
         	        } else {
-        	          $_SESSION['POPUP'][] = array('CONTENT' => $iPayoutId->getError(), 'TYPE' => 'errormsg');
+        	          $_SESSION['POPUP'][] = array('CONTENT' => $iPayoutId->getError(), 'TYPE' => 'alert alert-danger');
         	        }
         	      } else {
-        	        $_SESSION['POPUP'][] = array('CONTENT' => $csrftoken->getErrorWithDescriptionHTML(), 'TYPE' => 'info');
+        	        $_SESSION['POPUP'][] = array('CONTENT' => $csrftoken->getErrorWithDescriptionHTML(), 'TYPE' => 'alert alert-warning');
         	      }
         	    } else {
-        	      $_SESSION['POPUP'][] = array('CONTENT' => 'You already have one active manual payout request.', 'TYPE' => 'errormsg');
+        	      $_SESSION['POPUP'][] = array('CONTENT' => 'You already have one active manual payout request.', 'TYPE' => 'alert alert-danger');
         	    }
         	  } else {
-        	    $_SESSION['POPUP'][] = array('CONTENT' => 'Insufficient funds, you need more than ' . $config['txfee_manual'] . ' ' . $config['currency'] . ' to cover transaction fees', 'TYPE' => 'errormsg');
+        	    $_SESSION['POPUP'][] = array('CONTENT' => 'Insufficient funds, you need more than ' . $config['txfee_manual'] . ' ' . $config['currency'] . ' to cover transaction fees', 'TYPE' => 'alert alert-danger');
         	  }
         	}
         	break;
@@ -127,24 +127,24 @@ if ($user->isAuthenticated()) {
           case 'updateAccount':
             if (!$config['csrf']['enabled'] || $config['csrf']['enabled'] && $csrftoken->valid) {
               if ($user->updateAccount($_SESSION['USERDATA']['id'], $_POST['paymentAddress'], $_POST['payoutThreshold'], $_POST['donatePercent'], $_POST['email'], $_POST['is_anonymous'], $oldtoken_ea)) {
-            	$_SESSION['POPUP'][] = array('CONTENT' => 'Account details updated', 'TYPE' => 'success');
+            	$_SESSION['POPUP'][] = array('CONTENT' => 'Account details updated', 'TYPE' => 'alert alert-success');
               } else {
-            	$_SESSION['POPUP'][] = array('CONTENT' => 'Failed to update your account: ' . $user->getError(), 'TYPE' => 'errormsg');
+            	$_SESSION['POPUP'][] = array('CONTENT' => 'Failed to update your account: ' . $user->getError(), 'TYPE' => 'alert alert-danger');
               }
             } else {
-              $_SESSION['POPUP'][] = array('CONTENT' => $csrftoken->getErrorWithDescriptionHTML(), 'TYPE' => 'info');
+              $_SESSION['POPUP'][] = array('CONTENT' => $csrftoken->getErrorWithDescriptionHTML(), 'TYPE' => 'alert alert-warning');
             }
         	break;
 
           case 'updatePassword':
             if (!$config['csrf']['enabled'] || $config['csrf']['enabled'] && $csrftoken->valid) {
               if ($user->updatePassword($_SESSION['USERDATA']['id'], $_POST['currentPassword'], $_POST['newPassword'], $_POST['newPassword2'], $oldtoken_cp)) {
-                $_SESSION['POPUP'][] = array('CONTENT' => 'Password updated', 'TYPE' => 'success');
+                $_SESSION['POPUP'][] = array('CONTENT' => 'Password updated', 'TYPE' => 'alert alert-success');
               } else {
-                $_SESSION['POPUP'][] = array('CONTENT' => $user->getError(), 'TYPE' => 'errormsg');
+                $_SESSION['POPUP'][] = array('CONTENT' => $user->getError(), 'TYPE' => 'alert alert-danger');
               }
             } else {
-              $_SESSION['POPUP'][] = array('CONTENT' => $csrftoken->getErrorWithDescriptionHTML(), 'TYPE' => 'info');
+              $_SESSION['POPUP'][] = array('CONTENT' => $csrftoken->getErrorWithDescriptionHTML(), 'TYPE' => 'alert alert-warning');
             }
         	break;
         }

@@ -28,24 +28,24 @@ if (!$smarty->isCached('master.tpl', $smarty_cache_key)) {
         $iLimit = 1000;
   }
 
-  if (@$_REQUEST['next'] && !empty($_REQUEST['height'])) {
-    $iHeight = @$roundstats->getNextBlockForStats($_REQUEST['height'], $iLimit);
-      if (!$iHeight) {
-        $aBlock = $block->getLast();
-        $iHeight = $aBlock['height']; 
-      }
-  } else if (@$_REQUEST['prev'] && !empty($_REQUEST['height'])) {
-      $iHeight = $_REQUEST['height'];
-  } else if (!empty($_REQUEST['height']) && is_numeric($_REQUEST['height'])) {
-      $iHeight = $_REQUEST['height']; 
-  } else {
-      $aBlock = $block->getLast();
-      $iHeight = $aBlock['height'];
-  }
-
   if (@$_REQUEST['search']) {
     $iHeight = $roundstats->searchForBlockHeight($_REQUEST['search']);
   }
+  if (@$_REQUEST['next'] && !empty($_REQUEST['height'])) {
+    $iHeight = @$roundstats->getNextBlock($_REQUEST['height']);
+    if (!$iHeight) {
+      $iBlock = $block->getLast();
+      $iHeight = $iBlock['height'];
+    }
+  } else if (@$_REQUEST['prev'] && !empty($_REQUEST['height'])) {
+    $iHeight = $roundstats->getPreviousBlock($_REQUEST['height']);
+  } else if (empty($_REQUEST['height'])) {
+    $iBlock = $block->getLast();
+    $iHeight = $iBlock['height'];
+  } else {
+    $iHeight = $_REQUEST['height'];
+  }
+  $_REQUEST['height'] = $iHeight;
 
   if (@$_REQUEST['filter']) {
     $filter = $_REQUEST['filter'];
@@ -65,13 +65,13 @@ if (!$smarty->isCached('master.tpl', $smarty_cache_key)) {
     }
   }
 
-    $smarty->assign('REPORTDATA', $aBlocksData);
-    $smarty->assign("USERLIST", $aUserList);
-    $smarty->assign("USERNAME", $userName);
-    $smarty->assign("USERID", $iUserId);
-    $smarty->assign("BLOCKLIMIT", $iLimit);
-    $smarty->assign("HEIGHT", $iHeight);
-    $smarty->assign("FILTER", $filter);
+  $smarty->assign('REPORTDATA', $aBlocksData);
+  $smarty->assign("USERLIST", $aUserList);
+  $smarty->assign("USERNAME", $userName);
+  $smarty->assign("USERID", $iUserId);
+  $smarty->assign("BLOCKLIMIT", $iLimit);
+  $smarty->assign("HEIGHT", $iHeight);
+  $smarty->assign("FILTER", $filter);
 } else {
   $debug->append('Using cached page', 3);
 }
