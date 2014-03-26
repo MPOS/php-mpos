@@ -10,7 +10,7 @@
                 <ul class="nav navbar-nav navbar-top-links">
                   <li class="dropdown">
                     <a href="#" class="navbar-brand dropdown-toggle" data-toggle="dropdown">{$GLOBAL.website.name} <b class="caret"></b></a>
-                    <ul class="dropdown-menu">
+                    <ul class="dropdown-menu lightgrey">
                       {assign var="PoolArray" value="\n"|explode:$GLOBAL.config.poolnav_pools}
                       {foreach from=$PoolArray item=pooldata}
                       {assign var="PoolURL" value="|"|explode:$pooldata}
@@ -65,7 +65,7 @@
                     <a class="dropdown-toggle" data-toggle="dropdown" href="#">
                         <i class="fa fa-user fa-fw"></i> {if $GLOBAL.userdata.username|default}{$smarty.session.USERDATA.username|escape}{else}Guest{/if} <i class="fa fa-caret-down"></i>
                     </a>
-                    <ul class="dropdown-menu dropdown-user">
+                    <ul class="dropdown-menu dropdown-user lightgrey">
                     	{if $smarty.session.AUTHENTICATED|default:"0" == 1}
                         <li><a href="{$smarty.server.SCRIPT_NAME}?page=dashboard"><i class="fa fa-dashboard fa-fw"></i> Dashboard</a>
                         <li><a href="{$smarty.server.SCRIPT_NAME}?page=account&action=edit"><i class="fa fa-gear fa-fw"></i> Settings</a>
