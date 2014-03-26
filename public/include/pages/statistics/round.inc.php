@@ -58,7 +58,7 @@ case '1':
   $smarty->assign("CONTENT", "default.tpl");
   break;
 case '2':
-  $_SESSION['POPUP'][] = array('CONTENT' => 'Page currently disabled. Please try again later.', 'TYPE' => 'errormsg');
+  $_SESSION['POPUP'][] = array('CONTENT' => 'Page currently disabled. Please try again later.', 'TYPE' => 'alert alert-danger');
   $smarty->assign("CONTENT", "");
   break;
 }

@@ -75,7 +75,7 @@ class Share Extends Base {
    **/
   public function getRoundShares($previous_upstream=0, $current_upstream) {
     $stmt = $this->mysqli->prepare("SELECT
-      ROUND(IFNULL(SUM(IF(s.difficulty=0, POW(2, (" . $this->config['difficulty'] . " - 16)), s.difficulty)), 0) / POW(2, (" . $this->config['difficulty'] . " - 16)), 8) AS total
+      IFNULL(SUM(IF(s.difficulty=0, POW(2, (" . $this->config['difficulty'] . " - 16)), s.difficulty)), 0) AS total
       FROM $this->table AS s
       LEFT JOIN " . $this->user->getTableName() . " AS a
       ON a.username = SUBSTRING_INDEX( s.username , '.', 1 )
@@ -99,8 +99,8 @@ class Share Extends Base {
         a.id,
         SUBSTRING_INDEX( s.username , '.', 1 ) as username,
         a.no_fees AS no_fees,
-        ROUND(IFNULL(SUM(IF(our_result='Y', IF(s.difficulty=0, POW(2, (" . $this->config['difficulty'] . " - 16)), s.difficulty), 0)), 0) / POW(2, (" . $this->config['difficulty'] . " - 16)), 8) AS valid,
-        ROUND(IFNULL(SUM(IF(our_result='N', IF(s.difficulty=0, POW(2, (" . $this->config['difficulty'] . " - 16)), s.difficulty), 0)), 0) / POW(2, (" . $this->config['difficulty'] . " - 16)), 8) AS invalid
+        IFNULL(SUM(IF(our_result='Y', IF(s.difficulty=0, POW(2, (" . $this->config['difficulty'] . " - 16)), s.difficulty), 0)), 0) AS valid,
+        IFNULL(SUM(IF(our_result='N', IF(s.difficulty=0, POW(2, (" . $this->config['difficulty'] . " - 16)), s.difficulty), 0)), 0) AS invalid
       FROM $this->table AS s
       LEFT JOIN " . $this->user->getTableName() . " AS a
       ON a.username = SUBSTRING_INDEX( s.username , '.', 1 )
@@ -146,8 +146,8 @@ class Share Extends Base {
         a.id,
         SUBSTRING_INDEX( s.username , '.', 1 ) as account,
         a.no_fees AS no_fees,
-        ROUND(IFNULL(SUM(IF(our_result='Y', IF(s.difficulty=0, pow(2, (" . $this->config['difficulty'] . " - 16)), s.difficulty), 0)), 0) / POW(2, (" . $this->config['difficulty'] . " - 16)), 8) AS valid,
-        ROUND(IFNULL(SUM(IF(our_result='N', IF(s.difficulty=0, pow(2, (" . $this->config['difficulty'] . " - 16)), s.difficulty), 0)), 0) / POW(2, (" . $this->config['difficulty'] . " - 16)), 8) AS invalid
+        IFNULL(SUM(IF(our_result='Y', IF(s.difficulty=0, pow(2, (" . $this->config['difficulty'] . " - 16)), s.difficulty), 0)), 0) AS valid,
+        IFNULL(SUM(IF(our_result='N', IF(s.difficulty=0, pow(2, (" . $this->config['difficulty'] . " - 16)), s.difficulty), 0)), 0) AS invalid
       FROM $this->tableArchive AS s
       LEFT JOIN " . $this->user->getTableName() . " AS a
       ON a.username = SUBSTRING_INDEX( s.username , '.', 1 )
@@ -360,8 +360,6 @@ class Share Extends Base {
    * Fetch the lowest needed share ID from shares
    **/
   function getMinimumShareId($iCount, $current_upstream) {
-    // We don't use baseline here to be more accurate
-    $iCount = $iCount * pow(2, ($this->config['difficulty'] - 16));
     $stmt = $this->mysqli->prepare("
       SELECT MIN(b.id) AS id FROM
       (
@@ -381,8 +379,6 @@ class Share Extends Base {
    * Fetch the lowest needed share ID from archive
    **/
   function getMinArchiveShareId($iCount) {
-    // We don't use baseline here to be more accurate
-    $iCount = $iCount * pow(2, ($this->config['difficulty'] - 16));
     $stmt = $this->mysqli->prepare("
       SELECT MIN(b.share_id) AS share_id FROM
       (

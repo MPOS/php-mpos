@@ -63,7 +63,7 @@ if ($config['pps']['reward']['type'] == 'blockavg' && $block->getBlockCount() > 
 }
 
 // Per-share value to be paid out to users
-$pps_value = round($pps_reward / (pow(2, $config['target_bits']) * $dDifficulty), 12);
+$pps_value = round($coin->calcPPSValue($pps_reward, $dDifficulty), 12);
 
 // Find our last share accounted and last inserted share for PPS calculations
 if (!$iPreviousShareId = $setting->getValue('pps_last_share_id')) {
@@ -105,9 +105,8 @@ foreach ($aAccountShares as $aData) {
     continue;
   }
 
-  // MPOS uses a base difficulty setting to avoid showing weightened shares
-  // Since we need weightened shares here, we go back to the proper value for payouts
-  $aData['payout'] = round($aData['valid'] * pow(2, ($config['difficulty'] - 16)) * $pps_value, 12);
+  // Payout for this user
+  $aData['payout'] = round($aData['valid'] * $pps_value, 12);
 
   // Defaults
   $aData['fee' ] = 0;
@@ -120,7 +119,7 @@ foreach ($aAccountShares as $aData) {
   $aData['donation'] = round($user->getDonatePercent($user->getUserId($aData['username'])) / 100 * ( $aData['payout'] - $aData['fee']), 12);
 
   $log->logInfo(sprintf(
-    $strLogMask, $aData['id'], $aData['username'], $aData['invalid'], $aData['valid'] * pow(2, ($config['difficulty'] - 16)),
+    $strLogMask, $aData['id'], $aData['username'], $aData['invalid'], $aData['valid'],
     number_format($pps_value, 12), number_format($aData['payout'], 12), number_format($aData['donation'], 12), number_format($aData['fee'], 12)
   ));
 
