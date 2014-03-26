@@ -1,4 +1,4 @@
-      <table class="table borderless m-b-none text-small lightgrey">
+      <table class="table borderless m-b-none text-small panel-footer">
         <thead>
           <tr>
             <th></th>
