@@ -2,8 +2,15 @@
 
 /* ------------------------------- */
 
- body {
+body {
     background-color: #f8f8f8;
+    min-width: 350px;
+    font-size: 12px;
+    /* Design constraint */
+}
+
+p {
+  font-size: 12px;
 }
 
 /* Wrappers */
@@ -18,6 +25,7 @@
     padding: 0 15px;
     min-height: 568px;
     background-color: #fff;
+    font-size: 12px;
 }
 
 @media(min-width:768px) {
@@ -25,8 +33,9 @@
         position: inherit;
         margin: 0 0 0 250px;
         padding: 0 30px;
-        min-height: 1300px;
+        min-height: 900px;
         border-left: 1px solid #e7e7e7;
+        font-size: 12px;
     }
 }
 
@@ -40,7 +49,7 @@
 
 /* Top Right Navigation Dropdown Styles */
 
- .navbar-top-links li {
+.navbar-top-links li {
     display: inline-block;
 }
 
@@ -53,8 +62,8 @@
     min-height: 50px;
 }
 
-.dropdown-user { min-width:100px;
-
+.dropdown-user { 
+    min-width:100px;
 }
 
 .navbar-top-links .dropdown-menu li {
@@ -90,7 +99,7 @@
 }
 
 .navbar-top-links .dropdown-alerts {
-    margin-left: -123px;
+  /*#margin-left: -123px; */
 }
 
 .navbar-top-links .dropdown-user {
@@ -224,13 +233,13 @@
 
 /* Login Page */
 
- .login-panel {
+.login-panel {
     margin-top: 25%;
 }
 
 /* Flot Chart Containers */
 
- .flot-chart {
+.flot-chart {
     display: block;
     height: 400px;
 }
@@ -242,7 +251,7 @@
 
 /* DataTables Overrides */
 
- table.dataTable thead .sorting,
+table.dataTable thead .sorting,
 table.dataTable thead .sorting_asc:after,
 table.dataTable thead .sorting_desc,
 table.dataTable thead .sorting_asc_disabled,
@@ -451,19 +460,38 @@ span.spark-25 {
   line-height: 80px;
 }
 
-.blue {
-  background-color: #428BCA;
+.lightblue {
+  background-color: #2FAACE;
 }
 
 .text-faded {
   color: rgba(255, 255, 255, 0.7);
 }
 
+.text-link {
+  color: #FFFFFF;
+}
+
 p.up {
-  margin: -10px 0px 0px 0px;
+  margin: -5px 0px -8px;
+  font-weight: 600;
 }
 
 div.up {
   margin: -10px 0px 6px 0px;
 }
+
+p.up-more {
+  margin: -6px 0px 10px;
+  font-weight: 600;
+}
+
+p.up-more2 {
+  margin: -6px 0px 0px;
+}
+
+div.fade {
+  opacity: 0.8;
+}  
+
 /* End Test */

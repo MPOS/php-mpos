@@ -5,7 +5,7 @@
 
 <div class="row">
   <div class="col-lg-6">
-    <form class="panel panel-info" method="post" role="form">
+    <form class="panel panel-info form-inline" method="post" role="form">
       <input type="hidden" name="page" value="{$smarty.request.page|escape}">
       {if $smarty.request.token|default:""}
       <input type="hidden" name="token" value="{$smarty.request.token|escape}">
@@ -16,41 +16,40 @@
         <i class="fa fa-edit fa-fw"></i> Register new account
       </div>
       <div class="panel-body">
-        <label>Username</label>
-        <div class="input-group margin-bottom-sm">
-          <span class="input-group-addon"><i class="fa fa-user fa-fw"></i></span>
-          <input type="text" class="form-control" name="username" placeholder="Usermane" value="{$smarty.post.username|escape|default:""}" size="15" maxlength="20" required>
-        </div>
-        <label>Password</label> (<span id="pw_strength">Strength</span>)
-        <div class="input-group">
-          <span class="input-group-addon"><i class="fa fa-key fa-fw"></i></span>
-          <input type="password" class="form-control" name="password1" placeholder="Password" value="" size="15" maxlength="100" id="pw_field" required>
-        </div>
-        <span id="pw_match"></span>
-        <div class="input-group margin-bottom-sm">
-          <span class="input-group-addon" id="pw_match"><i class="fa fa-key fa-fw"></i></span>
-          <input type="password" class="form-control" name="password2" placeholder="Repeat Password" value="" size="15" maxlength="100" id="pw_field2" required>
-        </div>
-        <label>Email</label>
-        <div class="input-group">
-          <span class="input-group-addon"><i class="fa fa-envelope-o fa-fw"></i></span>
-          <input type="text" name="email1" placeholder="Email" class="form-control" value="{$smarty.post.email1|escape|default:""}" size="15" required>
-        </div>
-        <div class="input-group margin-bottom-sm">
-          <span class="input-group-addon"><i class="fa fa-envelope-o fa-fw"></i></span>
-          <input type="text" class="form-control" name="email2" placeholder="Repeat Email" value="{$smarty.post.email2|escape|default:""}" size="15" required>
-        </div>
-        <label>PIN</label>
-        <font size="1">Four digit number. <b>Remember this pin!</b></font>
-        <div class="input-group">
-          <span class="input-group-addon"><i class="fa fa-shield fa-fw"></i></span>
-          <input type="password" class="form-control" name="pin" placeholder="PIN" value="" size="4" maxlength="4" required>   
-        </div>
         <div class="form-group">
+          <label>Username</label>
+          <div class="input-group margin-bottom-sm">
+            <span class="input-group-addon"><i class="fa fa-user fa-fw"></i></span>
+            <input type="text" class="form-control" name="username" placeholder="Usermane" value="{$smarty.post.username|escape|default:""}" size="15" maxlength="20" required>
+          </div>
+          <label>Password</label> (<span id="pw_strength">Strength</span>)
+          <div class="input-group">
+            <span class="input-group-addon"><i class="fa fa-key fa-fw"></i></span>
+            <input type="password" class="form-control" name="password1" placeholder="Password" value="" size="15" maxlength="100" id="pw_field" required>
+          </div>
+          <span id="pw_match"></span>
+          <div class="input-group margin-bottom-sm">
+            <span class="input-group-addon" id="pw_match"><i class="fa fa-key fa-fw"></i></span>
+            <input type="password" class="form-control" name="password2" placeholder="Repeat Password" value="" size="15" maxlength="100" id="pw_field2" required>
+          </div>
+          <label>Email</label>
+          <div class="input-group">
+            <span class="input-group-addon"><i class="fa fa-envelope-o fa-fw"></i></span>
+            <input type="text" name="email1" placeholder="Email" class="form-control" value="{$smarty.post.email1|escape|default:""}" size="15" required>
+          </div>
+          <div class="input-group margin-bottom-sm">
+            <span class="input-group-addon"><i class="fa fa-envelope-o fa-fw"></i></span>
+            <input type="text" class="form-control" name="email2" placeholder="Repeat Email" value="{$smarty.post.email2|escape|default:""}" size="15" required>
+          </div>
+          <label>PIN</label>
+          <font size="1">Four digit number. <b>Remember this pin!</b></font>
+          <div class="input-group">
+            <span class="input-group-addon"><i class="fa fa-shield fa-fw"></i></span>
+            <input type="password" class="form-control" name="pin" placeholder="PIN" value="" size="4" maxlength="4" required>   
+          </div>
           <div class="checkbox">
             <label>
-              <input type="checkbox" value="1" name="tac" id="tac">
-              I Accept The <a data-toggle="modal" data-target="#TAC">Terms and Conditions</a>
+              <input type="checkbox" value="1" name="tac" id="tac"> I Accept The <a data-toggle="modal" data-target="#TAC">Terms and Conditions</a>
             </label>
           </div>
         </div>

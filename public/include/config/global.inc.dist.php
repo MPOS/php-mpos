@@ -30,6 +30,13 @@ $config['SALTY'] = 'THISSHOULDALSOBERRAANNDDOOM';
 $config['algorithm'] = 'scrypt';
 
 /**
+  * Getbalance API Calls
+  *  System used for getting actual Balance from Wallet
+  *   https://github.com/MPOS/php-mpos/wiki/Config-Setup#getbalance-api-calls
+  **/
+$config['getbalancewithunconfirmed'] = true;
+
+/**
  * Database configuration
  *  MySQL database configuration
  *   https://github.com/MPOS/php-mpos/wiki/Config-Setup#wiki-database-configuration
@@ -77,13 +84,6 @@ $config['price']['currency'] = 'USD';
  **/
 $config['ap_threshold']['min'] = 1;
 $config['ap_threshold']['max'] = 250;
-
-/**
- * Minimum manual Payout Threshold
- *  Minimum manual payout amount
- *   https://github.com/MPOS/php-mpos/wiki/Config-Setup#wiki-manual-payout-threshold
- **/
-$config['mp_threshold'] = 1;
 
 /**
  * Minimum manual Payout Threshold

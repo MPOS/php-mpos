@@ -16,7 +16,6 @@
           <tbody id="b-workers">
             <td colspan="3" class="text-center">No worker information available</td>
           </tbody>
-          </tr>
         </table>
       </div>
     </div>

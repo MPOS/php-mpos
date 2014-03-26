@@ -6,7 +6,24 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
+                {if $GLOBAL.config.poolnav_enabled|default:"false"}
+                <ul class="nav navbar-nav navbar-top-links">
+                  <li class="dropdown">
+                    <a href="#" class="navbar-brand dropdown-toggle" data-toggle="dropdown">{$GLOBAL.website.name} <b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+                      {assign var="PoolArray" value="\n"|explode:$GLOBAL.config.poolnav_pools}
+                      {foreach from=$PoolArray item=pooldata}
+                      {assign var="PoolURL" value="|"|explode:$pooldata}
+                      {if $PoolURL|count > 1}
+                      <li class="h4"><a href="{$PoolURL[1]}"><i class="fa fa-angle-double-right fa-fw"></i> {$PoolURL[0]}</a></li>
+                      {/if}
+                      {/foreach}
+                    </ul>
+                  </li>
+                </ul>
+                {else}
                 <a class="navbar-brand" href="{$smarty.server.SCRIPT_NAME}">{$GLOBAL.website.name}</a>
+                {/if}
             </div>
 
             <ul class="nav navbar-top-links navbar-right">
