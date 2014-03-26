@@ -98,15 +98,42 @@ if (@$_SESSION['USERDATA']['is_admin'] && $user->isAdmin(@$_SESSION['USERDATA'][
 
   // poke stratum using gettingstarted details -> enotice
   if (function_exists('socket_create')) {
+    $host = @gethostbyname($config['gettingstarted']['stratumurl']);
+    $port = $config['gettingstarted']['stratumport'];
+    $timeout = 3;
+    $stratumerror = false;
+
     $socket = socket_create(AF_INET, SOCK_STREAM, SOL_TCP);
-    if ($socket !== false) {
-      $address = @gethostbyname($config['gettingstarted']['stratumurl']);
-      $result = @socket_connect($socket, $address, $config['gettingstarted']['stratumport']);
-      if ($result !== true) {
-        $enotice[] = 'We tried to poke your Stratum server using your $config[\'gettingstarted\'] settings but it didn\'t respond';
+
+	socket_set_nonblock($socket)
+	  or exit;
+
+    $time = time();
+    while (!@socket_connect($socket, $host, $port))
+    {
+      $err = socket_last_error($socket);
+      if ($err == 115 || $err == 114)
+      {
+        if ((time() - $time) >= $timeout)
+        {
+          socket_close($socket);
+          //die("Connection timed out.\n");
+          //$enotice[] = 'We tried to poke your Stratum server using your $config[\'gettingstarted\'] settings but it didn\'t respond';
+          $stratumerror = true;
+          break;
+        }
+        sleep(1);
+        continue;
       }
-      $close = @socket_close($socket);
+      $stratumerrormessage = socket_strerror($err);
     }
+    if ($stratumerror) {
+		$enotice[] = 'We tried to poke your Stratum server using your $config[\'gettingstarted\'] settings but it didn\'t respond - ' . $stratumerrormessage;
+    } else {
+		socket_set_block($socket)
+		  or exit;
+    }
+    
   } else {
     // Connect via fsockopen as fallback
     if (! $fp = @fsockopen($config['gettingstarted']['stratumurl'], $config['gettingstarted']['stratumport'], $errCode, $errStr, 1)) {
