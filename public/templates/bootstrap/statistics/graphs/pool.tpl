@@ -3,7 +3,7 @@
     <div class="panel-heading">
       Pool Hashrate
     </div>
-    <div class="panel-body lightgrey">
+    <div class="panel-body">
       <div id="pool-area-chart"></div>
     </div>
   </div>

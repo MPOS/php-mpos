@@ -3,7 +3,7 @@
     <div class="panel-heading">
       Your Hashrate
     </div>
-    <div class="panel-body lightgrey">
+    <div class="panel-body">
       <div id="mine-area-chart"></div>
     </div>
   </div>

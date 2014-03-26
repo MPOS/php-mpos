@@ -5,7 +5,7 @@
       <div class="panel-heading">
         <h4 class="panel-title"><i class="fa fa-align-left fa-fw"></i> Overview</h4>
       </div>
-      <div class="panel-body text-center lightgrey">
+      <div class="panel-body text-center">
         <div class="row">
           <div class="col-lg-12">
           {* Load our payout system so we can load some payout specific templates *}

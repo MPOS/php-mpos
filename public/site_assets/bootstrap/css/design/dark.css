@@ -111,11 +111,14 @@ a:focus {
 .panel-footer {
     color: #000;
     background-color: #BDBFBF;
+    border-top: 1px solid #808080;
+    border-bottom-right-radius: 3px;
+    border-bottom-left-radius: 3px;
 }
 
 .panel-body {
     color: #000;
-    background-color: #BDBFBF;
+    background-color: #D3D3D3;
 }
 
 .panel-info > .panel-heading {
@@ -128,7 +131,6 @@ a:focus {
     border-color: #808080;
 }
 
-.lightgrey {
-  background-color: #D3D3D3;
+.dropdown-menu {
+    background-color: #D3D3D3;
 }
-

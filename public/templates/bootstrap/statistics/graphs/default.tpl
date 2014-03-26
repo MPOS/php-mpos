@@ -100,7 +100,7 @@ $(function () {
       <div class="panel-heading">
         <i class="fa fa-signal fa-fw"></i> Stats
       </div>           
-      <div class="panel-body lightgrey">
+      <div class="panel-body">
         <ul class="nav nav-pills" id="hashrategraph">
           <li><a href="#mine" data-toggle="tab">Mine</a></li>
           <li><a href="#pool" data-toggle="tab">Pool</a></li>
