@@ -10,7 +10,6 @@
           <input type="hidden" name="action" value="{$smarty.request.action|escape}">
           <input type="hidden" name="do" value="sendInvitation">
           <input type="hidden" name="ctoken" value="{$CTOKEN|escape|default:""}" />
-
           <div class="form-group">
             <label>E-Mail</label>
             <input class="form-control" type="text" name="data[email]" value="{$smarty.request.data.email|escape|default:""}" size="30" />
@@ -19,10 +18,10 @@
             <label>Message</label>
             <textarea class="form-control" name="data[message]" rows="5">{$smarty.request.data.message|escape|default:"Please accept my invitation to this awesome pool."}</textarea>
           </div>
+          <div class="form-group">
+            <input type="submit" value="Invite" class="btn btn-success">
+          </div>
         </form>
-      </div>
-      <div class="panel-footer">
-        <input type="submit" value="Invite" class="btn btn-success">
       </div>
     </div>
   </div>
@@ -58,4 +57,3 @@
     </div>
   </div>
 </div>
-
