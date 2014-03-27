@@ -1,0 +1,68 @@
+.subvalue {
+  margin-bottom: 10px;
+}
+
+.logo {
+  margin-left: -50px;
+  margin-top: -10px;
+  z-index: 20;
+}
+
+
+.box > h4 {
+  font-size: 14px;
+  margin: 0;
+  line-height: 20px;
+  font-weight: 600;
+  text-align: left;
+  margin-left: 5px;
+}
+
+.box > .icon {
+  margin-top: 5px;
+  height: inherit;
+}
+
+input.login {
+  -webkit-box-sizing: content-box;
+  -moz-box-sizing: content-box;
+  box-sizing: content-box;
+  min-height: 0;
+  padding: 4px 14px;
+  color: #666666;
+  border: none;
+  background: rgba(255, 255, 255, 0.4);
+  padding-left: 26px;
+  -webkit-transition: width 0.2s;
+  -moz-transition: width 0.2s;
+  -o-transition: width 0.2s;
+  transition: width 0.2s;
+  width: 100px;
+  -webkit-box-shadow: 0 0 2px rgba(0, 0, 0, 0.3);
+  -moz-box-shadow: 0 0 2px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 0 2px rgba(0, 0, 0, 0.3);
+}
+
+.small-login {
+  float: left;
+  padding-left: 15px;
+  width: 230px;
+}
+
+footer {
+}
+
+#loginForm {
+  width: 490px;
+}
+
+.page-title small {
+  text-shadow: 0 0 10px #999;
+}
+
+.user-header {
+  color: white;
+  padding-top: 7px;
+  text-shadow: 0 0 10px #618fb0;
+}
+
