@@ -70,9 +70,8 @@ class Monitoring extends Base {
     if ($query && $query->bind_param('s', $name) && $query->execute() && $result = $query->get_result()) {
       return $result->fetch_assoc();
     } else {
-      $this->sqlError();
+      return $this->sqlError();
     }
-    return $value;
   }
 
   /**
