@@ -46,7 +46,7 @@ $hts = ($config['https_only'] && (!empty($_SERVER['QUERY_STRING']))) ? "https://
 // Rate limiting
 if ($config['memcache']['enabled'] && $config['mc_antidos']['enabled']) {
   if (PHP_OS == 'WINNT') {
-    require_once(CLASS_DIR . 'memcached.class.php');
+    require_once(CLASS_DIR . '/memcached.class.php');
   }
   // memcache antidos needs a memcache handle
   $memcache = new Memcached();
