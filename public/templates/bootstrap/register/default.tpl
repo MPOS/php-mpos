@@ -56,7 +56,7 @@
         <center>{nocache}{$RECAPTCHA|default:"" nofilter}{/nocache}</center>
       </div>
       <div class="panel-footer">
-        <input type="submit" value="Register" class="btn btn-success">
+        <input type="submit" value="Register" class="btn btn-success btn-sm">
       </div>
     </form>
   </div>
@@ -73,7 +73,7 @@
           {include file="tac/content.tpl"}
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-default btn-sm" data-dismiss="modal">Close</button>
         </div>
       </div>
     </div>

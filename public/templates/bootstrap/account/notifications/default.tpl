@@ -53,7 +53,7 @@
         </table>
       </div>
       <div class="panel-footer">
-        <input type="submit" value="Update" class="btn btn-success">
+        <input type="submit" value="Update" class="btn btn-success btn-sm">
       </div>
     </form>
   </div>

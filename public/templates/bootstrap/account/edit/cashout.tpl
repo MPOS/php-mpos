@@ -41,16 +41,16 @@
       <input type="hidden" name="utype" value="withdraw_funds">
       {if $GLOBAL.twofactor.enabled && $GLOBAL.twofactor.options.withdraw}
       {if $GLOBAL.userdata.balance.confirmed|escape < $GLOBAL.config.mp_threshold}
-      <input type="submit" value="Unlock" class="alt_btn" name="unlock" disabled>
+      <input type="submit" value="Unlock" class="btn btn-warning btn-sm" name="unlock"  disabled="disabled">
       {elseif $WITHDRAWSENT == 1 && $WITHDRAWUNLOCKED == 1}
-      <input type="submit" value="Cash Out" class="btn btn-success">
+      <input type="submit" value="Cash Out" class="btn btn-success btn-sm">
       {elseif $WITHDRAWSENT == 0 && $WITHDRAWUNLOCKED == 1 || $WITHDRAWSENT == 1 && $WITHDRAWUNLOCKED == 0}
-      <input type="submit" value="Cash Out" class="btn btn-danger" disabled>
+      <input type="submit" value="Cash Out" class="btn btn-danger btn-sm" disabled="disabled">
       {elseif $WITHDRAWSENT == 0 && $WITHDRAWUNLOCKED == 0}
-      <input type="submit" value="Unlock" class="btn btn-warning" name="unlock">
+      <input type="submit" value="Unlock" class="btn btn-warning btn-sm" name="unlock">
       {/if}
       {else}
-      <input type="submit" value="Cash Out" class="btn btn-success">
+      <input type="submit" value="Cash Out" class="btn btn-success btn-sm">
       {/if}
       {/nocache}
       </div>
