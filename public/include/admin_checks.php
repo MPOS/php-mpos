@@ -100,34 +100,16 @@ if (@$_SESSION['USERDATA']['is_admin'] && $user->isAdmin(@$_SESSION['USERDATA'][
   if (function_exists('socket_create')) {
     $host = @gethostbyname($config['gettingstarted']['stratumurl']);
     $port = $config['gettingstarted']['stratumport'];
-    $timeout = 3;
-    $stratumerror = false;
+    socket_set_option($socket, SOL_SOCKET, SO_SNDTIMEO, array('sec' => 3, 'usec' => 0)); 
 
-    $socket = socket_create(AF_INET, SOCK_STREAM, SOL_TCP);
-
-    socket_set_nonblock($socket)
-      or die('Failed to set socket to non-blocking');
-
-    $time = time();
-    while (!@socket_connect($socket, $host, $port)) {
-      $err = socket_last_error($socket);
-      if ($err == 115 || $err == 114) {
-        if ((time() - $time) >= $timeout) {
-          socket_close($socket);
-          $stratumerror = true;
-          break;
-        }
-        sleep(1);
-        continue;
-      }
-      $stratumerrormessage = socket_strerror($err);
+    if (isset($port) and
+      ($socket=socket_create(AF_INET, SOCK_STREAM, SOL_TCP)) and
+      (socket_connect($socket, $host, $port)))
+    {
+      socket_close($socket);
     }
-    if ($stratumerror) {
-      $enotice[] = 'We tried to poke your Stratum server using your $config[\'gettingstarted\'] settings but it didn\'t respond - ' . $stratumerrormessage;
-    } else {
-      socket_set_block($socket)
-        or die('Failed to set socket to blocking');
-    }
+    else
+      $enotice[] = 'We tried to poke your Stratum server using your $config[\'gettingstarted\'] settings but it didn\'t respond - ' . socket_strerror(socket_last_error());
   } else {
     // Connect via fsockopen as fallback
     if (! $fp = @fsockopen($config['gettingstarted']['stratumurl'], $config['gettingstarted']['stratumport'], $errCode, $errStr, 1)) {
