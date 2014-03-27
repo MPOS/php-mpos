@@ -27,6 +27,9 @@ if (file_exists(CLASS_DIR . '/coins/coin_' . $config['algorithm'] . '.class.php'
   die('Unable to load your coins class definition for ' . $config['algorithm']);
 }
 
+// Swiftmailer
+require_once(INCLUDE_DIR . '/lib/swiftmailer/swift_required.php');
+
 // Detect device
 if ( PHP_SAPI == 'cli') {
   // Create a new compile folder just for crons

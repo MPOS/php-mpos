@@ -4,8 +4,8 @@
 <script type="text/javascript" src="{$PATH}/js/pwcheck.js"></script>
 
 <div class="row">
-  <div class="col-lg-6">
-    <form class="panel panel-info form-inline" method="post" role="form">
+  <div class="col-lg-5">
+    <form class="panel panel-info" method="post" role="form">
       <input type="hidden" name="page" value="{$smarty.request.page|escape}">
       {if $smarty.request.token|default:""}
       <input type="hidden" name="token" value="{$smarty.request.token|escape}">

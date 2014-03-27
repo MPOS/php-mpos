@@ -98,14 +98,17 @@ if (@$_SESSION['USERDATA']['is_admin'] && $user->isAdmin(@$_SESSION['USERDATA'][
 
   // poke stratum using gettingstarted details -> enotice
   if (function_exists('socket_create')) {
-    $socket = socket_create(AF_INET, SOCK_STREAM, SOL_TCP);
-    if ($socket !== false) {
-      $address = @gethostbyname($config['gettingstarted']['stratumurl']);
-      $result = @socket_connect($socket, $address, $config['gettingstarted']['stratumport']);
-      if ($result !== true) {
-        $enotice[] = 'We tried to poke your Stratum server using your $config[\'gettingstarted\'] settings but it didn\'t respond';
-      }
-      $close = @socket_close($socket);
+    $host = @gethostbyname($config['gettingstarted']['stratumurl']);
+    $port = $config['gettingstarted']['stratumport'];
+    
+    if (isset($port) and
+      ($socket=socket_create(AF_INET, SOCK_STREAM, SOL_TCP)) and
+      (socket_set_option($socket, SOL_SOCKET, SO_SNDTIMEO, array('sec' => 3, 'usec' => 0))) and
+      (@socket_connect($socket, $host, $port)))
+    {
+      socket_close($socket);
+    } else {
+      $enotice[] = 'We tried to poke your Stratum server using your $config[\'gettingstarted\'] settings but it didn\'t respond - ' . socket_strerror(socket_last_error());
     }
   } else {
     // Connect via fsockopen as fallback
