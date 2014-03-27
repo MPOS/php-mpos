@@ -46,15 +46,24 @@ class Mail extends Base {
   }
 
   /**
-   * Send a mail with templating via Smarty
+   * Send a mail with templating via Smarty and Siftmailer
    * @param template string Template name within the mail folder, no extension
    * @param aData array Data array with some required fields
-   *     SUBJECT : Mail Subject
+   *     subject : Mail Subject
    *     email   : Destination address
    **/
   public function sendMail($template, $aData) {
     // Prepare SMTP transport and mailer
-    $transport = Swift_SendmailTransport::newInstance('/usr/sbin/sendmail -bs');
+    $transport_type = $this->config['swiftmailer']['type'];
+    if ($transport_type == 'sendmail') {
+      $transport = Swift_SendmailTransport::newInstance($this->config['swiftmailer'][$transport_type]['path'] . ' ' . $this->config['swiftmailer'][$transport_type]['options']);
+    } else if ($this->config['swiftmailer']['type'] == 'smtp') {
+      $transport = Swift_SmtpTransport::newInstance($this->config['switfmailer']['smtp']['host'], $this->config['switfmailer']['smtp']['port'], $this->config['switfmailer']['smtp']['encryption']);
+      if (!empty($this->config['switfmailer']['smtp']['username']) && !empty($this->config['switfmailer']['smtp']['password'])) {
+        $transport->setUsername($this->config['switfmailer']['smtp']['username']);
+        $transport->setPassword($this->config['switfmailer']['smtp']['password']);
+      }
+    }
     $mailer = Swift_Mailer::newInstance($transport);
     // Prepare the smarty templates used
     $this->smarty->clearCache(BASEPATH . 'templates/mail/' . $template . '.tpl');
@@ -62,6 +71,7 @@ class Mail extends Base {
     $this->smarty->assign('WEBSITENAME', $this->setting->getValue('website_name'));
     $this->smarty->assign('SUBJECT', $aData['subject']);
     $this->smarty->assign('DATA', $aData);
+
     // Create new message for Swiftmailer
     $message = Swift_Message::newInstance()
       ->setSubject($this->smarty->fetch(BASEPATH . 'templates/mail/subject.tpl'))
@@ -72,8 +82,14 @@ class Mail extends Base {
       ->setBody($this->smarty->fetch(BASEPATH . 'templates/mail/' . $template . '.tpl'), 'text/html');
     if (strlen(@$aData['senderName']) > 0 && @strlen($aData['senderEmail']) > 0 )
       $message->setReplyTo(array($aData['senderEmail'] => $aData['senderName']));
-    if ($mailer->send($message))
-      return true;
+
+    // Send message out with configured transport
+    try {
+      if ($mailer->send($message)) return true;
+    } catch (Exception $e) {
+      $this->setErrorMessage($e->getMessage());
+      return false;
+    }
     $this->setErrorMessage($this->sqlError('E0031'));
     return false;
   }
