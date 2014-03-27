@@ -53,18 +53,26 @@ class Mail extends Base {
    *     email   : Destination address
    **/
   public function sendMail($template, $aData) {
-    // Make sure we don't load a cached filed
+    // Prepare SMTP transport and mailer
+    $transport = Swift_SendmailTransport::newInstance('/usr/sbin/sendmail -bs');
+    $mailer = Swift_Mailer::newInstance($transport);
+    // Prepare the smarty templates used
     $this->smarty->clearCache(BASEPATH . 'templates/mail/' . $template . '.tpl');
     $this->smarty->clearCache(BASEPATH . 'templates/mail/subject.tpl');
     $this->smarty->assign('WEBSITENAME', $this->setting->getValue('website_name'));
     $this->smarty->assign('SUBJECT', $aData['subject']);
     $this->smarty->assign('DATA', $aData);
-    $headers = 'From: ' . $this->setting->getValue('website_name') . '<' . $this->setting->getValue('website_email') . ">\n";
-    $headers .= "MIME-Version: 1.0\n";
-    $headers .= "Content-Type: text/html; charset=ISO-8859-1\r\n";
+    // Create new message for Swiftmailer
+    $message = Swift_Message::newInstance()
+      ->setSubject($this->smarty->fetch(BASEPATH . 'templates/mail/subject.tpl'))
+      ->setFrom(array( $this->setting->getValue('website_email') => $this->setting->getValue('website_name')))
+      ->setTo($aData['email'])
+      ->setSender($this->setting->getValue('website_email'))
+      ->setReturnPath($this->setting->getValue('website_email'))
+      ->setBody($this->smarty->fetch(BASEPATH . 'templates/mail/' . $template . '.tpl'), 'text/html');
     if (strlen(@$aData['senderName']) > 0 && @strlen($aData['senderEmail']) > 0 )
-      $headers .= 'Reply-To: ' . $aData['senderName'] . ' <' . $aData['senderEmail'] . ">\n";
-    if (mail($aData['email'], $this->smarty->fetch(BASEPATH . 'templates/mail/subject.tpl'), $this->smarty->fetch(BASEPATH . 'templates/mail/' . $template . '.tpl'), $headers, '-f ' . $this->setting->getValue('website_email')))
+      $message->setReplyTo(array($aData['senderEmail'] => $aData['senderName']));
+    if ($mailer->send($message))
       return true;
     $this->setErrorMessage($this->sqlError('E0031'));
     return false;
