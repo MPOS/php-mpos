@@ -70,7 +70,23 @@ footer {
   color: #A9DCFF;
 }
 
-.post-header {
+.article-header {
   padding-bottom: 7px;
   border-bottom: 1px solid #eee;
 }
+
+span.green {
+  color: #56bc76 !important;
+  background-color: transparent !important;
+}
+
+span.orange {
+  color: #eac85e !important;
+  background-color: transparent !important;
+}
+
+span.red {
+  color: #FF734C !important;
+  background-color: transparent !important;
+}
+

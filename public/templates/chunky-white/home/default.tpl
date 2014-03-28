@@ -2,7 +2,7 @@
   <div class="col-md-8">
     {section name=news loop=$NEWS}
         <section class="widget">
-          <header class="post-header"><h5 class="article-header"><i class="fa fa-book"></i> {$NEWS[news].header}, posted {$NEWS[news].time|date_format:"%b %e, %Y at %H:%M"}{if $HIDEAUTHOR|default:"0" == 0} by <b>{$NEWS[news].author}</b>{/if}</h5></header>
+          <header><h5 class="article-header"><i class="fa fa-book"></i> {$NEWS[news].header}, posted {$NEWS[news].time|date_format:"%b %e, %Y at %H:%M"}{if $HIDEAUTHOR|default:"0" == 0} by <b>{$NEWS[news].author}</b>{/if}</h5></header>
           <div class="body">
             {$NEWS[news].content}
           </div>
