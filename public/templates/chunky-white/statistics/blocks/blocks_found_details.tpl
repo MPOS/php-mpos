@@ -1,4 +1,4 @@
-<article class="widget col-md-12">
+<article class="widget col-md-11">
   <header><h3>Last {$BLOCKLIMIT} Blocks Found</h3></header>
   <table class="table table-striped" cellspacing="0">
     <thead>

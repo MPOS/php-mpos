@@ -1,4 +1,4 @@
-<article class="widget col-md-12">
+<article class="widget col-md-11">
   <header><h3>Block Overview</h3></header>
   <table width="100%" class="table table-striped" cellspacing="0">
     <thead>

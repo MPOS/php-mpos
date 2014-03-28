@@ -1,4 +1,4 @@
-<article class="widget col-md-12">
+<article class="widget col-md-11">
   <header><h3>Block Shares</h3></header>
   <table width="70%" class="visualize" rel="line" class="table">
     <caption>Block Shares</caption>
