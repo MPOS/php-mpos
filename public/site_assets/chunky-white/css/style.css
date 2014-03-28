@@ -69,3 +69,8 @@ footer {
 .alert-info > a {
   color: #A9DCFF;
 }
+
+.post-header {
+  padding-bottom: 7px;
+  border-bottom: 1px solid #eee;
+}
