@@ -66,3 +66,6 @@ footer {
   text-shadow: 0 0 10px #618fb0;
 }
 
+.alert-info > a {
+  color: #A9DCFF;
+}

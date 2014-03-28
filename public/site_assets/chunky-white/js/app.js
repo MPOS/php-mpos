@@ -72,9 +72,9 @@ function resetContentMargin(){
 
 $(function(){
 
-    $('.info').addClass('alert alert-info');
-    $('.success').addClass('alert alert-success');
-    $('.warning').addClass('alert alert-warning');
+    $('.info').addClass('alert alert-info col-md-8');
+    $('.success').addClass('alert alert-success col-md-8');
+    $('.warning').addClass('alert alert-warning col-md-8');
 
     var $sidebar = $('#sidebar');
 
