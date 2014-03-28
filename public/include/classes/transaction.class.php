@@ -109,16 +109,18 @@ class Transaction extends Base {
   public function getTransactionTypebyTime($account_id=NULL) {
     $this->debug->append("STA " . __METHOD__, 4);
     if ($data = $this->memcache->get(__FUNCTION__)) return $data;
-    $stmt = $this->mysqli->prepare(" 
-      SELECT 
+    $stmt = $this->mysqli->prepare("
+      SELECT
         IFNULL(SUM(IF(t.type = 'Credit' AND timestamp >= DATE_SUB(now(), INTERVAL 3600 SECOND), t.amount, 0)), 0) AS 1HourCredit,
+        IFNULL(SUM(IF(t.type = 'Bonus' AND timestamp >= DATE_SUB(now(), INTERVAL 3600 SECOND), t.amount, 0)), 0) AS 1HourBonus,
         IFNULL(SUM(IF(t.type = 'Debit_MP' AND timestamp >= DATE_SUB(now(), INTERVAL 3600 SECOND), t.amount, 0)), 0) AS 1HourDebitMP,
         IFNULL(SUM(IF(t.type = 'Debit_AP' AND timestamp >= DATE_SUB(now(), INTERVAL 3600 SECOND), t.amount, 0)), 0) AS 1HourDebitAP,
         IFNULL(SUM(IF(t.type = 'TXFee' AND timestamp >= DATE_SUB(now(), INTERVAL 3600 SECOND), t.amount, 0)), 0) AS 1HourTXFee,
         IFNULL(SUM(IF(t.type = 'Fee' AND timestamp >= DATE_SUB(now(), INTERVAL 3600 SECOND), t.amount, 0)), 0) AS 1HourFee,
         IFNULL(SUM(IF(t.type = 'Donation' AND timestamp >= DATE_SUB(now(), INTERVAL 3600 SECOND), t.amount, 0)), 0) AS 1HourDonation,
-  
+
         IFNULL(SUM(IF(t.type = 'Credit' AND timestamp >= DATE_SUB(now(), INTERVAL 86400 SECOND), t.amount, 0)), 0) AS 24HourCredit,
+        IFNULL(SUM(IF(t.type = 'Bonus' AND timestamp >= DATE_SUB(now(), INTERVAL 86400 SECOND), t.amount, 0)), 0) AS 24HourBonus,
         IFNULL(SUM(IF(t.type = 'Debit_MP' AND timestamp >= DATE_SUB(now(), INTERVAL 86400 SECOND), t.amount, 0)), 0) AS 24HourDebitMP,
         IFNULL(SUM(IF(t.type = 'Debit_AP' AND timestamp >= DATE_SUB(now(), INTERVAL 86400 SECOND), t.amount, 0)), 0) AS 24HourDebitAP,
         IFNULL(SUM(IF(t.type = 'TXFee' AND timestamp >= DATE_SUB(now(), INTERVAL 86400 SECOND), t.amount, 0)), 0) AS 24HourTXFee,
@@ -126,6 +128,7 @@ class Transaction extends Base {
         IFNULL(SUM(IF(t.type = 'Donation' AND timestamp >= DATE_SUB(now(), INTERVAL 86400 SECOND), t.amount, 0)), 0) AS 24HourDonation,
 
         IFNULL(SUM(IF(t.type = 'Credit' AND timestamp >= DATE_SUB(now(), INTERVAL 604800 SECOND), t.amount, 0)), 0) AS 1WeekCredit,
+        IFNULL(SUM(IF(t.type = 'Bonus' AND timestamp >= DATE_SUB(now(), INTERVAL 604800 SECOND), t.amount, 0)), 0) AS 1WeekBonus,
         IFNULL(SUM(IF(t.type = 'Debit_MP' AND timestamp >= DATE_SUB(now(), INTERVAL 604800 SECOND), t.amount, 0)), 0) AS 1WeekDebitMP,
         IFNULL(SUM(IF(t.type = 'Debit_AP' AND timestamp >= DATE_SUB(now(), INTERVAL 604800 SECOND), t.amount, 0)), 0) AS 1WeekDebitAP,
         IFNULL(SUM(IF(t.type = 'TXFee' AND timestamp >= DATE_SUB(now(), INTERVAL 604800 SECOND), t.amount, 0)), 0) AS 1WeekTXFee,
@@ -133,13 +136,15 @@ class Transaction extends Base {
         IFNULL(SUM(IF(t.type = 'Donation' AND timestamp >= DATE_SUB(now(), INTERVAL 604800 SECOND), t.amount, 0)), 0) AS 1WeekDonation,
 
         IFNULL(SUM(IF(t.type = 'Credit' AND timestamp >= DATE_SUB(now(), INTERVAL 2419200 SECOND), t.amount, 0)), 0) AS 1MonthCredit,
+        IFNULL(SUM(IF(t.type = 'Bonus' AND timestamp >= DATE_SUB(now(), INTERVAL 2419200 SECOND), t.amount, 0)), 0) AS 1MonthBonus,
         IFNULL(SUM(IF(t.type = 'Debit_MP' AND timestamp >= DATE_SUB(now(), INTERVAL 2419200 SECOND), t.amount, 0)), 0) AS 1MonthDebitMP,
         IFNULL(SUM(IF(t.type = 'Debit_AP' AND timestamp >= DATE_SUB(now(), INTERVAL 2419200 SECOND), t.amount, 0)), 0) AS 1MonthDebitAP,
         IFNULL(SUM(IF(t.type = 'TXFee' AND timestamp >= DATE_SUB(now(), INTERVAL 2419200 SECOND), t.amount, 0)), 0) AS 1MonthTXFee,
         IFNULL(SUM(IF(t.type = 'Fee' AND timestamp >= DATE_SUB(now(), INTERVAL 2419200 SECOND), t.amount, 0)), 0) AS 1MonthFee,
         IFNULL(SUM(IF(t.type = 'Donation' AND timestamp >= DATE_SUB(now(), INTERVAL 2419200 SECOND), t.amount, 0)), 0) AS 1MonthDonation,
-  
+
         IFNULL(SUM(IF(t.type = 'Credit' AND timestamp >= DATE_SUB(now(), INTERVAL 31536000 SECOND), t.amount, 0)), 0) AS 1YearCredit,
+        IFNULL(SUM(IF(t.type = 'Bonus' AND timestamp >= DATE_SUB(now(), INTERVAL 31536000 SECOND), t.amount, 0)), 0) AS 1YearBonus,
         IFNULL(SUM(IF(t.type = 'Debit_MP' AND timestamp >= DATE_SUB(now(), INTERVAL 31536000 SECOND), t.amount, 0)), 0) AS 1YearDebitMP,
         IFNULL(SUM(IF(t.type = 'Debit_AP' AND timestamp >= DATE_SUB(now(), INTERVAL 31536000 SECOND), t.amount, 0)), 0) AS 1YearDebitAP,
         IFNULL(SUM(IF(t.type = 'TXFee' AND timestamp >= DATE_SUB(now(), INTERVAL 31536000 SECOND), t.amount, 0)), 0) AS 1YearTXFee,
