@@ -1,11 +1,11 @@
  <article class="widget col-md-5" style="margin-right: 25px;">
   <header><h3>General Statistics</h3></header>
   <div class="module_content">
-    <table width="100%" class="table table-hover">
+    <table width="100%" class="table table-striped">
       <tbody>
         <tr>
           <th align="left" width="50%">Pool Hash Rate</th>
-          <td width="70%"><span id="b-hashrate">{$GLOBAL.hashrate|number_format:"3"}</span> {$GLOBAL.hashunits.pool}</td>
+          <td width="70%" style="border: none;"><span id="b-hashrate">{$GLOBAL.hashrate|number_format:"3"}</span> {$GLOBAL.hashunits.pool}</td>
         </tr>
         <tr>
           <th align="left">Pool Efficiency</td>

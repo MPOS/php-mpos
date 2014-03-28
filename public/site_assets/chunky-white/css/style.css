@@ -90,3 +90,10 @@ span.red {
   background-color: transparent !important;
 }
 
+article > header > h3 {
+  padding-bottom: 15px;
+}
+
+tbody > th {
+  margin-left: 0px;
+}
