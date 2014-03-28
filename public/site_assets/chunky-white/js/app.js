@@ -71,6 +71,11 @@ function resetContentMargin(){
 }
 
 $(function(){
+
+    $('.info').addClass('alert alert-info');
+    $('.success').addClass('alert alert-success');
+    $('.warning').addClass('alert alert-warning');
+
     var $sidebar = $('#sidebar');
 
     $sidebar.on("mouseleave",function(){

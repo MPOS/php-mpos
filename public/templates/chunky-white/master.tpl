@@ -94,7 +94,7 @@
 
 <body class="background">
   <div class="logo">
-    <h4><a href="/"><img src="{$PATH}/img/logo.png" width="60"> Chunky <strong>Pools</strong></a></h4>
+    <h4><a href="/"><img src="{$PATH}/images/logo120.png" width="60"> Chunky <strong>Pools</strong></a></h4>
     <!-- <h4><a href="/"><img src="https://i.imgur.com/8sAPFgb.png" width="60"> Chunky <strong>Pools</strong></a></h4> -->
   </div>
 

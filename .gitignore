@@ -24,3 +24,5 @@ public/include/config/**/*.php
 .buildpath
 .project
 .settings
+
+.DS_Store
