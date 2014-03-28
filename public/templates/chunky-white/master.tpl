@@ -15,23 +15,23 @@
 
     <!-- jquery and friends -->
     <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js" type="text/javascript"></script>
-    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery-migrate/1.2.1/jquery-migrate.min.js" type="text/javascript"></script>
-    <script type="text/javascript" src="{$PATH}/js/hideshow.js" type="text/javascript"></script>
-    <script type="text/javascript" src="{$PATH}/js/jquery.visualize.js"></script>
-    <script type="text/javascript" src="{$PATH}/js/jquery.jqplot.min.js"></script>
-    <script type="text/javascript" src="{$PATH}/js/jquery.tablesorter.min.js" type="text/javascript"></script>
-    <script type="text/javascript" src="{$PATH}/js/jquery.tablesorter.pager.js" type="text/javascript"></script>
-    <script type="text/javascript" src="{$PATH}/js/jquery.equalHeight.js"></script>
-    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/raphael/2.1.2/raphael-min.js"></script>
+    <!-- <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery&#45;migrate/1.2.1/jquery&#45;migrate.min.js" type="text/javascript"></script> -->
+    <!-- <script type="text/javascript" src="{$PATH}/js/hideshow.js" type="text/javascript"></script> -->
+    <!-- <script type="text/javascript" src="{$PATH}/js/jquery.visualize.js"></script> -->
+    <!-- <script type="text/javascript" src="{$PATH}/js/jquery.jqplot.min.js"></script> -->
+    <!-- <script type="text/javascript" src="{$PATH}/js/jquery.tablesorter.min.js" type="text/javascript"></script> -->
+    <!-- <script type="text/javascript" src="{$PATH}/js/jquery.tablesorter.pager.js" type="text/javascript"></script> -->
+    <!-- <script type="text/javascript" src="{$PATH}/js/jquery.equalHeight.js"></script> -->
+    <!-- <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/raphael/2.1.2/raphael&#45;min.js"></script> -->
     <script type="text/javascript" src="{$PATH}/js/justgage.1.0.1.min.js"></script>
-    <script type="text/javascript" src="{$PATH}/js/custom.js"></script>
+    <!-- <script type="text/javascript" src="{$PATH}/js/custom.js"></script> -->
 
       <!-- jquery plugins -->
-    <script src="{$PATH}/lib/icheck.js/jquery.icheck.js"></script>
-    <script src="{$PATH}/js/bootstrap-switch.min.js"></script>
-    <script src="{$PATH}/lib/sparkline/jquery.sparkline.js"></script>
-    <script src="{$PATH}/lib/jquery-ui-1.10.3.custom.js"></script>
-    <script src="{$PATH}/lib/jquery.slimscroll.js"></script>
+    <!-- <script src="{$PATH}/lib/icheck.js/jquery.icheck.js"></script> -->
+    <script src="{$PATH}/lib/bootstrap-switch.js"></script>
+    <!-- <script src="{$PATH}/lib/sparkline/jquery.sparkline.js"></script> -->
+    <!-- <script src="{$PATH}/lib/jquery&#45;ui&#45;1.10.3.custom.js"></script> -->
+    <!-- <script src="{$PATH}/lib/jquery.slimscroll.js"></script> -->
 
 
     <!-- d3, nvd3-->
@@ -53,9 +53,9 @@
     <!-- <script src="{$PATH}/lib/rickshaw/rickshaw&#45;extensions.js"></script> -->
 
     <!--backbone and friends -->
-    <script src="{$PATH}/lib/backbone/underscore-min.js"></script>
-    <script src="{$PATH}/lib/backbone/backbone-min.js"></script>
-    <script src="{$PATH}/lib/backbone/backbone.localStorage-min.js"></script>
+    <!-- <script src="{$PATH}/lib/backbone/underscore&#45;min.js"></script> -->
+    <!-- <script src="{$PATH}/lib/backbone/backbone&#45;min.js"></script> -->
+    <!-- <script src="{$PATH}/lib/backbone/backbone.localStorage&#45;min.js"></script> -->
 
     <!-- bootstrap default plugins -->
     <script src="{$PATH}/lib/bootstrap/transition.js"></script>
@@ -69,19 +69,30 @@
 
     <!-- basic application js-->
     <script src="{$PATH}/js/app.js"></script>
-    <script src="{$PATH}/js/settings.js"></script>
+    <script src="{$PATH}/js/forms.js"></script>
+    <script src="{$PATH}/js/forms-elements.js"></script>
+    <script src="{$PATH}/js/ui-buttons.js"></script>
+    <script src="{$PATH}/js/ui-dialogs.js"></script>
+    <!-- <script src="{$PATH}/js/settings.js"></script> -->
 
     <!-- page specific -->
     <!-- <script src="{$PATH}/js/index.js"></script> -->
     <!-- <script src="{$PATH}/js/realtime.js"></script> -->
     <!-- <script src="{$PATH}/js/chat.js"></script> -->
 
-    {if $GLOBAL.statistics.analytics.enabled}
-      {$GLOBAL.statistics.analytics.code}
-    {/if}
+    <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+      ga('create', 'UA-48865762-1', 'chunkypools.com');
+      ga('send', 'pageview');
+
+    </script>
 </head>
 
-<body class="background-dark">
+<body class="background">
   <div class="logo">
     <h4><a href="/"><img src="{$PATH}/img/logo.png" width="60"> Chunky <strong>Pools</strong></a></h4>
     <!-- <h4><a href="/"><img src="https://i.imgur.com/8sAPFgb.png" width="60"> Chunky <strong>Pools</strong></a></h4> -->
