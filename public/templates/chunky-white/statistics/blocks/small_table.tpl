@@ -1,6 +1,6 @@
 <article class="widget col-md-5">
   <header><h3>Last Found Blocks</h3></header>
-  <table cellspacing="0" class="table table-hover">
+  <table cellspacing="0" class="table table-striped">
     <thead>
       <tr>
         <th align="center">Block</th>

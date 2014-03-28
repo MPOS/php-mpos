@@ -1,6 +1,6 @@
-<article class="module width_full">
+<article class="widget col-md-12">
   <header><h3>Last {$BLOCKLIMIT} Blocks Found</h3></header>
-  <table class="tablesorter" cellspacing="0">
+  <table class="table table-striped" cellspacing="0">
     <thead>
       <tr>
         <th align="center">Block</th>

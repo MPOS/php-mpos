@@ -1,6 +1,6 @@
-<article class="module width_full">
+<article class="widget col-md-12">
   <header><h3>Block Shares</h3></header>
-  <table width="70%" class="visualize" rel="line">
+  <table width="70%" class="visualize" rel="line" class="table">
     <caption>Block Shares</caption>
     <thead>
       <tr>
@@ -36,7 +36,7 @@
    </tr>{/if}
     </tbody>
   </table>
-  <table class="tablesorter">
+  <table class="table">
     <tbody>
       <tr>
         <td align="left">

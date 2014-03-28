@@ -5,7 +5,7 @@
       <tbody>
         <tr>
           <th align="left" width="50%">Pool Hash Rate</th>
-          <td width="70%" style="border: none;"><span id="b-hashrate">{$GLOBAL.hashrate|number_format:"3"}</span> {$GLOBAL.hashunits.pool}</td>
+          <td width="70%"><span id="b-hashrate">{$GLOBAL.hashrate|number_format:"3"}</span> {$GLOBAL.hashunits.pool}</td>
         </tr>
         <tr>
           <th align="left">Pool Efficiency</td>
