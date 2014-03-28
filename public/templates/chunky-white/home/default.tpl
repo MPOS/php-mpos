@@ -41,7 +41,7 @@
                   <li>
                       <div class="key pull-right">Network Difficulty</div>
                       <div class="stat">
-                          <div>{$DIFFICULTY}</div>
+                          <div>{$DIFFICULTY|default:'0'}</div>
                           <div class="progress progress-small">
                             <div class="progress-bar progress-bar-danger" style="width: {($DIFFICULTY / 250) * 100}%;"></div>
                           </div>
