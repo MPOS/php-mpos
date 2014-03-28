@@ -101,7 +101,8 @@ if (@$_SESSION['USERDATA']['is_admin'] && $user->isAdmin(@$_SESSION['USERDATA'][
     $host = @gethostbyname($config['gettingstarted']['stratumurl']);
     $port = $config['gettingstarted']['stratumport'];
     
-    if (isset($port) and
+    if (isset($host) and
+      isset($port) and
       ($socket=socket_create(AF_INET, SOCK_STREAM, SOL_TCP)) and
       (socket_set_option($socket, SOL_SOCKET, SO_SNDTIMEO, array('sec' => 3, 'usec' => 0))) and
       (@socket_connect($socket, $host, $port)))
