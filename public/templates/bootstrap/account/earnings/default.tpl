@@ -46,6 +46,7 @@
                     <tr>
                       <th></th>
                       <th>Credit</th>
+                      <th>Bonus</th>
                       <th>Debit AP</th>
                       <th>Debit MP</th>
                       <th>Donation</th>
@@ -59,6 +60,7 @@
                     <tr>
                       <td>Last Hour</th>
                       <td>{$BYTIME.1HourCredit|number_format:"8"}</td>
+                      <td>{$BYTIME.1HourBonus|number_format:"8"}</td>
                       <td>{$BYTIME.1HourDebitAP|number_format:"8"}</td>
                       <td>{$BYTIME.1HourDebitMP|number_format:"8"}</td>
                       <td>{$BYTIME.1HourDonation|number_format:"8"}</td>
@@ -70,6 +72,7 @@
                     <tr>
                       <td>Last Day</th>
                       <td>{$BYTIME.24HourCredit|number_format:"8"}</td>
+                      <td>{$BYTIME.24HourBonus|number_format:"8"}</td>
                       <td>{$BYTIME.24HourDebitAP|number_format:"8"}</td>
                       <td>{$BYTIME.24HourDebitMP|number_format:"8"}</td>
                       <td>{$BYTIME.24HourDonation|number_format:"8"}</td>
@@ -81,6 +84,7 @@
                     <tr>
                       <td>Last Week</th>
                       <td>{$BYTIME.1WeekCredit|number_format:"8"}</td>
+                      <td>{$BYTIME.1WeekBonus|number_format:"8"}</td>
                       <td>{$BYTIME.1WeekDebitAP|number_format:"8"}</td>
                       <td>{$BYTIME.1WeekDebitMP|number_format:"8"}</td>
                       <td>{$BYTIME.1WeekDonation|number_format:"8"}</td>
@@ -92,6 +96,7 @@
                     <tr>
                       <td>Last Month</th>
                       <td>{$BYTIME.1MonthCredit|number_format:"8"}</td>
+                      <td>{$BYTIME.1MonthBonus|number_format:"8"}</td>
                       <td>{$BYTIME.1MonthDebitAP|number_format:"8"}</td>
                       <td>{$BYTIME.1MonthDebitMP|number_format:"8"}</td>
                       <td>{$BYTIME.1MonthDonation|number_format:"8"}</td>
@@ -103,6 +108,7 @@
                     <tr>
                       <td>Last Year</th>
                       <td>{$BYTIME.1YearCredit|number_format:"8"}</td>
+                      <td>{$BYTIME.1YearBonus|number_format:"8"}</td>
                       <td>{$BYTIME.1YearDebitAP|number_format:"8"}</td>
                       <td>{$BYTIME.1YearDebitMP|number_format:"8"}</td>
                       <td>{$BYTIME.1YearDonation|number_format:"8"}</td>
