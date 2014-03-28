@@ -9,7 +9,6 @@ function run_005() {
   $db_version_now = $setting->getValue('DB_VERSION');  // Our actual version installed
 
   // Upgrade specific variables
-  $aSql[] = "ALTER TABLE `accounts` ADD COLUMN `signup_timestamp` INT( 10 ) NOT NULL DEFAULT '0' AFTER `failed_pins`";
   $aSql[] = "UPDATE `accounts` SET `coin_address` = NULL WHERE `coin_address` = ''";
   $aSql[] = "ALTER TABLE  `accounts` ADD UNIQUE INDEX (  `coin_address` )";
   $aSql[] = "INSERT INTO `settings` (`name`, `value`) VALUES ('DB_VERSION', '0.0.5') ON DUPLICATE KEY UPDATE `value` = '0.0.5'";
