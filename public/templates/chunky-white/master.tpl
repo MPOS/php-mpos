@@ -2,25 +2,16 @@
 <html>
 <head>
     <title>{$GLOBAL.website.title} | {$smarty.request.page|escape|default:"home"|capitalize}</title>
-    <link href="{$PATH}/css/application.min.css" rel="stylesheet">
-    <link href="{$PATH}/css/moar.css" rel="stylesheet">
+    <link href="{$PATH}/css/layout.css" rel="stylesheet">
+    <link href="{$PATH}/css/style.css" rel="stylesheet">
+    <link href="{$PATH}/css/fontello.css" rel="stylesheet">
+    <link href="{$PATH}/css/bootstrap-switch.css" rel="stylesheet">
     <link rel="shortcut icon" href="{$PATH}/img/favicon.ico" type="image/x-icon">
     <link rel="icon" href="{$PATH}/img/favicon.ico" type="image/x-icon">	
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="">
     <meta name="author" content="">
     <meta charset="utf-8">
-
-    <link rel="stylesheet" href="{$PATH}/css/animation.css">
-    <!--[if IE 7]><link rel="stylesheet" href="css/fontello-ie7.css"><![endif]-->
-    <link rel="stylesheet" href="{$PATH}/css/visualize.css" type="text/css" media="screen" />
-    <link rel="stylesheet" href="{$PATH}/css/custom.css" type="text/css" media="screen" />
-    <link rel="stylesheet" href="{$PATH}/css/bootstrap-switch.min.css" type="text/css" media="screen" />
-    <link rel="stylesheet" href="{$PATH}/css/jquery.jqplot.min.css" type="text/css" media="screen" />
-    <!--[if lt IE 9]>
-    <link rel="stylesheet" href="{$PATH}/css/ie.css" type="text/css" media="screen" />
-    <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
-    <![endif]-->
 
     <!-- jquery and friends -->
     <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js" type="text/javascript"></script>
