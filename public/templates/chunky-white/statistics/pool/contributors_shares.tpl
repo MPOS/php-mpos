@@ -1,6 +1,6 @@
-<article class="widget col-md-6" style="min-height: 350px;">
+<article class="widget col-md-5" style="min-height: 350px; margin-right: 25px;">
   <header><h3>Contributor Shares</h3></header>
-  <table class="tablesorter" cellspacing="0" class="table table-hover">
+  <table cellspacing="0" class="table table-hover">
     <thead>
       <tr>
         <th align="center">Rank</th>

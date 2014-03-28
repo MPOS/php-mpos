@@ -1,7 +1,7 @@
-<article class="widget col-md-6" style="min-height: 350px">
+<article class="widget col-md-5" style="min-height: 350px">
   <header><h3>Contributor Hashrates</h3></header>
   <div>
-  <table class="tablesorter" cellspacing="0" class="table table-hover">
+  <table cellspacing="0" class="table table-hover">
     <thead>
       <tr>
         <th align="center">Rank</th>

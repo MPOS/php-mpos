@@ -1,4 +1,4 @@
- <article class="widget col-md-6">
+ <article class="widget col-md-5" style="margin-right: 25px;">
   <header><h3>General Statistics</h3></header>
   <div class="module_content">
     <table width="100%" class="table table-hover">
