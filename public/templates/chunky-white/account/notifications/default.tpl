@@ -1,4 +1,4 @@
-<form action="{$smarty.server.PHP_SELF}" method="POST">
+<form action="{$smarty.server.PHP_SELF}" method="POST" class="form-horizontal">
   <input type="hidden" name="page" value="{$smarty.request.page|escape}">
   <input type="hidden" name="action" value="{$smarty.request.action|escape}">
   <input type="hidden" name="do" value="save">
@@ -64,7 +64,7 @@
     </div>
     <footer>
       <div class="submit_link">
-        <input type="submit" value="Update" class="alt_btn">
+        <input type="submit" value="Update" class="btn btn-primary">
       </div>
     </footer>
   </article>
