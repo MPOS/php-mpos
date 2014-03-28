@@ -1,4 +1,4 @@
-<article class="module width_half">
+<article class="widget col-md-5 push-right">
   <header><h3 class="">Add New Worker</h3></header>
   <form action="{$smarty.server.PHP_SELF}" method="post" class="form-horizontal">
     <input type="hidden" name="page" value="{$smarty.request.page|escape}">
@@ -30,13 +30,13 @@
   </form>
 </article>
 
-<article class="module width_3_quarter">
+<article class="widget col-md-5">
   <header><h3 class="">Worker Configuration</h3></header>
   <form action="{$smarty.server.PHP_SELF}" method="post" class="form-horizontal">
     <input type="hidden" name="page" value="{$smarty.request.page|escape}">
     <input type="hidden" name="action" value="{$smarty.request.action|escape}">
     <input type="hidden" name="do" value="update">
-    <table class="tablesorter" cellspacing="0" class="table table-hover">
+    <table class="table" cellspacing="0">
       <thead>
         <tr>
           <th align="left">Worker Login</th>

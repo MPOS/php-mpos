@@ -97,3 +97,7 @@ article > header > h3 {
 tbody > th {
   margin-left: 0px;
 }
+
+.push-right {
+  margin-right: 25px;
+}

@@ -2,7 +2,7 @@
   <input type="hidden" name="page" value="{$smarty.request.page|escape}">
   <input type="hidden" name="action" value="{$smarty.request.action|escape}">
   <input type="hidden" name="do" value="updateAccount">
-  <article class="module width_3_quarter">
+  <article class="widget col-md-5 push-right">
     <header><h3>Account Details</h3></header>
     <div class="module_content">
       <fieldset>
@@ -90,7 +90,7 @@
   <input type="hidden" name="page" value="{$smarty.request.page|escape}">
   <input type="hidden" name="action" value="{$smarty.request.action|escape}">
   <input type="hidden" name="do" value="cashOut">
-  <article class="module width_3_quarter">
+  <article class="widget col-md-5">
     <header>
       <h3>Cash Out</h3>
     </header>
@@ -132,7 +132,7 @@
   <input type="hidden" name="page" value="{$smarty.request.page|escape}">
   <input type="hidden" name="action" value="{$smarty.request.action|escape}">
   <input type="hidden" name="do" value="updatePassword">
-  <article class="module width_3_quarter">
+  <article class="widget col-md-5">
     <header>
       <h3>Change Password</h3>
     </header>

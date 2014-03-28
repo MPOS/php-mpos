@@ -1,4 +1,4 @@
-<article class="module width_full">
+<article class="widget col-md-11">
   <header><h3>Transaction Summary</h3></header>
   <table class="tablesorter" cellspacing="0">
     <thead>
@@ -18,7 +18,7 @@
   </table>
 </article>
 
-<article class="module width_quarter">
+<article class="widget col-md-3 push-right">
   <header><h3>Transaction Filter</h3></header>
   <div class="module_content">
   <form action="{$smarty.server.PHP_SELF}">
@@ -63,7 +63,7 @@
 </form>
 </article>
 
-<article class="module width_3_quarter">
+<article class="widget col-md-8">
   <header><h3>Transaction History</h3></header>
     <table cellspacing="0" class="tablesorter" width="100%">
       <thead>

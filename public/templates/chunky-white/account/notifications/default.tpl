@@ -2,12 +2,12 @@
   <input type="hidden" name="page" value="{$smarty.request.page|escape}">
   <input type="hidden" name="action" value="{$smarty.request.action|escape}">
   <input type="hidden" name="do" value="save">
-  <article class="module width_quarter">
+  <article class="widget col-md-3 push-right">
     <header>
       <h3>Notification Settings</h3>
     </header>
     <div class="module_content">
-    <table width="100%">
+    <table class="table" width="100%">
       <tr>
         <th align="left">Type</th>
         <th align="center">Active</th>
@@ -70,12 +70,12 @@
   </article>
 </form>
 
-<article class="module width_3_quarter">
+<article class="widget col-md-8">
   <header>
       <h3>Notification History</h3>
       <div class="submit_link">{include file="global/pagination.tpl"}</div>
   </header>
-  <table width="100%" class="tablesorterpager" cellspacing="0">
+  <table width="100%" class="table table-striped" cellspacing="0">
     <thead style="font-size:13px;">
       <tr>
         <th align="center" style="cursor: pointer;">ID</th>
