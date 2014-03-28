@@ -1,6 +1,6 @@
-<article class="module width_full">
+<article class="widget col-md-11">
   <header><h3>Block Statistics</h3></header>
-  <table class="tablesorter">
+  <table class="table">
     <tbody>
       <tr>
         <td align="left">

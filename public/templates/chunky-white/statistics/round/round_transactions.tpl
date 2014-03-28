@@ -1,6 +1,6 @@
-<article class="module width_half">
+<article class="widget col-md-5">
   <header><h3>Round Transactions</h3></header>
-  <table class="tablesorter" cellspacing="0">
+  <table class="table table-striped" cellspacing="0">
     <thead>
       <tr>
         <th>User Name</th>

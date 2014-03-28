@@ -1,6 +1,6 @@
-<article class="module width_half">
+<article class="widget col-md-5" style="margin-right: 25px">
   <header><h3>Round Shares</h3></header>
-  <table class="tablesorter" cellspacing="0">
+  <table class="table table-striped" cellspacing="0">
     <thead>
       <tr>
         <th align="center">Rank</th>
