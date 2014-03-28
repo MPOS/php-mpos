@@ -24,7 +24,7 @@
                   <td>
                     <div class="form-group">
                       <label>Select User</label>
-                      {html_options class="form-control" name="id" options=$USERLIST selected=$USERID|default:"0"}
+                      {html_options class="form-control select-mini" name="id" options=$USERLIST selected=$USERID|default:"0"}
                     </div>
                   </td>
                   <td>
@@ -55,7 +55,7 @@
             </div>
           </div>
           <div class="panel-footer">
-            <input type="submit" value="Submit" class="btn btn-success">
+            <input type="submit" value="Submit" class="btn btn-success btn-sm">
           </div>
         </div>
       </div>

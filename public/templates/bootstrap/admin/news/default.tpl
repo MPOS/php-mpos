@@ -30,7 +30,7 @@
         </div>
       </div>
       <div class="panel-footer">
-        <input type="submit" value="Add" class="btn btn-success">
+        <input type="submit" value="Add" class="btn btn-success btn-sm">
       </div>
     </div>
   </form>
@@ -51,13 +51,14 @@
         {$NEWS[news].content nofilter}
       </div>
       <div class="panel-footer">
-        <div  style="text-align:right">
+        <div style="text-align:right">
           <a href='{$smarty.server.SCRIPT_NAME}?page={$smarty.request.page|escape}&action=news_edit&id={$NEWS[news].id}'><i class="fa fa-wrench fa-fw"></i></a>&nbsp;
           <a href='{$smarty.server.SCRIPT_NAME}?page={$smarty.request.page|escape}&action={$smarty.request.action|escape}&do=delete&id={$NEWS[news].id}'><i class="fa fa-trash-o fa-fw"></i></a>
         </div>
       </div>
     </div>
   </div>
-</div>
 {/section}
 {/nocache}
+</div>
+

@@ -76,11 +76,10 @@
         <form action="{$smarty.server.SCRIPT_NAME}" method="POST" id='search' role="form">
           <input type="hidden" name="page" value="{$smarty.request.page|escape}">
           <input type="hidden" name="action" value="{$smarty.request.action|escape}">
-          <div class="form-group input-group">
+          <div class="input-group input-group-sm">
             <input type="text" class="form-control" name="search" value="{$smarty.request.height|default:"%"|escape}">
               <span class="input-group-btn">
-                <button class="btn btn-default" type="submit" value="Search"><i class="fa fa-search"></i>
-                </button>
+                <button class="btn btn-sm" type="submit" value="Search"><i class="fa fa-search"></i></button>
               </span>
           </div>
         </form>

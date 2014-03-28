@@ -36,8 +36,8 @@
           </div>
         </div>
         <div class="panel-footer">
-          <button type="submit" class="btn btn-success">Send Email</button>
-          <button type="reset" class="btn btn-warning">Reset Values</button></center>
+          <button type="submit" class="btn btn-success btn-sm">Send Email</button>
+          <button type="reset" class="btn btn-warning btn-sm">Reset Values</button></center>
         </div>
       </div>
     </div>

@@ -19,7 +19,7 @@
         </div>
       </div>
       <div class="panel-footer">
-        <input type="submit" class="btn btn-success" value="Reset PIN">
+        <input type="submit" class="btn btn-success btn-sm" value="Reset PIN">
       </div>
     </div>
   </div>

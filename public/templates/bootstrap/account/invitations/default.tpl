@@ -19,7 +19,7 @@
         </div>
       </div>
       <div class="panel-footer">
-        <input type="submit" value="Invite" class="btn btn-success">
+        <input type="submit" value="Invite" class="btn btn-success btn-sm">
       </div>
     </div>
   </form>

@@ -50,11 +50,11 @@
         </ul>
         <div class="form-group">
           <label>Type</label>
-          {html_options class="form-control select2-bootstrap-append" name="filter[type]" options=$TRANSACTIONTYPES selected=$smarty.request.filter.type|default:""}
+          {html_options class="form-control select-mini" name="filter[type]" options=$TRANSACTIONTYPES selected=$smarty.request.filter.type|default:""}
         </div>
         <div class="form-group">
           <label>Status</label>
-          {html_options class="form-control" name="filter[status]" options=$TXSTATUS selected=$smarty.request.filter.status|default:""}
+          {html_options class="form-control select-mini" name="filter[status]" options=$TXSTATUS selected=$smarty.request.filter.status|default:""}
         </div>
         <div class="form-group">
           <label>Account</label>
@@ -66,7 +66,7 @@
         </div>
       </div>
       <div class="panel-footer">
-        <input type="submit" value="Filter" class="btn btn-success">
+        <input type="submit" value="Filter" class="btn btn-success btn-sm">
       </div>
     </div>
   </form>
