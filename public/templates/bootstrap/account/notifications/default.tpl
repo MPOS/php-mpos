@@ -10,6 +10,7 @@
       </div>
       <div class="panel-body no-padding">
         <table class="table table-striped table-bordered table-hover">
+            {if $DISABLE_IDLEWORKERNOTIFICATIONS|default:"" != 1}
             <tr>
               <td>
                 <label>IDLE Worker</label>
@@ -19,7 +20,8 @@
                 <input type="checkbox" class="switch" data-size="small" name="data[idle_worker]" id="idle_worker" value="1"{nocache}{if $SETTINGS['idle_worker']|default:"0" == 1}checked{/if}{/nocache} />
               </td>
             </tr>
-      {if $DISABLE_BLOCKNOTIFICATIONS|default:"" != 1}
+            {/if}
+            {if $DISABLE_BLOCKNOTIFICATIONS|default:"" != 1}
             <tr>
               <td>
                 <label>New Blocks</label>
@@ -29,7 +31,7 @@
                 <input type="checkbox"class="switch" data-size="small" name="data[new_block]" id="new_block" value="1"{nocache}{if $SETTINGS['new_block']|default:"0" == 1}checked{/if}{/nocache} />
               </td>
             </tr>
-      {/if}
+            {/if}
             <tr>
               <td>
                 <label>Payout</label>
