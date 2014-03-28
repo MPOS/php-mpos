@@ -278,6 +278,13 @@ table.dataTable thead .sorting:after {
     color: rgba(50,50,50,.5);
 }
 
+.table {
+    width: 100%;
+    margin-bottom: 20px;
+    table-layout: fixed;
+    word-wrap: break-word;
+}
+
 /* Circle Buttons */
 
  .btn-circle {
