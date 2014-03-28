@@ -3,42 +3,42 @@
   font-family: 'Open Sans';
   font-style: normal;
   font-weight: 300;
-  src: local("Open Sans Light"), local("OpenSans-Light"), url(<%= asset_path 'open-sans-light.woff' %>) format("woff");
+  src: local("Open Sans Light"), local("OpenSans-Light"), url('../fonts/open-sans-light.woff') format("woff");
 }
 
 @font-face {
   font-family: 'Open Sans';
   font-style: normal;
   font-weight: 400;
-  src: local("Open Sans"), local("OpenSans"), url(<%= asset_path 'open-sans.woff' %>) format("woff");
+  src: local("Open Sans"), local("OpenSans"), url('../fonts/open-sans.woff') format("woff");
 }
 
 @font-face {
   font-family: 'Open Sans';
   font-style: normal;
   font-weight: 600;
-  src: local("Open Sans Semibold"), local("OpenSans-Semibold"), url(<%= asset_path 'open-sans-semibold.woff' %>) format("woff");
+  src: local("Open Sans Semibold"), local("OpenSans-Semibold"), url('../fonts/open-sans-semibold.woff') format("woff");
 }
 
 @font-face {
   font-family: 'Open Sans';
   font-style: normal;
   font-weight: 700;
-  src: local("Open Sans Bold"), local("OpenSans-Bold"), url(<%= asset_path 'open-sans-bold.woff' %>) format("woff");
+  src: local("Open Sans Bold"), local("OpenSans-Bold"), url('../fonts/open-sans-bold.woff') format("woff");
 }
 
 @font-face {
   font-family: 'Open Sans';
   font-style: italic;
   font-weight: 400;
-  src: local("Open Sans Italic"), local("OpenSans-Italic"), url(<%= asset_path 'open-sans-italic.woff' %>) format("woff");
+  src: local("Open Sans Italic"), local("OpenSans-Italic"), url('../fonts/open-sans-italic.woff') format("woff");
 }
 
 @font-face {
   font-family: 'Open Sans';
   font-style: italic;
   font-weight: 300;
-  src: local("Open Sans Light Italic"), local("OpenSansLight-Italic"), url(<%= asset_path 'open-sans-italic-light.woff' %>) format("woff");
+  src: local("Open Sans Light Italic"), local("OpenSansLight-Italic"), url('../fonts/open-sans-italic-light.woff') format("woff");
 }
 
 /*! normalize.css v2.1.3 | MIT License | git.io/normalize */
@@ -2705,8 +2705,8 @@ input[type="button"].btn-block {
 
 @font-face {
   font-family: 'Glyphicons Halflings';
-  src: url(<%= asset_path "glyphicons/glyphicons-halflings-regular.eot" %>);
-  src: url(<%= asset_path "glyphicons/glyphicons-halflings-regular.eot?#iefix" %>) format("embedded-opentype"), url(<%= asset_path "glyphicons/glyphicons-halflings-regular.woff" %>) format("woff"), url(<%= asset_path "glyphicons/glyphicons-halflings-regular.ttf" %>) format("truetype"), url(<%= asset_path "glyphicons/glyphicons-halflings-regular.svg#glyphicons_halflingsregular" %>) format("svg");
+  src: url("../fonts/glyphicons/glyphicons-halflings-regular.eot");
+  src: url("../fonts/glyphicons/glyphicons-halflings-regular.eot?#iefix") format("embedded-opentype"), url("../fonts/glyphicons/glyphicons-halflings-regular.woff") format("woff"), url("../fonts/glyphicons/glyphicons-halflings-regular.ttf") format("truetype"), url("../fonts/glyphicons/glyphicons-halflings-regular.svg#glyphicons_halflingsregular") format("svg");
 }
 
 .glyphicon {
@@ -7204,8 +7204,8 @@ textarea + .help-block,
  * -------------------------- */
 @font-face {
   font-family: 'FontAwesome';
-  src: url(<%= asset_path "font-awesome/fontawesome-webfont.eot?v=4.0.3" %>);
-  src: url(<%= asset_path "font-awesome/fontawesome-webfont.eot?#iefix&v=4.0.3" %>) format("embedded-opentype"), url(<%= asset_path "font-awesome/fontawesome-webfont.woff?v=4.0.3" %>) format("woff"), url(<%= asset_path "font-awesome/fontawesome-webfont.ttf?v=4.0.3" %>) format("truetype"), url(<%= asset_path "font-awesome/fontawesome-webfont.svg?v=4.0.3#fontawesomeregular" %>) format("svg");
+  src: url("../fonts/font-awesome/fontawesome-webfont.eot?v=4.0.3");
+  src: url("../fonts/font-awesome/fontawesome-webfont.eot?#iefix&v=4.0.3") format("embedded-opentype"), url("../fonts/font-awesome/fontawesome-webfont.woff?v=4.0.3") format("woff"), url("../fonts/font-awesome/fontawesome-webfont.ttf?v=4.0.3") format("truetype"), url("../fonts/font-awesome/fontawesome-webfont.svg?v=4.0.3#fontawesomeregular") format("svg");
   font-weight: normal;
   font-style: normal;
 }
@@ -9969,7 +9969,7 @@ ul.wysihtml5-toolbar div[data-wysihtml5-command-value="orange"] {
 .colorpicker-saturation {
   width: 170px;
   height: 170px;
-  background-image: url(<%= asset_path "saturation2.png" %>);
+  background-image: url("../images/saturation2.png");
   cursor: crosshair;
   float: left;
 }
@@ -10023,11 +10023,11 @@ ul.wysihtml5-toolbar div[data-wysihtml5-command-value="orange"] {
 }
 
 .colorpicker-hue {
-  background-image: url(<%= asset_path "hue.png" %>);
+  background-image: url("../images/hue.png");
 }
 
 .colorpicker-alpha {
-  background-image: url(<%= asset_path "alpha.png" %>);
+  background-image: url("../images/alpha.png");
   display: none;
 }
 
@@ -10084,7 +10084,7 @@ ul.wysihtml5-toolbar div[data-wysihtml5-command-value="orange"] {
   height: 10px;
   margin-top: 5px;
   clear: both;
-  background-image: url(<%= asset_path "alpha.png" %>);
+  background-image: url("../images/alpha.png");
   background-position: 0 100%;
 }
 .colorpicker-color div {
@@ -16008,18 +16008,18 @@ html {
 body {
   font-weight: normal;
   padding-bottom: 100px;
-  background-image: url("data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4gPHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PHJhZGlhbEdyYWRpZW50IGlkPSJncmFkIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgY3g9IjEwJSIgY3k9IjAiIHI9IjEwMCUiPjxzdG9wIG9mZnNldD0iMCUiIHN0b3AtY29sb3I9InJnYmEoNzQsIDEyMSwgMTQ3LCAwLjg5KSIvPjxzdG9wIG9mZnNldD0iNTAlIiBzdG9wLWNvbG9yPSJyZ2JhKDIyNiwgMjI2LCAyMjYsIDAuODcpIi8+PHN0b3Agb2Zmc2V0PSIxMDAlIiBzdG9wLWNvbG9yPSJyZ2JhKDE4NSwgMTM1LCAxMzEsIDAuODcpIi8+PC9yYWRpYWxHcmFkaWVudD48L2RlZnM+PHJlY3QgeD0iMCIgeT0iMCIgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0idXJsKCNncmFkKSIgLz48L3N2Zz4="), url(<%= asset_path "bgnoise_lg_dark.png" %>);
+  background-image: url("data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4gPHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PHJhZGlhbEdyYWRpZW50IGlkPSJncmFkIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgY3g9IjEwJSIgY3k9IjAiIHI9IjEwMCUiPjxzdG9wIG9mZnNldD0iMCUiIHN0b3AtY29sb3I9InJnYmEoNzQsIDEyMSwgMTQ3LCAwLjg5KSIvPjxzdG9wIG9mZnNldD0iNTAlIiBzdG9wLWNvbG9yPSJyZ2JhKDIyNiwgMjI2LCAyMjYsIDAuODcpIi8+PHN0b3Agb2Zmc2V0PSIxMDAlIiBzdG9wLWNvbG9yPSJyZ2JhKDE4NSwgMTM1LCAxMzEsIDAuODcpIi8+PC9yYWRpYWxHcmFkaWVudD48L2RlZnM+PHJlY3QgeD0iMCIgeT0iMCIgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0idXJsKCNncmFkKSIgLz48L3N2Zz4="), url("../images/bgnoise_lg_dark.png");
   background-color: rgba(74, 121, 147, 0.89);
-  background: radial-gradient(farthest-side ellipse at 10% 0, rgba(74, 121, 147, 0.89), rgba(226, 226, 226, 0.87), rgba(185, 135, 131, 0.87)), url(<%= asset_path "bgnoise_lg_dark.png" %>);
-  background: -webkit-radial-gradient(10% 0, farthest-side ellipse, rgba(74, 121, 147, 0.89), rgba(226, 226, 226, 0.87), rgba(185, 135, 131, 0.87)), url(<%= asset_path "bgnoise_lg_dark.png" %>);
-  background: -moz-radial-gradient(10% 0, farthest-side ellipse, rgba(74, 121, 147, 0.89), rgba(226, 226, 226, 0.87), rgba(185, 135, 131, 0.87)), url(<%= asset_path "bgnoise_lg_dark.png" %>);
+  background: radial-gradient(farthest-side ellipse at 10% 0, rgba(74, 121, 147, 0.89), rgba(226, 226, 226, 0.87), rgba(185, 135, 131, 0.87)), url("../images/bgnoise_lg_dark.png");
+  background: -webkit-radial-gradient(10% 0, farthest-side ellipse, rgba(74, 121, 147, 0.89), rgba(226, 226, 226, 0.87), rgba(185, 135, 131, 0.87)), url("../images/bgnoise_lg_dark.png");
+  background: -moz-radial-gradient(10% 0, farthest-side ellipse, rgba(74, 121, 147, 0.89), rgba(226, 226, 226, 0.87), rgba(185, 135, 131, 0.87)), url("../images/bgnoise_lg_dark.png");
 }
 body.background-dark {
-background-image: url("data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4gPHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PHJhZGlhbEdyYWRpZW50IGlkPSJncmFkIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgY3g9IjEwJSIgY3k9IjAiIHI9IjEwMCUiPjxzdG9wIG9mZnNldD0iMCUiIHN0b3AtY29sb3I9InJnYmEoMTkzLCAxNzksIDEzMiwgMC44NykiLz48c3RvcCBvZmZzZXQ9IjUwJSIgc3RvcC1jb2xvcj0icmdiYSgxODQsIDE1OCwgMTExLCAwLjg4KSIvPjxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0icmdiYSgxNTcsIDEzNCwgOTUsIDAuODgpIi8+PC9yYWRpYWxHcmFkaWVudD48L2RlZnM+PHJlY3QgeD0iMCIgeT0iMCIgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0idXJsKCNncmFkKSIgLz48L3N2Zz4="), url(<%= asset_path "bgnoise_lg_dark.png" %>);
+background-image: url("data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz4gPHN2ZyB2ZXJzaW9uPSIxLjEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PHJhZGlhbEdyYWRpZW50IGlkPSJncmFkIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgY3g9IjEwJSIgY3k9IjAiIHI9IjEwMCUiPjxzdG9wIG9mZnNldD0iMCUiIHN0b3AtY29sb3I9InJnYmEoMTkzLCAxNzksIDEzMiwgMC44NykiLz48c3RvcCBvZmZzZXQ9IjUwJSIgc3RvcC1jb2xvcj0icmdiYSgxODQsIDE1OCwgMTExLCAwLjg4KSIvPjxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0icmdiYSgxNTcsIDEzNCwgOTUsIDAuODgpIi8+PC9yYWRpYWxHcmFkaWVudD48L2RlZnM+PHJlY3QgeD0iMCIgeT0iMCIgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0idXJsKCNncmFkKSIgLz48L3N2Zz4="), url("../images/bgnoise_lg_dark.png");
   background-color: rgba(193, 179, 132, 0.87);
-  background: radial-gradient(farthest-side ellipse at 10% 0, rgba(193, 179, 132, 0.87), rgba(184, 158, 111, 0.88), rgba(157, 134, 95, 0.88)), url(<%= asset_path "bgnoise_lg_dark.png" %>);
-  background: -webkit-radial-gradient(10% 0, farthest-side ellipse, rgba(193, 179, 132, 0.87), rgba(184, 158, 111, 0.88), rgba(157, 134, 95, 0.88)), url(<%= asset_path "bgnoise_lg_dark.png" %>);
-  background: -moz-radial-gradient(10% 0, farthest-side ellipse, rgba(193, 179, 132, 0.87), rgba(184, 158, 111, 0.88), rgba(157, 134, 95, 0.88)), url(<%= asset_path "bgnoise_lg_dark.png" %>);
+  background: radial-gradient(farthest-side ellipse at 10% 0, rgba(193, 179, 132, 0.87), rgba(184, 158, 111, 0.88), rgba(157, 134, 95, 0.88)), url("../images/bgnoise_lg_dark.png");
+  background: -webkit-radial-gradient(10% 0, farthest-side ellipse, rgba(193, 179, 132, 0.87), rgba(184, 158, 111, 0.88), rgba(157, 134, 95, 0.88)), url("../images/bgnoise_lg_dark.png");
+  background: -moz-radial-gradient(10% 0, farthest-side ellipse, rgba(193, 179, 132, 0.87), rgba(184, 158, 111, 0.88), rgba(157, 134, 95, 0.88)), url("../images/bgnoise_lg_dark.png");
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -17995,23 +17995,23 @@ table.table thead .sorting_desc_disabled {
 }
 
 table.table thead .sorting {
-  background: url(<%= asset_path "datatables/sort_both.png" %>) no-repeat center right;
+  background: url("../images/datatables/sort_both.png") no-repeat center right;
 }
 
 table.table thead .sorting_asc {
-  background: url(<%= asset_path "datatables/sort_asc.png" %>) no-repeat center right;
+  background: url("../images/datatables/sort_asc.png") no-repeat center right;
 }
 
 table.table thead .sorting_desc {
-  background: url(<%= asset_path "datatables/sort_desc.png" %>) no-repeat center right;
+  background: url("../images/datatables/sort_desc.png") no-repeat center right;
 }
 
 table.table thead .sorting_asc_disabled {
-  background: url(<%= asset_path "datatables/sort_asc_disabled.png" %>) no-repeat center right;
+  background: url("../images/datatables/sort_asc_disabled.png") no-repeat center right;
 }
 
 table.table thead .sorting_desc_disabled {
-  background: url(<%= asset_path "datatables/sort_desc_disabled.png" %>) no-repeat center right;
+  background: url("../images/datatables/sort_desc_disabled.png") no-repeat center right;
 }
 
 .per-page-selector label {
