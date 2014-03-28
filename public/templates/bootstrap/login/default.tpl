@@ -7,11 +7,11 @@
       </div>
       <div class="panel-body">
         <div class="form-group">
-          <div class="input-group margin-bottom-sm">
+          <div class="input-group input-group-sm">
             <span class="input-group-addon"><i class="fa fa-envelope-o fa-fw"></i></span>
             <input class="form-control" placeholder="E-mail" name="username" type="email" autofocus required>
           </div>
-          <div class="input-group">
+          <div class="input-group input-group-sm">
             <span class="input-group-addon"><i class="fa fa-key fa-fw"></i></span>
             <input class="form-control" placeholder="Password" name="password" type="password" value="" required>
           </div>
