@@ -1,4 +1,4 @@
-<article class="module width_half">
+<article class="widget col-md-6">
   <header><h3>Last Found Blocks</h3></header>
   <table class="tablesorter" cellspacing="0" class="table table-hover">
     <thead>

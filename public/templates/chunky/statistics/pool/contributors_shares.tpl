@@ -1,4 +1,4 @@
-<article class="module width_half" style="min-height: 350px;">
+<article class="widget col-md-6" style="min-height: 350px;">
   <header><h3>Contributor Shares</h3></header>
   <table class="tablesorter" cellspacing="0" class="table table-hover">
     <thead>
