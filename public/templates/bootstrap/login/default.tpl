@@ -3,7 +3,7 @@
     <input type="hidden" name="ctoken" value="{$CTOKEN|escape|default:""}">
     <div class="panel panel-info">
       <div class="panel-heading">
-        <h3 class="panel-title">Login with existing account</h3>
+        <i class="fa fa-sign-in fa-fw"></i> Login with existing account
       </div>
       <div class="panel-body">
         <div class="form-group">
