@@ -8,21 +8,19 @@
             <a href="{$smarty.server.PHP_SELF}?page=irc"><i class="fa fa-comments"></i> <span class="name">IRC Chat</span></a>
         </li>
 
+        <li>
+            <a href="https://forums.chunkypools.com"><i class="fa fa-comments"></i> <span class="name">Forum</span></a>
+        </li>
+
         <li class="panel">
             <a class="accordion-toggle collapsed" data-toggle="collapse"
                data-parent="#side-nav" href="#forms-collapse"><i class="fa fa-tint"></i> <span class="name">Pools</span></a>
             <ul id="forms-collapse" class="panel-collapse collapse">
-                <li><a href="https://pool.chunky.ms/doge/">Dogecoin (DOGE)</a></li>
-                <li><a href="https://pool.chunky.ms/eac/">Earthcoin (EAC)</a></li>
-                <li><a href="https://pool.chunky.ms/rpc/">RonPaulCoin (RPC)</a></li>
-                <li><a href="https://pool.chunky.ms/lot/">Lottocoin (LOT)</a></li>
-                <li><a href="https://pool.chunky.ms/sbc/">Stablecoin (SBC)</a></li>
-                <li><a href="https://pool.chunky.ms/42/">42coin (42)</a></li>
-                <li><a href="https://pool.chunky.ms/dgb/">Digibyte (DGB)</a></li>
-                <li><a href="https://pool.chunky.ms/ltc/">Litecoin (LTC)</a></li>
-                <li><a href="https://pool.chunky.ms/kdc/">Klondikecoin (KDC)</a></li>
-                <li><a href="https://pool.chunky.ms/leaf/">Leafcoin (LEAF)</a></li>
-                <li><a href="https://pool.chunky.ms/pot/">Potcoin (POT)</a></li>
+                <li><a href="https://chunkypools.com/doge/">Dogecoin (DOGE)</a></li>
+                <li><a href="https://chunkypools.com/rpc/">RonPaulCoin (RPC)</a></li>
+                <li><a href="https://chunkypools.com/dgb/">Digibyte (DGB)</a></li>
+                <li><a href="https://chunkypools.com/kdc/">Klondikecoin (KDC)</a></li>
+                <li><a href="https://chunkypools.com/pot/">Potcoin (POT)</a></li>
             </ul>
         </li>
 
@@ -96,7 +94,9 @@
         {/if}
     </ul>
 
+    {if $SITECOINNAME}
     <div id="coin-logo">
       <img src="{$PATH}/img/{$SITECOINNAME|lower}120.png" />
-    </div> 
+    </div>
+    {/if}
 </nav>
