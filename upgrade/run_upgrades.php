@@ -13,6 +13,12 @@ $db_version_now = $setting->getValue('DB_VERSION');
 
 // Helper functions
 function run_db_upgrade($db_version_now) {
+  // Dirty, but need it here
+  global $setting;
+
+  // Drop caches from our settings for live data
+  $setting->flushCache();
+
   // Find upgrades
   $files = glob(dirname(__FILE__) . "/definitions/${db_version_now}_to_*");
   if (count($files) == 0) die('No upgrade definitions found for ' . $db_version_now . PHP_EOL);
@@ -23,14 +29,19 @@ function run_db_upgrade($db_version_now) {
     if (!require_once($file)) die('Failed to load upgrade definition: ' . $file);
     echo "+ Running upgrade from $db_version_now to $db_version_to" . PHP_EOL;
     $run = "run_$run_string";
-    $run();
-    run_db_upgrade($db_version_to);
+    if (function_exists($run)) {
+      $run();
+      run_db_upgrade($db_version_to);
+    } else {
+      echo 'Could find upgrade function ' . $run . '!' . PHP_EOL;
+      exit(1);
+    }
   }
 }
 function execute_db_upgrade($aSql) {
   global $mysqli;
   // Run the upgrade
-  echo '- Starting database migration to version ' . $db_version_new . PHP_EOL;
+  echo '- Starting database migration ' . PHP_EOL;
   foreach ($aSql as $sql) {
     echo '-  Preparing: ' . $sql . PHP_EOL;
     $stmt = $mysqli->prepare($sql);
