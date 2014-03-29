@@ -39,7 +39,7 @@
         </div>  
       </div>
       <div class="panel-footer">
-        <input type="submit" value="Save" class="btn btn-success">
+        <input type="submit" value="Save" class="btn btn-success btn-sm">
       </div>
     </div>
   </form>

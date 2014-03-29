@@ -58,6 +58,20 @@ $config['wallet']['username'] = 'testnet';
 $config['wallet']['password'] = 'testnet';
 
 /**
+ * Swiftmailer configuration
+ *  Configure your way to send mails
+ *   https://github.com/MPOS/php-mpos/wiki/Config-Setup#wiki-swiftmailer
+ **/
+$config['swiftmailer']['type'] = 'sendmail';
+$config['swiftmailer']['sendmail']['path'] = '/usr/sbin/sendmail';
+$config['swiftmailer']['sendmail']['options'] = '-bs';
+$config['switfmailer']['smtp']['host'] = 'your.mail-relay.com';
+$config['switfmailer']['smtp']['port'] = '587';
+$config['switfmailer']['smtp']['encryption'] = 'tls';
+$config['switfmailer']['smtp']['username'] = '';
+$config['switfmailer']['smtp']['password'] = '';
+
+/**
  * Getting Started Config
  *  Shown to users in the 'Getting Started' section
  *   https://github.com/MPOS/php-mpos/wiki/Config-Setup#wiki-getting-started

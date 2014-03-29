@@ -15,30 +15,6 @@ p {
     background-color: #999999;
 }
 
-select,
-textarea,
-input[type="text"],
-input[type="password"],
-input[type="datetime"],
-input[type="datetime-local"],
-input[type="date"],
-input[type="month"],
-input[type="time"],
-input[type="week"],
-input[type="number"],
-input[type="email"],
-input[type="url"],
-input[type="search"],
-input[type="tel"],
-input[type="color"],
-.uneditable-input {
-  background-color: #ffffff;
-  padding: 4px 4px 4px 4px;
-  font-size: 12px;
-  color: #555555;
-  border: 1px solid #ccc;
-}
-
 @media(min-width:768px) {
     #page-wrapper {
         border-left: 1px solid #222222;
@@ -75,6 +51,10 @@ a:focus {
   color: #FFFFFF;
 }
 
+.navbar .brand, .navbar .nav > li > a {
+    color: #999999;
+}
+
 .navbar .brand, .navbar .nav > li > a:hover {
     color: #FFFFFF;
     background-color: #000000;
@@ -106,10 +86,30 @@ a:focus {
     color: #FFFFFF;
 }
 
+.navbar .nav > li.dropdown.open > .dropdown-toggle,
+.navbar .nav > li.dropdown.active > .dropdown-toggle,
+.navbar .nav > li.dropdown.open.active > .dropdown-toggle {
+    color: #FFFFFF;
+    background-color: #000000;
+}
+
+.navbar-default .navbar-nav .open .dropdown-menu > li > a, 
+.navbar-default .navbar-nav .open .dropdown-menu {
+    color: #FFFFFF;
+    background-color: #000000;
+    font-size: 12px;
+}
+
+.navbar-default .navbar-nav .open .dropdown-menu > li a:hover {
+    background-color: #000000;
+    color: #999999;
+    font-size: 12px;
+}
+
 /* Tables */
 
 .panel-footer {
-    color: #000;
+    color: #000000;
     background-color: #BDBFBF;
     border-top: 1px solid #808080;
     border-bottom-right-radius: 3px;
@@ -117,7 +117,7 @@ a:focus {
 }
 
 .panel-body {
-    color: #000;
+    color: #000000;
     background-color: #D3D3D3;
 }
 

@@ -7,7 +7,7 @@
           </div>
           <div class="col-md-spark">
             <i class="fa fa-money fa-2x"></i>
-            <p id="b-payout" class="h6 font-bold m-t">{$GLOBAL.userdata.estimates.hours1|number_format:"12"}</p>
+            <p id="b-payout" class="h6 font-bold m-t">{$GLOBAL.userdata.estimates.hours24|number_format:"12"}</p>
             <p class="h6 text-muted">{$GLOBAL.config.currency} 24 Hours Estimated Earnings</p>
           </div>
           <div class="col-md-spark">

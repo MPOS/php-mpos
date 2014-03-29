@@ -20,6 +20,15 @@ class Setting extends Base {
   }
 
   /**
+   * Flush our local cache, may be required for upgrades
+   * or other places where we need live data
+   **/
+  public function flushCache() {
+    $this->cache = array();
+    return true;
+  }
+
+  /**
    * Fetch a value from our table
    * @param name string Setting name
    * @return value string Value

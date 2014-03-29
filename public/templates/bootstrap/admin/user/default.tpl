@@ -56,19 +56,19 @@
         </div>
         <div class="form-group">
           <label>Is Admin</label>
-          {html_options class="form-control" name="filter[is_admin]" options=$ADMIN selected=$smarty.request.filter.is_admin|default:""}
+          {html_options class="form-control select-mini" name="filter[is_admin]" options=$ADMIN selected=$smarty.request.filter.is_admin|default:""}
         </div>
         <div class="form-group">
           <label>Is Locked</label>
-          {html_options class="form-control" name="filter[is_locked]" options=$LOCKED selected=$smarty.request.filter.is_locked|default:""}
+          {html_options class="form-control select-mini" name="filter[is_locked]" options=$LOCKED selected=$smarty.request.filter.is_locked|default:""}
         </div>
         <div class="form-group">
           <label>No Fees</label>
-          {html_options class="form-control" name="filter[no_fees]" options=$NOFEE selected=$smarty.request.filter.no_fees|default:""}
+          {html_options class="form-control select-mini" name="filter[no_fees]" options=$NOFEE selected=$smarty.request.filter.no_fees|default:""}
         </div>
       </div>
       <div class="panel-footer">
-        <input type="submit" value="Search" class="btn btn-success">
+        <input type="submit" value="Search" class="btn btn-success btn-sm">
       </div>
     </div>
   </form>

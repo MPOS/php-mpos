@@ -24,14 +24,14 @@
         <input type="hidden" name="utype" value="change_pw">
         {if $GLOBAL.twofactor.enabled && $GLOBAL.twofactor.options.changepw}
           {if $CHANGEPASSSENT == 1 && $CHANGEPASSUNLOCKED == 1}
-          	<input type="submit" value="Change Password" class="alt_btn">
+          	<input type="submit" value="Change Password" class="btn btn-warning btn-sm">
           {elseif $CHANGEPASSSENT == 0 && $CHANGEPASSUNLOCKED == 1 || $CHANGEPASSSENT == 1 && $CHANGEPASSUNLOCKED == 0}
-            <input type="submit" value="Change Password" class="alt_btn" disabled>
+            <input type="submit" value="Change Password" class="btn btn-warning btn-sm" disabled="disabled">
           {elseif $CHANGEPASSSENT == 0 && $CHANGEPASSUNLOCKED == 0}
-            <input type="submit" value="Unlock" class="alt_btn" name="unlock">
+            <input type="submit" value="Unlock" class="btn btn-warning btn-sm" name="unlock">
           {/if}
         {else}
-          <input type="submit" value="Change Password" class="alt_btn">
+          <input type="submit" value="Change Password" class="btn btn-warning btn-sm">
         {/if}
       {/nocache}
     </footer>

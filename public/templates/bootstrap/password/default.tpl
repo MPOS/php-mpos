@@ -17,7 +17,7 @@
         </fieldset>
       </div>
       <div class="panel-footer" style="margin-top: 10px;">
-        <input type="submit" class="btn btn-success" value="Reset" >
+        <input type="submit" class="btn btn-success btn-sm" value="Reset" >
       </div>
     </div>
   </form>
