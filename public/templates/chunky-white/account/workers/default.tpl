@@ -55,7 +55,7 @@
         <tr>
           <td align="left"{if $WORKERS[worker].hashrate > 0} style="color: orange"{/if}>{$username.0|escape}.<input name="data[{$WORKERS[worker].id}][username]" value="{$username.1|escape}" size="10" required/></td>
           <td align="left"><input type="text" name="data[{$WORKERS[worker].id}][password]" value="{$WORKERS[worker].password|escape}" size="10" required></td>
-          <td align="center"><i class="fa fa-{if $WORKERS[worker].hashrate > 0}check{else}cancel{/if}"></i></td>
+          <td align="center"><i class="fa fa-{if $WORKERS[worker].hashrate > 0}check{else}fa-times-circle{/if}"></i></td>
           {if $GLOBAL.config.disable_notifications != 1}
           <td>
             <span class="toggle">
