@@ -1,4 +1,4 @@
-<article class="module width_full">
+<article class="widget col-md-12">
   <header><h3>Getting Started Guide</h3></header>
   <div class="module_content">
     <li>1. <strong>Create account.</strong>
