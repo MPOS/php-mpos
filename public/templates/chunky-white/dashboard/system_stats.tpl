@@ -1,4 +1,4 @@
- <article class="widget col-md-3">
+ <article class="widget">
    <header><h3>{$GLOBAL.config.payout_system|capitalize} Stats</h3></header>
    <div class="module_content">
      <table width="100%" class="table table-borderless">

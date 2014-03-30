@@ -1,4 +1,4 @@
-<article class="widget col-md-3 push-right">
+<article class="widget col-md-5">
   <header><h3>Account Information</h3></header>
     <table cellspacing="0" class="table table-borderless">
       <tr>
