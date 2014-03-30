@@ -1,8 +1,10 @@
+<div class="row">
+  <div class="col-md-4">
 <form action="{$smarty.server.PHP_SELF}" method="POST" class="form-horizontal">
   <input type="hidden" name="page" value="{$smarty.request.page|escape}">
   <input type="hidden" name="action" value="{$smarty.request.action|escape}">
   <input type="hidden" name="do" value="save">
-  <article class="widget col-md-3 push-right">
+  <article class="widget">
     <header>
       <h3>Notification Settings</h3>
     </header>
@@ -69,8 +71,10 @@
     </footer>
   </article>
 </form>
+</div>
 
-<article class="widget col-md-8">
+<div class="col-md-7">
+<article class="widget">
   <header>
       <h3>Notification History</h3>
       <div class="submit_link">{include file="global/pagination.tpl"}</div>
@@ -104,3 +108,4 @@
     </tbody>
   </table>
 </article>
+</div></div>
