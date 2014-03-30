@@ -1,7 +1,7 @@
 <form action="{$smarty.server.PHP_SELF}" method="post">
   <input type="hidden" name="page" value="{$smarty.request.page|escape}">
   <input type="hidden" name="action" value="contactform">
-    <article class="module width_3_quarter">
+    <article class="widget col-md-8">
     <header><h3>Contact Us</h3></header>
     <div class="module_content">
       <div>
@@ -40,8 +40,8 @@
       </fieldset>
       <center>{nocache}{$RECAPTCHA|default:""}{/nocache}</center>
     </div>
-    <footer>
+    <div class="form-actions edit-actions">
       <div class="submit_link"><input type="submit" class="alt_btn" name="sendMessage" value="Send Email" /></div>
-    </footer>
+    </div>
   </article>
 </form>
