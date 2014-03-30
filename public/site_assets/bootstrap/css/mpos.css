@@ -585,3 +585,15 @@ div.fade {
 }  
 
 /* End Test */
+
+/* Tables */
+
+.table>tbody>tr>th
+{
+padding-left:3px;
+border: 1px solid #ddd;
+background-color: #f9f9f9;
+padding-right:1px;
+}
+
+/* End Tables */
