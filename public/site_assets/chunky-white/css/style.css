@@ -101,3 +101,7 @@ tbody > th {
 .push-right {
   margin-right: 25px;
 }
+
+.table-borderless > tbody > tr > td {
+  border: 0;
+}

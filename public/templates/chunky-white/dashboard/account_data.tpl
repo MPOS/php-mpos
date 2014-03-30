@@ -1,6 +1,6 @@
 <article class="widget col-md-3 push-right">
   <header><h3>Account Information</h3></header>
-    <table cellspacing="0" class="table">
+    <table cellspacing="0" class="table table-borderless">
       <tr>
         <td colspan="2">
 {if $GLOBAL.userdata.no_fees}

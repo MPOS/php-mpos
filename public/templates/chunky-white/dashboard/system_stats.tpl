@@ -1,7 +1,7 @@
  <article class="widget col-md-3">
    <header><h3>{$GLOBAL.config.payout_system|capitalize} Stats</h3></header>
    <div class="module_content">
-     <table width="100%" class="table">
+     <table width="100%" class="table table-borderless">
        <tbody>
 {if $GLOBAL.config.payout_system == 'pplns'}
          <tr>
