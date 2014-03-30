@@ -109,3 +109,8 @@ tbody > th {
 .form-actions.edit-actions {
   padding-left: 30%;
 }
+
+.anon-switch > div.has-switch {
+  position: relative;
+  right: 180px;
+}

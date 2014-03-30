@@ -63,11 +63,11 @@
               </span>
             </label>
             <label class="control-label checkbox" for="is_anonymous">
-            <div class="controls form-group anon-switch">
-              <input class="switch" type="hidden" name="is_anonymous" value="0" />
-              <input class="switch" type="checkbox" name="is_anonymous" value="1" id="is_anonymous" {if $GLOBAL.userdata.is_anonymous}checked{/if} />
-              <div class="switch"></div>
-            </div>
+              <div class="controls form-group anon-switch">
+                <input class="switch" type="hidden" name="is_anonymous" value="0" />
+                <input class="switch" type="checkbox" name="is_anonymous" value="1" id="is_anonymous" {if $GLOBAL.userdata.is_anonymous}checked{/if} />
+                <div class="switch"></div>
+              </div>
             </label>
           </div>
           <div class="control-group">
