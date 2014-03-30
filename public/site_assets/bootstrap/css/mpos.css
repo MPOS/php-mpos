@@ -425,6 +425,7 @@ div.dataTables_paginate ul.pagination {
 
 .borderless > tbody > tr > td {
     border: none;
+    padding: 5px;
 }
 
 .borderless > thead > tr > th {
