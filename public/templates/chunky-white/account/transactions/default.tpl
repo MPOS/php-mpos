@@ -57,7 +57,7 @@
     </div>
       <div class="form-actions edit-actions">
         <div class="submit_link">
-          <input type="submit" value="Filter" class="alt_btn">
+          <input type="submit" value="Filter" class="btn btn-primary">
         </div>
       </div>
   </footer>
