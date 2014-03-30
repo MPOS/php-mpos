@@ -15,6 +15,10 @@ if (!$smarty->isCached('master.tpl', $smarty_cache_key)) {
     }
   }
 
+  if ($bitcoin->can_connect() === true) {
+    $smarty->assign("DIFFICULTY", $bitcoin->getdifficulty());
+  }
+
   $smarty->assign("HIDEAUTHOR", $setting->getValue('acl_hide_news_author'));
   $smarty->assign("NEWS", $aNews);
 } else {
