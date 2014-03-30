@@ -69,10 +69,10 @@
 
     <!-- basic application js-->
     <script src="{$PATH}/js/app.js"></script>
-    <script src="{$PATH}/js/forms.js"></script>
-    <script src="{$PATH}/js/forms-elements.js"></script>
-    <script src="{$PATH}/js/ui-buttons.js"></script>
-    <script src="{$PATH}/js/ui-dialogs.js"></script>
+    <!-- <script src="{$PATH}/js/forms.js"></script> -->
+    <!-- <script src="{$PATH}/js/forms&#45;elements.js"></script> -->
+    <!-- <script src="{$PATH}/js/ui&#45;buttons.js"></script> -->
+    <!-- <script src="{$PATH}/js/ui&#45;dialogs.js"></script> -->
     <!-- <script src="{$PATH}/js/settings.js"></script> -->
 
     <!-- page specific -->
