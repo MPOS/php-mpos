@@ -10,7 +10,7 @@
         </li>
         <li class="hidden-xs"><a href="/logout"><i class="fa fa-sign-out"></i></a></li>
       </ul>
-      <div class="user-header pull-right"><strong><%= @current_user %></strong></div>
+      <div class="user-header pull-right"><strong>{$GLOBAL.userdata.username|escape}</strong></div>
     {else}
       <div>
         <form action="{$smarty.server.PHP_SELF}" method="post" id="loginForm" class="navbar-form pull-right">

@@ -75,7 +75,7 @@ $(function(){
     $('.info').addClass('alert alert-info col-md-8');
     $('.success').addClass('alert alert-success col-md-8');
     $('.warning').addClass('alert alert-warning col-md-8');
-    $('.errormsg').addClass('alert alert-error col-md-8');
+    $('.errormsg').addClass('alert alert-danger col-md-8');
 
     var $sidebar = $('#sidebar');
 
