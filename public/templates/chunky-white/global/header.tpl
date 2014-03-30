@@ -1,6 +1,6 @@
 <header class="page-header">
   <div class="navbar">
-    {if $smarty.session.AUTHENTICATED|default:"0" == 0}
+    {if $smarty.session.AUTHENTICATED|default:"0" == 1}
       <ul class="nav navbar-nav navbar-right pull-right">
         <li class="divider"></li>
         <li class="hidden-xs">
