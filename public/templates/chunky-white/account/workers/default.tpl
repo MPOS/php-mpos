@@ -1,4 +1,4 @@
-<article class="widget col-md-5 push-right">
+<article class="widget col-md-3 push-right">
   <header><h3 class="">Add New Worker</h3></header>
   <form action="{$smarty.server.PHP_SELF}" method="post" class="form-horizontal">
     <input type="hidden" name="page" value="{$smarty.request.page|escape}">
@@ -30,7 +30,7 @@
   </form>
 </article>
 
-<article class="widget col-md-5">
+<article class="widget col-md-7">
   <header><h3 class="">Worker Configuration</h3></header>
   <form action="{$smarty.server.PHP_SELF}" method="post" class="form-horizontal">
     <input type="hidden" name="page" value="{$smarty.request.page|escape}">
