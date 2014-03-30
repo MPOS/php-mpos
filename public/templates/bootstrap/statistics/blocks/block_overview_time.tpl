@@ -149,7 +149,7 @@
                 <td class="text-right">{($LASTBLOCKSBYTIME.4WeeksTotal|default:"0.00" / (2419200 / $COINGENTIME)  * 100)|number_format:"2"}%</td>
               </tr>
               <tr>
-                <th style="padding-left:3px;">The Past 12 Months</th>
+                <th>The Past 12 Months</th>
                 <td class="text-right">{(29030400 / $COINGENTIME)|number_format}</td>
                 <td class="text-right">{$LASTBLOCKSBYTIME.12MonthTotal|number_format}</td>
                 <td class="text-right">{$LASTBLOCKSBYTIME.12MonthValid|number_format}</td>
