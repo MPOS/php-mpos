@@ -9,7 +9,7 @@
       <h3>Notification Settings</h3>
     </header>
     <div class="module_content">
-    <table class="table" width="100%">
+    <table class="table table-borderless" width="100%">
       <tr>
         <th align="left">Type</th>
         <th align="center">Active</th>
@@ -64,11 +64,11 @@
       </tr>
     </table>
     </div>
-    <footer>
+      <div class="form-actions edit-actions">
       <div class="submit_link">
         <input type="submit" value="Update" class="btn btn-primary">
       </div>
-    </footer>
+      </div>
   </article>
 </form>
 </div>
