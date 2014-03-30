@@ -5,11 +5,11 @@
         </li>
 
         <li>
-            <a href="{$smarty.server.PHP_SELF}?page=irc"><i class="fa fa-comments"></i> <span class="name">IRC Chat</span></a>
+            <a href="/chat"><i class="fa fa-comments-o"></i> <span class="name">IRC Chat</span></a>
         </li>
 
         <li>
-            <a href="https://forums.chunkypools.com"><i class="fa fa-comments"></i> <span class="name">Forum</span></a>
+            <a href="https://forums.chunkypools.com"><i class="fa fa-group"></i> <span class="name">Forum</span></a>
         </li>
 
         <li class="panel">
@@ -21,6 +21,10 @@
                 <li><a href="https://chunkypools.com/dgb/">Digibyte (DGB)</a></li>
                 <li><a href="https://chunkypools.com/kdc/">Klondikecoin (KDC)</a></li>
                 <li><a href="https://chunkypools.com/pot/">Potcoin (POT)</a></li>
+                <li><a href="https://chunkypools.com/ruby/">Rubycoin (RUBY)</a></li>
+                <li><a href="https://chunkypools.com/sun/">Suncoin (SUN)</a></li>
+                <li><a href="https://chunkypools.com/pcn/">Procoin (PCN)</a></li>
+                <li><a href="https://chunkypools.com/spn/">Spartancoin (SPN)</a></li>
             </ul>
         </li>
 
