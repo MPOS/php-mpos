@@ -15,23 +15,23 @@
 
     <!-- jquery and friends -->
     <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js" type="text/javascript"></script>
-    <!-- <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery&#45;migrate/1.2.1/jquery&#45;migrate.min.js" type="text/javascript"></script> -->
-    <!-- <script type="text/javascript" src="{$PATH}/js/hideshow.js" type="text/javascript"></script> -->
-    <!-- <script type="text/javascript" src="{$PATH}/js/jquery.visualize.js"></script> -->
-    <!-- <script type="text/javascript" src="{$PATH}/js/jquery.jqplot.min.js"></script> -->
-    <!-- <script type="text/javascript" src="{$PATH}/js/jquery.tablesorter.min.js" type="text/javascript"></script> -->
-    <!-- <script type="text/javascript" src="{$PATH}/js/jquery.tablesorter.pager.js" type="text/javascript"></script> -->
-    <!-- <script type="text/javascript" src="{$PATH}/js/jquery.equalHeight.js"></script> -->
-    <!-- <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/raphael/2.1.2/raphael&#45;min.js"></script> -->
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/jquery-migrate/1.2.1/jquery-migrate.min.js" type="text/javascript"></script>
+    <script type="text/javascript" src="{$PATH}/js/hideshow.js" type="text/javascript"></script>
+    <script type="text/javascript" src="{$PATH}/js/jquery.visualize.js"></script>
+    <script type="text/javascript" src="{$PATH}/js/jquery.jqplot.min.js"></script>
+    <script type="text/javascript" src="{$PATH}/js/jquery.tablesorter.min.js" type="text/javascript"></script>
+    <script type="text/javascript" src="{$PATH}/js/jquery.tablesorter.pager.js" type="text/javascript"></script>
+    <script type="text/javascript" src="{$PATH}/js/jquery.equalHeight.js"></script>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/raphael/2.1.2/raphael-min.js"></script>
     <script type="text/javascript" src="{$PATH}/js/justgage.1.0.1.min.js"></script>
     <!-- <script type="text/javascript" src="{$PATH}/js/custom.js"></script> -->
 
       <!-- jquery plugins -->
     <!-- <script src="{$PATH}/lib/icheck.js/jquery.icheck.js"></script> -->
     <script src="{$PATH}/lib/bootstrap-switch.js"></script>
-    <!-- <script src="{$PATH}/lib/sparkline/jquery.sparkline.js"></script> -->
-    <!-- <script src="{$PATH}/lib/jquery&#45;ui&#45;1.10.3.custom.js"></script> -->
-    <!-- <script src="{$PATH}/lib/jquery.slimscroll.js"></script> -->
+    <script src="{$PATH}/lib/sparkline/jquery.sparkline.js"></script>
+    <script src="{$PATH}/lib/jquery-ui-1.10.3.custom.js"></script>
+    <script src="{$PATH}/lib/jquery.slimscroll.js"></script>
 
 
     <!-- d3, nvd3-->
