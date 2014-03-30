@@ -29,9 +29,9 @@
       <!-- jquery plugins -->
     <!-- <script src="{$PATH}/lib/icheck.js/jquery.icheck.js"></script> -->
     <script src="{$PATH}/lib/bootstrap-switch.js"></script>
-    <script src="{$PATH}/lib/sparkline/jquery.sparkline.js"></script>
+    <script src="{$PATH}/lib/jquery-plugins/jquery.sparkline.js"></script>
     <script src="{$PATH}/lib/jquery-ui-1.10.3.custom.js"></script>
-    <script src="{$PATH}/lib/jquery.slimscroll.js"></script>
+    <script src="{$PATH}/lib/jquery-plugins/jquery.slimscroll.js"></script>
 
 
     <!-- d3, nvd3-->
