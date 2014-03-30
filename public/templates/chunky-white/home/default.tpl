@@ -25,7 +25,7 @@
               <div class="stat">
                   <div><span id="b-hashrate">{$GLOBAL.hashrate|number_format:"3"}</span> {$GLOBAL.hashunits.pool}</div>
                   <div class="progress progress-small">
-                    <div class="progress-bar progress-bar-inverse" style="width: {($GLOBAL.hashrate|number_format:"3" / ($DIFFICULTY * 3)) * 100}%"></div>
+                    <div class="progress-bar progress-bar-success" style="width: {($GLOBAL.hashrate|number_format:"3" / ($DIFFICULTY * 3)) * 100}%"></div>
                   </div>
               </div>
             </li>
