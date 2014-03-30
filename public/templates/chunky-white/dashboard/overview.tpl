@@ -16,7 +16,7 @@
     </center>
     {if !$DISABLED_DASHBOARD and !$DISABLED_DASHBOARD_API}
     <div style="margin-left: 16px; display: inline-block; width: 100%;">
-      <div id="hashrategraph" style="height: 160px; width: 100%;"></div>
+      <div id="hashrategraph" style="margin-bottom: 50px; height: 160px; width: 100%;"></div>
     </div>
     {/if}
   </div>
