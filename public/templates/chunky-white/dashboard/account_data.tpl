@@ -1,6 +1,6 @@
-<article class="module width_quarter">
+<article class="widget col-md-3 push-right">
   <header><h3>Account Information</h3></header>
-    <table class="tablesorter" cellspacing="0" class="table table-hover">
+    <table cellspacing="0" class="table">
       <tr>
         <td colspan="2">
 {if $GLOBAL.userdata.no_fees}
@@ -18,7 +18,7 @@
         </td>
       </tr>
     </table>
-    <table class="tablesorter" cellspacing="0">
+    <table class="table" cellspacing="0">
       <thead>
         <tr><th colspan="2"><b>{$GLOBAL.config.currency} Account Balance</b></th></tr>
       </thead>
@@ -32,7 +32,7 @@
       </tr>
     </table>
     {if !$DISABLED_DASHBOARD and !$DISABLED_DASHBOARD_API}
-    <table class="tablesorter" cellspacing="0" class="table table-hover">
+    <table cellspacing="0" class="table">
      <thead>
       <tr>
         <th align="left">Worker</th>

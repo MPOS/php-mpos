@@ -1,4 +1,4 @@
-<article class="module module width_3_quarter">
+<article class="widget col-md-8 push-right">
   <header><h3>Overview {if $GLOBAL.config.price.currency}{$GLOBAL.config.currency}/{$GLOBAL.config.price.currency}: <span id="b-price">{$GLOBAL.price}</span>{/if} / Pool Workers: <span id="b-dworkers">{$GLOBAL.workers}</span></h3></header>
   <div class="module_content">
     <center>
