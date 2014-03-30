@@ -1,5 +1,5 @@
 <div class="row">
-  <div class="col-md-8">
+  <div class="col-md-7">
     <form action="{$smarty.server.PHP_SELF}" method="post" class="form-horizontal">
       <input type="hidden" name="page" value="{$smarty.request.page|escape}">
       <input type="hidden" name="action" value="{$smarty.request.action|escape}">
@@ -88,7 +88,7 @@
     </form>
   </div>
 
-  <div class="col-md-4">
+  <div class="col-md-5">
     {if !$GLOBAL.disable_payouts}
     <form action="{$smarty.server.PHP_SELF}" method="post" class="form-horizontal">
       <input type="hidden" name="page" value="{$smarty.request.page|escape}">
