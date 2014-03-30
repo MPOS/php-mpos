@@ -79,7 +79,7 @@
             </div>
           </fieldset>
         </div>
-        <div class="form-actions">
+        <div class="form-actions edit-actions">
           <div class="submit_link">
             <input type="submit" value="Update Account" class="btn btn-primary">
             <button type="button" class="btn btn-default">Cancel</button>
@@ -124,7 +124,7 @@
           </div>
           </fieldset>
         </div>
-        <div class="form-actions">
+        <div class="form-actions edit-actions">
           <div class="submit_link">
             <input type="submit" value="Cash Out" class="btn btn-primary">
             <button type="button" class="btn btn-default">Cancel</button>
@@ -173,7 +173,7 @@
           </div>
           </fieldset>
         </div>
-        <div class="form-actions">
+        <div class="form-actions edit-actions">
           <div class="submit_link">
             <input type="submit" value="Change Password" class="btn btn-primary">
             <button type="button" class="btn btn-default">Cancel</button>

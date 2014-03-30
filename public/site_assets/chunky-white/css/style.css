@@ -105,3 +105,7 @@ tbody > th {
 .table-borderless > tbody > tr > td {
   border: 0;
 }
+
+.edit-actions {
+  padding-left: 30%;
+}
