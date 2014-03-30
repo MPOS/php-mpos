@@ -1,4 +1,4 @@
-<div class="row">
+<div class="row alert-row">
 {if is_array($smarty.session.POPUP|default)}
   {section popup $smarty.session.POPUP}
     <div class="{$smarty.session.POPUP[popup].TYPE|default:"alert alert-info"}">

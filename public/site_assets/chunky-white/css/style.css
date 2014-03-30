@@ -114,3 +114,7 @@ tbody > th {
   position: relative;
   right: 180px;
 }
+
+.row.alert-row {
+  margin-left: 0;
+}
