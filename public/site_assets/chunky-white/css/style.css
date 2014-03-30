@@ -106,6 +106,6 @@ tbody > th {
   border: 0;
 }
 
-.edit-actions {
+.form-actions.edit-actions {
   padding-left: 30%;
 }
