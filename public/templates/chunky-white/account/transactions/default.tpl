@@ -55,17 +55,18 @@
       {html_options name="filter[status]" options=$TXSTATUS selected=$smarty.request.filter.status|default:""}
     </fieldset>
     </div>
-  <footer>
-    <div class="submit_link">
-      <input type="submit" value="Filter" class="alt_btn">
-    </div>
+      <div class="form-actions edit-actions">
+        <div class="submit_link">
+          <input type="submit" value="Filter" class="alt_btn">
+        </div>
+      </div>
   </footer>
 </form>
 </article>
 
 <article class="widget col-md-8">
   <header><h3>Transaction History</h3></header>
-    <table cellspacing="0" class="tablesorter" width="100%">
+    <table cellspacing="0" class="table" width="100%">
       <thead>
         <tr>
           <th align="center">ID</th>
