@@ -18,7 +18,7 @@
         {else}
         <td align="center">{$BLOCKSFOUND[block].height}</td>
         {/if}
-        <td>{if $BLOCKSFOUND[block].is_anonymous|default:"0" == 1 && $GLOBAL.userdata.is_admin|default:"0" == 0}anonymous{else}{substr($BLOCKSFOUND[block].finder, 0, strlen($BLOCKSFOUND[block].finder) - rand(1, 3))|escape}{substr(md5($BLOCKSFOUND[block].finder), 0, 5)}***{/if}</td>
+        <td>{if $BLOCKSFOUND[block].is_anonymous|default:"0" == 1 && $GLOBAL.userdata.is_admin|default:"0" == 0}anonymous{else}{$BLOCKSFOUND[block].finder|default:"unknown"|escape}{/if}</td>
         <td align="center">{$BLOCKSFOUND[block].time|date_format:"%d/%m %H:%M:%S"}</td>
         <td align="right" style="padding-right: 25px;">{$BLOCKSFOUND[block].shares|number_format}</td>
       </tr>

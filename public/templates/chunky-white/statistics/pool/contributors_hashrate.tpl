@@ -20,7 +20,7 @@
       <tr{if $GLOBAL.userdata.username|default:""|lower == $CONTRIBHASHES[contrib].account|lower}{assign var=listed value=1} style="background-color:#99EB99;"{else} class="{cycle values="odd,even"}"{/if}>
         <td align="center">{$rank++}</td>
         <td align="right">{if $CONTRIBHASHES[contrib].donate_percent > 0}<i class="fa fa-star"></i>{/if}</td>
-        <td>{if $CONTRIBHASHES[contrib].is_anonymous|default:"0" == 1 && $GLOBAL.userdata.is_admin|default:"0" == 0}anonymous{else}{substr($CONTRIBHASHES[contrib].account, 0, strlen($CONTRIBHASHES[contrib].account) - rand(1, 3))|escape}{substr(md5($CONTRIBHASHES[contrib].account), 0, 5)}***{/if}</td>
+        <td>{if $CONTRIBHASHES[contrib].is_anonymous|default:"0" == 1 && $GLOBAL.userdata.is_admin|default:"0" == 0}anonymous{else}{$CONTRIBHASHES[contrib].account|escape}{/if}</td>
         <td align="right">{$CONTRIBHASHES[contrib].hashrate|number_format}</td>
         <td align="right">{$estday|number_format:"3"}</td>
         {if $GLOBAL.config.price.currency}<td align="right" style="padding-right: 25px;">{($estday * $GLOBAL.price)|default:"n/a"|number_format:"4"}</td>{/if}
