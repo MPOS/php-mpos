@@ -595,7 +595,11 @@ padding-bottom:3px;
 border: 1px solid #ddd;
 background-color: #f9f9f9;
 padding-right:1px;
+}
 
+.table>tbody>tr>td
+{
+ padding:4px;  
 }
 
 /* End Tables */
