@@ -27,7 +27,7 @@
           </div>
           <div class="col-md-spark">
             <i class="fa fa-th-large fa-2x"></i>
-            <p id="b-nblock" class="h5 font-bold m-t">{$GLOBAL.ppsvalue}</p>
+            <p id="b-ppsvalue" class="h5 font-bold m-t">{$GLOBAL.ppsvalue}</p>
             <p class="h6 text-muted">PPS Value</p>
           </div>
           <div class="col-md-spark">
