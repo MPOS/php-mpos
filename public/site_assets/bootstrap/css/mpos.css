@@ -591,9 +591,11 @@ div.fade {
 .table>tbody>tr>th
 {
 padding-left:3px;
+padding-bottom:4px;
 border: 1px solid #ddd;
 background-color: #f9f9f9;
 padding-right:1px;
+
 }
 
 /* End Tables */
