@@ -61,7 +61,7 @@
                           <li><a href="{$smarty.server.SCRIPT_NAME}?page=gettingstarted"><i class="fa fa-question fa-fw"></i> Getting Started</a></li>
                           {acl_check page='about' action='pool' name='<i class="fa fa-info fa-fw"></i> About' acl=$GLOBAL.acl.about.page}
                           {acl_check page='about' action='donors' name='<i class="fa fa-bitbucket fa-fw"></i> Donors' acl=$GLOBAL.acl.donors.page}
-                          {acl_check page='about' action='chat' name='<i class="fa fa-comments-o fa-fw"></i> Web Chat' acl=$GLOBAL.acl.chat.page}
+                          {acl_check page='about' action='chat' name='<i class="fa fa-comments-o fa-fw"></i> {$GLOBAL.website.name} Forum' acl=$GLOBAL.acl.chat.page}
                         </ul>
                         <!-- /.nav-second-level -->
                     </li>
