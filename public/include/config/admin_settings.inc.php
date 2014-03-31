@@ -272,6 +272,13 @@ $aSettings['acl'][] = array(
   'name' => 'acl_chat_page', 'value' => $setting->getValue('acl_chat_page'),
   'tooltip' => 'Make the chat page private (users only) or public.'
 );
+$aSettings['acl'][] = array(
+  'display' => 'MOOT Forum Page', 'type' => 'select',
+  'options' => array( 0 => 'Private', 1 => 'Public', 2 => 'Disabled' ),
+  'default' => 2,
+  'name' => 'acl_moot_forum', 'value' => $setting->getValue('acl_moot_forum'),
+  'tooltip' => 'Make the forum page private (users only) or public.'
+);
 $aSettings['system'][] = array(
   'display' => 'E-mail address for system error notifications', 'type' => 'text',
   'size' => 25,
@@ -369,6 +376,13 @@ $aSettings['system'][] = array(
   'default' => '#lazypoolop',
   'name' => 'system_irc_chat', 'value' => $setting->getValue('system_irc_chat'),
   'tooltip' => 'Your IRC support channel name.'
+);
+$aSettings['system'][] = array(
+  'display' => 'Moot Forum Channel', 'type' => 'text',
+  'size' => 25,
+  'default' => 'lazypoolop',
+  'name' => 'system_moot_forum', 'value' => $setting->getValue('system_moot_forum'),
+  'tooltip' => 'Your MOOT support forum name.'
 );
 $aSettings['recaptcha'][] = array(
   'display' => 'Enable re-Captcha', 'type' => 'select',
