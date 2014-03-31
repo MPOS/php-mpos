@@ -6,7 +6,7 @@
 # SYN Floods, TCP Floods, Handshake Exploits, XMAS Packets,        #
 # Smurf Attacks, ICMP Bombs, LAND attacks and RST Floods.          #
 # You need to give this script Root privileges Before you run it.  #
-# sudo chmod u+x 777 SecureIT.sh                                   #
+# sudo chmod 777 safer_firewall.sh                                 #
 #################################################################################################
 # This script by default will leave open ports 80, 25, 53, 443, 22.                             #
 # This script assumes you have 1 Stratum port, And that it is port 3333                         #
