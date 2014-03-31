@@ -53,7 +53,12 @@ class CoinBase extends Base {
    * Calculate next expected difficulty based on current difficulty
    **/
   public function calcExpectedNextDifficulty($dDifficulty, $dNetworkHashrate) {
-    return round($dDifficulty * $this->config['cointarget'] / $this->calcNetworkExpectedTimePerBlock($dDifficulty, $dNetworkHashrate), 8);
+    $iExpectedTimePerBlock = $this->calcNetworkExpectedTimePerBlock($dDifficulty, $dNetworkHashrate);
+    if (!empty($iExpectedTimePerBlock) && $iExpectedTimePerBlock > 0) {
+      return round($dDifficulty * $this->config['cointarget'] / $iExpectedTimePerBlock, 8);
+    } else {
+      return 0;
+    }
   }
 }
 
