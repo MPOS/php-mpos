@@ -44,7 +44,7 @@
 	  <br />
 	  <p> You then need to change "-u Weblogin.Worker -p Worker password" to reflect your own account. Eg, "-u Steve.StevesWorker -p StevesWorkerPassword" Then go to "File => Save as" and save the file as "RunMe.bat" in the same folder as minerd. You are now ready to mine, double click on "RunMe.bat" to start mining. If you want, you can create additional workers with usernames and passwords of your choice <a href="{$smarty.server.SCRIPT_NAME}?page=account&action=workers">here</a></p>
     </ul>
-    <p>4. <strong>Create a {$SITECOINNAME|default:"Litecoin"} address to recieve payments.</strong></p>
+    <p>4. <strong>Create a {$SITECOINNAME|default:"Litecoin"} address to receive payments.</strong></p>
       <ul>
         <li> Downloading the client &amp; block chain: 	Download the {$SITECOINNAME|default:"Litecoin"} client from <a href="{$SITECOINURL|default:"http://www.litecoin.org"}" target="_blank">here</a>.
           <p>Generate a new address and input it on your account page to receive payments.</p>
