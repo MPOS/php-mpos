@@ -1,13 +1,23 @@
 #!/bin/sh
-# Copyright 2014 Samuel Christison, May be adapted freely.
-# This script will stop most; port scanning attempts, UPD Floods,
-# SYN Floods, TCP Floods, Handshake Exploits, XMAS Packets,
-# Smurf Attacks, ICMP Bombs, LAND attacks and RST Floods.
-# You need to give this script Root privileges Before you run it.
-# sudo chmod u+x 777 SecureIT.sh
-# This script by default will leave open ports 80, 25, 53, 443, 22.
-# This script assumes you have 1 Stratum port, And that it is port 3333
-#############################################
+
+####################################################################
+# Copyright 2014 Samuel Christison, May be adapted freely.         #
+# This script will stop most; port scanning attempts, UPD Floods,  #
+# SYN Floods, TCP Floods, Handshake Exploits, XMAS Packets,        #
+# Smurf Attacks, ICMP Bombs, LAND attacks and RST Floods.          #
+# You need to give this script Root privileges Before you run it.  #
+# sudo chmod u+x 777 SecureIT.sh                                   #
+#################################################################################################
+# This script by default will leave open ports 80, 25, 53, 443, 22.                             #
+# This script assumes you have 1 Stratum port, And that it is port 3333                         #
+# If you are running 1 Pool on a Single Server with no Subnet, You can run this without changes.#
+#################################################################################################
+#Did this help you? Consider donating:                #
+#DOGE: DLdyx3X2FNNchHTLPKwLTCuWLACma1wVp6             #
+#Cryptsy TK: fad0d5602884e23fd9a044ab1870fdb6dc2c5ac4 #
+#######################################################
+#Ports for your services, You can change these before running the script.
+
 $WEB = 80
 $MAIL = 25
 $DNS = 53
@@ -17,6 +27,16 @@ $STRATUM = 3333
 $TCPBurstNew = 200
 $TCPBurstEst = 50
 
+###############################################################################
+#TCPBurstNew is how many packets a new connection can send in 1 request       #
+#TCPBurstEst is how many packets an existing connection can send in 1 request.#
+###############################################################################
+
+#########################################################
+#You don't need to change below this line               #
+#Unless you want to set up extra stratum-ports.         #
+#Then you need to go to L184 and L243 and make changes. #
+#########################################################
 
 echo "Lets start by Flushing your old Rules."
 sleep 0.1
@@ -270,4 +290,3 @@ echo "Your Webserver is now more secure then it was 5 minutes ago"
 echo "Hash On"
 sleep 5
 exit
-
