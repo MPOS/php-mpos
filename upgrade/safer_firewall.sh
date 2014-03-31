@@ -5,9 +5,20 @@
 # Smurf Attacks, ICMP Bombs, LAND attacks and RST Floods.
 # You need to give this script Root privileges Before you run it.
 # sudo chmod u+x 777 SecureIT.sh
-# This script by default will leave open ports 80, 25, 54, 443, 22.
+# This script by default will leave open ports 80, 25, 53, 443, 22.
+# This script assumes you have 1 Stratum port, And that it is port 3333
+#############################################
+$WEB = 80
+$MAIL = 25
+$DNS = 53
+$SSL = 443
+$SSH = 22
+$STRATUM = 3333
+$TCPBurstNew = 200
+$TCPBurstEst = 50
 
-echo "Lets start by deleting your old Rules."
+
+echo "Lets start by Flushing your old Rules."
 sleep 0.1
 
 iptables -F
@@ -24,8 +35,8 @@ echo "Note if you have cloud flare the limit needs to be rather high or you need
 sleep 2
 
 iptables -A INPUT -m state --state ESTABLISHED,RELATED -j ACCEPT
-sudo iptables -A INPUT -p tcp --dport 80 -m state --state NEW -m limit --limit 50/minute --limit-burst 200 -j ACCEPT
-sudo iptables -A INPUT -m state --state RELATED,ESTABLISHED -m limit --limit 50/second --limit-burst 50 -j ACCEPT
+sudo iptables -A INPUT -p tcp --dport $WEB -m state --state NEW -m limit --limit 50/minute --limit-burst $TCPBurstNew -j ACCEPT
+sudo iptables -A INPUT -m state --state RELATED,ESTABLISHED -m limit --limit 50/second --limit-burst $TCPBurstEst -j ACCEPT
 
 echo "Adding Protection from LAND Attacks, If these IPs look required, please stop the script and alter it."
 
@@ -135,32 +146,32 @@ sleep 1
 echo "Done\!"
 echo "Allow the following ports through from outside"
 
-echo "SMTP Port 25 Default"
-iptables -A INPUT -p tcp -m tcp --dport 25 -j ACCEPT
+echo "SMTP Port $MAIL"
+iptables -A INPUT -p tcp -m tcp --dport $MAIL -j ACCEPT
 
 sleep 0.1
 echo "Done\!"
 
-echo "Web Port 80 Default"
-iptables -A INPUT -p tcp -m tcp --dport 80 -j ACCEPT
+echo "Web Port $WEB"
+iptables -A INPUT -p tcp -m tcp --dport $WEB -j ACCEPT
 
 sleep 0.1
 echo "Done\!"
 
-echo "DNS Port 53 Default"
-iptables -A INPUT -p udp -m udp --dport 53 -j ACCEPT
+echo "DNS Port $DNS"
+iptables -A INPUT -p udp -m udp --dport $DNS -j ACCEPT
 
 sleep 1
 echo "Done\!"
 
-echo "SSL Port 443 Default"
-iptables -A INPUT -p tcp -m tcp --dport 443 -j ACCEPT
+echo "SSL Port $SSL"
+iptables -A INPUT -p tcp -m tcp --dport $SSL -j ACCEPT
 
 sleep 1
 echo "Done\!"
 
-echo "SSH Port 22 Default"
-iptables -A INPUT -p tcp -m tcp --dport 22 -j ACCEPT
+echo "SSH Port $SSH"
+iptables -A INPUT -p tcp -m tcp --dport $SSH -j ACCEPT
 
 sleep 1
 echo "Done Opening Ports For Web Access\!"
@@ -170,7 +181,7 @@ echo "Done Opening Ports For Web Access\!"
 
 echo "Enabling Stratum Port INPUT"
 sleep 0.5
-iptables -A INPUT -p tcp -m tcp --dport 3333 -j ACCEPT
+iptables -A INPUT -p tcp -m tcp --dport $STRATUM -j ACCEPT
 
 sleep 1
 echo "Done\!"
@@ -194,32 +205,32 @@ echo "Done\!"
 
 echo "Allow the following ports Access OUT from the INSIDE"
 
-echo "SMTP 25 Default"
-iptables -A OUTPUT -p tcp -m tcp --dport 25 -j ACCEPT
+echo "SMTP Port $MAIL"
+iptables -A OUTPUT -p tcp -m tcp --dport $MAIL -j ACCEPT
 
 sleep 1
 echo "Done\!"
 
-echo "DNS 53 Default"
-iptables -A OUTPUT -p udp -m udp --dport 53 -j ACCEPT
+echo "DNS Port $DNS"
+iptables -A OUTPUT -p udp -m udp --dport $DNS -j ACCEPT
 
 sleep 1
 echo "Done\!"
 
-echo "HTTP 80 Default"
-iptables -A OUTPUT -p tcp -m tcp --dport 80 -j ACCEPT
+echo "Web Port $WEB"
+iptables -A OUTPUT -p tcp -m tcp --dport $WEB -j ACCEPT
 
 sleep 1
 echo "Done\!"
 
-echo "HTTPS 443 Default"
-iptables -A OUTPUT -p tcp -m tcp --dport 443 -j ACCEPT
+echo "HTTPS Port $SSL"
+iptables -A OUTPUT -p tcp -m tcp --dport $SSL-j ACCEPT
 
 sleep 1
 echo "Done\!"
 
-echo "SSH 22 Default"
-iptables -A OUTPUT -p tcp -m tcp --dport 22 -j ACCEPT
+echo "SSH Port $SSH"
+iptables -A OUTPUT -p tcp -m tcp --dport $SSH -j ACCEPT
 
 sleep 1
 echo "Done\!"
@@ -228,7 +239,7 @@ echo "Done\!"
 # eg. #####################iptables -A OUTPUT -p tcp -m tcp --dport 4545 -j ACCEPT #######
 echo "Setting up your OUTGOING Stratum Port or Ports"
 
-iptables -A OUTPUT -p tcp -m tcp --dport 3333 -j ACCEPT
+iptables -A OUTPUT -p tcp -m tcp --dport $STRATUM -j ACCEPT
 
 
 sleep 1
