@@ -6,7 +6,9 @@
       </div>
       <div class="panel-body">
         <table class="table table-bordered">
-          <iframe src="https://webchat.freenode.net/?channels={$CHATROOM|default:"#lazypoolop"}" height="768" width="100%"></iframe>
+       <a class="moot" href="https://moot.it/i/{$CHATROOM|default:"lazypoolop"}">{$CHATROOM|default:"lazypoolop"}</a>
+<script src="//cdn.moot.it/1/moot.min.js"></script>
+       
         </table>
       </div>
     </div>
