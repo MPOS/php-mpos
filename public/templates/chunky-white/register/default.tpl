@@ -13,6 +13,8 @@
                  §  <input type="hidden" name="token" value="{$smarty.request.token|escape}" />
                 {/if}
                     <input type="hidden" name="action" value="register">
+                    <input type="hidden" value="1" name="tac" id="tac">
+                    
 
                     <fieldset>
                         <div class="control-group">
