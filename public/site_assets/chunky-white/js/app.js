@@ -72,6 +72,8 @@ function resetContentMargin(){
 
 $(function(){
 
+    $('.module').addClass('.widget');
+
     $('.info').addClass('alert alert-info col-md-8');
     $('.success').addClass('alert alert-success col-md-8');
     $('.warning').addClass('alert alert-warning col-md-8');
