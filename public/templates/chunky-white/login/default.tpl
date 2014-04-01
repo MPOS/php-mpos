@@ -3,7 +3,7 @@
             <h4>Login to your account</h4>
         </header>
         <div class="body">
-          <form action="{$smarty.server.PHP_SELF}?page=login" method="post" id="loginForm" class="no-margin">
+          <form action="{$smarty.server.PHP_SELF}?page=login" method="post" class="no-margin">
             <input type="hidden" name="to" value="{($smarty.request.to|default:"{$smarty.server.PHP_SELF}?page=dashboard")|escape}" />
                 <fieldset>
                     <div class="form-group no-margin">
