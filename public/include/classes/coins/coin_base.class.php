@@ -47,7 +47,11 @@ class CoinBase extends Base {
    * Calculate our networks expected time per block
    **/
   public function calcNetworkExpectedTimePerBlock($dDifficulty, $dNetworkHashrate) {
-    return pow(2, 32) * $dDifficulty / $dNetworkHashrate;
+    if ($dNetworkHashrate > 0) {
+      return pow(2, 32) * $dDifficulty / $dNetworkHashrate;
+    } else {
+      return 0;
+    }
   }
   /**
    * Calculate next expected difficulty based on current difficulty
