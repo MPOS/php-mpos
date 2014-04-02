@@ -45,7 +45,7 @@
                   0.00%
                 {/if}
                 </td>
-                <td class="text-right">{$LASTBLOCKSBYTIME.TotalAmount|number_format}</td>
+                <td class="text-right">{$LASTBLOCKSBYTIME.TotalAmount|number_format:"2"}</td>
                 <td class="text-right">{($LASTBLOCKSBYTIME.Total|default:"0.00" / ($FIRSTBLOCKFOUND / $COINGENTIME)  * 100)|number_format:"2"}%</td>
               </tr>
               <tr>
@@ -70,7 +70,7 @@
                   0.00%
                 {/if}
                 </td>
-                <td class="text-right">{$LASTBLOCKSBYTIME.1HourAmount|number_format}</td>
+                <td class="text-right">{$LASTBLOCKSBYTIME.1HourAmount|number_format:"2"}</td>
                 <td class="text-right">{($LASTBLOCKSBYTIME.1HourTotal|default:"0.00" / (3600 / $COINGENTIME)  * 100)|number_format:"2"}%</td>
               </tr>
               <tr>
@@ -95,7 +95,7 @@
                   0.00%
                 {/if}
                 </td>
-                <td class="text-right">{$LASTBLOCKSBYTIME.24HourAmount|number_format}</td>
+                <td class="text-right">{$LASTBLOCKSBYTIME.24HourAmount|number_format:"2"}</td>
                 <td class="text-right">{($LASTBLOCKSBYTIME.24HourTotal|default:"0.00" / (86400 / $COINGENTIME)  * 100)|number_format:"2"}%</td>
               </tr>
               <tr>
@@ -120,7 +120,7 @@
                   0.00%
                 {/if}
                 </td>
-                <td class="text-right">{$LASTBLOCKSBYTIME.7DaysAmount}</td>
+                <td class="text-right">{$LASTBLOCKSBYTIME.7DaysAmount|number_format:"2"}</td>
                 <td class="text-right">{($LASTBLOCKSBYTIME.7DaysTotal|default:"0.00" / (604800 / $COINGENTIME)  * 100)|number_format:"2"}%</td>
               </tr>
               <tr>
@@ -145,7 +145,7 @@
                   0.00%
                 {/if}
                 </td>
-                <td class="text-right">{$LASTBLOCKSBYTIME.4WeeksAmount|number_format}</td>
+                <td class="text-right">{$LASTBLOCKSBYTIME.4WeeksAmount|number_format:"2"}</td>
                 <td class="text-right">{($LASTBLOCKSBYTIME.4WeeksTotal|default:"0.00" / (2419200 / $COINGENTIME)  * 100)|number_format:"2"}%</td>
               </tr>
               <tr>
@@ -170,7 +170,7 @@
                   0.00%
                 {/if}
                 </td>
-                <td class="text-right">{$LASTBLOCKSBYTIME.12MonthAmount|number_format}</td>
+                <td class="text-right">{$LASTBLOCKSBYTIME.12MonthAmount|number_format:"2"}</td>
                 <td class="text-right">{($LASTBLOCKSBYTIME.12MonthTotal|default:"0.00" / (29030400 / $COINGENTIME)  * 100)|number_format:"2"}%</td>
               </tr>
             </tbody>
