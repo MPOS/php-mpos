@@ -31,7 +31,7 @@
               {nocache}<input class="form-control" type="password" name="newPassword2" id="pw_field2"{if $GLOBAL.twofactor.enabled && $GLOBAL.twofactor.options.changepw && !$CHANGEPASSUNLOCKED}id="disabledInput" disabled{/if}/>{/nocache}
             </div>
             <div class="form-group">
-              <label>4 digit PIN</label>
+              <label>4 Digit PIN</label>
               <input class="form-control" type="password" name="authPin" size="4" maxlength="4" />
             </div>
 

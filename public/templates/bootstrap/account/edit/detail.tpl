@@ -54,7 +54,7 @@
               <font size="1">Hide username on website from others. Admins can still get your user information.</font>
             </div>
             <div class="form-group">
-              <label>4 digit PIN</label>
+              <label>4 Digit PIN</label>
               <font size="1">The 4 digit PIN you chose when registering</font>
               <input class="form-control" type="password" name="authPin" size="4" maxlength="4">
             </div>
