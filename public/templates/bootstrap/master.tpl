@@ -28,6 +28,7 @@
   
   <script src="{$PATH}/js/jquery-2.0.3.min.js"></script>
   <script src="{$PATH}/js/jquery.cookie.js"></script>
+  <script src="{$PATH}/js/jquery.md5.js"></script>
   <script src="{$PATH}/js/bootstrap.min.js"></script>
   <script src="{$PATH}/js/bootstrap-switch.min.js"></script>
   <script src="{$PATH}/js/plugins/dataTables/jquery.dataTables.js"></script>
