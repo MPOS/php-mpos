@@ -23,7 +23,6 @@ $(document).ready(function() {
     // Bootstrap iOS style switches for checkboxes with switch class
     $('.switch').bootstrapSwitch();
     
-    
     if (document.getElementById("motd")) {
     	var md5motd = $.md5(document.getElementById('motd').innerHTML);
 		// Check if MOTD alert has been closed
