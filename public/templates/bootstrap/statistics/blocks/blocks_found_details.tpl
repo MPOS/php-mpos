@@ -9,7 +9,7 @@
           <table class="table table-striped table-bordered table-hover">
             <thead>
               <tr>
-                <th class="text-right">Block</th>
+                <th class="text-center">Block</th>
                 <th class="text-center">Validity</th>
                 <th class="text-left">Finder</th>
                 <th class="text-right">Time</th>
@@ -32,7 +32,7 @@
               {assign var="count" value=$count+1}
               {if $GLOBAL.config.payout_system == 'pplns'}{assign var="pplnsshares" value=$pplnsshares+$BLOCKSFOUND[block].pplns_shares}{/if}
               {if ! $GLOBAL.website.blockexplorer.disabled}
-                <td class="text-right"><a href="{$smarty.server.SCRIPT_NAME}?page=statistics&action=round&height={$BLOCKSFOUND[block].height}">{$BLOCKSFOUND[block].height}</a></td>
+                <td class="text-center"><a href="{$smarty.server.SCRIPT_NAME}?page=statistics&action=round&height={$BLOCKSFOUND[block].height}">{$BLOCKSFOUND[block].height}</a></td>
               {else}
                 <td class="text-right">{$BLOCKSFOUND[block].height}</td>
               {/if}
@@ -46,7 +46,7 @@
               {/if}
               </td>
                 <td>{if $BLOCKSFOUND[block].is_anonymous|default:"0" == 1 && $GLOBAL.userdata.is_admin|default:"0" == 0}anonymous{else}{$BLOCKSFOUND[block].finder|default:"unknown"|escape}{/if}</td>
-                <td class="text-right">{$BLOCKSFOUND[block].time|date_format:"%d/%m %H:%M:%S"}</td>
+                <td class="text-right">{$BLOCKSFOUND[block].time|date_format:"%d/%m/%Y %H:%M:%S"}</td>
                 <td class="text-right">{$BLOCKSFOUND[block].difficulty|number_format:"4"}</td>
                 <td class="text-right">{$BLOCKSFOUND[block].amount|number_format:"2"}</td>
                 <td class="text-right">
@@ -77,7 +77,7 @@
         </div>
       </div>
       <div class="panel-footer">
-        <h6>{if $GLOBAL.config.payout_system != 'pps'}Round Earnings are not credited until <font color="orange">{$GLOBAL.confirmations}</font> confirms.{/if}</h6>
+        <h6>{if $GLOBAL.config.payout_system != 'pps'}Round Earnings are not credited until <font class="confirmations">{$GLOBAL.confirmations}</font> confirms.{/if}</h6>
       </div>
     </div>
   </div>

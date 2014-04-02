@@ -3,7 +3,7 @@
   <div class="col-lg-12">
     <div class="panel panel-info">
       <div class="panel-heading">
-        <i class="fa fa-user fa-fw"></i> Last registered Users
+        <i class="fa fa-user fa-fw"></i> Last Registered Users
       </div>
       <div class="panel-body no-padding">
         <div class="table-responsive">
@@ -15,7 +15,7 @@
                 <th>eMail</th>
                 <th>Reg. Date</th>
                 <th>Invite</th>
-                <th>Invited from</th>
+                <th>Invited From</th>
               </tr>
             </thead>
             <tbody>
@@ -25,7 +25,7 @@
                 <td>{$LASTREGISTEREDUSERS[user].mposuser}</td>
                 <td>{$LASTREGISTEREDUSERS[user].email}</td>
                 <td>{$LASTREGISTEREDUSERS[user].signup_timestamp|date_format:"%d/%m %H:%M:%S"}</td>
-                <td align="center">{if !$LASTREGISTEREDUSERS[user].inviter}<i class="fa fa-times fa-fw">{else}<i class="fa fa-check fa-fw">{/if}</td>
+                <td class="text-center">{if !$LASTREGISTEREDUSERS[user].inviter}<i class="fa fa-times fa-fw">{else}<i class="fa fa-check fa-fw">{/if}</td>
                 <td><a href="{$smarty.server.SCRIPT_NAME}?page=admin&action=user&do=query&filter[account]={$LASTREGISTEREDUSERS[user].inviter}">{$LASTREGISTEREDUSERS[user].inviter}</a></td>
               </tr>
               {/section}
