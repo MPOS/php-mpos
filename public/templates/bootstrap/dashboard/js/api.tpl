@@ -83,7 +83,11 @@ $(document).ready(function(){
     $('#b-poolworkers').html(number_format(data.getdashboarddata.data.pool.workers));
     $('#b-hashrate').html((number_format(data.getdashboarddata.data.personal.hashrate, 2)));
     $('#b-poolhashrate').html(number_format(data.getdashboarddata.data.pool.hashrate, 2));
-    $('#b-nethashrate').html(number_format(data.getdashboarddata.data.network.hashrate, 2));
+    if (data.getdashboarddata.data.network.hashrate > 0) {
+      $('#b-nethashrate').html(number_format(data.getdashboarddata.data.network.hashrate, 2));
+    } else {
+      $('#b-nethashrate').html('n/a');
+    }
     $('#b-sharerate').html((parseFloat(data.getdashboarddata.data.personal.sharerate).toFixed(2)));
     $('#b-yvalid').html(number_format(data.getdashboarddata.data.personal.shares.valid));
     $('#b-yivalid').html(number_format(data.getdashboarddata.data.personal.shares.invalid));
@@ -100,8 +104,13 @@ $(document).ready(function(){
       $('#b-pefficiency').html(number_format(0, 2) + "%");
     }
     $('#b-diff').html(number_format(data.getdashboarddata.data.network.difficulty, 8));
-    $('#b-nextdiff').html(number_format(data.getdashboarddata.data.network.nextdifficulty, 8));
-    $('#b-nextdiffc').html(" Change in " + data.getdashboarddata.data.network.blocksuntildiffchange + " Blocks");
+    if (data.getdashboarddata.data.network.hashrate > 0) {
+      $('#b-nextdiff').html(number_format(data.getdashboarddata.data.network.nextdifficulty, 8));
+      $('#b-nextdiffc').html(" Change in " + data.getdashboarddata.data.network.blocksuntildiffchange + " Blocks");
+    } else {
+      $('#b-nextdiff').html('n/a');
+      $('#b-nextdiffc').html(' No Estimates');
+    }
     var minutes = Math.floor(data.getdashboarddata.data.network.esttimeperblock / 60);
     var seconds = Math.floor(data.getdashboarddata.data.network.esttimeperblock - minutes * 60);
     $('#b-esttimeperblock').html(minutes + " minutes " + seconds + " seconds"); // <- this needs some nicer format
