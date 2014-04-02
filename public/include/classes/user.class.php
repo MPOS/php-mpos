@@ -192,6 +192,11 @@ class User extends Base {
       return false;
     }
     if ($this->checkUserPassword($username, $password)) {
+      // delete notification cookies
+      setcookie("motd-box", "", time()-3600);
+      setcookie("lastlogin-box", "", time()-3600);
+      setcookie("backend-box", "", time()-3600);
+      // rest of login process
       $uid = $this->getUserId($username);
       $lastLoginTime = $this->getLastLogin($uid);
       $this->updateLoginTimestamp($uid);

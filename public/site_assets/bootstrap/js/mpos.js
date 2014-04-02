@@ -22,7 +22,38 @@ $(document).ready(function() {
 
     // Bootstrap iOS style switches for checkboxes with switch class
     $('.switch').bootstrapSwitch();
+    
+    if (document.getElementById("motd")) {
+    	var md5motd = $.md5(document.getElementById('motd').innerHTML);
+		// Check if MOTD alert has been closed
+		//alert(md5motd);
+    	if( $.cookie('motd-box') === md5motd ){
+        	$('#motd').hide();
+        	//alert('hidden');
+    	}
+    }
+    
+    if (document.getElementById("lastlogin")) {
+    	var md5lastlogin = $.md5(document.getElementById('lastlogin').innerHTML);
+    	// Check if lastlogin alert has been closed
+    	//alert(md5lastlogin);
+    	if( $.cookie('lastlogin-box') === md5lastlogin ){
+        	$('#lastlogin').hide();
+        	//alert('hidden');
+    	}
+    
+    }
 
+    if (document.getElementById("backend")) {
+    	var md5backend = $.md5(document.getElementById('backend').innerHTML);
+    	// Check if Backend Issues alert has been closed
+    	//alert(md5backend);
+    	if( $.cookie('backend-box') === md5backend ){
+        	$('#backend').hide();
+        	//alert('hidden');
+    	}
+    }
+    
 });
 
 $(function() {
@@ -38,29 +69,19 @@ $(function() {
         }, hide_delay + hide_next*index);
     });
    
-    // Check if lastlogin alert has been closed
-    if( $.cookie('lastlogin-box') === 'closed' ){
-        $('#lastlogin').hide();
-    }
-    // Check if MOTD alert has been closed
-    if( $.cookie('motd-box') === 'closed' ){
-        $('#motd').hide();
-    }
-    // Check if Backend Issues alert has been closed
-    if( $.cookie('backend-box') === 'closed' ){
-        $('#backend').hide();
-    }
-    
     // Grab your button (based on your posted html)
     $('.close').click(function( e ){
         e.preventDefault();
         //alert($(this).attr("id"));
         if ($(this).attr("id") === 'motd') {
-        	$.cookie('motd-box', 'closed', { path: '/' });
+        	var md5motd = $.md5(document.getElementById('motd').innerHTML);
+        	$.cookie('motd-box', md5motd, { path: '/' });
         } else if ($(this).attr("id") === 'lastlogin') {
-        	$.cookie('lastlogin-box', 'closed', { path: '/' });
+        	var md5lastlogin = $.md5(document.getElementById('lastlogin').innerHTML);
+        	$.cookie('lastlogin-box', md5lastlogin, { path: '/' });
         } else if ($(this).attr("id") === 'backend') {
-        	$.cookie('backend-box', 'closed', { path: '/' });
+        	var md5backend = $.md5(document.getElementById('backend').innerHTML);
+        	$.cookie('backend-box', md5backend, { path: '/' });
         } else {
             //alert($(this).attr("id"));
         }
