@@ -279,6 +279,13 @@ $aSettings['acl'][] = array(
   'name' => 'acl_moot_forum', 'value' => $setting->getValue('acl_moot_forum'),
   'tooltip' => 'Make the forum page private (users only) or public.'
 );
+$aSettings['acl'][] = array(
+  'display' => 'QRCode', 'type' => 'select',
+  'options' => array( 0 => 'Enabled', 1 => 'Disabled' ),
+  'default' => 0,
+  'name' => 'acl_qrcode', 'value' => $setting->getValue('acl_qrcode'),
+  'tooltip' => 'Hide or Show the QRCode Page.'
+);
 $aSettings['system'][] = array(
   'display' => 'E-mail address for system error notifications', 'type' => 'text',
   'size' => 25,
