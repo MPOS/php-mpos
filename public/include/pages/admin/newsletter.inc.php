@@ -20,7 +20,7 @@ if ($setting->getValue('notifications_disable_pool_newsletter', 0) == 1) {
       $iSuccess = 0;
       foreach ($user->getAllAssoc() as $aData) {
         $aUserNotificationSettings = $notification->getNotificationSettings($aData['id']);
-        if (!$aUserNotificationSettings['newsletter'] == 1) continue;
+        if ($aData['is_locked'] != 0 || !$aUserNotificationSettings['newsletter'] == 1) continue;
         $aData['subject'] = $_REQUEST['data']['subject'];
         $aData['CONTENT'] = $_REQUEST['data']['content'];
         if (!$mail->sendMail('newsletter/body', $aData, true)) {
