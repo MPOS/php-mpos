@@ -90,6 +90,9 @@ class Notification extends Mail {
           }
         }
         return $aData;
+      } else {
+        foreach ($aDefaults as $type => $value) $aData[$type] = $value;
+        return $aData;
       }
     }
     return $this->sqlError('E0045');
