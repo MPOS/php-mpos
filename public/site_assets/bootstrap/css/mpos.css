@@ -605,12 +605,14 @@ div.fade {
 
 /* Footer */
 
+
 .footer {
 	clear: both;
 	text-align: center;
 	padding: 4px 0px 0px;
 	font-size: 11px;
 	width: 100%;
+	margin-bottom: 5px !important;
 }
 
 .confirmations {
