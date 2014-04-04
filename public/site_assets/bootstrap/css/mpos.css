@@ -434,14 +434,6 @@ div.dataTables_paginate ul.pagination {
     border: none;
 }
 
-.footer {
-	clear: both;
-	text-align: center;
-	padding: 4px 0px 0px;
-	font-size: 11px;
-	width: 100%;
-}
-
 .margin-bottom-sm {
 	margin-bottom: 5px !important;
 }
@@ -610,3 +602,23 @@ div.fade {
 }
 
 /* End Tables */
+
+/* Footer */
+
+
+.footer {
+	clear: both;
+	text-align: center;
+	padding: 4px 0px 0px;
+	font-size: 11px;
+	width: 100%;
+	margin-bottom: 5px !important;
+}
+
+.confirmations {
+	color: #F79D00;
+}
+
+/* End Footer */
+
+
