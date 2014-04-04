@@ -72,13 +72,26 @@ class Notification extends Mail {
    * @return array Notification settings
    **/
   public function getNotificationSettings($account_id) {
+    // Some defaults, we cover them here so we can avoid adding default settings on user creation
+    $aDefaults = array( 'newsletter' => 1 );
     $this->debug->append("STA " . __METHOD__, 4);
     $stmt = $this->mysqli->prepare("SELECT * FROM $this->tableSettings WHERE account_id = ?");
     if ($stmt && $stmt->bind_param('i', $account_id) && $stmt->execute() && $result = $stmt->get_result()) {
       if ($result->num_rows > 0) {
+        $aFound = array();
         while ($row = $result->fetch_assoc()) {
+          if (array_key_exists($row['type'], $aDefaults)) $aFound[] = $row['type'];
           $aData[$row['type']] = $row['active'];
         }
+        // Check found types against our defaults, set if required
+        foreach ($aDefaults as $type => $value) {
+          if (!in_array($type, $aFound)) {
+            $aData[$type] = $value;
+          }
+        }
+        return $aData;
+      } else {
+        foreach ($aDefaults as $type => $value) $aData[$type] = $value;
         return $aData;
       }
     }

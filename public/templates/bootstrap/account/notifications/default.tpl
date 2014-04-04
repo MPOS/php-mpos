@@ -50,6 +50,17 @@
                 <input type="checkbox" class="switch" data-size="mini"  name="data[success_login]" id="success_login" value="1"{nocache}{if $SETTINGS['success_login']|default:"0" == 1}checked{/if}{/nocache} />
               </td>
             </tr>
+            {if $DISABLE_POOLNEWSLETTER|default:"" != 1}
+            <tr>
+              <td>
+                <label>Pool Newsletter</label>
+              </td>
+              <td>
+                <input type="hidden" name="data[newsletter]" value="0" />
+                <input type="checkbox"class="switch" data-size="mini" name="data[newsletter]" id="new_block" value="1"{nocache}{if $SETTINGS['newsletter']|default:"1" == 1}checked{/if}{/nocache} />
+              </td>
+            </tr>
+            {/if}
         </table>
       </div>
       <div class="panel-footer">
