@@ -52,7 +52,7 @@ class Mail extends Base {
    *     subject : Mail Subject
    *     email   : Destination address
    **/
-  public function sendMail($template, $aData) {
+  public function sendMail($template, $aData, $throttle=false) {
     // Prepare SMTP transport and mailer
     $transport_type = $this->config['swiftmailer']['type'];
     if ($transport_type == 'sendmail') {
@@ -65,6 +65,14 @@ class Mail extends Base {
       }
     }
     $mailer = Swift_Mailer::newInstance($transport);
+
+    // Throttle mails to x per minute, used for newsletter for example
+    if ($this->config['swiftmailer']['type'] == 'smtp' && $throttle) {
+      $mailer->registerPlugin(new Swift_Plugins_ThrottlerPlugin(
+        $this->config['switfmailer']['smtp']['throttle'], Swift_Plugins_ThrottlerPlugin::MESSAGES_PER_MINUTE
+      ));
+    }
+
     // Prepare the smarty templates used
     $this->smarty->clearCache(BASEPATH . 'templates/mail/' . $template . '.tpl');
     $this->smarty->clearCache(BASEPATH . 'templates/mail/subject.tpl');
