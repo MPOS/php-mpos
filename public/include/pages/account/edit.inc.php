@@ -12,52 +12,54 @@ $updating = (@$_POST['do']) ? 1 : 0;
 
 if ($user->isAuthenticated()) {
   if ($config['twofactor']['enabled']) {
-    $popupmsg = 'E-mail confirmations are required for ';
-    $popuptypes = array();
-    if ($config['twofactor']['options']['details'] && $oldtoken_ea !== "") {
-      $popuptypes[] = 'editing your details';
-      $ea_editable = $user->token->isTokenValid($_SESSION['USERDATA']['id'], $oldtoken_ea, 5);
-      $ea_sent = $user->token->doesTokenExist('account_edit', $_SESSION['USERDATA']['id']);
-    }
-    if ($config['twofactor']['options']['changepw'] && $oldtoken_cp !== "") {
-      $popuptypes[] = 'changing your password';
-      $cp_editable = $user->token->isTokenValid($_SESSION['USERDATA']['id'], $oldtoken_cp, 6);
-      $cp_sent = $user->token->doesTokenExist('change_pw', $_SESSION['USERDATA']['id']);
-    }
-    if ($config['twofactor']['options']['withdraw'] && $oldtoken_wf !== "") {
-      $popuptypes[] = 'withdrawals';
-      $wf_editable = $user->token->isTokenValid($_SESSION['USERDATA']['id'], $oldtoken_wf, 7);
-      $wf_sent = $user->token->doesTokenExist('withdraw_funds', $_SESSION['USERDATA']['id']);
-    }
-    
-    // get the status of a token if set
-    $message_tokensent_invalid = 'A token was sent to your e-mail that will allow you to ';
-    $message_tokensent_valid = 'You can currently ';
-    $messages_tokensent_status = array(
-      'ea' => 'edit your account details',
-      'wf' => 'withdraw funds',
-      'cp' => 'change your password'
-    );
-    // build the message we're going to show them for their token(s)
-    $eaprep_sent = ($ea_sent) ? $message_tokensent_valid.$messages_tokensent_status['ea'] : "";
-    $eaprep_edit = ($ea_editable) ? $message_tokensent_invalid.$messages_tokensent_status['ea'] : "";
-    $wfprep_sent = ($wf_sent) ? $message_tokensent_valid.$messages_tokensent_status['wf'] : "";
-    $wfprep_edit = ($wf_editable) ? $message_tokensent_invalid.$messages_tokensent_status['wf'] : "";
-    $cpprep_sent = ($cp_sent) ? $message_tokensent_valid.$messages_tokensent_status['cp'] : "";
-    $cpprep_edit = ($cp_editable) ? $message_tokensent_invalid.$messages_tokensent_status['cp'] : "";
-    $ptc = 0;
-    $ptcn = count($popuptypes);
-    foreach ($popuptypes as $pt) {
-      if ($ptcn == 1) { $popupmsg.= $popuptypes[$ptc]; continue; }
-      if ($ptc !== ($ptcn-1)) {
-        $popupmsg.= $popuptypes[$ptc].', ';
-      } else {
-        $popupmsg.= 'and '.$popuptypes[$ptc];
+    if ($config['twofactor']['options']['details'] OR $config['twofactor']['options']['changepw'] OR $config['twofactor']['options']['withdraw']) {
+      $popupmsg = 'E-mail confirmations are required for ';
+      $popuptypes = array();
+      if ($config['twofactor']['options']['details'] && $oldtoken_ea !== "") {
+        $popuptypes[] = 'editing your details';
+        $ea_editable = $user->token->isTokenValid($_SESSION['USERDATA']['id'], $oldtoken_ea, 5);
+        $ea_sent = $user->token->doesTokenExist('account_edit', $_SESSION['USERDATA']['id']);
       }
-      $ptc++;
+      if ($config['twofactor']['options']['changepw'] && $oldtoken_cp !== "") {
+        $popuptypes[] = 'changing your password';
+        $cp_editable = $user->token->isTokenValid($_SESSION['USERDATA']['id'], $oldtoken_cp, 6);
+        $cp_sent = $user->token->doesTokenExist('change_pw', $_SESSION['USERDATA']['id']);
+      }
+      if ($config['twofactor']['options']['withdraw'] && $oldtoken_wf !== "") {
+        $popuptypes[] = 'withdrawals';
+        $wf_editable = $user->token->isTokenValid($_SESSION['USERDATA']['id'], $oldtoken_wf, 7);
+        $wf_sent = $user->token->doesTokenExist('withdraw_funds', $_SESSION['USERDATA']['id']);
+      }
+    
+      // get the status of a token if set
+      $message_tokensent_invalid = 'A token was sent to your e-mail that will allow you to ';
+      $message_tokensent_valid = 'You can currently ';
+      $messages_tokensent_status = array(
+        'ea' => 'edit your account details',
+        'wf' => 'withdraw funds',
+        'cp' => 'change your password'
+      );
+      // build the message we're going to show them for their token(s)
+      $eaprep_sent = ($ea_sent) ? $message_tokensent_valid.$messages_tokensent_status['ea'] : "";
+      $eaprep_edit = ($ea_editable) ? $message_tokensent_invalid.$messages_tokensent_status['ea'] : "";
+      $wfprep_sent = ($wf_sent) ? $message_tokensent_valid.$messages_tokensent_status['wf'] : "";
+      $wfprep_edit = ($wf_editable) ? $message_tokensent_invalid.$messages_tokensent_status['wf'] : "";
+      $cpprep_sent = ($cp_sent) ? $message_tokensent_valid.$messages_tokensent_status['cp'] : "";
+      $cpprep_edit = ($cp_editable) ? $message_tokensent_invalid.$messages_tokensent_status['cp'] : "";
+      $ptc = 0;
+      $ptcn = count($popuptypes);
+      foreach ($popuptypes as $pt) {
+        if ($ptcn == 1) { $popupmsg.= $popuptypes[$ptc]; continue; }
+        if ($ptc !== ($ptcn-1)) {
+          $popupmsg.= $popuptypes[$ptc].', ';
+        } else {
+          $popupmsg.= 'and '.$popuptypes[$ptc];
+        }
+        $ptc++;
+      }
+      // display global notice about tokens being in use and for which bits they're active
+      $_SESSION['POPUP'][] = array('CONTENT' => $popupmsg, 'TYPE' => 'alert alert-warning');
     }
-    // display global notice about tokens being in use and for which bits they're active
-    $_SESSION['POPUP'][] = array('CONTENT' => $popupmsg, 'TYPE' => 'alert alert-warning');
   }
   
   if (isset($_POST['do']) && $_POST['do'] == 'genPin') {
@@ -174,12 +176,12 @@ if ($config['twofactor']['enabled'] && $user->isAuthenticated()) {
   }
   
   // display token info per each - only when sent and editable or just sent, not by default
-  (!empty($eaprep_sent) && !empty($eaprep_edit)) ? $_SESSION['POPUP'][] = array('CONTENT' => $eaprep_sent, 'TYPE' => 'success'):"";
-  (!empty($eaprep_sent) && empty($eaprep_edit)) ? $_SESSION['POPUP'][] = array('CONTENT' => $message_tokensent_invalid.$messages_tokensent_status['ea'], 'TYPE' => 'success'):"";
-  (!empty($wfprep_sent) && !empty($wfprep_edit)) ? $_SESSION['POPUP'][] = array('CONTENT' => $wfprep_sent, 'TYPE' => 'success'):"";
-  (!empty($wfprep_sent) && empty($wfprep_edit)) ? $_SESSION['POPUP'][] = array('CONTENT' => $message_tokensent_invalid.$messages_tokensent_status['wf'], 'TYPE' => 'success'):"";
-  (!empty($cpprep_sent) && !empty($cpprep_edit)) ? $_SESSION['POPUP'][] = array('CONTENT' => $cpprep_sent, 'TYPE' => 'success'):"";
-  (!empty($cpprep_sent) && empty($cpprep_edit)) ? $_SESSION['POPUP'][] = array('CONTENT' => $message_tokensent_invalid.$messages_tokensent_status['cp'], 'TYPE' => 'success'):"";
+  (!empty($eaprep_sent) && !empty($eaprep_edit)) ? $_SESSION['POPUP'][] = array('CONTENT' => $eaprep_sent, 'TYPE' => 'alert alert-success'):"";
+  (!empty($eaprep_sent) && empty($eaprep_edit)) ? $_SESSION['POPUP'][] = array('CONTENT' => $message_tokensent_invalid.$messages_tokensent_status['ea'], 'TYPE' => 'alert alert-success'):"";
+  (!empty($wfprep_sent) && !empty($wfprep_edit)) ? $_SESSION['POPUP'][] = array('CONTENT' => $wfprep_sent, 'TYPE' => 'alert alert-success'):"";
+  (!empty($wfprep_sent) && empty($wfprep_edit)) ? $_SESSION['POPUP'][] = array('CONTENT' => $message_tokensent_invalid.$messages_tokensent_status['wf'], 'TYPE' => 'alert alert-success'):"";
+  (!empty($cpprep_sent) && !empty($cpprep_edit)) ? $_SESSION['POPUP'][] = array('CONTENT' => $cpprep_sent, 'TYPE' => 'alert alert-success'):"";
+  (!empty($cpprep_sent) && empty($cpprep_edit)) ? $_SESSION['POPUP'][] = array('CONTENT' => $message_tokensent_invalid.$messages_tokensent_status['cp'], 'TYPE' => 'alert alert-success'):"";
   // two-factor stuff
   $smarty->assign("CHANGEPASSUNLOCKED", $cp_editable);
   $smarty->assign("WITHDRAWUNLOCKED", $wf_editable);

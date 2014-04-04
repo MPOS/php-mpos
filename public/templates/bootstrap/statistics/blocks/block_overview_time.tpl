@@ -10,16 +10,16 @@
             <thead>
               <tr>
                 <th></th>
-                <th class="text-right">Gen est.</th>
+                <th class="text-right">Gen. Est.</th>
                 <th class="text-right">Found</th>
                 <th class="text-right">Valid</th>
                 <th class="text-right">Orphan</th>
-                <th class="text-right">Avg Diff</th>
-                <th class="text-right">Shares est.</th>
+                <th class="text-right">Avg. Diff</th>
+                <th class="text-right">Shares Est.</th>
                 <th class="text-right">Shares</th>
                 <th class="text-right">Percentage</th>
                 <th class="text-right">Amount</th>
-                <th class="text-right">Rate est.</th>
+                <th class="text-right">Rate Est.</th>
               </tr>
             </thead>
             <tbody>
@@ -178,7 +178,7 @@
         </div>
       </div>
       <div class="panel-footer">
-        <h6>{if $GLOBAL.config.payout_system != 'pps'}Round earnings are not credited until <font color="orange">{$GLOBAL.confirmations}</font> confirms.{/if}</h6>
+        <h6>{if $GLOBAL.config.payout_system != 'pps'}Round earnings are not credited until <font class="confirmations">{$GLOBAL.confirmations}</font> confirms.{/if}</h6>
       </div>
     </div>
   </div>

@@ -138,3 +138,7 @@ a:focus {
 .dropdown-menu {
     background-color: #D3D3D3;
 }
+
+.confirmations {
+	color: #F3FF12;
+}
