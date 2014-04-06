@@ -34,7 +34,7 @@ class Mail extends Base {
     $aData['senderEmail'] = $senderEmail;
     $aData['senderSubject'] = $senderSubject;
     $aData['senderMessage'] = $senderMessage;
-    $aData['email'] = $this->setting->getValue('website_email');
+    $aData['email'] = $this->setting->getValue('website_email', 'test@example.com');
     $aData['subject'] = 'Contact Form';
       if ($this->sendMail('contactform/body', $aData)) {
         return true;
@@ -81,14 +81,16 @@ class Mail extends Base {
     $this->smarty->assign('DATA', $aData);
 
     // Create new message for Swiftmailer
+    $senderEmail = $this->setting->getValue('website_email', 'test@example.com');
+    $senderName = $this->setting->getValue('website_name', 'test@example.com');
     $message = Swift_Message::newInstance()
       ->setSubject($this->smarty->fetch(BASEPATH . 'templates/mail/subject.tpl'))
-      ->setFrom(array( $this->setting->getValue('website_email') => $this->setting->getValue('website_name')))
+      ->setFrom(array( $senderEmail => $senderName))
       ->setTo($aData['email'])
-      ->setSender($this->setting->getValue('website_email'))
-      ->setReturnPath($this->setting->getValue('website_email'))
+      ->setSender($senderEmail)
+      ->setReturnPath($senderEmail)
       ->setBody($this->smarty->fetch(BASEPATH . 'templates/mail/' . $template . '.tpl'), 'text/html');
-    if (strlen(@$aData['senderName']) > 0 && @strlen($aData['senderEmail']) > 0 )
+    if (strlen($aData['senderName']) > 0 && strlen($aData['senderEmail']) > 0 && filter_var($aData['senderEmail'], FILTER_VALIDATE_EMAIL))
       $message->setReplyTo(array($aData['senderEmail'] => $aData['senderName']));
 
     // Send message out with configured transport
