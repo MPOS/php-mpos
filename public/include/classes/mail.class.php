@@ -90,7 +90,11 @@ class Mail extends Base {
       ->setSender($senderEmail)
       ->setReturnPath($senderEmail)
       ->setBody($this->smarty->fetch(BASEPATH . 'templates/mail/' . $template . '.tpl'), 'text/html');
-    if (strlen(@$aData['senderName']) > 0 && strlen(@$aData['senderEmail']) > 0 && filter_var(@$aData['senderEmail'], FILTER_VALIDATE_EMAIL))
+    if (isset($aData['senderName']) &&
+        isset($aData['senderEmail']) &&
+        strlen($aData['senderName']) > 0 &&
+        strlen($aData['senderEmail']) > 0 &&
+        filter_var($aData['senderEmail'], FILTER_VALIDATE_EMAIL))
       $message->setReplyTo(array($aData['senderEmail'] => $aData['senderName']));
 
     // Send message out with configured transport
