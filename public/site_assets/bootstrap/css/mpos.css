@@ -96,6 +96,7 @@ input[type="color"],
 .select-mini, .input-group {
 	font-size: 11px;
 	height: 25px;
+	padding: 3px;
 }
 
 /* Navigation */
