@@ -27,12 +27,12 @@
           </div>
           <div class="col-md-spark">
             <i class="fa fa-th-large fa-2x"></i>
-            <p id="b-nblock" class="h5 font-bold m-t">{$GLOBAL.ppsvalue}</p>
+            <p id="b-ppsvalue" class="h5 font-bold m-t">{$GLOBAL.ppsvalue}</p>
             <p class="h6 text-muted">PPS Value</p>
           </div>
           <div class="col-md-spark">
             <i class="fa fa-bar-chart-o fa-flip-horizontal fa-2x"></i>
-            <p id="b-roundprogress" class="h6 font-bold m-t">{$GLOBAL.userdata.pps.unpaidshares}</p>
+            <p id="b-unpaidshares" class="h6 font-bold m-t">{$GLOBAL.userdata.pps.unpaidshares}</p>
             <p class="h6 text-muted">Unpaid Shares</p>
           </div>
           <div class="col-md-spark">
@@ -42,8 +42,8 @@
           </div>
           <div class="col-md-spark">
             <i class="fa fa-sitemap fa-2x"></i>
-            <p id="b-nextdiff" class="h5 font-bold m-t">{$NETWORK.EstNextDifficulty|number_format:"8"}</p>
-            <p id="b-nextdiffc" class="h6 font-bold m-t">Change in {$NETWORK.BlocksUntilDiffChange} Blocks</p>
+            <p id="b-nextdiff" class="h5 font-bold m-t">{if $GLOBAL.nethashrate > 0}{$NETWORK.EstNextDifficulty|number_format:"8"}{else}n/a{/if}</p>
+            <p id="b-nextdiffc" class="h6 font-bold m-t">{if $GLOBAL.nethashrate > 0}Change in {$NETWORK.BlocksUntilDiffChange} Blocks{else}No Estimates{/if}</p>
             <p class="h6 text-muted">Est Next Difficulty</p>
           </div>
           <div class="col-md-spark">

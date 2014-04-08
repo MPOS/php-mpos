@@ -133,6 +133,8 @@ $aGlobal['acl']['donors']['page'] = $setting->getValue('acl_donors_page');
 $aGlobal['acl']['about']['page'] = $setting->getValue('acl_about_page');
 $aGlobal['acl']['contactform'] = $setting->getValue('acl_contactform');
 $aGlobal['acl']['chat']['page'] = $setting->getValue('acl_chat_page', 2);
+$aGlobal['acl']['moot']['forum'] = $setting->getValue('acl_moot_forum', 2);
+$aGlobal['acl']['qrcode'] = $setting->getValue('acl_qrcode');
 
 // We don't want these session infos cached
 if (@$_SESSION['USERDATA']['id']) {

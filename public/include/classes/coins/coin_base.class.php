@@ -47,13 +47,22 @@ class CoinBase extends Base {
    * Calculate our networks expected time per block
    **/
   public function calcNetworkExpectedTimePerBlock($dDifficulty, $dNetworkHashrate) {
-    return pow(2, 32) * $dDifficulty / $dNetworkHashrate;
+    if ($dNetworkHashrate > 0) {
+      return pow(2, 32) * $dDifficulty / $dNetworkHashrate;
+    } else {
+      return 0;
+    }
   }
   /**
    * Calculate next expected difficulty based on current difficulty
    **/
   public function calcExpectedNextDifficulty($dDifficulty, $dNetworkHashrate) {
-    return round($dDifficulty * $this->config['cointarget'] / $this->calcNetworkExpectedTimePerBlock($dDifficulty, $dNetworkHashrate), 8);
+    $iExpectedTimePerBlock = $this->calcNetworkExpectedTimePerBlock($dDifficulty, $dNetworkHashrate);
+    if (!empty($iExpectedTimePerBlock) && $iExpectedTimePerBlock > 0) {
+      return round($dDifficulty * $this->config['cointarget'] / $iExpectedTimePerBlock, 8);
+    } else {
+      return 0;
+    }
   }
 }
 

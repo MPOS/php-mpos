@@ -34,7 +34,7 @@ class Mail extends Base {
     $aData['senderEmail'] = $senderEmail;
     $aData['senderSubject'] = $senderSubject;
     $aData['senderMessage'] = $senderMessage;
-    $aData['email'] = $this->setting->getValue('website_email');
+    $aData['email'] = $this->setting->getValue('website_email', 'test@example.com');
     $aData['subject'] = 'Contact Form';
       if ($this->sendMail('contactform/body', $aData)) {
         return true;
@@ -52,7 +52,7 @@ class Mail extends Base {
    *     subject : Mail Subject
    *     email   : Destination address
    **/
-  public function sendMail($template, $aData) {
+  public function sendMail($template, $aData, $throttle=false) {
     // Prepare SMTP transport and mailer
     $transport_type = $this->config['swiftmailer']['type'];
     if ($transport_type == 'sendmail') {
@@ -65,6 +65,14 @@ class Mail extends Base {
       }
     }
     $mailer = Swift_Mailer::newInstance($transport);
+
+    // Throttle mails to x per minute, used for newsletter for example
+    if ($this->config['swiftmailer']['type'] == 'smtp' && $throttle) {
+      $mailer->registerPlugin(new Swift_Plugins_ThrottlerPlugin(
+        $this->config['switfmailer']['smtp']['throttle'], Swift_Plugins_ThrottlerPlugin::MESSAGES_PER_MINUTE
+      ));
+    }
+
     // Prepare the smarty templates used
     $this->smarty->clearCache(BASEPATH . 'templates/mail/' . $template . '.tpl');
     $this->smarty->clearCache(BASEPATH . 'templates/mail/subject.tpl');
@@ -73,14 +81,20 @@ class Mail extends Base {
     $this->smarty->assign('DATA', $aData);
 
     // Create new message for Swiftmailer
+    $senderEmail = $this->setting->getValue('website_email', 'test@example.com');
+    $senderName = $this->setting->getValue('website_name', 'test@example.com');
     $message = Swift_Message::newInstance()
       ->setSubject($this->smarty->fetch(BASEPATH . 'templates/mail/subject.tpl'))
-      ->setFrom(array( $this->setting->getValue('website_email') => $this->setting->getValue('website_name')))
+      ->setFrom(array( $senderEmail => $senderName))
       ->setTo($aData['email'])
-      ->setSender($this->setting->getValue('website_email'))
-      ->setReturnPath($this->setting->getValue('website_email'))
+      ->setSender($senderEmail)
+      ->setReturnPath($senderEmail)
       ->setBody($this->smarty->fetch(BASEPATH . 'templates/mail/' . $template . '.tpl'), 'text/html');
-    if (strlen(@$aData['senderName']) > 0 && @strlen($aData['senderEmail']) > 0 )
+    if (isset($aData['senderName']) &&
+        isset($aData['senderEmail']) &&
+        strlen($aData['senderName']) > 0 &&
+        strlen($aData['senderEmail']) > 0 &&
+        filter_var($aData['senderEmail'], FILTER_VALIDATE_EMAIL))
       $message->setReplyTo(array($aData['senderEmail'] => $aData['senderName']));
 
     // Send message out with configured transport

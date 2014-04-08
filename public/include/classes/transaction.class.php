@@ -150,8 +150,8 @@ class Transaction extends Base {
         IFNULL(SUM(IF(t.type = 'TXFee' AND timestamp >= DATE_SUB(now(), INTERVAL 31536000 SECOND), t.amount, 0)), 0) AS 1YearTXFee,
         IFNULL(SUM(IF(t.type = 'Fee' AND timestamp >= DATE_SUB(now(), INTERVAL 31536000 SECOND), t.amount, 0)), 0) AS 1YearFee,
         IFNULL(SUM(IF(t.type = 'Donation' AND timestamp >= DATE_SUB(now(), INTERVAL 31536000 SECOND), t.amount, 0)), 0) AS 1YearDonation
-      FROM transactions AS t
-      LEFT OUTER JOIN blocks AS b ON b.id = t.block_id
+      FROM $this->table AS t
+      LEFT OUTER JOIN " . $this->block->getTableName() . " AS b ON b.id = t.block_id
       WHERE
         t.account_id = ? AND (b.confirmations > 0 OR b.id IS NULL)");
     if ($this->checkStmt($stmt) && $stmt->bind_param("i", $account_id) && $stmt->execute() && $result = $stmt->get_result())

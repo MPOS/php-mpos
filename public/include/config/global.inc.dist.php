@@ -70,6 +70,7 @@ $config['switfmailer']['smtp']['port'] = '587';
 $config['switfmailer']['smtp']['encryption'] = 'tls';
 $config['switfmailer']['smtp']['username'] = '';
 $config['switfmailer']['smtp']['password'] = '';
+$config['switfmailer']['smtp']['throttle'] = 100;
 
 /**
  * Getting Started Config

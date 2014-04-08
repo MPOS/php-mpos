@@ -43,6 +43,10 @@ a:focus {
   border-color: #222222;
 }
 
+.panel .panel-default {
+  background-color: #D3D3D3;
+}
+
 .lightblue {
   background-color: #222222;
 }
@@ -133,4 +137,8 @@ a:focus {
 
 .dropdown-menu {
     background-color: #D3D3D3;
+}
+
+.confirmations {
+	color: #F3FF12;
 }

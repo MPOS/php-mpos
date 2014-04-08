@@ -3,7 +3,7 @@
   <div class="col-lg-12">
     <div class="panel panel-info">
       <div class="panel-heading">
-        <i class="fa fa-user fa-fw"></i> Last registered Users
+        <i class="fa fa-user fa-fw"></i> Last Registered Users
       </div>
       <div class="panel-body no-padding">
         <div class="table-responsive">
@@ -15,7 +15,7 @@
                 <th>eMail</th>
                 <th>Reg. Date</th>
                 <th>Invite</th>
-                <th>Invited from</th>
+                <th>Invited From</th>
               </tr>
             </thead>
             <tbody>
@@ -25,7 +25,7 @@
                 <td>{$LASTREGISTEREDUSERS[user].mposuser}</td>
                 <td>{$LASTREGISTEREDUSERS[user].email}</td>
                 <td>{$LASTREGISTEREDUSERS[user].signup_timestamp|date_format:"%d/%m %H:%M:%S"}</td>
-                <td align="center">{if !$LASTREGISTEREDUSERS[user].inviter}<i class="fa fa-times fa-fw">{else}<i class="fa fa-check fa-fw">{/if}</td>
+                <td class="text-center">{if !$LASTREGISTEREDUSERS[user].inviter}<i class="fa fa-times fa-fw">{else}<i class="fa fa-check fa-fw">{/if}</td>
                 <td><a href="{$smarty.server.SCRIPT_NAME}?page=admin&action=user&do=query&filter[account]={$LASTREGISTEREDUSERS[user].inviter}">{$LASTREGISTEREDUSERS[user].inviter}</a></td>
               </tr>
               {/section}
@@ -35,8 +35,8 @@
       </div>
       <div class="panel-footer">
         <ul class="pager">
-          <li class="previous {if $smarty.get.start|default:"0" <= 0}disabled{/if}">
-            <a href="{if $smarty.get.start|default:"0" <= 0}#{else}{$smarty.server.SCRIPT_NAME}?page={$smarty.request.page|escape}&action={$smarty.request.action|escape}&registeredstart={$smarty.request.registeredstart|escape|default:"0" - $LIMIT}{if $FILTERS|default:""}{$FILTERS}{/if}{/if}">&larr; Prev</a>
+          <li class="previous {if $smarty.get.registeredstart|default:"0" <= 0}disabled{/if}">
+            <a href="{if $smarty.get.registeredstart|default:"0" <= 0}#{else}{$smarty.server.SCRIPT_NAME}?page={$smarty.request.page|escape}&action={$smarty.request.action|escape}&registeredstart={$smarty.request.registeredstart|escape|default:"0" - $LIMIT}{if $FILTERS|default:""}{$FILTERS}{/if}{/if}">&larr; Prev</a>
           </li>
           <li class="next">
             <a href="{$smarty.server.SCRIPT_NAME}?page={$smarty.request.page|escape}&action={$smarty.request.action|escape}&registeredstart={$smarty.request.registeredstart|escape|default:"0" + $LIMIT}{if $FILTERS|default:""}{$FILTERS}{/if}#registrations">Next &rarr;</a>

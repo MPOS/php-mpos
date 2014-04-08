@@ -10,21 +10,21 @@
             <thead>
               <tr>
                 <th></th>
-                <th class="text-right">Gen est.</th>
+                <th class="text-right">Gen. Est.</th>
                 <th class="text-right">Found</th>
                 <th class="text-right">Valid</th>
                 <th class="text-right">Orphan</th>
-                <th class="text-right">Avg Diff</th>
-                <th class="text-right">Shares est.</th>
+                <th class="text-right">Avg. Diff</th>
+                <th class="text-right">Shares Est.</th>
                 <th class="text-right">Shares</th>
                 <th class="text-right">Percentage</th>
                 <th class="text-right">Amount</th>
-                <th class="text-right">Rate est.</th>
+                <th class="text-right">Rate Est.</th>
               </tr>
             </thead>
             <tbody>
               <tr>
-                <th style="padding-left: 15px">all time</th>
+                <th>All Time</th>
                 <td class="text-right">{($FIRSTBLOCKFOUND / $COINGENTIME)|number_format}</td>
                 <td class="text-right">{$LASTBLOCKSBYTIME.Total|number_format}</td>
                 <td class="text-right">{$LASTBLOCKSBYTIME.TotalValid|number_format}</td>
@@ -45,11 +45,11 @@
                   0.00%
                 {/if}
                 </td>
-                <td class="text-right">{$LASTBLOCKSBYTIME.TotalAmount|number_format}</td>
+                <td class="text-right">{$LASTBLOCKSBYTIME.TotalAmount|number_format:"2"}</td>
                 <td class="text-right">{($LASTBLOCKSBYTIME.Total|default:"0.00" / ($FIRSTBLOCKFOUND / $COINGENTIME)  * 100)|number_format:"2"}%</td>
               </tr>
               <tr>
-                <th style="padding-left: 15px">last hour</th>
+                <th>Last Hour</th>
                 <td class="text-right">{(3600 / $COINGENTIME)|number_format}</td>
                 <td class="text-right">{$LASTBLOCKSBYTIME.1HourTotal|number_format}</td>
                 <td class="text-right">{$LASTBLOCKSBYTIME.1HourValid|number_format}</td>
@@ -70,11 +70,11 @@
                   0.00%
                 {/if}
                 </td>
-                <td class="text-right">{$LASTBLOCKSBYTIME.1HourAmount|number_format}</td>
+                <td class="text-right">{$LASTBLOCKSBYTIME.1HourAmount|number_format:"2"}</td>
                 <td class="text-right">{($LASTBLOCKSBYTIME.1HourTotal|default:"0.00" / (3600 / $COINGENTIME)  * 100)|number_format:"2"}%</td>
               </tr>
               <tr>
-                <th style="padding-left: 15px">last 24 hours</th>
+                <th style="padding-left:3px;padding-right:1px;">Last 24 Hours</th>
                 <td class="text-right">{(86400 / $COINGENTIME)|number_format}</td>
                 <td class="text-right">{$LASTBLOCKSBYTIME.24HourTotal|number_format}</td>
                 <td class="text-right">{$LASTBLOCKSBYTIME.24HourValid|number_format}</td>
@@ -95,11 +95,11 @@
                   0.00%
                 {/if}
                 </td>
-                <td class="text-right">{$LASTBLOCKSBYTIME.24HourAmount|number_format}</td>
+                <td class="text-right">{$LASTBLOCKSBYTIME.24HourAmount|number_format:"2"}</td>
                 <td class="text-right">{($LASTBLOCKSBYTIME.24HourTotal|default:"0.00" / (86400 / $COINGENTIME)  * 100)|number_format:"2"}%</td>
               </tr>
               <tr>
-                <th style="padding-left: 15px">last 7 days</th>
+                <th>Last 7 Days</th>
                 <td class="text-right">{(604800 / $COINGENTIME)|number_format}</td>
                 <td class="text-right">{$LASTBLOCKSBYTIME.7DaysTotal|number_format}</td>
                 <td class="text-right">{$LASTBLOCKSBYTIME.7DaysValid|number_format}</td>
@@ -120,11 +120,11 @@
                   0.00%
                 {/if}
                 </td>
-                <td class="text-right">{$LASTBLOCKSBYTIME.7DaysAmount}</td>
+                <td class="text-right">{$LASTBLOCKSBYTIME.7DaysAmount|number_format:"2"}</td>
                 <td class="text-right">{($LASTBLOCKSBYTIME.7DaysTotal|default:"0.00" / (604800 / $COINGENTIME)  * 100)|number_format:"2"}%</td>
               </tr>
               <tr>
-                <th style="padding-left: 15px">last 4 Weeks</th>
+                <th>Last 4 Weeks</th>
                 <td class="text-right">{(2419200 / $COINGENTIME)|number_format}</td>
                 <td class="text-right">{$LASTBLOCKSBYTIME.4WeeksTotal|number_format}</td>
                 <td class="text-right">{$LASTBLOCKSBYTIME.4WeeksValid|number_format}</td>
@@ -145,11 +145,11 @@
                   0.00%
                 {/if}
                 </td>
-                <td class="text-right">{$LASTBLOCKSBYTIME.4WeeksAmount|number_format}</td>
+                <td class="text-right">{$LASTBLOCKSBYTIME.4WeeksAmount|number_format:"2"}</td>
                 <td class="text-right">{($LASTBLOCKSBYTIME.4WeeksTotal|default:"0.00" / (2419200 / $COINGENTIME)  * 100)|number_format:"2"}%</td>
               </tr>
               <tr>
-                <th style="padding-left: 15px">last 12 Month</th>
+                <th>The Past 12 Months</th>
                 <td class="text-right">{(29030400 / $COINGENTIME)|number_format}</td>
                 <td class="text-right">{$LASTBLOCKSBYTIME.12MonthTotal|number_format}</td>
                 <td class="text-right">{$LASTBLOCKSBYTIME.12MonthValid|number_format}</td>
@@ -170,7 +170,7 @@
                   0.00%
                 {/if}
                 </td>
-                <td class="text-right">{$LASTBLOCKSBYTIME.12MonthAmount|number_format}</td>
+                <td class="text-right">{$LASTBLOCKSBYTIME.12MonthAmount|number_format:"2"}</td>
                 <td class="text-right">{($LASTBLOCKSBYTIME.12MonthTotal|default:"0.00" / (29030400 / $COINGENTIME)  * 100)|number_format:"2"}%</td>
               </tr>
             </tbody>
@@ -178,7 +178,7 @@
         </div>
       </div>
       <div class="panel-footer">
-        <h6>{if $GLOBAL.config.payout_system != 'pps'}Round earnings are not credited until <font color="orange">{$GLOBAL.confirmations}</font> confirms.{/if}</h6>
+        <h6>{if $GLOBAL.config.payout_system != 'pps'}Round earnings are not credited until <font class="confirmations">{$GLOBAL.confirmations}</font> confirms.{/if}</h6>
       </div>
     </div>
   </div>

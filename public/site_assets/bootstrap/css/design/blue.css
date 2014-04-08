@@ -43,6 +43,10 @@ a:focus {
   border-color: #A2BCF5;
 }
 
+.panel .panel-default {
+  background-color: #3E6CCF;
+}
+
 .lightblue {
   background-color: #3065D9;
 }

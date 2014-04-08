@@ -67,8 +67,8 @@
               </div>
               <div class="circle-tile-content lightblue">
                 <div class="circle-tile-description text-faded">
-                  <p class="h5 up" id="b-nextdiff">{$NETWORK.EstNextDifficulty|number_format:"8"}</p>
-                  <p class="h6" id="b-nextdiffc">Change in {$NETWORK.BlocksUntilDiffChange} Blocks</p>
+                  <p class="h5 up" id="b-nextdiff">{if $GLOBAL.nethashrate > 0}{$NETWORK.EstNextDifficulty|number_format:"8"}{else}n/a{/if}</p>
+                  <p class="h6" id="b-nextdiffc">{if $GLOBAL.nethashrate > 0}Change in {$NETWORK.BlocksUntilDiffChange} Blocks{else}No Estimates{/if}</p>
                 </div>
                 <div class="circle-tile-number text-faded">
                   <p class="h6">Est Next Difficulty</p>
