@@ -1,0 +1,45 @@
+.sparklines-stats li:first-child {
+  border-radius: 2px 0 0 2px;
+  -webkit-border-radius: 2px 0 0 2px;
+  -moz-border-radius: 2px 0 0 2px;
+}
+.sparklines-stats li.bg-default {
+  background-color: #fafafa;
+  border: 1px solid #e5e5e5;
+}
+ul.list-justified li {
+  float: none;
+  width: 1%;
+  display: table-cell;
+}
+.sparklines-stats li {
+  padding: 12px 18px;
+  border-left: 1px solid #e5e5e5;
+  display: inline-block;
+}
+.sparklines-stats {
+  margin-left: 0;
+  padding: 0;
+  list-style: none;
+  margin-bottom: 20px;
+}
+.chart {
+  float: right;
+  margin-top: 4px;
+}
+.sparklines-stats-showcase {
+  float: left;
+  margin-right: 18px;
+}
+.sparklines-stats-showcase span {
+  font-weight: 600;
+  font-size: 11px;
+  text-transform: uppercase;
+  display: block;
+  margin-bottom: 4px;
+}
+.sparklines-stats-showcase h2 {
+  margin: 0;
+  font-size: 20px;
+  line-height: 20px;
+}

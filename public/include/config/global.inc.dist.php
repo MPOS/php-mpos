@@ -30,6 +30,13 @@ $config['SALTY'] = 'THISSHOULDALSOBERRAANNDDOOM';
 $config['algorithm'] = 'scrypt';
 
 /**
+  * Getbalance API Calls
+  *  System used for getting actual Balance from Wallet
+  *   https://github.com/MPOS/php-mpos/wiki/Config-Setup#getbalance-api-calls
+  **/
+$config['getbalancewithunconfirmed'] = true;
+
+/**
  * Database configuration
  *  MySQL database configuration
  *   https://github.com/MPOS/php-mpos/wiki/Config-Setup#wiki-database-configuration
@@ -51,6 +58,21 @@ $config['wallet']['username'] = 'testnet';
 $config['wallet']['password'] = 'testnet';
 
 /**
+ * Swiftmailer configuration
+ *  Configure your way to send mails
+ *   https://github.com/MPOS/php-mpos/wiki/Config-Setup#wiki-swiftmailer
+ **/
+$config['swiftmailer']['type'] = 'sendmail';
+$config['swiftmailer']['sendmail']['path'] = '/usr/sbin/sendmail';
+$config['swiftmailer']['sendmail']['options'] = '-bs';
+$config['switfmailer']['smtp']['host'] = 'your.mail-relay.com';
+$config['switfmailer']['smtp']['port'] = '587';
+$config['switfmailer']['smtp']['encryption'] = 'tls';
+$config['switfmailer']['smtp']['username'] = '';
+$config['switfmailer']['smtp']['password'] = '';
+$config['switfmailer']['smtp']['throttle'] = 100;
+
+/**
  * Getting Started Config
  *  Shown to users in the 'Getting Started' section
  *   https://github.com/MPOS/php-mpos/wiki/Config-Setup#wiki-getting-started
@@ -65,6 +87,7 @@ $config['gettingstarted']['stratumport'] = '3333';
  *  Fetch exchange rates via an API
  *   https://github.com/MPOS/php-mpos/wiki/Config-Setup#wiki-ticker-api
  **/
+$config['price']['enabled'] = false;
 $config['price']['url'] = 'https://btc-e.com';
 $config['price']['target'] = '/api/2/ltc_usd/ticker';
 $config['price']['currency'] = 'USD';
@@ -76,6 +99,13 @@ $config['price']['currency'] = 'USD';
  **/
 $config['ap_threshold']['min'] = 1;
 $config['ap_threshold']['max'] = 250;
+
+/**
+ * Minimum manual Payout Threshold
+ *  Minimum manual payout amount
+ *   https://github.com/MPOS/php-mpos/wiki/Config-Setup#wiki-manual-payout-threshold
+ **/
+$config['mp_threshold'] = 1;
 
 /**
  * Donation thresholds
@@ -121,12 +151,14 @@ $config['txfee_auto'] = 0.1;
 $config['txfee_manual'] = 0.1;
 
 /**
- * Block Bonus
- *  Bonus in coins of block bonus
+ * Block & Pool Bonus
+ *  Bonus coins for blockfinder or a pool bonus for everyone
  *   https://github.com/MPOS/php-mpos/wiki/Config-Setup#wiki-block-bonus
+ *   https://github.com/MPOS/php-mpos/wiki/Config-Setup#wiki-pool-bonus
  */
 $config['block_bonus'] = 0;
-
+$config['pool_bonus'] = 0;
+$config['pool_bonus_type'] = 'payout';
 
 /**
  * Payout System

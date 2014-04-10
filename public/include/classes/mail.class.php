@@ -34,7 +34,7 @@ class Mail extends Base {
     $aData['senderEmail'] = $senderEmail;
     $aData['senderSubject'] = $senderSubject;
     $aData['senderMessage'] = $senderMessage;
-    $aData['email'] = $this->setting->getValue('website_email');
+    $aData['email'] = $this->setting->getValue('website_email', 'test@example.com');
     $aData['subject'] = 'Contact Form';
       if ($this->sendMail('contactform/body', $aData)) {
         return true;
@@ -46,26 +46,64 @@ class Mail extends Base {
   }
 
   /**
-   * Send a mail with templating via Smarty
+   * Send a mail with templating via Smarty and Siftmailer
    * @param template string Template name within the mail folder, no extension
    * @param aData array Data array with some required fields
-   *     SUBJECT : Mail Subject
+   *     subject : Mail Subject
    *     email   : Destination address
    **/
-  public function sendMail($template, $aData) {
-    // Make sure we don't load a cached filed
+  public function sendMail($template, $aData, $throttle=false) {
+    // Prepare SMTP transport and mailer
+    $transport_type = $this->config['swiftmailer']['type'];
+    if ($transport_type == 'sendmail') {
+      $transport = Swift_SendmailTransport::newInstance($this->config['swiftmailer'][$transport_type]['path'] . ' ' . $this->config['swiftmailer'][$transport_type]['options']);
+    } else if ($this->config['swiftmailer']['type'] == 'smtp') {
+      $transport = Swift_SmtpTransport::newInstance($this->config['switfmailer']['smtp']['host'], $this->config['switfmailer']['smtp']['port'], $this->config['switfmailer']['smtp']['encryption']);
+      if (!empty($this->config['switfmailer']['smtp']['username']) && !empty($this->config['switfmailer']['smtp']['password'])) {
+        $transport->setUsername($this->config['switfmailer']['smtp']['username']);
+        $transport->setPassword($this->config['switfmailer']['smtp']['password']);
+      }
+    }
+    $mailer = Swift_Mailer::newInstance($transport);
+
+    // Throttle mails to x per minute, used for newsletter for example
+    if ($this->config['swiftmailer']['type'] == 'smtp' && $throttle) {
+      $mailer->registerPlugin(new Swift_Plugins_ThrottlerPlugin(
+        $this->config['switfmailer']['smtp']['throttle'], Swift_Plugins_ThrottlerPlugin::MESSAGES_PER_MINUTE
+      ));
+    }
+
+    // Prepare the smarty templates used
     $this->smarty->clearCache(BASEPATH . 'templates/mail/' . $template . '.tpl');
     $this->smarty->clearCache(BASEPATH . 'templates/mail/subject.tpl');
     $this->smarty->assign('WEBSITENAME', $this->setting->getValue('website_name'));
     $this->smarty->assign('SUBJECT', $aData['subject']);
     $this->smarty->assign('DATA', $aData);
-    $headers = 'From: ' . $this->setting->getValue('website_name') . '<' . $this->setting->getValue('website_email') . ">\n";
-    $headers .= "MIME-Version: 1.0\n";
-    $headers .= "Content-Type: text/html; charset=ISO-8859-1\r\n";
-    if (strlen(@$aData['senderName']) > 0 && @strlen($aData['senderEmail']) > 0 )
-      $headers .= 'Reply-To: ' . $aData['senderName'] . ' <' . $aData['senderEmail'] . ">\n";
-    if (mail($aData['email'], $this->smarty->fetch(BASEPATH . 'templates/mail/subject.tpl'), $this->smarty->fetch(BASEPATH . 'templates/mail/' . $template . '.tpl'), $headers))
-      return true;
+
+    // Create new message for Swiftmailer
+    $senderEmail = $this->setting->getValue('website_email', 'test@example.com');
+    $senderName = $this->setting->getValue('website_name', 'test@example.com');
+    $message = Swift_Message::newInstance()
+      ->setSubject($this->smarty->fetch(BASEPATH . 'templates/mail/subject.tpl'))
+      ->setFrom(array( $senderEmail => $senderName))
+      ->setTo($aData['email'])
+      ->setSender($senderEmail)
+      ->setReturnPath($senderEmail)
+      ->setBody($this->smarty->fetch(BASEPATH . 'templates/mail/' . $template . '.tpl'), 'text/html');
+    if (isset($aData['senderName']) &&
+        isset($aData['senderEmail']) &&
+        strlen($aData['senderName']) > 0 &&
+        strlen($aData['senderEmail']) > 0 &&
+        filter_var($aData['senderEmail'], FILTER_VALIDATE_EMAIL))
+      $message->setReplyTo(array($aData['senderEmail'] => $aData['senderName']));
+
+    // Send message out with configured transport
+    try {
+      if ($mailer->send($message)) return true;
+    } catch (Exception $e) {
+      $this->setErrorMessage($e->getMessage());
+      return false;
+    }
     $this->setErrorMessage($this->sqlError('E0031'));
     return false;
   }

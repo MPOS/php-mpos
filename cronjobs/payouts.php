@@ -48,10 +48,10 @@ if (!$dWalletBalance = $bitcoin->getrealbalance())
 empty($config['network_confirmations']) ? $confirmations = 120 : $confirmations = $config['network_confirmations'];
 $aBlocksUnconfirmed = $block->getAllUnconfirmed($confirmations);
 $dBlocksUnconfirmedBalance = 0;
-  if (!empty($aBlocksUnconfirmed))foreach ($aBlocksUnconfirmed as $aData) $dBlocksUnconfirmedBalance += $aData['amount'];
-
-$dWalletBalance -= $dBlocksUnconfirmedBalance;
-
+if (!empty($aBlocksUnconfirmed))foreach ($aBlocksUnconfirmed as $aData) $dBlocksUnconfirmedBalance += $aData['amount'];
+if ($config['getbalancewithunconfirmed']) {
+  $dWalletBalance -= $dBlocksUnconfirmedBalance;
+}
 // Fetch Newmint
 $aGetInfo = $bitcoin->getinfo();
 if (is_array($aGetInfo) && array_key_exists('newmint', $aGetInfo)) {
@@ -135,10 +135,10 @@ if (!$dWalletBalance = $bitcoin->getrealbalance())
 empty($config['network_confirmations']) ? $confirmations = 120 : $confirmations = $config['network_confirmations'];
 $aBlocksUnconfirmed = $block->getAllUnconfirmed($confirmations);
 $dBlocksUnconfirmedBalance = 0;
-  if (!empty($aBlocksUnconfirmed))foreach ($aBlocksUnconfirmed as $aData) $dBlocksUnconfirmedBalance += $aData['amount'];
-
-$dWalletBalance -= $dBlocksUnconfirmedBalance;
-
+if (!empty($aBlocksUnconfirmed))foreach ($aBlocksUnconfirmed as $aData) $dBlocksUnconfirmedBalance += $aData['amount'];
+if ($config['getbalancewithunconfirmed']) {
+  $dWalletBalance -= $dBlocksUnconfirmedBalance;
+}
 // Fetch Newmint
 $aGetInfo = $bitcoin->getinfo();
 if (is_array($aGetInfo) && array_key_exists('newmint', $aGetInfo)) {

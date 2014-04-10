@@ -46,7 +46,7 @@ $hts = ($config['https_only'] && (!empty($_SERVER['QUERY_STRING']))) ? "https://
 // Rate limiting
 if ($config['memcache']['enabled'] && $config['mc_antidos']['enabled']) {
   if (PHP_OS == 'WINNT') {
-    require_once(CLASS_DIR . 'memcached.class.php');
+    require_once(CLASS_DIR . '/memcached.class.php');
   }
   // memcache antidos needs a memcache handle
   $memcache = new Memcached();
@@ -98,11 +98,10 @@ if (count(@$_SESSION['last_ip_pop']) == 2) {
   $data = $_SESSION['last_ip_pop'];
   $ip = filter_var($data[0], FILTER_VALIDATE_IP);
   $time = date("l, F jS \a\\t g:i a", $data[1]);
-  $closelink = "<a href='index.php?page=dashboard&clp=1' style='float:right;padding-right:14px;'>Close</a>";
   if (@$_SESSION['AUTHENTICATED'] && $_SESSION['last_ip_pop'][0] !== $user->getCurrentIP()) {
-    $_SESSION['POPUP'][] = array('CONTENT' => "You last logged in from <b>$ip</b> on $time $closelink", 'TYPE' => 'warning');
+    $_SESSION['POPUP'][] = array('CONTENT' => "You last logged in from <b>$ip</b> on $time", 'DISMISS' => 'yes', 'ID' => 'lastlogin', 'TYPE' => 'alert alert-warning');
   } else {
-    $_SESSION['POPUP'][] = array('CONTENT' => "You last logged in from <b>$ip</b> on $time $closelink", 'TYPE' => 'info');
+    $_SESSION['POPUP'][] = array('CONTENT' => "You last logged in from <b>$ip</b> on $time", 'DISMISS' => 'yes', 'ID' => 'lastlogin', 'TYPE' => 'alert alert-info');
   }
 }
 

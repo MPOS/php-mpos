@@ -33,18 +33,26 @@ $log->logInfo('Running periodic tasks to update database values for GUI access')
 $strLogMask = "| %-25.25s | %15.15s | %8.8s | %-6.6s | %-80.80s |";
 $log->logInfo(sprintf($strLogMask, 'Method', 'Value', 'Runtime', 'Status', 'Message'));
 
+empty($config['price']['enabled']) ? $tickerupdate = false : $tickerupdate = $config['price']['enabled'];
+
 // Fetch latest coin price via API call
 $start = microtime(true);
-$message = 'Updated latest ' . $config['currency'] . ' price from ' . $config['price']['url'] . ' API';
-$status = 'OK';
-if ($price = $tools->getPrice()) {
-  if (!$setting->setValue('price', $price)) {
-    $message = 'Unable to store new price value: ' . $setting->getCronError();
+if ($tickerupdate) {
+  $message = 'Updated latest ' . $config['currency'] . ' price from ' . $config['price']['url'] . ' API';
+  $status = 'OK';
+  if ($price = $tools->getPrice()) {
+    if (!$setting->setValue('price', $price)) {
+      $message = 'Unable to store new price value: ' . $setting->getCronError();
+      $status = 'ERROR';
+    }
+  } else {
+    $message = 'Failed to fetch price from API: ' . $tools->getCronError();
     $status = 'ERROR';
   }
 } else {
-  $message = 'Failed to fetch price from API: ' . $tools->getCronError();
-  $status = 'ERROR';
+  $message = 'Tickerupdate is disabled';
+  $status = 'OK';
+  $price = 0;
 }
 $log->logInfo(sprintf($strLogMask, 'Price Update', $price, number_format(microtime(true) - $start, 3), $status, $message));
 

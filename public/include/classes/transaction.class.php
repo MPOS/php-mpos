@@ -70,8 +70,8 @@ class Transaction extends Base {
     $sql = "
       SELECT
         SUM(t.amount) AS total, t.type AS type
-      FROM transactions AS t
-      LEFT OUTER JOIN blocks AS b
+      FROM $this->table AS t
+      LEFT OUTER JOIN " . $this->block->getTableName() . " AS b
       ON b.id = t.block_id
       WHERE ( b.confirmations > 0 OR b.id IS NULL )";
     if (!empty($account_id)) {
@@ -97,6 +97,65 @@ class Transaction extends Base {
       // Cache data for a while, query takes long on many rows
       return $this->memcache->setCache(__FUNCTION__ . $account_id, $aData, 60);
     }
+    return $this->sqlError();
+  }
+
+
+  /**
+   * Fetch a transaction summary by user with total amounts
+   * @param account_id int Account ID, NULL for all
+   * @return data array type and total
+   **/
+  public function getTransactionTypebyTime($account_id=NULL) {
+    $this->debug->append("STA " . __METHOD__, 4);
+    if ($data = $this->memcache->get(__FUNCTION__)) return $data;
+    $stmt = $this->mysqli->prepare("
+      SELECT
+        IFNULL(SUM(IF(t.type = 'Credit' AND timestamp >= DATE_SUB(now(), INTERVAL 3600 SECOND), t.amount, 0)), 0) AS 1HourCredit,
+        IFNULL(SUM(IF(t.type = 'Bonus' AND timestamp >= DATE_SUB(now(), INTERVAL 3600 SECOND), t.amount, 0)), 0) AS 1HourBonus,
+        IFNULL(SUM(IF(t.type = 'Debit_MP' AND timestamp >= DATE_SUB(now(), INTERVAL 3600 SECOND), t.amount, 0)), 0) AS 1HourDebitMP,
+        IFNULL(SUM(IF(t.type = 'Debit_AP' AND timestamp >= DATE_SUB(now(), INTERVAL 3600 SECOND), t.amount, 0)), 0) AS 1HourDebitAP,
+        IFNULL(SUM(IF(t.type = 'TXFee' AND timestamp >= DATE_SUB(now(), INTERVAL 3600 SECOND), t.amount, 0)), 0) AS 1HourTXFee,
+        IFNULL(SUM(IF(t.type = 'Fee' AND timestamp >= DATE_SUB(now(), INTERVAL 3600 SECOND), t.amount, 0)), 0) AS 1HourFee,
+        IFNULL(SUM(IF(t.type = 'Donation' AND timestamp >= DATE_SUB(now(), INTERVAL 3600 SECOND), t.amount, 0)), 0) AS 1HourDonation,
+
+        IFNULL(SUM(IF(t.type = 'Credit' AND timestamp >= DATE_SUB(now(), INTERVAL 86400 SECOND), t.amount, 0)), 0) AS 24HourCredit,
+        IFNULL(SUM(IF(t.type = 'Bonus' AND timestamp >= DATE_SUB(now(), INTERVAL 86400 SECOND), t.amount, 0)), 0) AS 24HourBonus,
+        IFNULL(SUM(IF(t.type = 'Debit_MP' AND timestamp >= DATE_SUB(now(), INTERVAL 86400 SECOND), t.amount, 0)), 0) AS 24HourDebitMP,
+        IFNULL(SUM(IF(t.type = 'Debit_AP' AND timestamp >= DATE_SUB(now(), INTERVAL 86400 SECOND), t.amount, 0)), 0) AS 24HourDebitAP,
+        IFNULL(SUM(IF(t.type = 'TXFee' AND timestamp >= DATE_SUB(now(), INTERVAL 86400 SECOND), t.amount, 0)), 0) AS 24HourTXFee,
+        IFNULL(SUM(IF(t.type = 'Fee' AND timestamp >= DATE_SUB(now(), INTERVAL 86400 SECOND), t.amount, 0)), 0) AS 24HourFee,
+        IFNULL(SUM(IF(t.type = 'Donation' AND timestamp >= DATE_SUB(now(), INTERVAL 86400 SECOND), t.amount, 0)), 0) AS 24HourDonation,
+
+        IFNULL(SUM(IF(t.type = 'Credit' AND timestamp >= DATE_SUB(now(), INTERVAL 604800 SECOND), t.amount, 0)), 0) AS 1WeekCredit,
+        IFNULL(SUM(IF(t.type = 'Bonus' AND timestamp >= DATE_SUB(now(), INTERVAL 604800 SECOND), t.amount, 0)), 0) AS 1WeekBonus,
+        IFNULL(SUM(IF(t.type = 'Debit_MP' AND timestamp >= DATE_SUB(now(), INTERVAL 604800 SECOND), t.amount, 0)), 0) AS 1WeekDebitMP,
+        IFNULL(SUM(IF(t.type = 'Debit_AP' AND timestamp >= DATE_SUB(now(), INTERVAL 604800 SECOND), t.amount, 0)), 0) AS 1WeekDebitAP,
+        IFNULL(SUM(IF(t.type = 'TXFee' AND timestamp >= DATE_SUB(now(), INTERVAL 604800 SECOND), t.amount, 0)), 0) AS 1WeekTXFee,
+        IFNULL(SUM(IF(t.type = 'Fee' AND timestamp >= DATE_SUB(now(), INTERVAL 604800 SECOND), t.amount, 0)), 0) AS 1WeekFee,
+        IFNULL(SUM(IF(t.type = 'Donation' AND timestamp >= DATE_SUB(now(), INTERVAL 604800 SECOND), t.amount, 0)), 0) AS 1WeekDonation,
+
+        IFNULL(SUM(IF(t.type = 'Credit' AND timestamp >= DATE_SUB(now(), INTERVAL 2419200 SECOND), t.amount, 0)), 0) AS 1MonthCredit,
+        IFNULL(SUM(IF(t.type = 'Bonus' AND timestamp >= DATE_SUB(now(), INTERVAL 2419200 SECOND), t.amount, 0)), 0) AS 1MonthBonus,
+        IFNULL(SUM(IF(t.type = 'Debit_MP' AND timestamp >= DATE_SUB(now(), INTERVAL 2419200 SECOND), t.amount, 0)), 0) AS 1MonthDebitMP,
+        IFNULL(SUM(IF(t.type = 'Debit_AP' AND timestamp >= DATE_SUB(now(), INTERVAL 2419200 SECOND), t.amount, 0)), 0) AS 1MonthDebitAP,
+        IFNULL(SUM(IF(t.type = 'TXFee' AND timestamp >= DATE_SUB(now(), INTERVAL 2419200 SECOND), t.amount, 0)), 0) AS 1MonthTXFee,
+        IFNULL(SUM(IF(t.type = 'Fee' AND timestamp >= DATE_SUB(now(), INTERVAL 2419200 SECOND), t.amount, 0)), 0) AS 1MonthFee,
+        IFNULL(SUM(IF(t.type = 'Donation' AND timestamp >= DATE_SUB(now(), INTERVAL 2419200 SECOND), t.amount, 0)), 0) AS 1MonthDonation,
+
+        IFNULL(SUM(IF(t.type = 'Credit' AND timestamp >= DATE_SUB(now(), INTERVAL 31536000 SECOND), t.amount, 0)), 0) AS 1YearCredit,
+        IFNULL(SUM(IF(t.type = 'Bonus' AND timestamp >= DATE_SUB(now(), INTERVAL 31536000 SECOND), t.amount, 0)), 0) AS 1YearBonus,
+        IFNULL(SUM(IF(t.type = 'Debit_MP' AND timestamp >= DATE_SUB(now(), INTERVAL 31536000 SECOND), t.amount, 0)), 0) AS 1YearDebitMP,
+        IFNULL(SUM(IF(t.type = 'Debit_AP' AND timestamp >= DATE_SUB(now(), INTERVAL 31536000 SECOND), t.amount, 0)), 0) AS 1YearDebitAP,
+        IFNULL(SUM(IF(t.type = 'TXFee' AND timestamp >= DATE_SUB(now(), INTERVAL 31536000 SECOND), t.amount, 0)), 0) AS 1YearTXFee,
+        IFNULL(SUM(IF(t.type = 'Fee' AND timestamp >= DATE_SUB(now(), INTERVAL 31536000 SECOND), t.amount, 0)), 0) AS 1YearFee,
+        IFNULL(SUM(IF(t.type = 'Donation' AND timestamp >= DATE_SUB(now(), INTERVAL 31536000 SECOND), t.amount, 0)), 0) AS 1YearDonation
+      FROM $this->table AS t
+      LEFT OUTER JOIN " . $this->block->getTableName() . " AS b ON b.id = t.block_id
+      WHERE
+        t.account_id = ? AND (b.confirmations > 0 OR b.id IS NULL)");
+    if ($this->checkStmt($stmt) && $stmt->bind_param("i", $account_id) && $stmt->execute() && $result = $stmt->get_result())
+    	return $this->memcache->setCache(__FUNCTION__ . $account_id, $result->fetch_assoc(), 60);
     return $this->sqlError();
   }
 
@@ -211,7 +270,7 @@ class Transaction extends Base {
       FROM $this->table AS t
       LEFT JOIN " . $this->user->getTableName() . " AS a
       ON t.account_id = a.id
-      LEFT JOIN blocks AS b
+      LEFT JOIN " . $this->block->getTableName() . " AS b
       ON t.block_id = b.id
       WHERE
       (
@@ -306,9 +365,9 @@ class Transaction extends Base {
           ), 0
         ) AS confirmed
       FROM $this->table AS t
-      LEFT JOIN blocks AS b
+      LEFT JOIN " . $this->block->getTableName() . " AS b
       ON t.block_id = b.id
-      LEFT JOIN accounts AS a
+      LEFT JOIN " . $this->user->getTableName() . " AS a
       ON t.account_id = a.id
       WHERE t.archived = 0 AND a.ap_threshold > 0 AND a.coin_address IS NOT NULL AND a.coin_address != ''
       GROUP BY t.account_id

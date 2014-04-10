@@ -19,6 +19,9 @@ class Base {
   public function setDebug($debug) {
     $this->debug = $debug;
   }
+  public function setCoin($coin) {
+    $this->coin = $coin;
+  }
   public function setLog($log) {
     $this->log = $log;
   }

@@ -192,6 +192,11 @@ class User extends Base {
       return false;
     }
     if ($this->checkUserPassword($username, $password)) {
+      // delete notification cookies
+      setcookie("motd-box", "", time()-3600);
+      setcookie("lastlogin-box", "", time()-3600);
+      setcookie("backend-box", "", time()-3600);
+      // rest of login process
       $uid = $this->getUserId($username);
       $lastLoginTime = $this->getLastLogin($uid);
       $this->updateLoginTimestamp($uid);
@@ -347,7 +352,7 @@ class User extends Base {
    **/
   public function existsCoinAddress($address) {
     $this->debug->append("STA " . __METHOD__, 4);
-    return $this->getSingle($address, 'coin_address', 'coin_address') === $address;
+    return $this->getSingle($address, 'coin_address', 'coin_address', 's') === $address;
   }
 
   /**
@@ -624,15 +629,12 @@ class User extends Base {
     // Unset all of the session variables
     $_SESSION = array();
     // As we're killing the sesison, also kill the cookie!
-    if (ini_get("session.use_cookies")) {
-        $params = session_get_cookie_params();
-        setcookie(session_name(), '', time() - 42000, $params["path"], $params["domain"], $params["secure"], $params["httponly"]);
-    }
+    setcookie(session_name(), '', time() - 42000);
     // Destroy the session.
     session_destroy();
     // Enforce generation of a new Session ID and delete the old
     session_regenerate_id(true);
-    
+
     // Enforce a page reload and point towards login with referrer included, if supplied
     $port = ($_SERVER["SERVER_PORT"] == "80" || $_SERVER["SERVER_PORT"] == "443") ? "" : (":".$_SERVER["SERVER_PORT"]);
     $pushto = $_SERVER['SCRIPT_NAME'].'?page=login';
@@ -866,7 +868,7 @@ class User extends Base {
     $this->debug->append("STA " . __METHOD__, 4);
     // Fetch the users mail address
     if (empty($username)) {
-      $this->serErrorMessage("Username must not be empty");
+      $this->setErrorMessage("Username must not be empty");
       return false;
     }
     if (filter_var($username, FILTER_VALIDATE_EMAIL)) {
@@ -926,23 +928,28 @@ public function isAuthenticated($logout=true) {
 
   /**
    * Convenience function to get IP address, no params is the same as REMOTE_ADDR
-   * @param trustremote bool must be FALSE to checkclient or checkforwarded
+   * @param trustremote bool must be FALSE to checkcloudflare, checkclient or checkforwarded
+   * @param checkcloudflare bool check HTTP_CF_CONNECTING_IP for a valid ip first
    * @param checkclient bool check HTTP_CLIENT_IP for a valid ip first
    * @param checkforwarded bool check HTTP_X_FORWARDED_FOR for a valid ip first
    * @return string IP address
    */
-  public function getCurrentIP($trustremote=false, $checkclient=false, $checkforwarded=true) {
+  public function getCurrentIP($trustremote=false, $checkcloudflare=true, $checkclient=false, $checkforwarded=true) {
+    $cf = (isset($_SERVER['HTTP_CF_CONNECTING_IP'])) ? $_SERVER['HTTP_CF_CONNECTING_IP'] : false;
     $client = (isset($_SERVER['HTTP_CLIENT_IP'])) ? $_SERVER['HTTP_CLIENT_IP'] : false;
     $fwd = (isset($_SERVER['HTTP_X_FORWARDED_FOR'])) ? $_SERVER['HTTP_X_FORWARDED_FOR'] : false;
     $remote = (isset($_SERVER['REMOTE_ADDR'])) ? $_SERVER['REMOTE_ADDR'] : @$_SERVER['REMOTE_ADDR'];
     // shared internet
-    if (filter_var($client, FILTER_VALIDATE_IP) && !$trustremote && $checkclient) {
+    if (!$trustremote && $checkcloudflare && filter_var($cf, FILTER_VALIDATE_IP)) {
+      // cloudflare
+      return $cf;
+    } else if (!$trustremote && $checkclient && filter_var($client, FILTER_VALIDATE_IP)) {
       return $client;
-    } else if (strpos($fwd, ',') !== false && !$trustremote && $checkforwarded) {
+    } else if (!$trustremote && $checkforwarded && strpos($fwd, ',') !== false) {
       // multiple proxies
       $ips = explode(',', $fwd);
       return $ips[0];
-    } else if (filter_var($fwd, FILTER_VALIDATE_IP) && !$trustremote && $checkforwarded) {
+    } else if (!$trustremote && $checkforwarded && filter_var($fwd, FILTER_VALIDATE_IP)) {
       // single
       return $fwd;
     } else {

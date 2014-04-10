@@ -1,0 +1,140 @@
+/* overwrite style infos */
+
+/* ------------------------------- */
+
+body {
+    background-color: #A2BCF5;
+    font-size: 12px;
+}
+
+p {
+  font-size: 12px;
+}
+
+#page-wrapper {
+    background-color: #A2BCF5;
+}
+
+@media(min-width:768px) {
+    #page-wrapper {
+        border-left: 1px solid #A2BCF5;
+    }
+}
+
+.navbar-static-side ul li {
+    border-bottom: 1px solid #A2BCF5;
+}
+
+.navbar, .navbar-static-side, .navbar-default {
+    background-color: #A2BCF5;
+}
+
+a {
+  color: #0e0af2;
+}
+a:hover,
+a:focus {
+  color: #FFFFFF;
+}
+
+.panel-body {
+  color: #000000;
+  background-color: #8CABED;
+  border-color: #A2BCF5;
+}
+
+.panel .panel-default {
+  background-color: #3E6CCF;
+}
+
+.lightblue {
+  background-color: #3065D9;
+}
+
+.footer {
+  color: #FFFFFF;
+}
+
+.navbar .brand, .navbar .nav > li > a {
+    color: #0e0af2;
+}
+
+.navbar .brand, .navbar .nav > li > a:hover {
+    color: #8CABED;
+    background-color: #0e0af2;
+}
+
+.navbar-default .navbar-nav > .active > a, 
+.navbar-default .navbar-nav > .active > a:hover, 
+.navbar-default .navbar-nav > .active > a:focus {
+    background-color: #0e0af2;
+    color: #FFFFFF;
+}
+
+.table tbody tr:hover a,
+.table tbody tr:hover td,
+.table tbody tr:hover th {
+    background-color: #0e0af2;
+    color: #FFFFFF;
+}
+
+.nav > li > a:hover, 
+.nav > li > a:focus {
+    background-color: #0e0af2;
+    color: #FFFFFF;
+}
+
+.nav .nav-second-level > li > a:hover, 
+.nav .nav-second-level > li > a:focus {
+    background-color: #0e0af2;
+    color: #FFFFFF;
+}
+
+.navbar .nav > li.dropdown.open > .dropdown-toggle,
+.navbar .nav > li.dropdown.active > .dropdown-toggle,
+.navbar .nav > li.dropdown.open.active > .dropdown-toggle {
+    color: #FFFFFF;
+    background-color: #0e0af2;
+}
+
+.navbar-default .navbar-nav .open .dropdown-menu > li > a, 
+.navbar-default .navbar-nav .open .dropdown-menu {
+    color: #FFFFFF;
+    background-color: #0e0af2;
+    font-size: 12px;
+}
+
+.navbar-default .navbar-nav .open .dropdown-menu > li a:hover {
+    background-color: #0e0af2;
+    color: #3E6CCF;
+    font-size: 12px;
+}
+
+/* Tables */
+
+.panel-footer {
+    color: #000;
+    background-color: #3065D9;
+    border-top: 1px solid #3065D9;
+    border-bottom-right-radius: 3px;
+    border-bottom-left-radius: 3px;
+}
+
+.panel-body {
+    color: #000000;
+    background-color: #3E6CCF;
+}
+
+.panel-info > .panel-heading {
+    background-color: #6F94E3;
+    border-color: #2c28ed;
+    color: #D3D3D3;
+}
+
+.panel-info {
+    border-color: #2c28ed;
+}
+
+.dropdown-menu {
+    background-color: #6090F7;
+}

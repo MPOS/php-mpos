@@ -181,8 +181,8 @@ foreach ($aAllBlocks as $iIndex => $aBlock) {
     }
 
     // Table header for account shares
-    $strLogMask = "| %5.5s | %-15.15s | %15.15s | %15.15s | %12.12s | %20.20s | %20.20s | %20.20s |";
-    $log->logInfo(sprintf($strLogMask, 'ID', 'Username', 'Valid', 'Invalid', 'Percentage', 'Payout', 'Donation', 'Fee'));
+    $strLogMask = "| %5.5s | %-15.15s | %15.15s | %15.15s | %12.12s | %15.15s | %15.15s | %15.15s | %15.15s |";
+    $log->logInfo(sprintf($strLogMask, 'ID', 'Username', 'Valid', 'Invalid', 'Percentage', 'Payout', 'Donation', 'Fee', 'Bonus'));
 
     // Loop through all accounts that have found shares for this round
     foreach ($aTotalAccountShares as $key => $aData) {
@@ -201,16 +201,28 @@ foreach ($aAllBlocks as $iIndex => $aBlock) {
       // Defaults
       $aData['fee' ] = 0;
       $aData['donation'] = 0;
+      $aData['pool_bonus'] = 0;
 
+      // Calculate pool fees
       if ($config['fees'] > 0 && $aData['no_fees'] == 0)
         $aData['fee'] = round($config['fees'] / 100 * $aData['payout'], 8);
+
+      // Calculate pool bonus if it applies, will be paid from liquid assets!
+      if ($config['pool_bonus'] > 0) {
+        if ($config['pool_bonus_type'] == 'block') {
+          $aData['pool_bonus'] = round(( $config['pool_bonus'] / 100 ) * $dReward, 8);
+        } else {
+          $aData['pool_bonus'] = round(( $config['pool_bonus'] / 100 ) * $aData['payout'], 8);
+        }
+      }
+
       // Calculate donation amount, fees not included
       $aData['donation'] = round($user->getDonatePercent($user->getUserId($aData['username'])) / 100 * ( $aData['payout'] - $aData['fee']), 8);
 
       // Verbose output of this users calculations
       $log->logInfo(
         sprintf($strLogMask, $aData['id'], $aData['username'], $aData['pplns_valid'], $aData['pplns_invalid'],
-                number_format($aData['percentage'], 8), number_format($aData['payout'], 8), number_format($aData['donation'], 8), number_format($aData['fee'], 8)
+                number_format($aData['percentage'], 8), number_format($aData['payout'], 8), number_format($aData['donation'], 8), number_format($aData['fee'], 8), number_format($aData['pool_bonus'], 8)
         )
       );
 
@@ -225,6 +237,10 @@ foreach ($aAllBlocks as $iIndex => $aBlock) {
       if ($aData['donation'] > 0)
         if (!$transaction->addTransaction($aData['id'], $aData['donation'], 'Donation', $aBlock['id']))
           $log->logFatal('Failed to insert new Donation transaction to database for ' . $aData['username'] . ': ' . $transaction->getCronError() . 'on block ' . $aBlock['id']);
+      // Add new bonus credit
+      if ($aData['pool_bonus'] > 0)
+        if (!$transaction->addTransaction($aData['id'], $aData['pool_bonus'], 'Bonus', $aBlock['id']))
+          $log->logFatal('Failed to insert new Bonus transaction to database for ' . $aData['username'] . ': ' . $transaction->getCronError());
     }
 
     // Add full round share statistics

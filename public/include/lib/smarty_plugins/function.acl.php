@@ -5,9 +5,14 @@ function check_acl_access($params, $smarty)
 {
   $isAuthenticated = isset($_SESSION['AUTHENTICATED']) ? true : false;
   $iAclSetting = $params['acl'];
-  $sUrl = '<li class="'.$params['icon'].'"><a href="'.$_SERVER['SCRIPT_NAME'].'?page='.$params['page'].'&action='.$params['action'].'">'.$params['name'].'</a></li>';
+  // $params['icon'] is deprecated, only needed for mpos compatibility
+  if (isset($params['icon'])) {
+  	$sUrl = '<li class="'.$params['icon'].'"><a href="'.$_SERVER['SCRIPT_NAME'].'?page='.$params['page'].'&action='.$params['action'].'">'.$params['name'].'</a></li>';
+  } else {
+  	$sUrl = '<li><a href="'.$_SERVER['SCRIPT_NAME'].'?page='.$params['page'].'&action='.$params['action'].'">'.$params['name'].'</a></li>';
+  }
   if (isset($params['fallback']))
-    $sFallbackUrl = '<li class="'.$params['icon'].'"><a href="'.$_SERVER['SCRIPT_NAME'].'?page='.$params['page'].'">'.$params['name'].'</a></li>';
+    $sFallbackUrl = '<li><a href="'.$_SERVER['SCRIPT_NAME'].'?page='.$params['page'].'">'.$params['name'].'</a></li>';
   switch($iAclSetting) {
   case '0':
     if ($isAuthenticated) {

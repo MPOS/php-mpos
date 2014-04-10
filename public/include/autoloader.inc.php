@@ -2,13 +2,6 @@
 (SECURITY == "*)WT#&YHfd" && SECHASH_CHECK) ? die("public/index.php -> Set a new SECURITY value to continue") : 0;
 $defflip = (!cfip()) ? exit(header('HTTP/1.1 401 Unauthorized')) : 1;
 
-// SHA/Scrypt check
-if (empty($config['algorithm']) || $config['algorithm'] == 'scrypt') {
-  $config['target_bits'] = 16;
-} else {
-  $config['target_bits'] = 32;
-}
-
 // Default classes
 require_once(INCLUDE_DIR . '/lib/KLogger.php');
 require_once(CLASS_DIR . '/logger.class.php');
@@ -20,24 +13,31 @@ require_once(INCLUDE_DIR . '/database.inc.php');
 require_once(INCLUDE_DIR . '/config/memcache_keys.inc.php');
 require_once(INCLUDE_DIR . '/config/error_codes.inc.php');
 
-// We need to load these two first
+// We need to load these first
 require_once(CLASS_DIR . '/base.class.php');
+require_once(CLASS_DIR . '/coins/coin_base.class.php');
 require_once(CLASS_DIR . '/setting.class.php');
 
-// We need this one in here to properly set our theme
-require_once(INCLUDE_DIR . '/lib/Mobile_Detect.php');
+// Now decide on which coin class to load and instantiate
+if (file_exists(CLASS_DIR . '/coins/coin_' . $config['algorithm'] . '.class.php')) {
+  require_once(CLASS_DIR . '/coins/coin_' . $config['algorithm'] . '.class.php');
+  $coin = new Coin();
+  $coin->setConfig($config);
+} else {
+  die('Unable to load your coins class definition for ' . $config['algorithm']);
+}
+
+// Swiftmailer
+require_once(INCLUDE_DIR . '/lib/swiftmailer/swift_required.php');
 
 // Detect device
-if ($detect->isMobile() && $setting->getValue('website_mobile_theme')) {
-  // Set to mobile theme
-  $setting->getValue('website_mobile_theme') ? $theme = $setting->getValue('website_mobile_theme') : $theme = 'mobile';
-} else if ( PHP_SAPI == 'cli') {
+if ( PHP_SAPI == 'cli') {
   // Create a new compile folder just for crons
   // We call mail templates directly anyway
   $theme = 'cron';
 } else {
   // Use configured theme, fallback to default theme
-  $setting->getValue('website_theme') ? $theme = $setting->getValue('website_theme') : $theme = 'mpos';
+  $setting->getValue('website_theme') ? $theme = $setting->getValue('website_theme') : $theme = 'bootstrap';
 }
 define('THEME', $theme);
 

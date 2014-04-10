@@ -2,6 +2,7 @@
 $defflip = (!cfip()) ? exit(header('HTTP/1.1 401 Unauthorized')) : 1;
 
 $aThemes = $template->getThemes();
+$aDesigns = $template->getDesigns();
 
 // Load the settings available in this system
 $aSettings['website'][] = array(
@@ -49,16 +50,30 @@ $aSettings['website'][] = array(
 $aSettings['website'][] = array(
   'display' => 'Website theme', 'type' => 'select',
   'options' => $aThemes,
-  'default' => 'mpos',
+  'default' => 'bootstrap',
   'name' => 'website_theme', 'value' => $setting->getValue('website_theme'),
   'tooltip' => 'The default theme used on your pool.'
 );
 $aSettings['website'][] = array(
-  'display' => 'Website mobile theme', 'type' => 'select',
-  'options' => $aThemes,
-  'default' => 'mobile',
-  'name' => 'website_mobile_theme', 'value' => $setting->getValue('website_mobile_theme'),
-  'tooltip' => 'The mobile theme used for your pool.'
+  'display' => 'Website Design', 'type' => 'select',
+  'options' => $aDesigns,
+  'default' => 'default',
+  'name' => 'website_design', 'value' => $setting->getValue('website_design'),
+  'tooltip' => 'The default design used on your pool.'
+);
+$aSettings['website'][] = array(
+  'display' => 'Website News Style', 'type' => 'select',
+  'options' => array( 0 => 'Show all news in one Page', 1 => 'Show Responsive News Table' ),
+  'default' => 0,
+  'name' => 'website_news_style', 'value' => $setting->getValue('website_news_style'),
+  'tooltip' => 'How News are displayed on Main Page.'
+);
+$aSettings['website'][] = array(
+  'display' => 'Auto Hide Notifications', 'type' => 'select',
+  'options' => array( 0 => 'Notifications always visible', 1 => 'Hide Notifications automatically' ),
+  'default' => 0,
+  'name' => 'website_notification_autohide', 'value' => $setting->getValue('website_notification_autohide'),
+  'tooltip' => 'Hides Notifications after 5 seconds.'
 );
 $aSettings['blockchain'][] = array(
   'display' => 'Disable Blockexplorer', 'type' => 'select',
@@ -257,6 +272,20 @@ $aSettings['acl'][] = array(
   'name' => 'acl_chat_page', 'value' => $setting->getValue('acl_chat_page'),
   'tooltip' => 'Make the chat page private (users only) or public.'
 );
+$aSettings['acl'][] = array(
+  'display' => 'MOOT Forum Page', 'type' => 'select',
+  'options' => array( 0 => 'Private', 1 => 'Public', 2 => 'Disabled' ),
+  'default' => 2,
+  'name' => 'acl_moot_forum', 'value' => $setting->getValue('acl_moot_forum'),
+  'tooltip' => 'Make the forum page private (users only) or public.'
+);
+$aSettings['acl'][] = array(
+  'display' => 'QRCode', 'type' => 'select',
+  'options' => array( 0 => 'Enabled', 1 => 'Disabled' ),
+  'default' => 0,
+  'name' => 'acl_qrcode', 'value' => $setting->getValue('acl_qrcode'),
+  'tooltip' => 'Hide or Show the QRCode Page.'
+);
 $aSettings['system'][] = array(
   'display' => 'E-mail address for system error notifications', 'type' => 'text',
   'size' => 25,
@@ -355,6 +384,13 @@ $aSettings['system'][] = array(
   'name' => 'system_irc_chat', 'value' => $setting->getValue('system_irc_chat'),
   'tooltip' => 'Your IRC support channel name.'
 );
+$aSettings['system'][] = array(
+  'display' => 'Moot Forum Channel', 'type' => 'text',
+  'size' => 25,
+  'default' => 'lazypoolop',
+  'name' => 'system_moot_forum', 'value' => $setting->getValue('system_moot_forum'),
+  'tooltip' => 'Your MOOT support forum name.'
+);
 $aSettings['recaptcha'][] = array(
   'display' => 'Enable re-Captcha', 'type' => 'select',
   'options' => array( 0 => 'No', 1 => 'Yes' ),
@@ -424,4 +460,33 @@ $aSettings['notifications'][] = array(
   'default' => 0,
   'name' => 'notifications_disable_block', 'value' => $setting->getValue('notifications_disable_block'),
   'tooltip' => 'Enable/Disable block notifications globally. Will remove the user option too.'
+);
+$aSettings['notifications'][] = array(
+  'display' => 'Disable IDLE Worker Notifications', 'type' => 'select',
+  'options' => array( 0 => 'No', 1 => 'Yes'),
+  'default' => 0,
+  'name' => 'notifications_disable_idle_worker', 'value' => $setting->getValue('notifications_disable_idle_worker'),
+  'tooltip' => 'Enable/Disable IDLE worker notifications globally. Will remove the user option too.'
+);
+$aSettings['notifications'][] = array(
+  'display' => 'Disable Pool Newsletter', 'type' => 'select',
+  'options' => array( 0 => 'No', 1 => 'Yes'),
+  'default' => 0,
+  'name' => 'notifications_disable_pool_newsletter', 'value' => $setting->getValue('notifications_disable_pool_newsletter'),
+  'tooltip' => 'Enable/Disable pool newsletter globally. Will remove the user option too.'
+);
+$aSettings['pools'][] = array(
+  'display' => 'Enable Pool Navigation', 'type' => 'select',
+  'options' => array( 0 => 'No', 1 => 'Yes' ),
+  'default' => 0,
+  'name' => 'poolnav_enabled', 'value' => $setting->getValue('poolnav_enabled'),
+  'tooltip' => 'Enable or Disable Pool Navigation for multiple Pools in Header.'
+);
+$aSettings['pools'][] = array(
+  'display' => 'Pools for Pool Navigation', 'type' => 'textarea',
+  'size' => 20,
+  'height' => 12,
+  'default' => 'Pool Name|Pool URL',
+  'name' => 'poolnav_pools', 'value' => $setting->getValue('poolnav_pools'),
+  'tooltip' => '.'
 );

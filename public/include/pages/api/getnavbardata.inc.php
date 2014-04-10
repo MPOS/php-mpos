@@ -66,8 +66,8 @@ if ($iEstShares > 0 && $aRoundShares['valid'] > 0) {
 // Output JSON format
 $data = array(
   'raw' => array( 'workers' => $worker->getCountAllActiveWorkers(), 'pool' => array( 'hashrate' => $dPoolHashrate ) ),
-  'pool' => array( 'hashratemodifiername' => $aHashunits[$dPoolHashrateModifier], 'hashratemodifier' => $dPoolHashrateModifier, 'workers' => $worker->getCountAllActiveWorkers(), 'hashrate' => $dPoolHashrateAdjusted, 'estimated' => $iEstShares, 'progress' => $dEstPercent ),
-  'network' => array( 'hashratemodifiername' => $aHashunits[$dNetworkHashrateModifier], 'hashratemodifier' => $dNetworkHashrateModifier, 'hashrate' => $dNetworkHashrateAdjusted, 'difficulty' => $dDifficulty, 'block' => $iBlock ),
+  'pool' => array( 'workers' => $worker->getCountAllActiveWorkers(), 'hashrate' => $dPoolHashrateAdjusted, 'estimated' => $iEstShares, 'progress' => $dEstPercent ),
+  'network' => array( 'hashrate' => $dNetworkHashrateAdjusted, 'difficulty' => $dDifficulty, 'block' => $iBlock )
 );
 echo $api->get_json($data);
 

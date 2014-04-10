@@ -35,7 +35,7 @@ $aErrorCodes['E0030'] = 'Unable to fetch a valid token for this invitation';
 $aErrorCodes['E0031'] = 'Failed to send e-mail via mail() function';
 $aErrorCodes['E0032'] = 'Failed to run API call: %s';
 $aErrorCodes['E0033'] = 'Failed to store uptime status: %s';
-$aErrorCodes['E0034'] = 'Subjcet may only contain alphanumeric characters';
+$aErrorCodes['E0034'] = 'Subject may only contain alphanumeric characters';
 $aErrorCodes['E0035'] = 'Failed to add news record';
 $aErrorCodes['E0036'] = 'Failed to delete news record';
 $aErrorCodes['E0037'] = 'Failed to update news record';
@@ -77,4 +77,5 @@ $aErrorCodes['E0078'] = 'RPC method did not return 200 OK';
 $aErrorCodes['E0079'] = 'Wallet does not cover payouts total amount';
 $aErrorCodes['E0080'] = 'No new unaccounted shares since last run';
 $aErrorCodes['E0081'] = 'Failed to insert new block into database';
+$aErrorCodes['E0082'] = 'Block does not supply any usable confirmation information';
 ?>

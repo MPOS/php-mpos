@@ -27,16 +27,16 @@ $sOriginalTemplate = $template->getTemplateContent($sTemplate);
 
 if (@$_REQUEST['do'] == 'save') {
   if ($template->updateEntry(@$_REQUEST['template'], @$_REQUEST['content'], @$_REQUEST['active'])) {
-    $_SESSION['POPUP'][] = array('CONTENT' => 'Page updated', 'TYPE' => 'success');
+    $_SESSION['POPUP'][] = array('CONTENT' => 'Page updated', 'TYPE' => 'alert alert-success');
   } else {
-    $_SESSION['POPUP'][] = array('CONTENT' => 'Page update failed: ' . $template->getError(), 'TYPE' => 'errormsg');
+    $_SESSION['POPUP'][] = array('CONTENT' => 'Page update failed: ' . $template->getError(), 'TYPE' => 'alert alert-danger');
   }
 }
 
 $oDatabaseTemplate = $template->getEntry($sTemplate);
 
 if ( $oDatabaseTemplate === false ) {
-  $_SESSION['POPUP'][] = array('CONTENT' => 'Can\'t fetch template from Database. Have you created `templates` table? Run 005_create_templates_table.sql from sql folder', 'TYPE' => 'errormsg');
+  $_SESSION['POPUP'][] = array('CONTENT' => 'Can\'t fetch template from Database. Have you created `templates` table? Run 005_create_templates_table.sql from sql folder', 'TYPE' => 'alert alert-danger');
 }
 
 $smarty->assign("TEMPLATES", $aTemplates);
