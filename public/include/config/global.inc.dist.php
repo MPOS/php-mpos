@@ -5,7 +5,7 @@ $defflip = (!cfip()) ? exit(header('HTTP/1.1 401 Unauthorized')) : 1;
  * Do not edit this unless you have confirmed that your config has been updated!
  *  https://github.com/MPOS/php-mpos/wiki/Config-Setup#wiki-config-version
  **/
-$config['version'] = '0.0.7';
+$config['version'] = '0.0.8';
 
 /**
  * Unless you disable this, we'll do a quick check on your config first.
