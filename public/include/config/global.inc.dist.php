@@ -65,12 +65,12 @@ $config['wallet']['password'] = 'testnet';
 $config['swiftmailer']['type'] = 'sendmail';
 $config['swiftmailer']['sendmail']['path'] = '/usr/sbin/sendmail';
 $config['swiftmailer']['sendmail']['options'] = '-bs';
-$config['switfmailer']['smtp']['host'] = 'your.mail-relay.com';
-$config['switfmailer']['smtp']['port'] = '587';
-$config['switfmailer']['smtp']['encryption'] = 'tls';
-$config['switfmailer']['smtp']['username'] = '';
-$config['switfmailer']['smtp']['password'] = '';
-$config['switfmailer']['smtp']['throttle'] = 100;
+$config['swiftmailer']['smtp']['host'] = 'your.mail-relay.com';
+$config['swiftmailer']['smtp']['port'] = '587';
+$config['swiftmailer']['smtp']['encryption'] = 'tls';
+$config['swiftmailer']['smtp']['username'] = '';
+$config['swiftmailer']['smtp']['password'] = '';
+$config['swiftmailer']['smtp']['throttle'] = 100;
 
 /**
  * Getting Started Config

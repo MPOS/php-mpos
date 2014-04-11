@@ -58,10 +58,10 @@ class Mail extends Base {
     if ($transport_type == 'sendmail') {
       $transport = Swift_SendmailTransport::newInstance($this->config['swiftmailer'][$transport_type]['path'] . ' ' . $this->config['swiftmailer'][$transport_type]['options']);
     } else if ($this->config['swiftmailer']['type'] == 'smtp') {
-      $transport = Swift_SmtpTransport::newInstance($this->config['switfmailer']['smtp']['host'], $this->config['switfmailer']['smtp']['port'], $this->config['switfmailer']['smtp']['encryption']);
-      if (!empty($this->config['switfmailer']['smtp']['username']) && !empty($this->config['switfmailer']['smtp']['password'])) {
-        $transport->setUsername($this->config['switfmailer']['smtp']['username']);
-        $transport->setPassword($this->config['switfmailer']['smtp']['password']);
+      $transport = Swift_SmtpTransport::newInstance($this->config['swiftmailer']['smtp']['host'], $this->config['swiftmailer']['smtp']['port'], $this->config['swiftmailer']['smtp']['encryption']);
+      if (!empty($this->config['swiftmailer']['smtp']['username']) && !empty($this->config['swiftmailer']['smtp']['password'])) {
+        $transport->setUsername($this->config['swiftmailer']['smtp']['username']);
+        $transport->setPassword($this->config['swiftmailer']['smtp']['password']);
       }
     }
     $mailer = Swift_Mailer::newInstance($transport);
@@ -69,7 +69,7 @@ class Mail extends Base {
     // Throttle mails to x per minute, used for newsletter for example
     if ($this->config['swiftmailer']['type'] == 'smtp' && $throttle) {
       $mailer->registerPlugin(new Swift_Plugins_ThrottlerPlugin(
-        $this->config['switfmailer']['smtp']['throttle'], Swift_Plugins_ThrottlerPlugin::MESSAGES_PER_MINUTE
+        $this->config['swiftmailer']['smtp']['throttle'], Swift_Plugins_ThrottlerPlugin::MESSAGES_PER_MINUTE
       ));
     }
 
