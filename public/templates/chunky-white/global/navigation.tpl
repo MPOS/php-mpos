@@ -25,6 +25,10 @@
                 <li><a href="https://chunkypools.com/sun/">Suncoin (SUN)</a></li>
                 <li><a href="https://chunkypools.com/pcn/">Procoin (PCN)</a></li>
                 <li><a href="https://chunkypools.com/spn/">Spartancoin (SPN)</a></li>
+                <li><a href="https://chunkypools.com/stp/">Stoopidcoin (STP)</a></li>
+                <li><a href="https://chunkypools.com/def/">Defcoin (DEF)</a></li>
+                <li><a href="https://chunkypools.com/mun/">Muniti (MUN) [x11]</a></li>
+
             </ul>
         </li>
 
