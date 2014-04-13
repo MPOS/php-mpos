@@ -381,7 +381,7 @@ class Transaction extends Base {
       ON a.id = c.account_id AND '$this->currency' = c.coin
       WHERE t.archived = 0 AND c.ap_threshold > 0 AND c.address IS NOT NULL AND c.address != ''
       GROUP BY t.account_id
-      HAVING confirmed > c.ap_threshold AND confirmed > " . $this->config['txfee_auto']) . "
+      HAVING confirmed > c.ap_threshold AND confirmed > " . $this->config['txfee_auto'] . "
       LIMIT ?");
     if ($this->checkStmt($stmt) && $stmt->bind_param('i', $limit) && $stmt->execute() && $result = $stmt->get_result())
       return $result->fetch_all(MYSQLI_ASSOC);

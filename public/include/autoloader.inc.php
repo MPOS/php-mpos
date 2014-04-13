@@ -21,7 +21,7 @@ require_once(CLASS_DIR . '/setting.class.php');
 $currency = $setting->getValue('currency');
 
 // We need this one in here to properly set our theme
-require_once(INCLUDE_DIR . '/lib/Mobile_Detect.php');
+//require_once(INCLUDE_DIR . '/lib/Mobile_Detect.php');
 
 // Now decide on which coin class to load and instantiate
 if (file_exists(CLASS_DIR . '/coins/coin_' . $config['algorithm'] . '.class.php')) {
