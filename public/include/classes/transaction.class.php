@@ -265,7 +265,7 @@ class Transaction extends Base {
    **/
   public function getBalance($account_id) {
     $this->debug->append("STA " . __METHOD__, 4);
-    $stmt = $this->mysqli->prepare("
+    $query = "
       SELECT
         IFNULL(ROUND((
           SUM( IF( ( t.type IN ('Credit','Bonus') AND b.confirmations >= ? ) OR t.type = 'Credit_PPS', t.amount, 0 ) ) -
