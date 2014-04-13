@@ -350,7 +350,7 @@ class User extends Base {
    **/
   public function existsCoinAddress($address) {
     $this->debug->append("STA " . __METHOD__, 4);
-    return $this->coinAddress->getCoinAddressByAddress($address) === $address;
+    return $this->coinAddress->existsCoinAddress($address);
   }
 
   /**
