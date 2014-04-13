@@ -122,6 +122,54 @@ class User extends Base {
   }
 
   /**
+   * Fetch last registered users for administrative tasks
+   * @param none
+   * @return data array All users with db columns as array fields
+   **/
+  public function getLastRegisteredUsers($limit=10,$start=0) {
+    $this->debug->append("STA " . __METHOD__, 4);
+    $invitation = new Invitation();
+    $invitation->setMysql($this->mysqli);
+    $invitation->setDebug($this->debug);
+    $invitation->setLog($this->log);
+    $stmt = $this->mysqli->prepare("
+    	SELECT a.id,a.username as mposuser,a.email,a.signup_timestamp,u.username AS inviter FROM " . $this->getTableName() . " AS a
+    	LEFT JOIN " . $invitation->getTableName() . " AS i
+    	ON a.email = i.email
+    	LEFT JOIN " . $this->getTableName() . " AS u
+    	ON i.account_id = u.id
+    	ORDER BY a.id DESC LIMIT ?,?");
+    if ($this->checkStmt($stmt) && $stmt->bind_param("ii", $start, $limit) && $stmt->execute() && $result = $stmt->get_result()) {
+      return $result->fetch_all(MYSQLI_ASSOC);
+    }
+  }
+
+  /**
+   * Fetch Top 10 Inviters
+   * @param none
+   * @return data array All users with db columns as array fields
+   **/
+  public function getTopInviters($limit=10,$start=0) {
+    $this->debug->append("STA " . __METHOD__, 4);
+    $invitation = new Invitation();
+    $invitation->setMysql($this->mysqli);
+    $invitation->setDebug($this->debug);
+    $invitation->setLog($this->log);
+    $stmt = $this->mysqli->prepare("
+    	SELECT COUNT(i.account_id) AS invitationcount,a.id,a.username,a.email,
+    	(SELECT COUNT(account_id) FROM " . $invitation->getTableName() . " WHERE account_id = i.account_id AND is_activated = 1 GROUP BY account_id) AS activated
+    	FROM " . $invitation->getTableName() . " AS i
+    	LEFT JOIN " . $this->getTableName() . " AS a
+    	ON a.id = i.account_id
+    	GROUP BY i.account_id
+    	ORDER BY invitationcount ASC
+    	LIMIT ?,?");
+    if ($this->checkStmt($stmt) && $stmt->bind_param("ii", $start, $limit) && $stmt->execute() && $result = $stmt->get_result()) {
+      return $result->fetch_all(MYSQLI_ASSOC);
+    }
+  }
+
+  /**
    * Check user login
    * @param username string Username
    * @param password string Password
@@ -150,11 +198,16 @@ class User extends Base {
       return false;
     }
     if ($this->checkUserPassword($username, $password)) {
+      // delete notification cookies
+      setcookie("motd-box", "", time()-3600);
+      setcookie("lastlogin-box", "", time()-3600);
+      setcookie("backend-box", "", time()-3600);
+      // rest of login process
       $uid = $this->getUserId($username);
       $lastLoginTime = $this->getLastLogin($uid);
       $this->updateLoginTimestamp($uid);
       $getIPAddress = $this->getUserIp($uid);
-      if ($getIPAddress !== $_SERVER['REMOTE_ADDR']) {
+      if ($getIPAddress !== $this->getCurrentIP()) {
         $this->log->log("warn", "$username has logged in with a different IP, saved is [$getIPAddress]");
       }
       $setIPAddress = $this->setUserIp($uid, $_SERVER['REMOTE_ADDR']);
@@ -297,7 +350,7 @@ class User extends Base {
    **/
   public function existsCoinAddress($address) {
     $this->debug->append("STA " . __METHOD__, 4);
-    return $this->coinAddress->getCoinAddress($address);
+    return $this->coinAddress->getCoinAddressByAddress($address) === $address;
   }
 
   /**
@@ -311,7 +364,7 @@ class User extends Base {
   }
 
   /**
-   * Fetch users donation value 
+   * Fetch users donation value
    * @param userID int UserID
    * @return data string Coin Address
    **/
@@ -362,7 +415,7 @@ class User extends Base {
     $this->setErrorMessage('A request has already been sent to your e-mail address. Please wait an hour for it to expire.');
     return false;
   }
-  
+
   /**
    * Update the accounts password
    * @param userID int User ID
@@ -415,7 +468,7 @@ class User extends Base {
     $this->setErrorMessage( 'Unable to update password, current password wrong?' );
     return false;
   }
-  
+
   /**
    * Update account information from the edit account page
    * @param userID int User ID
@@ -590,15 +643,12 @@ class User extends Base {
     // Unset all of the session variables
     $_SESSION = array();
     // As we're killing the sesison, also kill the cookie!
-    if (ini_get("session.use_cookies")) {
-        $params = session_get_cookie_params();
-        setcookie(session_name(), '', time() - 42000, $params["path"], $params["domain"], $params["secure"], $params["httponly"]);
-    }
+    setcookie(session_name(), '', time() - 42000);
     // Destroy the session.
     session_destroy();
     // Enforce generation of a new Session ID and delete the old
     session_regenerate_id(true);
-    
+
     // Enforce a page reload and point towards login with referrer included, if supplied
     $port = ($_SERVER["SERVER_PORT"] == "80" || $_SERVER["SERVER_PORT"] == "443") ? "" : (":".$_SERVER["SERVER_PORT"]);
     $pushto = $_SERVER['SCRIPT_NAME'].'?page=login';
@@ -694,7 +744,7 @@ class User extends Base {
       $this->setErrorMessage( 'This e-mail address is already taken' );
       return false;
     }
-    if (strlen($password1) < 8) { 
+    if (strlen($password1) < 8) {
       $this->setErrorMessage( 'Password is too short, minimum of 8 characters required' );
       return false;
     }
@@ -802,7 +852,7 @@ class User extends Base {
         $this->setErrorMessage( 'New passwords do not match' );
         return false;
       }
-      if ( strlen($new1) < 8 ) { 
+      if ( strlen($new1) < 8 ) {
         $this->setErrorMessage( 'New password is too short, please use more than 8 chars' );
         return false;
       }
@@ -833,7 +883,7 @@ class User extends Base {
     $this->debug->append("STA " . __METHOD__, 4);
     // Fetch the users mail address
     if (empty($username)) {
-      $this->serErrorMessage("Username must not be empty");
+      $this->setErrorMessage("Username must not be empty");
       return false;
     }
     if (filter_var($username, FILTER_VALIDATE_EMAIL)) {
@@ -893,29 +943,28 @@ public function isAuthenticated($logout=true) {
 
   /**
    * Convenience function to get IP address, no params is the same as REMOTE_ADDR
-   * @param trustremote bool must be FALSE to checkclient or checkforwarded
+   * @param trustremote bool must be FALSE to checkcloudflare, checkclient or checkforwarded
+   * @param checkcloudflare bool check HTTP_CF_CONNECTING_IP for a valid ip first
    * @param checkclient bool check HTTP_CLIENT_IP for a valid ip first
    * @param checkforwarded bool check HTTP_X_FORWARDED_FOR for a valid ip first
    * @return string IP address
    */
-  public function getCurrentIP($trustremote=true, $checkclient=false, $checkforwarded=false) {
+  public function getCurrentIP($trustremote=false, $checkcloudflare=true, $checkclient=false, $checkforwarded=true) {
+    $cf = (isset($_SERVER['HTTP_CF_CONNECTING_IP'])) ? $_SERVER['HTTP_CF_CONNECTING_IP'] : false;
     $client = (isset($_SERVER['HTTP_CLIENT_IP'])) ? $_SERVER['HTTP_CLIENT_IP'] : false;
     $fwd = (isset($_SERVER['HTTP_X_FORWARDED_FOR'])) ? $_SERVER['HTTP_X_FORWARDED_FOR'] : false;
     $remote = (isset($_SERVER['REMOTE_ADDR'])) ? $_SERVER['REMOTE_ADDR'] : @$_SERVER['REMOTE_ADDR'];
     // shared internet
-    if (filter_var($client, FILTER_VALIDATE_IP) && !$trustremote && $checkclient) {
+    if (!$trustremote && $checkcloudflare && filter_var($cf, FILTER_VALIDATE_IP)) {
+      // cloudflare
+      return $cf;
+    } else if (!$trustremote && $checkclient && filter_var($client, FILTER_VALIDATE_IP)) {
       return $client;
-    } else if (strpos($fwd, ',') !== false && !$trustremote && $checkforwarded) {
+    } else if (!$trustremote && $checkforwarded && strpos($fwd, ',') !== false) {
       // multiple proxies
       $ips = explode(',', $fwd);
-      $path = array();
-      foreach ($ips as $ip) {
-        if (filter_var($ip, FILTER_VALIDATE_IP)) {
-          $path[] = $ip;
-        }
-      }
-      return array_pop($path);
-    } else if (filter_var($fwd, FILTER_VALIDATE_IP) && !$trustremote && $checkforwarded) {
+      return $ips[0];
+    } else if (!$trustremote && $checkforwarded && filter_var($fwd, FILTER_VALIDATE_IP)) {
       // single
       return $fwd;
     } else {

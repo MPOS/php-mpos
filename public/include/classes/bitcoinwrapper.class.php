@@ -36,6 +36,20 @@ class BitcoinWrapper extends BitcoinClient {
     if ($data = $this->memcache->get(__FUNCTION__)) return $data;
     return $this->memcache->setCache(__FUNCTION__, parent::getblockcount(), 30);
   }
+  // Wrapper method to get the real main account balance
+  public function getrealbalance() {
+    $this->oDebug->append("STA " . __METHOD__, 4);
+    $aAccounts = parent::listaccounts();
+    $dBalance = parent::getbalance('');
+    // Account checks
+    if (count($aAccounts) == 1) {
+      // We only have a single account so getbalance will be fine
+      return $dBalance;
+    } else {
+      $dMainBalance = $aAccounts[''];
+      return $dMainBalance;
+    }
+  }
   public function getdifficulty() {
     $this->oDebug->append("STA " . __METHOD__, 4);
     if ($data = $this->memcache->get(__FUNCTION__)) return $data;
@@ -60,6 +74,10 @@ class BitcoinWrapper extends BitcoinClient {
       if (is_array($dNetworkHashrate)) {
         if (array_key_exists('networkhashps', $dNetworkHashrate)) {
           $dNetworkHashrate = $dNetworkHashrate['networkhashps'];
+        } else if (array_key_exists('networkmhps', $dNetworkHashrate)) {
+          $dNetworkHashrate = $dNetworkHashrate['networkmhps'] * 1000 * 1000;
+        } else if (array_key_exists('networkghps', $dNetworkHashrate)) {
+          $dNetworkHashrate = $dNetworkHashrate['networkghps'] * 1000 * 1000 * 1000;
         } else if (array_key_exists('hashespersec', $dNetworkHashrate)) {
           $dNetworkHashrate = $dNetworkHashrate['hashespersec'];
         } else if (array_key_exists('netmhashps', $dNetworkHashrate)) {

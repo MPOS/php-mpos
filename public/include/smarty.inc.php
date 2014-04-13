@@ -170,4 +170,7 @@ if ($config['smarty']['cache']) {
   $smarty->escape_html = true;
   $smarty->use_sub_dirs = true;
 }
+
+// Load custom smarty plugins
+require_once(INCLUDE_DIR . '/lib/smarty_plugins/function.acl.php');
 ?>

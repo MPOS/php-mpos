@@ -38,6 +38,7 @@ if (empty($aAllBlocks)) {
   $monitoring->endCronjob($cron_name, 'E0011', 0, true, false);
 }
 
+$log->logDebug('Starting PPLNS payout process');
 $count = 0;
 foreach ($aAllBlocks as $iIndex => $aBlock) {
   // If we have unaccounted blocks without share_ids, they might not have been inserted yet
@@ -77,29 +78,31 @@ foreach ($aAllBlocks as $iIndex => $aBlock) {
     $config['reward_type'] == 'block' ? $dReward = $aBlock['amount'] : $dReward = $config['reward'];
     $aRoundAccountShares = $share->getSharesForAccounts($iPreviousShareId, $aBlock['share_id']);
 
-    $log->logInfo('Target: ' . $pplns_target . '; Shares: ' . $iRoundShares . '; Height: ' . $aBlock['height'] . '; Amount: ' . $aBlock['amount'] . '; Found by ID: ' . $aBlock['account_id']);
+    $strLogMask = "| %20.20s | %20.20s | %8.8s | %10.10s | %15.15s |";
+    $log->logInfo(sprintf($strLogMask, 'PPLNS Target', 'Actual Shares', 'Height', 'Amount', 'Finder'));
+    $log->logInfo(sprintf($strLogMask, $pplns_target, $iRoundShares, $aBlock['height'], $aBlock['amount'],  $user->getUsername($aBlock['account_id'])));
 
     if ($iRoundShares >= $pplns_target) {
-      $log->logDebug("Matching or exceeding PPLNS target of $pplns_target with $iRoundShares");
+      $log->logDebug("  Matching or exceeding PPLNS target of $pplns_target with $iRoundShares");
       $iMinimumShareId = $share->getMinimumShareId($pplns_target, $aBlock['share_id']);
       // We need to go one ID lower due to `id >` or we won't match if minimum share ID == $aBlock['share_id']
       $aAccountShares = $share->getSharesForAccounts($iMinimumShareId - 1, $aBlock['share_id']);
       if (empty($aAccountShares)) {
-        $log->logFatal("No shares found for this block, aborted! Block Height : " . $aBlock['height'] . ', Block ID: ' . $aBlock['id']);
+        $log->logFatal("  No shares found for this block, aborted! Block Height : " . $aBlock['height'] . ', Block ID: ' . $aBlock['id']);
         $monitoring->endCronjob($cron_name, 'E0013', 1, true);
       }
       foreach($aAccountShares as $key => $aData) {
         $iNewRoundShares += $aData['valid'];
       }
-      $log->logInfo('Adjusting round to PPLNS target of ' . $pplns_target . ' shares used ' . $iNewRoundShares);
+      $log->logInfo('  Adjusting round to PPLNS target of ' . $pplns_target . ' shares used ' . $iNewRoundShares);
       $iRoundShares = $iNewRoundShares;
     } else {
-      $log->logDebug("Not able to match PPLNS target of $pplns_target with $iRoundShares");
+      $log->logDebug("  Not able to match PPLNS target of $pplns_target with $iRoundShares");
       // We need to fill up with archived shares
       // Grab the full current round shares since we didn't match target
       $aAccountShares = $aRoundAccountShares;
       if (empty($aAccountShares)) {
-        $log->logFatal("No shares found for this block, aborted! Block height: " . $aBlock['height'] . ', Block ID:' . $aBlock['id']);
+        $log->logFatal("  No shares found for this block, aborted! Block height: " . $aBlock['height'] . ', Block ID:' . $aBlock['id']);
         $monitoring->endCronjob($cron_name, 'E0013', 1, true);
       }
 
@@ -112,27 +115,31 @@ foreach ($aAllBlocks as $iIndex => $aBlock) {
         // Add archived shares to users current shares, if we have any in archive
         if (is_array($aArchiveShares)) {
           $log->logDebug('Found shares in archive to match PPLNS target, calculating per-user shares');
+          $strLogMask = "| %-20.20s | %15.15s | %15.15s | %15.15s | %15.15s | %15.15s | %15.15s |";
+          $log->logDebug(sprintf($strLogMask, 'Username', 'Round Valid', 'Archive Valid', 'Total Valid', 'Round Invalid', 'Archive Invalid', 'Total Invalid'));
           foreach($aAccountShares as $key => $aData) {
             if (array_key_exists($aData['username'], $aArchiveShares)) {
-              $log->logDebug('Found user ' . $aData['username'] . ' in archived shares');
-              $log->logDebug('  valid   : ' . $aAccountShares[$key]['valid'] . ' + ' . $aArchiveShares[$aData['username']]['valid'] . ' = ' . ($aAccountShares[$key]['valid'] + $aArchiveShares[$aData['username']]['valid']) );
-              $log->logDebug('  invalid : ' . $aAccountShares[$key]['invalid'] . ' + ' . $aArchiveShares[$aData['username']]['invalid'] . ' = ' . ($aAccountShares[$key]['invalid'] + $aArchiveShares[$aData['username']]['invalid']) );
+              $log->logDebug(sprintf($strLogMask, $aData['username'],
+                $aAccountShares[$key]['valid'], $aArchiveShares[$aData['username']]['valid'], ($aAccountShares[$key]['valid'] + $aArchiveShares[$aData['username']]['valid']),
+                $aAccountShares[$key]['invalid'], $aArchiveShares[$aData['username']]['invalid'], ($aAccountShares[$key]['invalid'] + $aArchiveShares[$aData['username']]['invalid']))
+              );
               $aAccountShares[$key]['valid'] += $aArchiveShares[$aData['username']]['valid'];
               $aAccountShares[$key]['invalid'] += $aArchiveShares[$aData['username']]['invalid'];
             }
           }
           // reverse payout
           if ($config['pplns']['reverse_payout']) {
+            $log->logDebug('Reverse payout enabled, adding shelved shares for all users');
             $aSharesData = NULL;
             foreach($aAccountShares as $key => $aData) {
               $aSharesData[$aData['username']] = $aData;
             }
             // Add users from archive not in current round
+            $strLogMask = "| %-20.20s | %15.15s | %15.15s |";
+            $log->logDebug(sprintf($strLogMask, 'Username', 'Shelved Valid', 'Shelved Invalid'));
             foreach($aArchiveShares as $key => $aArchData) {
               if (!array_key_exists($aArchData['account'], $aSharesData)) {
-                $log->logDebug('Adding user ' . $aArchData['account'] . ' to round shares');
-                $log->logDebug('  valid   : ' . $aArchData['valid']);
-                $log->logDebug('  invalid   : ' . $aArchData['invalid']);
+                $log->logDebug(sprintf($strLogMask, $aArchData['account'], $aArchData['valid'], $aArchData['invalid']));
                 $aArchData['username'] = $aArchData['account'];
                 $aSharesData[$aArchData['account']] = $aArchData;
               }
@@ -174,7 +181,8 @@ foreach ($aAllBlocks as $iIndex => $aBlock) {
     }
 
     // Table header for account shares
-    $log->logInfo("ID\tUsername\tValid\tInvalid\tPercentage\tPayout\t\tDonation\tFee");
+    $strLogMask = "| %5.5s | %-15.15s | %15.15s | %15.15s | %12.12s | %15.15s | %15.15s | %15.15s | %15.15s |";
+    $log->logInfo(sprintf($strLogMask, 'ID', 'Username', 'Valid', 'Invalid', 'Percentage', 'Payout', 'Donation', 'Fee', 'Bonus'));
 
     // Loop through all accounts that have found shares for this round
     foreach ($aTotalAccountShares as $key => $aData) {
@@ -193,21 +201,30 @@ foreach ($aAllBlocks as $iIndex => $aBlock) {
       // Defaults
       $aData['fee' ] = 0;
       $aData['donation'] = 0;
+      $aData['pool_bonus'] = 0;
 
+      // Calculate pool fees
       if ($config['fees'] > 0 && $aData['no_fees'] == 0)
         $aData['fee'] = round($config['fees'] / 100 * $aData['payout'], 8);
+
+      // Calculate pool bonus if it applies, will be paid from liquid assets!
+      if ($config['pool_bonus'] > 0) {
+        if ($config['pool_bonus_type'] == 'block') {
+          $aData['pool_bonus'] = round(( $config['pool_bonus'] / 100 ) * $dReward, 8);
+        } else {
+          $aData['pool_bonus'] = round(( $config['pool_bonus'] / 100 ) * $aData['payout'], 8);
+        }
+      }
+
       // Calculate donation amount, fees not included
       $aData['donation'] = round($user->getDonatePercent($user->getUserId($aData['username'])) / 100 * ( $aData['payout'] - $aData['fee']), 8);
 
       // Verbose output of this users calculations
-      $log->logInfo($aData['id'] . "\t" .
-        $aData['username'] . "\t" .
-        $aData['pplns_valid'] . "\t" .
-        $aData['pplns_invalid'] . "\t" .
-        number_format($aData['percentage'], 8) . "\t" .
-        number_format($aData['payout'], 8) . "\t" .
-        number_format($aData['donation'], 8) . "\t" .
-        number_format($aData['fee'], 8));
+      $log->logInfo(
+        sprintf($strLogMask, $aData['id'], $aData['username'], $aData['pplns_valid'], $aData['pplns_invalid'],
+                number_format($aData['percentage'], 8), number_format($aData['payout'], 8), number_format($aData['donation'], 8), number_format($aData['fee'], 8), number_format($aData['pool_bonus'], 8)
+        )
+      );
 
       // Add new credit transaction
       if (!$transaction->addTransaction($aData['id'], $aData['payout'], 'Credit', $aBlock['id']))
@@ -220,6 +237,10 @@ foreach ($aAllBlocks as $iIndex => $aBlock) {
       if ($aData['donation'] > 0)
         if (!$transaction->addTransaction($aData['id'], $aData['donation'], 'Donation', $aBlock['id']))
           $log->logFatal('Failed to insert new Donation transaction to database for ' . $aData['username'] . ': ' . $transaction->getCronError() . 'on block ' . $aBlock['id']);
+      // Add new bonus credit
+      if ($aData['pool_bonus'] > 0)
+        if (!$transaction->addTransaction($aData['id'], $aData['pool_bonus'], 'Bonus', $aBlock['id']))
+          $log->logFatal('Failed to insert new Bonus transaction to database for ' . $aData['username'] . ': ' . $transaction->getCronError());
     }
 
     // Add full round share statistics

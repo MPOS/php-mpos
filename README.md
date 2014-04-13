@@ -1,7 +1,7 @@
 Description [ ![Codeship Status for TheSerapher/php-mpos](https://www.codeship.io/projects/40fa7600-61a6-0131-3fd3-367b94dc0d60/status?branch=next)](https://www.codeship.io/projects/12276)
 ===========
 
-MPOS is a web based Mining Portal for various crypto currencies. It was created by [TheSerapher](https://github.com/TheSerapher) and has hence grown quite large. Recently it was migrated into a Github Organization to make development easier. It's a community driven open source project: If you wish to participate contact the team on IRC: https://webchat.freenode.net/?channels=#mpos-dev
+MPOS is a web based Mining Portal for various crypto currencies. It was created by [TheSerapher](https://github.com/TheSerapher) and has hence grown quite large. Recently it was migrated into a Github Organization to make development easier. It's a community driven open source project. Support can be requested on IRC at https://webchat.freenode.net/?channels=#mpos
 
 
 **NOTE**: This project is still under development and commits are happening on a daily basis.
@@ -38,7 +38,8 @@ These people have supported this project with a donation:
 * [xisi](https://github.com/xisi)
 * [PCFiL](https://github.com/PCFiL)
 * [rog1121](https://github.com/rog1121)(https://rapidhash.net)
-* [Wow, Much Pool](http://http://www.wowmuchpool.com/)
+* [Wow, Much Pool](http://www.wowmuchpool.com/)
+* webxassDE (https://www.suchcoins.com/)
 
 Pools running MPOS
 ==================
@@ -56,7 +57,7 @@ supported. They will never match an upstream share, solo miners do not create
 any shares, only blocks. Expect weird behavior if trying to mix them. See #299
 for full information.
 
-* 64 bit system
+* 64-bit system
  * Otherwise some coins will display wrong network hashrates
 * Apache2
  * libapache2-mod-php5
@@ -161,6 +162,8 @@ You can contribute to this project in different ways:
 * Report outstanding issues and bugs by creating an [Issue][1]
 * Suggest feature enhancements also via [Issues][1]
 * Fork the project, create a branch and file a pull request to improve the code itself
+
+If you wish to participate contact the team on IRC: https://webchat.freenode.net/?channels=#mpos - we will point you to the proper channels!
 
 Contact
 =======

@@ -30,6 +30,13 @@ $config['SALTY'] = 'THISSHOULDALSOBERRAANNDDOOM';
 $config['algorithm'] = 'scrypt';
 
 /**
+  * Getbalance API Calls
+  *  System used for getting actual Balance from Wallet
+  *   https://github.com/MPOS/php-mpos/wiki/Config-Setup#getbalance-api-calls
+  **/
+$config['getbalancewithunconfirmed'] = true;
+
+/**
  * Database configuration
  *  MySQL database configuration
  *   https://github.com/MPOS/php-mpos/wiki/Config-Setup#wiki-database-configuration
@@ -51,13 +58,19 @@ $config['wallet']['username'] = 'testnet';
 $config['wallet']['password'] = 'testnet';
 
 /**
- * Cold Wallet / Liquid Assets
- *  Automatically send liquid assets to a cold wallet
- *   https://github.com/MPOS/php-mpos/wiki/Config-Setup#wiki-liquid-assets--cold-wallet
+ * Swiftmailer configuration
+ *  Configure your way to send mails
+ *   https://github.com/MPOS/php-mpos/wiki/Config-Setup#wiki-swiftmailer
  **/
-$config['coldwallet']['address'] = '';
-$config['coldwallet']['reserve'] = 50;
-$config['coldwallet']['threshold'] = 5;
+$config['swiftmailer']['type'] = 'sendmail';
+$config['swiftmailer']['sendmail']['path'] = '/usr/sbin/sendmail';
+$config['swiftmailer']['sendmail']['options'] = '-bs';
+$config['switfmailer']['smtp']['host'] = 'your.mail-relay.com';
+$config['switfmailer']['smtp']['port'] = '587';
+$config['switfmailer']['smtp']['encryption'] = 'tls';
+$config['switfmailer']['smtp']['username'] = '';
+$config['switfmailer']['smtp']['password'] = '';
+$config['switfmailer']['smtp']['throttle'] = 100;
 
 /**
  * Getting Started Config
@@ -74,6 +87,7 @@ $config['gettingstarted']['stratumport'] = '3333';
  *  Fetch exchange rates via an API
  *   https://github.com/MPOS/php-mpos/wiki/Config-Setup#wiki-ticker-api
  **/
+$config['price']['enabled'] = false;
 $config['price']['url'] = 'https://btc-e.com';
 $config['price']['target'] = '/api/2/ltc_usd/ticker';
 $config['price']['currency'] = 'USD';
@@ -85,6 +99,13 @@ $config['price']['currency'] = 'USD';
  **/
 $config['ap_threshold']['min'] = 1;
 $config['ap_threshold']['max'] = 250;
+
+/**
+ * Minimum manual Payout Threshold
+ *  Minimum manual payout amount
+ *   https://github.com/MPOS/php-mpos/wiki/Config-Setup#wiki-manual-payout-threshold
+ **/
+$config['mp_threshold'] = 1;
 
 /**
  * Donation thresholds
@@ -130,12 +151,14 @@ $config['txfee_auto'] = 0.1;
 $config['txfee_manual'] = 0.1;
 
 /**
- * Block Bonus
- *  Bonus in coins of block bonus
+ * Block & Pool Bonus
+ *  Bonus coins for blockfinder or a pool bonus for everyone
  *   https://github.com/MPOS/php-mpos/wiki/Config-Setup#wiki-block-bonus
+ *   https://github.com/MPOS/php-mpos/wiki/Config-Setup#wiki-pool-bonus
  */
 $config['block_bonus'] = 0;
-
+$config['pool_bonus'] = 0;
+$config['pool_bonus_type'] = 'payout';
 
 /**
  * Payout System
@@ -143,6 +166,20 @@ $config['block_bonus'] = 0;
  *   https://github.com/MPOS/php-mpos/wiki/Config-Setup#wiki-payout-system
  **/
 $config['payout_system'] = 'prop';
+
+/**
+ * Sendmany Support
+ *  Enable/Disable Sendmany RPC method
+ *   https://github.com/MPOS/php-mpos/wiki/Config-Setup#wiki-sendmany-support
+ **/
+$config['sendmany']['enabled'] = false;
+
+/**
+ * Transaction Limits
+ *  Number of transactions per payout run
+ **/
+$config['payout']['txlimit_manual'] = 500;
+$config['payout']['txlimit_auto'] = 500;
 
 /**
  * Round Purging
@@ -176,7 +213,7 @@ $config['fees'] = 0;
 $config['pplns']['shares']['default'] = 4000000;
 $config['pplns']['shares']['type'] = 'blockavg';
 $config['pplns']['blockavg']['blockcount'] = 10;
-$config['pplns']['reverse_payout'] = false;
+$config['pplns']['reverse_payout'] = true;
 $config['pplns']['dynamic']['percent'] = 30;
 
 /**
@@ -222,6 +259,7 @@ $config['memcache']['port'] = 11211;
 $config['memcache']['keyprefix'] = 'mpos_';
 $config['memcache']['expiration'] = 90;
 $config['memcache']['splay'] = 15;
+$config['memcache']['force']['contrib_shares'] = false;
 
 /**
  * Cookies

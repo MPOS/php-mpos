@@ -8,7 +8,7 @@ if (!$user->isAuthenticated() || !$user->isAdmin($_SESSION['USERDATA']['id'])) {
 }
 
 // Some defaults
-$iLimit = 30;
+$iLimit = 100;
 $smarty->assign('LIMIT', $iLimit);
 empty($_REQUEST['start']) ? $start = 0 : $start = $_REQUEST['start'];
 $smarty->assign('ADMIN', array('' => '', '0' => 'No', '1' => 'Yes'));
@@ -57,11 +57,13 @@ if (isset($_REQUEST['filter'])) {
     foreach ($aUsers as $iKey => $aUser) {
       $aBalance = $transaction->getBalance($aUser['id']);
       $aUser['balance'] = $aBalance['confirmed'];
-      $aUser['hashrate'] = $statistics->getUserHashrate($aUser['username'], $aUser['id']);
+      $aUser['signup_timestamp'] = $user->getSignupTime($aUser['id']);
+      $aUserMiningStats = $statistics->getUserMiningStats($aUser['username'], $aUser['id']);
+      $aUser['hashrate'] = $aUserMiningStats['hashrate'];
 
       if ($config['payout_system'] == 'pps') {
-        $aUser['sharerate'] = $statistics->getUserSharerate($aUser['username'], $aUser['id']);
-        $aUser['difficulty'] = $statistics->getUserShareDifficulty($aUser['username'], $aUser['id']);
+        $aUser['sharerate'] = $aUserMiningStats['sharerate'];
+        $aUser['difficulty'] = $aUserMiningStats['avgsharediff'];
         $aUser['estimates'] = $statistics->getUserEstimates($aUser['sharerate'], $aUser['difficulty'], $user->getUserDonatePercent($aUser['id']), $user->getUserNoFee($aUser['id']), $statistics->getPPSValue());
       } else {
         $aUser['estimates'] = $statistics->getUserEstimates($aRoundShares, $aUser['shares'], $aUser['donate_percent'], $aUser['no_fees']);
@@ -72,7 +74,7 @@ if (isset($_REQUEST['filter'])) {
     // Assign our variables
     $smarty->assign("USERS", $aUsers);
   } else {
-    $_SESSION['POPUP'][] = array('CONTENT' => 'Could not find any users', 'TYPE' => 'errormsg');
+    $_SESSION['POPUP'][] = array('CONTENT' => 'Could not find any users', 'TYPE' => 'alert alert-danger');
   }
 }
 

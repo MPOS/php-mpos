@@ -13,18 +13,21 @@ if (!$smarty->isCached('master.tpl', $smarty_cache_key)) {
   }
 
   $iHeight = 0;
-  if (@$_REQUEST['next'] && !empty($_REQUEST['height']) && is_numeric($_REQUEST['height'])) {
-    $iHeight = @$roundstats->getNextBlockForStats($_REQUEST['height'], $iLimit);
-      if (!$iHeight) {
-        $iBlock = $block->getLast();
-        $iHeight = $iBlock['height']; 
-      }
-  } else if (@$_REQUEST['prev'] && !empty($_REQUEST['height']) && is_numeric($_REQUEST['height'])) {
-    $iHeight = $_REQUEST['height'];
+  if (@$_REQUEST['next'] && !empty($_REQUEST['height'])) {
+    $iHeight = @$roundstats->getNextBlock($_REQUEST['height']);
+    if (!$iHeight) {
+      $iBlock = $block->getLast();
+      $iHeight = $iBlock['height'];
+    }
+  } else if (@$_REQUEST['prev'] && !empty($_REQUEST['height'])) {
+    $iHeight = $roundstats->getPreviousBlock($_REQUEST['height']);
   } else if (empty($_REQUEST['height'])) {
-      $aBlock = $block->getLast();
-      $iHeight = $aBlock['height']; 
+    $iBlock = $block->getLast();
+    $iHeight = $iBlock['height'];
+  } else {
+    $iHeight = $_REQUEST['height'];
   }
+  $_REQUEST['height'] = $iHeight;
 
   $test = false;
   if (@$_REQUEST['test'] && $user->isAdmin($_SESSION['USERDATA']['id'])) {
@@ -48,8 +51,8 @@ if (!$smarty->isCached('master.tpl', $smarty_cache_key)) {
       } 
     }
   } else if ($config['payout_system'] == 'prop' || $config['payout_system'] == 'pps') {
-      if ($setting->getValue('statistics_show_block_average') && !$test) {
-        foreach($aBlocksFoundData as $key => $aData) {
+    if ($setting->getValue('statistics_show_block_average') && !$test) {
+      foreach($aBlocksFoundData as $key => $aData) {
         $aBlocksFoundData[$key]['block_avg'] = round($block->getAvgBlockShares($aData['height'], $config['pplns']['blockavg']['blockcount']));
         $use_average = true;
       } 
@@ -88,9 +91,17 @@ if (!$smarty->isCached('master.tpl', $smarty_cache_key)) {
   $debug->append('Using cached page', 3);
 }
 
-if ($setting->getValue('acl_block_statistics')) {
+switch($setting->getValue('acl_block_statistics', 1)) {
+case '0':
+  if ($user->isAuthenticated()) {
+    $smarty->assign("CONTENT", "default.tpl");
+  }
+  break;
+case '1':
   $smarty->assign("CONTENT", "default.tpl");
-} else if ($user->isAuthenticated()) {
-  $smarty->assign("CONTENT", "default.tpl");
+  break;
+case '2':
+  $_SESSION['POPUP'][] = array('CONTENT' => 'Page currently disabled. Please try again later.', 'TYPE' => 'alert alert-danger');
+  $smarty->assign("CONTENT", "");
+  break;
 }
-?>

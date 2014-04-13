@@ -16,8 +16,8 @@ class Monitoring extends Base {
       $aMonitors = explode(',', $api_keys);
       foreach ($aMonitors as $aData) {
         $temp = explode('|', $aData);
-        $aMonitor['api_key'] = $temp[0];
-        $aMonitor['monitor_id'] = $temp[1];
+        $aMonitor['api_key'] = trim($temp[0]);
+        $aMonitor['monitor_id'] = trim($temp[1]);
         $target = '/getMonitors?apiKey=' . $aMonitor['api_key'] . '&monitors=' . $aMonitor['monitor_id'] . '&format=json&noJsonCallback=1&customUptimeRatio=1-7-30&logs=1';
         $aMonitorStatus = $this->tools->getApi($url, $target);
         if (!$aMonitorStatus || @$aMonitorStatus['stat'] == 'fail') {
@@ -70,9 +70,8 @@ class Monitoring extends Base {
     if ($query && $query->bind_param('s', $name) && $query->execute() && $result = $query->get_result()) {
       return $result->fetch_assoc();
     } else {
-      $this->sqlError();
+      return $this->sqlError();
     }
-    return $value;
   }
 
   /**
@@ -100,7 +99,7 @@ class Monitoring extends Base {
   public function startCronjob($cron_name) {
     $aStatus = $this->getStatus($cron_name . '_active');
     if ($aStatus['value'] == 1) {
-      $this->setErrorMessage('Cron is already active in database: ' . $cron_name . '_active is 1');
+      $this->setErrorMessage('Cron is already active in database: ' . $cron_name . '_active is 1, please force run with -f once ensured it\' not running');
       return false;
     }
     $this->setStatus($cron_name . "_active", "yesno", 1);

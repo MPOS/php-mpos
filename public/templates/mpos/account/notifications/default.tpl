@@ -13,6 +13,7 @@
         <th align="left">Type</th>
         <th align="center">Active</th>
       </tr>
+      {if $DISABLE_IDLEWORKERNOTIFICATIONS|default:"" != 1}
       <tr>
         <td align="left">IDLE Worker</td>
         <td>
@@ -25,6 +26,7 @@
           </span>
         </td>
       </tr>
+      {/if}
       {if $DISABLE_BLOCKNOTIFICATIONS|default:"" != 1}
       <tr>
         <td align="left">New Blocks</td>
@@ -40,24 +42,12 @@
       </tr>
       {/if}
       <tr>
-        <td align="left">Auto Payout</td>
+        <td align="left">Payout</td>
         <td>
           <span class="toggle">
-          <label for="data[auto_payout]">
-          <input type="hidden" name="data[auto_payout]" value="0" />
-          <input type="checkbox" class="ios-switch" name="data[auto_payout]" id="data[auto_payout]" value="1"{nocache}{if $SETTINGS['auto_payout']|default:"0" == 1}checked{/if}{/nocache} />
-          <div class="switch"></div>
-          </label>
-          </span>
-        </td>
-      </tr>
-      <tr>
-        <td align="left">Manual Payout</td>
-        <td>
-          <span class="toggle">
-          <label for="data[manual_payout]">
-          <input type="hidden" name="data[manual_payout]" value="0" />
-          <input type="checkbox" class="ios-switch" name="data[manual_payout]" id="data[manual_payout]" value="1"{nocache}{if $SETTINGS['manual_payout']|default:"0" == 1}checked{/if}{/nocache} />
+          <label for="data[payout]">
+          <input type="hidden" name="data[payout]" value="0" />
+          <input type="checkbox" class="ios-switch" name="data[payout]" id="data[payout]" value="1"{nocache}{if $SETTINGS['payout']|default:"0" == 1}checked{/if}{/nocache} />
           <div class="switch"></div>
           </label>
           </span>
@@ -106,9 +96,8 @@
         <td align="center">{$NOTIFICATIONS[notification].time}</td>
         <td align="center">
 {if $NOTIFICATIONS[notification].type == new_block}New Block
-{else if $NOTIFICATIONS[notification].type == auto_payout}Auto Payout
+{else if $NOTIFICATIONS[notification].type == payout}Payout
 {else if $NOTIFICATIONS[notification].type == idle_worker}IDLE Worker
-{else if $NOTIFICATIONS[notification].type == manual_payout}Manual Payout
 {else if $NOTIFICATIONS[notification].type == success_login}Successful Login
 {/if}
         </td>

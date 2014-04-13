@@ -78,7 +78,7 @@ class RoundStats extends Base {
       SELECT 
       b.id, height, blockhash, amount, confirmations, difficulty, FROM_UNIXTIME(time) as time, shares,
       IF(a.is_anonymous, 'anonymous', a.username) AS finder,
-      ROUND((difficulty * 65535) / POW(2, (" . $this->config['difficulty'] . " -16)), 0) AS estshares,
+      ROUND(difficulty * POW(2, 32 - " . $this->coin->getTargetBits() . "), 0) AS estshares,
       (time - (SELECT time FROM $this->tableBlocks WHERE height < ? ORDER BY height DESC LIMIT 1)) AS round_time
       FROM " . $this->block->getTableName() . " as b
       LEFT JOIN " . $this->user->getTableName() . " AS a ON b.account_id = a.id
@@ -288,3 +288,4 @@ $roundstats->setUser($user);
 $roundstats->setStatistics($statistics);
 $roundstats->setBlock($block);
 $roundstats->setTransaction($transaction);
+$roundstats->setCoin($coin);

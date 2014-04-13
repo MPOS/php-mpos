@@ -1,5 +1,7 @@
 #!/bin/bash
 
+echo "Please be aware: This cron is deprecated and will be removed. Please read: https://github.com/MPOS/php-mpos/wiki/Cronjobs#setup"
+sleep 2
 
 #########################
 #                       #
@@ -10,7 +12,7 @@
 PHP_BIN=$( which php )
 
 # List of cruns to execute
-CRONS="findblock.php proportional_payout.php pplns_payout.php pps_payout.php blockupdate.php payouts.php tickerupdate.php notifications.php statistics.php token_cleanup.php archive_cleanup.php liquid_payout.php"
+CRONS="findblock.php proportional_payout.php pplns_payout.php pps_payout.php blockupdate.php payouts.php tickerupdate.php notifications.php statistics.php tables_cleanup.php"
 
 # Output additional runtime information
 VERBOSE="0"
@@ -115,7 +117,10 @@ if [[ -e $PIDFILE ]]; then
 fi
 
 # Write our PID file
-echo $PID > $PIDFILE
+echo $PID 2>/dev/null 1> $PIDFILE || {
+  echo 'Failed to create PID file, aborting';
+  exit 1
+}
 
 for cron in $CRONS; do
   [[ $VERBOSE == 1 ]] && echo "Running $cron, check logfile for details"

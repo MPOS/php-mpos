@@ -58,10 +58,10 @@ class Notification extends Mail {
    * @param id int Account ID
    * @return array Notification data
    **/
-  public function getNofifications($account_id) {
+  public function getNotifications($account_id,$limit=50) {
     $this->debug->append("STA " . __METHOD__, 4);
-    $stmt = $this->mysqli->prepare("SELECT * FROM $this->table WHERE account_id = ? ORDER BY time DESC");
-    if ($stmt && $stmt->bind_param('i', $account_id) && $stmt->execute() && $result = $stmt->get_result())
+    $stmt = $this->mysqli->prepare("SELECT * FROM $this->table WHERE account_id = ? ORDER BY time DESC LIMIT ?");
+    if ($stmt && $stmt->bind_param('ii', $account_id, $limit) && $stmt->execute() && $result = $stmt->get_result())
       return $result->fetch_all(MYSQLI_ASSOC);
     return $this->getError();
   }
@@ -72,13 +72,26 @@ class Notification extends Mail {
    * @return array Notification settings
    **/
   public function getNotificationSettings($account_id) {
+    // Some defaults, we cover them here so we can avoid adding default settings on user creation
+    $aDefaults = array( 'newsletter' => 1 );
     $this->debug->append("STA " . __METHOD__, 4);
     $stmt = $this->mysqli->prepare("SELECT * FROM $this->tableSettings WHERE account_id = ?");
     if ($stmt && $stmt->bind_param('i', $account_id) && $stmt->execute() && $result = $stmt->get_result()) {
       if ($result->num_rows > 0) {
+        $aFound = array();
         while ($row = $result->fetch_assoc()) {
+          if (array_key_exists($row['type'], $aDefaults)) $aFound[] = $row['type'];
           $aData[$row['type']] = $row['active'];
         }
+        // Check found types against our defaults, set if required
+        foreach ($aDefaults as $type => $value) {
+          if (!in_array($type, $aFound)) {
+            $aData[$type] = $value;
+          }
+        }
+        return $aData;
+      } else {
+        foreach ($aDefaults as $type => $value) $aData[$type] = $value;
         return $aData;
       }
     }
@@ -150,6 +163,27 @@ class Notification extends Mail {
     }
     $this->setErrorMessage('Error sending mail notification');
     return false;
+  }
+
+  /**
+   * Cleanup old notifications
+   * @param none
+   * @return bool true or false
+   **/
+  public function cleanupNotifications($days=7) {
+    $failed = 0;
+    $this->deleted = 0;
+    $stmt = $this->mysqli->prepare("DELETE FROM $this->table WHERE time < (NOW() - ? * 24 * 60 * 60)");
+    if (! ($this->checkStmt($stmt) && $stmt->bind_param('i', $days) && $stmt->execute())) {
+      $failed++;
+    } else {
+      $this->deleted += $stmt->affected_rows;
+    }
+    if ($failed > 0) {
+      $this->setCronMessage('Failed to delete ' . $failed . ' notifications from ' . $this->table . ' table');
+      return false;
+    }
+    return true;
   }
 }
 

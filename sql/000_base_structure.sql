@@ -46,7 +46,7 @@ CREATE TABLE IF NOT EXISTS `blocks` (
   `account_id` int(255) unsigned DEFAULT NULL,
   `worker_name` varchar(50) DEFAULT 'unknown',
   `shares` int(255) unsigned DEFAULT NULL,
-  `share_id` int(255) DEFAULT NULL,
+  `share_id` bigint(30) DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `height` (`height`,`blockhash`),
   KEY `time` (`time`)
@@ -120,7 +120,7 @@ CREATE TABLE IF NOT EXISTS `payouts` (
   `completed` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   KEY `account_id` (`account_id`,`completed`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 CREATE TABLE IF NOT EXISTS `pool_worker` (
   `id` int(255) NOT NULL AUTO_INCREMENT,
@@ -142,7 +142,7 @@ CREATE TABLE IF NOT EXISTS `settings` (
   UNIQUE KEY `setting` (`name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-INSERT INTO `settings` (`name`, `value`) VALUES ('DB_VERSION', '0.0.5');
+INSERT INTO `settings` (`name`, `value`) VALUES ('DB_VERSION', '0.0.8');
 
 CREATE TABLE IF NOT EXISTS `shares` (
   `id` bigint(30) NOT NULL AUTO_INCREMENT,
@@ -233,7 +233,8 @@ CREATE TABLE IF NOT EXISTS `transactions` (
   KEY `block_id` (`block_id`),
   KEY `account_id` (`account_id`),
   KEY `type` (`type`),
-  KEY `archived` (`archived`)
+  KEY `archived` (`archived`),
+  KEY `account_id_archived` (`account_id`,`archived`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
 CREATE TABLE IF NOT EXISTS `templates` (

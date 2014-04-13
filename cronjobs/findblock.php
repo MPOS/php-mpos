@@ -26,7 +26,7 @@ chdir(dirname(__FILE__));
 require_once('shared.inc.php');
 
 // Fetch our last block found from the DB as a starting point
-$aLastBlock = @$block->getLast();
+$aLastBlock = @$block->getLastValid();
 $strLastBlockHash = $aLastBlock['blockhash'];
 if (!$strLastBlockHash) $strLastBlockHash = '';
 
@@ -47,24 +47,35 @@ if (empty($aTransactions['transactions'])) {
   foreach ($aTransactions['transactions'] as $iIndex => $aData) {
     if ( $aData['category'] == 'generate' || $aData['category'] == 'immature' ) {
       // Table header, printe once if we found a block
-      !$header ? $log->logInfo("Blockhash\t\tHeight\tAmount\tConfirmations\tDiff\t\tTime") : $header = true;
+      $strLogMask = "| %-20.20s | %15.15s | %10.10s | %13.13s | %25.25s | %18.18s |";
+      // Loop through our unaccounted blocks
+      if (!$header) {
+        $log->logInfo('Starting RPC block detecion, blocks are stored in Database');
+        $log->logInfo(sprintf($strLogMask, 'Blockhash', 'Height', 'Amount', 'Confirmations', 'Difficulty', 'Time'));
+        $header = true;
+      }
 
       $aBlockRPCInfo = $bitcoin->getblock($aData['blockhash']);
       $config['reward_type'] == 'block' ? $aData['amount'] = $aData['amount'] : $aData['amount'] = $config['reward'];
       $aData['height'] = $aBlockRPCInfo['height'];
+      $aTxDetails = $bitcoin->gettransaction($aBlockRPCInfo['tx'][0]);
+      if (!isset($aBlockRPCInfo['confirmations'])) {
+        $aData['confirmations'] = $aBlockRPCInfo['confirmations'];
+      } else if (isset($aTxDetails['confirmations'])) {
+        $aData['confirmations'] = $aTxDetails['confirmations'];
+      } else {
+        $log->logFatal('    RPC does not return any usable block confirmation information');
+        $monitoring->endCronjob($cron_name, 'E0082', 1, true);
+      }
       $aData['difficulty'] = $aBlockRPCInfo['difficulty'];
-      $log->logInfo(substr($aData['blockhash'], 0, 15) . "...\t" .
-        $aData['height'] . "\t" .
-        $aData['amount'] . "\t" .
-        $aData['confirmations'] . "\t\t" .
-        $aData['difficulty'] . "\t" .
-        strftime("%Y-%m-%d %H:%M:%S", $aData['time']));
+      $log->logInfo(sprintf($strLogMask, substr($aData['blockhash'], 0, 17)."...", $aData['height'], $aData['amount'], $aData['confirmations'], $aData['difficulty'], strftime("%Y-%m-%d %H:%M:%S", $aData['time'])));
       if ( ! empty($aBlockRPCInfo['flags']) && preg_match('/proof-of-stake/', $aBlockRPCInfo['flags']) ) {
         $log->logInfo("Block above with height " .  $aData['height'] . " not added to database, proof-of-stake block!");
         continue;
       }
       if (!$block->addBlock($aData) ) {
-        $log->logFatal('Unable to add block: ' . $aData['height'] . ': ' . $block->getCronError());
+        $log->logFatal('Unable to add block: (' . $aData['height'] . ') ' . $aData['blockhash'] . ': ' . $block->getCronError());
+        $monitoring->endCronjob($cron_name, 'E0081', 1, true);
       }
     }
   }
@@ -75,8 +86,10 @@ $aAllBlocks = $block->getAllUnsetShareId('ASC');
 if (empty($aAllBlocks)) {
   $log->logDebug('No new blocks without share_id found in database');
 } else {
+  $log->logInfo('Starting block share detection, this may take a while');
+  $strLogMask = "| %8.8s | %10.10s | %15.15s | %10.10s | %25.25s | %-15.15s | %-15.15s | %18.18s |";
   // Loop through our unaccounted blocks
-  $log->logInfo("Block ID\tHeight\t\tAmount\tShare ID\tShares\tFinder\tWorker\t\tType");
+  $log->logInfo(sprintf($strLogMask, 'Block ID', 'Height', 'Amount', 'Share ID', 'Shares', 'Finder', 'Worker', 'Type'));
   foreach ($aAllBlocks as $iIndex => $aBlock) {
     if (empty($aBlock['share_id'])) {
       // Fetch share information
@@ -124,16 +137,8 @@ if (empty($aAllBlocks)) {
         $monitoring->endCronjob($cron_name, 'E0005', 0, true);
       }
 
-      $log->logInfo(
-        $aBlock['id'] . "\t\t"
-        . $aBlock['height'] . "\t\t"
-        . $aBlock['amount'] . "\t"
-        . $iCurrentUpstreamId . "\t\t"
-        . $iRoundShares . "\t"
-        . "[$iAccountId] " . $user->getUserName($iAccountId) . "\t"
-        . $iWorker . "\t"
-        . $share->share_type
-      );
+      // Print formatted row
+      $log->logInfo(sprintf($strLogMask, $aBlock['id'], $aBlock['height'], $aBlock['amount'], $iCurrentUpstreamId, $iRoundShares, "[$iAccountId] " . $user->getUserName($iAccountId), $iWorker, $share->share_type));
 
       // Store new information
       if (!$block->setShareId($aBlock['id'], $iCurrentUpstreamId))
@@ -152,11 +157,17 @@ if (empty($aAllBlocks)) {
         // Notify users
         $aAccounts = $notification->getNotificationAccountIdByType('new_block');
         if (is_array($aAccounts)) {
+		
+          $finder = $user->getUserName($iAccountId);
           foreach ($aAccounts as $aData) {
             $aMailData['height'] = $aBlock['height'];
             $aMailData['subject'] = 'New Block';
             $aMailData['email'] = $user->getUserEmail($user->getUserName($aData['account_id']));
             $aMailData['shares'] = $iRoundShares;
+            $aMailData['amount'] = $aBlock['amount'];
+            $aMailData['difficulty'] = $aBlock['difficulty'];
+            $aMailData['finder'] = $finder;
+            $aMailData['currency'] = $config['currency'];
             if (!$notification->sendNotification($aData['account_id'], 'new_block', $aMailData))
               $log->logError('Failed to notify user of new found block: ' . $user->getUserName($aData['account_id']));
           }

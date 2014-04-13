@@ -46,7 +46,7 @@ $hts = ($config['https_only'] && (!empty($_SERVER['QUERY_STRING']))) ? "https://
 // Rate limiting
 if ($config['memcache']['enabled'] && $config['mc_antidos']['enabled']) {
   if (PHP_OS == 'WINNT') {
-    require_once(CLASS_DIR . 'memcached.class.php');
+    require_once(CLASS_DIR . '/memcached.class.php');
   }
   // memcache antidos needs a memcache handle
   $memcache = new Memcached();
@@ -98,11 +98,10 @@ if (count(@$_SESSION['last_ip_pop']) == 2) {
   $data = $_SESSION['last_ip_pop'];
   $ip = filter_var($data[0], FILTER_VALIDATE_IP);
   $time = date("l, F jS \a\\t g:i a", $data[1]);
-  $closelink = "<a href='index.php?page=dashboard&clp=1' style='float:right;padding-right:14px;'>Close</a>";
-  if (@$_SESSION['AUTHENTICATED'] && $_SESSION['last_ip_pop'][0] !== $_SERVER['REMOTE_ADDR']) {
-    $_SESSION['POPUP'][] = array('CONTENT' => "You last logged in from <b>$ip</b> on $time $closelink", 'TYPE' => 'warning');
+  if (@$_SESSION['AUTHENTICATED'] && $_SESSION['last_ip_pop'][0] !== $user->getCurrentIP()) {
+    $_SESSION['POPUP'][] = array('CONTENT' => "You last logged in from <b>$ip</b> on $time", 'DISMISS' => 'yes', 'ID' => 'lastlogin', 'TYPE' => 'alert alert-warning');
   } else {
-    $_SESSION['POPUP'][] = array('CONTENT' => "You last logged in from <b>$ip</b> on $time $closelink", 'TYPE' => 'info');
+    $_SESSION['POPUP'][] = array('CONTENT' => "You last logged in from <b>$ip</b> on $time", 'DISMISS' => 'yes', 'ID' => 'lastlogin', 'TYPE' => 'alert alert-info');
   }
 }
 
@@ -148,11 +147,11 @@ $action = (isset($_REQUEST['action']) && !is_array($_REQUEST['action'])) && isse
 
 // Check csrf token validity if necessary
 if ($config['csrf']['enabled'] && isset($_REQUEST['ctoken']) && !empty($_REQUEST['ctoken']) && !is_array($_REQUEST['ctoken'])) {
-  $csrftoken->valid = ($csrftoken->checkBasic($user->getCurrentIP(), $arrPages[$page], $_REQUEST['ctoken'])) ? 1 : 0;
+  $csrftoken->valid = ($csrftoken->checkBasic(session_id(), $arrPages[$page], $_REQUEST['ctoken'])) ? 1 : 0;
 } else if ($config['csrf']['enabled'] && (!@$_REQUEST['ctoken'] || empty($_REQUEST['ctoken']))) {
   $csrftoken->valid = 0;
 }
-if ($config['csrf']['enabled']) $smarty->assign('CTOKEN', $csrftoken->getBasic($user->getCurrentIP(), $arrPages[$page]));
+if ($config['csrf']['enabled']) $smarty->assign('CTOKEN', $csrftoken->getBasic(session_id(), $arrPages[$page]));
 
 // Load the page code setting the content for the page OR the page action instead if set
 if (!empty($action)) {

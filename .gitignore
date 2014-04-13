@@ -9,8 +9,7 @@
 /public/templates/cache/**
 
 # Logs
-/cronjobs/**
-/cronjobs/logs/**.txt
+/cronjobs/logs
 /cronjobs/logs/**.txt.*.gz
 /logs/*
 
@@ -26,3 +25,10 @@ public/include/config/**/*.php
 .settings
 
 .DS_Store
+#
+# Site specific Files
+/public/robots.txt
+/public/sitemap.xml
+/public/sitemap.gz
+/public/sitemap.tar.gz
+/public/.htaccess

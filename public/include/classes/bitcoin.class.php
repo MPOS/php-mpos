@@ -308,4 +308,16 @@ class BitcoinClient extends jsonRPCClient {
     }
     return true;
   }
+
+  public function is_testnet() {
+    try {
+      $r = parent::getinfo();
+      if ($r['testnet']) {
+        return true;
+      }
+    } catch (Exception $e) {
+      return false;
+    }
+    return false;
+  }
 }

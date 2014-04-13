@@ -114,7 +114,7 @@ class jsonRPCClient {
     $resultStatus = curl_getinfo($ch);
     if ($resultStatus['http_code'] != '200') {
       if ($resultStatus['http_code'] == '401') throw new Exception('RPC call did not return 200: Authentication failed');
-      throw new Exception('RPC call did not return 200: HTTP error: ' . $resultStatus['http_code']);
+      throw new Exception('RPC call did not return 200: HTTP error: ' . $resultStatus['http_code'] . ' - JSON Response: [' . @$response['error']['code'] . '] ' . @$response['error']['message']);
     }
     if (curl_errno($ch)) throw new Exception('RPC call failed: ' . curl_error($ch));
     curl_close($ch);

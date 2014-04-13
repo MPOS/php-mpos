@@ -33,7 +33,9 @@ if ($iCurrentPoolHashrate > $dNetworkHashrate) $dNetworkHashrate = $iCurrentPool
 
 // Time in seconds, not hours, using modifier in smarty to translate
 $iCurrentPoolHashrate > 0 ? $iEstTime = $dDifficulty * pow(2,32) / ($iCurrentPoolHashrate * 1000) : $iEstTime = 0;
-$iEstShares = (pow(2, 32 - $config['difficulty']) * $dDifficulty);
+$iEstShares = $statistics->getEstimatedShares($dDifficulty);
+// For mpos-bot PoolLuck
+$iEstShares > 0 && $aShares['valid'] > 0 ? $dEstPercent = round(100 / $iEstShares * $aShares['valid'], 2) : $dEstPercent = 0;
 
 // Time since last
 $now = new DateTime( "now" );
@@ -48,6 +50,7 @@ $data = array(
   'pool_name' => $setting->getValue('website_name'),
   'hashrate' => $iCurrentPoolHashrate,
   'efficiency' => $dEfficiency,
+  'progress' => $dEstPercent,
   'workers' => $worker->getCountAllActiveWorkers(),
   'currentnetworkblock' =>  $iBlock,
   'nextnetworkblock' =>  $iBlock + 1,

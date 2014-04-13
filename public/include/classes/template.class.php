@@ -32,6 +32,23 @@ class Template extends Base {
   }
 
   /**
+   * Get all available designs
+   * Read css files from css/design folder
+   *
+   * @return array - list of available designs
+   */
+  public function getDesigns() {
+    $this->debug->append("STA " . __METHOD__, 4);
+    $aTmpDesigns = glob(BASEPATH . 'site_assets/' . THEME . '/css/design/*.css');
+    $aDesigns = array();
+    $aDesigns['default'] = 'default';
+    foreach ($aTmpDesigns as $filename) {
+      if (basename($filename) != '.' && basename($filename) != '..') $aDesigns[basename($filename, ".css")] = basename($filename, ".css");
+    }
+    return $aDesigns;
+  }
+  
+  /**
    * Cached getActiveTemplates method
    *
    * @see getActiveTemplates
