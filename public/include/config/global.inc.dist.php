@@ -147,8 +147,8 @@ $config['coindiffchangetarget'] = 2016;
  *  Fees applied to transactions
  *   https://github.com/MPOS/php-mpos/wiki/Config-Setup#wiki-tx-fees
  **/
-$config['txfee_auto'] = 0.1;
-$config['txfee_manual'] = 0.1;
+$config['txfee_auto'] = 0.001;
+$config['txfee_manual'] = 0.01;
 
 /**
  * Block & Pool Bonus
@@ -266,7 +266,7 @@ $config['memcache']['force']['contrib_shares'] = false;
  *  Cookie configuration details
  *   https://github.com/MPOS/php-mpos/wiki/Config-Setup#wiki-cookies
  **/
-$config['cookie']['duration'] = '1440';
+$config['cookie']['duration'] = '86400';
 $config['cookie']['domain'] = '';
 $config['cookie']['path'] = '/';
 $config['cookie']['httponly'] = true;

@@ -498,3 +498,4 @@ $transaction->setErrorCodes($aErrorCodes);
 $transaction->setCurrency($currency);
 $transaction->setCoinAddress($coinAddress);
 ?>
+

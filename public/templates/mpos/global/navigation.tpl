@@ -1,5 +1,6 @@
     <hr/>
-    <li class="icon-home"><a href="{$smarty.server.SCRIPT_NAME}">Home</a></li>
+    <li class="icon-home"><a href="/">Home</a></li>
+    <li class="icon-megaphone"><a href="/chat">IRC / Chat</a></li>
     {if $smarty.session.AUTHENTICATED|default:"0" == 1}
     <h3>My Account</h3>
     <ul class="toggle">
