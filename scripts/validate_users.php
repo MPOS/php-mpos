@@ -8,10 +8,18 @@
 	// Include all settings and classes
 	require_once('shared.inc.php');
 
-  $options = getopt("d:a");
+  $options = getopt("d:n:ah");
 	isset($options['d']) ? $timeLimitInDays = (int)$options['d'] : $timeLimitInDays = 90;
   isset($options['a']) ? $allUsers = true : $allUsers = false;
-	$notifyStaleUsers = False;
+	isset($options['n']) ? $notifyStaleUsers = true : $notifyStaleUsers = false;
+  if (isset($options['h'])) {
+    echo "Usage " . basename($argv[0]) . " [-d #] [-a] [-n]:" . PHP_EOL;
+    echo "  -h       :  Show this help" . PHP_EOL;
+    echo "  -d #     :  Only show users inactive for more that # days" . PHP_EOL;
+    echo "  -n       :  Notify stale accounts via e-mail [EXPERIMENTAL]" . PHP_EOL;
+    echo "  -a       :  Show all pool users regardless of inactivity" . PHP_EOL;
+    exit(0);
+  }
 
 	// Fetch all users
 	$users = $user->getAllAssoc();
