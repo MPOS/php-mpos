@@ -63,7 +63,7 @@ foreach ($argv as $option) {
 }
 
 // Load 3rd party logging library for running crons
-$log = KLogger::instance( 'logs/' . $cron_name, KLogger::INFO );
+$log = KLogger::instance( BASEPATH . '../logs/' . $cron_name, KLogger::INFO );
 $log->LogDebug('Starting ' . $cron_name);
 
 // Load the start time for later runtime calculations for monitoring
