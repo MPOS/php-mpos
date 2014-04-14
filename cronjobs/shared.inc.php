@@ -35,7 +35,7 @@ if (SECHASH_CHECK) {
 
 // MODIFY THIS
 // We need to find our include files so set this properly
-define("BASEPATH", "../public/");
+define("BASEPATH", dirname(__FILE__) . "/");
 
 /*****************************************************
  * No need to change beyond this point               *
@@ -48,14 +48,8 @@ $dStartTime = microtime(true);
 $cron_name = basename($_SERVER['PHP_SELF'], '.php');
 
 // Include our configuration (holding defines for the requires)
-require_once(BASEPATH . 'include/config/global.inc.dist.php');
-require_once(BASEPATH . 'include/config/global.inc.php');
-
-require_once(BASEPATH . 'include/config/security.inc.dist.php');
-@include_once(BASEPATH . 'include/config/security.inc.php');
-
-require_once(BASEPATH . 'include/bootstrap.php');
-require_once(BASEPATH . 'include/version.inc.php');
+require_once(BASEPATH . '../include/bootstrap.php');
+require_once(BASEPATH . '../include/version.inc.php');
 
 // Command line switches
 array_shift($argv);
