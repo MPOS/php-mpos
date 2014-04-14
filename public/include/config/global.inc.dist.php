@@ -5,7 +5,7 @@ $defflip = (!cfip()) ? exit(header('HTTP/1.1 401 Unauthorized')) : 1;
  * Do not edit this unless you have confirmed that your config has been updated!
  *  https://github.com/MPOS/php-mpos/wiki/Config-Setup#wiki-config-version
  **/
-$config['version'] = '0.0.7';
+$config['version'] = '0.0.8';
 
 /**
  * Unless you disable this, we'll do a quick check on your config first.
@@ -65,12 +65,12 @@ $config['wallet']['password'] = 'testnet';
 $config['swiftmailer']['type'] = 'sendmail';
 $config['swiftmailer']['sendmail']['path'] = '/usr/sbin/sendmail';
 $config['swiftmailer']['sendmail']['options'] = '-bs';
-$config['switfmailer']['smtp']['host'] = 'your.mail-relay.com';
-$config['switfmailer']['smtp']['port'] = '587';
-$config['switfmailer']['smtp']['encryption'] = 'tls';
-$config['switfmailer']['smtp']['username'] = '';
-$config['switfmailer']['smtp']['password'] = '';
-$config['switfmailer']['smtp']['throttle'] = 100;
+$config['swiftmailer']['smtp']['host'] = 'your.mail-relay.com';
+$config['swiftmailer']['smtp']['port'] = '587';
+$config['swiftmailer']['smtp']['encryption'] = 'tls';
+$config['swiftmailer']['smtp']['username'] = '';
+$config['swiftmailer']['smtp']['password'] = '';
+$config['swiftmailer']['smtp']['throttle'] = 100;
 
 /**
  * Getting Started Config

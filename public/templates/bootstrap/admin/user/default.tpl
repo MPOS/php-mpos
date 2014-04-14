@@ -110,7 +110,7 @@
 {section name=user loop=$USERS|default}
               <tr>
                 <td>{$USERS[user].id}</td>
-                <td>{$USERS[user].username|escape}</td>
+                <td><a href="{$smarty.server.SCRIPT_NAME}?page={$smarty.request.page|escape}&action=userdetails&id={$USERS[user].id}">{$USERS[user].username|escape}</a></td>
                 <td>{$USERS[user].email|escape}</td>
                 <td>{$USERS[user].shares.valid}</td>
                 <td>{$USERS[user].hashrate}</td>
