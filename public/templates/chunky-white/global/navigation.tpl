@@ -16,19 +16,18 @@
             <a class="accordion-toggle collapsed" data-toggle="collapse"
                data-parent="#side-nav" href="#forms-collapse"><i class="fa fa-tint"></i> <span class="name">Pools</span></a>
             <ul id="forms-collapse" class="panel-collapse collapse">
-                <li><a href="https://chunkypools.com/doge/">Dogecoin (DOGE)</a></li>
-                <li><a href="https://chunkypools.com/rpc/">RonPaulCoin (RPC)</a></li>
+                <li><a href="https://chunkypools.com/def/">Defcoin (DEF)</a></li>
                 <li><a href="https://chunkypools.com/dgb/">Digibyte (DGB)</a></li>
+                <li><a href="https://chunkypools.com/doge/">Dogecoin (DOGE)</a></li>
+                <li><a href="https://chunkypools.com/jny/">Jennycoin (JNY)</a></li>
                 <li><a href="https://chunkypools.com/kdc/">Klondikecoin (KDC)</a></li>
+                <li><a href="https://chunkypools.com/mun/">Muniti (MUN) [x11]</a></li>
                 <li><a href="https://chunkypools.com/pot/">Potcoin (POT)</a></li>
+                <li><a href="https://chunkypools.com/rpc/">RonPaulCoin (RPC)</a></li>
                 <li><a href="https://chunkypools.com/ruby/">Rubycoin (RUBY)</a></li>
-                <li><a href="https://chunkypools.com/sun/">Suncoin (SUN)</a></li>
-                <li><a href="https://chunkypools.com/pcn/">Procoin (PCN)</a></li>
                 <li><a href="https://chunkypools.com/spn/">Spartancoin (SPN)</a></li>
                 <li><a href="https://chunkypools.com/stp/">Stoopidcoin (STP)</a></li>
-                <li><a href="https://chunkypools.com/def/">Defcoin (DEF)</a></li>
-                <li><a href="https://chunkypools.com/mun/">Muniti (MUN) [x11]</a></li>
-
+                <li><a href="https://chunkypools.com/wc/">Whitecoin (WC)</a></li>
             </ul>
         </li>
 
