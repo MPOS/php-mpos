@@ -153,6 +153,7 @@ There are a few other projects out there that take advantage of MPOS and it's in
 * [MPOS Eggdrop Module](https://github.com/iAmShorty/mpos-eggdrop-tcl) written in TCL, adding MPOS commands to this bot, using the MPOS API
 * [Windows Phone Pool App](http://www.windowsphone.com/en-us/store/app/meeneminermonitor/7ec6eac7-a642-409b-96c8-57b5cfdf45cf)
 * [iPhone iMPOS App](https://itunes.apple.com/us/app/impos/id742179239?mt=8)
+* [Other Windows Phone App](http://www.windowsphone.com/en-us/store/app/mining-info/952f1137-eb62-4613-8057-34576d3c9c44)
 
 Contributing
 ============

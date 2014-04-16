@@ -8,7 +8,7 @@
                     <li>
                         <a href="{$smarty.server.SCRIPT_NAME}?page=dashboard"><i class="fa fa-dashboard fa-fw"></i> Dashboard</a>
                     </li>
-                    
+
                     <li {if $smarty.get.page|default:"0" eq "account"}class="active"{/if}>
                         <a href="#"><i class="fa fa-user-md fa-fw"></i> My Account<span class="fa arrow"></span></a>
                         <ul class="nav nav-second-level">
@@ -39,7 +39,6 @@
                           <li><a href="{$smarty.server.SCRIPT_NAME}?page=admin&action=registrations"><i class="fa fa-pencil-square-o fa-fw"></i> Registrations</a></li>
                           <li><a href="{$smarty.server.SCRIPT_NAME}?page=admin&action=invitations"><i class="fa fa-users fa-fw"></i> Invitations</a></li>
                           <li><a href="{$smarty.server.SCRIPT_NAME}?page=admin&action=poolworkers"><i class="fa fa-desktop fa-fw"></i> Pool Workers</a></li>
-                          <li><a href="{$smarty.server.SCRIPT_NAME}?page=admin&action=templates"><i class="fa fa-files-o fa-fw"></i> Templates</a></li>
                         </ul>
                         <!-- /.nav-second-level -->
                     </li>
