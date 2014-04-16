@@ -139,14 +139,17 @@ $(document).ready(function(){
   function refreshWorkerData(data) {
     workers = data.getuserworkers.data;
     length = workers.length;
+    totalHashrate = 0;
     $('#b-workers').html('');
     for (var i = j = 0; i < length; i++) {
       if (workers[i].hashrate > 0) {
+        totalHashrate += workers[i].hashrate;
         j++;
-        $('#b-workers').append('<tr><td class="text-left">' + workers[i].username + '</td><td class="text-right">' + workers[i].hashrate + '</td><td class="text-right">' + workers[i].difficulty + '</td></tr>');
+        $('#b-workers').append('<tr><td class="text-left">' + workers[i].username + '</td><td class="text-right">' + number_format(workers[i].hashrate, 2) + '</td><td class="text-right">' + workers[i].difficulty + '</td></tr>');
       }
     }
     if (j == 0) { $('#b-workers').html('<tr><td colspan="3" class="text-center">No active workers</td></tr>'); }
+    if (totalHashrate > 0) { $('#b-workers').append('<tr><td class="text-left"><b>Total</b></td><td class="text-right">' + number_format(totalHashrate, 2) + '</td><td></td></tr>'); }
   }
 
   // Refresh balance information
