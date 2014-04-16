@@ -30,7 +30,7 @@ if ($user->isAuthenticated()) {
         $wf_editable = $user->token->isTokenValid($_SESSION['USERDATA']['id'], $oldtoken_wf, 7);
         $wf_sent = $user->token->doesTokenExist('withdraw_funds', $_SESSION['USERDATA']['id']);
       }
-    
+
       // get the status of a token if set
       $message_tokensent_invalid = 'A token was sent to your e-mail that will allow you to ';
       $message_tokensent_valid = 'You can currently ';
@@ -61,7 +61,7 @@ if ($user->isAuthenticated()) {
       $_SESSION['POPUP'][] = array('CONTENT' => $popupmsg, 'TYPE' => 'alert alert-warning');
     }
   }
-  
+
   if (isset($_POST['do']) && $_POST['do'] == 'genPin') {
     if (!$config['csrf']['enabled'] || $config['csrf']['enabled'] && $csrftoken->valid) {
       if ($user->generatePin($_SESSION['USERDATA']['id'], $_POST['currentPassword'])) {
@@ -100,6 +100,8 @@ if ($user->isAuthenticated()) {
         	$dBalance = $aBalance['confirmed'];
         	if ($setting->getValue('disable_payouts') == 1 || $setting->getValue('disable_manual_payouts') == 1) {
         	  $_SESSION['POPUP'][] = array('CONTENT' => 'Manual payouts are disabled.', 'TYPE' => 'alert alert-warning');
+          } else if ($config['twofactor']['enabled'] && $config['twofactor']['options']['withdraw'] && !$wf_editable) {
+            $_SESSION['POPUP'][] = array('CONTENT' => 'You have not yet unlocked account withdrawls.', 'TYPE' => 'alert alert-danger');
           } else if ($aBalance['confirmed'] < $config['mp_threshold']) {
             $_SESSION['POPUP'][] = array('CONTENT' => 'Payout must be greater or equal than ' . $config['mp_threshold'] . '.', 'TYPE' => 'info');
           } else if (!$user->getCoinAddress($_SESSION['USERDATA']['id'])) {
@@ -127,7 +129,9 @@ if ($user->isAuthenticated()) {
         	break;
 
           case 'updateAccount':
-            if (!$config['csrf']['enabled'] || $config['csrf']['enabled'] && $csrftoken->valid) {
+            if ($config['twofactor']['enabled'] && $config['twofactor']['options']['details'] && !$ea_editable) {
+              $_SESSION['POPUP'][] = array('CONTENT' => 'You have not yet unlocked account updates.', 'TYPE' => 'alert alert-danger');
+            } else if (!$config['csrf']['enabled'] || $config['csrf']['enabled'] && $csrftoken->valid) {
               if ($user->updateAccount($_SESSION['USERDATA']['id'], $_POST['paymentAddress'], $_POST['payoutThreshold'], $_POST['donatePercent'], $_POST['email'], $_POST['is_anonymous'], $oldtoken_ea)) {
             	$_SESSION['POPUP'][] = array('CONTENT' => 'Account details updated', 'TYPE' => 'alert alert-success');
               } else {
@@ -139,7 +143,9 @@ if ($user->isAuthenticated()) {
         	break;
 
           case 'updatePassword':
-            if (!$config['csrf']['enabled'] || $config['csrf']['enabled'] && $csrftoken->valid) {
+            if ($config['twofactor']['enabled'] && $config['twofactor']['options']['changepw'] && !$cp_editable) {
+              $_SESSION['POPUP'][] = array('CONTENT' => 'You have not yet unlocked password updates.', 'TYPE' => 'alert alert-danger');
+            } else if (!$config['csrf']['enabled'] || $config['csrf']['enabled'] && $csrftoken->valid) {
               if ($user->updatePassword($_SESSION['USERDATA']['id'], $_POST['currentPassword'], $_POST['newPassword'], $_POST['newPassword2'], $oldtoken_cp)) {
                 $_SESSION['POPUP'][] = array('CONTENT' => 'Password updated', 'TYPE' => 'alert alert-success');
               } else {
