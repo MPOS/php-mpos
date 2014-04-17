@@ -32,6 +32,8 @@ function run_009() {
     }
   }
 
+  echo '! Use `git status` to clenaup any remaining left over folders' . PHP_EOL;
+
   if ($db_version_now == $db_version_old && version_compare($db_version_now, DB_VERSION, '<')) {
     // Run the upgrade
     echo '- Starting database migration to version ' . $db_version_new . PHP_EOL;
