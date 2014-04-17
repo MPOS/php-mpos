@@ -58,7 +58,7 @@ CREATE TABLE IF NOT EXISTS `coin_addresses` (
   `coin` varchar(255) NOT NULL,
   `account_id` int(255) NOT NULL,
   `ap_threshold` float DEFAULT '0',
-  PRIMARY KEY (`id`),
+  PRIMARY KEY (`id`)
 ) ENGINE=FEDERATED DEFAULT CHARSET=utf8 CONNECTION='mysql://.../chunky/coin_addresses';
 
 CREATE TABLE IF NOT EXISTS `invitations` (
@@ -88,7 +88,7 @@ CREATE TABLE IF NOT EXISTS `news` (
   `time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `active` tinyint(1) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
+) ENGINE=FEDERATED DEFAULT CHARSET=utf8 CONNECTION='mysql://.../chunky/news';
 
 CREATE TABLE IF NOT EXISTS `notifications` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
