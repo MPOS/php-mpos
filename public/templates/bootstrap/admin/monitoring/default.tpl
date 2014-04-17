@@ -50,7 +50,7 @@
                   {else}
                     <font color="green">
                   {/if}
-                    {$event.value|date_format:"%m/%d %H:%M:%S"}
+                    {$event.value|date_format:$GLOBAL.config.date}
                   </font>
                 {else}
                   {$event.value|default:""}

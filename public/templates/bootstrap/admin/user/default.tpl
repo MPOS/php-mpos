@@ -121,8 +121,8 @@
                 <td colspan="2">{$USERS[user].estimates.hours24|number_format:"8"}</td>
 {/if}
                 <td>{$USERS[user].balance|number_format:"8"}</td>
-                <td>{$USERS[user].signup_timestamp|date_format:"%d/%m %H:%M:%S"}</td>
-                <td>{$USERS[user].last_login|date_format:"%d/%m %H:%M:%S"}</td>
+                <td>{$USERS[user].signup_timestamp|date_format:$GLOBAL.config.date}</td>
+                <td>{$USERS[user].last_login|date_format:$GLOBAL.config.date}</td>
                 <td>
                   <input type="hidden" name="admin[{$USERS[user].id}]" value="0"/>
                   <input type="checkbox" onclick="storeAdmin({$USERS[user].id})" name="admin[{$USERS[user].id}]" value="1" id="admin[{$USERS[user].id}]" {if $USERS[user].is_admin}checked{/if} />

@@ -5,7 +5,7 @@
       <div class="panel-heading">
         <i class="fa fa-bookmark"></i> {$NEWS[news].header}
         <br />
-        <font size="1px">posted {$NEWS[news].time|date_format:"%b %e, %Y at %H:%M"}{if $HIDEAUTHOR|default:"0" == 0} by <b>{$NEWS[news].author}</b>{/if}</font>
+        <font size="1px">posted {$NEWS[news].time|date_format:$GLOBAL.config.date}{if $HIDEAUTHOR|default:"0" == 0} by <b>{$NEWS[news].author}</b>{/if}</font>
       </div>
       <div class="panel-body">
         {$NEWS[news].content nofilter}

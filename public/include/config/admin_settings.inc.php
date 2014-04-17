@@ -294,6 +294,13 @@ $aSettings['system'][] = array(
   'tooltip' => 'The email address for system errors notifications, like cronjobs failures.'
 );
 $aSettings['system'][] = array(
+  'display' => 'Date format string', 'type' => 'text',
+  'site' => 25,
+  'default' => '%m/%d/%Y %H:%M:%S',
+  'name' => 'system_date_format', 'value' => $setting->getValue('system_date_format'),
+  'tooltip' => 'Date format to be used throughout the site. Please check PHP strftime for details.'
+);
+$aSettings['system'][] = array(
   'display' => 'Disable e-mail confirmations', 'type' => 'select',
   'options' => array( 0 => 'No', 1 => 'Yes' ),
   'default' => 0,

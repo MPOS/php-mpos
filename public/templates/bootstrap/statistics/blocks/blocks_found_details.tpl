@@ -46,7 +46,7 @@
               {/if}
               </td>
                 <td>{if $BLOCKSFOUND[block].is_anonymous|default:"0" == 1 && $GLOBAL.userdata.is_admin|default:"0" == 0}anonymous{else}{$BLOCKSFOUND[block].finder|default:"unknown"|escape}{/if}</td>
-                <td class="text-right">{$BLOCKSFOUND[block].time|date_format:"%d/%m/%Y %H:%M:%S"}</td>
+                <td class="text-right">{$BLOCKSFOUND[block].time|date_format:$GLOBAL.config.date}</td>
                 <td class="text-right">{$BLOCKSFOUND[block].difficulty|number_format:"4"}</td>
                 <td class="text-right">{$BLOCKSFOUND[block].amount|number_format:"2"}</td>
                 <td class="text-right">
