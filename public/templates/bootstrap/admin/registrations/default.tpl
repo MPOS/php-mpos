@@ -24,7 +24,7 @@
                 <td>{$LASTREGISTEREDUSERS[user].id|escape}</td>
                 <td>{$LASTREGISTEREDUSERS[user].mposuser}</td>
                 <td>{$LASTREGISTEREDUSERS[user].email}</td>
-                <td>{$LASTREGISTEREDUSERS[user].signup_timestamp|date_format:"%d/%m %H:%M:%S"}</td>
+                <td>{$LASTREGISTEREDUSERS[user].signup_timestamp|date_format:$GLOBAL.config.date}</td>
                 <td class="text-center">{if !$LASTREGISTEREDUSERS[user].inviter}<i class="fa fa-times fa-fw">{else}<i class="fa fa-check fa-fw">{/if}</td>
                 <td><a href="{$smarty.server.SCRIPT_NAME}?page=admin&action=user&do=query&filter[account]={$LASTREGISTEREDUSERS[user].inviter}">{$LASTREGISTEREDUSERS[user].inviter}</a></td>
               </tr>

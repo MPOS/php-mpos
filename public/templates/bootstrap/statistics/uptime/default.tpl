@@ -23,7 +23,7 @@
               <td class="text-center"><img src="{$GLOBALASSETS}/images/flags/{$node.0}.png"/></td>
               {if $node|count > 1}<td class="text-center">{$node.1}</td>{/if}
               <td class="text-center"><span class="ur-status-{$CODES[$item.status]|lower}">{$CODES[$item.status]}</span></td>
-              <td class="text-center">{$item.log.1.datetime|date_format:"%b %d, %Y %H:%M"}</td>
+              <td class="text-center">{$item.log.1.datetime|date_format:$GLOBAL.config.date}</td>
               <td>
                 <div class="progress progress-striped active">
                   <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="{$item.customuptimeratio.0}" aria-valuemin="0" aria-valuemax="100" style="width: {$item.customuptimeratio.0}%">
@@ -58,7 +58,7 @@
         </table>
       </div>
       <div class="panel-footer">
-        <h6>Last update {$UPDATED|date_format:"%b %d, %Y %H:%M"}</h6>
+        <h6>Last update {$UPDATED|date_format:$GLOBAL.config.date}</h6>
       </div>
     </div>
   </div>
