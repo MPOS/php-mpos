@@ -14,15 +14,19 @@
     </li>
     <p>2. <strong>Download a miner.</strong></p>
       <ul>
-        <li><em>Intel/ATI/AMD CGMiner Windows Sha256:</em> <a href="http://ck.kolivas.org/apps/cgminer/cgminer-4.2.2-windows.zip" target="_blank">Download here</a></li>
-        <li><em>Intel/ATI/AMD CGMiner Linux Sha256:</em> <a href="http://ck.kolivas.org/apps/cgminer/cgminer-4.2.2.tar.bz2" target="_blank">Download Here</a></li>
-	<li><em>Intel/ATI/AMD CGMiner 3.7.2 Scrypt Windows:</em> <a href="https://mega.co.nz/#!iQhlGIxa!mzKOfLY6TpOfvPvWE6JFlWdRgHEoshzm99f1hd3ZdRw" target="_blank">Download here</a></li>	
-	<li><em>Intel/ATI/AMD CGMiner 3.7.2 Scrypt Linux:</em> <a href="http://ck.kolivas.org/apps/cgminer/3.7/cgminer-3.7.0.tar.bz2" target="_blank">Download Here</a></li>	
+        {if $GLOBAL.config.algorithm == 'sha256d'}
+        <li><em>Intel/ATI/AMD CGMiner Windows:</em> <a href="http://ck.kolivas.org/apps/cgminer/cgminer-4.2.2-windows.zip" target="_blank">Download here</a></li>
+        <li><em>Intel/ATI/AMD CGMiner Linux:</em> <a href="http://ck.kolivas.org/apps/cgminer/cgminer-4.2.2.tar.bz2" target="_blank">Download Here</a></li>
+	{/if}
+	{if $GLOBAL.config.algorithm == 'scrypt'}
+	<li><em>Intel/ATI/AMD CGMiner (3.7.2) Windows:</em> <a href="https://mega.co.nz/#!iQhlGIxa!mzKOfLY6TpOfvPvWE6JFlWdRgHEoshzm99f1hd3ZdRw" target="_blank">Download here</a></li>	
+	<li><em>Intel/ATI/AMD CGMiner (3.7.2) Linux:</em> <a href="http://ck.kolivas.org/apps/cgminer/3.7/cgminer-3.7.0.tar.bz2" target="_blank">Download Here</a></li>	
+	{/if}
 	<li><em>Intel/ATI/AMD BFGMiner Linux/Windows:</em> <a href="http://bfgminer.org" target="_blank">Download here</a></li>
         <li><em>Fabulous Panda Miner Mac OS X:</em> <a href="http://fabulouspanda.co.uk/macminer/" target="_blank">Download here</a></li>
         <li><em>Minerd CPU Miner Mac/Linux/Windows:</em><a href="https://bitcointalk.org/index.php?topic=55038.msg654850#msg654850" target="_blank"> Download here</a>.</li>
         <li><em>NVIDIA Cudaminer:</em><a href="https://mega.co.nz/#!ZQxxRKJI!W_H00CQCBdQZUpgokQWmAsteplcbQfc-j44LrAvM9oQ" target="_blank"> Download here</a></li>
-	  </ul>
+      </ul>
     </li>
     <p>3. <strong>Configure your miner.</strong></p>
     <ul>
