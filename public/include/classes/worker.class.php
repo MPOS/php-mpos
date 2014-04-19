@@ -190,6 +190,7 @@ class Worker extends Base {
       FROM $this->table AS w
       ORDER BY shares DESC LIMIT ?,?");
     if ($this->checkStmt($stmt) && $stmt->bind_param('iiiiii', $interval, $interval, $interval, $interval, $start, $iLimit) && $stmt->execute() && $result = $stmt->get_result()) {
+      $aData = array();
       while ($row = $result->fetch_assoc()) {
         $row['hashrate'] = round($this->coin->calcHashrate($row['shares'], $interval), 2);
         if ($row['count_all'] > 0) {
