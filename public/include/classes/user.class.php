@@ -35,6 +35,12 @@ class User extends Base {
   public function getUserEmailById($id) {
     return $this->getSingle($id, 'email', 'id', 'i');
   }
+  public function getUserPasswordHashById($id) {
+    return $this->getSingle($id, 'pass', 'id', 'i');
+  }
+  public function getUserPinHashById($id) {
+    return $this->getSingle($id, 'pin', 'id', 'i');
+  }
   public function getUserNoFee($id) {
     return $this->getSingle($id, 'no_fees', 'id');
   }
@@ -264,14 +270,14 @@ class User extends Base {
    * @param pin int PIN to check
    * @return bool
    **/
-  public function checkPin($userId, $pin=false) {
+  public function checkPin($userId, $pin='') {
     $this->debug->append("STA " . __METHOD__, 4);
     $this->debug->append("Confirming PIN for $userId and pin $pin", 2);
-    $stmt = $this->mysqli->prepare("SELECT pin FROM $this->table WHERE id=? AND pin=? LIMIT 1");
-    $pin_hash = $this->getHash($pin);
+    $strPinHash = $this->getUserPinHashById($userId);
+    $aPin = explode('$', $strPinHash);
+    count($aPin) == 1 ? $pin_hash = $this->getHash($pin, 0) : $pin_hash = $this->getHash($pin, $aPin[1], $aPin[2]);
+    $stmt = $this->mysqli->prepare("SELECT pin FROM $this->table WHERE id = ? AND pin = ? LIMIT 1");
     if ($stmt->bind_param('is', $userId, $pin_hash) && $stmt->execute() && $stmt->bind_result($row_pin) && $stmt->fetch()) {
-      $aPin = explode('$', $row_pin);
-      count($aPin) == 1 ? $pin_hash = $this->getHash($pin, 0) : $pin_hash = $this->getHash($pin, $aPin[1], $aPin[2]);
       $this->setUserPinFailed($userId, 0);
       return ($pin_hash === $row_pin);
     }
@@ -298,15 +304,17 @@ class User extends Base {
     $this->debug->append("STA " . __METHOD__, 4);
     $username = $this->getUserName($userID);
     $email = $this->getUserEmail($username);
-    $current = $this->getHash($current);
+    $strPasswordHash = $this->getUserPasswordHashById($userID);
+    $aPassword = explode('$', $strPasswordHash);
+    count($aPassword) == 1 ? $password_hash = $this->getHash($current, 0) : $password_hash = $this->getHash($current, $aPassword[1], $aPassword[2]);
     $newpin = intval( '0' . rand(1,9) . rand(0,9) . rand(0,9) . rand(0,9) );
     $aData['username'] = $username;
     $aData['email'] = $email;
     $aData['pin'] = $newpin;
-    $newpin = $this->getHash($newpin);
+    $newpin = $this->getHash($newpin, 1, bin2hex(openssl_random_pseudo_bytes(32)));
     $aData['subject'] = 'PIN Reset Request';
     $stmt = $this->mysqli->prepare("UPDATE $this->table SET pin = ? WHERE ( id = ? AND pass = ? )");
-    if ($this->checkStmt($stmt) && $stmt->bind_param('sis', $newpin, $userID, $current) && $stmt->execute()) {
+    if ($this->checkStmt($stmt) && $stmt->bind_param('sis', $newpin, $userID, $password_hash) && $stmt->execute()) {
       if ($stmt->errno == 0 && $stmt->affected_rows === 1) {
         if ($this->mail->sendMail('pin/reset', $aData)) {
           $this->log->log("info", "$username was sent a pin reset e-mail");
@@ -436,8 +444,10 @@ class User extends Base {
       $this->setErrorMessage( 'New password is too short, please use more than 8 chars' );
       return false;
     }
-    $current = $this->getHash($current);
-    $new = $this->getHash($new1);
+    $strPasswordHash = $this->getUserPasswordHashById($userID);
+    $aPassword = explode('$', $strPasswordHash);
+    count($aPassword) == 1 ? $password_hash = $this->getHash($current, 0) : $password_hash = $this->getHash($current, $aPassword[1], $aPassword[2]);
+    $new = $this->getHash($new1, 1, bin2hex(openssl_random_pseudo_bytes(32)));
     if ($this->config['twofactor']['enabled'] && $this->config['twofactor']['options']['changepw']) {
       $tValid = $this->token->isTokenValid($userID, $strToken, 6);
       if ($tValid) {
@@ -457,7 +467,7 @@ class User extends Base {
     }
     $stmt = $this->mysqli->prepare("UPDATE $this->table SET pass = ? WHERE ( id = ? AND pass = ? )");
     if ($this->checkStmt($stmt)) {
-      $stmt->bind_param('sis', $new, $userID, $current);
+      $stmt->bind_param('sis', $new, $userID, $password_hash);
       $stmt->execute();
       if ($stmt->errno == 0 && $stmt->affected_rows === 1) {
         $this->log->log("info", $this->getUserName($userID)." updated password");
