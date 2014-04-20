@@ -9,7 +9,7 @@ function run_009() {
   $db_version_now = $setting->getValue('DB_VERSION');  // Our actual version installed
 
   // Upgrade specific variables
-  $aSql[] = "ALTER TABLE " . $user->getTableName() . " ADD `timezone` VARCHAR(35) NOT NULL DEFAULT 'UTC' AFTER `email`";
+  $aSql[] = "ALTER TABLE " . $user->getTableName() . " ADD `timezone` VARCHAR(35) NOT NULL DEFAULT '415' AFTER `email`";
   $aSql[] = "UPDATE " . $setting->getTableName() . "    SET value = '0.0.9' WHERE name = 'DB_VERSION'";
 
   if ($db_version_now == $db_version_old && version_compare($db_version_now, DB_VERSION, '<')) {

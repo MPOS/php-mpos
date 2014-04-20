@@ -15,6 +15,7 @@ CREATE TABLE IF NOT EXISTS `accounts` (
   `username` varchar(40) NOT NULL,
   `pass` varchar(255) NOT NULL,
   `email` varchar(255) DEFAULT NULL COMMENT 'Assocaited email: used for validating users, and re-setting passwords',
+  `timezone` varchar(35) NOT NULL DEFAULT '415',
   `notify_email` VARCHAR( 255 ) NULL DEFAULT NULL,
   `loggedIp` varchar(255) DEFAULT NULL,
   `is_locked` tinyint(1) NOT NULL DEFAULT '0',
