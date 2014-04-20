@@ -7,8 +7,15 @@ class User extends Base {
   private $user = array();
 
   // get and set methods
-  private function getHash($string) {
-    return hash('sha256', $string.$this->salt);
+  private function getHash($string, $version=0, $pepper='') {
+    switch($version) {
+    case 0:
+      return hash('sha256', $string.$this->salt);
+      break;
+    case 1:
+      return '$' . $version . '$' . $pepper . '$' . hash('sha256', $string.$this->salt.$pepper);
+      break;
+    }
   }
   public function getUserName($id) {
     return $this->getSingle($id, 'username', 'id');
@@ -263,6 +270,8 @@ class User extends Base {
     $stmt = $this->mysqli->prepare("SELECT pin FROM $this->table WHERE id=? AND pin=? LIMIT 1");
     $pin_hash = $this->getHash($pin);
     if ($stmt->bind_param('is', $userId, $pin_hash) && $stmt->execute() && $stmt->bind_result($row_pin) && $stmt->fetch()) {
+      $aPin = explode('$', $row_pin);
+      count($aPin) == 1 ? $pin_hash = $this->getHash($pin, 0) : $pin_hash = $this->getHash($pin, $aPin[1], $aPin[2]);
       $this->setUserPinFailed($userId, 0);
       return ($pin_hash === $row_pin);
     }
@@ -407,7 +416,7 @@ class User extends Base {
     $this->setErrorMessage('A request has already been sent to your e-mail address. Please wait an hour for it to expire.');
     return false;
   }
-  
+
   /**
    * Update the accounts password
    * @param userID int User ID
@@ -460,7 +469,7 @@ class User extends Base {
     $this->setErrorMessage( 'Unable to update password, current password wrong?' );
     return false;
   }
-  
+
   /**
    * Update account information from the edit account page
    * @param userID int User ID
@@ -538,7 +547,7 @@ class User extends Base {
         return false;
       }
     }
-    
+
     // We passed all validation checks so update the account
     $stmt = $this->mysqli->prepare("UPDATE $this->table SET coin_address = ?, ap_threshold = ?, donate_percent = ?, email = ?, is_anonymous = ? WHERE id = ?");
     if ($this->checkStmt($stmt) && $stmt->bind_param('sddsii', $address, $threshold, $donate, $email, $is_anonymous, $userID) && $stmt->execute()) {
@@ -577,14 +586,15 @@ class User extends Base {
   private function checkUserPassword($username, $password) {
     $this->debug->append("STA " . __METHOD__, 4);
     $user = array();
-    $password_hash = $this->getHash($password);
-    $stmt = $this->mysqli->prepare("SELECT username, id, is_admin FROM $this->table WHERE LOWER(username) = LOWER(?) AND pass = ? LIMIT 1");
-    if ($this->checkStmt($stmt) && $stmt->bind_param('ss', $username, $password_hash) && $stmt->execute() && $stmt->bind_result($row_username, $row_id, $row_admin)) {
+    $stmt = $this->mysqli->prepare("SELECT username, pass, id, is_admin FROM $this->table WHERE LOWER(username) = LOWER(?) LIMIT 1");
+    if ($this->checkStmt($stmt) && $stmt->bind_param('s', $username) && $stmt->execute() && $stmt->bind_result($row_username, $row_password, $row_id, $row_admin)) {
       $stmt->fetch();
       $stmt->close();
+      $aPassword = explode('$', $row_password);
+      count($aPassword) == 1 ? $password_hash = $this->getHash($password, 0) : $password_hash = $this->getHash($password, $aPassword[1], $aPassword[2]);
       // Store the basic login information
       $this->user = array('username' => $row_username, 'id' => $row_id, 'is_admin' => $row_admin);
-      return strtolower($username) === strtolower($row_username);
+      return $password_hash === $row_password && strtolower($username) === strtolower($row_username);
     }
     return $this->sqlError();
   }
@@ -788,9 +798,9 @@ class User extends Base {
     }
 
     // Create hashed strings using original string and salt
-    $password_hash = $this->getHash($password1);
-    $pin_hash = $this->getHash($pin);
-    $apikey_hash = $this->getHash($username);
+    $password_hash = $this->getHash($password1, 1, bin2hex(openssl_random_pseudo_bytes(32)));
+    $pin_hash = $this->getHash($pin, 1, bin2hex(openssl_random_pseudo_bytes(32)));
+    $apikey_hash = $this->getHash($username, 0);
     $username_clean = strip_tags($username);
     $signup_time = time();
 
