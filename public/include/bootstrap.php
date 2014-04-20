@@ -29,6 +29,14 @@ if (!$session_start) {
 }
 @setcookie(session_name(), session_id(), time()+$config['cookie']['duration'], $config['cookie']['path'], $config['cookie']['domain'], $config['cookie']['secure'], $config['cookie']['httponly']);
 
+// Set the timezone if a user has it set, default UTC
+if (isset($_SESSION['USERDATA']['timezone'])) {
+  $aTimezones = DateTimeZone::listIdentifiers();
+  date_default_timezone_set($aTimezones[$_SESSION['USERDATA']['timezone']]);
+} else {
+  date_default_timezone_set('UTC');
+}
+
 // Our default template to load, pages can overwrite this later
 $master_template = 'master.tpl';
 
