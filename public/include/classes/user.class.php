@@ -311,7 +311,7 @@ class User extends Base {
     $aData['username'] = $username;
     $aData['email'] = $email;
     $aData['pin'] = $newpin;
-    $newpin = $this->getHash($newpin, 1, bin2hex(openssl_random_pseudo_bytes(32)));
+    $newpin = $this->getHash($newpin, HASH_VERSION, bin2hex(openssl_random_pseudo_bytes(32)));
     $aData['subject'] = 'PIN Reset Request';
     $stmt = $this->mysqli->prepare("UPDATE $this->table SET pin = ? WHERE ( id = ? AND pass = ? )");
     if ($this->checkStmt($stmt) && $stmt->bind_param('sis', $newpin, $userID, $password_hash) && $stmt->execute()) {
@@ -447,7 +447,7 @@ class User extends Base {
     $strPasswordHash = $this->getUserPasswordHashById($userID);
     $aPassword = explode('$', $strPasswordHash);
     count($aPassword) == 1 ? $password_hash = $this->getHash($current, 0) : $password_hash = $this->getHash($current, $aPassword[1], $aPassword[2]);
-    $new = $this->getHash($new1, 1, bin2hex(openssl_random_pseudo_bytes(32)));
+    $new = $this->getHash($new1, HASH_VERSION, bin2hex(openssl_random_pseudo_bytes(32)));
     if ($this->config['twofactor']['enabled'] && $this->config['twofactor']['options']['changepw']) {
       $tValid = $this->token->isTokenValid($userID, $strToken, 6);
       if ($tValid) {
@@ -808,8 +808,8 @@ class User extends Base {
     }
 
     // Create hashed strings using original string and salt
-    $password_hash = $this->getHash($password1, 1, bin2hex(openssl_random_pseudo_bytes(32)));
-    $pin_hash = $this->getHash($pin, 1, bin2hex(openssl_random_pseudo_bytes(32)));
+    $password_hash = $this->getHash($password1, HASH_VERSION, bin2hex(openssl_random_pseudo_bytes(32)));
+    $pin_hash = $this->getHash($pin, HASH_VERSION, bin2hex(openssl_random_pseudo_bytes(32)));
     $apikey_hash = $this->getHash($username, 0);
     $username_clean = strip_tags($username);
     $signup_time = time();
