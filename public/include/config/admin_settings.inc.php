@@ -13,8 +13,9 @@ $aSettings['website'][] = array(
   'tooltip' => 'Enable or Disable maintenance mode. Only admins can still login.'
 );
 $aSettings['website'][] = array(
-  'display' => 'Message of the Day', 'type' => 'text',
-  'size' => 25,
+  'display' => 'Message of the Day', 'type' => 'textarea',
+  'size' => 20,
+  'height' => 3,
   'default' => '',
   'name' => 'system_motd', 'value' => $setting->getValue('system_motd'),
   'tooltip' => 'Display a message of the day as information popup if set.'
