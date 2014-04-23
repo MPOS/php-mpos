@@ -37,7 +37,6 @@
                 {html_options options=$TIMEZONES selected=$GLOBAL.userdata.timezone}
               </select>
               {/nocache}
-         <!-- <input class="form-control" type="text" name="timezone" value="{$GLOBAL.userdata.timezone|escape}" size="20" {if $GLOBAL.twofactor.enabled && $GLOBAL.twofactor.options.details && !$DETAILSUNLOCKED}id="disabledInput" disabled{/if}/>{/nocache} -->
             </div>
             <div class="form-group">
               <label>Payment Address</label>
