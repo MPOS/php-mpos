@@ -7,8 +7,15 @@ class User extends Base {
   private $user = array();
 
   // get and set methods
-  private function getHash($string) {
-    return hash('sha256', $string.$this->salt);
+  private function getHash($string, $version=0, $pepper='') {
+    switch($version) {
+    case 0:
+      return hash('sha256', $string.$this->salt);
+      break;
+    case 1:
+      return '$' . $version . '$' . $pepper . '$' . hash('sha256', $string.$this->salt.$pepper);
+      break;
+    }
   }
   public function getUserName($id) {
     return $this->getSingle($id, 'username', 'id');
@@ -27,6 +34,12 @@ class User extends Base {
   }
   public function getUserEmailById($id) {
     return $this->getSingle($id, 'email', 'id', 'i');
+  }
+  public function getUserPasswordHashById($id) {
+    return $this->getSingle($id, 'pass', 'id', 'i');
+  }
+  public function getUserPinHashById($id) {
+    return $this->getSingle($id, 'pin', 'id', 'i');
   }
   public function getUserNoFee($id) {
     return $this->getSingle($id, 'no_fees', 'id');
@@ -257,11 +270,13 @@ class User extends Base {
    * @param pin int PIN to check
    * @return bool
    **/
-  public function checkPin($userId, $pin=false) {
+  public function checkPin($userId, $pin='') {
     $this->debug->append("STA " . __METHOD__, 4);
     $this->debug->append("Confirming PIN for $userId and pin $pin", 2);
-    $stmt = $this->mysqli->prepare("SELECT pin FROM $this->table WHERE id=? AND pin=? LIMIT 1");
-    $pin_hash = $this->getHash($pin);
+    $strPinHash = $this->getUserPinHashById($userId);
+    $aPin = explode('$', $strPinHash);
+    count($aPin) == 1 ? $pin_hash = $this->getHash($pin, 0) : $pin_hash = $this->getHash($pin, $aPin[1], $aPin[2]);
+    $stmt = $this->mysqli->prepare("SELECT pin FROM $this->table WHERE id = ? AND pin = ? LIMIT 1");
     if ($stmt->bind_param('is', $userId, $pin_hash) && $stmt->execute() && $stmt->bind_result($row_pin) && $stmt->fetch()) {
       $this->setUserPinFailed($userId, 0);
       return ($pin_hash === $row_pin);
@@ -289,15 +304,17 @@ class User extends Base {
     $this->debug->append("STA " . __METHOD__, 4);
     $username = $this->getUserName($userID);
     $email = $this->getUserEmail($username);
-    $current = $this->getHash($current);
+    $strPasswordHash = $this->getUserPasswordHashById($userID);
+    $aPassword = explode('$', $strPasswordHash);
+    count($aPassword) == 1 ? $password_hash = $this->getHash($current, 0) : $password_hash = $this->getHash($current, $aPassword[1], $aPassword[2]);
     $newpin = intval( '0' . rand(1,9) . rand(0,9) . rand(0,9) . rand(0,9) );
     $aData['username'] = $username;
     $aData['email'] = $email;
     $aData['pin'] = $newpin;
-    $newpin = $this->getHash($newpin);
+    $newpin = $this->getHash($newpin, HASH_VERSION, bin2hex(openssl_random_pseudo_bytes(32)));
     $aData['subject'] = 'PIN Reset Request';
     $stmt = $this->mysqli->prepare("UPDATE $this->table SET pin = ? WHERE ( id = ? AND pass = ? )");
-    if ($this->checkStmt($stmt) && $stmt->bind_param('sis', $newpin, $userID, $current) && $stmt->execute()) {
+    if ($this->checkStmt($stmt) && $stmt->bind_param('sis', $newpin, $userID, $password_hash) && $stmt->execute()) {
       if ($stmt->errno == 0 && $stmt->affected_rows === 1) {
         if ($this->mail->sendMail('pin/reset', $aData)) {
           $this->log->log("info", "$username was sent a pin reset e-mail");
@@ -407,7 +424,7 @@ class User extends Base {
     $this->setErrorMessage('A request has already been sent to your e-mail address. Please wait an hour for it to expire.');
     return false;
   }
-  
+
   /**
    * Update the accounts password
    * @param userID int User ID
@@ -427,8 +444,10 @@ class User extends Base {
       $this->setErrorMessage( 'New password is too short, please use more than 8 chars' );
       return false;
     }
-    $current = $this->getHash($current);
-    $new = $this->getHash($new1);
+    $strPasswordHash = $this->getUserPasswordHashById($userID);
+    $aPassword = explode('$', $strPasswordHash);
+    count($aPassword) == 1 ? $password_hash = $this->getHash($current, 0) : $password_hash = $this->getHash($current, $aPassword[1], $aPassword[2]);
+    $new = $this->getHash($new1, HASH_VERSION, bin2hex(openssl_random_pseudo_bytes(32)));
     if ($this->config['twofactor']['enabled'] && $this->config['twofactor']['options']['changepw']) {
       $tValid = $this->token->isTokenValid($userID, $strToken, 6);
       if ($tValid) {
@@ -448,7 +467,7 @@ class User extends Base {
     }
     $stmt = $this->mysqli->prepare("UPDATE $this->table SET pass = ? WHERE ( id = ? AND pass = ? )");
     if ($this->checkStmt($stmt)) {
-      $stmt->bind_param('sis', $new, $userID, $current);
+      $stmt->bind_param('sis', $new, $userID, $password_hash);
       $stmt->execute();
       if ($stmt->errno == 0 && $stmt->affected_rows === 1) {
         $this->log->log("info", $this->getUserName($userID)." updated password");
@@ -460,7 +479,7 @@ class User extends Base {
     $this->setErrorMessage( 'Unable to update password, current password wrong?' );
     return false;
   }
-  
+
   /**
    * Update account information from the edit account page
    * @param userID int User ID
@@ -538,7 +557,7 @@ class User extends Base {
         return false;
       }
     }
-    
+
     // We passed all validation checks so update the account
     $stmt = $this->mysqli->prepare("UPDATE $this->table SET coin_address = ?, ap_threshold = ?, donate_percent = ?, email = ?, is_anonymous = ? WHERE id = ?");
     if ($this->checkStmt($stmt) && $stmt->bind_param('sddsii', $address, $threshold, $donate, $email, $is_anonymous, $userID) && $stmt->execute()) {
@@ -577,14 +596,15 @@ class User extends Base {
   private function checkUserPassword($username, $password) {
     $this->debug->append("STA " . __METHOD__, 4);
     $user = array();
-    $password_hash = $this->getHash($password);
-    $stmt = $this->mysqli->prepare("SELECT username, id, is_admin FROM $this->table WHERE LOWER(username) = LOWER(?) AND pass = ? LIMIT 1");
-    if ($this->checkStmt($stmt) && $stmt->bind_param('ss', $username, $password_hash) && $stmt->execute() && $stmt->bind_result($row_username, $row_id, $row_admin)) {
+    $stmt = $this->mysqli->prepare("SELECT username, pass, id, is_admin FROM $this->table WHERE LOWER(username) = LOWER(?) LIMIT 1");
+    if ($this->checkStmt($stmt) && $stmt->bind_param('s', $username) && $stmt->execute() && $stmt->bind_result($row_username, $row_password, $row_id, $row_admin)) {
       $stmt->fetch();
       $stmt->close();
+      $aPassword = explode('$', $row_password);
+      count($aPassword) == 1 ? $password_hash = $this->getHash($password, 0) : $password_hash = $this->getHash($password, $aPassword[1], $aPassword[2]);
       // Store the basic login information
       $this->user = array('username' => $row_username, 'id' => $row_id, 'is_admin' => $row_admin);
-      return strtolower($username) === strtolower($row_username);
+      return $password_hash === $row_password && strtolower($username) === strtolower($row_username);
     }
     return $this->sqlError();
   }
@@ -788,9 +808,9 @@ class User extends Base {
     }
 
     // Create hashed strings using original string and salt
-    $password_hash = $this->getHash($password1);
-    $pin_hash = $this->getHash($pin);
-    $apikey_hash = $this->getHash($username);
+    $password_hash = $this->getHash($password1, HASH_VERSION, bin2hex(openssl_random_pseudo_bytes(32)));
+    $pin_hash = $this->getHash($pin, HASH_VERSION, bin2hex(openssl_random_pseudo_bytes(32)));
+    $apikey_hash = $this->getHash($username, 0);
     $username_clean = strip_tags($username);
     $signup_time = time();
 
