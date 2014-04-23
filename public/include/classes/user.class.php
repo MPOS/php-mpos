@@ -597,7 +597,7 @@ class User extends Base {
     $this->debug->append("STA " . __METHOD__, 4);
     $user = array();
     $stmt = $this->mysqli->prepare("SELECT username, pass, id, timezone, is_admin FROM $this->table WHERE LOWER(username) = LOWER(?) LIMIT 1");
-    if ($this->checkStmt($stmt) && $stmt->bind_param('s', $username) && $stmt->execute() && $stmt->bind_result($row_username, $row_password, $row_id, $row_admin)) {
+    if ($this->checkStmt($stmt) && $stmt->bind_param('s', $username) && $stmt->execute() && $stmt->bind_result($row_username, $row_password, $row_id, $row_timezone, $row_admin)) {
       $stmt->fetch();
       $stmt->close();
       $aPassword = explode('$', $row_password);
