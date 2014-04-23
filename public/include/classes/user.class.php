@@ -861,7 +861,7 @@ class User extends Base {
         $this->setErrorMessage( 'New password is too short, please use more than 8 chars' );
         return false;
       }
-      $new_hash = $this->getHash($new1);
+      $new_hash = $this->getHash($new1, HASH_VERSION, bin2hex(openssl_random_pseudo_bytes(32)));
       $stmt = $this->mysqli->prepare("UPDATE $this->table SET pass = ? WHERE id = ?");
       if ($this->checkStmt($stmt) && $stmt->bind_param('si', $new_hash, $aToken['account_id']) && $stmt->execute() && $stmt->affected_rows === 1) {
         if ($this->token->deleteToken($aToken['token'])) {
