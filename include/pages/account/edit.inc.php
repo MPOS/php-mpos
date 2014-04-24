@@ -132,10 +132,11 @@ if ($user->isAuthenticated()) {
             if ($config['twofactor']['enabled'] && $config['twofactor']['options']['details'] && !$ea_editable) {
               $_SESSION['POPUP'][] = array('CONTENT' => 'You have not yet unlocked account updates.', 'TYPE' => 'alert alert-danger');
             } else if (!$config['csrf']['enabled'] || $config['csrf']['enabled'] && $csrftoken->valid) {
-              if ($user->updateAccount($_SESSION['USERDATA']['id'], $_POST['paymentAddress'], $_POST['payoutThreshold'], $_POST['donatePercent'], $_POST['email'], $_POST['is_anonymous'], $oldtoken_ea)) {
-            	$_SESSION['POPUP'][] = array('CONTENT' => 'Account details updated', 'TYPE' => 'alert alert-success');
+              if ($user->updateAccount($_SESSION['USERDATA']['id'], $_POST['paymentAddress'], $_POST['payoutThreshold'], $_POST['donatePercent'], $_POST['email'], $_POST['timezone'], $_POST['is_anonymous'], $oldtoken_ea)) {
+                $_SESSION['USERDATA']['timezone'] = $_POST['timezone'];
+              	$_SESSION['POPUP'][] = array('CONTENT' => 'Account details updated', 'TYPE' => 'alert alert-success');
               } else {
-            	$_SESSION['POPUP'][] = array('CONTENT' => 'Failed to update your account: ' . $user->getError(), 'TYPE' => 'alert alert-danger');
+              	$_SESSION['POPUP'][] = array('CONTENT' => 'Failed to update your account: ' . $user->getError(), 'TYPE' => 'alert alert-danger');
               }
             } else {
               $_SESSION['POPUP'][] = array('CONTENT' => $csrftoken->getErrorWithDescriptionHTML(), 'TYPE' => 'alert alert-warning');
@@ -197,6 +198,10 @@ if ($config['twofactor']['enabled'] && $user->isAuthenticated()) {
   $smarty->assign("DETAILSSENT", $ea_sent);
 }
 
+// Grab our timezones
+$smarty->assign('TIMEZONES', DateTimeZone::listIdentifiers());
+
+// Fetch donation threshold
 $smarty->assign("DONATE_THRESHOLD", $config['donate_threshold']);
 
 // Tempalte specifics
