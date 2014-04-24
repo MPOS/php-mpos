@@ -1,15 +1,15 @@
 <?php
-function run_009() {
+function run_0010() {
   // Ugly but haven't found a better way
   global $setting, $config, $statistics, $block, $mysqli;
 
   // Version information
-  $db_version_old = '0.0.8';  // What version do we expect
-  $db_version_new = '0.0.9';  // What is the new version we wish to upgrade to
+  $db_version_old = '0.0.9';  // What version do we expect
+  $db_version_new = '0.0.10';  // What is the new version we wish to upgrade to
   $db_version_now = $setting->getValue('DB_VERSION');  // Our actual version installed
 
   // Upgrade specific variables
-  $aSql[] = "UPDATE " . $setting->getTableName() . "    SET value = '0.0.9' WHERE name = 'DB_VERSION'";
+  $aSql[] = "UPDATE " . $setting->getTableName() . "    SET value = '0.0.10' WHERE name = 'DB_VERSION'";
 
   echo '- Starting configuration migration into new location' . PHP_EOL;
   $files = glob(BASEPATH . '../public/include/config/*');
