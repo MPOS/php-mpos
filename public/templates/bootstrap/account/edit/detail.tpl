@@ -31,6 +31,14 @@
               {nocache}<input class="form-control" type="text" name="email" value="{$GLOBAL.userdata.email|escape}" size="20" {if $GLOBAL.twofactor.enabled && $GLOBAL.twofactor.options.details && !$DETAILSUNLOCKED}id="disabledInput" disabled{/if}/>{/nocache}
             </div>
             <div class="form-group">
+              <label>Timezone</label>
+              {nocache}
+              <select class="form-control" name="timezone">
+                {html_options options=$TIMEZONES selected=$GLOBAL.userdata.timezone}
+              </select>
+              {/nocache}
+            </div>
+            <div class="form-group">
               <label>Payment Address</label>
               {nocache}<input class="form-control" type="text" name="paymentAddress" value="{$smarty.request.paymentAddress|default:$GLOBAL.userdata.coin_address|escape}" size="40"  {if $GLOBAL.twofactor.enabled && $GLOBAL.twofactor.options.details && !$DETAILSUNLOCKED}id="disabledInput" disabled{/if}/>{/nocache}
             </div>
