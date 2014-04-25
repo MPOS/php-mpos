@@ -48,15 +48,34 @@ class Worker extends Base {
     $this->debug->append("STA " . __METHOD__, 4);
     $stmt = $this->mysqli->prepare("
       SELECT w.account_id AS account_id, w.id AS id, w.username AS username
-      FROM " . $this->share->getTableName() . " AS s
+      FROM
+      (
+        SELECT username AS s_username, MAX(shares_id) AS shares_id, MAX(shares_archive_id) AS shares_archive_id
+        FROM
+        (
+          SELECT
+          s.username AS username, MAX(s.id) AS shares_id, NULL AS shares_archive_id
+          FROM . " . $this->share->getTableName() . " AS s
+          WHERE s.time > DATE_SUB(now(), INTERVAL ? SECOND)
+          AND s.our_result = 'Y'
+          GROUP BY s.username
+          UNION
+          SELECT
+          sa.username AS username, NULL AS shares_id, MAX(sa.id) AS shares_archive_id
+          FROM " . $this->share->getArchiveTableName() . " AS sa
+          WHERE sa.time > DATE_SUB(now(), INTERVAL ? SECOND)
+          AND sa.our_result = 'Y'
+          GROUP BY sa.username
+        ) AS derived0
+        GROUP BY s_username
+      ) AS derived1
       RIGHT JOIN " . $this->getTableName() . " AS w
-      ON w.username = s.username
-      AND s.time > DATE_SUB(now(), INTERVAL ? SECOND)
-      AND our_result = 'Y'
+      ON s_username = w.username
       WHERE w.monitor = 1
-      AND s.id IS NULL
+      AND shares_id IS NULL
+      AND shares_archive_id IS NULL
     ");
-    if ($this->checkStmt($stmt) && $stmt->bind_param('i', $interval) && $stmt->execute() && $result = $stmt->get_result())
+    if ($this->checkStmt($stmt) && $stmt->bind_param('ii', $interval, $interval) && $stmt->execute() && $result = $stmt->get_result())
       return $result->fetch_all(MYSQLI_ASSOC);
     return $this->sqlError('E0054');
   }
