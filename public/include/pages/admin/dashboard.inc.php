@@ -14,9 +14,14 @@ if ($bitcoin->can_connect() === true){
   $_SESSION['POPUP'][] = array('CONTENT' => 'Unable to connect to wallet RPC service: ' . $bitcoin->can_connect(), 'TYPE' => 'alert alert-danger');
 }
 
+// Grab versions from Online source
+require_once(CLASS_DIR . '/tools.class.php');
+$online_versions = $tools->getOnlineVersions();
+
 // Fetch version information
 $version['CURRENT'] = array('DB' => DB_VERSION, 'CONFIG' => CONFIG_VERSION, 'CORE' => MPOS_VERSION);
-$version['INSTALLED'] = array('DB' => $setting->getValue('DB_VERSION'), 'CONFIG' => $config['version'], 'CORE' => MPOS_VERSION);
+$version['INSTALLED'] = array('DB' => $setting->getValue('DB_VERSION'), 'CONFIG' => $config['version'], 'CORE' => $online_versions['MPOS_VERSION']);
+$version['ONLINE'] = array('DB' => $online_versions['DB_VERSION'], 'CONFIG' => $online_versions['CONFIG_VERSION'], 'CORE' => $online_versions['MPOS_VERSION']);
 
 // Fetch our cron list $aMonitorCrons
 require_once(INCLUDE_DIR . '/config/monitor_crons.inc.php');
