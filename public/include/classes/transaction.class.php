@@ -23,9 +23,10 @@ class Transaction extends Base {
    * @param coin_address string Coin address for this transaction [optional]
    * @return bool
    **/
-  public function addTransaction($account_id, $amount, $type='Credit', $block_id=NULL, $coin_address=NULL, $txid=NULL) {
-    $stmt = $this->mysqli->prepare("INSERT INTO $this->table (account_id, amount, block_id, type, coin_address, txid) VALUES (?, ?, ?, ?, ?, ?)");
-    if ($this->checkStmt($stmt) && $stmt->bind_param("idisss", $account_id, $amount, $block_id, $type, $coin_address, $txid) && $stmt->execute()) {
+  public function addTransaction($account_id, $amount, $type='Credit', $block_id=NULL, $coin_address=NULL, $txid=NULL, $convertible=NULL, $database_name=NULL) {
+    $where_to_insert = isset($database_name) ? "$database_name.$this->table" : $this->table;
+    $stmt = $this->mysqli->prepare("INSERT INTO $where_to_insert (account_id, amount, block_id, type, coin_address, txid, convertible) VALUES (?, ?, ?, ?, ?, ?, ?)");
+    if ($this->checkStmt($stmt) && $stmt->bind_param("idissss", $account_id, $amount, $block_id, $type, $coin_address, $txid, $convertible) && $stmt->execute()) {
       $this->insert_id = $stmt->insert_id;
       return true;
     }
@@ -349,6 +350,37 @@ class Transaction extends Base {
       return $result->fetch_assoc();
     return $this->sqlError();
   }
+
+ public function getConvertibleQueue($limit=250) {
+    $this->debug->append("STA " . __METHOD__, 4);
+    $stmt = $this->mysqli->prepare("
+      SELECT
+        a.id as account_id,
+        t.id as transaction_id,
+        a.username,
+        IFNULL(
+          ROUND(
+            (
+              SUM( IF( ( t.type = 'Convertible' AND b.confirmations >= " . $this->config['confirmations'] . "), t.amount, 0 ) ) -
+              SUM( IF( t.type = 'Convertible_Transfer', t.amount, 0 ) ) -
+              SUM( IF( ( t.type IN ('Donation','Fee') AND b.confirmations >= " . $this->config['confirmations'] . ") OR ( t.type IN ('Donation_PPS', 'Fee_PPS', 'TXFee') ), t.amount, 0 ) )
+            ), 8
+          ), 0
+        ) AS confirmed,
+      t.convertible
+      FROM $this->table AS t
+      LEFT JOIN " . $this->block->getTableName() . " AS b
+      ON t.block_id = b.id
+      LEFT JOIN " . $this->user->getTableName() . " AS a
+      ON t.account_id = a.id
+      WHERE t.archived = 0
+      GROUP BY t.account_id
+      LIMIT ?");
+    if ($this->checkStmt($stmt) && $stmt->bind_param('i', $limit) && $stmt->execute() && $result = $stmt->get_result())
+      return $result->fetch_all(MYSQLI_ASSOC);
+    return $this->sqlError();
+  }
+
 
   /**
    * Get our Auto Payout queue

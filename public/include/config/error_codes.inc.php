@@ -78,4 +78,7 @@ $aErrorCodes['E0079'] = 'Wallet does not cover payouts total amount';
 $aErrorCodes['E0080'] = 'No new unaccounted shares since last run';
 $aErrorCodes['E0081'] = 'Failed to insert new block into database';
 $aErrorCodes['E0082'] = 'Block does not supply any usable confirmation information';
+$aErrorCodes['E0083'] = 'Error retrieving original coin exchange rates';
+$aErrorCodes['E0084'] = 'Error retrieving end coin exchange rates';
+$aErrorCodes['E0085'] = 'No new unaccounted Convertible transactions found in database';
 ?>
