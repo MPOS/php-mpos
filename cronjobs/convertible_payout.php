@@ -18,7 +18,7 @@ if ($currency != 'RUBY') {
   $monitoring->endCronjob($cron_name, 'E0083', 0, true, false);
 }
 
-$table_names = array('WC' => 'wc');
+$db_names = array('WC' => 'wc');
 $end_coin_exchange_rates = array('WC' => null);
 
 $original_coin = $currency; // let's say POT
@@ -44,7 +44,7 @@ foreach ($convertible_transactions as $convertible_transaction) {
   $transaction_id = $convertible_transaction['transaction_id'];
   $amount_to_exchange = $convertible_transaction['amount']; // let's say 20000 (in POT)
   $coin_to_credit = $convertible_transaction['convertible']; // let's say WC
-  $end_coin_table_name = $table_names[$coin_to_credit];
+  $end_coin_db_name = $db_names[$coin_to_credit];
 
   if (!isset($end_coin_exchange_rates[$coin_to_credit])) {
     $json_data = file_get_contents("http://chunkypools.com/api/coin/exchange_rates/$coin_to_credit");
@@ -68,16 +68,16 @@ foreach ($convertible_transactions as $convertible_transaction) {
   $amount_in_end_coin = $amount_in_bitcoin / $end_coin_exchange_rate->exchange_rate;
 
   $log->logInfo("amount in end coin [$amount_in_end_coin] = amount in btc [$amount_in_bitcoin] / $coin_to_credit rate [$end_coin_exchange_rate->exchange_rate]");
-  
+
   $amount_in_end_coin_minus_fee = $amount_in_end_coin * 0.99;
 
   $log->logInfo("amount in end coin minus fee [$amount_in_end_coin_minus_fee] = amount in end coin [$amount_in_end_coin] * 0.99");
 
-  if (!$transaction->addTransaction($account_id, $amount_in_end_coin_minus_fee, 'Credit_PPS')) {
+  if (!$transaction->addTransaction($account_id, $amount_in_end_coin_minus_fee, 'Credit_PPS', NULL, NULL, NULL, NULL, $end_coin_db_name)) {
     $log->logFatal("Failed to add Convertible payout as Credit_PPS to $account_id");
     continue;
   }
-  $log->logInfo("added $amount_in_end_coin to $coin_to_credit transaction table as Credit_PPS");
+  $log->logInfo("added $amount_in_end_coin to $end_coin_db_name transaction table as Credit_PPS");
 
   if (!$transaction->addTransaction($account_id, $amount_to_exchange, 'Convertible_Transfer')) {
     $log->logFatal("Failed to add Convertible_Transfer to $account_id for $amount_to_exchange");
