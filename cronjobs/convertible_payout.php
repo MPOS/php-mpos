@@ -13,21 +13,21 @@ if ($config['payout_system'] != 'prop') {
   exit(0);
 }
 
-if ($coin != 'POT') {
-  $log->logInfo("Coin was: $coin. Only testing POT now.");
-  exit(0);
+if ($currency != 'RUBY') {
+  $log->logInfo("Ran on $currency. Only testing RUBY now.");
+  $monitoring->endCronjob($cron_name, 'E0083', 0, true, false);
 }
 
 $table_names = array('WC' => 'wc');
 $end_coin_exchange_rates = array('WC' => null);
 
-$original_coin = $coin; // let's say POT
+$original_coin = $currency; // let's say POT
 
 $from_coin_exchange_rate = json_decode(file_get_contents("http://chunkypools.com/api/coin/exchange_rates/$original_coin"));
 $end_coin_exchange_rate = null;
 
 // check that we have exchange rates, or die
-if (!is_array($from_coin_exchange_rate) || !($from_coin_exchange_rate['exchange_rate'] > 0)) {
+if (!is_array($from_coin_exchange_rate) || !($from_coin_exchange_rate->exchange_rate > 0)) {
   $log->logInfo("Error retrieving $original_coin exchange rates");
   $monitoring->endCronjob($cron_name, 'E0083', 0, true, false);
 }
@@ -52,31 +52,42 @@ foreach ($convertible_transactions as $convertible_transaction) {
   }
 
   // check that we have good exchange rates, or die
-  if (!is_array($end_coin_exchange_rate[$coin_to_credit]) || !($end_coin_exchange_rate[$coin_to_credit]['exchange_rate'] > 0)) {
+  if (!is_array($end_coin_exchange_rate[$coin_to_credit]) || !($end_coin_exchange_rate[$coin_to_credit]->exchange_rate > 0)) {
     $log->logInfo("Error retrieving $coin_to_credit exchange rates");
     $monitoring->endCronjob($cron_name, 'E0084', 0, true, false);
   }
 
+  $log->logInfo("processing: account $account_id - transaction $transaction_id");
+
   // 0.48 BTC        = 0.00002400    POT/BTC                     * 20000 POT
-  $amount_in_bitcoin = $from_coin_exchange_rate['exchange_rate'] * $amount_to_exchange;
+  $amount_in_bitcoin = $from_coin_exchange_rate->exchange_rate * $amount_to_exchange;
+
+  $log->logInfo("amount in btc [$amount_in_bitcoin] = $original_coin rate [$from_coin_exchange_rate->exchange_rate] * amount to exchange [$amount_to_exchange]");
 
   // 50,526.315789 WC = 0.48 BTC         / 0.00000950   WC/BTC
-  $amount_in_end_coin = $amount_in_bitcoin / $end_coin_exchange_rate['exchange_rate'];
+  $amount_in_end_coin = $amount_in_bitcoin / $end_coin_exchange_rate->exchange_rate;
 
-  // add $amount_in_end_coin to WC transaction table as Credit_PPS
-  if (!$transaction->addTransaction($account_id, $amount_in_end_coin, 'Credit_PPS')) {
+  $log->logInfo("amount in end coin [$amount_in_end_coin] = amount in btc [$amount_in_bitcoin] / $coin_to_credit rate [$end_coin_exchange_rate->exchange_rate]");
+  
+  $amount_in_end_coin_minus_fee = $amount_in_end_coin * 0.99;
+
+  $log->logInfo("amount in end coin minus fee [$amount_in_end_coin_minus_fee] = amount in end coin [$amount_in_end_coin] * 0.99");
+
+  if (!$transaction->addTransaction($account_id, $amount_in_end_coin_minus_fee, 'Credit_PPS')) {
     $log->logFatal("Failed to add Convertible payout as Credit_PPS to $account_id");
     continue;
   }
+  $log->logInfo("added $amount_in_end_coin to $coin_to_credit transaction table as Credit_PPS");
 
-  // add Convertible_Transfer of $amount_to_exchange to POT transaction table
   if (!$transaction->addTransaction($account_id, $amount_to_exchange, 'Convertible_Transfer')) {
     $log->logFatal("Failed to add Convertible_Transfer to $account_id for $amount_to_exchange");
   }
 
-  // mark transaction as archived
-  if (!$transaction->updateSingle($transaction_id, array('name' => 'archived', 'value' => 1, 'type' => 'i')) {
+  $log->logInfo("added Convertible_Transfer of $amount_to_exchange to $original_coin transaction table");
+
+  if (!$transaction->updateSingle($transaction_id, array('name' => 'archived', 'value' => 1, 'type' => 'i'))) {
     $log->logFatal("Failed to mark $transaction_id as archived");
   }
+  $log->logInfo("marked transaction as archived. done.");
 }
 
