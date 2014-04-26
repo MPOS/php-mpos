@@ -69,6 +69,23 @@ class Transaction extends Base {
     return $this->sqlError();
   }
 
+  public function setConvertibleArchived($account_id, $txid) {
+    // Update all paid out transactions as archived
+    $stmt = $this->mysqli->prepare("
+      UPDATE $this->table AS t
+      LEFT JOIN " . $this->block->getTableName() . " AS b
+      ON b.id = t.block_id
+      SET t.archived = 1
+      WHERE t.archived = 0
+      AND (
+           ( t.type in ('Convertible', 'Fee', 'Donation') AND t.account_id = ? AND t.id <= ? AND b.confirmations >= ? )
+        OR ( t.account_id = ? AND t.id <= ? AND t.type IN ( 'Convertible_Transfer' ) )
+      )");
+     if ($this->checkStmt($stmt) && $stmt->bind_param('iiiii', $account_id, $txid, $this->config['confirmations'], $account_id, $txid) && $stmt->execute())
+      return true;
+    return $this->sqlError();
+  }
+
   /**
    * Fetch a transaction summary by type with total amounts
    * @param account_id int Account ID, NULL for all
