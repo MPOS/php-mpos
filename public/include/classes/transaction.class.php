@@ -78,10 +78,9 @@ class Transaction extends Base {
       SET t.archived = 1
       WHERE t.archived = 0
       AND (
-           ( t.type in ('Convertible', 'Fee', 'Donation') AND t.account_id = ? AND t.id <= ? AND b.confirmations >= ? )
-        OR ( t.account_id = ? AND t.id <= ? AND t.type IN ( 'Convertible_Transfer' ) )
+           ( t.type in ('Convertible', 'Convertible_Transfer', 'Fee', 'Donation') AND t.account_id = ? AND b.confirmations >= ? )
       )");
-     if ($this->checkStmt($stmt) && $stmt->bind_param('iiiii', $account_id, $txid, $this->config['confirmations'], $account_id, $txid) && $stmt->execute())
+     if ($this->checkStmt($stmt) && $stmt->bind_param('ii', $account_id, $this->config['confirmations']) && $stmt->execute())
       return true;
     return $this->sqlError();
   }
