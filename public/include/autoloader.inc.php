@@ -17,6 +17,7 @@ require_once(INCLUDE_DIR . '/config/error_codes.inc.php');
 require_once(CLASS_DIR . '/base.class.php');
 require_once(CLASS_DIR . '/coins/coin_base.class.php');
 require_once(CLASS_DIR . '/setting.class.php');
+if (PHP_OS == 'WINNT') require_once(CLASS_DIR . '/memcached.class.php');
 
 // Now decide on which coin class to load and instantiate
 if (file_exists(CLASS_DIR . '/coins/coin_' . $config['algorithm'] . '.class.php')) {
