@@ -7,6 +7,28 @@ $defflip = (!cfip()) ? exit(header('HTTP/1.1 401 Unauthorized')) : 1;
  * the scope of our web application
  **/
 class Tools extends Base {
+  public function getOnlineVersions() {
+    // Fetch version online, cache for a bit
+    $key = $this->config['memcache']['keyprefix'] . 'ONLINE_VERSIONS';
+    if (! $mpos_versions = $this->memcache->get($key)) {
+      $url = $this->config['version_url'];
+      $curl = curl_init();
+      curl_setopt($curl, CURLOPT_URL, $url);
+      curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+      curl_setopt($curl, CURLOPT_HEADER, false);
+      $data = curl_exec($curl);
+      preg_match('/define\(\'MPOS_VERSION\', \'(.*)\'\);/', $data, $match);
+      $mpos_versions['MPOS_VERSION'] = $match[1];
+      preg_match('/define\(\'DB_VERSION\', \'(.*)\'\);/', $data, $match);
+      $mpos_versions['DB_VERSION'] = $match[1];
+      preg_match('/define\(\'CONFIG_VERSION\', \'(.*)\'\);/', $data, $match);
+      $mpos_versions['CONFIG_VERSION'] = $match[1];
+      curl_close($curl);
+      return $this->memcache->setCache($key, $mpos_versions, 30);
+    } else {
+      return $mpos_versions;
+    }
+  }
   /**
    * Fetch JSON data from an API
    * @param url string API URL
@@ -108,3 +130,4 @@ class Tools extends Base {
 $tools = new Tools();
 $tools->setDebug($debug);
 $tools->setConfig($config);
+$tools->setMemcache($memcache);

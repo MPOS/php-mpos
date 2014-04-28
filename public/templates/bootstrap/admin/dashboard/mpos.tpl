@@ -11,6 +11,7 @@
               <th>Component</th>
               <th>Current</th>
               <th>Installed</th>
+              <th>Online</th>
             </tr>
           </thead>
           <tbody>
@@ -20,6 +21,9 @@
               <td>
                 <font color="{if $VERSION['INSTALLED']['CORE'] == $VERSION['CURRENT']['CORE']}green{else}red{/if}">{$VERSION['INSTALLED']['CORE']}</font>
               </td>
+              <td>
+                <font color="{if $VERSION['INSTALLED']['CORE'] == $VERSION['ONLINE']['CORE']}green{else}red{/if}">{$VERSION['ONLINE']['CORE']}</font>
+              </td>
             </tr>
             <tr>
               <td><strong>Config</strong></td>
@@ -27,12 +31,18 @@
               <td>
                 <font color="{if $VERSION['INSTALLED']['CONFIG'] == $VERSION['CURRENT']['CONFIG']}green{else}red{/if}">{$VERSION['INSTALLED']['CONFIG']}</font>
               </td>
+              <td>
+                <font color="{if $VERSION['INSTALLED']['CONFIG'] == $VERSION['ONLINE']['CONFIG']}green{else}red{/if}">{$VERSION['ONLINE']['CONFIG']}</font>
+              </td>
             </tr>
             <tr>
               <td><strong>Database</strong></td>
               <td><font color="green">{$VERSION['CURRENT']['DB']}</font></td>
               <td>
                 <font color="{if $VERSION['INSTALLED']['DB'] == $VERSION['CURRENT']['DB']}green{else}red{/if}">{$VERSION['INSTALLED']['DB']}</font>
+              </td>
+              <td>
+                <font color="{if $VERSION['INSTALLED']['DB'] == $VERSION['ONLINE']['DB']}green{else}red{/if}">{$VERSION['ONLINE']['DB']}</font>
               </td>
             </tr>
           </tbody>
