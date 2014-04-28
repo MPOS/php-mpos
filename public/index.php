@@ -43,14 +43,8 @@ include_once(BASEPATH . '../include/bootstrap.php');
 $hts = ($config['https_only'] && (!empty($_SERVER['QUERY_STRING']))) ? "https://".$_SERVER['SERVER_NAME'].$_SERVER['SCRIPT_NAME']."?".$_SERVER['QUERY_STRING'] : "https://".$_SERVER['SERVER_NAME'].$_SERVER['SCRIPT_NAME'];
 ($config['https_only'] && @!$_SERVER['HTTPS']) ? exit(header("Location: ".$hts)):0;
 
-// Rate limiting
+// Rate limiting, we use our initilized memcache from bootstrap/autoloader
 if ($config['memcache']['enabled'] && $config['mc_antidos']['enabled']) {
-  if (PHP_OS == 'WINNT') {
-    require_once(CLASS_DIR . '/memcached.class.php');
-  }
-  // memcache antidos needs a memcache handle
-  $memcache = new Memcached();
-  $memcache->addServer($config['memcache']['host'], $config['memcache']['port']);
   require_once(CLASS_DIR . '/memcache_ad.class.php');
   $skip_check = false;
   // if this is an api call we need to be careful not to time them out for those calls separately
