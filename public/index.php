@@ -101,7 +101,6 @@ if (count(@$_SESSION['last_ip_pop']) == 2) {
 
 // version check and config check if not disabled
 if (@$_SESSION['USERDATA']['is_admin'] && $user->isAdmin(@$_SESSION['USERDATA']['id'])) {
-  require_once(INCLUDE_DIR . '/version.inc.php');
   if (!@$config['skip_config_tests']) {
     require_once(INCLUDE_DIR . '/admin_checks.php');
   }
