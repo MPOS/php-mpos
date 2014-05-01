@@ -141,6 +141,7 @@ class Worker extends Base {
       FROM $this->table AS w
       WHERE account_id = ?");
     if ($this->checkStmt($stmt) && $stmt->bind_param('iiiii', $interval, $interval, $interval, $interval, $account_id) && $stmt->execute() && $result = $stmt->get_result()) {
+      $aData = array();
       while ($row = $result->fetch_assoc()) {
         $row['hashrate'] = round($this->coin->calcHashrate($row['shares'], $interval), 2);
         if ($row['count_all'] > 0) {
