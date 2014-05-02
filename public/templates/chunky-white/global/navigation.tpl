@@ -17,16 +17,10 @@
                data-parent="#side-nav" href="#forms-collapse"><i class="fa fa-tint"></i> <span class="name">Pools</span></a>
             <ul id="forms-collapse" class="panel-collapse collapse">
                 <li><a href="https://chunkypools.com/def/">Defcoin (DEF)</a></li>
-                <li><a href="https://chunkypools.com/dgb/">Digibyte (DGB)</a></li>
                 <li><a href="https://chunkypools.com/doge/">Dogecoin (DOGE)</a></li>
-                <li><a href="https://chunkypools.com/jny/">Jennycoin (JNY)</a></li>
-                <li><a href="https://chunkypools.com/kdc/">Klondikecoin (KDC)</a></li>
-                <li><a href="https://chunkypools.com/mun/">Muniti (MUN) [x11]</a></li>
                 <li><a href="https://chunkypools.com/pot/">Potcoin (POT)</a></li>
                 <li><a href="https://chunkypools.com/rpc/">RonPaulCoin (RPC)</a></li>
                 <li><a href="https://chunkypools.com/ruby/">Rubycoin (RUBY)</a></li>
-                <li><a href="https://chunkypools.com/spn/">Spartancoin (SPN)</a></li>
-                <li><a href="https://chunkypools.com/stp/">Stoopidcoin (STP)</a></li>
                 <li><a href="https://chunkypools.com/wc/">Whitecoin (WC)</a></li>
             </ul>
         </li>
@@ -68,6 +62,7 @@
             </ul>
         </li>
         {/if}
+        {if $GLOBAL.config.currency != 'WC'}
         <li class="panel">
             <a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#side-nav" href="#stats-collapse"><i class="fa fa-bar-chart-o"></i> <span class="name">Statistics</span></a>
             <ul id="stats-collapse" class="panel-collapse collapse">
@@ -76,6 +71,7 @@
               <li class="icon-record"><a href="{$smarty.server.PHP_SELF}?page=statistics&action=round">Round</a></li>
             </ul>
         </li>
+        {/if}
 
         <li>&nbsp;</li>
 
@@ -100,10 +96,4 @@
         <li class="panel"><a href="{$smarty.server.PHP_SELF}?page=support"><i class="fa fa-inbox"></i> Support</a></li>
         {/if}
     </ul>
-
-    {if $SITECOINNAME}
-    <div id="coin-logo">
-      <img src="{$PATH}/img/{$SITECOINNAME|lower}120.png" />
-    </div>
-    {/if}
 </nav>

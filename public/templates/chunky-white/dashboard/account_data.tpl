@@ -24,11 +24,23 @@
       </thead>
       <tr>
         <td align="left" style="font-weight: bold;">Confirmed</td>
-        <td align="right"><span id="b-confirmed" class="confirmed" style="width: calc(120px); font-size: 12px;">{$GLOBAL.userdata.balance.confirmed}</span></td>
+        <td align="right"><span id="b-confirmed" class="label label-success" style="width: calc(120px); font-size: 12px;">
+        {if $GLOBAL.userdata.balance.confirmed >= 0}{$GLOBAL.userdata.balance.confirmed}{else}0{/if}
+        </span></td>
       </tr>
+      {if $GLOBAL.userdata.balance.convertible > 0}
+      <tr>
+        <td align="left" style="font-weight: bold;">Convertible</td>
+        <td align="right"><span id="b-convertible" class="label label-info" style="width: calc(120px); font-size: 12px;">{$GLOBAL.userdata.balance.convertible}</span></td>
+      </tr>
+      {/if}
       <tr>
         <td align="left" style="font-weight: bold;">Unconfirmed</td>
-        <td align="right"><span id="b-unconfirmed" class="unconfirmed" style="width: calc(120px); font-size: 12px;">{$GLOBAL.userdata.balance.unconfirmed}</span></td>
+        <td align="right"><span id="b-unconfirmed" class="label label-warning" style="width: calc(120px); font-size: 12px;">
+
+        {if $GLOBAL.userdata.balance.unconfirmed >= 0}{$GLOBAL.userdata.balance.unconfirmed}{else}0{/if}
+
+</span></td>
       </tr>
     </table>
     {if !$DISABLED_DASHBOARD and !$DISABLED_DASHBOARD_API}
