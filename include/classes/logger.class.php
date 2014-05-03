@@ -5,7 +5,7 @@ class Logger {
   private $logging = false;
   public function __construct($config) {
     if ($config['logging']['enabled'] && $config['logging']['level'] > 0) {
-      $this->KLogger = KLogger::instance($config['logging']['path'], $config['logging']['level']);
+      $this->KLogger = KLogger::instance($config['logging']['path'] . '/website', $config['logging']['level']);
       $this->logging = true;
       $this->floatStartTime = microtime(true);
     }

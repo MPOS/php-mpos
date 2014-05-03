@@ -17,13 +17,13 @@ class Template extends Base {
 
   /**
    * Get all available themes
-   * Read theme folders from THEME_DIR
+   * Read theme folders from TEMPLATE_DIR
    *
    * @return array - list of available themes
    */
   public function getThemes() {
     $this->debug->append("STA " . __METHOD__, 4);
-    $aTmpThemes = glob(THEME_DIR . '/*');
+    $aTmpThemes = glob(TEMPLATE_DIR . '/*');
     $aThemes = array();
     foreach ($aTmpThemes as $dir) {
       if (basename($dir) != 'cache' && basename($dir) != 'compile' && basename($dir) != 'mail') $aThemes[basename($dir)] = basename($dir);
@@ -86,12 +86,12 @@ class Template extends Base {
   /**
    * Return the content of specific template file
    *
-   * @param $file - file of template related to THEME_DIR
+   * @param $file - file of template related to TEMPLATE_DIR
    * @return string - content of the template file
    */
   public function getTemplateContent($file) {
     $this->debug->append("STA " . __METHOD__, 4);
-    $filepath = THEME_DIR . '/' . $file;
+    $filepath = TEMPLATE_DIR . '/' . $file;
     return file_get_contents($filepath);
   }
 
@@ -103,7 +103,7 @@ class Template extends Base {
    */
   public function getTemplateFiles($theme) {
     $this->debug->append("STA " . __METHOD__, 4);
-    $folder = THEME_DIR . '/' . $theme;
+    $folder = TEMPLATE_DIR . '/' . $theme;
 
     $dir = new RecursiveDirectoryIterator($folder);
     $ite = new RecursiveIteratorIterator($dir);
@@ -130,7 +130,7 @@ class Template extends Base {
 
     $templates = array();
     foreach($themes as $theme) {
-      $templates[$theme] = $this->_getTemplatesTreeRecursive(THEME_DIR . '/' . $theme);
+      $templates[$theme] = $this->_getTemplatesTreeRecursive(TEMPLATE_DIR . '/' . $theme);
     }
 
     return $templates;

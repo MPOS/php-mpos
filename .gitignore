@@ -1,12 +1,12 @@
 # Local Config
-/public/include/config/global.inc.php
-/public/include/config/security.inc.php
+/include/config/global.inc.php
+/include/config/security.inc.php
 
 # Templates
-/public/templates/compile/*.php
-/public/templates/compile/**
-/public/templates/cache/*.php
-/public/templates/cache/**
+/templates/compile/*.php
+/templates/compile/**
+/templates/cache/*.php
+/templates/cache/**
 
 # Logs
 /cronjobs/logs
@@ -14,8 +14,8 @@
 /logs/*
 
 # Test configs
-public/include/config/global.inc.scrypt.php
-public/include/config/global.inc.sha.php
+/include/config/global.inc.scrypt.php
+/include/config/global.inc.sha.php
 
 # IDE Settings
 /.idea/*

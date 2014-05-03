@@ -53,10 +53,10 @@ if (@$_SESSION['USERDATA']['is_admin'] && $user->isAdmin(@$_SESSION['USERDATA'][
   }
 
   // check if we can write templates/cache and templates/compile -> error
-  if (!is_writable(THEME_DIR.'/cache')) {
+  if (!is_writable(TEMPLATE_DIR . '/cache')) {
     $error[] = "templates/cache folder is not writable for uid {$apache_user['name']}";
   }
-  if (!is_writable(THEME_DIR.'/compile')) {
+  if (!is_writable(TEMPLATE_DIR . '/compile')) {
     $error[] = "templates/compile folder is not writable for uid {$apache_user['name']}";
   }
 

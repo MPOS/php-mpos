@@ -74,8 +74,8 @@ class Mail extends Base {
     }
 
     // Prepare the smarty templates used
-    $this->smarty->clearCache(BASEPATH . 'templates/mail/' . $template . '.tpl');
-    $this->smarty->clearCache(BASEPATH . 'templates/mail/subject.tpl');
+    $this->smarty->clearCache(TEMPLATE_DIR . '/mail/' . $template . '.tpl');
+    $this->smarty->clearCache(TEMPLATE_DIR . '/mail/subject.tpl');
     $this->smarty->assign('WEBSITENAME', $this->setting->getValue('website_name'));
     $this->smarty->assign('SUBJECT', $aData['subject']);
     $this->smarty->assign('DATA', $aData);
@@ -84,12 +84,12 @@ class Mail extends Base {
     $senderEmail = $this->setting->getValue('website_email', 'test@example.com');
     $senderName = $this->setting->getValue('website_name', 'test@example.com');
     $message = Swift_Message::newInstance()
-      ->setSubject($this->smarty->fetch(BASEPATH . 'templates/mail/subject.tpl'))
+      ->setSubject($this->smarty->fetch(TEMPLATE_DIR . '/mail/subject.tpl'))
       ->setFrom(array( $senderEmail => $senderName))
       ->setTo($aData['email'])
       ->setSender($senderEmail)
       ->setReturnPath($senderEmail)
-      ->setBody($this->smarty->fetch(BASEPATH . 'templates/mail/' . $template . '.tpl'), 'text/html');
+      ->setBody($this->smarty->fetch(TEMPLATE_DIR . '/mail/' . $template . '.tpl'), 'text/html');
     if (isset($aData['senderName']) &&
         isset($aData['senderEmail']) &&
         strlen($aData['senderName']) > 0 &&
