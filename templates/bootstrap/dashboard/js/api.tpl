@@ -18,6 +18,7 @@ $(document).ready(function(){
                           null, null, null, null, null, null, null, null, null, null, null, null,
                           null, null, null, null, null, null, null, null, null, null, null, null,
                           {/literal}{$GLOBAL.price}{literal} ];
+  var lastBlock = 0;
 
   // Sparkline options applied to all graphs
   var sparklineBarOptions = {
@@ -152,6 +153,41 @@ $(document).ready(function(){
     if (totalHashrate > 0) { $('#b-workers').append('<tr><td class="text-left"><b>Total</b></td><td class="text-right">' + number_format(totalHashrate, 2) + '</td><td></td></tr>'); }
   }
 
+  function refreshBlockData(data) {
+    blocks = data.getdashboarddata.data.pool.blocks;
+    console.log(blocks);
+    if (blocks[0].height > lastBlock) {
+      lastBlock = blocks[0].height;
+      console.log('New block is higher, re-draw table');
+      var table_content = '<tbody id="b-blocks">';
+      for (index = 0; index < blocks.length; ++index) {
+        console.log(blocks[index]);
+        var time = new Date.UTC(blocks[index].time * 1000)
+        var table_row = '<tr>';
+        table_row += '<td class="text-right">' + blocks[index].height + '</td>';
+        table_row += '<td class="text-center">' + blocks[index].finder + '</td>';
+        table_row += '<td class="text-right">' + time.format("mm/dd/yy HH:MM:ss") + '</td>';
+        table_row += '<td class="text-right">' + blocks[index].difficulty + '</td>';
+        table_row += '<td class="text-right">' + blocks[index].amount + '</td>';
+        table_row += '<td class="text-right">' + blocks[index].estshares + '</td>';
+        table_row += '<td class="text-right">' + blocks[index].shares + '</td>';
+        percentage = parseFloat(blocks[index].shares / blocks[index].estshares * 100).toFixed(2);
+        if (percentage <= 100) {
+          color = 'green';
+        } else {
+          color = 'red';
+        }
+        table_row += '<td class="text-right"><font color="'+color+'">' + percentage + '</font></td>';
+        table_row += '</tr>';
+        table_content += table_row;
+      }
+      table_content += '</tbody>';
+      $("tbody#b-blocks").replaceWith(table_content);
+    } else {
+      console.log('No table update required');
+    }
+  }
+
   // Refresh balance information
   function refreshBalanceData(data) {
     balance = data.getuserbalance.data
@@ -170,6 +206,7 @@ $(document).ready(function(){
       success: function(data) {
         refreshInformation(data);
         refreshStaticData(data);
+        refreshBlockData(data);
       },
       complete: function() {
         setTimeout(worker1, {/literal}{($GLOBAL.config.statistics_ajax_refresh_interval * 1000)|default:"10000"}{literal})

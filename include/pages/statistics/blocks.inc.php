@@ -34,9 +34,9 @@ if (!$smarty->isCached('master.tpl', $smarty_cache_key)) {
     $test = true;
     $count = 10;
     $percent = 30;
-    if (@$_REQUEST['count'] && is_numeric($_REQUEST['count']))   
+    if (@$_REQUEST['count'] && is_numeric($_REQUEST['count']))
       $count = $_REQUEST['count'];
-    if (@$_REQUEST['percent'] && is_numeric($_REQUEST['percent']))      
+    if (@$_REQUEST['percent'] && is_numeric($_REQUEST['percent']))
       $percent = $_REQUEST['percent'];
   }
 
@@ -48,19 +48,19 @@ if (!$smarty->isCached('master.tpl', $smarty_cache_key)) {
       if ($setting->getValue('statistics_show_block_average') && !$test) {
         $aBlocksFoundData[$key]['block_avg'] = round($block->getAvgBlockShares($aData['height'], $config['pplns']['blockavg']['blockcount']));
         $use_average = true;
-      } 
+      }
     }
   } else if ($config['payout_system'] == 'prop' || $config['payout_system'] == 'pps') {
     if ($setting->getValue('statistics_show_block_average') && !$test) {
       foreach($aBlocksFoundData as $key => $aData) {
         $aBlocksFoundData[$key]['block_avg'] = round($block->getAvgBlockShares($aData['height'], $config['pplns']['blockavg']['blockcount']));
         $use_average = true;
-      } 
+      }
     }
   }
   // show test data in graph
   if ($test) {
-    $use_average = true;  
+    $use_average = true;
     foreach($aBlocksFoundData as $key => $aData) {
       if ($_REQUEST['test'] == 1) {
         $aBlocksFoundData[$key]['block_avg'] = round($block->getAvgBlockShares($aData['height'], $count));

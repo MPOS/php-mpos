@@ -37,7 +37,19 @@ if ($user->isAuthenticated()) {
   $dEstNextDifficulty = $statistics->getExpectedNextDifficulty();
   $iBlocksUntilDiffChange = $statistics->getBlocksUntilDiffChange();
 
+  // Block statistics
+  $aLastBlocks = $statistics->getBlocksFound(5);
+  if (!$user->isAdmin(@$_SESSION['USERDATA']['id'])) {
+    foreach ($aLastBlocks as $key => $data) {
+      if ($data['is_anonymous'] == 1) {
+        $aLastBlocks[$key]['worker_name'] = 'anonymous';
+        $aLastBlocks[$key]['finder'] = 'anonymous';
+      }
+    }
+  }
+
   // Make it available in Smarty
+  $smarty->assign('BLOCKSFOUND', $aLastBlocks);
   $smarty->assign('DISABLED_DASHBOARD', $setting->getValue('disable_dashboard'));
   $smarty->assign('DISABLED_DASHBOARD_API', $setting->getValue('disable_dashboard_api'));
   $smarty->assign('ESTIMATES', array('shares' => $iEstShares, 'percent' => $dEstPercent));

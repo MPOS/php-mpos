@@ -1,4 +1,5 @@
 {if $smarty.session.AUTHENTICATED|default}
+<script src="{$PATH}/js/plugins/date.format.js"></script>
 <div class="row">
   <div class="col-lg-12">
     <div class="panel panel-info">
@@ -14,6 +15,7 @@
           {include file="dashboard/round_statistics/$PAYOUT_SYSTEM/default.tpl"}
           {include file="dashboard/account_data/default.tpl"}
           {include file="dashboard/worker_information/default.tpl"}
+          {include file="dashboard/blocks/default.tpl"}
           </div>
         </div>
       </div>
