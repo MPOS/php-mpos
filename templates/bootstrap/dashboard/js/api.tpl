@@ -3,6 +3,11 @@
 <script>
 {literal}
 $(document).ready(function(){
+  var audioPath = "{/literal}{$PATH}{literal}/audio/";
+  var manifest = [ {id:"ding", src:"ding.ogg"} ];
+  createjs.Sound.alternateExtensionseExtensions = ["mp3"];
+  createjs.Sound.registerManifest(manifest, audioPath);
+
   // Ajax API URL
   var url_dashboard = "{/literal}{$smarty.server.SCRIPT_NAME}?page=api&action=getdashboarddata&api_key={$GLOBAL.userdata.api_key}&id={$GLOBAL.userdata.id}{literal}";
   var url_worker = "{/literal}{$smarty.server.SCRIPT_NAME}?page=api&action=getuserworkers&api_key={$GLOBAL.userdata.api_key}&id={$GLOBAL.userdata.id}{literal}";
@@ -18,6 +23,7 @@ $(document).ready(function(){
                           null, null, null, null, null, null, null, null, null, null, null, null,
                           null, null, null, null, null, null, null, null, null, null, null, null,
                           {/literal}{$GLOBAL.price}{literal} ];
+  var lastBlock = 0;
 
   // Sparkline options applied to all graphs
   var sparklineBarOptions = {
@@ -152,6 +158,42 @@ $(document).ready(function(){
     if (totalHashrate > 0) { $('#b-workers').append('<tr><td class="text-left"><b>Total</b></td><td class="text-right">' + number_format(totalHashrate, 2) + '</td><td></td></tr>'); }
   }
 
+  function refreshBlockData(data) {
+    blocks = data.getdashboarddata.data.pool.blocks;
+    // Initilize
+    if (lastBlock == 0) {
+      lastBlock = blocks[0].height;
+      return;
+    }
+    if (blocks[0].height > lastBlock) {
+      createjs.Sound.play('ding');
+      lastBlock = blocks[0].height;
+      var table_content = '<tbody id="b-blocks">';
+      for (index = 0; index < blocks.length; ++index) {
+        var time = new Date(blocks[index].time * 1000)
+        var table_row = '<tr>';
+        table_row += '<td class="text-right">' + blocks[index].height + '</td>';
+        table_row += '<td class="text-center">' + blocks[index].finder + '</td>';
+        table_row += '<td class="text-right">' + time.format("mm/dd/yyyy HH:MM:ss") + '</td>';
+        table_row += '<td class="text-right">' + parseFloat(blocks[index].difficulty).toFixed(4) + '</td>';
+        table_row += '<td class="text-right">' + parseFloat(blocks[index].amount).toFixed(2) + '</td>';
+        table_row += '<td class="text-right">' + number_format(blocks[index].estshares) + '</td>';
+        table_row += '<td class="text-right">' + number_format(blocks[index].shares) + '</td>';
+        percentage = parseFloat(blocks[index].shares / blocks[index].estshares * 100).toFixed(2);
+        if (percentage <= 100) {
+          color = 'green';
+        } else {
+          color = 'red';
+        }
+        table_row += '<td class="text-right"><font color="'+color+'">' + percentage + '</font></td>';
+        table_row += '</tr>';
+        table_content += table_row;
+      }
+      table_content += '</tbody>';
+      $("tbody#b-blocks").replaceWith(table_content);
+    }
+  }
+
   // Refresh balance information
   function refreshBalanceData(data) {
     balance = data.getuserbalance.data
@@ -170,6 +212,7 @@ $(document).ready(function(){
       success: function(data) {
         refreshInformation(data);
         refreshStaticData(data);
+        refreshBlockData(data);
       },
       complete: function() {
         setTimeout(worker1, {/literal}{($GLOBAL.config.statistics_ajax_refresh_interval * 1000)|default:"10000"}{literal})

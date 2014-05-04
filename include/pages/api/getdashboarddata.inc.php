@@ -82,6 +82,17 @@ $dExpectedTimePerBlock = $statistics->getNetworkExpectedTimePerBlock();
 $dEstNextDifficulty = $statistics->getExpectedNextDifficulty();
 $iBlocksUntilDiffChange = $statistics->getBlocksUntilDiffChange();
 
+// Block statistics
+$aLastBlocks = $statistics->getBlocksFound(5);
+if (!$user->isAdmin(@$_SESSION['USERDATA']['id'])) {
+  foreach ($aLastBlocks as $key => $data) {
+    if ($data['is_anonymous'] == 1) {
+      $aLastBlocks[$key]['worker_name'] = 'anonymous';
+      $aLastBlocks[$key]['finder'] = 'anonymous';
+    }
+  }
+}
+
 // Output JSON format
 $data = array(
   'raw' => array( 'personal' => array( 'hashrate' => $dPersonalHashrate ), 'pool' => array( 'hashrate' => $dPoolHashrate ), 'network' => array( 'hashrate' => $dNetworkHashrate / 1000, 'esttimeperblock' => $dExpectedTimePerBlock, 'nextdifficulty' => $dEstNextDifficulty, 'blocksuntildiffchange' => $iBlocksUntilDiffChange ) ),
@@ -94,6 +105,7 @@ $data = array(
       'name' => $setting->getValue('website_name'),
       'currency' => $config['currency']
     ),
+    'blocks' => $aLastBlocks,
     'workers' => $worker->getCountAllActiveWorkers(), 'hashrate' => $dPoolHashrateAdjusted,
     'shares' => array( 'valid' => $aRoundShares['valid'], 'invalid' => $aRoundShares['invalid'], 'invalid_percent' => $dPoolInvalidPercent, 'estimated' => $iEstShares, 'progress' => $dEstPercent ),
     'price' => $aPrice,
