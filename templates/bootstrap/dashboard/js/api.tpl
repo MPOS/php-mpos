@@ -160,6 +160,11 @@ $(document).ready(function(){
 
   function refreshBlockData(data) {
     blocks = data.getdashboarddata.data.pool.blocks;
+    // Initilize
+    if (lastBlock == 0) {
+      lastBlock = blocks[0].height;
+      return;
+    }
     if (blocks[0].height > lastBlock) {
       createjs.Sound.play('ding');
       lastBlock = blocks[0].height;
