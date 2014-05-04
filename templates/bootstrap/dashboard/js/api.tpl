@@ -3,6 +3,11 @@
 <script>
 {literal}
 $(document).ready(function(){
+  var audioPath = "{/literal}{$PATH}{literal}/audio/";
+  var manifest = [ {id:"ding", src:"ding.ogg"} ];
+  createjs.Sound.alternateExtensionseExtensions = ["mp3"];
+  createjs.Sound.registerManifest(manifest, audioPath);
+
   // Ajax API URL
   var url_dashboard = "{/literal}{$smarty.server.SCRIPT_NAME}?page=api&action=getdashboarddata&api_key={$GLOBAL.userdata.api_key}&id={$GLOBAL.userdata.id}{literal}";
   var url_worker = "{/literal}{$smarty.server.SCRIPT_NAME}?page=api&action=getuserworkers&api_key={$GLOBAL.userdata.api_key}&id={$GLOBAL.userdata.id}{literal}";
@@ -156,6 +161,7 @@ $(document).ready(function(){
   function refreshBlockData(data) {
     blocks = data.getdashboarddata.data.pool.blocks;
     if (blocks[0].height > lastBlock) {
+      createjs.Sound.play('ding');
       lastBlock = blocks[0].height;
       var table_content = '<tbody id="b-blocks">';
       for (index = 0; index < blocks.length; ++index) {
@@ -163,11 +169,11 @@ $(document).ready(function(){
         var table_row = '<tr>';
         table_row += '<td class="text-right">' + blocks[index].height + '</td>';
         table_row += '<td class="text-center">' + blocks[index].finder + '</td>';
-        table_row += '<td class="text-right">' + time.format("mm/dd/yy HH:MM:ss") + '</td>';
-        table_row += '<td class="text-right">' + blocks[index].difficulty + '</td>';
-        table_row += '<td class="text-right">' + blocks[index].amount + '</td>';
-        table_row += '<td class="text-right">' + blocks[index].estshares + '</td>';
-        table_row += '<td class="text-right">' + blocks[index].shares + '</td>';
+        table_row += '<td class="text-right">' + time.format("mm/dd/yyyy HH:MM:ss") + '</td>';
+        table_row += '<td class="text-right">' + parseFloat(blocks[index].difficulty).toFixed(4) + '</td>';
+        table_row += '<td class="text-right">' + parseFloat(blocks[index].amount).toFixed(2) + '</td>';
+        table_row += '<td class="text-right">' + number_format(blocks[index].estshares) + '</td>';
+        table_row += '<td class="text-right">' + number_format(blocks[index].shares) + '</td>';
         percentage = parseFloat(blocks[index].shares / blocks[index].estshares * 100).toFixed(2);
         if (percentage <= 100) {
           color = 'green';

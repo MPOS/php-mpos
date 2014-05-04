@@ -1,5 +1,7 @@
 {if $smarty.session.AUTHENTICATED|default}
 <script src="{$PATH}/js/plugins/date.format.js"></script>
+<script src="{$PATH}/js/plugins/soundjs-0.5.2.min.js"></script>
+
 <div class="row">
   <div class="col-lg-12">
     <div class="panel panel-info">
