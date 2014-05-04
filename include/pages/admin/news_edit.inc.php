@@ -12,7 +12,7 @@ use \Michelf\Markdown;
 
 if (@$_REQUEST['do'] == 'save') {
   if ($news->updateNews($_REQUEST['id'], $_REQUEST['header'], $_REQUEST['content'], $_REQUEST['active'])) {
-    $_SESSION['POPUP'][] = array('CONTENT' => 'News updated', 'TYPE' => 'success');
+    $_SESSION['POPUP'][] = array('CONTENT' => 'News updated', 'TYPE' => 'alert alert-success');
   } else {
     $_SESSION['POPUP'][] = array('CONTENT' => 'News update failed: ' . $news->getError(), 'TYPE' => 'alert alert-danger');
   }
