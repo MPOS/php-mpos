@@ -155,14 +155,11 @@ $(document).ready(function(){
 
   function refreshBlockData(data) {
     blocks = data.getdashboarddata.data.pool.blocks;
-    console.log(blocks);
     if (blocks[0].height > lastBlock) {
       lastBlock = blocks[0].height;
-      console.log('New block is higher, re-draw table');
       var table_content = '<tbody id="b-blocks">';
       for (index = 0; index < blocks.length; ++index) {
-        console.log(blocks[index]);
-        var time = new Date.UTC(blocks[index].time * 1000)
+        var time = new Date(blocks[index].time * 1000)
         var table_row = '<tr>';
         table_row += '<td class="text-right">' + blocks[index].height + '</td>';
         table_row += '<td class="text-center">' + blocks[index].finder + '</td>';
@@ -183,8 +180,6 @@ $(document).ready(function(){
       }
       table_content += '</tbody>';
       $("tbody#b-blocks").replaceWith(table_content);
-    } else {
-      console.log('No table update required');
     }
   }
 
