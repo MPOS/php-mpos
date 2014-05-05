@@ -21,6 +21,13 @@ $aSettings['website'][] = array(
   'tooltip' => 'Display a message of the day as information popup if set.'
 );
 $aSettings['website'][] = array(
+  'display' => 'MOTD Style', 'type' => 'select',
+  'options' => array( 0 => 'Success', 1 => 'Information', 2 => 'Warning', 3 => 'Danger' ),
+  'default' => 0,
+  'name' => 'motd_style', 'value' => $setting->getValue('motd_style'),
+  'tooltip' => 'Set the Style what MOTD looks like.'
+);
+$aSettings['website'][] = array(
   'display' => 'Website Name', 'type' => 'text',
   'size' => 25,
   'default' => 'The Pool',
