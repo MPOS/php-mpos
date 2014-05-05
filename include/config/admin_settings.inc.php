@@ -24,7 +24,7 @@ $aSettings['website'][] = array(
   'display' => 'MOTD Style', 'type' => 'select',
   'options' => array( 0 => 'Success', 1 => 'Information', 2 => 'Warning', 3 => 'Danger' ),
   'default' => 0,
-  'name' => 'motd_style', 'value' => $setting->getValue('motd_style'),
+  'name' => 'system_motd_style', 'value' => $setting->getValue('system_motd_style'),
   'tooltip' => 'Set the Style what MOTD looks like.'
 );
 $aSettings['website'][] = array(
