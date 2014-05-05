@@ -188,7 +188,23 @@ if (@$_SESSION['USERDATA']['id']) {
 if ($setting->getValue('maintenance'))
   $_SESSION['POPUP'][] = array('CONTENT' => 'This pool is currently in maintenance mode.', 'TYPE' => 'alert alert-warning');
 if ($motd = $setting->getValue('system_motd'))
-  $_SESSION['POPUP'][] = array('CONTENT' => $motd, 'DISMISS' => 'yes', 'ID' => 'motd', 'TYPE' => 'alert alert-info');
+  switch ($setting->getValue('system_motd_style')) {
+    case 0:
+        $motd_style = "alert-success";
+        break;
+    case 1:
+        $motd_style = "alert-info";
+        break;
+    case 2:
+        $motd_style = "alert-warning";
+        break;
+    case 3:
+        $motd_style = "alert-danger";
+        break;
+    default:
+       $motd_style = "alert-info";
+  }
+  $_SESSION['POPUP'][] = array('CONTENT' => $motd, 'DISMISS' => 'yes', 'ID' => 'motd', 'TYPE' => 'alert ' . $motd_style . '');
 
 // check for deprecated theme
 if ($setting->getValue('website_theme') == "mpos")
