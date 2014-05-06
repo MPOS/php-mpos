@@ -53,6 +53,7 @@ class Transaction extends Base {
       WHERE t.archived = 0
       AND (
            ( t.account_id = ? AND t.id <= ? AND b.confirmations >= ? )
+        OR ( t.account_id = ? AND t.id <= ? AND b.confirmations = -1 )
         OR ( t.account_id = ? AND t.id <= ? AND t.type IN ( 'Credit_PPS', 'Donation_PPS', 'Fee_PPS', 'TXFee', 'Debit_MP', 'Debit_AP' ) )
       )");
      if ($this->checkStmt($stmt) && $stmt->bind_param('iiiii', $account_id, $txid, $this->config['confirmations'], $account_id, $txid) && $stmt->execute())
