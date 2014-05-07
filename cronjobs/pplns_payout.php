@@ -115,16 +115,16 @@ foreach ($aAllBlocks as $iIndex => $aBlock) {
         // Add archived shares to users current shares, if we have any in archive
         if (is_array($aArchiveShares)) {
           $log->logDebug('Found shares in archive to match PPLNS target, calculating per-user shares');
-          $strLogMask = "| %-20.20s | %15.15s | %15.15s | %15.15s | %15.15s | %15.15s | %15.15s |";
-          $log->logDebug(sprintf($strLogMask, 'Username', 'Round Valid', 'Archive Valid', 'Total Valid', 'Round Invalid', 'Archive Invalid', 'Total Invalid'));
+          $strLogMask = "| %5.5s | %-20.20s | %15.15s | %15.15s | %15.15s | %15.15s | %15.15s | %15.15s |";
+          $log->logDebug(sprintf($strLogMask, 'ID', 'Username', 'Round Valid', 'Archive Valid', 'Total Valid', 'Round Invalid', 'Archive Invalid', 'Total Invalid'));
           foreach($aAccountShares as $key => $aData) {
-            if (array_key_exists($aData['username'], $aArchiveShares)) {
-              $log->logDebug(sprintf($strLogMask, $aData['username'],
-                $aAccountShares[$key]['valid'], $aArchiveShares[$aData['username']]['valid'], ($aAccountShares[$key]['valid'] + $aArchiveShares[$aData['username']]['valid']),
-                $aAccountShares[$key]['invalid'], $aArchiveShares[$aData['username']]['invalid'], ($aAccountShares[$key]['invalid'] + $aArchiveShares[$aData['username']]['invalid']))
+            if (array_key_exists(strtolower($aData['username']), $aArchiveShares)) {
+              $log->logDebug(sprintf($strLogMask, $aData['id'], $aData['username'],
+                $aAccountShares[$key]['valid'], $aArchiveShares[strtolower($aData['username'])]['valid'], ($aAccountShares[$key]['valid'] + $aArchiveShares[strtolower($aData['username'])]['valid']),
+                $aAccountShares[$key]['invalid'], $aArchiveShares[strtolower($aData['username'])]['invalid'], ($aAccountShares[$key]['invalid'] + $aArchiveShares[strtolower($aData['username'])]['invalid']))
               );
-              $aAccountShares[$key]['valid'] += $aArchiveShares[$aData['username']]['valid'];
-              $aAccountShares[$key]['invalid'] += $aArchiveShares[$aData['username']]['invalid'];
+              $aAccountShares[$key]['valid'] += $aArchiveShares[strtolower($aData['username'])]['valid'];
+              $aAccountShares[$key]['invalid'] += $aArchiveShares[strtolower($aData['username'])]['invalid'];
             }
           }
           // reverse payout
@@ -132,13 +132,13 @@ foreach ($aAllBlocks as $iIndex => $aBlock) {
             $log->logDebug('Reverse payout enabled, adding shelved shares for all users');
             $aSharesData = NULL;
             foreach($aAccountShares as $key => $aData) {
-              $aSharesData[$aData['username']] = $aData;
+              $aSharesData[strtolower($aData['username'])] = $aData;
             }
             // Add users from archive not in current round
             $strLogMask = "| %-20.20s | %15.15s | %15.15s |";
             $log->logDebug(sprintf($strLogMask, 'Username', 'Shelved Valid', 'Shelved Invalid'));
             foreach($aArchiveShares as $key => $aArchData) {
-              if (!array_key_exists($aArchData['account'], $aSharesData)) {
+              if (!array_key_exists(strtolower($aArchData['account']), $aSharesData)) {
                 $log->logDebug(sprintf($strLogMask, $aArchData['account'], $aArchData['valid'], $aArchData['invalid']));
                 $aArchData['username'] = $aArchData['account'];
                 $aSharesData[$aArchData['account']] = $aArchData;

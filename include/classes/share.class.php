@@ -146,7 +146,7 @@ class Share Extends Base {
     if ($this->checkStmt($stmt) && $stmt->bind_param("ii", $iMinId, $iMaxId) && $stmt->execute() && $result = $stmt->get_result()) {
       $aData = NULL;
       while ($row = $result->fetch_assoc()) {
-        $aData[$row['account']] = $row;
+        $aData[strtolower($row['account'])] = $row;
       }
       if (is_array($aData)) return $aData;
     }
