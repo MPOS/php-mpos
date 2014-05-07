@@ -26,7 +26,7 @@
   <link href="{$PATH}/css/design/{$GLOBAL.config.website_design}.css" rel="stylesheet">
   {/if}
   
-  <script src="{$PATH}/js/jquery-2.1.0.min.js"></script>
+  <script src="{$PATH}/js/jquery-2.1.1.min.js"></script>
   <script src="{$PATH}/js/jquery.cookie.js"></script>
   <script src="{$PATH}/js/jquery.md5.js"></script>
   <script src="{$PATH}/js/bootstrap.min.js"></script>
