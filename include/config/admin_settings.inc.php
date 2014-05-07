@@ -28,6 +28,13 @@ $aSettings['website'][] = array(
   'tooltip' => 'Set the Style what MOTD looks like.'
 );
 $aSettings['website'][] = array(
+  'display' => 'MOTD Dismiss', 'type' => 'select',
+  'options' => array( 0 => 'No', 1 => 'Yes' ),
+  'default' => 0,
+  'name' => 'system_motd_dismiss', 'value' => $setting->getValue('system_motd_dismiss'),
+  'tooltip' => 'Set if users can hide MOTD.'
+);
+$aSettings['website'][] = array(
   'display' => 'Website Name', 'type' => 'text',
   'size' => 25,
   'default' => 'The Pool',
