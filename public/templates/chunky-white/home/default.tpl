@@ -63,7 +63,7 @@
   {/if}
 
   <div class="col-md-4">
-  <section style="text-align: center;">
+  <section style="text-align: center; padding-bottom: 10px">
     <img src="https://chunkypools.com/images/{$coin_name}.png" style="width: 300px;">
   </section>
     <section class="widget">
@@ -78,7 +78,7 @@
             <li>
               <div class="key pull-right">Hashrate</div>
               <div class="stat">
-                  {if $coin_name == 'WC' or $coin_name == 'SUM'}
+                  {if $GLOBAL.multipool}
                     <div><span id="b-hashrate">{$coin_hash_rate|number_format:"3"}</span> {$GLOBAL.hashunits.pool}</div>
                     <div class="progress progress-small">
                     <div class="progress-bar progress-bar-success" style="width: {$coin_hash_rate|number_format:"3" / 25}%"></div>
@@ -94,7 +94,7 @@
               <li>
                   <div class="key pull-right">Workers</div>
                   <div class="stat">
-                    {if $coin_name == 'WC' or $coin_name == 'SUM'}
+                    {if $GLOBAL.multipool}
                     <div>{$coin_workers}</div>
                       <div class="progress progress-small">
                         <div class="progress-bar" style="width: {$coin_workers / 25}%;"></div>
@@ -111,7 +111,7 @@
                   <li>
                       <div class="key pull-right">Network Difficulty</div>
                       <div class="stat">
-                          {if $coin_name == 'WC'}
+                          {if $GLOBAL.multipool}
                           <div>0</div>
                           {else}
                           <div>{$DIFFICULTY|default:'0'}</div>
@@ -124,18 +124,18 @@
               </ul>
           </div>
       </section>
-      {if $coin_name == 'WC' or $coin_name == 'SUM'}
+      {if $GLOBAL.multipool}
       <section class="widget">
       <header>
         <h4><i class="eicon-network"></i> Currently Mining</h4>
       </header>
       <div class="body">
         <ul class="news-list">
-          {if $coin_name == 'WC'}
+          {if $coin_name == 'WC' or $coin_name == 'BNS' or $coin_name == 'UVC'}
           <li>
-            <img src="/wc/site_assets/chunky-white/images/potcoin120.png" class="pull-left img-circle">
+            <img src="/wc/site_assets/chunky-white/images/reddcoin120.png" class="pull-left img-circle">
             <div class="news-item-info">
-              <div class="name">POTCOIN</div>
+              <div class="name">REDDCOIN</div>
             </div>
           </li>
           {else}
@@ -159,6 +159,12 @@
           {if $coin_name == 'WC'}
           <li><code>stratum+tcp://us-east.chunkypools.com:3337</code></li>
           <li><code>stratum+tcp://europe.chunkypools.com:3337</code></li>
+          {elseif $coin_name == 'BNS'}
+          <li><code>stratum+tcp://us-east.chunkypools.com:8888</code></li>
+          <li><code><strike>stratum+tcp://europe.chunkypools.com:8888</strike></code></li>
+          {elseif $coin_name == 'UVC'}
+          <li><code>stratum+tcp://us-east.chunkypools.com:9999</code></li>
+          <li><code><strike>stratum+tcp://europe.chunkypools.com:9999</strike></code></li>
           {else}
           <li><code>stratum+tcp://us-east.chunkypools.com:1137</code></li>
           <li><code>stratum+tcp://europe.chunkypools.com:1137</code></li>

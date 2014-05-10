@@ -7,7 +7,7 @@ use \Michelf\Markdown;
 
 $smarty->assign('coin_name', $currency);
 
-if ($currency == 'WC' || $currency == 'SUM') {
+if (in_array($currency, array('WC', 'SUM', 'BNS', 'UVC'))) {
   $pool_status = json_decode(file_get_contents("http://chunkypools.com/api/pool/status"));
 
   $smarty->assign('coin_hash_rate', $pool_status->hash_rate);

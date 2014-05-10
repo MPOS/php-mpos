@@ -1,7 +1,7 @@
 {if $smarty.session.AUTHENTICATED|default}
   <div class="row">
     <div class="col-md-8">
-      {if $GLOBAL.config.currency != 'WC' and $GLOBAL.config.currency != 'SUM'}
+      {if !$GLOBAL.multipool}
       {include file="dashboard/overview.tpl"}
       {include file="dashboard/round_data.tpl"}
       {/if}
@@ -9,7 +9,7 @@
     </div>
 
     <div class="col-md-4">
-      {if $GLOBAL.config.currency != 'WC' and $GLOBAL.config.currency != 'SUM'}
+      {if !$GLOBAL.multipool}
       {include file="dashboard/system_stats.tpl"}
       {/if}
     </div>

@@ -36,7 +36,7 @@
       <div class="notifications pull-right">
         <div class="alert pull-right">
           <i class="fa fa-info-circle"></i> 
-          Just added <a href="https://pool.chunky.ms/spn/" target="_blank">Spartancoin (SPN)</a> to Chunky Pools!
+          Just added <a href="https://chunkypools.com/rdd/" target="_blank">Reddcoin</a> to Chunky Pools!
         </div>
       </div>
   </div>

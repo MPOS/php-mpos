@@ -384,8 +384,7 @@ class Transaction extends Base {
           ROUND(
             (
               SUM( IF( ( t.type = 'Convertible' AND b.confirmations >= " . $this->config['confirmations'] . "), t.amount, 0 ) ) -
-              SUM( IF( t.type = 'Convertible_Transfer', t.amount, 0 ) ) -
-              SUM( IF( ( t.type in ('Donation', 'Fee') AND b.confirmations >= " . $this->config['confirmations'] . "), t.amount, 0 ) )
+              SUM( IF( t.type = 'Convertible_Transfer', t.amount, 0 ) )
             ), 8
           ), 0
         ) AS amount,
@@ -395,7 +394,7 @@ class Transaction extends Base {
       ON t.block_id = b.id
       LEFT JOIN " . $this->user->getTableName() . " AS a
       ON t.account_id = a.id
-      WHERE t.type in ('Convertible', 'Convertible_Transfer', 'Donation', 'Fee') AND t.archived = 0
+      WHERE t.type in ('Convertible', 'Convertible_Transfer') AND t.archived = 0
       GROUP BY t.account_id
       HAVING amount > 0
       LIMIT ?");

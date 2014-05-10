@@ -55,6 +55,7 @@
             <a class="accordion-toggle collapsed" data-toggle="collapse"
                data-parent="#side-nav" href="#account-collapse"><i class="fa fa-user-md"></i> <span class="name">My Account</span></a>
             <ul id="account-collapse" class="panel-collapse collapse">
+              <li class="icon-user"><a href="/account">View Balance &amp; Workers</a></li>
               <li class="icon-user"><a href="{$smarty.server.PHP_SELF}?page=account&action=edit">Edit Account</a></li>
               <li class="icon-photo"><a href="{$smarty.server.PHP_SELF}?page=account&action=workers">My Workers</a></li>
               <li class="icon-indent-left"><a href="{$smarty.server.PHP_SELF}?page=account&action=transactions">Transactions</a></li>
