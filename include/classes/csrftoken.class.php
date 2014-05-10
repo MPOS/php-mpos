@@ -82,7 +82,7 @@ class CSRFToken Extends Base {
    * @return string HTML image with description
    */
   public static function getDescriptionImageHTML($dowhat="try") {
-    $string = "<img src='site_assets/mpos/images/questionmark.png' ";
+    $string = "<img src='site_assets/bootstrap/images/questionmark.png' ";
     $string.= "title='Tokens are used to help us mitigate attacks; Simply ";
     $string.= htmlentities(strip_tags($dowhat));
     $string.= " again to continue' width='20px' height='20px'>";
