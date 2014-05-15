@@ -33,7 +33,7 @@ if ($user->isAuthenticated()) {
   // Avoid confusion, ensure our nethash isn't higher than poolhash
   if ($iCurrentPoolHashrate > $dNetworkHashrate) $dNetworkHashrate = $iCurrentPoolHashrate;
 
-  $dExpectedTimePerBlock = $statistics->getNetworkExpectedTimePerBlock();
+  $dExpectedTimePerBlock = $statistics->getExpectedTimePerBlock('pool', $iCurrentPoolHashrate);
   $dEstNextDifficulty = $statistics->getExpectedNextDifficulty();
   $iBlocksUntilDiffChange = $statistics->getBlocksUntilDiffChange();
 

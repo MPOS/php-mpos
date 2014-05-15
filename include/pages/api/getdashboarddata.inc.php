@@ -78,7 +78,8 @@ $iEstShares = $statistics->getEstimatedShares($dDifficulty);
 $iEstShares > 0 && $aRoundShares['valid'] > 0 ? $dEstPercent = round(100 / $iEstShares * $aRoundShares['valid'], 2) : $dEstPercent = 0;
 
 // Some estimates
-$dExpectedTimePerBlock = $statistics->getNetworkExpectedTimePerBlock();
+$dExpectedTimePerBlock = $statistics->getExpectedTimePerBlock();
+$dPoolExpectedTimePerBlock = $statistics->getExpectedTimePerBlock('pool', $dPoolHashrate);
 $dEstNextDifficulty = $statistics->getExpectedNextDifficulty();
 $iBlocksUntilDiffChange = $statistics->getBlocksUntilDiffChange();
 
@@ -105,6 +106,7 @@ $data = array(
       'name' => $setting->getValue('website_name'),
       'currency' => $config['currency']
     ),
+    'esttimeperblock' => round($dPoolExpectedTimePerBlock, 2),
     'blocks' => $aLastBlocks,
     'workers' => $worker->getCountAllActiveWorkers(), 'hashrate' => $dPoolHashrateAdjusted,
     'shares' => array( 'valid' => $aRoundShares['valid'], 'invalid' => $aRoundShares['invalid'], 'invalid_percent' => $dPoolInvalidPercent, 'estimated' => $iEstShares, 'progress' => $dEstPercent ),

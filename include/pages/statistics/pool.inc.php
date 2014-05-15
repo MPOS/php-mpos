@@ -32,7 +32,7 @@ if (!$smarty->isCached('master.tpl', $smarty_cache_key)) {
   $iCurrentPoolHashrate =  $statistics->getCurrentHashrate();
 
   // Time in seconds, not hours, using modifier in smarty to translate
-  $iCurrentPoolHashrate > 0 ? $iEstTime = $dDifficulty * pow(2,32) / ($iCurrentPoolHashrate * 1000) : $iEstTime = 0;
+  $iCurrentPoolHashrate > 0 ? $iEstTime = $statistics->getExpectedTimePerBlock('pool', $iCurrentPoolHashrate) : $iEstTime = 0;
 
   // Time since last block
   if (!empty($aBlockData)) {
@@ -54,7 +54,7 @@ if (!$smarty->isCached('master.tpl', $smarty_cache_key)) {
     $dEstPercent = 0;
   }
 
-  $dExpectedTimePerBlock = $statistics->getNetworkExpectedTimePerBlock();
+  $dExpectedTimePerBlock = $statistics->getExpectedTimePerBlock();
   $dEstNextDifficulty = $statistics->getExpectedNextDifficulty();
   $iBlocksUntilDiffChange = $statistics->getBlocksUntilDiffChange();
 
