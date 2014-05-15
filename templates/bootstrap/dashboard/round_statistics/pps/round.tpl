@@ -48,7 +48,7 @@
           </div>
           <div class="col-md-spark">
             <i class="fa fa-clock-o fa-2x"></i>
-            <p id="b-esttimeperblock" class="h5 font-bold m-t">{$NETWORK.EstTimePerBlock|seconds_to_words}</p>
+            <p id="b-esttimeperblock" class="h5 font-bold m-t">{$NETWORK.EstTimePerBlock|seconds_to_hhmmss}</p>
             <p class="h6 text-muted">Est. Avg. Time per Block</p>
           </div>
         </div>

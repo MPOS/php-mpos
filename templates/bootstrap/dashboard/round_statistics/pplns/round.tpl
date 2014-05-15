@@ -83,7 +83,7 @@
               </div>
               <div class="circle-tile-content lightblue">
                 <div class="circle-tile-description text-faded">
-                  <p class="h5 up-more" id="b-esttimeperblock">{$NETWORK.EstTimePerBlock|seconds_to_words}</p>
+                  <p class="h5 up-more" id="b-esttimeperblock">{$NETWORK.EstTimePerBlock|seconds_to_hhmmss}</p>
                 </div>
                 <div class="circle-tile-number text-faded">
                   <p class="h6">Est. Avg. Time per Block</p>
