@@ -827,13 +827,10 @@ class Statistics extends Base {
       }
       $dDifficulty = $this->bitcoin->getdifficulty();
     } else {
-      $dNetworkHashrate = 1;
+      $hashrate = 1;
       $dDifficulty = 1;
     }
-    if($hashrate <= 0){
-      return $this->memcache->setCache(__FUNCTION__, $this->config['cointarget']);
-    }
-
+    if ($hashrate <= 0) $hashrate = 1;
     return $this->memcache->setCache(__FUNCTION__, $this->coin->calcNetworkExpectedTimePerBlock($dDifficulty, $hashrate));
   }
 
