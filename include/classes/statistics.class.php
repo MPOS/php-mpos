@@ -831,7 +831,7 @@ class Statistics extends Base {
       $dDifficulty = 1;
     }
     if ($hashrate <= 0) $hashrate = 1;
-    return $this->memcache->setCache(__FUNCTION__, $this->coin->calcNetworkExpectedTimePerBlock($dDifficulty, $hashrate));
+    return $this->memcache->setCache(__FUNCTION__ . '_' . $type, $this->coin->calcNetworkExpectedTimePerBlock($dDifficulty, $hashrate));
   }
 
   /**
