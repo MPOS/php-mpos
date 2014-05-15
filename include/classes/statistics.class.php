@@ -815,21 +815,26 @@ class Statistics extends Base {
    * Get the Expected Time per Block in the whole Network in seconde
    * @return seconds double Seconds per Block
    */
-  public function getNetworkExpectedTimePerBlock(){
+  public function getExpectedTimePerBlock($type='network',$hashrate = 0){
     if ($data = $this->memcache->get(__FUNCTION__)) return $data;
 
     if ($this->bitcoin->can_connect() === true) {
-      $dNetworkHashrate = $this->bitcoin->getnetworkhashps();
+      if ($type == 'network') {
+        $hashrate = $this->bitcoin->getnetworkhashps();
+      } else {
+        // We need hashes/second and expect khash as input
+        $hashrate = $hashrate * 1000;
+      }
       $dDifficulty = $this->bitcoin->getdifficulty();
     } else {
       $dNetworkHashrate = 1;
       $dDifficulty = 1;
     }
-    if($dNetworkHashrate <= 0){
+    if($hashrate <= 0){
       return $this->memcache->setCache(__FUNCTION__, $this->config['cointarget']);
     }
 
-    return $this->memcache->setCache(__FUNCTION__, $this->coin->calcNetworkExpectedTimePerBlock($dDifficulty, $dNetworkHashrate));
+    return $this->memcache->setCache(__FUNCTION__, $this->coin->calcNetworkExpectedTimePerBlock($dDifficulty, $hashrate));
   }
 
   /**
