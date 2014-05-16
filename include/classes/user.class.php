@@ -745,6 +745,10 @@ class User extends Base {
       $this->setErrorMessage('Coin Address is to short');
       return false;
     }
+    if (!$this->bitcoin->validateaddress($coinaddress)) {
+      $this->setErrorMessage('Coin address is not valid');
+      return false;
+    }
     if (preg_match('/[^a-z_\-0-9]/i', $username)) {
       $this->setErrorMessage('Username may only contain alphanumeric characters');
       return false;
