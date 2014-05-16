@@ -390,7 +390,7 @@ $aSettings['system'][] = array(
   'options' => array( 0 => 'No', 1 => 'Yes'),
   'default' => 0,
   'name' => 'disable_worker_edit', 'value' => $setting->getValue('disable_worker_edit'),
-  'tooltip' => 'No worker editing without valid Payout Address set in User Config.'
+  'tooltip' => 'No worker editing without valid Payout Address set in Account Settings.'
 );
 $aSettings['system'][] = array(
   'display' => 'IRC Chat Channel', 'type' => 'text',
