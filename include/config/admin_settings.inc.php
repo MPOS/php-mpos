@@ -386,6 +386,13 @@ $aSettings['system'][] = array(
   'tooltip' => 'Disable transaction summaries. Helpful with large transaction tables.'
 );
 $aSettings['system'][] = array(
+  'display' => 'Disable Worker Edit without valid Coin Address', 'type' => 'select',
+  'options' => array( 0 => 'No', 1 => 'Yes'),
+  'default' => 0,
+  'name' => 'disable_worker_edit', 'value' => $setting->getValue('disable_worker_edit'),
+  'tooltip' => 'No worker editing without valid Payout Address set in User Config.'
+);
+$aSettings['system'][] = array(
   'display' => 'IRC Chat Channel', 'type' => 'text',
   'size' => 25,
   'default' => '#lazypoolop',
