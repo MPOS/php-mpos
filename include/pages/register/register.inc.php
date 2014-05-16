@@ -26,7 +26,7 @@ if ($setting->getValue('disable_invitations') && $setting->getValue('lock_regist
     if ($setting->getValue('recaptcha_enabled') != 1 || $setting->getValue('recaptcha_enabled_registrations') != 1 || $rsp->is_valid) {
       // Check if recaptcha is enabled, process form data if valid or disabled
       isset($_POST['token']) ? $token = $_POST['token'] : $token = '';
-      if ($user->register(@$_POST['username'], @$_POST['password1'], @$_POST['password2'], @$_POST['pin'], @$_POST['email1'], @$_POST['email2'], @$_POST['tac'], $token)) {
+      if ($user->register(@$_POST['username'], @$_POST['coinaddress'], @$_POST['password1'], @$_POST['password2'], @$_POST['pin'], @$_POST['email1'], @$_POST['email2'], @$_POST['tac'], $token)) {
         (!$setting->getValue('accounts_confirm_email_disabled')) ? $_SESSION['POPUP'][] = array('CONTENT' => 'Please check your mailbox to activate this account') : $_SESSION['POPUP'][] = array('CONTENT' => 'Account created, please login');
       } else {
         $_SESSION['POPUP'][] = array('CONTENT' => 'Unable to create account: ' . $user->getError(), 'TYPE' => 'alert alert-danger');

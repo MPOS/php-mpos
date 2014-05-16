@@ -731,7 +731,7 @@ class User extends Base {
    * @param email2 string Email confirmation
    * @return bool
    **/
-  public function register($username, $password1, $password2, $pin, $email1='', $email2='', $tac='', $strToken='') {
+  public function register($username, $coinaddress, $password1, $password2, $pin, $email1='', $email2='', $tac='', $strToken='') {
     $this->debug->append("STA " . __METHOD__, 4);
     if ($tac != 1) {
       $this->setErrorMessage('You need to accept our <a href="'.$_SERVER['SCRIPT_NAME'].'?page=tac" target="_blank">Terms and Conditions</a>');
@@ -739,6 +739,10 @@ class User extends Base {
     }
     if (strlen($username) > 40) {
       $this->setErrorMessage('Username exceeding character limit');
+      return false;
+    }
+    if (strlen($coinaddress) < 35) {
+      $this->setErrorMessage('Coin Address is to short');
       return false;
     }
     if (preg_match('/[^a-z_\-0-9]/i', $username)) {
@@ -795,15 +799,15 @@ class User extends Base {
       ! $this->setting->getValue('accounts_confirm_email_disabled') ? $is_locked = 1 : $is_locked = 0;
       $is_admin = 0;
       $stmt = $this->mysqli->prepare("
-        INSERT INTO $this->table (username, pass, email, signup_timestamp, pin, api_key, is_locked)
-        VALUES (?, ?, ?, ?, ?, ?, ?)
+        INSERT INTO $this->table (username, pass, email, signup_timestamp, pin, api_key, is_locked, coin_address)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?)
         ");
     } else {
       $is_locked = 0;
       $is_admin = 1;
       $stmt = $this->mysqli->prepare("
-        INSERT INTO $this->table (username, pass, email, signup_timestamp, pin, api_key, is_admin, is_locked)
-        VALUES (?, ?, ?, ?, ?, ?, 1, ?)
+        INSERT INTO $this->table (username, pass, email, signup_timestamp, pin, api_key, is_admin, is_locked, coin_address)
+        VALUES (?, ?, ?, ?, ?, ?, 1, ?, ?)
         ");
     }
 
@@ -814,7 +818,7 @@ class User extends Base {
     $username_clean = strip_tags($username);
     $signup_time = time();
 
-    if ($this->checkStmt($stmt) && $stmt->bind_param('sssissi', $username_clean, $password_hash, $email1, $signup_time, $pin_hash, $apikey_hash, $is_locked) && $stmt->execute()) {
+    if ($this->checkStmt($stmt) && $stmt->bind_param('sssissis', $username_clean, $password_hash, $email1, $signup_time, $pin_hash, $apikey_hash, $is_locked, $coinaddress) && $stmt->execute()) {
       if (! $this->setting->getValue('accounts_confirm_email_disabled') && $is_admin != 1) {
         if ($token = $this->token->createToken('confirm_email', $stmt->insert_id)) {
           $aData['username'] = $username_clean;
