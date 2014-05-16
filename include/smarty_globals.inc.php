@@ -78,6 +78,7 @@ $aGlobal = array(
     'disable_auto_payouts' => $setting->getValue('disable_auto_payouts'),
     'disable_contactform' => $setting->getValue('disable_contactform'),
     'disable_contactform_guest' => $setting->getValue('disable_contactform_guest'),
+    'disable_worker_edit' => $setting->getValue('disable_worker_edit'),
     'algorithm' => $config['algorithm'],
     'getbalancewithunconfirmed' => $config['getbalancewithunconfirmed'],
     'target_bits' => $coin->getTargetBits(),
