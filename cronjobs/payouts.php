@@ -66,7 +66,13 @@ if ($setting->getValue('disable_manual_payouts') != 1 && $aManualPayouts) {
   // Calculate our sum first
   $dMPTotalAmount = 0;
   $aSendMany = NULL;
-  foreach ($aManualPayouts as $aUserData) $dMPTotalAmount += $aUserData['confirmed'];
+  foreach ($aManualPayouts as $aUserData) {
+    if ($aUserData['confirmed'] > $config['mp_max_threshold']) {
+      $dMPTotalAmount += $config['mp_max_threshold'];
+    } else {
+      $dMPTotalAmount += $aUserData['confirmed'];
+    }
+  }
   if ($dMPTotalAmount > $dWalletBalance) {
     $log->logError(" Wallet does not cover MP payouts - Payout: " . $dMPTotalAmount . " - Balance: " . $dWalletBalance);
     $monitoring->endCronjob($cron_name, 'E0079', 1, true);
@@ -79,19 +85,25 @@ if ($setting->getValue('disable_manual_payouts') != 1 && $aManualPayouts) {
   foreach ($aManualPayouts as $aUserData) {
     $transaction_id = NULL;
     $rpc_txid = NULL;
-    $log->logInfo(sprintf($mask, $aUserData['id'], $aUserData['username'], $aUserData['confirmed'], $aUserData['coin_address'], $aUserData['payout_id']));
+    $dMPUserAmount = 0;
+    if ($aUserData['confirmed'] > $config['mp_max_threshold']) {
+      $dMPUserAmount = $config['mp_max_threshold'];
+    } else {
+      $dMPUserAmount = $aUserData['confirmed'];
+    }
+    $log->logInfo(sprintf($mask, $aUserData['id'], $aUserData['username'], $dMPUserAmount, $aUserData['coin_address'], $aUserData['payout_id']));
     if (!$oPayout->setProcessed($aUserData['payout_id'])) {
       $log->logFatal('    unable to mark transactions ' . $aData['id'] . ' as processed. ERROR: ' . $oPayout->getCronError());
       $monitoring->endCronjob($cron_name, 'E0010', 1, true);
     }
     if ($bitcoin->validateaddress($aUserData['coin_address'])) {
-      if (!$transaction_id = $transaction->createDebitMPRecord($aUserData['id'], $aUserData['coin_address'], $aUserData['confirmed'])) {
+      if (!$transaction_id = $transaction->createDebitMPRecord($aUserData['id'], $aUserData['coin_address'], $dMPUserAmount)) {
         $log->logFatal('    failed to fullt debit user ' . $aUserData['username'] . ': ' . $transaction->getCronError());
         $monitoring->endCronjob($cron_name, 'E0064', 1, true);
       } else if (!$config['sendmany']['enabled'] || !$sendmanyAvailable) {
         // Run the payouts from RPC now that the user is fully debited
         try {
-          $rpc_txid = $bitcoin->sendtoaddress($aUserData['coin_address'], $aUserData['confirmed'] - $config['txfee_manual']);
+          $rpc_txid = $bitcoin->sendtoaddress($aUserData['coin_address'], $dMPUserAmount - $config['txfee_manual']);
         } catch (Exception $e) {
           $log->logError('E0078: RPC method did not return 200 OK: Address: ' . $aUserData['coin_address'] . ' ERROR: ' . $e->getMessage());
           // Remove this line below if RPC calls are failing but transactions are still added to it
@@ -103,7 +115,7 @@ if ($setting->getValue('disable_manual_payouts') != 1 && $aManualPayouts) {
           $log->logError('Unable to add RPC transaction ID ' . $rpc_txid . ' to transaction record ' . $transaction_id . ': ' . $transaction->getCronError());
       } else {
         // We don't run sendtoaddress but run sendmany later
-        $aSendMany[$aUserData['coin_address']] = $aUserData['confirmed'] - $config['txfee_manual'];
+        $aSendMany[$aUserData['coin_address']] = $dMPUserAmount - $config['txfee_manual'];
         $aTransactions[] = $transaction_id;
       }
     } else {
@@ -153,7 +165,13 @@ if ($setting->getValue('disable_auto_payouts') != 1 && $aAutoPayouts) {
   $aSendMany = NULL;
   // Calculate our sum first
   $dAPTotalAmount = 0;
-  foreach ($aAutoPayouts as $aUserData) $dAPTotalAmount += $aUserData['confirmed'];
+  foreach ($aAutoPayouts as $aUserData) {
+    if ($aUserData['confirmed'] > $config['mp_max_threshold']) {
+      $dAPTotalAmount += $config['mp_max_threshold'];
+    } else {
+      $dAPTotalAmount += $aUserData['confirmed'];
+    }
+  }
   if ($dAPTotalAmount > $dWalletBalance) {
     $log->logError(" Wallet does not cover AP payouts - Payout: " . $dAPTotalAmount . " - Balance: " . $dWalletBalance);
     $monitoring->endCronjob($cron_name, 'E0079', 1, true);
@@ -166,15 +184,21 @@ if ($setting->getValue('disable_auto_payouts') != 1 && $aAutoPayouts) {
   foreach ($aAutoPayouts as $aUserData) {
     $transaction_id = NULL;
     $rpc_txid = NULL;
-    $log->logInfo(sprintf($mask, $aUserData['id'], $aUserData['username'], $aUserData['confirmed'], $aUserData['coin_address'], $aUserData['ap_threshold']));
+    $dAPUserAmount = 0;
+    if ($aUserData['confirmed'] > $config['mp_max_threshold']) {
+      $dAPUserAmount = $config['mp_max_threshold'];
+    } else {
+      $dAPUserAmount = $aUserData['confirmed'];
+    }
+    $log->logInfo(sprintf($mask, $aUserData['id'], $aUserData['username'], $dAPUserAmount, $aUserData['coin_address'], $aUserData['ap_threshold']));
     if ($bitcoin->validateaddress($aUserData['coin_address'])) {
-      if (!$transaction_id = $transaction->createDebitAPRecord($aUserData['id'], $aUserData['coin_address'], $aUserData['confirmed'])) {
+      if (!$transaction_id = $transaction->createDebitAPRecord($aUserData['id'], $aUserData['coin_address'], $dAPUserAmount)) {
         $log->logFatal('    failed to fully debit user ' . $aUserData['username'] . ': ' . $transaction->getCronError());
         $monitoring->endCronjob($cron_name, 'E0064', 1, true);
       } else if (!$config['sendmany']['enabled'] || !$sendmanyAvailable) {
         // Run the payouts from RPC now that the user is fully debited
         try {
-          $rpc_txid = $bitcoin->sendtoaddress($aUserData['coin_address'], $aUserData['confirmed'] - $config['txfee_auto']);
+          $rpc_txid = $bitcoin->sendtoaddress($aUserData['coin_address'], $dAPUserAmount - $config['txfee_auto']);
         } catch (Exception $e) {
           $log->logError('E0078: RPC method did not return 200 OK: Address: ' . $aUserData['coin_address'] . ' ERROR: ' . $e->getMessage());
           // Remove this line below if RPC calls are failing but transactions are still added to it
@@ -186,7 +210,7 @@ if ($setting->getValue('disable_auto_payouts') != 1 && $aAutoPayouts) {
           $log->logError('Unable to add RPC transaction ID ' . $rpc_txid . ' to transaction record ' . $transaction_id . ': ' . $transaction->getCronError());
       } else {
         // We don't run sendtoaddress but run sendmany later
-        $aSendMany[$aUserData['coin_address']] = $aUserData['confirmed'] - $config['txfee_auto'];
+        $aSendMany[$aUserData['coin_address']] = $dAPUserAmount - $config['txfee_auto'];
         $aTransactions[] = $transaction_id;
       }
     } else {

@@ -97,17 +97,21 @@ if ($user->isAuthenticated()) {
         switch (@$_POST['do']) {
           case 'cashOut':
         	$aBalance = $transaction->getBalance($_SESSION['USERDATA']['id']);
-        	$dBalance = $aBalance['confirmed'];
+        	$dBalance = 0;
+        	if ($aBalance['confirmed'] > $config['mp_max_threshold']) {
+        	  $dBalance = $config['mp_max_threshold'];
+        	  $_SESSION['POPUP'][] = array('CONTENT' => 'Payout is set to ' . $config['mp_max_threshold'] . ', because that is the maximum payout threshold for a single payout.', 'TYPE' => 'alert alert-info');
+        	} else {
+        	  $dBalance = $aBalance['confirmed'];
+        	}
         	if ($setting->getValue('disable_payouts') == 1 || $setting->getValue('disable_manual_payouts') == 1) {
         	  $_SESSION['POPUP'][] = array('CONTENT' => 'Manual payouts are disabled.', 'TYPE' => 'alert alert-warning');
-          } else if ($config['twofactor']['enabled'] && $config['twofactor']['options']['withdraw'] && !$wf_editable) {
-            $_SESSION['POPUP'][] = array('CONTENT' => 'You have not yet unlocked account withdrawls.', 'TYPE' => 'alert alert-danger');
-          } else if ($aBalance['confirmed'] < $config['mp_min_threshold']) {
-            $_SESSION['POPUP'][] = array('CONTENT' => 'Payout must be greater or equal than ' . $config['mp_min_threshold'] . '.', 'TYPE' => 'info');
-          } else if ($aBalance['confirmed'] > $config['mp_max_threshold']) {
-            $_SESSION['POPUP'][] = array('CONTENT' => 'Payout must be lower or equal than ' . $config['mp_max_threshold'] . '.', 'TYPE' => 'info');
-          } else if (!$user->getCoinAddress($_SESSION['USERDATA']['id'])) {
-            $_SESSION['POPUP'][] = array('CONTENT' => 'You have no payout address set.', 'TYPE' => 'alert alert-danger');
+            } else if ($config['twofactor']['enabled'] && $config['twofactor']['options']['withdraw'] && !$wf_editable) {
+              $_SESSION['POPUP'][] = array('CONTENT' => 'You have not yet unlocked account withdrawls.', 'TYPE' => 'alert alert-danger');
+            } else if ($dBalance < $config['mp_min_threshold']) {
+              $_SESSION['POPUP'][] = array('CONTENT' => 'Payout must be greater or equal than ' . $config['mp_min_threshold'] . '.', 'TYPE' => 'alert alert-info');
+            } else if (!$user->getCoinAddress($_SESSION['USERDATA']['id'])) {
+              $_SESSION['POPUP'][] = array('CONTENT' => 'You have no payout address set.', 'TYPE' => 'alert alert-danger');
         	} else {
         	  $user->log->log("info", $_SESSION['USERDATA']['username']." requesting manual payout");
         	  if ($dBalance > $config['txfee_manual']) {
