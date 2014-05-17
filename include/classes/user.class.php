@@ -741,10 +741,6 @@ class User extends Base {
       $this->setErrorMessage('Username exceeding character limit');
       return false;
     }
-    if (strlen($coinaddress) < 35) {
-      $this->setErrorMessage('Coin Address is to short');
-      return false;
-    }
     if (!$this->bitcoin->validateaddress($coinaddress)) {
       $this->setErrorMessage('Coin address is not valid');
       return false;
