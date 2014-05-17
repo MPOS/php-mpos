@@ -110,12 +110,12 @@ $config['ap_threshold']['max'] = 250;
 $config['mp_min_threshold'] = 1;
 
 /**
- * Maximum manual Payout Threshold
- *  Maximum manual payout amount
+ * Maximum Coins per Payout
+ *  Maximum Amount of Coins per Payout
  *  Should be set to whatever Coin Daemon can handle as max Transaction for payouts
- *   https://github.com/MPOS/php-mpos/wiki/Config-Setup#maxmimum-manual-payout-threshold
+ *   https://github.com/MPOS/php-mpos/wiki/Config-Setup#maximum-coins-per-payout
  **/
-$config['mp_max_threshold'] = 20000;
+$config['max_payout_amount'] = 20000;
 
 /**
  * Donation thresholds

@@ -18,9 +18,6 @@
               <p style="padding-left:3px; padding-redight:30px; font-size:10px;">
                 Minimum Cashout: {$GLOBAL.config.mp_min_threshold} {$GLOBAL.config.currency}
               </p>
-              <p style="padding-left:3px; padding-redight:30px; font-size:10px;">
-                Maximum Cashout: {$GLOBAL.config.mp_max_threshold} {$GLOBAL.config.currency}
-              </p>
             </div>
             <div class="form-group">
               <label>Account Balance</label>
@@ -43,7 +40,7 @@
       <input type="hidden" name="ctoken" value="{$CTOKEN|escape|default:""}" />
       <input type="hidden" name="utype" value="withdraw_funds">
       {if $GLOBAL.twofactor.enabled && $GLOBAL.twofactor.options.withdraw}
-      {if $GLOBAL.userdata.balance.confirmed|escape < $GLOBAL.config.mp_threshold}
+      {if $GLOBAL.userdata.balance.confirmed|escape < $GLOBAL.config.mp_min_threshold}
       <input type="submit" value="Unlock" class="btn btn-warning btn-sm" name="unlock"  disabled="disabled">
       {elseif $WITHDRAWSENT == 1 && $WITHDRAWUNLOCKED == 1}
       <input type="submit" value="Cash Out" class="btn btn-success btn-sm">
