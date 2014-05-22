@@ -79,6 +79,7 @@ $aGlobal = array(
     'disable_contactform' => $setting->getValue('disable_contactform'),
     'disable_contactform_guest' => $setting->getValue('disable_contactform_guest'),
     'disable_worker_edit' => $setting->getValue('disable_worker_edit'),
+    'disable_transactionsummary' => $setting->getValue('disable_transactionsummary'),
     'algorithm' => $config['algorithm'],
     'getbalancewithunconfirmed' => $config['getbalancewithunconfirmed'],
     'target_bits' => $coin->getTargetBits(),
