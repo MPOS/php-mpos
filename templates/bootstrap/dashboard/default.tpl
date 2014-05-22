@@ -1,6 +1,19 @@
 {if $smarty.session.AUTHENTICATED|default}
 <script src="{$PATH}/js/plugins/date.format.js"></script>
 <script src="{$PATH}/js/plugins/soundjs-0.5.2.min.js"></script>
+<script type="text/javascript">
+  function myMute(obj,flag) {
+    if(flag!==createjs.Sound.getMute()) {
+      createjs.Sound.setMute(flag);
+      obj.style.textDecoration="underline";
+      obj.style.color="#FFFF00";
+      flag=!flag;
+      obj=document.getElementById("mute_"+flag.toString());
+      obj.style.textDecoration="none";
+      obj.style.color="#FF0000";
+    }
+  }
+</script>
 
 <div class="row">
   <div class="col-lg-12">
