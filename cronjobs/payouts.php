@@ -65,7 +65,8 @@ $aManualPayouts = $transaction->getMPQueue($config['payout']['txlimit_manual']);
 if ($setting->getValue('disable_manual_payouts') != 1 && $aManualPayouts) {
   // Calculate our sum first
   $dMPTotalAmount = 0;
-  $aSendMany = NULL;
+  #$aSendMany = NULL;
+  $aSendMany = array();
   foreach ($aManualPayouts as $aUserData) $dMPTotalAmount += $aUserData['confirmed'];
   if ($dMPTotalAmount > $dWalletBalance) {
     $log->logError(" Wallet does not cover MP payouts - Payout: " . $dMPTotalAmount . " - Balance: " . $dWalletBalance);
@@ -86,16 +87,21 @@ if ($setting->getValue('disable_manual_payouts') != 1 && $aManualPayouts) {
     }
     if ($bitcoin->validateaddress($aUserData['coin_address'])) {
       $dMPAmountOriginal = $aUserData['confirmed'];
+      $dMPPayoutLoop = ceil($dMPAmountOriginal / $config['max_payout_amount']);
+      $dMPPayoutLoopStart = 1;
       $dMPAmountLeft = $dMPAmountOriginal;
       while($dMPAmountLeft > 0) {
         if ($dMPAmountLeft > $config['max_payout_amount']) {
+          $log->logInfo('Found bigger amount than max payout. Payout will be splitted into ' . $dMPPayoutLoop .' Payouts');
           $log->logInfo('  Split Payout to: ' . $config['max_payout_amount'] . ' Left: ' . $dMPAmountLeft . ' Original: ' . $dMPAmountOriginal);
           $dMPAmountPayout = $config['max_payout_amount'] - $config['txfee_manual'];
           $dMPAmountLeft = $dMPAmountLeft - $dMPAmountPayout;
         } else if ($dMPAmountLeft < $config['txfee_manual']) {
+          $log->logInfo('  Split Payout ' . $config['max_payout_amount'] . ' is to small. Left: ' . $dMPAmountLeft . ' Original: ' . $dMPAmountOriginal);
           break;
         } else {
           $log->logInfo('  Normal Payout: ' . $dMPAmountLeft . ' Original: ' . $dMPAmountOriginal);
+          #echo('  Normal Payout: ' . $dMPAmountLeft . ' Original: ' . $dMPAmountOriginal);
           $dMPAmountPayout = $dMPAmountLeft - $config['txfee_manual'];
           $dMPAmountLeft = 0;
         }
@@ -117,9 +123,12 @@ if ($setting->getValue('disable_manual_payouts') != 1 && $aManualPayouts) {
             $log->logError('Unable to add RPC transaction ID ' . $rpc_txid . ' to transaction record ' . $transaction_id . ': ' . $transaction->getCronError());
         } else {
           // We don't run sendtoaddress but run sendmany later
-          $aSendMany[$aUserData['coin_address']] = $dMPAmountPayout;
+          array_push($aSendMany, array("coinaddress" => $aUserData['coin_address'], "split" => $dMPPayoutLoopStart, "amount" => $dMPAmountPayout));
+          #$aSendMany[$aUserData['coin_address']] = $dMPAmountPayout;
           $aTransactions[] = $transaction_id;
         }
+        $log->logInfo('Payout #' . $dMPPayoutLoopStart .' of ' . $dMPPayoutLoop .' Payouts');
+        $dMPPayoutLoopStart ++;
       }
     } else {
       $log->logInfo('    failed to validate address for user: ' . $aUserData['username']);
@@ -165,7 +174,8 @@ $aAutoPayouts = $transaction->getAPQueue($config['payout']['txlimit_auto']);
 
 // Fetch our auto payouts, process them
 if ($setting->getValue('disable_auto_payouts') != 1 && $aAutoPayouts) {
-  $aSendMany = NULL;
+  #$aSendMany = NULL;
+  $aSendMany = array();
   // Calculate our sum first
   $dAPTotalAmount = 0;
   foreach ($aAutoPayouts as $aUserData) $dAPTotalAmount += $aUserData['confirmed'];
@@ -173,7 +183,6 @@ if ($setting->getValue('disable_auto_payouts') != 1 && $aAutoPayouts) {
     $log->logError(" Wallet does not cover AP payouts - Payout: " . $dAPTotalAmount . " - Balance: " . $dWalletBalance);
     $monitoring->endCronjob($cron_name, 'E0079', 1, true);
   }
-
   $log->logInfo("Auto Payout Sum: " . $dAPTotalAmount . " | Liquid Assets: " . $dWalletBalance . " | Wallet Balance: " . ($dWalletBalance + $dBlocksUnconfirmedBalance) . " | Unconfirmed: " . $dBlocksUnconfirmedBalance);
   $log->logInfo('  found ' . count($aAutoPayouts) . ' queued auto payouts');
   $mask = '    | %-10.10s | %-25.25s | %-20.20s | %-40.40s | %-20.20s |';
@@ -184,9 +193,12 @@ if ($setting->getValue('disable_auto_payouts') != 1 && $aAutoPayouts) {
     $log->logInfo(sprintf($mask, $aUserData['id'], $aUserData['username'], $aUserData['confirmed'], $aUserData['coin_address'], $aUserData['ap_threshold']));
     if ($bitcoin->validateaddress($aUserData['coin_address'])) {
       $dAPAmountOriginal = $aUserData['confirmed'];
+      $dAPPayoutLoop = ceil($dAPAmountOriginal / $config['max_payout_amount']);
+      $dAPPayoutLoopStart = 1;
       $dAPAmountLeft = $dAPAmountOriginal;
       while($dAPAmountLeft > 0) {
         if ($dAPAmountLeft > $config['max_payout_amount']) {
+          $log->logInfo('Found bigger amount than max payout. Payout will be splitted into ' . $dAPPayoutLoop .' Payouts');
           $log->logInfo('  Split Payout to: ' . $config['max_payout_amount'] . ' Left: ' . $dAPAmountLeft . ' Original: ' . $dAPAmountOriginal);
           $dAPAmountPayout = $config['max_payout_amount'] - $config['txfee_auto'];
           $dAPAmountLeft = $dAPAmountLeft - $dAPAmountPayout;
@@ -215,9 +227,12 @@ if ($setting->getValue('disable_auto_payouts') != 1 && $aAutoPayouts) {
             $log->logError('Unable to add RPC transaction ID ' . $rpc_txid . ' to transaction record ' . $transaction_id . ': ' . $transaction->getCronError());
         } else {
           // We don't run sendtoaddress but run sendmany later
-          $aSendMany[$aUserData['coin_address']] = $dAPAmountPayout;
+          array_push($aSendMany, array("coinaddress" => $aUserData['coin_address'], "split" => $dAPPayoutLoopStart, "amount" => $dAPAmountPayout));
+          #$aSendMany[$aUserData['coin_address']] = $dAPAmountPayout;
           $aTransactions[] = $transaction_id;
         }
+        $log->logInfo('Payout #' . $dMPPayoutLoopStart .' of ' . $dAPPayoutLoop .' Payouts');
+        $dAPPayoutLoopStart ++;
       }
     } else {
       $log->logInfo('    failed to validate address for user: ' . $aUserData['username']);
