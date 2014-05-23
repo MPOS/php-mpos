@@ -5,6 +5,7 @@
 $(document).ready(function(){
   var audioPath = "{/literal}{$PATH}{literal}/audio/";
   var manifest = [ {id:"ding", src:"ding.ogg"} ];
+  var muteFlag = 1;
   createjs.Sound.alternateExtensionseExtensions = ["mp3"];
   createjs.Sound.registerManifest(manifest, audioPath);
 
@@ -250,6 +251,23 @@ $(document).ready(function(){
       }
     });
   })();
+  
+  // Mute Button
+  $('#muteButton').click(function(){
+    if(muteFlag == 2) {
+      muteFlag = 1;
+      createjs.Sound.setMute(false);
+      $(this).toggleClass("btn-xs btn-danger").toggleClass("btn-xs btn-success");
+      //$(this).find($(".fa")).removeClass('fa-volume-off').addClass('fa-volume-up');
+    } else {
+      muteFlag = 2;
+      createjs.Sound.setMute(true);
+      $(this).toggleClass("btn-xs btn-success").toggleClass("btn-xs btn-danger");
+      //$(this).find($(".fa")).removeClass('fa-volume-up').addClass('fa-volume-off');
+    }
+  });
+  
+  
 });
 {/literal}
 </script>

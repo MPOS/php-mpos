@@ -38,7 +38,7 @@
         </table>
       </div>
       <div class="panel-footer text-right">
-        Blocknotify Sound <a href="#" id="mute_false" onclick="myMute(this, false);">on</a> / <a href="#" id="mute_true" onclick="myMute(this, true);">off</a>
+        <button id="muteButton" type="button" class="btn-xs btn-success"><i class="fa fa-volume-up"></i></button>
       </div>
     </div>
   </div>
