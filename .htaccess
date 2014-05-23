@@ -1,3 +1,10 @@
 ErrorDocument 404 /public/index.php?page=error&action=404
 RedirectMatch 404 /logs(/|$)
+RedirectMatch 404 /templates(/|$)
+RedirectMatch 404 /include(/|$)
+RedirectMatch 404 /scripts(/|$)
+RedirectMatch 404 /sql(/|$)
+RedirectMatch 404 /upgrade(/|$)
+RedirectMatch 404 /cronjobs(/|$)
+RedirectMatch 404 /tests(/|$)
 Options -Indexes

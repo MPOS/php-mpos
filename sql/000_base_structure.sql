@@ -15,6 +15,7 @@ CREATE TABLE IF NOT EXISTS `accounts` (
   `username` varchar(40) NOT NULL,
   `pass` varchar(255) NOT NULL,
   `email` varchar(255) DEFAULT NULL COMMENT 'Assocaited email: used for validating users, and re-setting passwords',
+  `timezone` varchar(35) NOT NULL DEFAULT '415',
   `notify_email` VARCHAR( 255 ) NULL DEFAULT NULL,
   `loggedIp` varchar(255) DEFAULT NULL,
   `is_locked` tinyint(1) NOT NULL DEFAULT '0',
@@ -133,7 +134,7 @@ CREATE TABLE IF NOT EXISTS `settings` (
   UNIQUE KEY `setting` (`name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-INSERT INTO `settings` (`name`, `value`) VALUES ('DB_VERSION', '0.0.8');
+INSERT INTO `settings` (`name`, `value`) VALUES ('DB_VERSION', '0.0.10');
 
 CREATE TABLE IF NOT EXISTS `shares` (
   `id` bigint(30) NOT NULL AUTO_INCREMENT,

@@ -1,4 +1,2 @@
 ErrorDocument 404 /index.php?page=error&action=404
-RedirectMatch 404 /templates(/|$)
-RedirectMatch 404 /include(/|$)
 RedirectMatch 404 /.git(/|$)
