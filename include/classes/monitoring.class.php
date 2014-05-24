@@ -18,7 +18,7 @@ class Monitoring extends Base {
         $temp = explode('|', $aData);
         $aMonitor['api_key'] = trim($temp[0]);
         $aMonitor['monitor_id'] = trim($temp[1]);
-        $target = '/getMonitors?apiKey=' . $aMonitor['api_key'] . '&monitors=' . $aMonitor['monitor_id'] . '&format=json&noJsonCallback=1&customUptimeRatio=1-7-30&logs=1';
+        $target = '/getMonitors?apiKey=' . $aMonitor['api_key'] . '&monitor=' . $aMonitor['monitor_id'] . '&format=json&noJsonCallback=1&customUptimeRatio=1-7-30&logs=1';
         $aMonitorStatus = $this->tools->getApi($url, $target);
         if (!$aMonitorStatus || @$aMonitorStatus['stat'] == 'fail') {
           if (is_array($aMonitorStatus) && array_key_exists('message', @$aMonitorStatus)) {
