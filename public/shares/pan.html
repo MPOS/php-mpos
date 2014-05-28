@@ -1,0 +1,250 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>AwesomeStats Dashboard</title>
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
+	  <link rel="shortcut icon" href="/site_assets/favicon.ico" />
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js"></script>
+    <script type="text/javascript" src="https://code.jquery.com/color/jquery.color-2.1.2.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/raphael/2.1.0/raphael-min.js"></script>
+	  <script type="text/javascript" src="ah_event_tools.js"></script>
+	  <script type="text/javascript" src="utils.js"></script>
+    <script type="text/javascript">
+      var diffToCompare = 100000000;
+      var lastBlockTemplate = 0;      
+      var stratumConnectionSnapshots = [];
+
+      function add_to_row(row, td_data) {
+        row.append("<td><div class=" + id + ">" + td_data + "</div></td>")
+      }
+      function add_conn_td_pair(r, n, c) { 
+        r.append("<td><div class='" + c + "'></div></td>");
+        n.append("<td><div class='" + c + "-notif-time'>-1</div></td>");
+      }
+      
+      function prepend_with_limit(table_id, row, max) { 
+        $(table_id + " tbody").prepend(row);
+        trs = $(table_id + " tr")
+        if (trs.length >= max) {  
+          trs[trs.length - 1].remove();
+        }
+      }
+      
+      function create_conn_row(instance_name) { 
+        var row = $("." + instance_name) 
+        if (row.length == 0) { 
+          row = $('<tr class="' + instance_name + '">')
+          row.append("<td>" + instance_name + "</td>")
+          row_notif = $('<tr class="' + instance_name + '-notif-times">')
+          row_notif.append("<td>" + instance_name + "</td>")
+          stratum_nodes.forEach(function(v) { 
+            add_conn_td_pair(row, row_notif, instance_name + v) 
+          }) 
+          $("#stratums tbody").append(row)
+          $("#blocknotif tbody").append(row_notif)
+          updateTimeSinceLast(row_notif)
+        }
+      } 
+      function populate_conn_data(stratum_node, data) { 
+        var stratums_on_node = Object.keys(data);
+        for (var inst; inst = stratums_on_node.pop();) {
+          create_conn_row(inst)
+          var tdid = "." + inst + "-" + stratum_node
+          $(tdid).text(data[inst]);
+        }
+      }
+     
+      function updateTableCellElapsed() { 
+        var val = parseInt($(this).text()) + 1 
+        color = (val > 180) ? 5 : Math.floor(val/30)
+        $(this).text(val)
+        $(this).css("backgroundColor", color_table[color])
+      }
+
+      function updateTimeSinceLast(row) { 
+          var first = true;
+          row.children("td").each(function(){
+            if (first) { 
+              first = false; 
+              return; 
+            } 
+            $(this).children("div").each(updateTableCellElapsed)
+          }) 
+        // Keep doing this...
+        setTimeout(function(){updateTimeSinceLast(row)}, 1000)
+      }
+
+      // Each message 'type' is a function in the object below:   
+      var message_handlers = { 
+        blocknotify : function(data) { 
+          var div = $("." + data.which + "-" + data.stratum + "-notif-time");
+          create_conn_row(data.which);
+          div.text("0")
+          div.css("backgroundColor", color_table[0])
+        },
+        blocktemplate : function(data) { 
+          lastBlockTemplate = (new Date().getTime() / 1000); 
+          updateDiffElement($('#curdiff_box'), data)
+        },
+        block : function(data) { 
+          var row = $('<tr>');
+          if (data.block_id == undefined) { 
+            add_to_row(row, "-" );
+          } else { 
+            add_to_row(row, "<a href='https://dogechain.info/block/" + 
+                             data.block_id + "'>..." +
+                             data.block_id.substring(data.block_id.length - 5) + "</a>");
+          }
+          add_to_row(row, data.event);
+          add_to_row(row, data.extra);
+          prepend_with_limit('#block_updates', row, 15);
+          color = block_colors[data.event] || color_table[2]
+          $("."+id).css("backgroundColor", color)
+        },
+        share : function(data) { 
+          var row = $('<tr>');
+          add_to_row(row, new Date().toLocaleTimeString());
+          add_to_row(row, data.user + "." + data.worker);
+          add_to_row(row, formatDiffString(data.share) + "<span style='color:#999999'> / " + formatDiffString(diffToCompare) + "mm</span>")
+          prepend_with_limit('#big_shares', row, 15);
+          // It probably IS a block if it's better than this diff
+          // Make it stand out: 
+          shareitems = $("." + id)
+          if (data.share >= diffToCompare) { 
+            shareitems.css("backgroundColor", color_table[1]) 
+          }
+        },
+
+        // Conenection update, which is a little odd - because of how wallet notifies 
+        // stratum of new blocks we have a lot fo +1/-1 fluctuations whenver we get a new block 
+        // notification. Experimental workaround: if we haev received a new block notif within 
+        // X seconds, do NOT update numbers .
+        conn : function(data) { 
+          if (Math.abs((new Date().getTime() / 1000) -  lastBlockTemplate ) < 8)  { 
+            return; 
+          }
+          create_conn_row(data.which) 
+          var td = $("." + data.which + "-" + data.stratum)
+          old_count = parseInt(td.text())
+          new_count = parseInt(data.newcount)
+          td.text(data.newcount)
+          if (new_count > old_count) { 
+            target_color = color_table[0]
+          } else if (old_count > new_count) { 
+            target_color = color_table[6]
+          } else {
+            return
+          }
+          highlight(td, target_color)
+        },
+        // Special handlers - responses to specific things that we have requested. 
+        responders : { 
+          connections : function(message) {   
+            var data = message.data
+            var all = Object.keys(data);
+            for (var stratum; stratum = all.pop(); ) { 
+              populate_conn_data(stratum, data[stratum]) 
+            }
+          }
+        } 
+      }
+
+      $(document).ready(function() {
+        monitor_stratum(message_handlers, [{  "request" : "connections" }, 
+                                           {  "request" : "mindiff", "value" : 1000000},   
+                                           {  "request" : "getcurrentblocktemplate" }  ]);
+      }); 
+      
+    </script>
+  </head>
+  <body>
+  <nav class="navbar navbar-default" role="navigation">
+    <ul class="nav navbar-nav">
+      <li><img src="https://i.imgur.com/CQIQ8P3.png"><a class="navbar-brand" href="/">AwesomeHash</a>
+      <li class="active"><a href="pan.html">Very Stats!</a></li>
+      <li><a href="ctp.html">Such Moon!</a></li>
+      <li><a href="index.html">So Shares!</a></li>
+    </ul>
+    <ul class="nav navbar-nav navbar-right">
+      <li style="height:50px;">
+        <a style="display:inline" title="AwesomeHash is a proud member the Dogecoin Defense Force!" href="http://www.reddit.com/r/DogecoinDefenseForce/">
+          <img src="https://i.imgur.com/Fn4cKvA.png" height="50px" alt="AwesomeHash is a proud member of Dogecoin Defense Force!" >
+        </a> 
+      </li>      
+      <li>
+          <div style="margin-right:20px; margin-top:4px; text-align:center;">
+                  Current Diff:<br/> 
+                  <span id='curdiff_box'>(waiting for new block)</span>
+          </div>
+      </li>
+    </ul>
+  </nav>
+  <div style='clear:both'>
+    <div class='container-fluid'>
+      <div class='col-md-2'>
+        <b>Stratum Connections</b>
+        <table id='stratums' class='table table-striped table-condensed'>
+          <thead>
+            <tr>
+              <th >
+              <th > East 
+              <th > West
+              <th > EU
+            </tr>
+          </thead>
+          <tbody>
+          </tbody>
+        </table>  
+      </div>
+      <div class='col-md-2'>
+        <b>Last Block Notification</b>
+        <table id='blocknotif' class='table table-striped table-condensed'>
+          <thead>
+            <tr>
+              <th >
+              <th > East 
+              <th > West
+              <th > EU
+            </tr>
+          </thead>
+          <tbody>
+          </tbody>
+        </table>  
+      </div>
+      <div class="col-md-5">
+      </div>
+    </div>
+    <div class="container-fluid"> 
+      <div class='col-md-5'>
+        <h4>Block Updates</h4>
+        <table id='block_updates' class='table table-striped table-condensed'>
+        <thead>
+          <tr>
+            <th> Block Id 
+            <th> Status
+            <th> Status Info
+          </tr>
+        </thead>
+        <tbody>
+        </tbody>
+        </table>  
+      </div>
+      <div class='col-md-5'>
+        <h4> High Diff Shares</h4>
+        <table id='big_shares' class='table table-striped table-condensed'>
+        <thead>
+          <tr>
+            <th> When 
+            <th> Who 
+            <th> Share Diff 
+          </tr>
+        </thead>
+        <tbody>
+        </tbody>
+        </table>  
+      </div>
+    </div>
+    <div>
+  </body>
+</html>

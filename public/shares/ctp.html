@@ -1,0 +1,281 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
+	  <link rel="shortcut icon" href="/site_assets/favicon.ico" />
+    <title>AwesomeRockets</title>
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+	  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/1.11.7/TweenMax.min.js"></script>
+	  <script type="text/javascript" src="ah_event_tools.js"></script>
+	  <script type="text/javascript" src="utils.js"></script>
+	  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.spritely/0.6.8/jquery.spritely.js"></script>
+ 	  <script type="text/javascript">
+		var moonTo = 0;
+		var timer = null;
+		var moonHeight = 0;
+	  	var totalShares = 0;
+		var startTime= Math.round(new Date().getTime() / 1000);
+		var lastTime= Math.round(new Date().getTime() / 1000);
+		var rocketCtr = 0;
+	    var event_handler = { 
+	      share : processData,
+		    blocktemplate : updateDiff
+	    }
+		var hasFocus = true;
+		
+		
+		var curDiff = 0;
+		var levelsArr = [.01,10,100,1000,10000,100000,1000000,10000000,100000000,1000000000];
+		function fireRockets()
+		{
+			var ignoreFocus = $('#ignorefocus').prop('checked');
+			if (ignoreFocus)
+			{
+				return true;
+			}
+			else
+			{
+				return hasFocus;
+			}
+		}
+		
+		$(document).ready(function() {
+			$(window).focus(function() {
+		        hasFocus = true;
+		    });
+
+		    $(window).blur(function() {
+		        hasFocus = false;
+		    });
+      $('#activeTab').css('background','');
+			$('#moon').css('left',($('body').width()*.5-$('#moon_gfx').width()*.5)+'px');
+			TweenLite.to($('#moon'), 2, {top:0});
+			$("body").css("overflow", "hidden");
+			monitor_stratum(event_handler, [{  "request" : "mindiff", "value" : 1000 },
+                                      {  "request" : "getcurrentblocktemplate" }]);
+			timer = setInterval(showAwesomeShibe, 30000);
+			var rocketCeiling = moonTo + $('#moon').height();
+			$('body').append("<div id='topcheck' style='position:absolute; left:0px; top:100%; width:10px; height:10px; background: #ffffff;'>&nbsp;</div>");
+			for (var lvl in levelsArr)
+			{
+				var lineHeight = log10(levelsArr[lvl])/log10(curDiff);
+				var rocketCeiling = moonTo + $('#moon').height();
+				var tstHeight = $('#topcheck').position().top - rocketCeiling;
+				//console.log(lineHeight);
+				var toHeight = $('#topcheck').position().top - (tstHeight * lineHeight);
+				//$('body').append("<div style='position:absolute; left:0px; width:200px; height:20px; border-bottom:1px solid yellow;color:yellow; top:"+toHeight+"px; '>"+levelsArr[lvl]+" ("+lineHeight+")</div>")
+			}
+		    $.ajax({
+		      type : "GET",
+		      url : "curdiff.php?w=blocks", // ?callback=?
+		      success : processBlocks, 
+		     	error: function(data) {"getBlocks: " + console.log(data); }                           
+		    })
+			
+		}); 
+		
+		function log10(val) {
+		  return Math.log(val) / Math.LN10;
+		}
+		function processBlocks(data)
+		{
+	        var jdata = JSON.parse(data);
+	  		var blocks = jdata.getblocksfound.data;
+			
+			for (var i in blocks )
+			{
+				var shibe = blocks[i].finder;
+				if (blocks[i].is_anonymous === "1")
+				{
+					shibe = 'anonymous';
+				}
+				$('#blockfinders_box').append('<div style="font-size:12px;"><a href="https://awesomehash.com/index.php?page=statistics&action=round&height='+blocks[i].height+'" target="_new">'+shibe+' | '+blocks[i].height+'</a></div>');
+			}
+			
+		}
+		function updateDiff(data)
+		{
+			curDiff = data.sharediff;
+			moonTo = $('#moon').position().top;
+			moonHeight = $('#moon').height();
+      updateDiffElement($('#curdiff_box'), data);
+      $('#curdiff_box').css('background','');
+			var rocketCeiling = moonTo+(.5*moonHeight);
+			var moonSize = 50000000 / curDiff;
+			TweenLite.to($('#moon_gfx'), 2, {width:(100*moonSize)});
+			TweenLite.to($('#moon'), 2, {left:($('body').width()*.5-$('#moon_gfx').width()*.5)});
+		}
+		function processData(data)
+		{
+			try
+			{
+				if(data.share >= 1000){
+					//rocketCtr++;
+					var tsStr = "";
+					var tsUsr = "";
+					if (data.share > totalShares)
+					{
+						totalShares = data.share;
+						tsStr = "High Score: "+totalShares+" | ";
+						tsUsr = "anonymous";
+						if (data.anon == false)
+						{
+							tsUsr = data.user;
+						}
+						tsStr = tsStr + tsUsr;
+						$('#rate_box').text(tsStr).css('display','hidden').fadeIn();
+					}
+					//var rate = totalShares/rocketCtr;
+					if (fireRockets())
+					{
+							//return false;
+		
+		
+						id++;
+						var rUser = "anonymous";
+						if (data.anon == false)
+						{
+							rUser = data.user;
+						}
+						$('body').append('<div id="rocket_'+id+'" style="position:absolute; background: url(https://i.imgur.com/aQrHqyl.png) no-repeat; top:100%; height:80px; width:80px; text-align:center; left:'+(Math.floor(Math.random()*$('body').width()))+'px"><img style="opacity:0;" src="https://i.imgur.com/aQrHqyl.png" width="80" height="55"><div style="overflow:hidden;color:#F6B442; width:80px; height:25px; font-size:10px; text-align:center">'+rUser+'<br>'+data.share+'</div></div>')
+						$('#rocket_'+id).sprite({
+							fps: 12,
+							no_of_frames: 4
+						});
+						data.share = parseInt(data.share);
+						tweenTo = $('#rocket_'+id).position().top;
+						//totalShares += data.share;
+						//var rate = totalShares / ((Math.round(new Date().getTime() / 1000) - startTime));
+						//$('#shares_box').text(totalShares);
+						//$('#rate_box').text(rate);
+						// 
+						var rocketCeiling = moonTo + $('#moon').height();
+						var heightFactor = (log10(data.share)/log10(curDiff))-.1;
+			
+						var totalDistance = (tweenTo - rocketCeiling);
+						var relativeHeight = tweenTo - (totalDistance * heightFactor);
+						var heightDiff = (tweenTo - relativeHeight)/tweenTo;
+						//console.log('heightFactor: '+heightFactor+' ('+data.share+')');
+						var deltaY = $('#rocket_'+id).position().top - relativeHeight;
+			
+			
+						var deltaX = ($('#moon').position().left + .5*$('#moon_gfx').width()) - $('#rocket_'+id).position().left + .5*$('#rocket_'+id).width();
+						deltaX = deltaX * heightFactor;
+						var degrees = (Math.atan2(-1*deltaY, deltaX) * 180 / Math.PI)+90;
+			
+						var newLeft = $('#moon').position().left+.5*$('#moon').width()-deltaX;
+						var shareStyle = "style='font-size:10px'";
+						if (data.share > 10000)
+						{
+							shareStyle = "style='font-size:12px'";
+						}
+						if (data.share > 100000)
+						{
+							shareStyle = "style='font-size:14px'";
+						}
+						if (data.share > 1000000)
+						{
+							shareStyle = "style='font-size:16px'";
+						}
+						if (data.share > 10000000)
+						{
+							shareStyle = "style='font-size:18px'";
+						}
+						if (data.share > 50000000)
+						{
+							shareStyle = "style='font-size:20px'";
+						}
+			
+			
+						$('#rocketeers_box').append("<div id='rrocket_"+id+"' "+shareStyle+">"+data.user+" | "+data.share+"</div>");
+			
+						TweenLite.to($('#rocket_'+id), .1, {rotation:degrees});
+						TweenLite.to($('#rocket_'+id), 2, {top:relativeHeight, left:newLeft, onComplete:killRocket, onCompleteParams:[$('#rocket_'+id)]});
+					}
+			
+				}
+			} 
+			catch (e)
+			{
+				console.log("Error shooting a rocket: "+e);
+			}
+		}
+		function killRocket(obj)
+		{
+			TweenLite.to(obj, 1, {opacity:0, scaleX:0, scaleY:0, top:$('#topcheck').position().top, onComplete:removeObject, onCompleteParams:[obj]});
+			
+		}
+		function removeObject(obj)
+		{
+			var id = obj.attr('id')
+			var obj2 = $('#r'+id);
+			obj2.unbind();
+			obj2.remove();
+			obj.unbind();
+			obj.remove();
+		}
+		function showAwesomeShibe()
+		{
+			$('body').append('<div id="awesomeshibe" style="position:absolute;"><img src="https://i.imgur.com/I8BDSiW.png"></div>');
+			$('#awesomeshibe').css('left',($('body').width()+500)+'px').css('top','300px');
+			TweenLite.to($('#awesomeshibe'), 10, {left:-500, ease:Bounce.easeInOut, onComplete:killAwesomeShibe, onCompleteParams:[$('#awesomeshibe')]	});
+			clearInterval(timer);
+			timer = setInterval(showAwesomeShibe, Math.round(Math.random()*(120000)+30000));
+		}
+		function killAwesomeShibe(obj)
+		{
+			obj.remove();
+		}
+    </script>
+  </head>
+  <body style="background: black url(https://i.imgur.com/81OssNl.jpg); padding:5px;">
+
+  <nav style="background:none;border:0px;" class="navbar navbar-default" role="navigation">
+    <ul class="nav navbar-nav">
+      <li><img src="https://i.imgur.com/CQIQ8P3.png"><a class="navbar-brand" href="/">AwesomeHash</a>
+      <li><a  href="pan.html">Very Stats!</a></li>
+      <li id="activeTab"  class="active"><a style="background:none;color:#F6C553;text-decoration:underline" href="ctp.html">Such Moon!</a></li>
+      <li><a  href="index.html">So Shares!</a></li>
+    </ul>
+    <ul class="nav navbar-nav navbar-right">
+      <li style="height:50px;">
+        <a style="display:inline" title="AwesomeHash is a proud member the Dogecoin Defense Force!" href="http://www.reddit.com/r/DogecoinDefenseForce/">
+          <img src="https://i.imgur.com/Fn4cKvA.png" height="50px" alt="AwesomeHash is a proud member of Dogecoin Defense Force!" >
+        </a> 
+      </li>      
+      <li>
+          <div style="color:#F6B442;margin-right:20px; margin-top:4px; text-align:center;">
+                  Current Diff:<br/> 
+                  <span id='curdiff_box'>(waiting for new block)</span>
+          </div>
+      </li>
+    </ul>
+  </nav>
+	<div style='float:left'>
+		<div id='ignorefocus_box' style='float:left; color:#F6B442; text-align:left; clear:both;'><a title='Allows the rockets to still be fired when this page / tab / window is not in focus.' style=' color:#F6B442; text-decoration:none;'>Ignore Focus? <input type='checkbox' name='ignorefocus' id='ignorefocus'  /></a></div>
+		<div id='rate_box' style='float:left; color:#F6B442; text-align:left; clear:both;'>loading</div>
+		<div id='rocketeers_box' style='float:left; color:#F6B442; text-align:left; clear:both;'>
+			<div>AwesomeRocketeers</div>
+		  	<div>----------------</div>
+		</div>
+	</div>
+	<div style='float:right'>
+		<div id='awesomehash_box' style='float:right; color:#F6B442;'><a href='https://awesomehash.com' style='font-size:15px; color:#F6B442;' target='_new'>AwesomeHash.com</a></div>
+		<div id='awesomehashirc_box' style='float:right; color:#F6B442; clear:both;'><a href='https://webchat.freenode.net/?channels=#awesomehash' style='font-size:12px; color:#F6B442;' target='_new'>#awesomehash on freenode.net</a></div>
+		<div id='awesomehashreg_box' style='float:right; color:#F6B442; clear:both;'><a href='https://awesomehash.com/index.php?page=register' style='font-size:14px; color:#FBEDD5;' target='_new'>Want your own moon rocket? <b>Mine with Us!</b></a></div>
+		<div id='' style='float:right; color:#F6B442; text-align:left; clear:both;'>&nbsp;</div>
+		<div id='blockfinders_box' style='float:right; color:#F6B442; text-align:right; clear:both;'>
+			<div>AwesomeHash Hall of Fame</div>
+			<div>----------------</div>
+		</div>
+	</div>
+ <!-- 
+		
+	  <div id='shares_box'>loading</div>
+	  
+  -->
+	  <div id="moon" style="position:absolute; top:-200px;"><img id='moon_gfx' src="https://i.imgur.com/n3yIBYM.png" style='width:100px' ></div>
+	  <div id='earth' style='position:absolute; left:50%; margin-left:-960px; top:100%; margin-top:-55px;'><img src='https://i.imgur.com/TUUmvuB.png'></div>
+  </body>
+</html>

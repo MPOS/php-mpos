@@ -1,0 +1,226 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <title>AwesomeShares</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
+	  <link rel="shortcut icon" href="/site_assets/favicon.ico" />
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+    <script type="text/javascript" src="https://netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+	  <script type="text/javascript" src="ah_event_tools.js"></script>
+	  <script type="text/javascript" src="utils.js"></script>
+    <script type="text/javascript">
+      function new_td(td_data){
+        return "<td><div class=" + id + ">" + td_data + "</div></td>"; 
+      }
+
+      function prepend_with_max_count(table_id, row, max) { 
+        $(table_id + " tbody").prepend(row);
+        trs = $(table_id + " tr")
+        if (trs.length >= max) {  
+          trs[trs.length - 1].remove();
+        }
+      }
+    
+      function setupFormattedFilterMenu() { 
+        var p = $('#dropdiffitems')
+        var values = [10000000, 5000000, 1000000, 500000, 100000, 50000, 10000, 5000, 1000, 500, 100];
+        
+        for (x = 0; x < values.length; x++) { 
+          v = '<li role="presentation"><a id="f'+x+'" class="diffFilterLink" data-internalId="' + values[x] + 
+              '" role="menuitem" tabindex="-1" href="#">' + new Intl.NumberFormat().format(values[x]) + '+</a>'
+          p.prepend(v);
+        }
+        $("#f" + (values.length - 1)).append("<span style='color:#AAAAAA'> 'ware the firehose!</span>")
+        $("#f0").append("<span style='color:#AAAAAA'> Just the blocks, ma'am</span>")
+      }
+
+      function add_share_tr(data) { 
+        var new_row = $('<tr style="padding:0px">');
+        var append_to
+        name = data.anon && data.user != "anonymous" ? "[A]" + data.user : data.user
+        if (data.share > 999999){ 
+          new_row.append(new_td(new Date().toLocaleTimeString()));
+          new_row.append(new_td(name +  "." + data.worker));
+          new_row.append(new_td(formatDiffString(data.share) + "<span style='color:#999999'>mm / " + formatDiffString(diffToCompare) + "mm</span>"));
+          append_to = '#big_shares'
+          max = 35 // TODO We could probably put this as data stored w/ table object itself...  
+                  // and it might be nice to make it configurable
+        } else { 
+          new_row.append(new_td(data.stratum  + "." + data.which));
+          new_row.append(new_td(name + "." + data.worker));
+          new_row.append(new_td(new Intl.NumberFormat().format(data.share)));
+          max = 25 // We could probably put this as data stored w/ table object itself... 
+          append_to = '#shares'
+        }
+
+        prepend_with_max_count(append_to, new_row, max);
+
+      }
+
+      function add_block_tr(data) {  
+        // For now, we're going to fit it into the  possible blocks table - 
+        // note that these kind of events probably shoudl get their own place... 
+        var new_row = $('<tr>');
+        new_row.append(new_td(new Date().toLocaleTimeString()));
+        new_row.append(new_td(data.extra));
+        if (data.block_id == undefined) { 
+          new_row.append(new_td( "-" ));
+        } else { 
+          new_row.append(new_td("Block: <a href='https://dogechain.info/block/" + data.block_id + "'>..." +
+                         data.block_id.substring(data.block_id.length - 5) + "</a>"));
+        }
+        prepend_with_max_count('#big_shares', new_row, 35);
+        $("." + id).fadeIn();
+      } 
+     
+      var handlers = { 
+        share : add_share_tr, 
+        block : add_block_tr, 
+        blocktemplate : function(data) { 
+          updateDiffElement($('#curdiff_box'), data) 
+        },
+        responders : { 
+          // TODO will become 'filter'
+          mindiff : function(message) { 
+            $('#dropdiff').text("Difficulty: " + new Intl.NumberFormat().format(message.data.value) + "+");
+            $('#dropdiff').append(" <b class='caret'></b>")
+
+          },
+          auth : function(message) { 
+            if (message.error) { 
+              $('.adminStuff').addClass('disabled')
+            } else { 
+              $('.adminStuff').removeClass('disabled')
+            }
+          },
+          userfilter : function(message) { 
+            if (message.error) {
+              t = "Shibes: Error in Expression";
+              $('#dropusers_error').text("Invalid expression: " + message.data.msg)
+              $('#dropusers_error').show();
+              $('#userDropdown').addClass('open');
+            } else { 
+              if (message.data.value == "" || message.data.value == undefined)  { 
+                t = "Shibe"
+              } else { 
+                if (message.data.value.length > 20) { 
+                  t = "Shibe: " + message.data.value.substring(0, 17) + "..."; 
+                } else { 
+                  t = "Shibe: " + message.data.value
+                }
+              } 
+              $('#dropusers_error').text("")
+              $('#dropusers_error').hide()
+            }
+            $('#dropusers').text(t) 
+            $('#dropusers').append(" <b class='caret'></b>")
+            $("#filter_user").text(message.data.value) 
+          }
+        }
+      } 
+
+      $(document).ready(function() {
+        setupFormattedFilterMenu();
+        $('.dropdown input, .dropdown label').click(function(e) {
+          // Prevents forms in dropdown from closing on click
+          e.stopPropagation();
+        });
+        $(".diffFilterLink").click(function(e) { 
+          updateFilterValues( { diff : $(this).data("internalid") } )
+        });
+        $("#filterUserForm").submit(function(e) { 
+          updateFilterValues( { user: $("#filter_user").val() } ) 
+          e.preventDefault();
+          $('.dropdown').removeClass('open');
+        });
+        $("#filterUserSend").click(function(e) { 
+          updateFilterValues( { user: $("#filter_user").val() } ) 
+          e.preventDefault();
+          $('.dropdown').removeClass('open');
+        });
+        $("#filterUserClear").click(function(e) { 
+          updateFilterValues( { user: "" } );
+          $('.dropdown').removeClass('open');
+        });
+        var initialRequest =  [ {  "request" : "getcurrentblocktemplate" }];
+        monitor_stratum(handlers, initialRequest);
+      }); 
+      
+    </script>
+  </head>
+  <body> 
+  <nav class="navbar navbar-default" role="navigation">
+    <ul class="nav navbar-nav">
+      <li><img src="https://i.imgur.com/CQIQ8P3.png"><a class="navbar-brand" href="/">AwesomeHash</a>
+      <li><a href="pan.html">Very Stats!</a></li>
+      <li><a href="ctp.html">Such Moon!</a></li>
+      <li class="active"><a href="index.html">So Shares!</a></li>
+    </ul>
+    <ul class="nav navbar-nav navbar-right">
+      <li style="height:50px;">
+        <a style="display:inline" title="AwesomeHash is a proud member the Dogecoin Defense Force!" href="http://www.reddit.com/r/DogecoinDefenseForce/">
+          <img src="https://i.imgur.com/Fn4cKvA.png" height="50px" alt="AwesomeHash is a proud member of Dogecoin Defense Force!" >
+        </a> 
+      </li>      
+      <li>
+          <div style="margin-right:20px; margin-top:4px; text-align:center;">
+                  Current Diff:<br/> 
+                  <span id='curdiff_box'>(waiting for new block)</span>
+          </div>
+      </li>
+    </ul>
+  </nav>
+
+
+  <div class="container-fluid">
+    <div class="col-md-6">
+      <h4>Shares</h4>
+      <table id='shares' class='table table-striped table-condensed'>
+       <thead> <tr> 
+       <th class="col-sm-2"> Stratum </th>
+       <th class="col-sm-5"> 
+         <div class="input-group input-group-sm" > 
+           <div class="dropdown" id="userDropdown">
+             <a href="#" id="dropusers" role="button" class="dropdown-toggle" data-toggle="dropdown">Shibe <b class="caret"></b></a>
+             <ul  id="filterUser" class="dropdown-menu" role="menu" aria-labelledby="dropusers">
+               <li role="presentation">
+               <form id="filterUserForm">
+                 <span class="input-group input-group-btn">
+                   <input id="filter_user" name="filter_user" placeholder="filter" class="form-control" type="text">
+                   <button class="btn btn-default button-mini glyphicon glyphicon-filter" id="filterUserSend" type="button" default="true" ></button>
+                   <button class="btn btn-default button-mini glyphicon glyphicon-remove" id="filterUserClear" type="button" ></button>
+                 </span>
+               <form>
+             </li>
+             <li   id="dropusers_error" class="bg-danger small" style="display: none"> </li>
+           </ul>
+         </div>
+       </th>
+       <th class="col-sm-3"> 
+         <div class="input-group input-group-sm" id="filterDiff"> 
+           <div class="dropdown">
+              <a href="#" id="dropdiff" role="button" class="dropdown-toggle" data-toggle="dropdown">Difficulty: 500+<b class="caret"></b></a>
+              <ul id="dropdiffitems" class="dropdown-menu dropdown-menu-right" role="menu" aria-labelledby="dropdiff">
+                <li role="presentation" class="divider"></li>
+                <li role="presentation" class="dropdown-header">Admins Only</li>
+                <li class="disabled adminStuff" role="presentation"><a class="diffFilterLink disabled" data-internalId="16" role="menuitem" tabindex="-1" href="#" >16+ (Holy Mother of Doge, Hold on Tight)<a></li>
+              </ul>
+            </div>           
+           
+         </div>
+       </th>
+       </tr> </thead>
+       <tbody> </tbody>
+      </table>  
+    </div>
+    <div class="col-md-4">
+      <h4>Big Ones -n- Blocks</h4>
+      <table id='big_shares' class='table table-striped table-condensed'>
+        <thead> <tr> <th> When <th> Worker <th> Diff </tr> </thead>
+        <tbody> </tbody>
+      </table>  
+    </div>
+  </div>
+  </body>
+</html>
