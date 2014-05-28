@@ -17,7 +17,7 @@ $config['skip_config_tests'] = false;
 
 /**
  * Unless you disable this, we'll do a check for a valid coin address on registration.
- *  https://github.com/MPOS/php-mpos/wiki/Config-Setup#wiki-coin-address-check
+ *  https://github.com/MPOS/php-mpos/wiki/Config-Setup#check-for-valid-wallet-address
  */
 $config['check_valid_coinaddress'] = true;
 
