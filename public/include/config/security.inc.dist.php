@@ -40,7 +40,7 @@ $config['mc_antidos']['error_push_page'] = array('page' => 'error', 'action' => 
  *  Enable or disable CSRF protection
  *   https://github.com/MPOS/php-mpos/wiki/Config-Setup#wiki-csrf-protection
  */
-$config['csrf']['enabled'] = true;
+$config['csrf']['enabled'] = false;
 
 /**
  * E-mail confirmations for user actions

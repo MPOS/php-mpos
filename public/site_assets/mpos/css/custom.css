@@ -1,4 +1,10 @@
 /* Custom stuff */
+.info ul {
+list-style-type:none;
+}
+
+
+
 span.ur-status-up {
   text-align: center;
   display: inline-block;
@@ -137,20 +143,25 @@ input[type=checkbox] {
 
 input[type=checkbox] + label
 {
-  background: url('../images/icn_alert_error.png');
+  display:none;
+  background: url('../images/icn_alert_error.png') center center no-repeat;
   height: 16px;
   width: 16px;
   display:inline-block;
   padding: 0 0 0 0px;
+  border: 1px solid black;
+  cursor: pointer;
 }
 
 input[type=checkbox]:checked + label
 {
-  background: url('../images/icn_alert_success.png');
+  background: url('../images/icn_alert_success.png') center center no-repeat;
   height: 16px;
   width: 16px;
   display:inline-block;
   padding: 0 0 0 0px;
+  border: 1px solid black;
+  cursor: pointer;
 }
 
 /* Debugger console toggle switch */

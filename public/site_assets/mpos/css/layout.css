@@ -197,8 +197,8 @@ aside#sidebar {
 width: 12%;
 background: #E0E0E3 url(../images/sidebar.png) repeat;
 float: left;
-min-height: 85%;
-margin-top: -4px;
+margin-top: -3px;
+min-height: 100%;
 }
 
 #sidebar hr {

@@ -3,7 +3,8 @@
 <head>
 	<meta charset="utf-8"/>
 	<title>{$GLOBAL.website.title} I {$smarty.request.page|escape|default:"home"|capitalize}</title>
-	
+	<link rel="shortcut icon" href="/site_assets/favicon.ico" />
+  <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
 	<link rel="stylesheet" href="{$PATH}/css/layout.css" type="text/css" media="screen" />
   <link rel="stylesheet" href="{$PATH}/css/fontello.css">
   <link rel="stylesheet" href="{$PATH}/css/animation.css">
@@ -39,13 +40,15 @@
 
 </head>
 <body>
-	<header id="header">
     {include file="global/header.tpl"}
-	</header>
+<!--	<header id="header"> 
+	</header> -->
+  <!--
 	<section id="secondary_bar">
-    {include file="global/userinfo.tpl"}
-    {include file="global/breadcrumbs.tpl"}
+    {include file="global/userinfo.tpl"} 
+    {include file="global/breadcrumbs.tpl"} 
 	</section>
+  -->
 	<aside id="sidebar" class="column">
     {include file="global/navigation.tpl"}
 	</aside>
