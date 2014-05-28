@@ -29,3 +29,5 @@ public/include/config/global.inc.sha.php
 /public/sitemap.gz
 /public/sitemap.tar.gz
 /public/.htaccess
+public/stats
+public/workers
