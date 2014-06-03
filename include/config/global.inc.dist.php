@@ -16,6 +16,12 @@ $config['version_url'] = 'https://raw.githubusercontent.com/MPOS/php-mpos/master
 $config['skip_config_tests'] = false;
 
 /**
+ * Unless you disable this, we'll do a check for a valid coin address on registration.
+ *  https://github.com/MPOS/php-mpos/wiki/Config-Setup#check-for-valid-wallet-address
+ */
+$config['check_valid_coinaddress'] = true;
+
+/**
  * Defines
  *  Debug setting and salts for hashing passwords
  *   https://github.com/MPOS/php-mpos/wiki/Config-Setup#wiki-defines--salts

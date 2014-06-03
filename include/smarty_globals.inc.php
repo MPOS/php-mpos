@@ -63,6 +63,7 @@ $aGlobal = array(
   'reward' => $config['reward_type'] == 'fixed' ? $config['reward'] : $block->getAverageAmount(),
   'price' => $setting->getValue('price'),
   'twofactor' => $config['twofactor'],
+  'coinaddresscheck' => $config['check_valid_coinaddress'],
   'csrf' => $config['csrf'],
   'config' => array(
     'date' => $setting->getValue('system_date_format', '%m/%d/%Y %H:%M:%S'),
