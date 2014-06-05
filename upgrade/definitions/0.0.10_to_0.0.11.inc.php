@@ -22,4 +22,10 @@ function run_0011() {
       if ($stmt && $stmt->execute()) {
         echo '-    success' . PHP_EOL;
       } else {
-        echo '-    failed: ' . $mysqli->e
+        echo '-    failed: ' . $mysqli->error . PHP_EOL;
+        exit(1);
+      }
+    }
+  }
+}
+?>
