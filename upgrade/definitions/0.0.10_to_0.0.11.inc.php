@@ -9,8 +9,8 @@ function run_0011() {
   $db_version_now = $setting->getValue('DB_VERSION');  // Our actual version installed
 
   // Upgrade specific variables
-  $aSql[] = "ALTER TABLE `shares_archive` MODIFY `id` bigint(30)";
-  $aSql[] = "ALTER TABLE `shares_archive` MODIFY `share_id` bigint(30)";
+  $aSql[] = "ALTER TABLE `shares_archive` CHANGE  `id` `id` BIGINT(30) unsigned NOT NULL AUTO_INCREMENT";
+  $aSql[] = "ALTER TABLE `shares_archive` CHANGE `share_id` `share_id` BIGINT(30) unsigned NOT NULL";
   $aSql[] = "UPDATE " . $setting->getTableName() . "    SET value = '0.0.11' WHERE name = 'DB_VERSION'";
 
   if ($db_version_now == $db_version_old && version_compare($db_version_now, DB_VERSION, '<')) {
