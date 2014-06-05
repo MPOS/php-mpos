@@ -39,7 +39,7 @@
       </div>
       <div id="togglesound" class="togglesound">
         <div class="panel-footer text-right">
-          <button id="muteButton" type="button" class="btn-xs btn-success"><i class="fa fa-volume-up"></i></button>
+          <button id="muteButton" type="button" class="btn-xs btn-success toggleSoundButton"><i class="fa fa-volume-up"></i></button>
         </div>
       </div>
     </div>
