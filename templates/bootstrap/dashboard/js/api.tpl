@@ -9,6 +9,9 @@ $(document).ready(function(){
   // check if the default plugins can be loaded, if not, disable button and don't load soundjs
   if (!createjs.Sound.initializeDefaultPlugins()) {
     $('#togglesound').hide();
+  // don't create object and hide toggle on mobile devices. must be started inside a touch event, else sound doesn't start
+  } else if (createjs.Sound.BrowserDetect.isIOS || createjs.Sound.BrowserDetect.isAndroid || createjs.Sound.BrowserDetect.isBlackberry) {
+    $('#togglesound').hide();
   } else {
     var audioPath = "{/literal}{$PATH}{literal}/audio/";
     var manifest = [ {id:"ding", src:"ding.ogg"} ];
