@@ -79,15 +79,14 @@ The following feature have been implemented so far:
 
 * Fully re-written GUI with [Smarty][2] templates
  * Full file based template support
- * **NEW** SQL based templates
-* Mobile WebUI
-* Scrypt, SHA256, VARDIFF Support
+* VARDIFF Support
 * Reward Systems
  * Propotional, PPS and PPLNS
 * New Theme
  * Live Dashboard
  * AJAX Support
  * Overhauled API
+ * Bootstrap
 * Web User accounts
  * Re-Captcha protected registration form
 * Worker accounts
@@ -95,7 +94,7 @@ The following feature have been implemented so far:
  * Worker hashrates
 * Pool statistics
 * Block statistics
-* Pool donations, fees and block bonuses
+* Pool donations, bonuses, fees and block bonuses
 * Manual and auto payout
 * Transaction list
 * Admin Panel
@@ -105,7 +104,6 @@ The following feature have been implemented so far:
  * User Transactions
  * News Posts
  * Pool Settings
- * Templates
  * Pool Workers
  * User Reports
  * Template Overwrite
@@ -115,9 +113,11 @@ The following feature have been implemented so far:
  * Auto Payout
  * Manual Payout
 * User-to-user Invitation System
-* Support for various coins via config
+* Support for various coins via coin class and config
  * All scrypt coins
  * All sha256d coins
+ * All x11 coins
+ * Others may be supported by creating a custom coin class 
 
 Installation
 ============
@@ -131,7 +131,7 @@ This project was meant to allow users to easily customize the system and templat
 If you are just using the system, there will be no need to adjust anything. Things will work out of the box! But if you plan on creating
 your own theme, things are pretty easy:
 
-* Create a new theme folder in `public/templates/`
+* Create a new theme folder in `templates/`
 * Create a new site_assets folder in `public/site_assets`
 * Create your own complete custom template or copy from an existing one
 * Change your theme in the `Admin Panel` and point it to the newly created folder
