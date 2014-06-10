@@ -10,11 +10,13 @@ if (!$user->isAuthenticated() || !$user->isAdmin($_SESSION['USERDATA']['id'])) {
 // Include markdown library
 use \Michelf\Markdown;
 
-if (@$_REQUEST['do'] == 'save') {
-  if ($news->updateNews($_REQUEST['id'], $_REQUEST['header'], $_REQUEST['content'], $_REQUEST['active'])) {
-    $_SESSION['POPUP'][] = array('CONTENT' => 'News updated', 'TYPE' => 'alert alert-success');
-  } else {
-    $_SESSION['POPUP'][] = array('CONTENT' => 'News update failed: ' . $news->getError(), 'TYPE' => 'alert alert-danger');
+if (!$config['csrf']['enabled'] || $config['csrf']['enabled'] && $csrftoken->valid) {
+  if (@$_REQUEST['do'] == 'save') {
+    if ($news->updateNews($_REQUEST['id'], $_REQUEST['header'], $_REQUEST['content'], $_REQUEST['active'])) {
+      $_SESSION['POPUP'][] = array('CONTENT' => 'News updated', 'TYPE' => 'alert alert-success');
+    } else {
+      $_SESSION['POPUP'][] = array('CONTENT' => 'News update failed: ' . $news->getError(), 'TYPE' => 'alert alert-danger');
+    }
   }
 }
 

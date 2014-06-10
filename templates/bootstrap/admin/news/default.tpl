@@ -53,7 +53,7 @@
       <div class="panel-footer">
         <div style="text-align:right">
           <a href='{$smarty.server.SCRIPT_NAME}?page={$smarty.request.page|escape}&action=news_edit&id={$NEWS[news].id}'><i class="fa fa-wrench fa-fw"></i></a>&nbsp;
-          <a href='{$smarty.server.SCRIPT_NAME}?page={$smarty.request.page|escape}&action={$smarty.request.action|escape}&do=delete&id={$NEWS[news].id}'><i class="fa fa-trash-o fa-fw"></i></a>
+          <a href='{$smarty.server.SCRIPT_NAME}?page={$smarty.request.page|escape}&action={$smarty.request.action|escape}&do=delete&id={$NEWS[news].id}&ctoken={$CTOKEN|escape|default:""}'><i class="fa fa-trash-o fa-fw"></i></a>
         </div>
       </div>
     </div>
@@ -61,4 +61,3 @@
 {/section}
 {/nocache}
 </div>
-

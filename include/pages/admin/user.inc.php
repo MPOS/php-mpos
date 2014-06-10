@@ -16,26 +16,28 @@ $smarty->assign('LOCKED', array('' => '', '0' => 'No', '1' => 'Yes'));
 $smarty->assign('NOFEE', array('' => '', '0' => 'No', '1' => 'Yes'));
 
 // Catch our JS queries to update some settings
-switch (@$_REQUEST['do']) {
-case 'lock':
-  $supress_master = 1;
-  // Reset user account
-  if ($user->isLocked($_POST['account_id']) == 0) {
-    $user->setLocked($_POST['account_id'], 2);
-  } else {
-    $user->setLocked($_POST['account_id'], 0);
-    $user->setUserFailed($_POST['account_id'], 0);
-    $user->setUserPinFailed($_POST['account_id'], 0);
+if (!$config['csrf']['enabled'] || $config['csrf']['enabled'] && $csrftoken->valid) {
+  switch (@$_REQUEST['do']) {
+  case 'lock':
+    $supress_master = 1;
+    // Reset user account
+    if ($user->isLocked($_POST['account_id']) == 0) {
+      $user->setLocked($_POST['account_id'], 2);
+    } else {
+      $user->setLocked($_POST['account_id'], 0);
+      $user->setUserFailed($_POST['account_id'], 0);
+      $user->setUserPinFailed($_POST['account_id'], 0);
+    }
+    break;
+  case 'fee':
+    $supress_master = 1;
+    $user->changeNoFee($_POST['account_id']);
+    break;
+  case 'admin':
+    $supress_master = 1;
+    $user->changeAdmin($_POST['account_id']);
+    break;
   }
-  break;
-case 'fee':
-  $supress_master = 1;
-  $user->changeNoFee($_POST['account_id']);
-  break;
-case 'admin':
-  $supress_master = 1;
-  $user->changeAdmin($_POST['account_id']);
-  break;
 }
 
 // Gernerate the GET URL for filters
