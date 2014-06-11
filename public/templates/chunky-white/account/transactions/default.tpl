@@ -86,7 +86,11 @@
           <td align="center">{$TRANSACTIONS[transaction].id}</td>
           <td>{$TRANSACTIONS[transaction].username}</td>
           <td>{$TRANSACTIONS[transaction].timestamp}</td>
-          <td>{$TRANSACTIONS[transaction].type}</td>
+          <td>{$TRANSACTIONS[transaction].type}
+              {if $TRANSACTIONS[transaction].type == 'Convertible'}
+              <br>({$TRANSACTIONS[transaction].convertible} Credit)
+              {/if}
+          </td>
           <td align="center">
             {if $TRANSACTIONS[transaction].type == 'Credit_PPS' OR
                 $TRANSACTIONS[transaction].type == 'Fee_PPS' OR
@@ -102,7 +106,7 @@
           <td>{$TRANSACTIONS[transaction].coin_address|truncate:20:"...":true:true}</td>
           <td>{$TRANSACTIONS[transaction].txid|truncate:20:"...":true:true}</td>
           <td>{if $TRANSACTIONS[transaction].height == 0}n/a{else}<a href="{$smarty.server.PHP_SELF}?page=statistics&action=round&height={$TRANSACTIONS[transaction].height}">{$TRANSACTIONS[transaction].height}</a>{/if}</td>
-          <td><span class="{if $TRANSACTIONS[transaction].type == 'Credit' or $TRANSACTIONS[transaction].type == 'Credit_PPS' or $TRANSACTIONS[transaction].type == 'Bonus'}green{else}red{/if}">{$TRANSACTIONS[transaction].amount|number_format:"8"}</span></td>
+          <td><span class="{if $TRANSACTIONS[transaction].type == 'Credit' or $TRANSACTIONS[transaction].type == 'Credit_PPS' or $TRANSACTIONS[transaction].type == 'Bonus' or $TRANSACTIONS[transaction].type == 'Convertible'}green{else}red{/if}">{$TRANSACTIONS[transaction].amount|number_format:"8"}</span></td>
         </tr>
 {/section}
       </tbody>

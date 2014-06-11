@@ -66,7 +66,13 @@
             </span>
           </td>
           {/if}
+
+          {if $GLOBAL.config.currency == 'WC'}
+          <td align="right"><a href="/account">view <i class="fa fa-external-link"></i></a></td>
+          {else}
           <td align="right">{$WORKERS[worker].hashrate|number_format}</td>
+          {/if}
+
           <td align="right">{$WORKERS[worker].difficulty|number_format:"2"}</td>
           <td align="center" style="padding-right: 25px;"><a href="{$smarty.server.PHP_SELF}?page={$smarty.request.page|escape}&action={$smarty.request.action|escape}&do=delete&id={$WORKERS[worker].id|escape}" class="icn_trash"><i class="fa fa-ban" /></a></td>
         </tr>

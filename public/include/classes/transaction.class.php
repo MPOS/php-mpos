@@ -202,6 +202,7 @@ class Transaction extends Base {
         t.type AS type,
         t.amount AS amount,
         t.coin_address AS coin_address,
+        t.convertible AS convertible,
         t.timestamp AS timestamp,
         t.txid AS txid,
         b.height AS height,
@@ -350,6 +351,11 @@ class Transaction extends Base {
           SUM( IF( ( t.type IN ('Donation','Fee') AND b.confirmations >= ? ) OR ( t.type IN ('Donation_PPS', 'Fee_PPS', 'TXFee') ), t.amount, 0 ) )
         ), 8), 0) AS confirmed,
         IFNULL(ROUND((
+          SUM( IF( ( t.type IN ('Convertible') AND b.confirmations >= ? ), t.amount, 0 ) ) -
+          SUM( IF( t.type IN ('Convertible_Transfer'), t.amount, 0 ) ) -
+          SUM( IF( ( t.type IN ('Donation','Fee') AND b.confirmations >= ? ) OR ( t.type IN ('Donation_PPS', 'Fee_PPS', 'TXFee') ), t.amount, 0 ) )
+        ), 8), 0) AS convertible,
+        IFNULL(ROUND((
           SUM( IF( t.type IN ('Credit','Bonus') AND b.confirmations < ? AND b.confirmations >= 0, t.amount, 0 ) ) -
           SUM( IF( t.type IN ('Donation','Fee') AND b.confirmations < ? AND b.confirmations >= 0, t.amount, 0 ) )
         ), 8), 0) AS unconfirmed,
@@ -363,7 +369,7 @@ class Transaction extends Base {
       WHERE t.account_id = ?
       AND archived = 0
       ");
-    if ($this->checkStmt($stmt) && $stmt->bind_param("iiiii", $this->config['confirmations'], $this->config['confirmations'], $this->config['confirmations'], $this->config['confirmations'], $account_id) && $stmt->execute() && $result = $stmt->get_result())
+    if ($this->checkStmt($stmt) && $stmt->bind_param("iiiiiii", $this->config['confirmations'], $this->config['confirmations'], $this->config['confirmations'], $this->config['confirmations'], $this->config['confirmations'], $this->config['confirmations'], $account_id) && $stmt->execute() && $result = $stmt->get_result())
       return $result->fetch_assoc();
     return $this->sqlError();
   }
@@ -373,7 +379,6 @@ class Transaction extends Base {
     $stmt = $this->mysqli->prepare("
       SELECT
         a.id as account_id,
-        t.id as transaction_id,
         a.username,
         IFNULL(
           ROUND(
@@ -389,8 +394,9 @@ class Transaction extends Base {
       ON t.block_id = b.id
       LEFT JOIN " . $this->user->getTableName() . " AS a
       ON t.account_id = a.id
-      WHERE t.type like 'Convertible%' AND t.archived = 0
+      WHERE t.type in ('Convertible', 'Convertible_Transfer') AND t.archived = 0
       GROUP BY t.account_id
+      HAVING amount > 0
       LIMIT ?");
     if ($this->checkStmt($stmt) && $stmt->bind_param('i', $limit) && $stmt->execute() && $result = $stmt->get_result())
       return $result->fetch_all(MYSQLI_ASSOC);

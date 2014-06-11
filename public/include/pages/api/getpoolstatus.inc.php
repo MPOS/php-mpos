@@ -1,6 +1,8 @@
 <?php
 $defflip = (!cfip()) ? exit(header('HTTP/1.1 401 Unauthorized')) : 1;
 
+//print_r(preg_grep("/L4OK/", preg_grep("/multi-wc/", $contents)));
+
 // Check if the API is activated
 $api->isActive();
 
