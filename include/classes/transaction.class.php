@@ -355,7 +355,7 @@ class Transaction extends Base {
         a.id,
         a.username,
         a.ap_threshold,
-        a.coin_address,
+        ca.coin_address,
         IFNULL(
           ROUND(
             (
@@ -370,11 +370,13 @@ class Transaction extends Base {
       ON t.block_id = b.id
       LEFT JOIN " . $this->user->getTableName() . " AS a
       ON t.account_id = a.id
-      WHERE t.archived = 0 AND a.ap_threshold > 0 AND a.coin_address IS NOT NULL AND a.coin_address != ''
+      LEFT JOIN " . $this->coin_address->getTableName() . " AS ca
+      ON ca.account_id = a.id
+      WHERE t.archived = 0 AND a.ap_threshold > 0 AND ca.coin_address IS NOT NULL AND ca.coin_address != '' AND ca.currency = ?
       GROUP BY t.account_id
       HAVING confirmed > a.ap_threshold AND confirmed > " . $this->config['txfee_auto'] . "
       LIMIT ?");
-    if ($this->checkStmt($stmt) && $stmt->bind_param('i', $limit) && $stmt->execute() && $result = $stmt->get_result())
+    if ($this->checkStmt($stmt) && $stmt->bind_param('si', $this->config['currency'], $limit) && $stmt->execute() && $result = $stmt->get_result())
       return $result->fetch_all(MYSQLI_ASSOC);
     return $this->sqlError();
   }
@@ -446,7 +448,7 @@ class Transaction extends Base {
       a.id,
       a.username,
       a.ap_threshold,
-      a.coin_address,
+      ca.coin_address,
       p.id AS payout_id,
       IFNULL(
         ROUND(
@@ -464,11 +466,13 @@ class Transaction extends Base {
       ON t.account_id = p.account_id
       LEFT JOIN " . $this->block->getTableName() . " AS b
       ON t.block_id = b.id
-      WHERE p.completed = 0 AND t.archived = 0 AND a.coin_address IS NOT NULL AND a.coin_address != ''
+      LEFT JOIN " . $this->coin_address->getTableName() . " AS ca
+      ON ca.account_id = a.id
+      WHERE p.completed = 0 AND t.archived = 0 AND ca.currency = ? AND ca.coin_address IS NOT NULL AND ca.coin_address != ''
       GROUP BY t.account_id
       HAVING confirmed > " . $this->config['txfee_manual'] . "
       LIMIT ?");
-    if ($this->checkStmt($stmt) && $stmt->bind_param('i', $limit) && $stmt->execute() && $result = $stmt->get_result())
+    if ($this->checkStmt($stmt) && $stmt->bind_param('si', $this->config['currency'], $limit) && $stmt->execute() && $result = $stmt->get_result())
       return $result->fetch_all(MYSQLI_ASSOC);
     return $this->sqlError('E0050');
   }
@@ -478,6 +482,7 @@ $transaction = new Transaction();
 $transaction->setMemcache($memcache);
 $transaction->setNotification($notification);
 $transaction->setDebug($debug);
+$transaction->setCoinAddress($coin_address);
 $transaction->setMysql($mysqli);
 $transaction->setConfig($config);
 $transaction->setBlock($block);

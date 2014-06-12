@@ -22,6 +22,9 @@ class Base {
   public function setCoin($coin) {
     $this->coin = $coin;
   }
+  public function setCoinAddress($coin_address) {
+    $this->coin_address = $coin_address;
+  }
   public function setLog($log) {
     $this->log = $log;
   }

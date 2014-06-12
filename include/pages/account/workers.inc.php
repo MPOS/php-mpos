@@ -4,12 +4,10 @@ $defflip = (!cfip()) ? exit(header('HTTP/1.1 401 Unauthorized')) : 1;
 if ($user->isAuthenticated()) {
 
 
-  if (!$user->getCoinAddress($_SESSION['USERDATA']['id']) AND $setting->getValue('disable_worker_edit')) {
-  
+  if (!$coin_address->getCoinAddress($_SESSION['USERDATA']['id']) AND $setting->getValue('disable_worker_edit')) {
     $_SESSION['POPUP'][] = array('CONTENT' => 'You have no payout address set.', 'TYPE' => 'alert alert-danger');
     $_SESSION['POPUP'][] = array('CONTENT' => 'You can not add workers unless a valid Payout Address is set in your User Settings.', 'TYPE' => 'alert alert-danger');
     $smarty->assign('CONTENT', 'disabled.tpl');
-    
   } else {
     switch (@$_REQUEST['do']) {
     case 'delete':
