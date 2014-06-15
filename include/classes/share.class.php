@@ -129,8 +129,8 @@ class Share Extends Base {
    * return array data Returns an array with usernames as keys for easy access
    **/
   function getArchiveShares($iCount) {
-    $iMinId = $this->getMinArchiveShareId($iCount);
     $iMaxId = $this->getMaxArchiveShareId();
+    $iMinId = $this->getMinArchiveShareId($iCount);
     $stmt = $this->mysqli->prepare("
       SELECT
         a.id,
