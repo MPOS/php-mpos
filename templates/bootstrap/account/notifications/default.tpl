@@ -13,7 +13,7 @@
             {if $DISABLE_IDLEWORKERNOTIFICATIONS|default:"" != 1}
             <tr>
               <td>
-                <label>IDLE Worker</label>
+                <label>Idle Worker</label>
               </td>
               <td>
                 <input type="hidden" name="data[idle_worker]" value="0" />
@@ -93,7 +93,7 @@
                 <td>
 {if $NOTIFICATIONS[notification].type == new_block}New Block
 {else if $NOTIFICATIONS[notification].type == payout}Payout
-{else if $NOTIFICATIONS[notification].type == idle_worker}IDLE Worker
+{else if $NOTIFICATIONS[notification].type == idle_worker}Idle Worker
 {else if $NOTIFICATIONS[notification].type == success_login}Successful Login
 {/if}
                 </td>
