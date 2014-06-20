@@ -15,7 +15,10 @@ Donations to this project are going directly to [TheSerapher](https://github.com
 
 * LTC address: `Lge95QR2frp9y1wJufjUPCycVsg5gLJPW8`
 * BTC address: `1HuYK6WPU8o3yWCrAaADDZPRpL5QiXitfv`
-* DOGE Address: `D6YtvxFGBmaD8Yq3i8LZsBQVPvCbZwCDzF`
+* DOGE address: `DANk8bnc3vHEf7Jthaxq1Xgn1BSiArNdjG`
+* 42Coin address: `4VxA6Ht59Mj6ikhA4gDXLiHuAaDCJEvYTZ`
+* FST address: `fiRqMgZyhjTN1GSEB3ZxV35JXsE5bjEaQ2`
+* FRK address: `FDcgGZjX2B29qevSuiuQVwXhkNhtQT4cEW`
 * Cryptsy Trade Key: `6ff7292142463b7b80cbbbdfc52334ba89727b11`
 
 Website Footer
