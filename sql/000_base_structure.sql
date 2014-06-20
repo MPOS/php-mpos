@@ -61,7 +61,7 @@ CREATE TABLE IF NOT EXISTS `coin_addresses` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `coin_address` (`coin_address`),
   KEY `account_id` (`account_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
 CREATE TABLE IF NOT EXISTS `invitations` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
