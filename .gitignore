@@ -14,6 +14,7 @@
 /logs/*
 
 # Test configs
+/include/config/global.inc.test.php
 /include/config/global.inc.scrypt.php
 /include/config/global.inc.sha.php
 

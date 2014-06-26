@@ -1,4 +1,4 @@
-Description [ ![Codeship Status for TheSerapher/php-mpos](https://www.codeship.io/projects/40fa7600-61a6-0131-3fd3-367b94dc0d60/status?branch=next)](https://www.codeship.io/projects/12276)
+Description
 ===========
 
 MPOS is a web based Mining Portal for various crypto currencies. It was created by [TheSerapher](https://github.com/TheSerapher) and has hence grown quite large. Recently it was migrated into a Github Organization to make development easier. It's a community driven open source project. Support can be requested on IRC at https://webchat.freenode.net/?channels=#mpos
@@ -15,7 +15,10 @@ Donations to this project are going directly to [TheSerapher](https://github.com
 
 * LTC address: `Lge95QR2frp9y1wJufjUPCycVsg5gLJPW8`
 * BTC address: `1HuYK6WPU8o3yWCrAaADDZPRpL5QiXitfv`
-* DOGE Address: `D6YtvxFGBmaD8Yq3i8LZsBQVPvCbZwCDzF`
+* DOGE address: `DANk8bnc3vHEf7Jthaxq1Xgn1BSiArNdjG`
+* 42Coin address: `4VxA6Ht59Mj6ikhA4gDXLiHuAaDCJEvYTZ`
+* FST address: `fiRqMgZyhjTN1GSEB3ZxV35JXsE5bjEaQ2`
+* FRK address: `FDcgGZjX2B29qevSuiuQVwXhkNhtQT4cEW`
 * Cryptsy Trade Key: `6ff7292142463b7b80cbbbdfc52334ba89727b11`
 
 Website Footer
@@ -79,15 +82,14 @@ The following feature have been implemented so far:
 
 * Fully re-written GUI with [Smarty][2] templates
  * Full file based template support
- * **NEW** SQL based templates
-* Mobile WebUI
-* Scrypt, SHA256, VARDIFF Support
+* VARDIFF Support
 * Reward Systems
  * Propotional, PPS and PPLNS
 * New Theme
  * Live Dashboard
  * AJAX Support
  * Overhauled API
+ * Bootstrap
 * Web User accounts
  * Re-Captcha protected registration form
 * Worker accounts
@@ -95,7 +97,7 @@ The following feature have been implemented so far:
  * Worker hashrates
 * Pool statistics
 * Block statistics
-* Pool donations, fees and block bonuses
+* Pool donations, bonuses, fees and block bonuses
 * Manual and auto payout
 * Transaction list
 * Admin Panel
@@ -105,7 +107,6 @@ The following feature have been implemented so far:
  * User Transactions
  * News Posts
  * Pool Settings
- * Templates
  * Pool Workers
  * User Reports
  * Template Overwrite
@@ -115,9 +116,11 @@ The following feature have been implemented so far:
  * Auto Payout
  * Manual Payout
 * User-to-user Invitation System
-* Support for various coins via config
+* Support for various coins via coin class and config
  * All scrypt coins
  * All sha256d coins
+ * All x11 coins
+ * Others may be supported by creating a custom coin class 
 
 Installation
 ============
@@ -131,7 +134,7 @@ This project was meant to allow users to easily customize the system and templat
 If you are just using the system, there will be no need to adjust anything. Things will work out of the box! But if you plan on creating
 your own theme, things are pretty easy:
 
-* Create a new theme folder in `public/templates/`
+* Create a new theme folder in `templates/`
 * Create a new site_assets folder in `public/site_assets`
 * Create your own complete custom template or copy from an existing one
 * Change your theme in the `Admin Panel` and point it to the newly created folder

@@ -3,10 +3,23 @@
 <script>
 {literal}
 $(document).ready(function(){
-  var audioPath = "{/literal}{$PATH}{literal}/audio/";
-  var manifest = [ {id:"ding", src:"ding.ogg"} ];
-  createjs.Sound.alternateExtensionseExtensions = ["mp3"];
-  createjs.Sound.registerManifest(manifest, audioPath);
+
+  var canCreateSoundJS = false;
+
+  // check if the default plugins can be loaded, if not, disable button and don't load soundjs
+  if (!createjs.Sound.initializeDefaultPlugins()) {
+    $('#togglesound').hide();
+  // don't create object and hide toggle on mobile devices. must be started inside a touch event, else sound doesn't start
+  } else if (createjs.Sound.BrowserDetect.isIOS || createjs.Sound.BrowserDetect.isAndroid || createjs.Sound.BrowserDetect.isBlackberry) {
+    $('#togglesound').hide();
+  } else {
+    var audioPath = "{/literal}{$PATH}{literal}/audio/";
+    var manifest = [ {id:"ding", src:"ding.ogg"} ];
+    var muteFlag = 1;
+    createjs.Sound.alternateExtensionseExtensions = ["mp3"];
+    createjs.Sound.registerManifest(manifest, audioPath);
+    canCreateSoundJS = true;
+  }
 
   // Ajax API URL
   var url_dashboard = "{/literal}{$smarty.server.SCRIPT_NAME}?page=api&action=getdashboarddata&api_key={$GLOBAL.userdata.api_key}&id={$GLOBAL.userdata.id}{literal}";
@@ -165,7 +178,9 @@ $(document).ready(function(){
       return;
     }
     if (blocks[0].height > lastBlock) {
-      createjs.Sound.play('ding');
+      if(canCreateSoundJS) { 
+        createjs.Sound.play('ding');
+      }
       lastBlock = blocks[0].height;
       var table_content = '<tbody id="b-blocks">';
       for (index = 0; index < blocks.length; ++index) {
@@ -250,6 +265,23 @@ $(document).ready(function(){
       }
     });
   })();
+  
+  // Mute Button
+  $('#muteButton').click(function(){
+    if(muteFlag == 2) {
+      muteFlag = 1;
+      createjs.Sound.setMute(false);
+      $(this).toggleClass("btn-xs btn-danger").toggleClass("btn-xs btn-success");
+      $(this).find($(".fa")).removeClass('fa-volume-off').addClass('fa-volume-up');
+    } else {
+      muteFlag = 2;
+      createjs.Sound.setMute(true);
+      $(this).toggleClass("btn-xs btn-success").toggleClass("btn-xs btn-danger");
+      $(this).find($(".fa")).removeClass('fa-volume-up').addClass('fa-volume-off');
+    }
+  });
+  
+  
 });
 {/literal}
 </script>

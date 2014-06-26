@@ -37,8 +37,10 @@ class Api extends Base {
       )), $force ? JSON_FORCE_OBJECT : 0
     );
     // JSONP support issue #1700
-    if (isset($_REQUEST['callback']))
+    if (isset($_REQUEST['callback']) && ctype_alpha($_REQUEST['callback'])) {
+      header('Content-type: application/json; charset=utf-8');
       return $_REQUEST['callback'] . '(' . $json . ');';
+    }
     return $json;
   }
 

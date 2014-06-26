@@ -8,11 +8,15 @@ if (!$user->isAuthenticated() || !$user->isAdmin($_SESSION['USERDATA']['id'])) {
 }
 
 if (@$_REQUEST['do'] == 'save' && !empty($_REQUEST['data'])) {
-  $user->log->log("warn", @$_SESSION['USERDATA']['username']." changed admin settings");
-  foreach($_REQUEST['data'] as $var => $value) {
-    $setting->setValue($var, $value);
+  if (!$config['csrf']['enabled'] || $config['csrf']['enabled'] && $csrftoken->valid) {
+    $user->log->log("warn", @$_SESSION['USERDATA']['username']." changed admin settings");
+    foreach($_REQUEST['data'] as $var => $value) {
+      $setting->setValue($var, $value);
+    }
+    $_SESSION['POPUP'][] = array('CONTENT' => 'Settings updated', 'TYPE' => 'alert alert-success');
+  } else {
+    $_SESSION['POPUP'][] = array('CONTENT' => $csrftoken->getErrorWithDescriptionHTML(), 'TYPE' => 'alert alert-warning');
   }
-  $_SESSION['POPUP'][] = array('CONTENT' => 'Settings updated', 'TYPE' => 'alert alert-success');
 }
 
 // Load our available settings from configuration

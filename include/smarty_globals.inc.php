@@ -26,7 +26,7 @@ if ( ! $dPoolHashrateModifier = $setting->getValue('statistics_pool_hashrate_mod
 $iCurrentPoolHashrate =  $statistics->getCurrentHashrate();
 
 // Avoid confusion, ensure our nethash isn't higher than poolhash
-if ($iCurrentPoolHashrate > $dNetworkHashrate / 1000) $dNetworkHashrate = $iCurrentPoolHashrate;
+if ($iCurrentPoolHashrate > $dNetworkHashrate / 1000) $dNetworkHashrate = $iCurrentPoolHashrate * 1000;
 
 // Baseline network hashrate for templates
 if ( ! $dPersonalHashrateModifier = $setting->getValue('statistics_personal_hashrate_modifier') ) $dPersonalHashrateModifier = 1;
@@ -63,6 +63,7 @@ $aGlobal = array(
   'reward' => $config['reward_type'] == 'fixed' ? $config['reward'] : $block->getAverageAmount(),
   'price' => $setting->getValue('price'),
   'twofactor' => $config['twofactor'],
+  'coinaddresscheck' => $config['check_valid_coinaddress'],
   'csrf' => $config['csrf'],
   'config' => array(
     'date' => $setting->getValue('system_date_format', '%m/%d/%Y %H:%M:%S'),
