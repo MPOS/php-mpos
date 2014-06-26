@@ -51,7 +51,22 @@ class CoinAddress extends Base {
       return false;
     }
     $stmt = $this->mysqli->prepare("INSERT INTO " . $this->getTableName() . " (account_id, currency, coin_address) VALUES (?, ?, ?)");
-    if ( $this->checkStmt($stmt) && $stmt->bind_param('sis', $userID, $currency, $address) && $stmt->execute()) {
+    if ( $this->checkStmt($stmt) && $stmt->bind_param('iss', $userID, $currency, $address) && $stmt->execute()) {
+      return true;
+    }
+    return $this->sqlError();
+  }
+
+  /**
+   * Remove a coin address record for a user
+   * @param userID int Account ID
+   * @param currency string Currency short handle, defaults to config option
+   * @return bool true or false
+   **/
+  public function remove ($userID, $currency=NULL) {
+    if ($currency === NULL) $currency = $this->config['currency'];
+    $stmt = $this->mysqli->prepare("DELETE FROM " . $this->getTableName() . " WHERE account_id = ? AND currency = ?");
+    if ( $this->checkStmt($stmt) && $stmt->bind_param('is', $userID, $currency) && $stmt->execute()) {
       return true;
     }
     return $this->sqlError();

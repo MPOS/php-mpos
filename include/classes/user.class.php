@@ -545,8 +545,15 @@ class User extends Base {
     if ($this->checkStmt($stmt) && $stmt->bind_param('ddssii', $threshold, $donate, $email, $timezone, $is_anonymous, $userID) && $stmt->execute()) {
       $this->log->log("info", $this->getUserName($userID)." updated their account details");
       // Update coin address too
-      if ($this->coin_address->update($userID, $address))
-        return true;
+      if ($address) {
+        if ($this->coin_address->update($userID, $address)) {
+          return true;
+        }
+      } else {
+        if ($this->coin_address->remove($userID, $address)) {
+          return true;
+        }
+      }
     }
     // Catchall
     $this->setErrorMessage('Failed to update your account');
