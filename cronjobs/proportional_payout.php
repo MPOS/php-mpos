@@ -40,10 +40,11 @@ if (empty($aAllBlocks)) {
 
 // Fetch precision
 $precision = $setting->getValue('system_coin_precision', 12);
+$table_precision = $setting->getValue('system_coin_precision', 12) + 3;
 
 $count = 0;
 // Table header for account shares
-$strLogMask = "| %10.10s | %-5.5s | %15.15s | %15.15s | %12.12s | %12.12s | %15.15s | %15.15s | %15.15s | %15.15s |";
+$strLogMask = "| %10.10s | %-5.5s | %15.15s | %15.15s | %12.12s | %12.12s | %${table_precision}.${table_precision}s | %${table_precision}.${table_precision}s | %${table_precision}.${table_precision}s | %${table_precision}.${table_precision}s |";
 $log->logInfo(sprintf($strLogMask, 'Block', 'ID', 'Username', 'Valid', 'Invalid', 'Percentage', 'Payout', 'Donation', 'Fee', 'Bonus'));
 foreach ($aAllBlocks as $iIndex => $aBlock) {
   // If we have unaccounted blocks without share_ids, they might not have been inserted yet

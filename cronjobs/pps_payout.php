@@ -90,13 +90,14 @@ $log->logInfo("\tQuery Completed...");
 if (!empty($aAccountShares)) {
   // Runtime information for this payout
   $precision = $setting->getValue('system_coin_precision', 12);
+  $table_precision = $setting->getValue('system_coin_precision', 12) + 3;
   $log->logInfo('Runtime information for this payout');
-  $strLogMask = "| %-15.15s | %15.15s | %15.15s | %15.15s | %3.3s |";
+  $strLogMask = "| %-15.15s | %15.15s | %15.15s | %${table_precision}.${table_precision}s | %3.3s |";
   $log->logInfo(sprintf($strLogMask, 'PPS reward type', 'Reward Base', 'Difficulty', 'PPS Value', 'Precision'));
   $log->logInfo(sprintf($strLogMask, $strRewardType, $pps_reward, $dDifficulty, $pps_value, $precision));
   $log->logInfo('Per-user payout information');
-  $strLogMask = "| %8.8s | %25.25s | %15.15s | %15.15s | %18.18s | %18.18s | %18.18s |";
-  $log->logInfo(sprintf($strLogMask, 'User ID', 'Username', 'Invalid', 'Valid', '  *   PPS Value', '  =  Payout', 'Donation', 'Fee'));
+  $strLogMask = "| %8.8s | %25.25s | %15.15s | %${table_precision}.${table_precision}s | %${table_precision}.${table_precision}s | %${table_precision}.${table_precision}s | %${table_precision}.${table_precision}s |";
+  $log->logInfo(sprintf($strLogMask, 'User ID', 'Username', 'Invalid', 'Valid', '* PPS Value', '  =  Payout', 'Donation', 'Fee'));
 }
 
 foreach ($aAccountShares as $aData) {

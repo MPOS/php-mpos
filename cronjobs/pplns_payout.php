@@ -40,6 +40,7 @@ if (empty($aAllBlocks)) {
 
 // Fetch precision
 $precision = $setting->getValue('system_coin_precision', 12);
+$table_precision = $setting->getValue('system_coin_precision', 12) + 3;
 
 $log->logDebug('Starting PPLNS payout process');
 $count = 0;
@@ -184,7 +185,7 @@ foreach ($aAllBlocks as $iIndex => $aBlock) {
     }
 
     // Table header for account shares
-    $strLogMask = "| %5.5s | %-15.15s | %15.15s | %15.15s | %12.12s | %15.15s | %15.15s | %15.15s | %15.15s |";
+    $strLogMask = "| %5.5s | %-15.15s | %15.15s | %15.15s | %12.12s | %${table_precision}.${table_precision}s | %${table_precision}.${table_precision}s | %${table_precision}.${table_precision}s | %${table_precision}.${table_precision}s |";
     $log->logInfo(sprintf($strLogMask, 'ID', 'Username', 'Valid', 'Invalid', 'Percentage', 'Payout', 'Donation', 'Fee', 'Bonus'));
 
     // Loop through all accounts that have found shares for this round
