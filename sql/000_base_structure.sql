@@ -134,7 +134,7 @@ CREATE TABLE IF NOT EXISTS `settings` (
   UNIQUE KEY `setting` (`name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-INSERT INTO `settings` (`name`, `value`) VALUES ('DB_VERSION', '0.0.12');
+INSERT INTO `settings` (`name`, `value`) VALUES ('DB_VERSION', '0.0.11');
 
 CREATE TABLE IF NOT EXISTS `shares` (
   `id` bigint(30) NOT NULL AUTO_INCREMENT,
@@ -216,7 +216,7 @@ CREATE TABLE IF NOT EXISTS `transactions` (
   `account_id` int(255) unsigned NOT NULL,
   `type` varchar(25) DEFAULT NULL,
   `coin_address` varchar(255) DEFAULT NULL,
-  `amount` double(60,30) DEFAULT '0',
+  `amount` double DEFAULT '0',
   `block_id` int(255) DEFAULT NULL,
   `timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `txid` varchar(256) DEFAULT NULL,
