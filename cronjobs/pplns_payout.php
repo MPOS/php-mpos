@@ -38,6 +38,9 @@ if (empty($aAllBlocks)) {
   $monitoring->endCronjob($cron_name, 'E0011', 0, true, false);
 }
 
+// Fetch precision
+$precision = $setting->getValue('system_coin_precision', 12);
+
 $log->logDebug('Starting PPLNS payout process');
 $count = 0;
 foreach ($aAllBlocks as $iIndex => $aBlock) {

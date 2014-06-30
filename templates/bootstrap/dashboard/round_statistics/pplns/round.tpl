@@ -37,10 +37,10 @@
               </div>
               <div class="circle-tile-content lightblue">
                 <div class="circle-tile-description text-faded">
-                  <p class="h5 up-more" id="b-payout">{$GLOBAL.userdata.estimates.payout|number_format:"8"}</p>
+                  <p class="h5 up-more" id="b-payout">{$GLOBAL.userdata.estimates.payout|number_format:$PRECISION}</p>
                 </div>
                 <div class="circle-tile-number text-faded">
-                  <p class="h6">{$GLOBAL.config.currency} Est Earnings</p>
+                  <p class="h6">{$GLOBAL.config.currency} Est. Earnings</p>
                 </div>
               </div>
             </div>
@@ -67,11 +67,10 @@
               </div>
               <div class="circle-tile-content lightblue">
                 <div class="circle-tile-description text-faded">
-                  <p class="h5 up" id="b-nextdiff">{if $GLOBAL.nethashrate > 0}{$NETWORK.EstNextDifficulty|number_format:"8"}{else}n/a{/if}</p>
-                  <p class="h6" id="b-nextdiffc">{if $GLOBAL.nethashrate > 0}Change in {$NETWORK.BlocksUntilDiffChange} Blocks{else}No Estimates{/if}</p>
+                  <p class="h5" id="b-nextdiff">{if $GLOBAL.nethashrate > 0}{$NETWORK.EstNextDifficulty|number_format:"8"}{else}n/a{/if}</p>
                 </div>
                 <div class="circle-tile-number text-faded">
-                  <p class="h6 up-more2">Est Next Difficulty</p>
+                  <p class="h6">Est Next Difficulty{if $GLOBAL.nethashrate > 0}<br/>Change in {$NETWORK.BlocksUntilDiffChange} Blocks{else}No Estimates{/if}</p>
                 </div>
               </div>
             </div> 

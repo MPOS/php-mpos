@@ -309,8 +309,15 @@ $aSettings['system'][] = array(
   'tooltip' => 'The email address for system errors notifications, like cronjobs failures.'
 );
 $aSettings['system'][] = array(
+  'display' => 'Coin Precision', 'type' => 'text',
+  'size' => 5,
+  'default' => '12',
+  'name' => 'system_coin_precision', 'value' => $setting->getValue('system_coin_precision'),
+  'tooltip' => 'How do we round any coin values throughout MPOS. Defaults to 12 digits.'
+);
+$aSettings['system'][] = array(
   'display' => 'Date format string', 'type' => 'text',
-  'site' => 25,
+  'size' => 25,
   'default' => '%m/%d/%Y %H:%M:%S',
   'name' => 'system_date_format', 'value' => $setting->getValue('system_date_format'),
   'tooltip' => 'Date format to be used throughout the site. Please check PHP strftime for details.'
