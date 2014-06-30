@@ -201,7 +201,7 @@ foreach ($aAllBlocks as $iIndex => $aBlock) {
 
       // Payout based on PPLNS target shares, proportional payout for all users
       $aData['percentage'] = round(( 100 / $iRoundShares) * $aData['pplns_valid'], 8);
-      $aData['payout'] = round(( $aData['percentage'] / 100 ) * $dReward, 8);
+      $aData['payout'] = ( $aData['percentage'] / 100 ) * $dReward;
       // Defaults
       $aData['fee' ] = 0;
       $aData['donation'] = 0;
@@ -209,19 +209,19 @@ foreach ($aAllBlocks as $iIndex => $aBlock) {
 
       // Calculate pool fees
       if ($config['fees'] > 0 && $aData['no_fees'] == 0)
-        $aData['fee'] = round($config['fees'] / 100 * $aData['payout'], 8);
+        $aData['fee'] = $config['fees'] / 100 * $aData['payout'];
 
       // Calculate pool bonus if it applies, will be paid from liquid assets!
       if ($config['pool_bonus'] > 0) {
         if ($config['pool_bonus_type'] == 'block') {
-          $aData['pool_bonus'] = round(( $config['pool_bonus'] / 100 ) * $dReward, 8);
+          $aData['pool_bonus'] = ( $config['pool_bonus'] / 100 ) * $dReward;
         } else {
-          $aData['pool_bonus'] = round(( $config['pool_bonus'] / 100 ) * $aData['payout'], 8);
+          $aData['pool_bonus'] = ( $config['pool_bonus'] / 100 ) * $aData['payout'];
         }
       }
 
       // Calculate donation amount, fees not included
-      $aData['donation'] = round($user->getDonatePercent($user->getUserId($aData['username'])) / 100 * ( $aData['payout'] - $aData['fee']), 8);
+      $aData['donation'] = $user->getDonatePercent($user->getUserId($aData['username'])) / 100 * ( $aData['payout'] - $aData['fee']);
 
       // Verbose output of this users calculations
       $log->logInfo(
