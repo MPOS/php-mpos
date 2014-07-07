@@ -16,8 +16,9 @@ class Transaction extends Base {
    * @return bool
    **/
   public function addTransaction($account_id, $amount, $type='Credit', $block_id=NULL, $coin_address=NULL, $txid=NULL) {
+    $amount = number_format($amount, $this->setting->getValue('system_coin_precision', 12), '.', '');
     $stmt = $this->mysqli->prepare("INSERT INTO $this->table (account_id, amount, block_id, type, coin_address, txid) VALUES (?, ?, ?, ?, ?, ?)");
-    if ($this->checkStmt($stmt) && $stmt->bind_param("idisss", $account_id, $amount, $block_id, $type, $coin_address, $txid) && $stmt->execute()) {
+    if ($this->checkStmt($stmt) && $stmt->bind_param("isisss", $account_id, $amount, $block_id, $type, $coin_address, $txid) && $stmt->execute()) {
       $this->insert_id = $stmt->insert_id;
       return true;
     }
@@ -473,6 +474,7 @@ class Transaction extends Base {
 $transaction = new Transaction();
 $transaction->setMemcache($memcache);
 $transaction->setNotification($notification);
+$transaction->setSetting($setting);
 $transaction->setDebug($debug);
 $transaction->setMysql($mysqli);
 $transaction->setConfig($config);
