@@ -16,6 +16,7 @@ require_once(INCLUDE_DIR . '/config/error_codes.inc.php');
 // We need to load these first
 require_once(CLASS_DIR . '/base.class.php');
 require_once(CLASS_DIR . '/coins/coin_base.class.php');
+require_once(CLASS_DIR . '/coin_address.class.php');
 require_once(CLASS_DIR . '/setting.class.php');
 require_once(INCLUDE_DIR . '/version.inc.php');
 if (PHP_OS == 'WINNT') require_once(CLASS_DIR . '/memcached.class.php');

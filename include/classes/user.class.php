@@ -163,7 +163,7 @@ class User extends Base {
     $invitation->setDebug($this->debug);
     $invitation->setLog($this->log);
     $stmt = $this->mysqli->prepare("
-    	SELECT COUNT(i.account_id) AS invitationcount,a.id,a.username,a.email,    	
+    	SELECT COUNT(i.account_id) AS invitationcount,a.id,a.username,a.email,
     	(SELECT COUNT(account_id) FROM " . $invitation->getTableName() . " WHERE account_id = i.account_id AND is_activated = 1 GROUP BY account_id) AS activated
     	FROM " . $invitation->getTableName() . " AS i
     	LEFT JOIN " . $this->getTableName() . " AS a
@@ -340,36 +340,18 @@ class User extends Base {
     $this->debug->append("STA " . __METHOD__, 4);
     $stmt = $this->mysqli->prepare("
       SELECT
-        id, username, coin_address, ap_threshold
-      FROM " . $this->getTableName() . "
-      WHERE ap_threshold > 0
-      AND coin_address IS NOT NULL
+        a.id, a.username, ca.coin_address AS coin_address, a.ap_threshold
+      FROM " . $this->getTableName() . " AS a
+      LEFT JOIN " . $this->coin_address->getTableName() . " AS ca
+      ON a.id = ca.account_id
+      WHERE ap_threshold > 0 AND ca.currency = ?
+      AND ca.coin_address IS NOT NULL
       ");
-    if ( $this->checkStmt($stmt) && $stmt->execute() && $result = $stmt->get_result()) {
+    if ( $this->checkStmt($stmt) && $stmt->bind_param('s', $this->config['currency']) && $stmt->execute() && $result = $stmt->get_result()) {
       return $result->fetch_all(MYSQLI_ASSOC);
     }
     $this->debug->append("Unable to fetch users with AP set");
     return false;
-  }
-
-  /**
-   * Fetch users coin address
-   * @param userID int UserID
-   * @return data string Coin Address
-   **/
-  public function getCoinAddress($userID) {
-    $this->debug->append("STA " . __METHOD__, 4);
-    return $this->getSingle($userID, 'coin_address', 'id');
-  }
-
-  /**
-   * Check if a coin address exists already
-   * @param address string Coin Address
-   * @return bool True of false
-   **/
-  public function existsCoinAddress($address) {
-    $this->debug->append("STA " . __METHOD__, 4);
-    return $this->getSingle($address, 'coin_address', 'coin_address', 's') === $address;
   }
 
   /**
@@ -519,7 +501,7 @@ class User extends Base {
       return false;
     }
     if (!empty($address)) {
-      if ($address != $this->getCoinAddress($userID) && $this->existsCoinAddress($address)) {
+      if ($address != $this->coin_address->getCoinAddress($userID) && $this->coin_address->existsCoinAddress($address)) {
         $this->setErrorMessage('Address is already in use');
         return false;
       }
@@ -559,10 +541,19 @@ class User extends Base {
     }
 
     // We passed all validation checks so update the account
-    $stmt = $this->mysqli->prepare("UPDATE $this->table SET coin_address = ?, ap_threshold = ?, donate_percent = ?, email = ?, timezone = ?, is_anonymous = ? WHERE id = ?");
-    if ($this->checkStmt($stmt) && $stmt->bind_param('sddssii', $address, $threshold, $donate, $email, $timezone, $is_anonymous, $userID) && $stmt->execute()) {
+    $stmt = $this->mysqli->prepare("UPDATE $this->table SET ap_threshold = ?, donate_percent = ?, email = ?, timezone = ?, is_anonymous = ? WHERE id = ?");
+    if ($this->checkStmt($stmt) && $stmt->bind_param('ddssii', $threshold, $donate, $email, $timezone, $is_anonymous, $userID) && $stmt->execute()) {
       $this->log->log("info", $this->getUserName($userID)." updated their account details");
-      return true;
+      // Update coin address too
+      if ($address) {
+        if ($this->coin_address->update($userID, $address)) {
+          return true;
+        }
+      } else {
+        if ($this->coin_address->remove($userID, $address)) {
+          return true;
+        }
+      }
     }
     // Catchall
     $this->setErrorMessage('Failed to update your account');
@@ -703,22 +694,18 @@ class User extends Base {
     $this->debug->append("Fetching user information for user id: $userID");
     $stmt = $this->mysqli->prepare("
       SELECT
-      id, username, pin, api_key, is_admin, is_anonymous, email, timezone, no_fees,
-      IFNULL(donate_percent, '0') as donate_percent, coin_address, ap_threshold
-      FROM $this->table
+      id AS id, username, pin, api_key, is_admin, is_anonymous, email, timezone, no_fees,
+      IFNULL(donate_percent, '0') as donate_percent, ap_threshold
+      FROM " . $this->getTableName() . "
       WHERE id = ? LIMIT 0,1");
-    if ($this->checkStmt($stmt)) {
-      $stmt->bind_param('i', $userID);
-      if (!$stmt->execute()) {
-        $this->debug->append('Failed to execute statement');
-        return false;
-      }
-      $result = $stmt->get_result();
+    if ($this->checkStmt($stmt) && $stmt->bind_param('i', $userID) && $stmt->execute() && $result = $stmt->get_result()) {
+      $aData = $result->fetch_assoc();
+      $aData['coin_address'] = $this->coin_address->getCoinAddress($userID);
       $stmt->close();
-      return $result->fetch_assoc();
+      return $aData;
     }
     $this->debug->append("Failed to fetch user information for $userID");
-    return false;
+    return $this->sqlError();
   }
 
   /**
@@ -742,6 +729,10 @@ class User extends Base {
       return false;
     }
     if (!is_null($coinaddress)) {
+      if ($this->coin_address->existsCoinAddress($coinaddress)) {
+        $this->setErrorMessage('Coin address is already taken');
+        return false;
+      }
       if (!$this->bitcoin->validateaddress($coinaddress)) {
         $this->setErrorMessage('Coin address is not valid');
         return false;
@@ -755,7 +746,7 @@ class User extends Base {
       $this->setErrorMessage( 'This e-mail address is already taken' );
       return false;
     }
-    if (strlen($password1) < 8) { 
+    if (strlen($password1) < 8) {
       $this->setErrorMessage( 'Password is too short, minimum of 8 characters required' );
       return false;
     }
@@ -801,15 +792,15 @@ class User extends Base {
       ! $this->setting->getValue('accounts_confirm_email_disabled') ? $is_locked = 1 : $is_locked = 0;
       $is_admin = 0;
       $stmt = $this->mysqli->prepare("
-        INSERT INTO $this->table (username, pass, email, signup_timestamp, pin, api_key, is_locked, coin_address)
-        VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+        INSERT INTO $this->table (username, pass, email, signup_timestamp, pin, api_key, is_locked)
+        VALUES (?, ?, ?, ?, ?, ?, ?)
         ");
     } else {
       $is_locked = 0;
       $is_admin = 1;
       $stmt = $this->mysqli->prepare("
-        INSERT INTO $this->table (username, pass, email, signup_timestamp, pin, api_key, is_admin, is_locked, coin_address)
-        VALUES (?, ?, ?, ?, ?, ?, 1, ?, ?)
+        INSERT INTO $this->table (username, pass, email, signup_timestamp, pin, api_key, is_admin, is_locked)
+        VALUES (?, ?, ?, ?, ?, ?, 1, ?)
         ");
     }
 
@@ -820,7 +811,9 @@ class User extends Base {
     $username_clean = strip_tags($username);
     $signup_time = time();
 
-    if ($this->checkStmt($stmt) && $stmt->bind_param('sssissis', $username_clean, $password_hash, $email1, $signup_time, $pin_hash, $apikey_hash, $is_locked, $coinaddress) && $stmt->execute()) {
+    if ($this->checkStmt($stmt) && $stmt->bind_param('sssissi', $username_clean, $password_hash, $email1, $signup_time, $pin_hash, $apikey_hash, $is_locked) && $stmt->execute()) {
+      $new_account_id = $this->mysqli->insert_id;
+      if (!is_null($coinaddress)) $this->coin_address->add($new_account_id, $coinaddress);
       if (! $this->setting->getValue('accounts_confirm_email_disabled') && $is_admin != 1) {
         if ($token = $this->token->createToken('confirm_email', $stmt->insert_id)) {
           $aData['username'] = $username_clean;
@@ -843,7 +836,8 @@ class User extends Base {
     } else {
       $this->setErrorMessage( 'Unable to register' );
       $this->debug->append('Failed to insert user into DB: ' . $this->mysqli->error);
-      if ($stmt->sqlstate == '23000') $this->setErrorMessage( 'Username, email or Coinaddress already registered' );
+      echo $this->mysqli->error;
+      if ($stmt->sqlstate == '23000') $this->setErrorMessage( 'Username or email already registered' );
       return false;
     }
     return false;
@@ -997,4 +991,5 @@ $user->setMail($mail);
 $user->setToken($oToken);
 $user->setBitcoin($bitcoin);
 $user->setSetting($setting);
+$user->setCoinAddress($coin_address);
 $user->setErrorCodes($aErrorCodes);
