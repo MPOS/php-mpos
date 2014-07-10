@@ -512,6 +512,8 @@ class Statistics extends Base {
    * @return bool true or false
    **/
   public function storeAllUserMiningStatsSnapshot($aData) {
+    $this->debug->append("STA " . __METHOD__, 4);
+    if (!isset($aData['data'])) return false;
     // initilize
     $timestamp = time();    // Store all entries with the same timestamp to reduce cardinality
     $ok = 0;
