@@ -9,6 +9,7 @@ $defflip = (!cfip()) ? exit(header('HTTP/1.1 401 Unauthorized')) : 1;
  **/
 class Statistics extends Base {
   protected $table = 'statistics_shares';
+  protected $table_user_stats = 'statistics_users';
   private $getcache = true;
 
   // Disable fetching values from cache
@@ -17,6 +18,12 @@ class Statistics extends Base {
   }
   public function getGetCache() {
     return $this->getcache;
+  }
+  public function getAllUserMiningStats() {
+    return $this->allUserMiningStats;
+  }
+  public function getUserStatsTableName() {
+    return $this->table_user_stats;
   }
 
   /**
@@ -451,14 +458,17 @@ class Statistics extends Base {
 
   /**
    * Fetch all user hashrates based on shares and archived shares
+   * Store it in cache, also keep a copy of the data internally to
+   * return it for further processing
    * @return data array Set of all user stats
    **/
-  public function getAllUserMiningStats($interval=180) {
+  public function fetchAllUserMiningStats($interval=180) {
     $this->debug->append("STA " . __METHOD__, 4);
     $stmt = $this->mysqli->prepare("
       SELECT
         a.id AS id,
         a.username AS account,
+        COUNT(DISTINCT t1.username) AS workers,
         IFNULL(SUM(t1.difficulty), 0) AS shares,
         ROUND(COUNT(t1.id) / ?, 2) AS sharerate,
         IFNULL(AVG(IF(difficulty=0, pow(2, (" . $this->config['difficulty'] . " - 16)), difficulty)), 0) AS avgsharediff
@@ -489,12 +499,43 @@ class Statistics extends Base {
         $aData['data'][$row['id']] = $row;
         $aData['data'][$row['id']]['hashrate'] = $this->coin->calcHashrate($row['shares'], $interval);
       }
+      $this->allUserMiningStats = $aData;
       return $this->memcache->setStaticCache(STATISTICS_ALL_USER_HASHRATES, $aData, 600);
     } else {
       return $this->sqlError();
     }
   }
 
+  /**
+   * Store our gathered data into our statistic table for users
+   * @param aData array Data created by fetchAllUserMiningStats
+   * @return bool true or false
+   **/
+  public function storeAllUserMiningStatsSnapshot($aData) {
+    // initilize
+    $timestamp = time();    // Store all entries with the same timestamp to reduce cardinality
+    $ok = 0;
+    $failed = 0;
+    foreach ($aData['data'] as $key => $aUserData) {
+      $stmt = $this->mysqli->prepare("
+        INSERT INTO " . $this->getUserStatsTableName() . "
+          ( account_id, hashrate, workers, sharerate, timestamp ) VALUES ( ?, ?, ?, ?, ?)");
+      if ($this->checkStmt($stmt) && $stmt->bind_param("ididi", $aUserData['id'], $aUserData['hashrate'], $aUserData['workers'], $aUserData['sharerate'], $timestamp) && $stmt->execute() ) {
+        $ok++;
+      } else {
+        $failed++;
+      }
+    }
+    return array('ok' => $ok, 'failed' => $failed);
+  }
+
+  /**
+   * Fetch unpaid PPS shares for an account
+   * @param username string Username
+   * @param account_id int User ID
+   * @param last_paid_pps_id int Last paid out share by pps_payout cron
+   * @return data int Sum of unpaid diff1 shares
+   **/
   public function getUserUnpaidPPSShares($username, $account_id=NULL, $last_paid_pps_id) {
     $this->debug->append("STA " . __METHOD__, 4);
     if ($this->getGetCache() && $data = $this->memcache->get(__FUNCTION__ . $account_id)) return $data;
@@ -655,38 +696,26 @@ class Statistics extends Base {
    * @param $account_id int account id
    * @return data array NOT FINISHED YET
    **/
-  public function getHourlyHashrateByAccount($username, $account_id=NULL) {
+  public function getHourlyHashrateByAccount($account_id) {
     $this->debug->append("STA " . __METHOD__, 4);
     if ($data = $this->memcache->get(__FUNCTION__ . $account_id)) return $data;
     $stmt = $this->mysqli->prepare("
       SELECT
-        id,
-        IFNULL(SUM(IF(difficulty=0, pow(2, (" . $this->config['difficulty'] . " - 16)), difficulty)), 0) AS shares,
-        HOUR(time) AS hour
-      FROM " . $this->share->getTableName() . "
-      WHERE time <= FROM_UNIXTIME(FLOOR(UNIX_TIMESTAMP(NOW())/(60*60))*(60*60))
-        AND time >= FROM_UNIXTIME(FLOOR(UNIX_TIMESTAMP(NOW())/(60*60))*(60*60)) - INTERVAL 24 HOUR
-        AND our_result = 'Y'
-        AND username LIKE ?
-      GROUP BY HOUR(time)
-      UNION
-      SELECT
-        share_id,
-        IFNULL(SUM(IF(difficulty=0, pow(2, (" . $this->config['difficulty'] . " - 16)), difficulty)), 0) AS shares,
-        HOUR(time) AS hour
-      FROM " . $this->share->getArchiveTableName() . "
-      WHERE time <= FROM_UNIXTIME(FLOOR(UNIX_TIMESTAMP(NOW())/(60*60))*(60*60))
-        AND time >= FROM_UNIXTIME(FLOOR(UNIX_TIMESTAMP(NOW())/(60*60))*(60*60)) - INTERVAL 24 HOUR
-        AND our_result = 'Y'
-        AND username LIKE ?
-      GROUP BY HOUR(time)");
-    $username = $username . ".%";
-    if ($this->checkStmt($stmt) && $stmt->bind_param('ss', $username, $username) && $stmt->execute() && $result = $stmt->get_result()) {
+        account_id AS id,
+        AVG(hashrate) AS hashrate,
+        HOUR(FROM_UNIXTIME(timestamp)) AS hour
+      FROM " . $this->getUserStatsTableName() . "
+      WHERE
+        account_id = ?
+        AND timestamp <= UNIX_TIMESTAMP(DATE_SUB(NOW(), INTERVAL 1 HOUR))
+        AND timestamp >= UNIX_TIMESTAMP(DATE_SUB(NOW(), INTERVAL 24 HOUR))
+      GROUP BY HOUR(FROM_UNIXTIME(timestamp))");
+    if ($this->checkStmt($stmt) && $stmt->bind_param('i', $account_id) && $stmt->execute() && $result = $stmt->get_result()) {
       $iStartHour = date('G');
       // Initilize array
       for ($i = 0; $i < 24; $i++) $aData[($iStartHour + $i) % 24] = 0;
-      // Fill data
-      while ($row = $result->fetch_assoc()) $aData[$row['hour']] += (int) $this->coin->calcHashrate($row['shares'], 3600);
+      // Fill data in proper hour order, result in SQL was ordered 0 - 23
+      while ($row = $result->fetch_assoc()) $aData[$row['hour']] += (int)$row['hashrate'];
       return $this->memcache->setCache(__FUNCTION__ . $account_id, $aData);
     }
     return $this->sqlError();
@@ -702,30 +731,24 @@ class Statistics extends Base {
     if ($this->getGetCache() && $data = $this->memcache->get(__FUNCTION__)) return $data;
     $stmt = $this->mysqli->prepare("
       SELECT
-        id,
-      	IFNULL(SUM(IF(s.difficulty=0, pow(2, (" . $this->config['difficulty'] . " - 16)), s.difficulty)), 0) AS shares,
-        HOUR(s.time) AS hour
-      FROM " . $this->share->getTableName() . " AS s
-      WHERE time <= FROM_UNIXTIME(FLOOR(UNIX_TIMESTAMP(NOW())/(60*60))*(60*60))
-        AND time >= FROM_UNIXTIME(FLOOR(UNIX_TIMESTAMP(NOW())/(60*60))*(60*60)) - INTERVAL 24 HOUR
-        AND our_result = 'Y'
-      GROUP BY HOUR(time)
-      UNION
-      SELECT
-        share_id,
-      	IFNULL(SUM(IF(s.difficulty=0, pow(2, (" . $this->config['difficulty'] . " - 16)), s.difficulty)), 0) AS shares,
-        HOUR(s.time) AS hour
-      FROM " . $this->share->getArchiveTableName() . " AS s
-      WHERE time <= FROM_UNIXTIME(FLOOR(UNIX_TIMESTAMP(NOW())/(60*60))*(60*60))
-        AND time >= FROM_UNIXTIME(FLOOR(UNIX_TIMESTAMP(NOW())/(60*60))*(60*60)) - INTERVAL 24 HOUR
-        AND our_result = 'Y'
-      GROUP BY HOUR(time)");
+        SUM(hashrate) / (
+          SELECT
+            COUNT(DISTINCT timestamp)
+          FROM " . $this->getUserStatsTableName() . "
+          WHERE timestamp <= UNIX_TIMESTAMP(DATE_SUB(NOW(), INTERVAL 1 HOUR))
+            AND timestamp >= UNIX_TIMESTAMP(DATE_SUB(NOW(), INTERVAL 24 HOUR))
+        ) AS hashrate,
+        HOUR(FROM_UNIXTIME(timestamp)) AS hour
+      FROM " . $this->getUserStatsTableName() . "
+      WHERE timestamp <= UNIX_TIMESTAMP(DATE_SUB(NOW(), INTERVAL 1 HOUR))
+        AND timestamp >= UNIX_TIMESTAMP(DATE_SUB(NOW(), INTERVAL 24 HOUR))
+      GROUP BY HOUR(FROM_UNIXTIME(timestamp))");
     if ($this->checkStmt($stmt) && $stmt->execute() && $result = $stmt->get_result()) {
       $iStartHour = date('G');
       // Initilize array
       for ($i = 0; $i < 24; $i++) $aData[($iStartHour + $i) % 24] = 0;
       // Fill data
-      while ($row = $result->fetch_assoc()) $aData[$row['hour']] += (int) $this->coin->calcHashrate($row['shares'], 3600);
+      while ($row = $result->fetch_assoc()) $aData[$row['hour']] += (int)$row['hashrate'];
       return $this->memcache->setCache(__FUNCTION__, $aData);
     }
     return $this->sqlError();
