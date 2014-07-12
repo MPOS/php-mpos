@@ -61,7 +61,7 @@ class Transaction extends Base {
       SET t.archived = 1
       WHERE t.archived = 0
       AND (
-           ( t.account_id = ? AND t.id <= ? AND b.confirmations >= ? )
+           ( t.account_id = ? AND t.id <= ? AND b.confirmations >= ? AND t.type != 'Convertible')
         OR ( t.account_id = ? AND t.id <= ? AND t.type IN ( 'Credit_PPS', 'Donation_PPS', 'Fee_PPS', 'TXFee', 'Debit_MP', 'Debit_AP' ) )
       )");
      if ($this->checkStmt($stmt) && $stmt->bind_param('iiiii', $account_id, $txid, $this->config['confirmations'], $account_id, $txid) && $stmt->execute())
@@ -395,7 +395,7 @@ class Transaction extends Base {
       LEFT JOIN " . $this->user->getTableName() . " AS a
       ON t.account_id = a.id
       WHERE t.type in ('Convertible', 'Convertible_Transfer') AND t.archived = 0
-      GROUP BY t.account_id
+      GROUP BY t.account_id, t.convertible
       HAVING amount > 0
       LIMIT ?");
     if ($this->checkStmt($stmt) && $stmt->bind_param('i', $limit) && $stmt->execute() && $result = $stmt->get_result())

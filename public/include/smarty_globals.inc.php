@@ -228,7 +228,7 @@ foreach ($aMonitorCrons as $strCron) {
 if ($bMessage)
   $_SESSION['POPUP'][] = array('CONTENT' => implode($aCronMessage, ''), 'DISMISS' => 'yes', 'ID' => 'backend', 'TYPE' => 'alert alert-warning');
 
-$aGlobal['multipool'] = in_array($config['currency'], array('WC', 'SUM', 'BNS', 'UVC'));
+$aGlobal['multipool'] = in_array($config['currency'], array('WC', 'SUM', 'BNS', 'UVC', 'HYPER'));
 
 // Make it available in Smarty
 $smarty->assign('PATH', 'site_assets/' . THEME);

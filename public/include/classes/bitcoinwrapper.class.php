@@ -39,8 +39,10 @@ class BitcoinWrapper extends BitcoinClient {
   // Wrapper method to get the real main account balance
   public function getrealbalance() {
     $this->oDebug->append("STA " . __METHOD__, 4);
-    $aAccounts = parent::listaccounts();
-    $dBalance = parent::getbalance('');
+   // $aAccounts = parent::listaccounts();
+    $dBalance = parent::getbalance();
+    
+    return $dBalance;
     // Account checks
     if (count($aAccounts) == 1) {
       // We only have a single account so getbalance will be fine

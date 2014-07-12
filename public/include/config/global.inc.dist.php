@@ -34,7 +34,7 @@ $config['algorithm'] = 'scrypt';
   *  System used for getting actual Balance from Wallet
   *   https://github.com/MPOS/php-mpos/wiki/Config-Setup#getbalance-api-calls
   **/
-$config['getbalancewithunconfirmed'] = true;
+$config['getbalancewithunconfirmed'] = false;
 
 /**
  * Database configuration

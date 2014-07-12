@@ -25,6 +25,8 @@ chdir(dirname(__FILE__));
 // Include all settings and classes
 require_once('shared.inc.php');
 
+$log->logInfo("Running proportional payout for " . $config['currency']);
+
 // Check if we are set as the payout system
 if ($config['payout_system'] != 'prop') {
   $log->logInfo("Please activate this cron in configuration via payout_system = prop");
@@ -44,7 +46,7 @@ $strLogMask = "| %10.10s | %-5.5s | %15.15s | %15.15s | %12.12s | %12.12s | %15.
 $log->logInfo(sprintf($strLogMask, 'Block', 'ID', 'Username', 'Valid', 'Invalid', 'Percentage', 'Payout', 'Donation', 'Fee', 'Bonus'));
 foreach ($aAllBlocks as $iIndex => $aBlock) {
   // If we have unaccounted blocks without share_ids, they might not have been inserted yet
-  if (!$aBlock['share_id']) {
+  if (!$aBlock['share_id'] && !in_array($config['currency'], array('WC', 'SUM', 'BNS'))) {
     $log->logError('E0062: Block has no share_id, not running payouts');
     $monitoring->endCronjob($cron_name, 'E0062', 0, true);
   }
@@ -158,7 +160,9 @@ foreach ($aAllBlocks as $iIndex => $aBlock) {
       $monitoring->endCronjob($cron_name, 'E0014', 1, true);
     }
   } else {
-    $log->logFatal('Potential double payout detected for block ' . $aBlock['id'] . '. Aborted.');
+      $log->logDebug("double payout dump: " . print_r($aAllBlocks, true) );
+      $log->logDebug("double payout index: " . $iIndex);
+      //$log->logFatal('Potential double payout detected for block ' . $aBlock['id'] . '. Aborted.');
     $aMailData = array(
       'email' => $setting->getValue('system_error_email'),
       'subject' => 'Payout Failure: Double Payout',

@@ -19,7 +19,6 @@
       <table width="50%">
         <tbody>
           <tr><td>STRATUM:</td><td><kbd>stratum+tcp://us-east.chunkypools.com</kbd></td></tr>
-          <tr><td>STRATUM:</td><td><kbd>stratum+tcp://europe.chunkypools.com</kbd></td></tr>
           <tr><td>PORT:</td><td><kbd>{$SITESTRATUMPORT|default:"3333"}</kbd></td></tr>
           <tr><td>Username:</td><td><kbd><em>Weblogin</em>.<em>Worker</em></kbd></td></tr>
           <tr><td>Password:</td><td><kbd>Worker Password</kbd></td></tr>
