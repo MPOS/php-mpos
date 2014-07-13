@@ -13,7 +13,7 @@ $(function () {
         // ID of the element in which to draw the chart.
         element: 'mine-area-chart',
         data: {$YOURHASHRATES},
-        xkey: 'timestamp',
+        xkey: 'time',
         ykeys: ['hashrate'],
         labels: ['Hashrate'],
         pointSize: 2,
@@ -29,7 +29,7 @@ $(function () {
         // ID of the element in which to draw the chart.
         element: 'pool-area-chart',
         data: {$POOLHASHRATES},
-        xkey: 'timestamp',
+        xkey: 'time',
         ykeys: ['hashrate'],
         labels: ['Hashrate'],
         pointSize: 2,

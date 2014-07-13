@@ -704,6 +704,7 @@ class Statistics extends Base {
     $stmt = $this->mysqli->prepare("
       SELECT
         timestamp,
+        FROM_UNIXTIME(timestamp, '%Y-%m-%d %T') AS time,
         hashrate
       FROM " . $this->getUserStatsTableName() . "
       WHERE
@@ -727,6 +728,7 @@ class Statistics extends Base {
     $stmt = $this->mysqli->prepare("
       SELECT
         timestamp,
+        FROM_UNIXTIME(timestamp, '%Y-%m-%d %T') AS time,
         SUM(hashrate) AS hashrate
         FROM " . $this->getUserStatsTableName() . "
       GROUP BY timestamp");
