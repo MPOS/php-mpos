@@ -1,4 +1,3 @@
-{if is_array($POOLHASHRATES)}
   <div class="tab-pane fade in" id="pool">
     <div class="panel-heading">
       Pool Hashrate
@@ -7,4 +6,3 @@
       <div id="pool-area-chart"></div>
     </div>
   </div>
-{/if}

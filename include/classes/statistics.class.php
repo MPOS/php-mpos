@@ -192,7 +192,7 @@ class Statistics extends Base {
       return $this->memcache->setCache(__FUNCTION__ . $account_id . $limit, $result->fetch_all(MYSQLI_ASSOC), 5);
     return $this->sqlError();
   }
-  
+
   /**
    * Currently the only function writing to the database
    * Stored per block user statistics of valid and invalid shares
@@ -698,61 +698,44 @@ class Statistics extends Base {
    * @param $account_id int account id
    * @return data array NOT FINISHED YET
    **/
-  public function getHourlyHashrateByAccount($account_id) {
+  public function getHashrateByAccount($account_id, $format='array') {
     $this->debug->append("STA " . __METHOD__, 4);
     if ($data = $this->memcache->get(__FUNCTION__ . $account_id)) return $data;
     $stmt = $this->mysqli->prepare("
       SELECT
-        account_id AS id,
-        AVG(hashrate) AS hashrate,
-        HOUR(FROM_UNIXTIME(timestamp)) AS hour
+        timestamp,
+        hashrate
       FROM " . $this->getUserStatsTableName() . "
       WHERE
-        account_id = ?
-        AND timestamp <= UNIX_TIMESTAMP(DATE_SUB(NOW(), INTERVAL 1 HOUR))
-        AND timestamp >= UNIX_TIMESTAMP(DATE_SUB(NOW(), INTERVAL 24 HOUR))
-      GROUP BY HOUR(FROM_UNIXTIME(timestamp))");
+        account_id = ?");
     if ($this->checkStmt($stmt) && $stmt->bind_param('i', $account_id) && $stmt->execute() && $result = $stmt->get_result()) {
-      $iStartHour = date('G');
-      // Initilize array
-      for ($i = 0; $i < 24; $i++) $aData[($iStartHour + $i) % 24] = 0;
-      // Fill data in proper hour order, result in SQL was ordered 0 - 23
-      while ($row = $result->fetch_assoc()) $aData[$row['hour']] += (int)$row['hashrate'];
-      return $this->memcache->setCache(__FUNCTION__ . $account_id, $aData);
+      $aData = $result->fetch_all(MYSQLI_ASSOC);
+      if ($format == 'json') $aData = json_encode($aData);
+      return $this->memcache->setCache(__FUNCTION__ . $account_id . $format, $aData);
     }
     return $this->sqlError();
   }
 
   /**
-   * get Hourly hashrate for the pool 
+   * get Hourly hashrate for the pool
    * @param none
    * @return data array NOT FINISHED YET
    **/
-  public function getHourlyHashrateByPool() {
+  public function getHashrateForPool($format='array') {
     $this->debug->append("STA " . __METHOD__, 4);
     if ($this->getGetCache() && $data = $this->memcache->get(__FUNCTION__)) return $data;
     $stmt = $this->mysqli->prepare("
       SELECT
-        SUM(hashrate) / (
-          SELECT
-            COUNT(DISTINCT timestamp)
-          FROM " . $this->getUserStatsTableName() . "
-          WHERE timestamp <= UNIX_TIMESTAMP(DATE_SUB(NOW(), INTERVAL 1 HOUR))
-            AND timestamp >= UNIX_TIMESTAMP(DATE_SUB(NOW(), INTERVAL 24 HOUR))
-        ) AS hashrate,
-        HOUR(FROM_UNIXTIME(timestamp)) AS hour
-      FROM " . $this->getUserStatsTableName() . "
-      WHERE timestamp <= UNIX_TIMESTAMP(DATE_SUB(NOW(), INTERVAL 1 HOUR))
-        AND timestamp >= UNIX_TIMESTAMP(DATE_SUB(NOW(), INTERVAL 24 HOUR))
-      GROUP BY HOUR(FROM_UNIXTIME(timestamp))");
+        timestamp,
+        SUM(hashrate) AS hashrate
+        FROM " . $this->getUserStatsTableName() . "
+      GROUP BY timestamp");
     if ($this->checkStmt($stmt) && $stmt->execute() && $result = $stmt->get_result()) {
-      $iStartHour = date('G');
-      // Initilize array
-      for ($i = 0; $i < 24; $i++) $aData[($iStartHour + $i) % 24] = 0;
-      // Fill data
-      while ($row = $result->fetch_assoc()) $aData[$row['hour']] += (int)$row['hashrate'];
-      return $this->memcache->setCache(__FUNCTION__, $aData);
+      $aData = $result->fetch_all(MYSQLI_ASSOC);
+      if ($format == 'json') $aData = json_encode($aData);
+      return $this->memcache->setCache(__FUNCTION__ . $format, $aData);
     }
+    var_dump($this->mysqli->error);
     return $this->sqlError();
   }
 
