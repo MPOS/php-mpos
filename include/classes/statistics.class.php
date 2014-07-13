@@ -737,7 +737,6 @@ class Statistics extends Base {
       if ($format == 'json') $aData = json_encode($aData);
       return $this->memcache->setCache(__FUNCTION__ . $format, $aData);
     }
-    var_dump($this->mysqli->error);
     return $this->sqlError();
   }
 
