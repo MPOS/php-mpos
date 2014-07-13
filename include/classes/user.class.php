@@ -496,7 +496,7 @@ class User extends Base {
       $this->setErrorMessage('Donation above allowed 100% limit');
       return false;
     }
-    if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+    if ($email != 'hidden' && $email != NULL && !filter_var($email, FILTER_VALIDATE_EMAIL)) {
       $this->setErrorMessage('Invalid email address');
       return false;
     }
@@ -540,6 +540,9 @@ class User extends Base {
       }
     }
 
+    // If we hide our email or it's not set, fetch current one to update
+    if ($email == 'hidden' || $email == NULL)
+      $email = $this->getUserEmailById($userID);
     // We passed all validation checks so update the account
     $stmt = $this->mysqli->prepare("UPDATE $this->table SET ap_threshold = ?, donate_percent = ?, email = ?, timezone = ?, is_anonymous = ? WHERE id = ?");
     if ($this->checkStmt($stmt) && $stmt->bind_param('ddssii', $threshold, $donate, $email, $timezone, $is_anonymous, $userID) && $stmt->execute()) {
