@@ -704,12 +704,13 @@ class Statistics extends Base {
     $stmt = $this->mysqli->prepare("
       SELECT
         timestamp,
-        FROM_UNIXTIME(timestamp, '%Y-%m-%d %T') AS time,
-        hashrate
+        FROM_UNIXTIME(timestamp, '%Y-%m-%d %H:%i') AS time,
+        AVG(hashrate) AS hashrate
       FROM " . $this->getUserStatsTableName() . "
-      WHERE
-        account_id = ?");
-    if ($this->checkStmt($stmt) && $stmt->bind_param('i', $account_id) && $stmt->execute() && $result = $stmt->get_result()) {
+      WHERE FROM_UNIXTIME(timestamp) >= DATE_SUB(NOW(), INTERVAL 24 HOUR)
+        AND account_id = ?
+      GROUP BY HOUR(FROM_UNIXTIME(timestamp))");
+    if ($this->checkStmt($stmt) && $stmt->bind_param('i', $account_id ) && $stmt->execute() && $result = $stmt->get_result()) {
       $aData = $result->fetch_all(MYSQLI_ASSOC);
       if ($format == 'json') $aData = json_encode($aData);
       return $this->memcache->setCache(__FUNCTION__ . $account_id . $format, $aData);
@@ -729,11 +730,14 @@ class Statistics extends Base {
       SELECT
         timestamp,
         FROM_UNIXTIME(timestamp, '%Y-%m-%d %T') AS time,
-        SUM(hashrate) AS hashrate
-        FROM " . $this->getUserStatsTableName() . "
-      GROUP BY timestamp");
+        SUM(DISTINCT account_id)
+      FROM " . $this->getUserStatsTableName() . "
+      WHERE timestamp >= DATE_SUB(NOW(), INTERVAL 24 HOUR)
+      GROUP BY HOUR(FROM_UNIXTIME(timestamp))");
     if ($this->checkStmt($stmt) && $stmt->execute() && $result = $stmt->get_result()) {
+      // return json_encode(array(time() * 1000, 1000));
       $aData = $result->fetch_all(MYSQLI_ASSOC);
+      var_dump($aData);
       if ($format == 'json') $aData = json_encode($aData);
       return $this->memcache->setCache(__FUNCTION__ . $format, $aData);
     }
