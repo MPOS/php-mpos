@@ -109,7 +109,7 @@ class jsonRPCClient {
     curl_setopt($ch, CURLOPT_POST, true);
     curl_setopt($ch, CURLOPT_POSTFIELDS, $request);
     curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
-    curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
+    // curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
     $response = curl_exec($ch);
     if (curl_errno($ch)) throw new Exception('RPC call failed: ' . curl_error($ch));
     if ($this->debug) $this->debug_output[] = 'Response: ' . $response;
