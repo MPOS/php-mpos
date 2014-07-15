@@ -16,12 +16,13 @@ $(function () {
         xkey: 'time',
         ykeys: ['hashrate'],
         labels: ['Hashrate'],
-        pointSize: 2,
+        pointSize: 1,
         hideHover: 'auto',
         resize: true,
         fillOpacity: 1.00,
         lineColors: ['#24A665'],
-        pointFillColors: ['#FFFFFF'],
+        pointFillColors: ['#24A665'],
+        pointStrokeColors: ['#24A665']
       });
     }
     if ($(e.target).attr('href') == '#pool' && $('#pool-area-chart').html().length == 0) {
@@ -32,12 +33,13 @@ $(function () {
         xkey: 'time',
         ykeys: ['hashrate'],
         labels: ['Hashrate'],
-        pointSize: 2,
+        pointSize: 1,
         hideHover: 'auto',
         resize: true,
         fillOpacity: 1.00,
         lineColors: ['#24A665'],
-        pointFillColors: ['#FFFFFF'],
+        pointFillColors: ['#24A665'],
+        pointStrokeColors: ['#24A665']
       });
     }
   });
@@ -54,12 +56,10 @@ $(function () {
         <ul class="nav nav-pills" id="hashrategraph">
           <li><a href="#mine" data-toggle="tab">Mine</a></li>
           <li><a href="#pool" data-toggle="tab">Pool</a></li>
-          <li><a href="#both" data-toggle="tab">Both</a></li>
         </ul>
         <div class="tab-content">
           {include file="{$smarty.request.page|escape}/{$smarty.request.action|escape}/mine.tpl"}
           {include file="{$smarty.request.page|escape}/{$smarty.request.action|escape}/pool.tpl"}
-          {include file="{$smarty.request.page|escape}/{$smarty.request.action|escape}/both.tpl"}
         </div>
       </div>
     </div>
