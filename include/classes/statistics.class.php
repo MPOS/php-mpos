@@ -261,12 +261,12 @@ class Statistics extends Base {
       SELECT
       (
         (
-          SELECT ROUND(COUNT(id) / ?, 2) AS sharerate
+          SELECT ROUND(SUM(difficulty) / ?, 2) AS sharerate
           FROM " . $this->share->getTableName() . "
           WHERE time > DATE_SUB(now(), INTERVAL ? SECOND)
           AND our_result = 'Y'
         ) + (
-          SELECT ROUND(COUNT(id) / ?, 2) AS sharerate
+          SELECT ROUND(SUM(difficulty) / ?, 2) AS sharerate
           FROM " . $this->share->getArchiveTableName() . "
           WHERE time > DATE_SUB(now(), INTERVAL ? SECOND)
           AND our_result = 'Y'
@@ -470,7 +470,7 @@ class Statistics extends Base {
         a.username AS account,
         COUNT(DISTINCT t1.username) AS workers,
         IFNULL(SUM(t1.difficulty), 0) AS shares,
-        ROUND(COUNT(t1.id) / ?, 2) AS sharerate,
+        ROUND(SUM(t1.difficulty) / ?, 2) AS sharerate,
         IFNULL(AVG(IF(difficulty=0, pow(2, (" . $this->config['difficulty'] . " - 16)), difficulty)), 0) AS avgsharediff
       FROM (
         SELECT
@@ -558,7 +558,7 @@ class Statistics extends Base {
    * Get Shares per x interval by user
    * @param username string username
    * @param $account_id int account id   
-   * @return data integer Current Sharerate in shares/s
+   * @return data integer Current Sharerate in diff1 shares/s
    **/
   public function getUserMiningStats($username, $account_id=NULL, $interval=180) {
     $this->debug->append("STA " . __METHOD__, 4);
@@ -575,7 +575,7 @@ class Statistics extends Base {
     if ($this->getGetCache() && $data = $this->memcache->get(__FUNCTION__ . $account_id)) return $data;
     $stmt = $this->mysqli->prepare("
       SELECT
-        IFNULL(COUNT(*) / ?, 0) AS sharerate,
+        IFNULL(SUM(difficulty) / ?, 0) AS sharerate,
         IFNULL(SUM(difficulty), 0) AS shares,
         IFNULL(AVG(difficulty), 0) AS avgsharediff
       FROM (
