@@ -698,48 +698,24 @@ class Statistics extends Base {
    * @param $account_id int account id
    * @return data array NOT FINISHED YET
    **/
-  public function getHashrateByAccount($account_id, $format='array') {
+  public function getHourlyMiningStatsByAccount($account_id, $format='array', $days = 1) {
     $this->debug->append("STA " . __METHOD__, 4);
     if ($data = $this->memcache->get(__FUNCTION__ . $account_id)) return $data;
     $stmt = $this->mysqli->prepare("
       SELECT
         timestamp,
         FROM_UNIXTIME(timestamp, '%Y-%m-%d %H:%i') AS time,
-        AVG(hashrate) AS hashrate
+        AVG(hashrate) AS hashrate,
+        AVG(workers) AS workers,
+        AVG(sharerate) AS sharerate
       FROM " . $this->getUserStatsTableName() . "
-      WHERE FROM_UNIXTIME(timestamp) >= DATE_SUB(NOW(), INTERVAL 24 HOUR)
+      WHERE FROM_UNIXTIME(timestamp) >= DATE_SUB(NOW(), INTERVAL $days DAY)
         AND account_id = ?
-      GROUP BY HOUR(FROM_UNIXTIME(timestamp))");
-    if ($this->checkStmt($stmt) && $stmt->bind_param('i', $account_id ) && $stmt->execute() && $result = $stmt->get_result()) {
+      GROUP BY DAY(FROM_UNIXTIME(timestamp)), HOUR(FROM_UNIXTIME(timestamp))");
+    if ($this->checkStmt($stmt) && $stmt->bind_param('i', $account_id) && $stmt->execute() && $result = $stmt->get_result()) {
       $aData = $result->fetch_all(MYSQLI_ASSOC);
       if ($format == 'json') $aData = json_encode($aData);
       return $this->memcache->setCache(__FUNCTION__ . $account_id . $format, $aData);
-    }
-    return $this->sqlError();
-  }
-
-  /**
-   * get Hourly hashrate for the pool
-   * @param none
-   * @return data array NOT FINISHED YET
-   **/
-  public function getHashrateForPool($format='array') {
-    $this->debug->append("STA " . __METHOD__, 4);
-    if ($this->getGetCache() && $data = $this->memcache->get(__FUNCTION__)) return $data;
-    $stmt = $this->mysqli->prepare("
-      SELECT
-        timestamp,
-        FROM_UNIXTIME(timestamp, '%Y-%m-%d %T') AS time,
-        SUM(DISTINCT account_id)
-      FROM " . $this->getUserStatsTableName() . "
-      WHERE timestamp >= DATE_SUB(NOW(), INTERVAL 24 HOUR)
-      GROUP BY HOUR(FROM_UNIXTIME(timestamp))");
-    if ($this->checkStmt($stmt) && $stmt->execute() && $result = $stmt->get_result()) {
-      // return json_encode(array(time() * 1000, 1000));
-      $aData = $result->fetch_all(MYSQLI_ASSOC);
-      var_dump($aData);
-      if ($format == 'json') $aData = json_encode($aData);
-      return $this->memcache->setCache(__FUNCTION__ . $format, $aData);
     }
     return $this->sqlError();
   }
@@ -931,7 +907,7 @@ class Statistics extends Base {
   /**
    * Purge older entries from our statistics_users table
    **/
-  public function purgeUserStats($days = 7) {
+  public function purgeUserStats($days = 1) {
     // Fallbacks if unset
     $stmt = $this->mysqli->prepare("DELETE FROM " . $this->getUserStatsTableName() . " WHERE FROM_UNIXTIME(timestamp) <= DATE_SUB(NOW(), INTERVAL ? DAY)");
     if ($this->checkStmt($stmt) && $stmt->bind_param('i', $days) && $stmt->execute())

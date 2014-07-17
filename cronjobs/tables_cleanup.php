@@ -77,7 +77,7 @@ $log->logInfo(sprintf($strLogMask, 'purgeArchive', $affected, number_format(micr
 $start = microtime(true);
 $status = 'OK';
 $message = '';
-$affected = $statistics->purgeUserStats();
+$affected = $statistics->purgeUserStats($setting->getValue('statistics_graphing_days', 1));
 if ($affected === false) {
   $message = 'Failed to delete entries: ' . $statistics->getCronError();
   $status = 'ERROR';
