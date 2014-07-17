@@ -927,6 +927,17 @@ class Statistics extends Base {
       return $this->memcache->setCache(__FUNCTION__, $result->fetch_object()->total);
     return $this->sqlError();
   }
+
+  /**
+   * Purge older entries from our statistics_users table
+   **/
+  public function purgeUserStats($days = 7) {
+    // Fallbacks if unset
+    $stmt = $this->mysqli->prepare("DELETE FROM " . $this->getUserStatsTableName() . " WHERE FROM_UNIXTIME(timestamp) <= DATE_SUB(NOW(), INTERVAL ? DAY)");
+    if ($this->checkStmt($stmt) && $stmt->bind_param('i', $days) && $stmt->execute())
+      return $stmt->affected_rows;
+    return $this->sqlError();
+  }
 }
 
 $statistics = new Statistics();
