@@ -58,10 +58,10 @@ class CoinAddress extends Base {
    **/
   public function updateCoinAddress($account_id, $old_address, $coin_address, $threshold) {
     $this->debug->append("STA " . __METHOD__, 4);
-    $str = "UPDATE $this->table SET address = ?, ap_threshold = ? WHERE address = ?";
+    $str = "UPDATE $this->table SET address = ?, ap_threshold = ? WHERE address = ? AND account_id = ?";
     $stmt = $this->mysqli->prepare($str);
 
-    return $this->checkStmt($stmt) && $stmt->bind_param('sds', $coin_address, $threshold, $old_address) && $stmt->execute();
+    return $this->checkStmt($stmt) && $stmt->bind_param('sdsd', $coin_address, $threshold, $old_address, $account_id) && $stmt->execute();
   }
 
   /**

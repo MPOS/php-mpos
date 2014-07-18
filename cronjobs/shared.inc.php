@@ -36,7 +36,6 @@ if (SECHASH_CHECK) {
 // MODIFY THIS
 // We need to find our include files so set this properly
 define("BASEPATH", "../public/");
-
 /*****************************************************
  * No need to change beyond this point               *
  *****************************************************/

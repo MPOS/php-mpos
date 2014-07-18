@@ -99,31 +99,8 @@ if [[ ! -e 'shared.inc.php' ]]; then
   exit 1
 fi
 
-# Our PID of this shell
-PID=$$
-
-if [[ -e $PIDFILE ]]; then
-  echo "Cron seems to be running already"
-  RUNPID=$( cat $PIDFILE )
-  if ps fax | grep -q "^\<$RUNPID\>"; then
-    echo "Process found in process table, aborting"
-    exit 1
-  else
-    echo "Process $RUNPID not found. Plese remove $PIDFILE if process is indeed dead."
-    exit 1
-  fi
-fi
-
-# Write our PID file
-echo $PID 2>/dev/null 1> $PIDFILE || {
-  echo 'Failed to create PID file, aborting';
-  exit 1
-}
-
 for cron in $CRONS; do
   [[ $VERBOSE == 1 ]] && echo "Running $cron, check logfile for details"
   $PHP_BIN $cron -d $SUBFOLDER $PHP_OPTS
 done
 
-# Remove pidfile
-rm -f $PIDFILE

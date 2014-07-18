@@ -125,7 +125,8 @@ class Monitoring extends Base {
         'email' => $this->setting->getValue('system_error_email'),
         'subject' => 'Cronjob Failure',
         'Error Code' => $msgCode,
-        'Error Message' => $this->getErrorMsg($msgCode)
+        'Error Message' => $this->getErrorMsg($msgCode),
+        'coin' => $this->config['currency']
       );
       if (!$this->mail->sendMail('notifications/error', $aMailData))
         $this->setErrorMessage('Failed to send mail notification');
