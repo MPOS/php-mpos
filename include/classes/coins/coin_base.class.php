@@ -12,11 +12,21 @@ class CoinBase extends Base {
   // Our coins target bits
   protected $target_bits = NULL;
 
+  // Our coins share difficulty precision
+  protected $share_difficulty_precision = 0;
+
   /**
    * Read our target bits
    **/
   public function getTargetBits() {
     return $this->target_bits;
+  }
+
+  /**
+   * Read our share difficulty precision
+   **/
+  public function getShareDifficultyPrecision() {
+    return $this->share_difficulty_precision;
   }
 
   /**

@@ -108,15 +108,15 @@ $(document).ready(function(){
       $('#b-nethashrate').html('n/a');
     }
     $('#b-sharerate').html((parseFloat(data.getdashboarddata.data.personal.sharerate).toFixed(2)));
-    $('#b-yvalid').html(number_format(data.getdashboarddata.data.personal.shares.valid));
-    $('#b-yivalid').html(number_format(data.getdashboarddata.data.personal.shares.invalid));
+    $('#b-yvalid').html(number_format(data.getdashboarddata.data.personal.shares.valid, {/literal}{$GLOBAL.config.sharediffprecision}{literal}));
+    $('#b-yivalid').html(number_format(data.getdashboarddata.data.personal.shares.invalid, {/literal}{$GLOBAL.config.sharediffprecision}{literal}));
     if ( data.getdashboarddata.data.personal.shares.valid > 0 ) {
       $('#b-yefficiency').html(number_format(100 - data.getdashboarddata.data.personal.shares.invalid_percent, 2) + "%");
     } else {
       $('#b-yefficiency').html(number_format(0, 2) + "%");
     }
-    $('#b-pvalid').html(number_format(data.getdashboarddata.data.pool.shares.valid));
-    $('#b-pivalid').html(number_format(data.getdashboarddata.data.pool.shares.invalid));
+    $('#b-pvalid').html(number_format(data.getdashboarddata.data.pool.shares.valid, {/literal}{$GLOBAL.config.sharediffprecision}{literal}));
+    $('#b-pivalid').html(number_format(data.getdashboarddata.data.pool.shares.invalid, {/literal}{$GLOBAL.config.sharediffprecision}{literal}));
     if ( data.getdashboarddata.data.pool.shares.valid > 0 ) {
       $('#b-pefficiency').html(number_format(100 - data.getdashboarddata.data.pool.shares.invalid_percent, 2) + "%");
     } else {
