@@ -226,7 +226,7 @@ CREATE TABLE IF NOT EXISTS `transactions` (
   `account_id` int(255) unsigned NOT NULL,
   `type` varchar(25) DEFAULT NULL,
   `coin_address` varchar(255) DEFAULT NULL,
-  `amount` double(50,30) DEFAULT '0',
+  `amount` decimal(50,30) DEFAULT '0',
   `block_id` int(255) DEFAULT NULL,
   `timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `txid` varchar(256) DEFAULT NULL,

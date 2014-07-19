@@ -89,8 +89,8 @@ $log->logInfo("\tQuery Completed...");
 
 if (!empty($aAccountShares)) {
   // Runtime information for this payout
-  $precision = $setting->getValue('system_coin_precision', 12);
-  $table_precision = $setting->getValue('system_coin_precision', 12) + 3;
+  $precision = $coin->getCoinValuePrevision();
+  $table_precision = $coin->getCoinValuePrevision() + 3;
   $log->logInfo('Runtime information for this payout');
   $strLogMask = "| %-15.15s | %15.15s | %15.15s | %${table_precision}.${table_precision}s | %3.3s |";
   $log->logInfo(sprintf($strLogMask, 'PPS reward type', 'Reward Base', 'Difficulty', 'PPS Value', 'Precision'));

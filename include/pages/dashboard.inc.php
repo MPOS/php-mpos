@@ -49,7 +49,7 @@ if ($user->isAuthenticated()) {
   }
 
   // Make it available in Smarty
-  $smarty->assign('PRECISION', $setting->getValue('system_coin_precision', 12));
+  $smarty->assign('PRECISION', $coin->getCoinValuePrevision());
   $smarty->assign('BLOCKSFOUND', $aLastBlocks);
   $smarty->assign('DISABLED_DASHBOARD', $setting->getValue('disable_dashboard'));
   $smarty->assign('DISABLED_DASHBOARD_API', $setting->getValue('disable_dashboard_api'));

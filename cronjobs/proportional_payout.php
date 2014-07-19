@@ -39,8 +39,8 @@ if (empty($aAllBlocks)) {
 }
 
 // Fetch precision
-$precision = $setting->getValue('system_coin_precision', 12);
-$table_precision = $setting->getValue('system_coin_precision', 12) + 3;
+$precision = $coin->getCoinValuePrevision();
+$table_precision = $coin->getCoinValuePrevision() + 3;
 
 $count = 0;
 // Table header for account shares

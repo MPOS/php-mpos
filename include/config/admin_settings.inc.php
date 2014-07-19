@@ -309,13 +309,6 @@ $aSettings['system'][] = array(
   'tooltip' => 'The email address for system errors notifications, like cronjobs failures.'
 );
 $aSettings['system'][] = array(
-  'display' => 'Coin Precision', 'type' => 'text',
-  'size' => 5,
-  'default' => '12',
-  'name' => 'system_coin_precision', 'value' => $setting->getValue('system_coin_precision'),
-  'tooltip' => 'How do we round any coin values throughout MPOS. Defaults to 12 digits.'
-);
-$aSettings['system'][] = array(
   'display' => 'Date format string', 'type' => 'text',
   'size' => 25,
   'default' => '%m/%d/%Y %H:%M:%S',

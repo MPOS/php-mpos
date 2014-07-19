@@ -7,7 +7,7 @@
               </div>
               <div class="circle-tile-content lightblue">
                 <div class="circle-tile-description text-faded">
-                  <p class="h5" id="b-est1">{$GLOBAL.userdata.estimates.hours1|number_format:12}</p>
+                  <p class="h5" id="b-est1">{$GLOBAL.userdata.estimates.hours1|number_format:$PRECISION}</p>
                 </div>
                 <div class="circle-tile-number text-faded">
                   <p class="h6">{$GLOBAL.config.currency} 1 Hour Estimated Earnings</p>
@@ -22,7 +22,7 @@
               </div>
               <div class="circle-tile-content lightblue">
                 <div class="circle-tile-description text-faded">
-                  <p class="h5" id="b-est24hours">{$GLOBAL.userdata.estimates.hours24|number_format:12}</p>
+                  <p class="h5" id="b-est24hours">{$GLOBAL.userdata.estimates.hours24|number_format:$PRECISION}</p>
                 </div>
                 <div class="circle-tile-number text-faded">
                   <p class="h6">{$GLOBAL.config.currency} 24 Hour Estimated Earnings</p>
@@ -37,7 +37,7 @@
               </div>
               <div class="circle-tile-content lightblue">
                 <div class="circle-tile-description text-faded">
-                  <p class="h5" id="b-est7days">{$GLOBAL.userdata.estimates.days7|number_format:12}</p>
+                  <p class="h5" id="b-est7days">{$GLOBAL.userdata.estimates.days7|number_format:$PRECISION}</p>
                 </div>
                 <div class="circle-tile-number text-faded">
                   <p class="h6">{$GLOBAL.config.currency} 7 Days Estimated Earnings</p>
@@ -52,7 +52,7 @@
               </div>
               <div class="circle-tile-content lightblue">
                 <div class="circle-tile-description text-faded">
-                  <p class="h5" id="b-est14days">{$GLOBAL.userdata.estimates.days14|number_format:12}</p>
+                  <p class="h5" id="b-est14days">{$GLOBAL.userdata.estimates.days14|number_format:$PRECISION}</p>
                 </div>
                 <div class="circle-tile-number text-faded">
                   <p class="h6">{$GLOBAL.config.currency} 14 Days Estimated Earnings</p>
@@ -67,7 +67,7 @@
               </div>
               <div class="circle-tile-content lightblue">
                 <div class="circle-tile-description text-faded">
-                  <p class="h5" id="b-est30days">{$GLOBAL.userdata.estimates.days30|number_format:12}</p>
+                  <p class="h5" id="b-est30days">{$GLOBAL.userdata.estimates.days30|number_format:$PRECISION}</p>
                 </div>
                 <div class="circle-tile-number text-faded">
                   <p class="h6">{$GLOBAL.config.currency} 30 Days Estimated Earnings</p>

@@ -1,5 +1,5 @@
 <?php
-function run_0012() {
+function run_0013() {
   // Ugly but haven't found a better way
   global $setting, $config, $user, $mysqli, $transaction;
 
@@ -9,7 +9,7 @@ function run_0012() {
   $db_version_now = $setting->getValue('DB_VERSION');  // Our actual version installed
 
   // Upgrade specific variables
-  $aSql[] = "ALTER TABLE " . $transaction->getTableName() . " CHANGE `amount` `amount` DOUBLE(60,30) NULL DEFAULT '0'";
+  $aSql[] = "ALTER TABLE " . $transaction->getTableName() . " CHANGE `amount` `amount` DECIMAL(50,30) NULL DEFAULT '0'";
   $aSql[] = "UPDATE " . $setting->getTableName() . " SET value = '0.0.13' WHERE name = 'DB_VERSION'";
 
   if ($db_version_now == $db_version_old && version_compare($db_version_now, DB_VERSION, '<')) {
