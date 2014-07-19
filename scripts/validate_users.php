@@ -36,7 +36,6 @@
 		$username = $user['username'];
 		$loggedIp = $user['loggedIp'];
 		$lastLogin  = $user['last_login'];
-		$coinAddress = $user['coin_address'];
 		$mailAddress = $user['email']; 
 
 		$everLoggedIn = !empty($lastLogin);

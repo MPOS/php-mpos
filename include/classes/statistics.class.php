@@ -223,12 +223,12 @@ class Statistics extends Base {
       SELECT
       (
         (
-          SELECT IFNULL(ROUND(SUM(IF(difficulty=0, POW(2, (" . $this->config['difficulty'] . " - 16)), difficulty))), 0) AS shares
+          SELECT IFNULL(SUM(IF(difficulty=0, POW(2, (" . $this->config['difficulty'] . " - 16)), difficulty)), 0) AS shares
           FROM " . $this->share->getTableName() . "
           WHERE time > DATE_SUB(now(), INTERVAL ? SECOND)
           AND our_result = 'Y'
         ) + (
-          SELECT IFNULL(ROUND(SUM(IF(difficulty=0, POW(2, (" . $this->config['difficulty'] . " - 16)), difficulty))), 0) AS shares
+          SELECT IFNULL(SUM(IF(difficulty=0, POW(2, (" . $this->config['difficulty'] . " - 16)), difficulty)), 0) AS shares
           FROM " . $this->share->getArchiveTableName() . "
           WHERE time > DATE_SUB(now(), INTERVAL ? SECOND)
           AND our_result = 'Y'

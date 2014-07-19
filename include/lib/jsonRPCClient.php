@@ -108,7 +108,10 @@ class jsonRPCClient {
     curl_setopt($ch, CURLOPT_USERPWD, $url['user'] . ":" . $url['pass']);
     curl_setopt($ch, CURLOPT_POST, true);
     curl_setopt($ch, CURLOPT_POSTFIELDS, $request);
+    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
+    // curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
     $response = curl_exec($ch);
+    if (curl_errno($ch)) throw new Exception('RPC call failed: ' . curl_error($ch));
     if ($this->debug) $this->debug_output[] = 'Response: ' . $response;
     $response = json_decode($response, true);
     $resultStatus = curl_getinfo($ch);
@@ -116,7 +119,6 @@ class jsonRPCClient {
       if ($resultStatus['http_code'] == '401') throw new Exception('RPC call did not return 200: Authentication failed');
       throw new Exception('RPC call did not return 200: HTTP error: ' . $resultStatus['http_code'] . ' - JSON Response: [' . @$response['error']['code'] . '] ' . @$response['error']['message']);
     }
-    if (curl_errno($ch)) throw new Exception('RPC call failed: ' . curl_error($ch));
     curl_close($ch);
 
     // final checks and return
