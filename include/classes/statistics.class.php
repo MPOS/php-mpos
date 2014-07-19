@@ -111,7 +111,7 @@ class Statistics extends Base {
         b.*,
         a.username AS finder,
         a.is_anonymous AS is_anonymous,
-        ROUND(difficulty * POW(2, 32 - " . $this->coin->getTargetBits() . "), 0), 4) AS estshares
+        ROUND(difficulty * POW(2, 32 - " . $this->coin->getTargetBits() . "), 0) AS estshares
       FROM " . $this->block->getTableName() . " AS b
       LEFT JOIN " . $this->user->getTableName() . " AS a
       ON b.account_id = a.id
