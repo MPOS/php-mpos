@@ -4,13 +4,13 @@ function run_0012() {
   global $setting, $config, $user, $mysqli, $transaction;
 
   // Version information
-  $db_version_old = '0.0.11';  // What version do we expect
-  $db_version_new = '0.0.12';  // What is the new version we wish to upgrade to
+  $db_version_old = '0.0.12';  // What version do we expect
+  $db_version_new = '0.0.13';  // What is the new version we wish to upgrade to
   $db_version_now = $setting->getValue('DB_VERSION');  // Our actual version installed
 
   // Upgrade specific variables
   $aSql[] = "ALTER TABLE " . $transaction->getTableName() . " CHANGE `amount` `amount` DOUBLE(60,30) NULL DEFAULT '0'";
-  $aSql[] = "UPDATE " . $setting->getTableName() . " SET value = '0.0.12' WHERE name = 'DB_VERSION'";
+  $aSql[] = "UPDATE " . $setting->getTableName() . " SET value = '0.0.13' WHERE name = 'DB_VERSION'";
 
   if ($db_version_now == $db_version_old && version_compare($db_version_now, DB_VERSION, '<')) {
     // Run the upgrade
