@@ -66,6 +66,7 @@ $aGlobal = array(
   'coinaddresscheck' => $config['check_valid_coinaddress'],
   'csrf' => $config['csrf'],
   'config' => array(
+    'sharediffprecision' => $coin->getShareDifficultyPrecision(),
     'date' => $setting->getValue('system_date_format', '%m/%d/%Y %H:%M:%S'),
     'website_design' => $setting->getValue('website_design'),
     'poolnav_enabled' => $setting->getValue('poolnav_enabled'),
