@@ -65,7 +65,7 @@ $status = 'OK';
 $message = '';
 $affected = $share->purgeArchive();
 if ($affected === false) {
-  $message = 'Failed to delete notifications: ' . $oToken->getCronError();
+  $message = 'Failed to delete shares: ' . $share->getCronError();
   $status = 'ERROR';
   $monitoring->endCronjob($cron_name, 'E0008', 0, false, false);
 } else {
@@ -73,6 +73,19 @@ if ($affected === false) {
 }
 $log->logInfo(sprintf($strLogMask, 'purgeArchive', $affected, number_format(microtime(true) - $start, 3), $status, $message));
 
+// Clenaup shares archive
+$start = microtime(true);
+$status = 'OK';
+$message = '';
+$affected = $statistics->purgeUserStats($setting->getValue('statistics_graphing_days', 1));
+if ($affected === false) {
+  $message = 'Failed to delete entries: ' . $statistics->getCronError();
+  $status = 'ERROR';
+  $monitoring->endCronjob($cron_name, 'E0008', 0, false, false);
+} else {
+  $affected == 0 ? $message = 'No entries deleted' : $message = 'Deleted old entries';
+}
+$log->logInfo(sprintf($strLogMask, 'purgeUserStats', $affected, number_format(microtime(true) - $start, 3), $status, $message));
 
 // Cron cleanup and monitoring
 require_once('cron_end.inc.php');
