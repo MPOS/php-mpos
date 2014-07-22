@@ -1,25 +1,16 @@
 <?php
-function run_0013() {
+function run_0014() {
   // Ugly but haven't found a better way
-  global $setting, $config, $user, $mysqli;
+  global $setting, $config, $user, $mysqli, $transaction;
 
   // Version information
-  $db_version_old = '0.0.12';  // What version do we expect
-  $db_version_new = '0.0.13';  // What is the new version we wish to upgrade to
+  $db_version_old = '0.0.13';  // What version do we expect
+  $db_version_new = '0.0.14';  // What is the new version we wish to upgrade to
   $db_version_now = $setting->getValue('DB_VERSION');  // Our actual version installed
 
   // Upgrade specific variables
-  $aSql[] = "CREATE TABLE `statistics_users` (
-    `id` int(11) NOT NULL AUTO_INCREMENT,
-    `account_id` int(11) NOT NULL,
-    `hashrate` int(11) NOT NULL,
-    `workers` int(11) NOT NULL,
-    `sharerate` float NOT NULL,
-    `timestamp` int(11) NOT NULL,
-    PRIMARY KEY (`id`),
-    KEY `account_id_timestamp` (`account_id`,`timestamp`)
-    ) ENGINE=InnoDB DEFAULT CHARSET=utf8";
-  $aSql[] = "UPDATE " . $setting->getTableName() . "    SET value = '0.0.13' WHERE name = 'DB_VERSION'";
+  $aSql[] = "ALTER TABLE " . $transaction->getTableName() . " CHANGE `amount` `amount` DECIMAL(50,30) NULL DEFAULT '0'";
+  $aSql[] = "UPDATE " . $setting->getTableName() . " SET value = '0.0.13' WHERE name = 'DB_VERSION'";
 
   if ($db_version_now == $db_version_old && version_compare($db_version_now, DB_VERSION, '<')) {
     // Run the upgrade

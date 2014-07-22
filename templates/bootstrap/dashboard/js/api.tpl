@@ -178,7 +178,7 @@ $(document).ready(function(){
       return;
     }
     if (blocks[0].height > lastBlock) {
-      if(canCreateSoundJS) { 
+      if(canCreateSoundJS) {
         createjs.Sound.play('ding');
       }
       lastBlock = blocks[0].height;
@@ -234,6 +234,7 @@ $(document).ready(function(){
     });
   })();
 
+  {/literal}{if !$DISABLED_API}{literal}
   // Worker process to update active workers in the account details table
   (function worker2() {
     $.ajax({
@@ -250,7 +251,9 @@ $(document).ready(function(){
       }
     });
   })();
+  {/literal}{/if}{literal}
 
+  {/literal}{if !$DISABLED_API}{literal}
   // Worker process to update user account balances
   // Our worker process to keep worker information updated
   (function worker3() {
@@ -265,7 +268,8 @@ $(document).ready(function(){
       }
     });
   })();
-  
+  {/literal}{/if}{literal}
+
   // Mute Button
   $('#muteButton').click(function(){
     if(muteFlag == 2) {
@@ -280,8 +284,6 @@ $(document).ready(function(){
       $(this).find($(".fa")).removeClass('fa-volume-up').addClass('fa-volume-off');
     }
   });
-  
-  
 });
 {/literal}
 </script>

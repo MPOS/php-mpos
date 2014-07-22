@@ -4,11 +4,9 @@ $defflip = (!cfip()) ? exit(header('HTTP/1.1 401 Unauthorized')) : 1;
 if (!$smarty->isCached('master.tpl', $smarty_cache_key)) {
   $debug->append('No cached version available, fetching from backend', 3);
   if ($user->isAuthenticated()) {
-    $aHourlyHashRates = $statistics->getHourlyHashrateByAccount($_SESSION['USERDATA']['username'], $_SESSION['USERDATA']['id']);
-    $aPoolHourlyHashRates = $statistics->getHourlyHashrateByPool();
+    $aHourlyMiningStats = $statistics->getHourlyMiningStatsByAccount($_SESSION['USERDATA']['id'], 'json', $setting->getValue('statistics_graphing_days', 1));
   }
-  $smarty->assign("YOURHASHRATES", @$aHourlyHashRates);
-  $smarty->assign("POOLHASHRATES", @$aPoolHourlyHashRates);
+  $smarty->assign('YOURMININGSTATS', @$aHourlyMiningStats);
 } else {
   $debug->append('Using cached page', 3);
 }

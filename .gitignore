@@ -18,6 +18,10 @@
 /include/config/global.inc.scrypt.php
 /include/config/global.inc.sha.php
 
+# Test files
+/scripts/test.php
+/cronjobs/test.php
+
 # IDE Settings
 /.idea/*
 .buildpath

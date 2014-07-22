@@ -53,6 +53,7 @@ if ($user->isAuthenticated()) {
   $smarty->assign('BLOCKSFOUND', $aLastBlocks);
   $smarty->assign('DISABLED_DASHBOARD', $setting->getValue('disable_dashboard'));
   $smarty->assign('DISABLED_DASHBOARD_API', $setting->getValue('disable_dashboard_api'));
+  $smarty->assign('DISABLED_API', $setting->getValue('disable_api'));
   $smarty->assign('ESTIMATES', array('shares' => $iEstShares, 'percent' => $dEstPercent));
   $smarty->assign('NETWORK', array('difficulty' => $dDifficulty, 'block' => $iBlock, 'EstNextDifficulty' => $dEstNextDifficulty, 'EstTimePerBlock' => $dExpectedTimePerBlock, 'BlocksUntilDiffChange' => $iBlocksUntilDiffChange));
   $smarty->assign('INTERVAL', $interval / 60);

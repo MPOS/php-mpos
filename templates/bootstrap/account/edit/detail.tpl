@@ -28,7 +28,7 @@
             {/if}
             <div class="form-group">
               <label>E-Mail</label>
-              {nocache}<input class="form-control" type="text" name="email" value="{$GLOBAL.userdata.email|escape}" size="20" {if $GLOBAL.twofactor.enabled && $GLOBAL.twofactor.options.details && !$DETAILSUNLOCKED}id="disabledInput" disabled{/if}/>{/nocache}
+              {nocache}<input class="form-control" type="text" name="email" value="hidden" size="20" {if $GLOBAL.twofactor.enabled && $GLOBAL.twofactor.options.details && !$DETAILSUNLOCKED}id="disabledInput" disabled{/if}/>{/nocache}
             </div>
             <div class="form-group">
               <label>Timezone</label>

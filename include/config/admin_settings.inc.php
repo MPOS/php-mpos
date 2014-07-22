@@ -161,6 +161,13 @@ $aSettings['statistics'][] = array(
   'tooltip' => 'Time in minutes, interval for hashrate and sharerate calculations. Higher intervals allow for better accuracy at a higer server load.'
 );
 $aSettings['statistics'][] = array(
+  'display' => 'Graphing Days', 'type' => 'text',
+  'size' => 25,
+  'default' => 1,
+  'name' => 'statistics_graphing_days', 'value' => $setting->getValue('statistics_graphing_days'),
+  'tooltip' => 'How many days to graph out on the statistics -> graphs page.'
+);
+$aSettings['statistics'][] = array(
   'display' => 'Block Statistics Count', 'type' => 'text',
   'size' => 25,
   'default' => 20,
