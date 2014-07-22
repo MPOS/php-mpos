@@ -10,7 +10,7 @@ function run_0014() {
 
   // Upgrade specific variables
   $aSql[] = "ALTER TABLE " . $transaction->getTableName() . " CHANGE `amount` `amount` DECIMAL(50,30) NULL DEFAULT '0'";
-  $aSql[] = "UPDATE " . $setting->getTableName() . " SET value = '0.0.13' WHERE name = 'DB_VERSION'";
+  $aSql[] = "UPDATE " . $setting->getTableName() . " SET value = '0.0.14' WHERE name = 'DB_VERSION'";
 
   if ($db_version_now == $db_version_old && version_compare($db_version_now, DB_VERSION, '<')) {
     // Run the upgrade
