@@ -7,7 +7,7 @@
         <div class="panel-body">
           <ul>
           <li><b><i>Q: When will I get paid?</b></i></li>
-          &nbsp;<b>A:</b> This pool uses the follwing payout system.<br>
+          &nbsp;<b>A:</b> This pool uses the following payout system.<br>
           {if $GLOBAL.config.payout_system == 'prop'}
           <br>
           <b>Proportional (Prop)</b> - The block reward is distributed among miners in proportion to the number of shares they submitted in a round. The expected reward per share depends on the number of shares already submitted in the round.
