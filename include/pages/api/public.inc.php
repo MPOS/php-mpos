@@ -19,7 +19,8 @@ echo json_encode(
     'workers' => $worker->getCountAllActiveWorkers(),
     'shares_this_round' => $aShares['valid'],
     'last_block' => $aLastBlock['height'],
-    'network_hashrate' => $dNetworkHashrate
+    'network_hashrate' => $dNetworkHashrate,
+    'fee' => $config['fees']
   )
 );
 
