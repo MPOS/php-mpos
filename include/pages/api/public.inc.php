@@ -20,7 +20,8 @@ echo json_encode(
     'shares_this_round' => $aShares['valid'],
     'last_block' => $aLastBlock['height'],
     'network_hashrate' => $dNetworkHashrate,
-    'fee' => $config['fees']
+    'fee' => $config['fees'],
+    'payout' => $config['payout_system']
   )
 );
 
