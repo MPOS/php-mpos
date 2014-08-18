@@ -104,7 +104,7 @@ if ($user->isAuthenticated()) {
             $_SESSION['POPUP'][] = array('CONTENT' => 'You have not yet unlocked account withdrawls.', 'TYPE' => 'alert alert-danger');
           } else if ($aBalance['confirmed'] < $config['mp_threshold']) {
             $_SESSION['POPUP'][] = array('CONTENT' => 'Payout must be greater or equal than ' . $config['mp_threshold'] . '.', 'TYPE' => 'info');
-          } else if (!$user->getCoinAddress($_SESSION['USERDATA']['id'])) {
+          } else if (!$coin_address->getCoinAddress($_SESSION['USERDATA']['id'])) {
             $_SESSION['POPUP'][] = array('CONTENT' => 'You have no payout address set.', 'TYPE' => 'alert alert-danger');
         	} else {
         	  $user->log->log("info", $_SESSION['USERDATA']['username']." requesting manual payout");

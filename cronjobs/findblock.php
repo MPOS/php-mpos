@@ -59,7 +59,7 @@ if (empty($aTransactions['transactions'])) {
       $config['reward_type'] == 'block' ? $aData['amount'] = $aData['amount'] : $aData['amount'] = $config['reward'];
       $aData['height'] = $aBlockRPCInfo['height'];
       $aTxDetails = $bitcoin->gettransaction($aBlockRPCInfo['tx'][0]);
-      if (!isset($aBlockRPCInfo['confirmations'])) {
+      if (isset($aBlockRPCInfo['confirmations'])) {
         $aData['confirmations'] = $aBlockRPCInfo['confirmations'];
       } else if (isset($aTxDetails['confirmations'])) {
         $aData['confirmations'] = $aTxDetails['confirmations'];

@@ -81,6 +81,8 @@ class Tools extends Base {
       return 'cryptorush';
     } else if (preg_match('/mintpal.com/', $url)) {
       return 'mintpal';
+    } else if (preg_match('/bittrex.com/', $url)) {
+      return 'bittrex';
     }
     $this->setErrorMessage("API URL unknown");
     return false;
@@ -115,6 +117,9 @@ class Tools extends Base {
       	  break;
       	case 'mintpal':
       	  return @$aData['0']['last_price'];
+      	  break;
+      	  case 'bittrex':
+      	  return @$aData['result']['Last'];
       	  break;
       }
     } else {

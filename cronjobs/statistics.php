@@ -27,7 +27,7 @@ require_once('shared.inc.php');
 
 // Header
 $log->logInfo('Running statistical queries, errors may just mean no shares were available');
-$strLogMask = "| %-26.26s | %8.8s | %-6.6s |";
+$strLogMask = "| %-33.33s | %8.8s | %-6.6s |";
 $log->logInfo(sprintf($strLogMask, 'Method', 'Runtime', 'Status'));
 
 // Per user share statistics based on all shares submitted
@@ -37,9 +37,15 @@ $log->logInfo(sprintf($strLogMask, 'getAllUserShares', number_format(microtime(t
 
 // Get all user hashrate statistics for caching
 $start = microtime(true);
-$statistics->getAllUserMiningStats() ? $status = 'OK' : $status = 'ERROR';
-$log->logInfo(sprintf($strLogMask, 'getAllUserMiningStats', number_format(microtime(true) - $start, 3), $status));
+$statistics->fetchAllUserMiningStats() ? $status = 'OK' : $status = 'ERROR';
+$log->logInfo(sprintf($strLogMask, 'fetchAllUserMiningStats', number_format(microtime(true) - $start, 3), $status));
 
+// Store our statistical data into our `statistics_users` table
+$start = microtime(true);
+$statistics->storeAllUserMiningStatsSnapshot($statistics->getAllUserMiningStats()) ? $status = 'OK' : $status = 'ERROR';
+$log->logInfo(sprintf($strLogMask, 'storeAllUserMiningStatsSnapshot', number_format(microtime(true) - $start, 3), $status));
+
+// Get stats for pool overview
 $start = microtime(true);
 $statistics->getTopContributors('hashes') ? $status = 'OK' : $status = 'ERROR';
 $log->logInfo(sprintf($strLogMask, 'getTopContributors(hashes)', number_format(microtime(true) - $start, 3), $status));

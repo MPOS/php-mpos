@@ -108,15 +108,15 @@ $(document).ready(function(){
       $('#b-nethashrate').html('n/a');
     }
     $('#b-sharerate').html((parseFloat(data.getdashboarddata.data.personal.sharerate).toFixed(2)));
-    $('#b-yvalid').html(number_format(data.getdashboarddata.data.personal.shares.valid));
-    $('#b-yivalid').html(number_format(data.getdashboarddata.data.personal.shares.invalid));
+    $('#b-yvalid').html(number_format(data.getdashboarddata.data.personal.shares.valid, {/literal}{$GLOBAL.config.sharediffprecision}{literal}));
+    $('#b-yivalid').html(number_format(data.getdashboarddata.data.personal.shares.invalid, {/literal}{$GLOBAL.config.sharediffprecision}{literal}));
     if ( data.getdashboarddata.data.personal.shares.valid > 0 ) {
       $('#b-yefficiency').html(number_format(100 - data.getdashboarddata.data.personal.shares.invalid_percent, 2) + "%");
     } else {
       $('#b-yefficiency').html(number_format(0, 2) + "%");
     }
-    $('#b-pvalid').html(number_format(data.getdashboarddata.data.pool.shares.valid));
-    $('#b-pivalid').html(number_format(data.getdashboarddata.data.pool.shares.invalid));
+    $('#b-pvalid').html(number_format(data.getdashboarddata.data.pool.shares.valid, {/literal}{$GLOBAL.config.sharediffprecision}{literal}));
+    $('#b-pivalid').html(number_format(data.getdashboarddata.data.pool.shares.invalid, {/literal}{$GLOBAL.config.sharediffprecision}{literal}));
     if ( data.getdashboarddata.data.pool.shares.valid > 0 ) {
       $('#b-pefficiency').html(number_format(100 - data.getdashboarddata.data.pool.shares.invalid_percent, 2) + "%");
     } else {
@@ -178,7 +178,7 @@ $(document).ready(function(){
       return;
     }
     if (blocks[0].height > lastBlock) {
-      if(canCreateSoundJS) { 
+      if(canCreateSoundJS) {
         createjs.Sound.play('ding');
       }
       lastBlock = blocks[0].height;
@@ -234,6 +234,7 @@ $(document).ready(function(){
     });
   })();
 
+  {/literal}{if !$DISABLED_API}{literal}
   // Worker process to update active workers in the account details table
   (function worker2() {
     $.ajax({
@@ -250,7 +251,9 @@ $(document).ready(function(){
       }
     });
   })();
+  {/literal}{/if}{literal}
 
+  {/literal}{if !$DISABLED_API}{literal}
   // Worker process to update user account balances
   // Our worker process to keep worker information updated
   (function worker3() {
@@ -265,7 +268,8 @@ $(document).ready(function(){
       }
     });
   })();
-  
+  {/literal}{/if}{literal}
+
   // Mute Button
   $('#muteButton').click(function(){
     if(muteFlag == 2) {
@@ -280,8 +284,6 @@ $(document).ready(function(){
       $(this).find($(".fa")).removeClass('fa-volume-up').addClass('fa-volume-off');
     }
   });
-  
-  
 });
 {/literal}
 </script>

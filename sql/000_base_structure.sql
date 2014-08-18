@@ -53,6 +53,16 @@ CREATE TABLE IF NOT EXISTS `blocks` (
   KEY `time` (`time`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='Discovered blocks persisted from Litecoin Service';
 
+CREATE TABLE IF NOT EXISTS `coin_addresses` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `account_id` int(11) NOT NULL,
+  `currency` varchar(5) NOT NULL,
+  `coin_address` varchar(255) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `coin_address` (`coin_address`),
+  KEY `account_id` (`account_id`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
+
 CREATE TABLE IF NOT EXISTS `invitations` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `account_id` int(11) unsigned NOT NULL,
@@ -134,7 +144,7 @@ CREATE TABLE IF NOT EXISTS `settings` (
   UNIQUE KEY `setting` (`name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-INSERT INTO `settings` (`name`, `value`) VALUES ('DB_VERSION', '0.0.11');
+INSERT INTO `settings` (`name`, `value`) VALUES ('DB_VERSION', '0.0.13');
 
 CREATE TABLE IF NOT EXISTS `shares` (
   `id` bigint(30) NOT NULL AUTO_INCREMENT,
@@ -229,12 +239,15 @@ CREATE TABLE IF NOT EXISTS `transactions` (
   KEY `account_id_archived` (`account_id`,`archived`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
-CREATE TABLE IF NOT EXISTS `templates` (
-  `template` varchar(255) NOT NULL,
-  `active` tinyint(1) NOT NULL DEFAULT 0,
-  `content` mediumtext,
-  `modified_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  PRIMARY KEY (`template`)
+CREATE TABLE `statistics_users` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `account_id` int(11) NOT NULL,
+  `hashrate` int(11) NOT NULL,
+  `workers` int(11) NOT NULL,
+  `sharerate` float NOT NULL,
+  `timestamp` int(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `account_id_timestamp` (`account_id`,`timestamp`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
