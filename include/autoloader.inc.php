@@ -37,7 +37,7 @@ require_once(INCLUDE_DIR . '/lib/swiftmailer/swift_required.php');
 require_once(INCLUDE_DIR . '/lib/Mobile_Detect.php');
 $detect = new Mobile_Detect;
 
-if (!$detect->isMobile()) {
+if ($detect->isMobile()) {
   $theme = $setting->getValue('website_mobile_theme', 'bootstrap');
 } else if ( PHP_SAPI == 'cli') {
   // Create a new compile folder just for crons
