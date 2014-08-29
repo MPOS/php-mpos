@@ -70,6 +70,13 @@ $aSettings['website'][] = array(
   'tooltip' => 'The default theme used on your pool.'
 );
 $aSettings['website'][] = array(
+  'display' => 'Website mobile theme', 'type' => 'select',
+  'options' => $aThemes,
+  'default' => 'bootstrap',
+  'name' => 'website_mobile_theme', 'value' => $setting->getValue('website_mobile_theme'),
+  'tooltip' => 'The default theme used on your pool.'
+);
+$aSettings['website'][] = array(
   'display' => 'Website Design', 'type' => 'select',
   'options' => $aDesigns,
   'default' => 'default',
