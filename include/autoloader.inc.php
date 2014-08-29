@@ -34,13 +34,18 @@ if (file_exists(CLASS_DIR . '/coins/coin_' . $config['algorithm'] . '.class.php'
 require_once(INCLUDE_DIR . '/lib/swiftmailer/swift_required.php');
 
 // Detect device
-if ( PHP_SAPI == 'cli') {
+require_once(INCLUDE_DIR . '/lib/Mobile_Detect.php');
+$detect = new Mobile_Detect;
+
+if (!$detect->isMobile()) {
+  $theme = $setting->getValue('website_mobile_theme', 'bootstrap');
+} else if ( PHP_SAPI == 'cli') {
   // Create a new compile folder just for crons
   // We call mail templates directly anyway
   $theme = 'cron';
 } else {
   // Use configured theme, fallback to default theme
-  $setting->getValue('website_theme') ? $theme = $setting->getValue('website_theme') : $theme = 'bootstrap';
+  $theme = $setting->getValue('website_theme', 'bootstrap');
 }
 define('THEME', $theme);
 
