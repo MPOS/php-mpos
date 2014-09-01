@@ -242,7 +242,7 @@ CREATE TABLE IF NOT EXISTS `transactions` (
 CREATE TABLE `statistics_users` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `account_id` int(11) NOT NULL,
-  `hashrate` int(11) NOT NULL,
+  `hashrate` bigint(20) unsigned NOT NULL,
   `workers` int(11) NOT NULL,
   `sharerate` float NOT NULL,
   `timestamp` int(11) NOT NULL,
