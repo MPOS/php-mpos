@@ -144,7 +144,7 @@ CREATE TABLE IF NOT EXISTS `settings` (
   UNIQUE KEY `setting` (`name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-INSERT INTO `settings` (`name`, `value`) VALUES ('DB_VERSION', '0.0.13');
+INSERT INTO `settings` (`name`, `value`) VALUES ('DB_VERSION', '0.0.14');
 
 CREATE TABLE IF NOT EXISTS `shares` (
   `id` bigint(30) NOT NULL AUTO_INCREMENT,
@@ -242,7 +242,7 @@ CREATE TABLE IF NOT EXISTS `transactions` (
 CREATE TABLE `statistics_users` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `account_id` int(11) NOT NULL,
-  `hashrate` int(11) NOT NULL,
+  `hashrate` bigint(20) unsigned NOT NULL,
   `workers` int(11) NOT NULL,
   `sharerate` float NOT NULL,
   `timestamp` int(11) NOT NULL,
