@@ -63,7 +63,7 @@ if ($config['pps']['reward']['type'] == 'blockavg' && $block->getBlockCount() > 
 }
 
 // Per-share value to be paid out to users
-$pps_value = round($coin->calcPPSValue($pps_reward, $dDifficulty), 12);
+$pps_value = $coin->calcPPSValue($pps_reward, $dDifficulty);
 
 // Find our last share accounted and last inserted share for PPS calculations
 if (!$iPreviousShareId = $setting->getValue('pps_last_share_id')) {
@@ -89,13 +89,15 @@ $log->logInfo("\tQuery Completed...");
 
 if (!empty($aAccountShares)) {
   // Runtime information for this payout
+  $precision = $coin->getCoinValuePrevision();
+  $table_precision = $coin->getCoinValuePrevision() + 3;
   $log->logInfo('Runtime information for this payout');
-  $strLogMask = "| %-15.15s | %15.15s | %15.15s | %15.15s |";
-  $log->logInfo(sprintf($strLogMask, 'PPS reward type', 'Reward Base', 'Difficulty', 'PPS Value'));
-  $log->logInfo(sprintf($strLogMask, $strRewardType, $pps_reward, $dDifficulty, $pps_value));
+  $strLogMask = "| %-15.15s | %15.15s | %15.15s | %${table_precision}.${table_precision}s | %3.3s |";
+  $log->logInfo(sprintf($strLogMask, 'PPS reward type', 'Reward Base', 'Difficulty', 'PPS Value', 'Precision'));
+  $log->logInfo(sprintf($strLogMask, $strRewardType, $pps_reward, $dDifficulty, $pps_value, $precision));
   $log->logInfo('Per-user payout information');
-  $strLogMask = "| %8.8s | %25.25s | %15.15s | %15.15s | %18.18s | %18.18s | %18.18s |";
-  $log->logInfo(sprintf($strLogMask, 'User ID', 'Username', 'Invalid', 'Valid', '  *   PPS Value', '  =  Payout', 'Donation', 'Fee'));
+  $strLogMask = "| %8.8s | %25.25s | %15.15s | %${table_precision}.${table_precision}s | %${table_precision}.${table_precision}s | %${table_precision}.${table_precision}s | %${table_precision}.${table_precision}s |";
+  $log->logInfo(sprintf($strLogMask, 'User ID', 'Username', 'Invalid', 'Valid', '* PPS Value', '  =  Payout', 'Donation', 'Fee'));
 }
 
 foreach ($aAccountShares as $aData) {
@@ -106,7 +108,7 @@ foreach ($aAccountShares as $aData) {
   }
 
   // Payout for this user
-  $aData['payout'] = round($aData['valid'] * $pps_value, 12);
+  $aData['payout'] = $aData['valid'] * $pps_value;
 
   // Defaults
   $aData['fee' ] = 0;
@@ -114,13 +116,13 @@ foreach ($aAccountShares as $aData) {
 
   // Calculate block fees
   if ($config['fees'] > 0 && $aData['no_fees'] == 0)
-    $aData['fee'] = round($config['fees'] / 100 * $aData['payout'], 12);
+    $aData['fee'] = $config['fees'] / 100 * $aData['payout'];
   // Calculate donation amount
-  $aData['donation'] = round($user->getDonatePercent($user->getUserId($aData['username'])) / 100 * ( $aData['payout'] - $aData['fee']), 12);
+  $aData['donation'] = $user->getDonatePercent($user->getUserId($aData['username'])) / 100 * ( $aData['payout'] - $aData['fee']);
 
   $log->logInfo(sprintf(
     $strLogMask, $aData['id'], $aData['username'], $aData['invalid'], $aData['valid'],
-    number_format($pps_value, 12), number_format($aData['payout'], 12), number_format($aData['donation'], 12), number_format($aData['fee'], 12)
+    number_format($pps_value, $precision), number_format($aData['payout'], $precision), number_format($aData['donation'], $precision), number_format($aData['fee'], $precision)
   ));
 
   // Add new credit transaction

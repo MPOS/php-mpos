@@ -38,6 +38,10 @@ if (empty($aAllBlocks)) {
   $monitoring->endCronjob($cron_name, 'E0011', 0, true, false);
 }
 
+// Fetch precision
+$precision = $coin->getCoinValuePrevision();
+$table_precision = $coin->getCoinValuePrevision() + 3;
+
 $log->logDebug('Starting PPLNS payout process');
 $count = 0;
 foreach ($aAllBlocks as $iIndex => $aBlock) {
@@ -181,7 +185,7 @@ foreach ($aAllBlocks as $iIndex => $aBlock) {
     }
 
     // Table header for account shares
-    $strLogMask = "| %5.5s | %-15.15s | %15.15s | %15.15s | %12.12s | %15.15s | %15.15s | %15.15s | %15.15s |";
+    $strLogMask = "| %5.5s | %-15.15s | %15.15s | %15.15s | %12.12s | %${table_precision}.${table_precision}s | %${table_precision}.${table_precision}s | %${table_precision}.${table_precision}s | %${table_precision}.${table_precision}s |";
     $log->logInfo(sprintf($strLogMask, 'ID', 'Username', 'Valid', 'Invalid', 'Percentage', 'Payout', 'Donation', 'Fee', 'Bonus'));
 
     // Loop through all accounts that have found shares for this round
@@ -197,7 +201,7 @@ foreach ($aAllBlocks as $iIndex => $aBlock) {
 
       // Payout based on PPLNS target shares, proportional payout for all users
       $aData['percentage'] = round(( 100 / $iRoundShares) * $aData['pplns_valid'], 8);
-      $aData['payout'] = round(( $aData['percentage'] / 100 ) * $dReward, 8);
+      $aData['payout'] = ( $aData['percentage'] / 100 ) * $dReward;
       // Defaults
       $aData['fee' ] = 0;
       $aData['donation'] = 0;
@@ -205,19 +209,19 @@ foreach ($aAllBlocks as $iIndex => $aBlock) {
 
       // Calculate pool fees
       if ($config['fees'] > 0 && $aData['no_fees'] == 0)
-        $aData['fee'] = round($config['fees'] / 100 * $aData['payout'], 8);
+        $aData['fee'] = $config['fees'] / 100 * $aData['payout'];
 
       // Calculate pool bonus if it applies, will be paid from liquid assets!
       if ($config['pool_bonus'] > 0) {
         if ($config['pool_bonus_type'] == 'block') {
-          $aData['pool_bonus'] = round(( $config['pool_bonus'] / 100 ) * $dReward, 8);
+          $aData['pool_bonus'] = ( $config['pool_bonus'] / 100 ) * $dReward;
         } else {
-          $aData['pool_bonus'] = round(( $config['pool_bonus'] / 100 ) * $aData['payout'], 8);
+          $aData['pool_bonus'] = ( $config['pool_bonus'] / 100 ) * $aData['payout'];
         }
       }
 
       // Calculate donation amount, fees not included
-      $aData['donation'] = round($user->getDonatePercent($user->getUserId($aData['username'])) / 100 * ( $aData['payout'] - $aData['fee']), 8);
+      $aData['donation'] = $user->getDonatePercent($user->getUserId($aData['username'])) / 100 * ( $aData['payout'] - $aData['fee']);
 
       // Verbose output of this users calculations
       $log->logInfo(

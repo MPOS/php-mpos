@@ -15,11 +15,21 @@ class CoinBase extends Base {
   // Our coins share difficulty precision
   protected $share_difficulty_precision = 0;
 
+  // Our coin value precision, mostly used on frontend
+  protected $coin_value_precision = 8;
+
   /**
    * Read our target bits
    **/
   public function getTargetBits() {
     return $this->target_bits;
+  }
+
+  /**
+   * Read our coin value precision
+   **/
+  public function getCoinValuePrevision() {
+    return $this->coin_value_precision;
   }
 
   /**

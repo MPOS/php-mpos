@@ -134,18 +134,18 @@ $(document).ready(function(){
     $('#b-nblock').html(data.getdashboarddata.data.network.block);
     $('#b-roundprogress').html(number_format(parseFloat(data.getdashboarddata.data.pool.shares.progress).toFixed(2), 2) + "%");
     {/literal}{if $GLOBAL.config.payout_system != 'pps'}{literal }
-    $('#b-payout').html(number_format(data.getdashboarddata.data.personal.estimates.payout, 8));
-    $('#b-block').html(number_format(data.getdashboarddata.data.personal.estimates.block, 8));
-    $('#b-fee').html(number_format(data.getdashboarddata.data.personal.estimates.fee,8 ));
-    $('#b-donation').html(number_format(data.getdashboarddata.data.personal.estimates.donation, 8));
+    $('#b-payout').html(number_format(data.getdashboarddata.data.personal.estimates.payout, {/literal}{$PRECISION}{literal}));
+    $('#b-block').html(number_format(data.getdashboarddata.data.personal.estimates.block, {/literal}{$PRECISION}{literal}));
+    $('#b-fee').html(number_format(data.getdashboarddata.data.personal.estimates.fee, {/literal}{$PRECISION}{literal}));
+    $('#b-donation').html(number_format(data.getdashboarddata.data.personal.estimates.donation, {/literal}{$PRECISION}{literal}));
 {/literal}{else}{literal}
     $('#b-ppsunpaid').html(number_format(data.getdashboarddata.data.personal.shares.unpaid));
     $('#b-ppsdiff').html(number_format(data.getdashboarddata.data.personal.sharedifficulty, 2));
-    $('#b-est1').html(number_format(data.getdashboarddata.data.personal.estimates.hours1, 8));
-    $('#b-est24hours').html(number_format(data.getdashboarddata.data.personal.estimates.hours24, 8));
-    $('#b-est7days').html(number_format(data.getdashboarddata.data.personal.estimates.days7, 8));
-    $('#b-est14days').html(number_format(data.getdashboarddata.data.personal.estimates.days14, 8));
-    $('#b-est30days').html(number_format(data.getdashboarddata.data.personal.estimates.days30, 8));
+    $('#b-est1').html(number_format(data.getdashboarddata.data.personal.estimates.hours1, {/literal}{$PRECISION}{literal}));
+    $('#b-est24hours').html(number_format(data.getdashboarddata.data.personal.estimates.hours24, {/literal}{$PRECISION}{literal}));
+    $('#b-est7days').html(number_format(data.getdashboarddata.data.personal.estimates.days7, {/literal}{$PRECISION}{literal}));
+    $('#b-est14days').html(number_format(data.getdashboarddata.data.personal.estimates.days14, {/literal}{$PRECISION}{literal}));
+    $('#b-est30days').html(number_format(data.getdashboarddata.data.personal.estimates.days30, {/literal}{$PRECISION}{literal}));
 {/literal}{/if}{literal}
 {/literal}{if $GLOBAL.config.payout_system == 'pplns'}{literal}
     $('#b-pplns').html({/literal}{$GLOBAL.pplns.target}{literal});
