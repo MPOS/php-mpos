@@ -3,11 +3,6 @@ Description
 
 MPOS is a web based Mining Portal for various crypto currencies. It was created by [TheSerapher](https://github.com/TheSerapher) and has hence grown quite large. Recently it was migrated into a Github Organization to make development easier. It's a community driven open source project. Support can be requested on IRC at https://webchat.freenode.net/?channels=#mpos - Be **PATIENT** ... People listed in this channel may currently be inactive but most users there have offline logging of messages. They **will** see your questions and answer if they can. Don't join, ask the question and leave. Sit around if you want answers to your questions!
 
-
-**NOTE**: This project is still under development and commits are happening on a daily basis.
-I do not recommend using this for a live setup as of yet. Wait for the later Release Candidate
-if you wish to run your pool with it. Testing pools are much appreciated though!
-
 Donations
 =========
 
