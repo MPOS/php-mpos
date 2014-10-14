@@ -1,12 +1,7 @@
 Description
 ===========
 
-MPOS is a web based Mining Portal for various crypto currencies. It was created by [TheSerapher](https://github.com/TheSerapher) and has hence grown quite large. Recently it was migrated into a Github Organization to make development easier. It's a community driven open source project. Support can be requested on IRC at https://webchat.freenode.net/?channels=#mpos
-
-
-**NOTE**: This project is still under development and commits are happening on a daily basis.
-I do not recommend using this for a live setup as of yet. Wait for the later Release Candidate
-if you wish to run your pool with it. Testing pools are much appreciated though!
+MPOS is a web based Mining Portal for various crypto currencies. It was created by [TheSerapher](https://github.com/TheSerapher) and has hence grown quite large. Recently it was migrated into a Github Organization to make development easier. It's a community driven open source project. Support can be requested on IRC at https://webchat.freenode.net/?channels=#mpos - Be **PATIENT** ... People listed in this channel may currently be inactive but most users there have offline logging of messages. They **will** see your questions and answer if they can. Don't join, ask the question and leave. Sit around if you want answers to your questions!
 
 Donations
 =========
@@ -24,7 +19,7 @@ Donations to this project are going directly to [TheSerapher](https://github.com
 Website Footer
 ==============
 
-When you decide to use `MPOS` please be so kind and leave the footer intact. You are not the author of the software and should honor those that have worked on it. I don't mind changing the LTC donation address at the bottom, but keep in mind who really wrote this software and would deserve those ;-).
+When you decide to use `MPOS` please be so kind and leave the footer intact. You are not the author of the software and should honor those that have worked on it. Keeping the footer intact helps spreading the word. Leaving the donation address untouched allows miners to donate to the author.
 
 Donors
 ======
@@ -109,7 +104,6 @@ The following feature have been implemented so far:
  * Pool Settings
  * Pool Workers
  * User Reports
- * Template Overwrite
 * Notification system
  * IDLE Workers
  * New blocks found in pool
@@ -125,7 +119,7 @@ The following feature have been implemented so far:
 Installation
 ============
 
-Please take a look at the [Quick Start Guide](https://github.com/TheSerapher/php-mpos/wiki/Quick-Start-Guide). This will give you an idea how to setup `MPOS`.
+Please take a look at the [Quick Start Guide](https://github.com/TheSerapher/php-mpos/wiki/Quick-Start-Guide). This will give you an idea how to setup `MPOS`. Please be aware that the `master` branch is our currently considered stable system while `development` is used as a test bed for all upcoming changes for `master`. If you wish to run a stable, well tested system ensure you run `git checkout master`. If you decide to stick to the `development` branch with bleeding edge code and potential bugs, just `git clone` the project.
 
 Customization
 =============
@@ -177,7 +171,7 @@ You can find the team on Freenode.net, #MPOS.
 Team Members
 ============
 
-Author and Github Owner: [TheSerapher](https://github.com/TheSerapher) aka Sebastian Grewe
+Author and Project Owner: [TheSerapher](https://github.com/TheSerapher) aka Sebastian Grewe
 
 Developers:
 

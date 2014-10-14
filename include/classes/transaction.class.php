@@ -16,8 +16,9 @@ class Transaction extends Base {
    * @return bool
    **/
   public function addTransaction($account_id, $amount, $type='Credit', $block_id=NULL, $coin_address=NULL, $txid=NULL) {
+    $amount = number_format($amount, $this->coin->getCoinValuePrevision(), '.', '');
     $stmt = $this->mysqli->prepare("INSERT INTO $this->table (account_id, amount, block_id, type, coin_address, txid) VALUES (?, ?, ?, ?, ?, ?)");
-    if ($this->checkStmt($stmt) && $stmt->bind_param("idisss", $account_id, $amount, $block_id, $type, $coin_address, $txid) && $stmt->execute()) {
+    if ($this->checkStmt($stmt) && $stmt->bind_param("isisss", $account_id, $amount, $block_id, $type, $coin_address, $txid) && $stmt->execute()) {
       $this->insert_id = $stmt->insert_id;
       return true;
     }
@@ -296,11 +297,11 @@ class Transaction extends Base {
     $this->debug->append("STA " . __METHOD__, 4);
     $stmt = $this->mysqli->prepare("
       SELECT
-        ROUND((
+        (
           SUM( IF( ( t.type IN ('Credit','Bonus') AND b.confirmations >= ? ) OR t.type = 'Credit_PPS', t.amount, 0 ) ) -
           SUM( IF( t.type IN ('Debit_MP', 'Debit_AP'), t.amount, 0 ) ) -
           SUM( IF( ( t.type IN ('Donation','Fee') AND b.confirmations >= ? ) OR ( t.type IN ('Donation_PPS', 'Fee_PPS', 'TXFee') ), t.amount, 0 ) )
-        ), 8) AS balance
+        ) AS balance
       FROM $this->table AS t
       LEFT JOIN " . $this->block->getTableName() . " AS b
       ON t.block_id = b.id
@@ -319,19 +320,19 @@ class Transaction extends Base {
     $this->debug->append("STA " . __METHOD__, 4);
     $stmt = $this->mysqli->prepare("
       SELECT
-        IFNULL(ROUND((
+        IFNULL((
           SUM( IF( ( t.type IN ('Credit','Bonus') AND b.confirmations >= ? ) OR t.type = 'Credit_PPS', t.amount, 0 ) ) -
           SUM( IF( t.type IN ('Debit_MP', 'Debit_AP'), t.amount, 0 ) ) -
           SUM( IF( ( t.type IN ('Donation','Fee') AND b.confirmations >= ? ) OR ( t.type IN ('Donation_PPS', 'Fee_PPS', 'TXFee') ), t.amount, 0 ) )
-        ), 8), 0) AS confirmed,
-        IFNULL(ROUND((
+        ), 0) AS confirmed,
+        IFNULL((
           SUM( IF( t.type IN ('Credit','Bonus') AND b.confirmations < ? AND b.confirmations >= 0, t.amount, 0 ) ) -
           SUM( IF( t.type IN ('Donation','Fee') AND b.confirmations < ? AND b.confirmations >= 0, t.amount, 0 ) )
-        ), 8), 0) AS unconfirmed,
-        IFNULL(ROUND((
+        ), 0) AS unconfirmed,
+        IFNULL((
           SUM( IF( t.type IN ('Credit','Bonus') AND b.confirmations = -1, t.amount, 0) ) -
           SUM( IF( t.type IN ('Donation','Fee') AND b.confirmations = -1, t.amount, 0) )
-        ), 8), 0) AS orphaned
+        ), 0) AS orphaned
       FROM $this->table AS t
       LEFT JOIN " . $this->block->getTableName() . " AS b
       ON t.block_id = b.id
@@ -357,12 +358,10 @@ class Transaction extends Base {
         a.ap_threshold,
         ca.coin_address,
         IFNULL(
-          ROUND(
             (
               SUM( IF( ( t.type IN ('Credit','Bonus') AND b.confirmations >= " . $this->config['confirmations'] . ") OR t.type = 'Credit_PPS', t.amount, 0 ) ) -
               SUM( IF( t.type IN ('Debit_MP', 'Debit_AP'), t.amount, 0 ) ) -
               SUM( IF( ( t.type IN ('Donation','Fee') AND b.confirmations >= " . $this->config['confirmations'] . ") OR ( t.type IN ('Donation_PPS', 'Fee_PPS', 'TXFee') ), t.amount, 0 ) )
-            ), 8
           ), 0
         ) AS confirmed
       FROM $this->table AS t
@@ -451,12 +450,10 @@ class Transaction extends Base {
       ca.coin_address,
       p.id AS payout_id,
       IFNULL(
-        ROUND(
           (
             SUM( IF( ( t.type IN ('Credit','Bonus') AND b.confirmations >= " . $this->config['confirmations'] . ") OR t.type = 'Credit_PPS', t.amount, 0 ) ) -
             SUM( IF( t.type IN ('Debit_MP', 'Debit_AP'), t.amount, 0 ) ) -
             SUM( IF( ( t.type IN ('Donation','Fee') AND b.confirmations >= " . $this->config['confirmations'] . ") OR ( t.type IN ('Donation_PPS', 'Fee_PPS', 'TXFee') ), t.amount, 0 ) )
-          ), 8
         ), 0
       ) AS confirmed
       FROM " . $this->payout->getTableName() . " AS p
@@ -481,7 +478,9 @@ class Transaction extends Base {
 $transaction = new Transaction();
 $transaction->setMemcache($memcache);
 $transaction->setNotification($notification);
+$transaction->setSetting($setting);
 $transaction->setDebug($debug);
+$transaction->setCoin($coin);
 $transaction->setCoinAddress($coin_address);
 $transaction->setMysql($mysqli);
 $transaction->setConfig($config);
