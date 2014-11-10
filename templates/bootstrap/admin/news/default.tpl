@@ -19,6 +19,10 @@
             <input type="hidden" name="do" value="add">
             <input type="hidden" name="ctoken" value="{$CTOKEN|escape|default:""}" />
             <div class="form-group">
+              <label>Active</label>
+              <input type="checkbox" class="switch" data-size="mini" name="data[active]" value="1" checked>
+            </div>
+            <div class="form-group">
               <label>Header</label>
               <input class="form-control" size="30" type="text" name="data[header]" required />
             </div>
