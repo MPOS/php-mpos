@@ -268,6 +268,9 @@ $config['memcache']['keyprefix'] = 'mpos_';
 $config['memcache']['expiration'] = 90;
 $config['memcache']['splay'] = 15;
 $config['memcache']['force']['contrib_shares'] = false;
+$config['memcache']['sasl'] = false;
+$config['memcache']['sasl']['username'] = '';
+$config['memcache']['sasl']['password'] = '';
 
 /**
  * Cookies
