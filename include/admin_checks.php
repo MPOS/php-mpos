@@ -34,7 +34,7 @@ if (@$_SESSION['USERDATA']['is_admin'] && $user->isAdmin(@$_SESSION['USERDATA'][
     }
     if (class_exists('Memcached')) {
       $memcache_test = @new Memcached();
-      if ($config['memcache']['sasl']) {
+      if ($config['memcache']['sasl'] === true) {
         $memcache_test->setOption(Memcached::OPT_BINARY_PROTOCOL, true);
         $memcache_test->setSaslAuthData($config['memcache']['sasl']['username'], $config['memcache']['sasl']['password']);
       }
