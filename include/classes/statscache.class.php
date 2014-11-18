@@ -19,9 +19,9 @@ class StatsCache {
         require_once(CLASS_DIR . '/memcached.class.php');
       }
       $this->cache = new Memcached();
-      if ($config['memcache']['sasl']) {
+      if ($config['memcache']['sasl'] === true) {
         $this->cache->setOption(Memcached::OPT_BINARY_PROTOCOL, true);
-        $this->cache->setSaslAuthData($config['memcache']['sasl']['username'], $config['memcache']['sasl']['password']) or die("failed!");
+        $this->cache->setSaslAuthData($config['memcache']['sasl']['username'], $config['memcache']['sasl']['password']);
       }
     }
   }
