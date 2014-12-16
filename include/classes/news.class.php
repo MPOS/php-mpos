@@ -88,6 +88,7 @@ class News extends Base {
     if (empty($aData['header'])) return false;
     if (empty($aData['content'])) return false;
     if (!is_int($account_id)) return false;
+    if (@$aData['active']) $active = true;
     $stmt = $this->mysqli->prepare("INSERT INTO $this->table (account_id, header, content, active) VALUES (?,?,?,?)");
     if ($stmt && $stmt->bind_param('issi', $account_id, $aData['header'], $aData['content'], $active) && $stmt->execute())
       return true;

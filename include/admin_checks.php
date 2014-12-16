@@ -34,6 +34,10 @@ if (@$_SESSION['USERDATA']['is_admin'] && $user->isAdmin(@$_SESSION['USERDATA'][
     }
     if (class_exists('Memcached')) {
       $memcache_test = @new Memcached();
+      if ($config['memcache']['sasl'] === true) {
+        $memcache_test->setOption(Memcached::OPT_BINARY_PROTOCOL, true);
+        $memcache_test->setSaslAuthData($config['memcache']['sasl']['username'], $config['memcache']['sasl']['password']);
+      }
       $memcache_test_add = @$memcache_test->addServer($config['memcache']['host'], $config['memcache']['port']);
       $randmctv = rand(5,10);
       $memcache_test_set = @$memcache_test->set('test_mpos_setval', $randmctv);
