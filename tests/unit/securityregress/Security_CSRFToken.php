@@ -1,6 +1,6 @@
 <?php
 
-class Security_CSRFToken extends PHPUnit_Framework_Testcase {
+class Security_CSRFToken extends \Codeception\TestCase\Test {
   /**
    * Tests if a CSRF token succeeds for a matching user and type
    */

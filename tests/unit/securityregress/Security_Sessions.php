@@ -1,6 +1,6 @@
 <?php
 
-class Security_Sessions extends PHPUnit_Framework_Testcase {
+class Security_Sessions extends \Codeception\TestCase\Test {
   /**
    * Tests if our current session checking will throw errors or take a malformed id
    */
