@@ -1,3 +1,7 @@
+[![Build Status](https://travis-ci.org/delboy1978uk/php-mpos.png?branch=master)](https://travis-ci.org/delboy1978uk/php-mpos) [![Code Coverage](https://scrutinizer-ci.com/g/delboy1978uk/php-mpos/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/delboy1978uk/php-mpos/?branch=master) [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/delboy1978uk/php-mpos/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/delboy1978uk/php-mpos/?branch=master) master<br />
+[![Build Status](https://travis-ci.org/delboy1978uk/php-mpos.png?branch=development)](https://travis-ci.org/delboy1978uk/php-mpos) [![Code Coverage](https://scrutinizer-ci.com/g/delboy1978uk/php-mpos/badges/coverage.png?b=development)](https://scrutinizer-ci.com/g/delboy1978uk/php-mpos/?branch=development) [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/delboy1978uk/php-mpos/badges/quality-score.png?b=development)](https://scrutinizer-ci.com/g/delboy1978uk/php-mpos/?branch=development)  development
+
+
 Description
 ===========
 
