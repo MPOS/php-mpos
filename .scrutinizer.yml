@@ -6,4 +6,4 @@ checks:
         duplication: true
 filter:
     paths:
-        - src/*
+        - include/classes/*
