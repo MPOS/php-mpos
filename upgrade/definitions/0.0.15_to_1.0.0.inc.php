@@ -9,7 +9,8 @@ function run_100() {
   $db_version_now = $setting->getValue('DB_VERSION');  // Our actual version installed
 
   // Upgrade specific variables
-  $aSql[] = "ALTER TABLE `blocks` CHANGE `shares` `shares` BIGINT(30) unsigned NOT NULL AUTO_INCREMENT";
+  $aSql[] = "ALTER TABLE `blocks` CHANGE `shares` `shares` BIGINT(30) unsigned DEFAULT NULL";
+  $aSql[] = "UPDATE " . $setting->getTableName() . "    SET value = '1.0.0' WHERE name = 'DB_VERSION'";
 
   if ($db_version_now == $db_version_old && version_compare($db_version_now, DB_VERSION, '<')) {
     // Run the upgrade
