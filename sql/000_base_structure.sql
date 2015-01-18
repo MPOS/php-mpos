@@ -46,7 +46,7 @@ CREATE TABLE IF NOT EXISTS `blocks` (
   `accounted` tinyint(1) NOT NULL DEFAULT '0',
   `account_id` int(255) unsigned DEFAULT NULL,
   `worker_name` varchar(50) DEFAULT 'unknown',
-  `shares` int(255) unsigned DEFAULT NULL,
+  `shares` bigint(30) unsigned DEFAULT NULL,
   `share_id` bigint(30) DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `height` (`height`,`blockhash`),
