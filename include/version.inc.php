@@ -1,9 +1,9 @@
 <?php
 $defflip = (!cfip()) ? exit(header('HTTP/1.1 401 Unauthorized')) : 1;
 
-define('MPOS_VERSION', '0.0.4');
-define('DB_VERSION', '0.0.15');
-define('CONFIG_VERSION', '0.0.8');
+define('MPOS_VERSION', '1.0.0');
+define('DB_VERSION', '1.0.0');
+define('CONFIG_VERSION', '1.0.0');
 define('HASH_VERSION', 1);
 
 // Fetch installed database version
