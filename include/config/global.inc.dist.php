@@ -6,7 +6,7 @@ $defflip = (!cfip()) ? exit(header('HTTP/1.1 401 Unauthorized')) : 1;
  * Also the URL to check for the most recent upstream versions available
  *  https://github.com/MPOS/php-mpos/wiki/Config-Setup#wiki-config-version
  **/
-$config['version'] = '0.0.8';
+$config['version'] = '1.0.0';
 $config['version_url'] = 'https://raw.githubusercontent.com/MPOS/php-mpos/master/include/version.inc.php';
 
 /**

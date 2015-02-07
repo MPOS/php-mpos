@@ -34,3 +34,7 @@
 /public/sitemap.gz
 /public/sitemap.tar.gz
 /public/.htaccess
+
+/vendor/
+
+tests/_output/*

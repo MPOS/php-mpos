@@ -1,6 +1,4 @@
-0.0.1 (Mar 7th 2013)
+1.0.0 (Jan 18th 2015)
 --------------------
 
-* WiP Upload of all files currently available
-* Added upstream script collections
-* Added SQL structure 
+* First (non-beta) public release of MPOS
