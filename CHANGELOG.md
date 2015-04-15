@@ -12,6 +12,7 @@
 * Updated Bootstrap Switch to 3.3.2
 * Updated CLEditor to 1.4.5
 * Removed unneeded JS files
+* Removed unneeded CSS files
 
 1.0.1 (Apr 15th 2015)
 ---------------------
