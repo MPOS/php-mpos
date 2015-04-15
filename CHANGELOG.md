@@ -6,6 +6,7 @@
   * Added number of accounts to Wallet Status
   * Added Peer information
   * Always show all accounts
+* Updated Bootstrap to 3.3.4
 
 1.0.1 (Apr 15th 2015)
 ---------------------
