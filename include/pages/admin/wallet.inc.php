@@ -22,6 +22,7 @@ if (!$smarty->isCached('master.tpl', $smarty_cache_key)) {
     }
 
     $aGetInfo = $bitcoin->getinfo();
+    $aGetPeerInfo = $bitcoin->getpeerinfo();
     if (is_array($aGetInfo) && array_key_exists('newmint', $aGetInfo)) {
       $dNewmint = $aGetInfo['newmint'];
     } else {
@@ -57,6 +58,7 @@ if (!$smarty->isCached('master.tpl', $smarty_cache_key)) {
   $smarty->assign("LOCKED", $dLockedBalance);
   $smarty->assign("NEWMINT", $dNewmint);
   $smarty->assign("COININFO", $aGetInfo);
+  $smarty->assign("PEERINFO", $aGetPeerInfo);
 
   // Tempalte specifics
 } else {

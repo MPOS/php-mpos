@@ -59,6 +59,7 @@
             <th>Wallet Version</th>
             <th>Connections</th>
             <th>Errors</th>
+			<th>Blocks</th>
           </thead>
           <tbody>
             <tr>
@@ -67,10 +68,44 @@
               <td>{$COININFO.walletversion|default:""}</td>
               <td>{$COININFO.connections|default:""}</td>
               <td><font color="{if $COININFO.errors}red{else}green{/if}">{$COININFO.errors|default:"OK"}</font></td>
+              <td>{$COININFO.blocks|default:"0"}</td>
             </tr>
             </tbody>
           </table>
         </div>
+      </div>
+    </div>
+  </div>
+
+<div class="row">
+  <div class="col-lg-12">
+    <div class="panel panel-info">
+      <div class="panel-heading">
+        <i class="fa fa-connectdevelop fa-fw"></i> Peer Information
+      </div>
+      <div class="panel-body no-padding">
+        <table class="table table-striped table-bordered table-hover">
+          <thead>
+          <tr>
+            <th>Host</th>
+            <th>Protocol Version</th>
+            <th>Identity</th>
+            <th>Connected</th>
+            <th>Traffic</th>
+          </tr>
+          </thead>
+          <tbody>
+{foreach key=KEY item=ARRAY from=$PEERINFO}
+          <tr>
+            <td>{$ARRAY['addr']}</td>
+            <td>{$ARRAY['version']}</td>
+            <td>{$ARRAY['subver']}</td>
+            <td>{$ARRAY['conntime']|date_format:$GLOBAL.config.date}</td>
+            <td>{(($ARRAY['bytessent'] + $ARRAY['bytesrecv']) / 1024 / 1024)|number_format:"3"} MB</td>
+          </tr>
+{/foreach}
+          </tbody>
+        </table>
       </div>
     </div>
   </div>
