@@ -10,6 +10,7 @@
 * Updated MorrisJS to 0.5.1
 * Updated RaphaelJS to 2.1.2
 * Updated Bootstrap Switch to 3.3.2
+* Updated CLEditor to 1.4.5
 * Removed unneeded JS files
 
 1.0.1 (Apr 15th 2015)
