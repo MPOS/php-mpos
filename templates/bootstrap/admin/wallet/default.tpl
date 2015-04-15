@@ -58,7 +58,7 @@
             <th>Protocol Version</th>
             <th>Wallet Version</th>
             <th>Connections</th>
-            <th>Errors</th>
+            <th>Status</th>
 			<th>Blocks</th>
           </thead>
           <tbody>
