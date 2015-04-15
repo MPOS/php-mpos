@@ -20,7 +20,7 @@ $online_versions = $tools->getOnlineVersions();
 
 // Fetch version information
 $version['CURRENT'] = array('DB' => DB_VERSION, 'CONFIG' => CONFIG_VERSION, 'CORE' => MPOS_VERSION);
-$version['INSTALLED'] = array('DB' => $setting->getValue('DB_VERSION'), 'CONFIG' => $config['version'], 'CORE' => $online_versions['MPOS_VERSION']);
+$version['INSTALLED'] = array('DB' => $setting->getValue('DB_VERSION'), 'CONFIG' => $config['version'], 'CORE' => MPOS_VERSION);
 $version['ONLINE'] = array('DB' => $online_versions['DB_VERSION'], 'CONFIG' => $online_versions['CONFIG_VERSION'], 'CORE' => $online_versions['MPOS_VERSION']);
 
 // Fetch our cron list $aMonitorCrons
