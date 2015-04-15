@@ -28,11 +28,9 @@ CREATE TABLE IF NOT EXISTS `accounts` (
   `token` varchar(65) DEFAULT NULL,
   `donate_percent` float DEFAULT '0',
   `ap_threshold` float DEFAULT '0',
-  `coin_address` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `username` (`username`),
-  UNIQUE KEY `email` (`email`),
-  UNIQUE KEY `coin_address` (`coin_address`)
+  UNIQUE KEY `email` (`email`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8;
 
 CREATE TABLE IF NOT EXISTS `blocks` (
