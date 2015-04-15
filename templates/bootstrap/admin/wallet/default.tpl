@@ -57,9 +57,10 @@
             <th>Version</th>
             <th>Protocol Version</th>
             <th>Wallet Version</th>
-            <th>Connections</th>
+            <th>Peers</th>
             <th>Status</th>
-			<th>Blocks</th>
+            <th>Blocks</th>
+            <th>Accounts</th>
           </thead>
           <tbody>
             <tr>
@@ -69,6 +70,7 @@
               <td>{$COININFO.connections|default:""}</td>
               <td><font color="{if $COININFO.errors}red{else}green{/if}">{$COININFO.errors|default:"OK"}</font></td>
               <td>{$COININFO.blocks|default:"0"}</td>
+              <td>{$ADDRESSCOUNT}</td>
             </tr>
             </tbody>
           </table>
@@ -88,7 +90,7 @@
           <thead>
           <tr>
             <th>Host</th>
-            <th>Protocol Version</th>
+            <th>Protocol</th>
             <th>Identity</th>
             <th>Connected</th>
             <th>Traffic</th>
@@ -108,15 +110,12 @@
         </table>
       </div>
     </div>
-  </div>
-
-{if $ADDRESSCOUNT > 1}
 
   <div class="row">
     <div class="col-lg-12">
       <div class="panel panel-info">
         <div class="panel-heading">
-          <i class="fa fa-users fa-fw"></i> Number of Accounts in Wallet: {$ADDRESSCOUNT|default:"0"}
+          <i class="fa fa-users fa-fw"></i> Wallet Accounts
         </div>
         <div class="panel-body ">
           <div class="panel-group">
@@ -179,4 +178,3 @@
     </div>
   </div>
 </div>
-{/if}
