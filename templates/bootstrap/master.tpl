@@ -15,7 +15,7 @@
   {$GLOBAL.statistics.analytics.code nofilter}
   {/if}
   <link href="{$PATH}/css/bootstrap.min.css" rel="stylesheet">
-  <link href="{$PATH}/css/bootstrap-switch.css" rel="stylesheet">
+  <link href="{$PATH}/css/bootstrap-switch.min.css" rel="stylesheet">
   <link href="{$PATH}/font-awesome/css/font-awesome.css" rel="stylesheet">
   <link href="{$PATH}/css/plugins/morris/morris-0.5.1.css" rel="stylesheet">
   <link href="{$PATH}/css/plugins/timeline/timeline.css" rel="stylesheet">
