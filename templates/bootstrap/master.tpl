@@ -17,7 +17,7 @@
   <link href="{$PATH}/css/bootstrap.min.css" rel="stylesheet">
   <link href="{$PATH}/css/bootstrap-switch.css" rel="stylesheet">
   <link href="{$PATH}/font-awesome/css/font-awesome.css" rel="stylesheet">
-  <link href="{$PATH}/css/plugins/morris/morris-0.4.3.min.css" rel="stylesheet">
+  <link href="{$PATH}/css/plugins/morris/morris-0.5.1.css" rel="stylesheet">
   <link href="{$PATH}/css/plugins/timeline/timeline.css" rel="stylesheet">
   <link href="{$PATH}/css/plugins/dataTables/dataTables.bootstrap.css" rel="stylesheet">
   <link href="{$PATH}/css/mpos.css" rel="stylesheet">
@@ -35,7 +35,7 @@
   <script src="{$PATH}/js/plugins/dataTables/dataTables.bootstrap.js"></script>
   <script src="{$PATH}/js/plugins/metisMenu/jquery.metisMenu.js"></script>
   <script src="{$PATH}/js/plugins/raphael-2.1.2.min.js"></script>
-  <script src="{$PATH}/js/plugins/morris/morris.js"></script>
+  <script src="{$PATH}/js/plugins/morris/morris-0.5.1.min.js"></script>
   <script src="{$PATH}/js/plugins/sparkline/jquery.sparkline.min.js"></script>
   <script src="{$PATH}/js/mpos.js"></script>
 </head>
