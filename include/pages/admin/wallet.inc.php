@@ -33,6 +33,7 @@ if (!$smarty->isCached('master.tpl', $smarty_cache_key)) {
     $dAddressCount = 0;
     $dAccountAddresses = array();
     $aGetInfo = array('errors' => 'Unable to connect');
+    $aGetPeerInfo = array();
     $dBalance = 0;
     $dNewmint = -1;
     $_SESSION['POPUP'][] = array('CONTENT' => 'Unable to connect to wallet RPC service: ' . $bitcoin->can_connect(), 'TYPE' => 'alert alert-danger');
