@@ -446,7 +446,7 @@ class Transaction extends Base {
       SELECT
       a.id,
       a.username,
-      a.ap_threshold,
+      ca.ap_threshold,
       ca.coin_address,
       p.id AS payout_id,
       IFNULL(
