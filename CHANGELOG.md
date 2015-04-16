@@ -8,6 +8,9 @@
   * Added last 25 transactions
     * Can be changed via Admin System Settings -> Wallet
   * Always show all accounts
+* Updated Auto Payout Threshold to be stored in `coin_address` table
+  * Existing thresholds will be migrated when upgrading
+  * Update to `1.0.1` for the database using the upgrade script supplied in MPOS
 * Updated Bootstrap to 3.3.4
 * Updated MorrisJS to 0.5.1
 * Updated RaphaelJS to 2.1.2
