@@ -5,6 +5,8 @@
   * Added block count to Wallet Status
   * Added number of accounts to Wallet Status
   * Added Peer information
+  * Added last 25 transactions
+    * Can be changed via Admin System Settings -> Wallet
   * Always show all accounts
 * Updated Bootstrap to 3.3.4
 * Updated MorrisJS to 0.5.1
