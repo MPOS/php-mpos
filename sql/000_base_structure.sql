@@ -27,7 +27,6 @@ CREATE TABLE IF NOT EXISTS `accounts` (
   `api_key` varchar(255) DEFAULT NULL,
   `token` varchar(65) DEFAULT NULL,
   `donate_percent` float DEFAULT '0',
-  `ap_threshold` float DEFAULT '0',
   PRIMARY KEY (`id`),
   UNIQUE KEY `username` (`username`),
   UNIQUE KEY `email` (`email`)
@@ -56,6 +55,7 @@ CREATE TABLE IF NOT EXISTS `coin_addresses` (
   `account_id` int(11) NOT NULL,
   `currency` varchar(5) NOT NULL,
   `coin_address` varchar(255) NOT NULL,
+  `ap_threshold` float DEFAULT '0',
   PRIMARY KEY (`id`),
   UNIQUE KEY `coin_address` (`coin_address`),
   KEY `account_id` (`account_id`)
