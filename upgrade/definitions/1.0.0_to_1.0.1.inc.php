@@ -10,7 +10,7 @@ function run_101() {
 
   // Upgrade specific variables
   $aSql[] = "ALTER TABLE `" . $coin_address->getTableName() . "` ADD ap_threshold float DEFAULT '0'";
-  $aSql[] = "UPDATE " . $coin_address->getTableName() . " AS ca LEFT JOIN " . $user->getTableName() . " AS a ON a.id = ca.account_id SET ca.coin_address = a.coin_address";
+  $aSql[] = "UPDATE " . $coin_address->getTableName() . " AS ca LEFT JOIN " . $user->getTableName() . " AS a ON a.id = ca.account_id SET ca.ap_threshold = a.ap_threshold";
   $aSql[] = "ALTER TABLE `" . $user->getTableName() . "` DROP `ap_threshold`";
   $aSql[] = "UPDATE " . $setting->getTableName() . "    SET value = '1.0.1' WHERE name = 'DB_VERSION'";
 
