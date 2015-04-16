@@ -20,7 +20,7 @@
           <tr>
             <td>{$ARRAY['addr']}</td>
             <td>{$ARRAY['version']}</td>
-            <td>{$ARRAY['subver']}</td>
+            <td>{$ARRAY['subver']|replace:'/':''}</td>
             <td>{$ARRAY['conntime']|date_format:$GLOBAL.config.date}</td>
             <td>{(($ARRAY['bytessent'] + $ARRAY['bytesrecv']) / 1024 / 1024)|number_format:"3"} MB</td>
           </tr>
