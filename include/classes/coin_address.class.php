@@ -28,6 +28,29 @@ class CoinAddress extends Base {
   }
 
   /**
+   * Fetch users Auto Payout Threshold for a currency
+   * @param UserID int UserID
+   * @return mixed Float value for threshold, false on error
+   **/
+  public function getAPThreshold($userID, $currency=NULL) {
+    if ($currency === NULL) $currency = $this->config['currency'];
+    $this->debug->append("STA " . __METHOD__, 4);
+    $stmt = $this->mysqli->prepare("
+      SELECT ap_threshold
+      FROM " . $this->getTableName() . "
+      WHERE account_id = ? AND currency = ?
+      ");
+    if ( $this->checkStmt($stmt) && $stmt->bind_param('is', $userID, $currency) && $stmt->execute() && $result = $stmt->get_result()) {
+      if ($result->num_rows == 1) {
+        return $result->fetch_object()->ap_threshold;
+      }
+    }
+    $this->debug->append("Unable to fetch users auto payout threshold for " . $currency);
+    return $this->sqlError();
+  }
+
+
+  /**
    * Check if a coin address is already set
    * @param address string Coin Address to check for
    * @return bool true or false
@@ -76,23 +99,24 @@ class CoinAddress extends Base {
    * Update a coin address record for a user and a currency
    * @param userID int Account ID
    * @param address string Coin Address
+   * @param ap_threshold float Threshold for auto payouts for this currency
    * @param currency string Currency short handle, defaults to config option
    * @return bool true or false
    **/
-  public function update($userID, $address, $currency=NULL) {
+  public function update($userID, $address, $ap_threshold, $currency=NULL) {
     if ($currency === NULL) $currency = $this->config['currency'];
     if ($address != $this->getCoinAddress($userID) && $this->existsCoinAddress($address)) {
       $this->setErrorMessage('Unable to update coin address, address already exists');
       return false;
     }
     if ($this->getCoinAddress($userID) != NULL) {
-      $stmt = $this->mysqli->prepare("UPDATE " . $this->getTableName() . " SET coin_address = ? WHERE account_id = ? AND currency = ?");
-      if ( $this->checkStmt($stmt) && $stmt->bind_param('sis', $address, $userID, $currency) && $stmt->execute()) {
+      $stmt = $this->mysqli->prepare("UPDATE " . $this->getTableName() . " SET coin_address = ?, ap_threshold = ? WHERE account_id = ? AND currency = ?");
+      if ( $this->checkStmt($stmt) && $stmt->bind_param('sdis', $address, $ap_threshold, $userID, $currency) && $stmt->execute()) {
         return true;
       }
     } else {
-      $stmt = $this->mysqli->prepare("INSERT INTO " . $this->getTableName() . " (coin_address, account_id, currency) VALUES (?, ?, ?)");
-      if ( $this->checkStmt($stmt) && $stmt->bind_param('sis', $address, $userID, $currency) && $stmt->execute()) {
+      $stmt = $this->mysqli->prepare("INSERT INTO " . $this->getTableName() . " (coin_address, ap_threshold, account_id, currency) VALUES (?, ?, ?, ?)");
+      if ( $this->checkStmt($stmt) && $stmt->bind_param('sdis', $address, $ap_threshold, $userID, $currency) && $stmt->execute()) {
         return true;
       }
     }

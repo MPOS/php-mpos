@@ -340,11 +340,11 @@ class User extends Base {
     $this->debug->append("STA " . __METHOD__, 4);
     $stmt = $this->mysqli->prepare("
       SELECT
-        a.id, a.username, ca.coin_address AS coin_address, a.ap_threshold
+        a.id, a.username, ca.coin_address AS coin_address, ca.ap_threshold
       FROM " . $this->getTableName() . " AS a
       LEFT JOIN " . $this->coin_address->getTableName() . " AS ca
       ON a.id = ca.account_id
-      WHERE ap_threshold > 0 AND ca.currency = ?
+      WHERE ca.ap_threshold > 0 AND ca.currency = ?
       AND ca.coin_address IS NOT NULL
       ");
     if ( $this->checkStmt($stmt) && $stmt->bind_param('s', $this->config['currency']) && $stmt->execute() && $result = $stmt->get_result()) {
@@ -544,12 +544,12 @@ class User extends Base {
     if ($email == 'hidden' || $email == NULL)
       $email = $this->getUserEmailById($userID);
     // We passed all validation checks so update the account
-    $stmt = $this->mysqli->prepare("UPDATE $this->table SET ap_threshold = ?, donate_percent = ?, email = ?, timezone = ?, is_anonymous = ? WHERE id = ?");
-    if ($this->checkStmt($stmt) && $stmt->bind_param('ddssii', $threshold, $donate, $email, $timezone, $is_anonymous, $userID) && $stmt->execute()) {
+    $stmt = $this->mysqli->prepare("UPDATE $this->table SET donate_percent = ?, email = ?, timezone = ?, is_anonymous = ? WHERE id = ?");
+    if ($this->checkStmt($stmt) && $stmt->bind_param('dssii', $donate, $email, $timezone, $is_anonymous, $userID) && $stmt->execute()) {
       $this->log->log("info", $this->getUserName($userID)." updated their account details");
-      // Update coin address too
+      // Update coin address and ap_threshold if coin_address is set
       if ($address) {
-        if ($this->coin_address->update($userID, $address)) {
+        if ($this->coin_address->update($userID, $address, $threshold)) {
           return true;
         }
       } else {
@@ -698,12 +698,13 @@ class User extends Base {
     $stmt = $this->mysqli->prepare("
       SELECT
       id AS id, username, pin, api_key, is_admin, is_anonymous, email, timezone, no_fees,
-      IFNULL(donate_percent, '0') as donate_percent, ap_threshold
+      IFNULL(donate_percent, '0') as donate_percent
       FROM " . $this->getTableName() . "
       WHERE id = ? LIMIT 0,1");
     if ($this->checkStmt($stmt) && $stmt->bind_param('i', $userID) && $stmt->execute() && $result = $stmt->get_result()) {
       $aData = $result->fetch_assoc();
       $aData['coin_address'] = $this->coin_address->getCoinAddress($userID);
+      $aData['ap_threshold'] = $this->coin_address->getAPThreshold($userID);
       $stmt->close();
       return $aData;
     }
