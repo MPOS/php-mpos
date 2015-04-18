@@ -6,6 +6,17 @@ class User extends Base {
   private $userID = false;
   private $user = array();
 
+  /**
+   * We allow changing the database for shared accounts across pools
+   * Load the config on construct so we can assign the DB name
+   * @param config array MPOS configuration
+   * @return none
+   **/
+  public function __construct($config) {
+    $this->setConfig($config);
+    $this->table = $this->config['db']['shared']['name'] . '.' . $this->table;
+  }
+
   // get and set methods
   private function getHash($string, $version=0, $pepper='') {
     switch($version) {
@@ -984,13 +995,12 @@ public function isAuthenticated($logout=true) {
 }
 
 // Make our class available automatically
-$user = new User();
+$user = new User($config);
 $user->setDebug($debug);
 $user->setLog($log);
 $user->setMysql($mysqli);
 $user->setSalt($config['SALT']);
 $user->setSmarty($smarty);
-$user->setConfig($config);
 $user->setMail($mail);
 $user->setToken($oToken);
 $user->setBitcoin($bitcoin);

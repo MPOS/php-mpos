@@ -3,7 +3,17 @@ $defflip = (!cfip()) ? exit(header('HTTP/1.1 401 Unauthorized')) : 1;
 
 class CoinAddress extends Base {
   protected $table = 'coin_addresses';
-  private $cache = array();
+
+  /**
+   * We allow changing the database for shared accounts across pools
+   * Load the config on construct so we can assign the DB name
+   * @param config array MPOS configuration
+   * @return none
+   **/
+  public function __construct($config) {
+    $this->setConfig($config);
+    $this->table = $this->config['db']['shared']['name'] . '.' . $this->table;
+  }
 
   /**
    * Fetch users coin address for a currency
@@ -124,8 +134,7 @@ class CoinAddress extends Base {
   }
 }
 
-$coin_address = new CoinAddress();
+$coin_address = new CoinAddress($config);
 $coin_address->setDebug($debug);
-$coin_address->setConfig($config);
 $coin_address->setMysql($mysqli);
 $coin_address->setErrorCodes($aErrorCodes);

@@ -54,6 +54,7 @@ $config['db']['user'] = 'someuser';
 $config['db']['pass'] = 'somepass';
 $config['db']['port'] = 3306;
 $config['db']['name'] = 'mpos';
+$config['db']['shared']['name'] = $config['db']['name'];
 
 /**
  * Local wallet RPC

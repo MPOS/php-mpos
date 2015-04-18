@@ -5,6 +5,17 @@ class Worker extends Base {
   protected $table = 'pool_worker';
 
   /**
+   * We allow changing the database for shared accounts across pools
+   * Load the config on construct so we can assign the DB name
+   * @param config array MPOS configuration
+   * @return none
+   **/
+  public function __construct($config) {
+    $this->setConfig($config);
+    $this->table = $this->config['db']['shared']['name'] . '.' . $this->table;
+  }
+
+  /**
    * Update worker list for a user
    * @param account_id int User ID
    * @param data array All workers and their settings
@@ -294,12 +305,11 @@ class Worker extends Base {
   }
 }
 
-$worker = new Worker();
+$worker = new Worker($config);
 $worker->setDebug($debug);
 $worker->setMysql($mysqli);
 $worker->setMemcache($memcache);
 $worker->setShare($share);
-$worker->setConfig($config);
 $worker->setUser($user);
 $worker->setErrorCodes($aErrorCodes);
 $worker->setCoin($coin);

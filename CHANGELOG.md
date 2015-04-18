@@ -1,6 +1,13 @@
 1.0.2 (XXX XXth 2015)
 ---------------------
 
+* Allow SSO accross MPOS pools
+  * Added a new config option `$config['db']['shared']['name']`, defaults to `$config['db']['name']`
+  * Will access `accounts` and `pool_workers` on shared table
+  * Does not allow splitting `accounts` and `pool_woker` across database hosts
+  * Required `$config['cookie']['domain']` to be set
+    * You need to use the top domain shared between hosts as the setting
+    * e.g. `ltc.thepool.com` and `btc.thepool.com` it has to be `.thepool.com` (NOTE the leading .)
 * Increased information on `Admin -> Wallet Info`
   * Added block count to Wallet Status
   * Added number of accounts to Wallet Status
