@@ -18,6 +18,7 @@
 * Updated CLEditor to 1.4.5
 * Removed unneeded JS files
 * Removed unneeded CSS files
+* Fixed ding for block notifications not playing on Safari
 
 1.0.1 (Apr 15th 2015)
 ---------------------
