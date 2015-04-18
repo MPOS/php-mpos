@@ -26,6 +26,7 @@
 * Removed unneeded JS files
 * Removed unneeded CSS files
 * Fixed ding for block notifications not playing on Safari
+* Fixed manual payout warning to show when account balance is too low
 
 1.0.1 (Apr 15th 2015)
 ---------------------
