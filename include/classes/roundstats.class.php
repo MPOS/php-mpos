@@ -2,11 +2,6 @@
 $defflip = (!cfip()) ? exit(header('HTTP/1.1 401 Unauthorized')) : 1;
 
 class RoundStats extends Base {
-  private $tableTrans = 'transactions';
-  private $tableStats = 'statistics_shares';
-  private $tableBlocks = 'blocks';
-  private $tableUsers = 'accounts';
-
   /**
    * Get next block for round stats
    **/
@@ -79,7 +74,7 @@ class RoundStats extends Base {
       b.id, height, blockhash, amount, confirmations, difficulty, FROM_UNIXTIME(time) as time, shares,
       IF(a.is_anonymous, 'anonymous', a.username) AS finder,
       ROUND(difficulty * POW(2, 32 - " . $this->coin->getTargetBits() . "), 0) AS estshares,
-      (time - (SELECT time FROM $this->tableBlocks WHERE height < ? ORDER BY height DESC LIMIT 1)) AS round_time
+      (time - (SELECT time FROM " . $this->block->getTableName() . " WHERE height < ? ORDER BY height DESC LIMIT 1)) AS round_time
       FROM " . $this->block->getTableName() . " as b
       LEFT JOIN " . $this->user->getTableName() . " AS a ON b.account_id = a.id
       WHERE b.height = ? LIMIT 1");

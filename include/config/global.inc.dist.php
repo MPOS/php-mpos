@@ -6,7 +6,7 @@ $defflip = (!cfip()) ? exit(header('HTTP/1.1 401 Unauthorized')) : 1;
  * Also the URL to check for the most recent upstream versions available
  *  https://github.com/MPOS/php-mpos/wiki/Config-Setup#wiki-config-version
  **/
-$config['version'] = '1.0.0';
+$config['version'] = '1.0.1';
 $config['version_url'] = 'https://raw.githubusercontent.com/MPOS/php-mpos/master/include/version.inc.php';
 
 /**
@@ -54,6 +54,11 @@ $config['db']['user'] = 'someuser';
 $config['db']['pass'] = 'somepass';
 $config['db']['port'] = 3306;
 $config['db']['name'] = 'mpos';
+// Disabled by default and set in bootstrap if unset, but left in here so
+// people know it exists
+// $config['db']['shared']['accounts'] = $config['db']['name'];
+// $config['db']['shared']['workers'] = $config['db']['name'];
+// $config['db']['shared']['news'] = $config['db']['name'];
 
 /**
  * Local wallet RPC

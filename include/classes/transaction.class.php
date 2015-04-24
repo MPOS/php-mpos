@@ -355,7 +355,7 @@ class Transaction extends Base {
       SELECT
         a.id,
         a.username,
-        a.ap_threshold,
+        ca.ap_threshold,
         ca.coin_address,
         IFNULL(
             (
@@ -371,9 +371,9 @@ class Transaction extends Base {
       ON t.account_id = a.id
       LEFT JOIN " . $this->coin_address->getTableName() . " AS ca
       ON ca.account_id = a.id
-      WHERE t.archived = 0 AND a.ap_threshold > 0 AND ca.coin_address IS NOT NULL AND ca.coin_address != '' AND ca.currency = ?
+      WHERE t.archived = 0 AND ca.ap_threshold > 0 AND ca.coin_address IS NOT NULL AND ca.coin_address != '' AND ca.currency = ?
       GROUP BY t.account_id
-      HAVING confirmed > a.ap_threshold AND confirmed > " . $this->config['txfee_auto'] . "
+      HAVING confirmed > ca.ap_threshold AND confirmed > " . $this->config['txfee_auto'] . "
       LIMIT ?");
     if ($this->checkStmt($stmt) && $stmt->bind_param('si', $this->config['currency'], $limit) && $stmt->execute() && $result = $stmt->get_result())
       return $result->fetch_all(MYSQLI_ASSOC);
@@ -446,7 +446,7 @@ class Transaction extends Base {
       SELECT
       a.id,
       a.username,
-      a.ap_threshold,
+      ca.ap_threshold,
       ca.coin_address,
       p.id AS payout_id,
       IFNULL(
