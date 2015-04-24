@@ -14,7 +14,7 @@ class User extends Base {
    **/
   public function __construct($config) {
     $this->setConfig($config);
-    $this->table = $this->config['db']['shared']['name'] . '.' . $this->table;
+    $this->table = $this->config['db']['shared']['accounts'] . '.' . $this->table;
   }
 
   // get and set methods

@@ -54,7 +54,11 @@ $config['db']['user'] = 'someuser';
 $config['db']['pass'] = 'somepass';
 $config['db']['port'] = 3306;
 $config['db']['name'] = 'mpos';
-$config['db']['shared']['name'] = $config['db']['name'];
+// Disabled by default and set in bootstrap if unset, but left in here so
+// people know it exists
+// $config['db']['shared']['accounts'] = $config['db']['name'];
+// $config['db']['shared']['workers'] = $config['db']['name'];
+// $config['db']['shared']['news'] = $config['db']['name'];
 
 /**
  * Local wallet RPC
