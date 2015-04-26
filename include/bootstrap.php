@@ -43,5 +43,3 @@ $master_template = 'master.tpl';
 // Load Classes, they name defines the $ variable used
 // We include all needed files here, even though our templates could load them themself
 require_once(INCLUDE_DIR . '/autoloader.inc.php');
-
-?>

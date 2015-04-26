@@ -9,4 +9,3 @@ if (!$user->isAuthenticated() || !$user->isAdmin($_SESSION['USERDATA']['id'])) {
 
 // Tempalte specifics
 $smarty->assign("CONTENT", "");
-?>

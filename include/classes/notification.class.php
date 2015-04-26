@@ -195,4 +195,3 @@ $notification->setSmarty($smarty);
 $notification->setConfig($config);
 $notification->setSetting($setting);
 $notification->setErrorCodes($aErrorCodes);
-?>

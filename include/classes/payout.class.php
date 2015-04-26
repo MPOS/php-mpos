@@ -67,5 +67,3 @@ $oPayout->setMysql($mysqli);
 $oPayout->setConfig($config);
 $oPayout->setToken($oToken);
 $oPayout->setErrorCodes($aErrorCodes);
-
-?>

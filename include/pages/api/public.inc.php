@@ -27,4 +27,3 @@ echo json_encode(
 
 // Supress master template
 $supress_master = 1;
-?>

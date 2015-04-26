@@ -15,4 +15,3 @@ echo $api->get_json($dDifficulty);
 
 // Supress master template
 $supress_master = 1;
-?>

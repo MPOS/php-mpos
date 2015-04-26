@@ -51,4 +51,3 @@ require_once(BASEPATH . '../include/version.inc.php');
 //   switch ($option) {
 //   }
 // }
-?>

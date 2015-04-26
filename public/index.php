@@ -175,5 +175,3 @@ if (!@$supress_master) $smarty->display($master_template, $smarty_cache_key);
 
 // Unset any temporary values here
 unset($_SESSION['POPUP']);
-
-?>

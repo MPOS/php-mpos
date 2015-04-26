@@ -89,4 +89,3 @@ $log->logInfo(sprintf($strLogMask, 'purgeUserStats', $affected, number_format(mi
 
 // Cron cleanup and monitoring
 require_once('cron_end.inc.php');
-?>

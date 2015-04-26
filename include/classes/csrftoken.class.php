@@ -104,4 +104,3 @@ $csrftoken->setUser($user);
 $csrftoken->setToken($oToken);
 $csrftoken->setConfig($config);
 $csrftoken->setErrorCodes($aErrorCodes);
-?>

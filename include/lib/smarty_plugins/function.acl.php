@@ -31,4 +31,3 @@ function check_acl_access($params, $smarty)
     break;
   }
 }
-?>

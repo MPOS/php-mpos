@@ -55,6 +55,3 @@ if ($user->isAuthenticated()) {
     $smarty->assign('CONTENT', 'default.tpl');
   }
 }
-
-
-?>

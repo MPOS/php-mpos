@@ -148,5 +148,3 @@ if (@$_SESSION['USERDATA']['is_admin'] && $user->isAdmin(@$_SESSION['USERDATA'][
     }
   }
 }
-
-?>

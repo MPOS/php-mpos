@@ -46,4 +46,3 @@ foreach ($aNews as $key => $aData) {
 }
 $smarty->assign("NEWS", $aNews);
 $smarty->assign("CONTENT", "default.tpl");
-?>

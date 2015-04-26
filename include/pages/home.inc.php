@@ -22,4 +22,3 @@ if (!$smarty->isCached('master.tpl', $smarty_cache_key)) {
 }
 // Load news entries for Desktop site and unauthenticated users
 $smarty->assign("CONTENT", "default.tpl");
-?>
