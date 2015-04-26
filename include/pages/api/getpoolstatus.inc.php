@@ -66,4 +66,3 @@ echo $api->get_json($data);
 
 // Supress master template
 $supress_master = 1;
-?>

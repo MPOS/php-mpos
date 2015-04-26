@@ -488,4 +488,3 @@ $transaction->setBlock($block);
 $transaction->setUser($user);
 $transaction->setPayout($oPayout);
 $transaction->setErrorCodes($aErrorCodes);
-?>

@@ -303,4 +303,3 @@ $worker->setConfig($config);
 $worker->setUser($user);
 $worker->setErrorCodes($aErrorCodes);
 $worker->setCoin($coin);
-?>

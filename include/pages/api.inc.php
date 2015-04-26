@@ -9,4 +9,3 @@ $id = $user->checkApiKey(@$_REQUEST['api_key']);
 
 header('HTTP/1.1 400 Bad Request');
 die('400 Bad Request');
-?>

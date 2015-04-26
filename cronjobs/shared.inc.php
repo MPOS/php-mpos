@@ -87,5 +87,3 @@ if ($setting->getValue('DB_VERSION') != DB_VERSION || $config['version'] != CONF
   $log->logFatal('Cronjob is currently disabled due to required upgrades. Import any outstanding SQL files and check your configuration file.');
   $monitoring->endCronjob($cron_name, 'E0075', 0, true, false);
 }
-
-?>

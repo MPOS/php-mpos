@@ -22,4 +22,3 @@ echo $api->get_json($sharerate);
 
 // Supress master template
 $supress_master = 1;
-?>

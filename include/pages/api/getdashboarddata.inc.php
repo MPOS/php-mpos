@@ -119,4 +119,3 @@ $data = array(
 );
 
 echo $api->get_json($data);
-?>

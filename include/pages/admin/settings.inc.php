@@ -27,4 +27,3 @@ $smarty->assign("SETTINGS", $aSettings);
 
 // Tempalte specifics
 $smarty->assign("CONTENT", "default.tpl");
-?>

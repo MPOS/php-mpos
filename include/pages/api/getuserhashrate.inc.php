@@ -22,4 +22,3 @@ echo $api->get_json($hashrate);
 
 // Supress master template
 $supress_master = 1;
-?>

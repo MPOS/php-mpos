@@ -55,4 +55,3 @@ $statistics->getCurrentHashrate() ? $status = 'OK' : $status = 'ERROR';
 $log->logInfo(sprintf($strLogMask, 'getTopContributors(shares)', number_format(microtime(true) - $start, 3), $status));
 
 require_once('cron_end.inc.php');
-?>

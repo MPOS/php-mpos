@@ -284,4 +284,3 @@ class Base {
     return $array;
   }
 }
-?>

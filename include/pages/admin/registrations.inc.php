@@ -18,4 +18,3 @@ $smarty->assign("LASTREGISTEREDUSERS", $aLastRegisteredUsers);
 
 // Tempalte specifics
 $smarty->assign("CONTENT", "default.tpl");
-?>

@@ -26,4 +26,3 @@ $smarty->assign("CRONSTATUS", $aCronStatus);
 
 // Tempalte specifics
 $smarty->assign("CONTENT", "default.tpl");
-?>

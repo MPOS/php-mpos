@@ -297,5 +297,3 @@ $config['smarty']['cache_lifetime'] = 30;
  *   https://github.com/MPOS/php-mpos/wiki/Config-Setup#wiki-system-load
  **/
 $config['system']['load']['max'] = 10.0;
-
-?>
