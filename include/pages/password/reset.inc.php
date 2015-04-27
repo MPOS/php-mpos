@@ -14,4 +14,3 @@ if (!$config['csrf']['enabled'] || $config['csrf']['enabled'] && $csrftoken->val
 
 // Tempalte specifics, user default template by parent page
 $smarty->assign("CONTENT", "../default.tpl");
-?>

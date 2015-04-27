@@ -24,4 +24,3 @@ if (!$config['csrf']['enabled'] || $config['csrf']['enabled'] && $csrftoken->val
 $aNews = $news->getEntry($_REQUEST['id']);
 $smarty->assign("NEWS", $aNews);
 $smarty->assign("CONTENT", "default.tpl");
-?>

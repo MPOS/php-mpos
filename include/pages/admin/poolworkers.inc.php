@@ -19,5 +19,3 @@ $smarty->assign('DISABLE_IDLEWORKERNOTIFICATIONS', $setting->getValue('notificat
 $smarty->assign('LIMIT', $iLimit);
 $smarty->assign('WORKERS', $aWorkers);
 $smarty->assign('CONTENT', 'default.tpl');
-
-?>

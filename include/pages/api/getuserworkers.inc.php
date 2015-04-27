@@ -15,4 +15,3 @@ echo $api->get_json($worker->getWorkers($user_id, $interval));
 
 // Supress master template
 $supress_master = 1;
-?>

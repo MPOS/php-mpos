@@ -75,4 +75,3 @@ if ($setting->getValue('notifications_disable_idle_worker') != 1) {
 }
 
 require_once('cron_end.inc.php');
-?>

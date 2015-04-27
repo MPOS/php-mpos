@@ -35,5 +35,3 @@ class mysqli_strict extends mysqli {
     }
   }
 }
-
-?>

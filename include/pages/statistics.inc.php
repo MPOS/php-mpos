@@ -18,4 +18,3 @@ if (!$smarty->isCached('master.tpl', $smarty_cache_key)) {
 }
 
 $smarty->assign("CONTENT", "default.tpl");
-?>

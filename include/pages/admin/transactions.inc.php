@@ -37,4 +37,3 @@ if (isset($_REQUEST['filter'])) {
   $smarty->assign('FILTERS', $strFilters);
 }
 $smarty->assign('CONTENT', 'default.tpl');
-?>

@@ -10,5 +10,3 @@ class Coin extends CoinBase {
   protected $target_bits = 32;
   protected $coin_value_precision = 20;
 }
-
-?>

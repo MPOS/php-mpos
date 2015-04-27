@@ -75,5 +75,3 @@ function smarty_modifier_relative_date($timestamp, $days = false, $format = "M j
   return @date($format, $timestamp);
  
 }
- 
-?>

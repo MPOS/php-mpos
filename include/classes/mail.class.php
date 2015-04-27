@@ -117,4 +117,3 @@ $mail->setSmarty($smarty);
 $mail->setConfig($config);
 $mail->setSetting($setting);
 $mail->setErrorCodes($aErrorCodes);
-?>

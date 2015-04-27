@@ -8,4 +8,3 @@ $smarty->assign("SITECOINURL", $config['gettingstarted']['coinurl']);
 
 // Tempalte specifics
 $smarty->assign("CONTENT", "default.tpl");
-?>
