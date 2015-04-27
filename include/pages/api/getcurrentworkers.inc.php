@@ -12,4 +12,3 @@ echo $api->get_json($worker->getCountAllActiveWorkers());
 
 // Supress master template
 $supress_master = 1;
-?>
