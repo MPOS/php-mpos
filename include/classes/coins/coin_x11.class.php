@@ -10,5 +10,3 @@ class Coin extends CoinBase {
   protected $target_bits = 24;
   protected $share_difficulty_precision = 4;
 }
-
-?>

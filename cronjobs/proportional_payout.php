@@ -169,4 +169,3 @@ foreach ($aAllBlocks as $iIndex => $aBlock) {
 }
 
 require_once('cron_end.inc.php');
-?>

@@ -57,4 +57,3 @@ class Logger {
   }
 }
 $log = new Logger($config);
-?>

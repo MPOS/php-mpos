@@ -15,4 +15,3 @@ if ($user->isAuthenticated()) {
   $smarty->assign('DISABLE_TRANSACTIONSUMMARY', $setting->getValue('disable_transactionsummary'));
 }
 $smarty->assign('CONTENT', 'default.tpl');
-?>

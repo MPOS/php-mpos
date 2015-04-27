@@ -25,4 +25,3 @@ case '2':
   $smarty->assign("CONTENT", "");
   break;
 }
-?>

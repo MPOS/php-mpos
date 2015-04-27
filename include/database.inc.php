@@ -17,5 +17,3 @@ if ($mysqli->query('/* MYSQLND_MS_MASTER_SWITCH */SELECT @@global.read_only AS r
 if (mysqli_connect_errno()) {
   die("Failed to connect to database");
 }
-
-?>

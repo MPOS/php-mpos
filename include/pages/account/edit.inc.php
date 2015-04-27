@@ -206,4 +206,3 @@ $smarty->assign("DONATE_THRESHOLD", $config['donate_threshold']);
 
 // Tempalte specifics
 $smarty->assign("CONTENT", "default.tpl");
-?>

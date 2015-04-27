@@ -16,4 +16,3 @@ echo $api->get_json($dEstimatedTime);
 
 // Supress master template
 $supress_master = 1;
-?>

@@ -19,4 +19,3 @@ echo $api->get_json($dTimeSinceLast);
 
 // Supress master template
 $supress_master = 1;
-?>

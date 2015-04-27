@@ -927,4 +927,3 @@ $statistics->setConfig($config);
 $statistics->setBitcoin($bitcoin);
 $statistics->setErrorCodes($aErrorCodes);
 $statistics->setCoin($coin);
-?>

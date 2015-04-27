@@ -15,4 +15,3 @@ if ($setting->getValue('acl_contactform') == 2) {
   // Tempalte specifics
   $smarty->assign("CONTENT", "default.tpl");
 }
-?>

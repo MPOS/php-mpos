@@ -11,4 +11,3 @@ if ($user->isAuthenticated()) {
 }
 // Somehow we still need to load this empty template
 $smarty->assign("CONTENT", "empty");
-?>

@@ -139,4 +139,3 @@ $invitation->setUser($user);
 $invitation->setToken($oToken);
 $invitation->setConfig($config);
 $invitation->setErrorCodes($aErrorCodes);
-?>

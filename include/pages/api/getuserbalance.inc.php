@@ -12,4 +12,3 @@ echo $api->get_json($transaction->getBalance($user_id));
 
 // Supress master template
 $supress_master = 1;
-?>

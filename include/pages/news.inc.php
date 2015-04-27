@@ -17,4 +17,3 @@ if (is_array($aNews)) {
 $smarty->assign("HIDEAUTHOR", $settings->getValue('acl_hide_news_author'));
 $smarty->assign("NEWS", $aNews);
 $smarty->assign("CONTENT", "default.tpl");
-?>

@@ -15,5 +15,3 @@ if (isset($_POST['do']) && $_POST['do'] == 'resetPassword') {
 
 // Tempalte specifics
 $smarty->assign("CONTENT", "default.tpl");
-
-?>

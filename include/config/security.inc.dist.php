@@ -59,5 +59,3 @@ $config['twofactor']['options']['changepw'] = true;
  **/
 $config['maxfailed']['login'] = 3;
 $config['maxfailed']['pin'] = 3;
-
-?>

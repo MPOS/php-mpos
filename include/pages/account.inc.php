@@ -5,4 +5,3 @@ if ($user->isAuthenticated()) {
   // Tempalte specifics
   $smarty->assign("CONTENT", "default.tpl");
 }
-?>
