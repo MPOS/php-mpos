@@ -2,8 +2,11 @@
 ---------------------
 
 * Allow SSO accross MPOS pools
-  * Added a new config option `$config['db']['shared']['name']`, defaults to `$config['db']['name']`
-  * Will access `accounts` and `pool_workers` on shared table
+  * Added a new config options
+    * `$config['db']['shared']['acounts']`, defaults to `$config['db']['name']`
+    * `$config['db']['shared']['workers']`, defaults to `$config['db']['name']`
+    * `$config['db']['shared']['news']`, defaults to `$config['db']['name']`
+  * Will access `accounts`, `pool_workers` and `news` on shared table
   * Does not allow splitting `accounts` and `pool_woker` across database hosts
   * Required `$config['cookie']['domain']` to be set
     * You need to use the top domain shared between hosts as the setting
