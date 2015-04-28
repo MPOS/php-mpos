@@ -1,4 +1,4 @@
-1.0.2 (XXX XXth 2015)
+1.0.2 (Apr 28th 2015)
 ---------------------
 
 * Allow SSO accross MPOS pools
