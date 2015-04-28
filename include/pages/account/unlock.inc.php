@@ -15,5 +15,3 @@ if (!isset($_GET['token']) || empty($_GET['token'])) {
   }
 }
 $smarty->assign('CONTENT', 'default.tpl');
-
-?>

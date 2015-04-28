@@ -83,4 +83,3 @@ if (isset($_REQUEST['filter'])) {
 
 // Tempalte specifics
 $smarty->assign("CONTENT", "default.tpl");
-?>

@@ -46,5 +46,3 @@ if (!empty($_POST['username']) && !empty($_POST['password'])) {
 }
 // Load login template
 $smarty->assign('CONTENT', 'default.tpl');
-
-?>

@@ -24,4 +24,3 @@ echo $api->get_json($aBlocks);
 
 // Supress master template
 $supress_master = 1;
-?>

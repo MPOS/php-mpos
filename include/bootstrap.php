@@ -14,6 +14,16 @@ $quickstartlink = "<a href='https://github.com/MPOS/php-mpos/wiki/Quick-Start-Gu
 if (!include_once(INCLUDE_DIR . '/config/global.inc.dist.php')) die('Unable to load base global config from ['.INCLUDE_DIR. '/config/global.inc.dist.php' . '] - '.$quickstartlink);
 if (!@include_once(INCLUDE_DIR . '/config/global.inc.php')) die('Unable to load your global config from ['.INCLUDE_DIR. '/config/global.inc.php' . '] - '.$quickstartlink);
 
+// Check for a shared account database and set to default DB if unset
+if (!isset($config['db']['shared']['accounts']))
+  $config['db']['shared']['accounts'] = $config['db']['name'];
+// Check for a shared worker database and set to default DB if unset
+if (!isset($config['db']['shared']['workers']))
+  $config['db']['shared']['workers'] = $config['db']['name'];
+// Check for a shared news database and set to default DB if unset
+if (!isset($config['db']['shared']['news']))
+  $config['db']['shared']['news'] = $config['db']['name'];
+
 // load our security configs
 if (!include_once(INCLUDE_DIR . '/config/security.inc.dist.php')) die('Unable to load base security config from ['.INCLUDE_DIR. '/config/security.inc.dist.php' . '] - '.$quickstartlink);
 if (@file_exists(INCLUDE_DIR . '/config/security.inc.php')) include_once(INCLUDE_DIR . '/config/security.inc.php');
@@ -43,5 +53,3 @@ $master_template = 'master.tpl';
 // Load Classes, they name defines the $ variable used
 // We include all needed files here, even though our templates could load them themself
 require_once(INCLUDE_DIR . '/autoloader.inc.php');
-
-?>

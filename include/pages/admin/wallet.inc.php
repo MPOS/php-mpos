@@ -22,6 +22,8 @@ if (!$smarty->isCached('master.tpl', $smarty_cache_key)) {
     }
 
     $aGetInfo = $bitcoin->getinfo();
+    $aGetPeerInfo = $bitcoin->getpeerinfo();
+    $aGetTransactions = $bitcoin->listtransactions('', (int)$setting->getValue('wallet_transaction_limit', 25));
     if (is_array($aGetInfo) && array_key_exists('newmint', $aGetInfo)) {
       $dNewmint = $aGetInfo['newmint'];
     } else {
@@ -32,6 +34,8 @@ if (!$smarty->isCached('master.tpl', $smarty_cache_key)) {
     $dAddressCount = 0;
     $dAccountAddresses = array();
     $aGetInfo = array('errors' => 'Unable to connect');
+    $aGetPeerInfo = array();
+    $aGetTransactions = array();
     $dBalance = 0;
     $dNewmint = -1;
     $_SESSION['POPUP'][] = array('CONTENT' => 'Unable to connect to wallet RPC service: ' . $bitcoin->can_connect(), 'TYPE' => 'alert alert-danger');
@@ -48,6 +52,8 @@ if (!$smarty->isCached('master.tpl', $smarty_cache_key)) {
 
   // Cold wallet balance
   if (! $dColdCoins = $setting->getValue('wallet_cold_coins')) $dColdCoins = 0;
+
+  // Tempalte specifics
   $smarty->assign("UNCONFIRMED", $dBlocksUnconfirmedBalance);
   $smarty->assign("BALANCE", $dBalance);
   $smarty->assign("ADDRESSCOUNT", $dAddressCount);
@@ -57,11 +63,11 @@ if (!$smarty->isCached('master.tpl', $smarty_cache_key)) {
   $smarty->assign("LOCKED", $dLockedBalance);
   $smarty->assign("NEWMINT", $dNewmint);
   $smarty->assign("COININFO", $aGetInfo);
-
-  // Tempalte specifics
+  $smarty->assign("PEERINFO", $aGetPeerInfo);
+  $smarty->assign('PRECISION', $coin->getCoinValuePrevision());
+  $smarty->assign("TRANSACTIONS", $aGetTransactions);
 } else {
   $debug->append('Using cached page', 3);
 }
 
 $smarty->assign("CONTENT", "default.tpl");
-?>

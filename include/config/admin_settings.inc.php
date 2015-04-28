@@ -146,6 +146,13 @@ $aSettings['wallet'][] = array(
   'name' => 'wallet_cold_coins', 'value' => $setting->getValue('wallet_cold_coins'),
   'tooltip' => 'Amount of coins held in a pools cold wallet.'
 );
+$aSettings['wallet'][] = array(
+  'display' => 'Transaction Limit', 'type' => 'text',
+  'size' => 6,
+  'default' => 25,
+  'name' => 'wallet_transaction_limit', 'value' => $setting->getValue('wallet_transaction_limit'),
+  'tooltip' => 'Maximum amount of transactions to list in Admin Wallet Info.'
+);
 $aSettings['statistics'][] = array(
   'display' => 'Ajax Refresh Interval', 'type' => 'select',
   'options' => array('5' => '5', '10' => '10', '15' => '15', '30' => '30', '60' => '60' ),

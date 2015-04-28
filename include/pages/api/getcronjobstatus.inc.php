@@ -43,5 +43,3 @@ echo $api->get_json($aCronStatus);
 
 // Supress master template
 $supress_master = 1;
-
-?>

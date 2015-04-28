@@ -44,5 +44,3 @@ if ($setting->getValue('disable_invitations') && $setting->getValue('lock_regist
 
 // We load the default registration template instead of an action specific one
 $smarty->assign("CONTENT", "../default.tpl");
-
-?>

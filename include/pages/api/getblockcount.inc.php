@@ -18,4 +18,3 @@ echo $api->get_json($iBlock);
 
 // Supress master template
 $supress_master = 1;
-?>

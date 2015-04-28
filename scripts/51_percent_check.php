@@ -41,4 +41,3 @@ if ($iPercentage >= 51) {
 } else {
   $setting->setValue('lock_registration', 0);
 }
-?>

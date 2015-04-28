@@ -38,4 +38,3 @@ if ($setting->getValue('notifications_disable_pool_newsletter', 0) == 1) {
   }
   $smarty->assign("CONTENT", "default.tpl");
 }
-?>

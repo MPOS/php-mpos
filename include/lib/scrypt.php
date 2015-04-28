@@ -532,5 +532,3 @@ function word_reverse($str) {
   }
   return $ret;
 }
-
-?>
