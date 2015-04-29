@@ -1,3 +1,9 @@
+1.0.3 (XXX XXth 2015)
+---------------------
+
+* Honor anonymous attribute when sending block finder mails
+* Display admin warning if no transfer fees are set
+
 1.0.3 (Apr 29th 2015)
 ---------------------
 
