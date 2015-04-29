@@ -1,3 +1,9 @@
+1.0.3 (Apr 29th 2015)
+---------------------
+
+* HOTFIX: Database upgrade from `1.0.0` to `1.0.1` did not work as
+  intended
+
 1.0.2 (Apr 28th 2015)
 ---------------------
 
