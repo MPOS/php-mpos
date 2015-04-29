@@ -9,9 +9,9 @@ function run_101() {
   $db_version_now = $setting->getValue('DB_VERSION');  // Our actual version installed
 
   // Upgrade specific variables
-  $aSql[] = "ALTER TABLE `" . $coin_address->getTableName() . "` ADD ap_threshold float DEFAULT '0'";
+  $aSql[] = "ALTER TABLE " . $coin_address->getTableName() . " ADD ap_threshold float DEFAULT '0'";
   $aSql[] = "UPDATE " . $coin_address->getTableName() . " AS ca LEFT JOIN " . $user->getTableName() . " AS a ON a.id = ca.account_id SET ca.ap_threshold = a.ap_threshold";
-  $aSql[] = "ALTER TABLE `" . $user->getTableName() . "` DROP `ap_threshold`";
+  $aSql[] = "ALTER TABLE " . $user->getTableName() . " DROP `ap_threshold`";
   $aSql[] = "UPDATE " . $setting->getTableName() . "    SET value = '1.0.1' WHERE name = 'DB_VERSION'";
 
   if ($db_version_now == $db_version_old && version_compare($db_version_now, DB_VERSION, '<')) {
