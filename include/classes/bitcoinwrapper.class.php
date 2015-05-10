@@ -46,7 +46,7 @@ class BitcoinWrapper extends BitcoinClient {
       // We only have a single account so getbalance will be fine
       return $dBalance;
     } else {
-      $dMainBalance = $aAccounts[''];
+      $dMainBalance = array_sum($aAccounts);
       return $dMainBalance;
     }
   }

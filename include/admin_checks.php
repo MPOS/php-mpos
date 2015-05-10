@@ -89,8 +89,8 @@ if (@$_SESSION['USERDATA']['is_admin'] && $user->isAdmin(@$_SESSION['USERDATA'][
 
       // check if there is more than one account set on wallet
       $accounts = $bitcoin->listaccounts();
-      if (count($accounts) > 1 && $accounts[''] <= 0) {
-        $error[] = "There are " . count($accounts) . " Accounts set in local Wallet and Default Account has no liquid funds to pay your miners!";
+      if (count($accounts) > 1 && array_sum($accounts) <= 0) {
+        $error[] = "There are " . count($accounts) . " Accounts set in local Wallet and none of them has no liquid funds to pay your miners!";
       }
     }
   } catch (Exception $e) {
