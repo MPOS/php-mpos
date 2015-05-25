@@ -22,6 +22,11 @@ if (@$_SESSION['USERDATA']['is_admin'] && $user->isAdmin(@$_SESSION['USERDATA'][
     }
   }
 
+  // check if fees are 0 and ap/mp tx fees are also set to 0 -> issue #2424
+  if ($config['fees'] == 0 && ($config['txfee_auto'] == 0 || $config['txfee_manual'] == 0)) {
+    $notice[] = "Having your pool fees set to 0 and tx fees also set to 0 can cause a problem where the wallet cannot payout, consider setting the txfee to a very low amount, ie. 0.0001 to avoid this.";
+  }
+
   // check if memcache isn't available but enabled in config -> error
   if (!class_exists('Memcached') && $config['memcache']['enabled']) {
     $error[] = "You have memcached enabled in your config and it's not available as a PHP module. Install the package on your system.";
