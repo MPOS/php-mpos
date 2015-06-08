@@ -31,6 +31,9 @@ class User extends Base {
   public function getUserName($id) {
     return $this->getSingle($id, 'username', 'id');
   }
+  public function getUserNameAnon($id) {
+    return $this->getSingle($id, 'is_anonymous', 'id');
+  }
   public function getUserNameByEmail($email) {
     return $this->getSingle($email, 'username', 'email', 's');
   }
