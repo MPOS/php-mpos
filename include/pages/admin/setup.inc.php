@@ -28,12 +28,8 @@ if (@$_SESSION['USERDATA']['is_admin'] && $user->isAdmin(@$_SESSION['USERDATA'][
     }
     
     // we want to load anything in checks/ that is check_*.inc.php
-    $potentialfiles = scandir(__DIR__."/checks/");
-    foreach ($potentialfiles as $pf) {
-      if ($pf == '.' || $pf == '..') continue;
-      if (preg_match("/check_+.+\.inc\.php/", $pf)) {
-        include_once("checks/".$pf);
-      }
+    foreach(glob(__DIR__."/checks/check_*.inc.php") as $file) {
+      include_once($file);
     }
   }
   $smarty->assign("ERRORS", $error);
