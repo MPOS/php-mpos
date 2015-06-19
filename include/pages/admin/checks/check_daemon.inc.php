@@ -9,7 +9,7 @@ try {
     $newerror['level'] = 3;
     $newerror['description'] = "Unable to connect to coin daemon using provided credentials.";
     $newerror['configvalue'] = "wallet.*";
-    $newerror['extdesc'] = "We weren't able to connect to your coin daemon using the host/username/password/port given in the config. Check that your coin daemon is running and mpos is configured with the data from your coin daemon config.";
+    $newerror['extdesc'] = "We weren't able to connect to your coin daemon using the host/username/password/port given in the config. Check that your coin daemon is running and mpos is configured with the data from your coin daemon config. Your coin daemon may also not yet be fully synced.";
     $newerror['helplink'] = "https://github.com/MPOS/php-mpos/wiki/Config-Setup#wiki-local-wallet-rpc";
     $error[] = $newerror;
     $newerror = null;
@@ -33,7 +33,7 @@ try {
       $newerror = array();
       $newerror['name'] = "Coin daemon";
       $newerror['level'] = 3;
-      $newerror['extdesc'] = "You need at least one account to be able to pay miners! See the above link for more details.";
+      $newerror['extdesc'] = "You need at least one account to be able to pay miners! Your coin daemon may not yet be fully synced, see the above link for more details.";
       $newerror['description'] = "There are " . count($accounts) . " Accounts set in local Wallet and Default Account has no liquid funds to pay your miners!";
       $newerror['configvalue'] = "wallet.host";
       $newerror['helplink'] = "https://github.com/MPOS/php-mpos/wiki/Config-Setup#wiki-local-wallet-rpc";

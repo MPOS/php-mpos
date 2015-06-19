@@ -16,7 +16,7 @@ if (function_exists('socket_create')) {
     $newerror = array();
     $newerror['name'] = "Stratum information";
     $newerror['level'] = 1;
-    $newerror['extdesc'] = "We tried to connect the stratum server that you set in your gettingstarted config, but an error occured somewhere along the way. Your stratum server may not be running currently, your firewall could be blocking the connection, etc.";
+    $newerror['extdesc'] = "We tried to connect the stratum server that you set in your gettingstarted config, but an error occured somewhere along the way. Your stratum server may not be running currently, your firewall could be blocking the connection, or your coin daemon may not yet be fully synced, etc.";
     $newerror['description'] = "We tried to poke your Stratum server using your \$config['gettingstarted'] settings but it didn't respond - " . socket_strerror(socket_last_error()) . ".";
     $newerror['configvalue'] = "gettingstarted";
     $newerror['helplink'] = "https://github.com/MPOS/php-mpos/wiki/Config-Setup#wiki-getting-started";
@@ -29,7 +29,7 @@ if (function_exists('socket_create')) {
     $newerror = array();
     $newerror['name'] = "Stratum information";
     $newerror['level'] = 1;
-    $newerror['extdesc'] = "We tried to connect the stratum server that you set in your gettingstarted config, but an error occured somewhere along the way. Your stratum server may not be running currently, your firewall could be blocking the connection, etc.";
+    $newerror['extdesc'] = "We tried to connect the stratum server that you set in your gettingstarted config, but an error occured somewhere along the way. Your stratum server may not be running currently, your firewall could be blocking the connection, or your coin daemon may not yet be fully synced, etc.";
     $newerror['description'] = "We tried to poke your Stratum server using your \$config['gettingstarted'] settings but it didn't respond.";
     $newerror['configvalue'] = "gettingstarted";
     $newerror['helplink'] = "https://github.com/MPOS/php-mpos/wiki/Config-Setup#wiki-getting-started";
