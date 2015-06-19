@@ -5,6 +5,8 @@ $defflip = (!cfip()) ? exit(header('HTTP/1.1 401 Unauthorized')) : 1;
 if (!class_exists('Memcached') && $config['memcache']['enabled']) {
   $newerror = array();
   $newerror['name'] = "Memcache Config";
+  $newerror['level'] = 3;
+  $newerror['extdesc'] = "Memcache is a service that you run that lets us cache commonly used data and access it quickly. It's highly recommended you <a href='https://github.com/MPOS/php-mpos/wiki/Quick-Start-Guide#requirements-1'>install the service and php packages</a> for your distro.";
   $newerror['description'] = "You have memcached enabled in your config and it's not available as a PHP module. Install the package on your system.";
   $newerror['configvalue'] = "memcache.enabled";
   $newerror['helplink'] = "https://github.com/MPOS/php-mpos/wiki/Config-Setup#wiki-memcache"; 
@@ -31,6 +33,8 @@ if (!$config['memcache']['enabled']) {
   if (class_exists('Memcached') && $memcache_test_get == $randmctv) {
     $newerror = array();
     $newerror['name'] = "Memcache Config";
+    $newerror['level'] = 2;
+    $newerror['extdesc'] = "Memcache is a service that you run that lets us cache commonly used data and access it quickly. It's highly recommended you <a href='https://github.com/MPOS/php-mpos/wiki/Quick-Start-Guide#requirements-1'>install the service and php packages</a> for your distro.";
     $newerror['description'] = "You have memcache disabled in the config but it's available and works! Enable it for best performance.";
     $newerror['configvalue'] = "memcache.enabled";
     $newerror['helplink'] = "https://github.com/MPOS/php-mpos/wiki/Config-Setup#wiki-memcache"; 
@@ -39,6 +43,8 @@ if (!$config['memcache']['enabled']) {
   } else {
     $newerror = array();
     $newerror['name'] = "Memcache Config";
+    $newerror['level'] = 2;
+     $newerror['extdesc'] = "Memcache is a service that you run that lets us cache commonly used data and access it quickly. It's highly recommended you <a href='https://github.com/MPOS/php-mpos/wiki/Quick-Start-Guide#requirements-1'>install the service and php packages</a> for your distro.";
     $newerror['description'] = "Memcache is disabled; Almost every linux distro has packages for it, you should be using it if you can.";
     $newerror['configvalue'] = "memcache.enabled";
     $newerror['helplink'] = "https://github.com/MPOS/php-mpos/wiki/Config-Setup#wiki-memcache"; 
@@ -51,6 +57,8 @@ if (!$config['memcache']['enabled']) {
 if ($config['mc_antidos'] && !$config['memcache']['enabled']) {
   $newerror = array();
   $newerror['name'] = "Memcache Config";
+  $newerror['level'] = 3;
+   $newerror['extdesc'] = "Memcache is a service that you run that lets us cache commonly used data and access it quickly. It's highly recommended you <a href='https://github.com/MPOS/php-mpos/wiki/Quick-Start-Guide#requirements-1'>install the service and php packages</a> for your distro.";
   $newerror['description'] = "mc_antidos is enabled and memcache is not, <u>memcache is required</u> to use this.";
   $newerror['configvalue'] = "memcache.enabled";
   $newerror['helplink'] = "https://github.com/MPOS/php-mpos/wiki/Config-Setup#memcache-rate-limiting"; 
