@@ -101,8 +101,8 @@ if (count(@$_SESSION['last_ip_pop']) == 2) {
 
 // version check and config check if not disabled
 if (@$_SESSION['USERDATA']['is_admin'] && $user->isAdmin(@$_SESSION['USERDATA']['id'])) {
-  if (!@$config['skip_config_tests']) {
-    require_once(INCLUDE_DIR . '/admin_checks.php');
+  if (!@$config['skip_config_tests'] && @$_GET['action'] != 'setup') {
+    $_SESSION['POPUP'][] = array('CONTENT' => "You haven't turned off config checks, visit the <b><a href='?page=admin&action=setup'>setup page</a></b> for further information.", 'DISMISS' => 'yes', 'ID' => 'lastlogin', 'TYPE' => 'alert alert-info');
   }
 }
 
