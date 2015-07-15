@@ -189,7 +189,7 @@ class User extends Base {
       return $result->fetch_all(MYSQLI_ASSOC);
     }
   }
-  
+
   /**
    * Check user login
    * @param username string Username
@@ -718,7 +718,8 @@ class User extends Base {
     if ($this->checkStmt($stmt) && $stmt->bind_param('i', $userID) && $stmt->execute() && $result = $stmt->get_result()) {
       $aData = $result->fetch_assoc();
       $aData['coin_address'] = $this->coin_address->getCoinAddress($userID);
-      $aData['ap_threshold'] = $this->coin_address->getAPThreshold($userID);
+      if (! $aData['ap_threshold'] = $this->coin_address->getAPThreshold($userID))
+        $aData['ap_threshold'] = 0;
       $stmt->close();
       return $aData;
     }
