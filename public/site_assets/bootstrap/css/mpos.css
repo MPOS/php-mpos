@@ -71,8 +71,7 @@ input[type="color"],
 	color: #555555;
 	border: 1px solid #ccc;
 	height: 25px;
-	/*line-height: 25px; IE FIX?*/
-        width: 100%;
+	line-height: 25px;
 }
 
 .input-group-sm > .form-control, 
@@ -585,7 +584,6 @@ div.fade {
 .table > tbody > tr > td
 {
 	padding:4px;  
-        vertical-align: middle;
 }
 
 .panel > .table,
@@ -627,21 +625,3 @@ div.fade {
 }
 
 /* End Footer */
-
-.navbar-right {
-    float: right !important;
-    margin-right: 0;
-}
-
-.input-group .form-control {
-    position: relative;
-    z-index: 2;
-    float: left;
-    margin-bottom: 0px;
-    width: auto;
-    min-width: 100%;
-}
-
-.input-group-sm > .form-control, .input-group-sm > .input-group-addon, .input-group-sm > .input-group-btn > .btn {
-    line-height: 0;
-}
