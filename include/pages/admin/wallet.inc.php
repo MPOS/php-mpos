@@ -23,6 +23,15 @@ if (!$smarty->isCached('master.tpl', $smarty_cache_key)) {
 
     $aGetInfo = $bitcoin->getinfo();
     $aGetPeerInfo = $bitcoin->getpeerinfo();
+    # Check if daemon is downloading the blockchain, estimated
+    $iStartingHeight = 0;
+    foreach ($aGetPeerInfo as $aPeerData) {
+      if ($iStartingHeight < $aPeerData['startingheight']) $iStartingHeight = $aPeerData['startingheight'];
+    }
+    if ($iStartingHeight > $aGetInfo['blocks']) {
+      $dDownloadPercentage = number_format(round($aGetInfo['blocks'] / $iStartingHeight * 100, 2), 2);
+      $aGetInfo['errors'] = "Downloading: $dDownloadPercentage%";
+    }
     $aGetTransactions = $bitcoin->listtransactions('', (int)$setting->getValue('wallet_transaction_limit', 25));
     if (is_array($aGetInfo) && array_key_exists('newmint', $aGetInfo)) {
       $dNewmint = $aGetInfo['newmint'];
@@ -61,6 +70,8 @@ if (!$smarty->isCached('master.tpl', $smarty_cache_key)) {
   $smarty->assign("ACCOUNTS", $dWalletAccounts);
   $smarty->assign("COLDCOINS", $dColdCoins);
   $smarty->assign("LOCKED", $dLockedBalance);
+  $smarty->assign("STARTINGHEIGHT", $iStartingHeight);
+  $smarty->assign("DOWNLOADPERCENTAGE", $dDownloadPercentage);
   $smarty->assign("NEWMINT", $dNewmint);
   $smarty->assign("COININFO", $aGetInfo);
   $smarty->assign("PEERINFO", $aGetPeerInfo);
