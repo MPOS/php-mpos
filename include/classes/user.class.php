@@ -231,7 +231,8 @@ class User extends Base {
       if ($getIPAddress !== $this->getCurrentIP()) {
         $this->log->log("warn", "$username has logged in with a different IP, saved is [$getIPAddress]");
       }
-      $setIPAddress = $this->setUserIp($uid, $_SERVER['REMOTE_ADDR']);
+      //$setIPAddress = $this->setUserIp($uid, $_SERVER['REMOTE_ADDR']);
+      $setIPAddress = $this->setUserIp($uid, $this->getCurrentIP());
       $this->createSession($username, $getIPAddress, $lastLoginTime);
       if ($setIPAddress) {
         // send a notification if success_login is active
@@ -951,7 +952,7 @@ public function isAuthenticated($logout=true) {
     $this->debug->append("STA " . __METHOD__, 4);
     if ( @$_SESSION['AUTHENTICATED'] == true &&
          !$this->isLocked($_SESSION['USERDATA']['id']) &&
-         $this->getUserIp($_SESSION['USERDATA']['id']) == $_SERVER['REMOTE_ADDR'] &&
+         $this->getUserIp($_SESSION['USERDATA']['id']) == $this->getCurrentIP() &&
          ( ! $this->config['protect_session_state'] ||
            (
              $this->config['protect_session_state'] && $_SESSION['STATE'] == md5($_SESSION['USERDATA']['username'].$_SESSION['USERDATA']['id'].@$_SERVER['HTTP_USER_AGENT'])
