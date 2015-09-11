@@ -1,0 +1,2223 @@
+msgid ""
+msgstr ""
+"Content-Type: text/plain; charset=UTF-8\n"
+"Project-Id-Version: \n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: English\n"
+"MIME-Version: 1.0\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 1.5.4\n"
+
+#: templates/mail/newsletter/body.tpl:3
+msgid "Dear"
+msgstr ""
+
+#: templates/mail/register/confirm_email.tpl:3
+#: templates/mail/password/reset.tpl:3 templates/mail/pin/reset.tpl:3
+msgid "Hello"
+msgstr ""
+
+#: templates/mail/register/confirm_email.tpl:4
+msgid ""
+"You have created a new account. In order to complete the registration "
+"process please follow this link:"
+msgstr ""
+
+#: templates/mail/register/confirm_email.tpl:7
+#: templates/mail/password/reset.tpl:7 templates/mail/invitations/body.tpl:8
+#: templates/mail/pin/reset.tpl:6
+msgid "Cheers,"
+msgstr ""
+
+#: templates/mail/password/reset.tpl:4
+msgid ""
+"You have requested a password reset through our online form. In order to "
+"complete the request please follow this link:"
+msgstr ""
+
+#: templates/mail/password/reset.tpl:6
+msgid ""
+"You will be asked to change your password. You can then use this new "
+"password to login to your account."
+msgstr ""
+
+#: templates/mail/notifications/idle_worker.tpl:3
+msgid "One of your workers is currently IDLE:"
+msgstr ""
+
+#: templates/mail/notifications/idle_worker.tpl:4
+msgid "We have not received any shares for this worker in the past 10 minutes."
+msgstr ""
+
+#: templates/mail/notifications/idle_worker.tpl:5
+msgid ""
+"Since monitoring is enabled for this worker, this notification was sent."
+msgstr ""
+
+#: templates/mail/notifications/idle_worker.tpl:7
+msgid "Please check your workers!"
+msgstr ""
+
+#: templates/mail/notifications/payout.tpl:3
+msgid ""
+"You account has been debited and the coins have been sent to your wallet."
+msgstr ""
+
+#: templates/mail/notifications/payout.tpl:4
+msgid "Amount:"
+msgstr ""
+
+#: templates/mail/notifications/account_edit.tpl:3
+msgid "You have a pending request to change your account details."
+msgstr ""
+
+#: templates/mail/notifications/account_edit.tpl:4
+#: templates/mail/notifications/change_pw.tpl:4
+#: templates/mail/notifications/withdraw_funds.tpl:4
+msgid ""
+"If you initiated this request, please follow the link below to confirm your "
+"changes. If you did NOT, please notify an administrator."
+msgstr ""
+
+#: templates/mail/notifications/error.tpl:2
+msgid "An error occured!"
+msgstr ""
+
+#: templates/mail/notifications/error.tpl:3
+msgid "This should never happen. Please review the error output below."
+msgstr ""
+
+#: templates/mail/notifications/change_pw.tpl:3
+msgid "You have a pending request to change your password."
+msgstr ""
+
+#: templates/mail/notifications/withdraw_funds.tpl:3
+msgid "You have a pending request to manually withdraw funds."
+msgstr ""
+
+#: templates/mail/notifications/locked.tpl:3
+msgid ""
+"You account has been locked due to too many failed password or PIN attempts. "
+"Please follow the URL below to unlock your account."
+msgstr ""
+
+#: templates/mail/notifications/new_block.tpl:2
+msgid "Block Number %1 has been discovered by %2 with a total value of %3 %4!"
+msgstr ""
+
+#: templates/mail/notifications/new_block.tpl:2
+msgid "The current difficulty is %1"
+msgstr ""
+
+#: templates/mail/notifications/success_login.tpl:3
+msgid "Your account has successfully logged in"
+msgstr ""
+
+#: templates/mail/notifications/success_login.tpl:4
+msgid "User: %1"
+msgstr ""
+
+#: templates/mail/notifications/success_login.tpl:6
+msgid "Time: %1"
+msgstr ""
+
+#: templates/mail/notifications/success_login.tpl:7
+msgid ""
+"If you initiated this login, you can ignore this message. If you did NOT, "
+"please notify an administrator."
+msgstr ""
+
+#: templates/mail/notifications/test_email.tpl:2
+msgid "Test email"
+msgstr ""
+
+#: templates/mail/notifications/test_email.tpl:3
+msgid "If you see this email - your email protocol is configured correctly"
+msgstr ""
+
+#: templates/mail/notifications/test_email.tpl:4
+msgid "Coin name: %1"
+msgstr ""
+
+#: templates/mail/notifications/test_email.tpl:5
+msgid "Stratum: %1:%2"
+msgstr ""
+
+#: templates/mail/contactform/body.tpl:3
+msgid "%1 Message,"
+msgstr ""
+
+#: templates/mail/contactform/body.tpl:4
+msgid "Sent you a message"
+msgstr ""
+
+#: templates/mail/contactform/body.tpl:5
+msgid "Senders Email: "
+msgstr ""
+
+#: templates/mail/contactform/body.tpl:6
+msgid "Subject: "
+msgstr ""
+
+#: templates/mail/contactform/body.tpl:7 templates/mail/invitations/body.tpl:6
+msgid "Personal message"
+msgstr ""
+
+#: templates/mail/invitations/body.tpl:3
+msgid "Hello valued miner"
+msgstr ""
+
+#: templates/mail/invitations/body.tpl:4
+msgid "invited you to participate on this pool"
+msgstr ""
+
+#: templates/mail/pin/reset.tpl:4
+msgid "You have requested a PIN reset through our online form."
+msgstr ""
+
+#: templates/mail/pin/reset.tpl:5
+msgid "Randomly Generated PIN:"
+msgstr ""
+
+#: templates/bootstrap/account/default.tpl:1
+msgid "No action specified"
+msgstr ""
+
+#: templates/bootstrap/account/workers/default.tpl:9
+#: templates/bootstrap/account/workers/default.tpl:22
+msgid "Add New Worker"
+msgstr ""
+
+#: templates/bootstrap/account/workers/default.tpl:13
+#: templates/bootstrap/admin/poolworkers/default.tpl:12
+msgid "Worker Name"
+msgstr ""
+
+#: templates/bootstrap/account/workers/default.tpl:17
+#: templates/bootstrap/account/workers/default.tpl:43
+msgid "Worker Password"
+msgstr ""
+
+#: templates/bootstrap/account/workers/default.tpl:30
+msgid "Worker Configuration"
+msgstr ""
+
+#: templates/bootstrap/account/workers/default.tpl:42
+msgid "Worker Login"
+msgstr ""
+
+#: templates/bootstrap/account/workers/default.tpl:44
+#: templates/bootstrap/account/notifications/default.tpl:85
+#: templates/bootstrap/admin/poolworkers/default.tpl:14
+#: templates/bootstrap/admin/monitoring/default.tpl:13
+#: templates/bootstrap/admin/dashboard/user.tpl:12
+#: templates/bootstrap/admin/news/default.tpl:22
+msgid "Active"
+msgstr ""
+
+#: templates/bootstrap/account/workers/default.tpl:46
+#: templates/bootstrap/admin/poolworkers/default.tpl:16
+msgid "Khash/s"
+msgstr ""
+
+#: templates/bootstrap/account/workers/default.tpl:47
+#: templates/bootstrap/dashboard/account_data/_workers.tpl:7
+#: templates/bootstrap/dashboard/round_statistics/pps/round.tpl:118
+#: templates/bootstrap/dashboard/round_statistics/pplns/round.tpl:58
+#: templates/bootstrap/dashboard/round_statistics/prop/round.tpl:58
+#: templates/bootstrap/dashboard/worker_information/default.tpl:13
+#: templates/bootstrap/dashboard/blocks/default.tpl:14
+#: templates/bootstrap/statistics/round/block_stats.tpl:36
+#: templates/bootstrap/statistics/blocks/blocks_found_details.tpl:16
+#: templates/bootstrap/admin/poolworkers/default.tpl:17
+msgid "Difficulty"
+msgstr ""
+
+#: templates/bootstrap/account/workers/default.tpl:48
+msgid "Action"
+msgstr ""
+
+#: templates/bootstrap/account/workers/default.tpl:80
+msgid "Update Workers"
+msgstr ""
+
+#: templates/bootstrap/account/transactions/default.tpl:8
+#: templates/bootstrap/admin/transactions/default.tpl:40
+msgid "Transaction Filter"
+msgstr ""
+
+#: templates/bootstrap/account/transactions/default.tpl:20
+#: templates/bootstrap/account/notifications/default.tpl:84
+#: templates/bootstrap/statistics/round/round_transactions.tpl:12
+#: templates/bootstrap/admin/transactions/default.tpl:52
+msgid "Type"
+msgstr ""
+
+#: templates/bootstrap/account/transactions/default.tpl:24
+#: templates/bootstrap/account/transactions/default.tpl:47
+#: templates/bootstrap/admin/wallet/status.tpl:13
+#: templates/bootstrap/admin/transactions/default.tpl:56
+msgid "Status"
+msgstr ""
+
+#: templates/bootstrap/account/transactions/default.tpl:37
+msgid "Transaction History"
+msgstr ""
+
+#: templates/bootstrap/account/transactions/default.tpl:44
+#: templates/bootstrap/account/notifications/default.tpl:82
+#: templates/bootstrap/admin/registrations/default.tpl:13
+#: templates/bootstrap/admin/user/default.tpl:89
+msgid "ID"
+msgstr ""
+
+#: templates/bootstrap/account/transactions/default.tpl:45
+msgid "Date"
+msgstr ""
+
+#: templates/bootstrap/account/transactions/default.tpl:46
+msgid "TX Type"
+msgstr ""
+
+#: templates/bootstrap/account/transactions/default.tpl:48
+#: templates/bootstrap/account/edit/detail.tpl:42
+msgid "Payment Address"
+msgstr ""
+
+#: templates/bootstrap/account/transactions/default.tpl:49
+msgid "TX #"
+msgstr ""
+
+#: templates/bootstrap/account/transactions/default.tpl:50
+msgid "Block #"
+msgstr ""
+
+#: templates/bootstrap/account/transactions/default.tpl:51
+#: templates/bootstrap/dashboard/blocks/default.tpl:15
+#: templates/bootstrap/statistics/round/block_stats.tpl:25
+#: templates/bootstrap/statistics/round/round_transactions.tpl:15
+#: templates/bootstrap/statistics/blocks/blocks_found_details.tpl:17
+#: templates/bootstrap/statistics/blocks/block_overview_time.tpl:22
+#: templates/bootstrap/admin/wallet/transactions.tpl:15
+#: templates/bootstrap/admin/reports/earnings_report.tpl:26
+#: templates/bootstrap/admin/invitations/default.tpl:14
+msgid "Amount"
+msgstr ""
+
+#: templates/bootstrap/account/transactions/default.tpl:69
+#: templates/bootstrap/dashboard/account_data/default.tpl:31
+#: templates/bootstrap/statistics/round/block_stats.tpl:29
+#: templates/bootstrap/statistics/blocks/blocks_found_details.tpl:41
+msgid "Confirmed"
+msgstr ""
+
+#: templates/bootstrap/account/transactions/default.tpl:71
+msgid "Orphaned"
+msgstr ""
+
+#: templates/bootstrap/account/transactions/default.tpl:73
+#: templates/bootstrap/dashboard/account_data/default.tpl:37
+#: templates/bootstrap/admin/wallet/balance.tpl:17
+msgid "Unconfirmed"
+msgstr ""
+
+#: templates/bootstrap/account/transactions/default.tpl:91
+msgid "Auto Threshold Payment"
+msgstr ""
+
+#: templates/bootstrap/account/transactions/default.tpl:91
+msgid "Manual Payment"
+msgstr ""
+
+#: templates/bootstrap/account/transactions/default.tpl:91
+#: templates/bootstrap/account/earnings/default.tpl:57
+#: templates/bootstrap/admin/userdetails/default.tpl:52
+msgid "Donation"
+msgstr ""
+
+#: templates/bootstrap/account/transactions/default.tpl:91
+msgid "Pool Fees (if applicable)"
+msgstr ""
+
+#: templates/bootstrap/account/earnings/default.tpl:6
+msgid "Total %1 Earning Reports"
+msgstr ""
+
+#: templates/bootstrap/account/earnings/default.tpl:13
+msgid "Summary"
+msgstr ""
+
+#: templates/bootstrap/account/earnings/default.tpl:28
+#: templates/bootstrap/statistics/blocks/block_overview_time.tpl:28
+msgid "All Time"
+msgstr ""
+
+#: templates/bootstrap/account/earnings/default.tpl:45
+msgid "Sorted by Time"
+msgstr ""
+
+#: templates/bootstrap/account/earnings/default.tpl:53
+#: templates/bootstrap/admin/userdetails/default.tpl:48
+msgid "Credit"
+msgstr ""
+
+#: templates/bootstrap/account/earnings/default.tpl:54
+#: templates/bootstrap/admin/userdetails/default.tpl:49
+msgid "Bonus"
+msgstr ""
+
+#: templates/bootstrap/account/earnings/default.tpl:55
+#: templates/bootstrap/admin/userdetails/default.tpl:50
+msgid "Debit AP"
+msgstr ""
+
+msgid "Debit_AP"
+msgstr ""
+
+#: templates/bootstrap/account/earnings/default.tpl:56
+#: templates/bootstrap/admin/userdetails/default.tpl:51
+msgid "Debit MP"
+msgstr ""
+
+#: templates/bootstrap/account/earnings/default.tpl:59
+#: templates/bootstrap/admin/userdetails/default.tpl:54
+msgid "Fee"
+msgstr ""
+
+#: templates/bootstrap/account/earnings/default.tpl:61
+#: templates/bootstrap/admin/userdetails/default.tpl:56
+msgid "TXFee"
+msgstr ""
+
+#: templates/bootstrap/account/earnings/default.tpl:66
+#: templates/bootstrap/admin/userdetails/default.tpl:61
+msgid "Last Hour"
+msgstr ""
+
+#: templates/bootstrap/account/earnings/default.tpl:78
+#: templates/bootstrap/admin/userdetails/default.tpl:73
+msgid "Last Day"
+msgstr ""
+
+msgid "Last 24 Hours"
+msgstr ""
+
+#: templates/bootstrap/account/earnings/default.tpl:90
+#: templates/bootstrap/admin/userdetails/default.tpl:85
+msgid "Last Week"
+msgstr ""
+
+#: templates/bootstrap/account/earnings/default.tpl:102
+#: templates/bootstrap/admin/userdetails/default.tpl:97
+msgid "Last Month"
+msgstr ""
+
+#: templates/bootstrap/account/earnings/default.tpl:114
+#: templates/bootstrap/admin/userdetails/default.tpl:109
+msgid "Last Year"
+msgstr ""
+
+#: templates/bootstrap/account/edit/password.tpl:9
+#: templates/bootstrap/account/edit/password.tpl:55
+#: templates/bootstrap/password/change/default.tpl:33
+#: templates/bootstrap/password/change/default.tpl:35
+#: templates/bootstrap/password/change/default.tpl:40
+msgid "Change Password"
+msgstr ""
+
+#: templates/bootstrap/account/edit/password.tpl:16
+#: templates/bootstrap/statistics/blocks/small_table.tpl:35
+msgid "Note"
+msgstr ""
+
+#: templates/bootstrap/account/edit/password.tpl:16
+msgid ""
+"You will be redirected to login on successful completion of a password change"
+msgstr ""
+
+#: templates/bootstrap/account/edit/password.tpl:20
+#: templates/bootstrap/account/edit/resetpin.tpl:15
+msgid "Current Password"
+msgstr ""
+
+#: templates/bootstrap/account/edit/password.tpl:24
+#: templates/bootstrap/password/change/default.tpl:16
+msgid "New Password"
+msgstr ""
+
+#: templates/bootstrap/account/edit/password.tpl:29
+#: templates/bootstrap/password/change/default.tpl:22
+msgid "Repeat New Password"
+msgstr ""
+
+#: templates/bootstrap/account/edit/password.tpl:34
+#: templates/bootstrap/account/edit/cashout.tpl:31
+#: templates/bootstrap/account/edit/detail.tpl:65
+msgid "4 Digit PIN"
+msgstr ""
+
+#: templates/bootstrap/account/edit/resetpin.tpl:9
+msgid "Reset PIN"
+msgstr ""
+
+#: templates/bootstrap/account/edit/cashout.tpl:9
+msgid "Cash Out"
+msgstr ""
+
+#: templates/bootstrap/account/edit/cashout.tpl:19
+msgid "Minimum Cashout"
+msgstr ""
+
+#: templates/bootstrap/account/edit/cashout.tpl:23
+#: templates/bootstrap/dashboard/account_data/default.tpl:27
+msgid "Account Balance"
+msgstr ""
+
+#: templates/bootstrap/account/edit/cashout.tpl:27
+msgid "Payout to"
+msgstr ""
+
+#: templates/bootstrap/account/edit/cashout.tpl:44
+#: templates/bootstrap/account/edit/cashout.tpl:50
+#: templates/bootstrap/account/edit/detail.tpl:83
+#: templates/bootstrap/password/change/default.tpl:37
+msgid "Unlock"
+msgstr ""
+
+#: templates/bootstrap/account/edit/cashout.tpl:46
+#: templates/bootstrap/account/edit/cashout.tpl:48
+#: templates/bootstrap/account/edit/cashout.tpl:53
+msgid "Cash Out!"
+msgstr ""
+
+#: templates/bootstrap/account/edit/detail.tpl:9
+msgid "Account Details"
+msgstr ""
+
+#: templates/bootstrap/account/edit/detail.tpl:15
+#: templates/bootstrap/register/default.tpl:20
+#: templates/bootstrap/admin/registrations/default.tpl:14
+#: templates/bootstrap/admin/user/default.tpl:90
+#: templates/bootstrap/admin/invitations/default.tpl:12
+msgid "Username"
+msgstr ""
+
+#: templates/bootstrap/account/edit/detail.tpl:19
+msgid "User Id"
+msgstr ""
+
+#: templates/bootstrap/account/edit/detail.tpl:24
+msgid "API Key"
+msgstr ""
+
+#: templates/bootstrap/account/edit/detail.tpl:30
+#: templates/bootstrap/account/invitations/default.tpl:13
+#: templates/bootstrap/account/invitations/default.tpl:38
+#: templates/bootstrap/admin/user/default.tpl:54
+msgid "E-Mail"
+msgstr ""
+
+#: templates/bootstrap/account/edit/detail.tpl:34
+msgid "Timezone"
+msgstr ""
+
+#: templates/bootstrap/account/edit/detail.tpl:46
+msgid "Donation Percentage"
+msgstr ""
+
+#: templates/bootstrap/account/edit/detail.tpl:47
+msgid "Donation amount in percent"
+msgstr ""
+
+#: templates/bootstrap/account/edit/detail.tpl:51
+msgid "Automatic Payout Threshold"
+msgstr ""
+
+#: templates/bootstrap/account/edit/detail.tpl:58
+msgid "Anonymous Account"
+msgstr ""
+
+#: templates/bootstrap/account/edit/detail.tpl:62
+msgid ""
+"Hide username on website from others. Admins can still get your user "
+"information."
+msgstr ""
+
+#: templates/bootstrap/account/edit/detail.tpl:66
+msgid "The 4 digit PIN you chose when registering"
+msgstr ""
+
+#: templates/bootstrap/account/edit/detail.tpl:79
+#: templates/bootstrap/account/edit/detail.tpl:81
+#: templates/bootstrap/account/edit/detail.tpl:86
+msgid "Update Account"
+msgstr ""
+
+#: templates/bootstrap/account/notifications/default.tpl:9
+msgid "Notification Settings"
+msgstr ""
+
+#: templates/bootstrap/account/notifications/default.tpl:16
+#: templates/bootstrap/account/notifications/default.tpl:96
+msgid "Idle Worker"
+msgstr ""
+
+#: templates/bootstrap/account/notifications/default.tpl:27
+msgid "New Blocks"
+msgstr ""
+
+#: templates/bootstrap/account/notifications/default.tpl:37
+#: templates/bootstrap/account/notifications/default.tpl:95
+#: templates/bootstrap/global/header.tpl:44
+msgid "Payout"
+msgstr ""
+
+#: templates/bootstrap/account/notifications/default.tpl:46
+#: templates/bootstrap/account/notifications/default.tpl:97
+#: templates/bootstrap/global/header.tpl:46
+msgid "Successful Login"
+msgstr ""
+
+#: templates/bootstrap/account/notifications/default.tpl:56
+msgid "Pool Newsletter"
+msgstr ""
+
+#: templates/bootstrap/account/notifications/default.tpl:67
+msgid "Update"
+msgstr ""
+
+#: templates/bootstrap/account/notifications/default.tpl:75
+msgid "Notification History"
+msgstr ""
+
+#: templates/bootstrap/account/notifications/default.tpl:83
+#: templates/bootstrap/dashboard/blocks/default.tpl:13
+#: templates/bootstrap/statistics/round/block_stats.tpl:38
+#: templates/bootstrap/statistics/blocks/blocks_found_details.tpl:15
+#: templates/bootstrap/statistics/blocks/small_table.tpl:12
+#: templates/bootstrap/admin/wallet/transactions.tpl:18
+msgid "Time"
+msgstr ""
+
+#: templates/bootstrap/account/notifications/default.tpl:94
+#: templates/bootstrap/global/header.tpl:43
+msgid "New Block"
+msgstr ""
+
+#: templates/bootstrap/account/invitations/default.tpl:5
+msgid "Invitation"
+msgstr ""
+
+#: templates/bootstrap/account/invitations/default.tpl:17
+#: templates/bootstrap/admin/monitoring/default.tpl:17
+msgid "Message"
+msgstr ""
+
+#: templates/bootstrap/account/invitations/default.tpl:30
+msgid "Past Invitations"
+msgstr ""
+
+#: templates/bootstrap/account/invitations/default.tpl:39
+msgid "Sent"
+msgstr ""
+
+#: templates/bootstrap/account/invitations/default.tpl:40
+#: templates/bootstrap/admin/dashboard/invitation.tpl:11
+#: templates/bootstrap/admin/invitations/default.tpl:16
+msgid "Activated"
+msgstr ""
+
+#: templates/bootstrap/account/qrcode/default.tpl:21
+msgid "API String"
+msgstr ""
+
+#: templates/bootstrap/account/qrcode/default.tpl:24
+msgid ""
+"This code will allow you to import the full API string into your mobile "
+"application."
+msgstr ""
+
+#: templates/bootstrap/global/footer.tpl:5
+msgid "Powered by"
+msgstr ""
+
+#: templates/bootstrap/global/navigation.tpl:5
+msgid "Home"
+msgstr ""
+
+#: templates/bootstrap/global/navigation.tpl:9
+#: templates/bootstrap/global/navigation.tpl:34
+#: templates/bootstrap/global/header.tpl:70
+msgid "Dashboard"
+msgstr ""
+
+#: templates/bootstrap/global/navigation.tpl:13
+msgid "My Account"
+msgstr ""
+
+#: templates/bootstrap/global/navigation.tpl:15
+msgid "Edit Account"
+msgstr ""
+
+#: templates/bootstrap/global/navigation.tpl:16
+msgid "My Workers"
+msgstr ""
+
+#: templates/bootstrap/global/navigation.tpl:17
+#: templates/bootstrap/global/navigation.tpl:43
+msgid "Transactions"
+msgstr ""
+
+#: templates/bootstrap/global/navigation.tpl:18
+msgid "Earnings"
+msgstr ""
+
+#: templates/bootstrap/global/navigation.tpl:19
+msgid "Notifications"
+msgstr ""
+
+#: templates/bootstrap/global/navigation.tpl:20
+#: templates/bootstrap/global/navigation.tpl:59
+#: templates/bootstrap/admin/dashboard/invitation.tpl:4
+msgid "Invitations"
+msgstr ""
+
+#: templates/bootstrap/global/navigation.tpl:21
+msgid "QR Codes"
+msgstr ""
+
+#: templates/bootstrap/global/navigation.tpl:28
+msgid "Admin Panel"
+msgstr ""
+
+#: templates/bootstrap/global/navigation.tpl:31
+msgid "System"
+msgstr ""
+
+#: templates/bootstrap/global/navigation.tpl:33
+msgid "Setup"
+msgstr ""
+
+#: templates/bootstrap/global/navigation.tpl:35
+#: templates/bootstrap/admin/monitoring/default.tpl:5
+msgid "Monitoring"
+msgstr ""
+
+#: templates/bootstrap/global/navigation.tpl:36
+#: templates/bootstrap/global/header.tpl:71
+#: templates/bootstrap/admin/settings/default.tpl:5
+msgid "Settings"
+msgstr ""
+
+#: templates/bootstrap/global/navigation.tpl:40
+msgid "Funds"
+msgstr ""
+
+#: templates/bootstrap/global/navigation.tpl:42
+msgid "Wallet Info"
+msgstr ""
+
+#: templates/bootstrap/global/navigation.tpl:47
+msgid "News"
+msgstr ""
+
+#: templates/bootstrap/global/navigation.tpl:49
+msgid "Site News"
+msgstr ""
+
+#: templates/bootstrap/global/navigation.tpl:50
+msgid "Newsletter"
+msgstr ""
+
+#: templates/bootstrap/global/navigation.tpl:54
+#: templates/bootstrap/admin/dashboard/user.tpl:5
+msgid "Users"
+msgstr ""
+
+#: templates/bootstrap/global/navigation.tpl:56
+msgid "User Info"
+msgstr ""
+
+#: templates/bootstrap/global/navigation.tpl:57
+msgid "Reports"
+msgstr ""
+
+#: templates/bootstrap/global/navigation.tpl:58
+#: templates/bootstrap/admin/dashboard/registrations.tpl:4
+msgid "Registrations"
+msgstr ""
+
+#: templates/bootstrap/global/navigation.tpl:60
+#: templates/bootstrap/dashboard/overview/_with_price_graph.tpl:62
+#: templates/bootstrap/dashboard/overview/_without_price_graph.tpl:62
+msgid "Pool Workers"
+msgstr ""
+
+#: templates/bootstrap/global/navigation.tpl:68
+msgid "Statistics"
+msgstr ""
+
+#: templates/bootstrap/global/navigation.tpl:81
+msgid "Help"
+msgstr ""
+
+#: templates/bootstrap/global/navigation.tpl:83
+msgid "Getting Started"
+msgstr ""
+
+#: templates/bootstrap/global/navigation.tpl:91
+msgid "Other"
+msgstr ""
+
+#: templates/bootstrap/global/navigation.tpl:94
+#: templates/bootstrap/global/header.tpl:75
+msgid "Logout"
+msgstr ""
+
+#: templates/bootstrap/global/navigation.tpl:96
+#: templates/bootstrap/global/header.tpl:78
+msgid "Login"
+msgstr ""
+
+#: templates/bootstrap/global/navigation.tpl:97
+#: templates/bootstrap/global/header.tpl:79
+msgid "Sign Up"
+msgstr ""
+
+#: templates/bootstrap/global/navigation.tpl:100
+#: templates/bootstrap/register/default.tpl:59
+#: templates/bootstrap/register/default.tpl:77
+msgid "Terms and Conditions"
+msgstr ""
+
+#: templates/bootstrap/global/header.tpl:45
+msgid "IDLE Worker"
+msgstr ""
+
+#: templates/bootstrap/global/header.tpl:57
+msgid "See All Notifications"
+msgstr ""
+
+#: templates/bootstrap/global/header.tpl:72
+msgid "Workers"
+msgstr ""
+
+#: templates/bootstrap/home/news_all.tpl:8
+#: templates/bootstrap/home/news_accordion.tpl:14
+#: templates/bootstrap/admin/news/default.tpl:51
+msgid "posted"
+msgstr ""
+
+#: templates/bootstrap/home/news_accordion.tpl:5
+msgid "latest News"
+msgstr ""
+
+#: templates/bootstrap/master.tpl:73
+msgid "Missing template for this page"
+msgstr ""
+
+#: templates/bootstrap/register/default.tpl:16
+msgid "Register new account"
+msgstr ""
+
+#: templates/bootstrap/register/default.tpl:26
+msgid "Coin Address"
+msgstr ""
+
+#: templates/bootstrap/register/default.tpl:32
+#: templates/bootstrap/login/default.tpl:16
+#: templates/bootstrap/admin/poolworkers/default.tpl:13
+msgid "Password"
+msgstr ""
+
+#: templates/bootstrap/register/default.tpl:32
+msgid "Strength"
+msgstr ""
+
+#: templates/bootstrap/register/default.tpl:42
+msgid "Email"
+msgstr ""
+
+#: templates/bootstrap/register/default.tpl:51
+msgid "PIN"
+msgstr ""
+
+#: templates/bootstrap/register/default.tpl:52
+msgid "Four digit number."
+msgstr ""
+
+#: templates/bootstrap/register/default.tpl:52
+msgid "Remember this pin!"
+msgstr ""
+
+#: templates/bootstrap/register/default.tpl:59
+msgid "I Accept The"
+msgstr ""
+
+#: templates/bootstrap/register/default.tpl:66
+msgid "Register"
+msgstr ""
+
+#: templates/bootstrap/register/default.tpl:83
+msgid "Close"
+msgstr ""
+
+#: templates/bootstrap/register/disabled.tpl:1
+msgid "We are currently not accepting new user registrations."
+msgstr ""
+
+#: templates/bootstrap/password/default.tpl:8
+#: templates/bootstrap/password/change/default.tpl:11
+msgid "Password reset"
+msgstr ""
+
+#: templates/bootstrap/password/default.tpl:12
+msgid ""
+"If you have an email set for your account, enter your username to get your "
+"password reset"
+msgstr ""
+
+#: templates/bootstrap/password/default.tpl:15
+msgid "Username or E-mail"
+msgstr ""
+
+#: templates/bootstrap/password/default.tpl:20
+msgid "Reset password"
+msgstr ""
+
+#: templates/bootstrap/dashboard/account_data/default.tpl:4
+msgid "Account Information"
+msgstr ""
+
+#: templates/bootstrap/dashboard/account_data/default.tpl:11
+msgid "You are mining without any pool fees applied and"
+msgstr ""
+
+#: templates/bootstrap/dashboard/account_data/default.tpl:13
+msgid "You are mining at"
+msgstr ""
+
+#: templates/bootstrap/dashboard/account_data/default.tpl:15
+msgid "This pool does not apply fees and"
+msgstr ""
+
+#: templates/bootstrap/dashboard/account_data/default.tpl:18
+msgid "you donate"
+msgstr ""
+
+#: templates/bootstrap/dashboard/account_data/default.tpl:20
+msgid "you are not"
+msgstr ""
+
+#: templates/bootstrap/dashboard/account_data/default.tpl:20
+msgid "donating"
+msgstr ""
+
+#: templates/bootstrap/dashboard/account_data/_workers.tpl:5
+#: templates/bootstrap/dashboard/worker_information/default.tpl:11
+msgid "Worker"
+msgstr ""
+
+#: templates/bootstrap/dashboard/account_data/_workers.tpl:6
+#: templates/bootstrap/dashboard/worker_information/default.tpl:12
+#: templates/bootstrap/admin/user/default.tpl:93
+msgid "Hashrate"
+msgstr ""
+
+#: templates/bootstrap/dashboard/account_data/_workers.tpl:11
+#: templates/bootstrap/dashboard/worker_information/default.tpl:17
+msgid "No worker information available"
+msgstr ""
+
+#: templates/bootstrap/dashboard/default.tpl:9
+msgid "Overview"
+msgstr ""
+
+#: templates/bootstrap/dashboard/default.tpl:27
+msgid "Refresh interval"
+msgstr ""
+
+#: templates/bootstrap/dashboard/default.tpl:27
+#: templates/bootstrap/admin/monitoring/default.tpl:43
+msgid "seconds"
+msgstr ""
+
+#: templates/bootstrap/dashboard/default.tpl:27
+msgid "worker and account"
+msgstr ""
+
+#: templates/bootstrap/dashboard/default.tpl:27
+msgid "Hashrate based on shares submitted in the past"
+msgstr ""
+
+#: templates/bootstrap/dashboard/default.tpl:27
+msgid "minutes"
+msgstr ""
+
+#: templates/bootstrap/dashboard/overview/default.tpl:5
+msgid "Pool Information"
+msgstr ""
+
+#: templates/bootstrap/dashboard/overview/_with_price_graph.tpl:8
+#: templates/bootstrap/dashboard/overview/_without_price_graph.tpl:8
+msgid "My Hashrate"
+msgstr ""
+
+#: templates/bootstrap/dashboard/overview/_with_price_graph.tpl:26
+#: templates/bootstrap/dashboard/overview/_without_price_graph.tpl:26
+msgid "Pool Hashrate"
+msgstr ""
+
+#: templates/bootstrap/dashboard/overview/_with_price_graph.tpl:44
+#: templates/bootstrap/dashboard/overview/_without_price_graph.tpl:44
+msgid "My Sharerate"
+msgstr ""
+
+#: templates/bootstrap/dashboard/overview/_with_price_graph.tpl:79
+#: templates/bootstrap/dashboard/overview/_without_price_graph.tpl:79
+msgid "Net Hashrate"
+msgstr ""
+
+#: templates/bootstrap/dashboard/round_statistics/pps/default.tpl:5
+#: templates/bootstrap/dashboard/round_statistics/pplns/default.tpl:5
+msgid "Round Information"
+msgstr ""
+
+#: templates/bootstrap/dashboard/round_statistics/pps/default.tpl:16
+#: templates/bootstrap/dashboard/round_statistics/pplns/default.tpl:16
+#: templates/bootstrap/dashboard/round_statistics/prop/default.tpl:16
+msgid "Share Information"
+msgstr ""
+
+#: templates/bootstrap/dashboard/round_statistics/pps/shares.tpl:5
+#: templates/bootstrap/dashboard/round_statistics/pplns/shares.tpl:5
+#: templates/bootstrap/dashboard/round_statistics/prop/shares.tpl:5
+msgid "Own"
+msgstr ""
+
+#: templates/bootstrap/dashboard/round_statistics/pps/shares.tpl:6
+#: templates/bootstrap/dashboard/round_statistics/pplns/shares.tpl:6
+#: templates/bootstrap/dashboard/round_statistics/prop/shares.tpl:6
+msgid "Pool"
+msgstr ""
+
+#: templates/bootstrap/dashboard/round_statistics/pps/shares.tpl:9
+#: templates/bootstrap/dashboard/round_statistics/pplns/shares.tpl:9
+#: templates/bootstrap/dashboard/round_statistics/prop/shares.tpl:9
+#: templates/bootstrap/statistics/round/round_shares.tpl:13
+#: templates/bootstrap/statistics/blocks/block_overview_time.tpl:15
+msgid "Valid"
+msgstr ""
+
+#: templates/bootstrap/dashboard/round_statistics/pps/shares.tpl:22
+#: templates/bootstrap/dashboard/round_statistics/pplns/shares.tpl:22
+#: templates/bootstrap/dashboard/round_statistics/prop/shares.tpl:22
+#: templates/bootstrap/statistics/round/round_shares.tpl:14
+#: templates/bootstrap/statistics/round/round_shares.tpl:15
+#: templates/bootstrap/admin/reports/earnings_report.tpl:15
+#: templates/bootstrap/admin/reports/earnings_report.tpl:21
+msgid "Invalid"
+msgstr ""
+
+#: templates/bootstrap/dashboard/round_statistics/pps/shares.tpl:35
+#: templates/bootstrap/dashboard/round_statistics/pplns/shares.tpl:35
+#: templates/bootstrap/dashboard/round_statistics/prop/shares.tpl:35
+msgid "Efficiency"
+msgstr ""
+
+#: templates/bootstrap/dashboard/round_statistics/pps/round.tpl:13
+msgid "1 Hour Estimated Earnings"
+msgstr ""
+
+#: templates/bootstrap/dashboard/round_statistics/pps/round.tpl:28
+msgid "24 Hour Estimated Earnings"
+msgstr ""
+
+#: templates/bootstrap/dashboard/round_statistics/pps/round.tpl:43
+msgid "7 Days Estimated Earnings"
+msgstr ""
+
+#: templates/bootstrap/dashboard/round_statistics/pps/round.tpl:58
+msgid "14 Days Estimated Earnings"
+msgstr ""
+
+#: templates/bootstrap/dashboard/round_statistics/pps/round.tpl:73
+msgid "30 Days Estimated Earnings"
+msgstr ""
+
+#: templates/bootstrap/dashboard/round_statistics/pps/round.tpl:88
+msgid "PPS<br/>Value"
+msgstr ""
+
+#: templates/bootstrap/dashboard/round_statistics/pps/round.tpl:103
+msgid "Unpaid<br/>difficulty shares"
+msgstr ""
+
+#: templates/bootstrap/dashboard/round_statistics/pps/round.tpl:133
+#: templates/bootstrap/dashboard/round_statistics/pplns/round.tpl:73
+#: templates/bootstrap/dashboard/round_statistics/prop/round.tpl:73
+msgid "Est Next Difficulty"
+msgstr ""
+
+#: templates/bootstrap/dashboard/round_statistics/pps/round.tpl:133
+#: templates/bootstrap/dashboard/round_statistics/pplns/round.tpl:73
+#: templates/bootstrap/dashboard/round_statistics/prop/round.tpl:73
+msgid "Change in %1 Blocks"
+msgstr ""
+
+#: templates/bootstrap/dashboard/round_statistics/pps/round.tpl:133
+#: templates/bootstrap/dashboard/round_statistics/pplns/round.tpl:73
+#: templates/bootstrap/dashboard/round_statistics/prop/round.tpl:73
+msgid "No Estimates"
+msgstr ""
+
+#: templates/bootstrap/dashboard/round_statistics/pps/round.tpl:148
+msgid "Estimated Average<br/>Time per Block"
+msgstr ""
+
+#: templates/bootstrap/dashboard/round_statistics/pplns/round.tpl:13
+#: templates/bootstrap/dashboard/round_statistics/prop/round.tpl:13
+msgid "Current Block"
+msgstr ""
+
+#: templates/bootstrap/dashboard/round_statistics/pplns/round.tpl:28
+#: templates/bootstrap/dashboard/round_statistics/prop/round.tpl:28
+msgid "Of Expected Shares"
+msgstr ""
+
+#: templates/bootstrap/dashboard/round_statistics/pplns/round.tpl:43
+#: templates/bootstrap/dashboard/round_statistics/prop/round.tpl:43
+msgid "Est. Earnings"
+msgstr ""
+
+#: templates/bootstrap/dashboard/round_statistics/pplns/round.tpl:88
+#: templates/bootstrap/dashboard/round_statistics/prop/round.tpl:88
+msgid "Est. Avg. Time per Block"
+msgstr ""
+
+#: templates/bootstrap/dashboard/round_statistics/prop/default.tpl:5
+msgid "ound Information"
+msgstr ""
+
+#: templates/bootstrap/dashboard/worker_information/default.tpl:5
+msgid "Worker Information"
+msgstr ""
+
+#: templates/bootstrap/dashboard/blocks/default.tpl:5
+msgid "Last Found Blocks"
+msgstr ""
+
+#: templates/bootstrap/dashboard/blocks/default.tpl:11
+#: templates/bootstrap/statistics/round/block_stats.tpl:19
+msgid "Height"
+msgstr ""
+
+#: templates/bootstrap/dashboard/blocks/default.tpl:12
+#: templates/bootstrap/statistics/round/block_stats.tpl:42
+#: templates/bootstrap/statistics/blocks/blocks_found_details.tpl:14
+#: templates/bootstrap/statistics/blocks/small_table.tpl:11
+msgid "Finder"
+msgstr ""
+
+#: templates/bootstrap/dashboard/blocks/default.tpl:16
+#: templates/bootstrap/statistics/blocks/blocks_found_details.tpl:18
+msgid "Expected Shares"
+msgstr ""
+
+#: templates/bootstrap/dashboard/blocks/default.tpl:17
+#: templates/bootstrap/statistics/blocks/blocks_found_details.tpl:20
+#: templates/bootstrap/statistics/blocks/small_table.tpl:13
+msgid "Actual Shares"
+msgstr ""
+
+#: templates/bootstrap/dashboard/blocks/default.tpl:18
+#: templates/bootstrap/statistics/blocks/blocks_found_details.tpl:21
+#: templates/bootstrap/statistics/blocks/block_overview_time.tpl:21
+msgid "Percentage"
+msgstr ""
+
+#: templates/bootstrap/dashboard/blocks/default.tpl:25
+msgid "anonymous"
+msgstr ""
+
+#: templates/bootstrap/login/default.tpl:6
+msgid "Login with existing account"
+msgstr ""
+
+#: templates/bootstrap/login/default.tpl:12
+msgid "E-mail"
+msgstr ""
+
+#: templates/bootstrap/login/default.tpl:23
+msgid "Forgot your password?"
+msgstr ""
+
+#: templates/bootstrap/about/moot/default.tpl:5
+msgid "Moot Forum"
+msgstr ""
+
+#: templates/bootstrap/about/pool/default.tpl:5
+msgid "Frequently Asked Questions"
+msgstr ""
+
+#: templates/bootstrap/about/pool/default.tpl:9
+#: templates/bootstrap/about/pool/default.tpl:24
+#: templates/bootstrap/about/pool/default.tpl:27
+#: templates/bootstrap/about/pool/default.tpl:31
+#: templates/bootstrap/about/pool/default.tpl:35
+#: templates/bootstrap/about/pool/default.tpl:46
+msgid "Q:"
+msgstr ""
+
+#: templates/bootstrap/about/pool/default.tpl:9
+msgid "When will I get paid?"
+msgstr ""
+
+#: templates/bootstrap/about/pool/default.tpl:10
+msgid "This pool uses the following payout system"
+msgstr ""
+
+#: templates/bootstrap/about/pool/default.tpl:13
+msgid "Proportional (Prop)"
+msgstr ""
+
+#: templates/bootstrap/about/pool/default.tpl:13
+msgid ""
+"The block reward is distributed among miners in proportion to the number of "
+"shares they submitted in a round. The expected reward per share depends on "
+"the number of shares already submitted in the round."
+msgstr ""
+
+#: templates/bootstrap/about/pool/default.tpl:17
+msgid "Pay Per Last N Shares (PPLNS)"
+msgstr ""
+
+#: templates/bootstrap/about/pool/default.tpl:17
+msgid ""
+"Block rewards are distributed among the last shares, disregarding round "
+"boundaries. In the accurate implementation, the number of shares is deter- "
+"mined so that their total will be a specified quantity of score (where the "
+"score of a share is the inverse of the difficulty). Most pools use a naive "
+"implementation based on a fixed number of shares or a fixed multiple of the "
+"difficulty. The share-variance can be reduced at the cost of increased "
+"maturity time, but there is no way to decrease the long-term pool-variance."
+msgstr ""
+
+#: templates/bootstrap/about/pool/default.tpl:21
+msgid "Pay Per Share (PPS)"
+msgstr ""
+
+#: templates/bootstrap/about/pool/default.tpl:21
+msgid ""
+"Each share receives a fixed reward known in advance. This is the ultimate "
+"low- variance, low-maturity simple method, but has the highest risk for the "
+"operator, and hence lower expected returns than other methods and risk of "
+"collapse if not managed properly."
+msgstr ""
+
+#: templates/bootstrap/about/pool/default.tpl:24
+msgid "What is a orphan block?"
+msgstr ""
+
+#: templates/bootstrap/about/pool/default.tpl:25
+#: templates/bootstrap/about/pool/default.tpl:28
+#: templates/bootstrap/about/pool/default.tpl:32
+#: templates/bootstrap/about/pool/default.tpl:36
+#: templates/bootstrap/about/pool/default.tpl:47
+msgid "A:"
+msgstr ""
+
+#: templates/bootstrap/about/pool/default.tpl:25
+msgid ""
+"Coins generated by a block will not be available to you right away. They "
+"will take some time to be confirmed by the entire network before you are "
+"allowed to transfer them out of the pool. Usually coins have a confirmation "
+"set to 120. What that actually means: the network (not the pool) has to "
+"discover 120 additional blocks on top of the one found by the pool to "
+"confirm it."
+msgstr ""
+
+#: templates/bootstrap/about/pool/default.tpl:27
+msgid "What is estimated payout?"
+msgstr ""
+
+#: templates/bootstrap/about/pool/default.tpl:28
+msgid ""
+"Estimated payout is your estimated payout if a block is found at that time. "
+"This is an estimate according to your amount of shares submitted for the "
+"round(s)."
+msgstr ""
+
+#: templates/bootstrap/about/pool/default.tpl:31
+msgid "What is pool-variance?"
+msgstr ""
+
+#: templates/bootstrap/about/pool/default.tpl:32
+msgid ""
+"This is the variance caused by the pool being too small. Using a method with "
+"high pool-variance does no harm to large pools."
+msgstr ""
+
+#: templates/bootstrap/about/pool/default.tpl:35
+msgid "What is a share?"
+msgstr ""
+
+#: templates/bootstrap/about/pool/default.tpl:36
+msgid ""
+"Finding blocks is not an easy task. Since it would take a really long time "
+"on some coins, finding a block is broken down into shares. Depending on the "
+"server side setting, each share can be a certain difficulty. The more "
+"difficult each share is to find by miners, the fewer total shares are "
+"required to eventually find a block."
+msgstr ""
+
+#: templates/bootstrap/about/pool/default.tpl:38
+msgid ""
+"On the server side, each share is checked against the coin daemon (a server "
+"side wallet with more features) if it is indeed a valid block solution. "
+"Every share computed has the potential to be a block solution. I will not go "
+"into details why this is, but rest assured that share estimates for blocks "
+"can sometimes be exceeded. In the long run though, shorter round with less "
+"shares than required will make up for those taking very long."
+msgstr ""
+
+#: templates/bootstrap/about/pool/default.tpl:40
+msgid ""
+"Keep in mind: shares are not blocks! Shares are part of a block and will "
+"count towards the block payout!"
+msgstr ""
+
+#: templates/bootstrap/about/pool/default.tpl:42
+msgid ""
+"At times, you will see shares being rejected by the pool. This can happen if "
+"you try to send an outdated share right after a block was found. Stratum, a "
+"protocol used by a miner to request work from a server, is used for share "
+"submission and getting new work. It is very solid when it comes to avoiding "
+"rejects but they can still happen once in a while."
+msgstr ""
+
+#: templates/bootstrap/about/pool/default.tpl:44
+msgid ""
+"If you are seeing reject all the time, then something isn’t working right on "
+"your end. You may also notice that your hashrate on the pool website is not "
+"increasing while your invalid share count keeps climbing up. In that case "
+"turn off your miner and check your settings!"
+msgstr ""
+
+#: templates/bootstrap/about/pool/default.tpl:46
+msgid "I am having problems connecting to the pool"
+msgstr ""
+
+#: templates/bootstrap/about/pool/default.tpl:47
+msgid "Double check your settings against our"
+msgstr ""
+
+#: templates/bootstrap/about/pool/default.tpl:47
+msgid "getting started page"
+msgstr ""
+
+#: templates/bootstrap/about/pool/default.tpl:51
+msgid "This Pool is running"
+msgstr ""
+
+#: templates/bootstrap/about/pool/default.tpl:51
+msgid ""
+"project code. This frontend was  created by TheSerapher aka Sebastian Grewe. "
+"The operation of the pool is soley at the hand of your trusted pool operator."
+msgstr ""
+
+#: templates/bootstrap/about/chat/default.tpl:5
+msgid "Web Chat"
+msgstr ""
+
+#: templates/bootstrap/about/api/default.tpl:5
+msgid "API Reference"
+msgstr ""
+
+#: templates/bootstrap/about/api/default.tpl:8
+msgid "Please head over to the"
+msgstr ""
+
+#: templates/bootstrap/about/api/default.tpl:8
+msgid "official documentation"
+msgstr ""
+
+#: templates/bootstrap/contactform/default.tpl:9
+#: templates/bootstrap/contactform/contactform/default.tpl:9
+msgid "Contact Us"
+msgstr ""
+
+#: templates/bootstrap/contactform/default.tpl:15
+#: templates/bootstrap/contactform/contactform/default.tpl:15
+msgid "Your Name"
+msgstr ""
+
+#: templates/bootstrap/contactform/default.tpl:19
+#: templates/bootstrap/contactform/contactform/default.tpl:19
+msgid "Your Email Address"
+msgstr ""
+
+#: templates/bootstrap/contactform/default.tpl:23
+#: templates/bootstrap/contactform/contactform/default.tpl:23
+msgid "Your Subject"
+msgstr ""
+
+#: templates/bootstrap/contactform/default.tpl:32
+#: templates/bootstrap/contactform/contactform/default.tpl:32
+msgid "Your Message"
+msgstr ""
+
+#: templates/bootstrap/contactform/default.tpl:39
+#: templates/bootstrap/contactform/contactform/default.tpl:39
+msgid "Send Email"
+msgstr ""
+
+#: templates/bootstrap/contactform/default.tpl:40
+#: templates/bootstrap/contactform/contactform/default.tpl:40
+msgid "Reset Values"
+msgstr ""
+
+#: templates/bootstrap/contactform/disabled.tpl:5
+msgid "Contact &amp; Support"
+msgstr ""
+
+#: templates/bootstrap/contactform/disabled.tpl:10
+msgid ""
+"This product comes 'as-is' without any warranty. Please check the Apache "
+"License, Version 2.0, for details."
+msgstr ""
+
+#: templates/bootstrap/statistics/donors/default.tpl:5
+msgid "Pool Donors"
+msgstr ""
+
+#: templates/bootstrap/statistics/donors/default.tpl:11
+msgid "Name"
+msgstr ""
+
+#: templates/bootstrap/statistics/donors/default.tpl:13
+#: templates/bootstrap/admin/dashboard/user.tpl:11
+#: templates/bootstrap/admin/dashboard/invitation.tpl:10
+msgid "Total"
+msgstr ""
+
+#: templates/bootstrap/statistics/donors/default.tpl:25
+msgid "No confirmed donations yet, please be patient!"
+msgstr ""
+
+#: templates/bootstrap/statistics/round/block_stats.tpl:5
+msgid "Block Statistics"
+msgstr ""
+
+#: templates/bootstrap/statistics/round/block_stats.tpl:27
+#: templates/bootstrap/admin/wallet/transactions.tpl:16
+msgid "Confirmations"
+msgstr ""
+
+#: templates/bootstrap/statistics/round/block_stats.tpl:31
+#: templates/bootstrap/statistics/blocks/blocks_found_details.tpl:43
+#: templates/bootstrap/statistics/blocks/block_overview_time.tpl:16
+#: templates/bootstrap/statistics/blocks/block_overview_time.tpl:17
+msgid "Orphan"
+msgstr ""
+
+#: templates/bootstrap/statistics/round/block_stats.tpl:33
+msgid "left"
+msgstr ""
+
+#: templates/bootstrap/statistics/round/block_stats.tpl:40
+#: templates/bootstrap/statistics/blocks/block_overview_time.tpl:20
+#: templates/bootstrap/admin/user/default.tpl:92
+msgid "Shares"
+msgstr ""
+
+#: templates/bootstrap/statistics/round/round_shares.tpl:4
+#: templates/bootstrap/statistics/round/round_transactions.tpl:13
+#: templates/bootstrap/admin/reports/earnings_report.tpl:13
+msgid "Round Shares"
+msgstr ""
+
+#: templates/bootstrap/statistics/round/round_shares.tpl:11
+msgid "Rank"
+msgstr ""
+
+#: templates/bootstrap/statistics/round/round_shares.tpl:12
+#: templates/bootstrap/statistics/round/round_transactions.tpl:11
+msgid "User Name"
+msgstr ""
+
+#: templates/bootstrap/statistics/round/round_transactions.tpl:4
+msgid "Round Transactions"
+msgstr ""
+
+#: templates/bootstrap/statistics/round/round_transactions.tpl:14
+#: templates/bootstrap/admin/reports/earnings_report.tpl:17
+msgid "Round %"
+msgstr ""
+
+msgid "Round"
+msgstr ""
+
+#: templates/bootstrap/statistics/pool/general_stats.tpl:10
+msgid "Pool Hash Rate"
+msgstr ""
+
+#: templates/bootstrap/statistics/pool/general_stats.tpl:14
+msgid "Pool Efficiency"
+msgstr ""
+
+#: templates/bootstrap/statistics/pool/general_stats.tpl:18
+msgid "Current Active Workers"
+msgstr ""
+
+#: templates/bootstrap/statistics/pool/general_stats.tpl:22
+msgid "Current Difficulty"
+msgstr ""
+
+#: templates/bootstrap/statistics/pool/general_stats.tpl:30
+msgid "Est. Next Difficulty"
+msgstr ""
+
+#: templates/bootstrap/statistics/pool/general_stats.tpl:38
+msgid "Est. Avg. Time per Round (Network)"
+msgstr ""
+
+#: templates/bootstrap/statistics/pool/general_stats.tpl:42
+msgid "Est. Avg. Time per Round (Pool)"
+msgstr ""
+
+#: templates/bootstrap/statistics/pool/general_stats.tpl:46
+msgid "Est. Shares this Round"
+msgstr ""
+
+#: templates/bootstrap/statistics/pool/general_stats.tpl:51
+#: templates/bootstrap/statistics/pool/general_stats.tpl:56
+msgid "Next Network Block"
+msgstr ""
+
+#: templates/bootstrap/statistics/pool/general_stats.tpl:61
+msgid "Last Block Found"
+msgstr ""
+
+#: templates/bootstrap/statistics/pool/general_stats.tpl:65
+msgid "Time Since Last Block"
+msgstr ""
+
+#: templates/bootstrap/statistics/pool/general_stats.tpl:72
+msgid "These stats are also available in JSON format"
+msgstr ""
+
+#: templates/bootstrap/statistics/pool/general_stats.tpl:72
+msgid "HERE"
+msgstr ""
+
+#: templates/bootstrap/statistics/blocks/blocks_found_details.tpl:5
+msgid "Last %1 Blocks Found"
+msgstr ""
+
+#: templates/bootstrap/statistics/blocks/blocks_found_details.tpl:12
+#: templates/bootstrap/statistics/blocks/small_table.tpl:10
+msgid "Block"
+msgstr ""
+
+#: templates/bootstrap/statistics/blocks/blocks_found_details.tpl:13
+msgid "Validity"
+msgstr ""
+
+#: templates/bootstrap/statistics/blocks/blocks_found_details.tpl:19
+#: templates/bootstrap/admin/reports/earnings_report.tpl:19
+msgid "PPLNS Shares"
+msgstr ""
+
+#: templates/bootstrap/statistics/blocks/blocks_found_details.tpl:67
+msgid "Totals"
+msgstr ""
+
+#: templates/bootstrap/statistics/blocks/blocks_found_details.tpl:80
+#: templates/bootstrap/statistics/blocks/small_table.tpl:35
+msgid "Round Earnings are not credited until"
+msgstr ""
+
+#: templates/bootstrap/statistics/blocks/blocks_found_details.tpl:80
+#: templates/bootstrap/statistics/blocks/small_table.tpl:35
+#: templates/bootstrap/statistics/blocks/block_overview_time.tpl:188
+msgid "confirms"
+msgstr ""
+
+#: templates/bootstrap/statistics/blocks/block_shares_graph.tpl:41
+msgid "Block Shares"
+msgstr ""
+
+#: templates/bootstrap/statistics/blocks/block_overview_time.tpl:5
+msgid "Block Overview"
+msgstr ""
+
+#: templates/bootstrap/statistics/blocks/block_overview_time.tpl:13
+msgid "Gen. Est."
+msgstr ""
+
+#: templates/bootstrap/statistics/blocks/block_overview_time.tpl:14
+msgid "Found"
+msgstr ""
+
+#: templates/bootstrap/statistics/blocks/block_overview_time.tpl:18
+msgid "Avg. Diff"
+msgstr ""
+
+#: templates/bootstrap/statistics/blocks/block_overview_time.tpl:19
+msgid "Shares Est."
+msgstr ""
+
+#: templates/bootstrap/statistics/blocks/block_overview_time.tpl:23
+msgid "Rate Est."
+msgstr ""
+
+#: templates/bootstrap/statistics/blocks/block_overview_time.tpl:106
+msgid "Last 7 Days"
+msgstr ""
+
+#: templates/bootstrap/statistics/blocks/block_overview_time.tpl:132
+msgid "Last 4 Weeks"
+msgstr ""
+
+#: templates/bootstrap/statistics/blocks/block_overview_time.tpl:158
+msgid "The Past 12 Months"
+msgstr ""
+
+#: templates/bootstrap/statistics/blocks/block_overview_time.tpl:188
+msgid "Round earnings are not credited until"
+msgstr ""
+
+#: templates/bootstrap/admin/wallet/accounts.tpl:5
+msgid "Wallet Accounts"
+msgstr ""
+
+#: templates/bootstrap/admin/wallet/accounts.tpl:12
+msgid "Account:"
+msgstr ""
+
+#: templates/bootstrap/admin/wallet/accounts.tpl:18
+msgid "Balance Info"
+msgstr ""
+
+#: templates/bootstrap/admin/wallet/accounts.tpl:23
+#: templates/bootstrap/admin/user/default.tpl:100
+msgid "Balance"
+msgstr ""
+
+#: templates/bootstrap/admin/wallet/accounts.tpl:37
+msgid "Addresses assigned to Account"
+msgstr ""
+
+#: templates/bootstrap/admin/wallet/peers.tpl:5
+msgid "Peer Information"
+msgstr ""
+
+#: templates/bootstrap/admin/wallet/peers.tpl:11
+msgid "Host"
+msgstr ""
+
+#: templates/bootstrap/admin/wallet/peers.tpl:12
+msgid "Protocol"
+msgstr ""
+
+#: templates/bootstrap/admin/wallet/peers.tpl:13
+msgid "Identity"
+msgstr ""
+
+#: templates/bootstrap/admin/wallet/peers.tpl:14
+msgid "Connected"
+msgstr ""
+
+#: templates/bootstrap/admin/wallet/peers.tpl:15
+msgid "Traffic"
+msgstr ""
+
+#: templates/bootstrap/admin/wallet/peers.tpl:25
+msgid "MB"
+msgstr ""
+
+#: templates/bootstrap/admin/wallet/transactions.tpl:5
+msgid "Last %1 transactions"
+msgstr ""
+
+#: templates/bootstrap/admin/wallet/transactions.tpl:12
+#: templates/bootstrap/admin/transactions/default.tpl:60
+#: templates/bootstrap/admin/user/default.tpl:50
+msgid "Account"
+msgstr ""
+
+#: templates/bootstrap/admin/wallet/transactions.tpl:13
+#: templates/bootstrap/admin/transactions/default.tpl:64
+msgid "Address"
+msgstr ""
+
+#: templates/bootstrap/admin/wallet/transactions.tpl:14
+msgid "Category"
+msgstr ""
+
+#: templates/bootstrap/admin/wallet/transactions.tpl:17
+msgid "Transaction ID"
+msgstr ""
+
+#: templates/bootstrap/admin/wallet/status.tpl:4
+msgid "Wallet Status"
+msgstr ""
+
+#: templates/bootstrap/admin/wallet/status.tpl:9
+msgid "Version"
+msgstr ""
+
+#: templates/bootstrap/admin/wallet/status.tpl:10
+msgid "Protocol Version"
+msgstr ""
+
+#: templates/bootstrap/admin/wallet/status.tpl:11
+msgid "Wallet Version"
+msgstr ""
+
+#: templates/bootstrap/admin/wallet/status.tpl:12
+msgid "Peers"
+msgstr ""
+
+#: templates/bootstrap/admin/wallet/status.tpl:14
+msgid "Blocks"
+msgstr ""
+
+#: templates/bootstrap/admin/wallet/status.tpl:15
+msgid "Accounts"
+msgstr ""
+
+#: templates/bootstrap/admin/wallet/balance.tpl:4
+msgid "Balance Summary"
+msgstr ""
+
+#: templates/bootstrap/admin/wallet/balance.tpl:9
+msgid "Wallet Balance"
+msgstr ""
+
+#: templates/bootstrap/admin/wallet/balance.tpl:13
+msgid "Locked for users"
+msgstr ""
+
+#: templates/bootstrap/admin/wallet/balance.tpl:22
+#: templates/bootstrap/admin/wallet/balance.tpl:35
+msgid "Liquid Assets"
+msgstr ""
+
+#: templates/bootstrap/admin/wallet/balance.tpl:30
+msgid "PoS New Mint"
+msgstr ""
+
+#: templates/bootstrap/admin/newsletter/default.tpl:10
+msgid "Write Newsletter"
+msgstr ""
+
+#: templates/bootstrap/admin/newsletter/default.tpl:12
+msgid "Newsletters support the Markdown syntax"
+msgstr ""
+
+#: templates/bootstrap/admin/newsletter/default.tpl:22
+msgid "Subject"
+msgstr ""
+
+#: templates/bootstrap/admin/newsletter/default.tpl:26
+#: templates/bootstrap/admin/news/default.tpl:30
+#: templates/bootstrap/admin/news_edit/default.tpl:35
+msgid "Content"
+msgstr ""
+
+#: templates/bootstrap/admin/newsletter/default.tpl:33
+msgid "Send"
+msgstr ""
+
+#: templates/bootstrap/admin/transactions/default.tpl:6
+msgid "Transaction Summary"
+msgstr ""
+
+#: templates/bootstrap/admin/transactions/default.tpl:45
+#: templates/bootstrap/admin/user/default.tpl:39
+#: templates/bootstrap/admin/user/default.tpl:42
+#: templates/bootstrap/admin/invitations/default.tpl:35
+msgid "Prev"
+msgstr ""
+
+#: templates/bootstrap/admin/transactions/default.tpl:48
+#: templates/bootstrap/admin/user/default.tpl:46
+#: templates/bootstrap/admin/invitations/default.tpl:38
+msgid "Next"
+msgstr ""
+
+#: templates/bootstrap/admin/transactions/default.tpl:69
+msgid "Filter"
+msgstr ""
+
+#: templates/bootstrap/admin/registrations/default.tpl:6
+msgid "Last Registered Users"
+msgstr ""
+
+#: templates/bootstrap/admin/registrations/default.tpl:15
+#: templates/bootstrap/admin/user/default.tpl:91
+#: templates/bootstrap/admin/invitations/default.tpl:13
+msgid "eMail"
+msgstr ""
+
+#: templates/bootstrap/admin/registrations/default.tpl:16
+#: templates/bootstrap/admin/user/default.tpl:101
+msgid "Reg. Date"
+msgstr ""
+
+#: templates/bootstrap/admin/registrations/default.tpl:17
+msgid "Invite"
+msgstr ""
+
+#: templates/bootstrap/admin/registrations/default.tpl:18
+msgid "Invited From"
+msgstr ""
+
+#: templates/bootstrap/admin/poolworkers/default.tpl:5
+msgid "Current Active Pool Workers"
+msgstr ""
+
+#: templates/bootstrap/admin/poolworkers/default.tpl:15
+msgid "Monitor"
+msgstr ""
+
+#: templates/bootstrap/admin/poolworkers/default.tpl:18
+msgid "Avg Difficulty"
+msgstr ""
+
+#: templates/bootstrap/admin/user/default.tpl:33
+msgid "User Search"
+msgstr ""
+
+#: templates/bootstrap/admin/user/default.tpl:58
+msgid "Is Admin"
+msgstr ""
+
+#: templates/bootstrap/admin/user/default.tpl:62
+msgid "Is Locked"
+msgstr ""
+
+#: templates/bootstrap/admin/user/default.tpl:66
+#: templates/bootstrap/admin/user/default.tpl:105
+#: templates/bootstrap/admin/dashboard/user.tpl:15
+msgid "No Fees"
+msgstr ""
+
+#: templates/bootstrap/admin/user/default.tpl:71
+msgid "Search!"
+msgstr ""
+
+#: templates/bootstrap/admin/user/default.tpl:82
+msgid "User Information"
+msgstr ""
+
+#: templates/bootstrap/admin/user/default.tpl:95
+msgid "Est. Donation"
+msgstr ""
+
+#: templates/bootstrap/admin/user/default.tpl:96
+msgid "Est. Payout"
+msgstr ""
+
+#: templates/bootstrap/admin/user/default.tpl:98
+msgid "Est. 24 Hours"
+msgstr ""
+
+#: templates/bootstrap/admin/user/default.tpl:102
+msgid "Last Login"
+msgstr ""
+
+#: templates/bootstrap/admin/user/default.tpl:103
+msgid "Admin"
+msgstr ""
+
+#: templates/bootstrap/admin/user/default.tpl:104
+#: templates/bootstrap/admin/dashboard/user.tpl:13
+msgid "Locked"
+msgstr ""
+
+#: templates/bootstrap/admin/monitoring/default.tpl:10
+msgid "Cronjob"
+msgstr ""
+
+#: templates/bootstrap/admin/monitoring/default.tpl:11
+#: templates/bootstrap/admin/dashboard/mpos.tpl:68
+msgid "Disabled"
+msgstr ""
+
+#: templates/bootstrap/admin/monitoring/default.tpl:12
+msgid "Exit Code"
+msgstr ""
+
+#: templates/bootstrap/admin/monitoring/default.tpl:14
+msgid "Runtime"
+msgstr ""
+
+#: templates/bootstrap/admin/monitoring/default.tpl:15
+msgid "Start Time"
+msgstr ""
+
+#: templates/bootstrap/admin/monitoring/default.tpl:16
+msgid "End Time"
+msgstr ""
+
+#: templates/bootstrap/admin/monitoring/default.tpl:29
+msgid "ERROR"
+msgstr ""
+
+#: templates/bootstrap/admin/dashboard/user.tpl:14
+msgid "Admins"
+msgstr ""
+
+#: templates/bootstrap/admin/dashboard/user.tpl:35
+msgid "Logins"
+msgstr ""
+
+#: templates/bootstrap/admin/dashboard/user.tpl:41
+#: templates/bootstrap/admin/dashboard/registrations.tpl:11
+msgid "%1 hours"
+msgstr ""
+
+#: templates/bootstrap/admin/dashboard/user.tpl:42
+#: templates/bootstrap/admin/dashboard/registrations.tpl:12
+msgid "%1 days"
+msgstr ""
+
+#: templates/bootstrap/admin/dashboard/user.tpl:43
+#: templates/bootstrap/admin/dashboard/registrations.tpl:13
+msgid "1 month"
+msgstr ""
+
+#: templates/bootstrap/admin/dashboard/user.tpl:44
+#: templates/bootstrap/admin/dashboard/registrations.tpl:14
+msgid "%1 months"
+msgstr ""
+
+#: templates/bootstrap/admin/dashboard/user.tpl:45
+#: templates/bootstrap/admin/dashboard/registrations.tpl:15
+msgid "1 year"
+msgstr ""
+
+#: templates/bootstrap/admin/dashboard/invitation.tpl:12
+#: templates/bootstrap/admin/invitations/default.tpl:15
+msgid "Outstanding"
+msgstr ""
+
+#: templates/bootstrap/admin/dashboard/mpos.tpl:5
+msgid "MPOS Version Information"
+msgstr ""
+
+#: templates/bootstrap/admin/dashboard/mpos.tpl:11
+msgid "Component"
+msgstr ""
+
+#: templates/bootstrap/admin/dashboard/mpos.tpl:12
+msgid "Current"
+msgstr ""
+
+#: templates/bootstrap/admin/dashboard/mpos.tpl:13
+msgid "Installed"
+msgstr ""
+
+#: templates/bootstrap/admin/dashboard/mpos.tpl:14
+msgid "Online"
+msgstr ""
+
+#: templates/bootstrap/admin/dashboard/mpos.tpl:29
+msgid "Config"
+msgstr ""
+
+#: templates/bootstrap/admin/dashboard/mpos.tpl:39
+msgid "Database"
+msgstr ""
+
+#: templates/bootstrap/admin/dashboard/mpos.tpl:57
+msgid "MPOS Status"
+msgstr ""
+
+#: templates/bootstrap/admin/dashboard/mpos.tpl:63
+msgid "Cronjobs"
+msgstr ""
+
+#: templates/bootstrap/admin/dashboard/mpos.tpl:64
+msgid "Wallet"
+msgstr ""
+
+#: templates/bootstrap/admin/dashboard/mpos.tpl:67
+#: templates/bootstrap/admin/dashboard/mpos.tpl:69
+msgid "Errors"
+msgstr ""
+
+#: templates/bootstrap/admin/dashboard/mpos.tpl:75
+#: templates/bootstrap/admin/dashboard/mpos.tpl:78
+msgid "None - OK"
+msgstr ""
+
+#: templates/bootstrap/admin/reports/earnings_control.tpl:9
+msgid "Earnings Information"
+msgstr ""
+
+#: templates/bootstrap/admin/reports/earnings_control.tpl:26
+msgid "Select User"
+msgstr ""
+
+#: templates/bootstrap/admin/reports/earnings_control.tpl:32
+msgid "Block Limit"
+msgstr ""
+
+#: templates/bootstrap/admin/reports/earnings_control.tpl:38
+msgid "Starting block height"
+msgstr ""
+
+#: templates/bootstrap/admin/reports/earnings_control.tpl:44
+msgid "Show empty rounds"
+msgstr ""
+
+#: templates/bootstrap/admin/reports/earnings_control.tpl:58
+msgid "Submit"
+msgstr ""
+
+#: templates/bootstrap/admin/reports/earnings_report.tpl:5
+msgid "Earnings Report Last %1 Blocks For User: %2"
+msgstr ""
+
+#: templates/bootstrap/admin/reports/earnings_report.tpl:14
+msgid "Round Valid"
+msgstr ""
+
+#: templates/bootstrap/admin/reports/earnings_report.tpl:16
+#: templates/bootstrap/admin/reports/earnings_report.tpl:22
+msgid "Invalid %"
+msgstr ""
+
+#: templates/bootstrap/admin/reports/earnings_report.tpl:20
+msgid "PPLNS Valid"
+msgstr ""
+
+#: templates/bootstrap/admin/reports/earnings_report.tpl:23
+msgid "PPLNS %"
+msgstr ""
+
+#: templates/bootstrap/admin/reports/earnings_report.tpl:24
+msgid "Variance"
+msgstr ""
+
+#: templates/bootstrap/admin/userdetails/default.tpl:6
+msgid "%1 Account Information"
+msgstr ""
+
+#: templates/bootstrap/admin/userdetails/default.tpl:13
+msgid "All Time Transaction Totals"
+msgstr ""
+
+#: templates/bootstrap/admin/userdetails/default.tpl:41
+msgid "Transactions over time"
+msgstr ""
+
+#: templates/bootstrap/admin/news/default.tpl:10
+msgid "Write News"
+msgstr ""
+
+#: templates/bootstrap/admin/news/default.tpl:12
+msgid "News posts support the Markdown syntax"
+msgstr ""
+
+#: templates/bootstrap/admin/news/default.tpl:26
+#: templates/bootstrap/admin/news_edit/default.tpl:31
+msgid "Header"
+msgstr ""
+
+#: templates/bootstrap/admin/news/default.tpl:37
+msgid "Add"
+msgstr ""
+
+#: templates/bootstrap/admin/invitations/default.tpl:6
+msgid "Top Inviters"
+msgstr ""
+
+#: templates/bootstrap/admin/setup/default.tpl:5
+msgid "Setup Checks"
+msgstr ""
+
+#: templates/bootstrap/admin/setup/default.tpl:6
+msgid ""
+"To disable these checks, set skip_config_tests to true in global.inc.php"
+msgstr ""
+
+#: templates/bootstrap/admin/news_edit/default.tpl:12
+msgid "Edit news entry #"
+msgstr ""
+
+#: templates/bootstrap/admin/news_edit/default.tpl:42
+#: templates/bootstrap/admin/settings/default.tpl:43
+msgid "Save"
+msgstr ""
+
+#: templates/bootstrap/admin/settings/default.tpl:33
+msgid "Unknown option type"
+msgstr ""
+
+#: templates/bootstrap/tac/default.tpl:5
+msgid "Terms &amp; Conditions"
+msgstr ""
+
+#: templates/bootstrap/tac/content.tpl:1
+msgid "This Agreement governs your use of %1"
+msgstr ""
+
+#: templates/bootstrap/tac/content.tpl:3
+msgid ""
+"By using any of the Pools or registering an account on the website, you "
+"agree to be bound by the terms and conditions below. If you do not agree "
+"with the terms and conditions in this Agreement you may not use the Pool."
+msgstr ""
+
+#: templates/bootstrap/tac/content.tpl:4
+msgid ""
+"The %1 staff may modify this Agreement and any policies affecting the Site "
+"at any point of time. Such modification is effective immediately upon "
+"posting to the website and will be distribution via email, forum post and a "
+"link in chat. Your continued use of the Pool following any modification to "
+"this Agreement shall be deemed an acceptance of all modifications."
+msgstr ""
+
+#: templates/bootstrap/tac/content.tpl:5
+msgid "The Pool rewards miners according to a "
+msgstr ""
+
+#: templates/bootstrap/tac/content.tpl:5
+msgid "system with"
+msgstr ""
+
+#: templates/bootstrap/tac/content.tpl:5
+msgid ""
+" fee. The fee may change at any time, but notice will be given before doing "
+"so. Any fee change will be communicated through the pools news page."
+msgstr ""
+
+#: templates/bootstrap/tac/content.tpl:6
+msgid ""
+"The Pool is not an e-wallet or a bank for your coins. The Pool and it's "
+"operators are not responsible for any loss of coins which are stored on the "
+"Pool. It is your responsibility to configure your account so that the coins "
+"you mine are regularly transferred to your own secured offline wallet."
+msgstr ""
+
+#: templates/bootstrap/tac/content.tpl:7
+msgid ""
+"The uptime of the pool or website is not guaranteed, maintenance and "
+"downtime may be required at times. Users are responsible for configuring "
+"their miners so that they will automatically reconnect, switch to all the "
+"pools we offer or a backup pool in the case of downtime."
+msgstr ""
+
+#: templates/bootstrap/tac/content.tpl:8
+msgid ""
+"Botnets are not welcome. Accounts with a large amount of miners connecting "
+"from different IPs may be suspended without prior notice. If we are "
+"uncertian then an investigation will be opened and the user will be notified "
+"via their configured e-mail address. If we do not receive a response your "
+"account may be suspended."
+msgstr ""
+
+#: templates/bootstrap/tac/content.tpl:9
+msgid ""
+"Multiple accounts controlled by one person may be considered as a botnet and "
+"an investigation will be opened, see above point."
+msgstr ""
+
+#: templates/bootstrap/error/default.tpl:4
+#: templates/bootstrap/error/404/default.tpl:4
+msgid "The page you requested was not found"
+msgstr ""
+
+#: templates/bootstrap/error/ratelimit/default.tpl:2
+msgid "Request rate limit exceeded"
+msgstr ""
+
+#: templates/bootstrap/error/ratelimit/default.tpl:4
+msgid "You're sending too many requests too fast!"
+msgstr ""
+
+msgid "Contact"
+msgstr ""
+
+msgid "About"
+msgstr ""
+
+msgid "Guest"
+msgstr ""
+
+msgid "Uptime"
+msgstr ""
+
+msgid "Donors"
+msgstr ""
+
+msgid "Donate to"
+msgstr ""
+
+msgid "General Statistics"
+msgstr ""
+
+msgid "Current Total Miners"
+msgstr ""
+
+msgid "Contributor Hashrates"
+msgstr ""
+
+msgid "Contributor Shares"
+msgstr ""
+
+msgid "Donor"
+msgstr ""
+
+msgid "no Donation"
+msgstr ""
+
+msgid "or more Donation"
+msgstr ""
+
+msgid "Blockfinder"
+msgstr ""
+
+msgid "Graphs"
+msgstr ""
+
+msgid "Search"
+msgstr ""
+
+msgid "Blocks found by own Workers"
+msgstr ""
+
+msgid "Coins Generated"
+msgstr ""
+
+msgid "Top 25 Blockfinder"
+msgstr ""
+
+msgid "Average Hashrate past 24h"
+msgstr ""
+
+msgid "Your average hashrate per hour, updated every backend cron run."
+msgstr ""
+
+msgid "Average Workers past 24h"
+msgstr ""
+
+msgid "Your average active workers per hour, updated every backend cron run."
+msgstr ""
+
+msgid "Average Sharerate past 24h"
+msgstr ""
+
+msgid "Your share rate per hour, updated every backend cron run."
+msgstr ""
+
+msgid "You last logged in from <b>%s</b> on %s"
+msgstr ""
