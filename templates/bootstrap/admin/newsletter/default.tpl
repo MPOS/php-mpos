@@ -7,9 +7,9 @@
   <form class="col-lg-12" method="POST" action="{$smarty.server.SCRIPT_NAME}" role="form">
     <div class="panel panel-info">
       <div class="panel-heading">
-        <i class="fa fa-edit fa-fw"></i> Write Newsletter
+        <i class="fa fa-edit fa-fw"></i> {t}Write Newsletter{/t}
         <br>
-        <font size="1px">Newsletters support the Markdown syntax</font>
+        <font size="1px">{t}Newsletters support the Markdown syntax{/t}</font>
       </div>
       <div class="panel-body">
         <div class="row">
@@ -19,18 +19,18 @@
             <input type="hidden" name="do" value="send">
             <input type="hidden" name="ctoken" value="{$CTOKEN|escape|default:""}" />
             <div class="form-group">
-              <label>Subject</label>
+              <label>{t}Subject{/t}</label>
               <input class="form-control" size="30" type="text" name="data[subject]" value="{$smarty.request.data.subject|default:""}" required />
             </div>
             <div class="form-group">
-              <label>Content</label>
+              <label>{t}Content{/t}</label>
               <textarea class="form-control cleditor" name="data[content]" rows="5" required>{$smarty.request.data.content|default:""}</textarea>
             </div>
           </div>
         </div>
       </div>
       <div class="panel-footer">
-        <input type="submit" value="Send" class="btn btn-success btn-sm">
+        <input type="submit" value="{t}Send{/t}" class="btn btn-success btn-sm">
       </div>
     </div>
   </form>

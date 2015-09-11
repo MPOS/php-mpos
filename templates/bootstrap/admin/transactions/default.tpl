@@ -3,7 +3,7 @@
   <div class="col-lg-12">
     <div class="panel panel-info">
       <div class="panel-heading">
-        <i class="fa fa-money fa-fw"></i> Transaction Summary
+        <i class="fa fa-money fa-fw"></i> {t}Transaction Summary{/t}
       </div>
       <div class="panel-body no-padding">
         <div class="table-responsive">
@@ -37,36 +37,36 @@
     <input type="hidden" name="ctoken" value="{$CTOKEN|escape|default:""}" />
     <div class="panel panel-info">
       <div class="panel-heading">
-        <i class="fa fa-search fa-fw"></i> Transaction Filter
+        <i class="fa fa-search fa-fw"></i> {t}Transaction Filter{/t}
       </div>
       <div class="panel-body">
         <ul class="pager">
           <li class="previous {if $smarty.get.start|default:"0" <= 0}disabled{/if}">
-            <a href="{if $smarty.get.start|default:"0" <= 0}#{else}{$smarty.server.SCRIPT_NAME}?page={$smarty.request.page|escape}&action={$smarty.request.action|escape}&start={$smarty.request.start|escape|default:"0" - $LIMIT}{if $FILTERS|default:""}{$FILTERS}{/if}{/if}">&larr; Prev</a>
+            <a href="{if $smarty.get.start|default:"0" <= 0}#{else}{$smarty.server.SCRIPT_NAME}?page={$smarty.request.page|escape}&action={$smarty.request.action|escape}&start={$smarty.request.start|escape|default:"0" - $LIMIT}{if $FILTERS|default:""}{$FILTERS}{/if}{/if}">&larr; {t}Prev{/t}</a>
           </li>
           <li class="next">
-            <a href="{$smarty.server.SCRIPT_NAME}?page={$smarty.request.page|escape}&action={$smarty.request.action|escape}&start={$smarty.request.start|escape|default:"0" + $LIMIT}{if $FILTERS|default:""}{$FILTERS}{/if}">Next &rarr;</a>
+            <a href="{$smarty.server.SCRIPT_NAME}?page={$smarty.request.page|escape}&action={$smarty.request.action|escape}&start={$smarty.request.start|escape|default:"0" + $LIMIT}{if $FILTERS|default:""}{$FILTERS}{/if}">{t}Next{/t} &rarr;</a>
           </li>
         </ul>
         <div class="form-group">
-          <label>Type</label>
+          <label>{t}Type{/t}</label>
           {html_options class="form-control select-mini" name="filter[type]" options=$TRANSACTIONTYPES selected=$smarty.request.filter.type|default:""}
         </div>
         <div class="form-group">
-          <label>Status</label>
+          <label>{t}Status{/t}</label>
           {html_options class="form-control select-mini" name="filter[status]" options=$TXSTATUS selected=$smarty.request.filter.status|default:""}
         </div>
         <div class="form-group">
-          <label>Account</label>
+          <label>{t}Account{/t}</label>
           <input class="form-control" size="20" type="text" name="filter[account]" value="{$smarty.request.filter.account|default:""}" />
         </div>
         <div class="form-group">
-          <label>Address</label>
+          <label>{t}Address{/t}</label>
           <input class="form-control" size="20" type="text" name="filter[address]" value="{$smarty.request.filter.address|default:""}" />
         </div>
       </div>
       <div class="panel-footer">
-        <input type="submit" value="Filter" class="btn btn-success btn-sm">
+        <input type="submit" value="{t}Filter{/t}" class="btn btn-success btn-sm">
       </div>
     </div>
   </form>
@@ -76,22 +76,22 @@
   <div class="col-lg-9">
     <div class="panel panel-info">
       <div class="panel-heading">
-        <i class="fa fa-clock-o fa-fw"></i> Transaction History
+        <i class="fa fa-clock-o fa-fw"></i> {t}Transaction History{/t}
       </div>
       <div class="panel-body no-padding">
         <div class="table-responsive">
           <table class="table table-striped table-bordered table-condensed">
             <thead>
               <tr>
-                <th class="h6">ID</th>
-                <th class="h6">Account</th>
-                <th class="h6">Date</th>
-                <th class="h6">TX Type</th>
-                <th class="h6">Status</th>
-                <th class="h6">Payment Address</th>
-                <th class="h6">TX #</th>
-                <th class="h6">Block #</th>
-                <th class="h6">Amount</th>
+                <th class="h6">{t}ID{/t}</th>
+                <th class="h6">{t}Account{/t}</th>
+                <th class="h6">{t}Date{/t}</th>
+                <th class="h6">{t}TX Type{/t}</th>
+                <th class="h6">{t}Status{/t}</th>
+                <th class="h6">{t}Payment Address{/t}</th>
+                <th class="h6">{t}TX #{/t}</th>
+                <th class="h6">{t}Block #{/t}</th>
+                <th class="h6">{t}Amount{/t}</th>
               </tr>
             </thead>
             <tbody>

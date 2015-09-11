@@ -2,19 +2,19 @@
   <div class="col-lg-12">
     <div class="panel panel-info">
       <div class="panel-heading">
-        <i class="fa fa-bell-o fa-fw"></i> Monitoring
+        <i class="fa fa-bell-o fa-fw"></i> {t}Monitoring{/t}
       </div>
       <div class="panel-body no-padding table-responsive">
         <table class="table table-striped table-bordered table-hover">
           <thead>
-            <th>Cronjob</th>
-            <th>Disabled</th>
-            <th>Exit Code</th>
-            <th>Active</th>
-            <th>Runtime</th>
-            <th>Start Time</th>
-            <th>End Time</th>
-            <th>Message</th>
+            <th>{t}Cronjob{/t}</th>
+            <th>{t}Disabled{/t}</th>
+            <th>{t}Exit Code{/t}</th>
+            <th>{t}Active{/t}</th>
+            <th>{t}Runtime{/t}</th>
+            <th>{t}Start Time{/t}</th>
+            <th>{t}End Time{/t}</th>
+            <th>{t}Message{/t}</th>
           </thead>
           <tbody>
     {foreach $CRONSTATUS as $cron => $data}
@@ -26,7 +26,7 @@
                   {if $event.value == 0}
                     <font color="green">OK</font>
                   {else}
-                    <font color="red">ERROR</font>
+                    <font color="red">{t}ERROR{/t}</font>
                   {/if}
                 {else if $event.type == 'message'}
                   <i>{$event.value}</i>
@@ -40,7 +40,7 @@
                   {else}
                     <font color="green">
                   {/if}
-                    {$event.value|default:"0"|number_format:"2"} seconds
+                    {$event.value|default:"0"|number_format:"2"} {t}seconds{/t}
                   </font>
                 {else if $event.type == 'date'}
                   {if ($smarty.now - 180) > $event.value}

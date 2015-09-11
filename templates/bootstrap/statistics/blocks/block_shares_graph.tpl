@@ -38,7 +38,7 @@ $(function () {
   <div class="col-lg-12">
     <div class="panel panel-info">
       <div class="panel-heading">
-        <i class="fa fa-th fa-fw"></i> Block Shares
+        <i class="fa fa-th fa-fw"></i> {t}Block Shares{/t}
       </div>
       <div class="panel-body">
         <ul class="pager">

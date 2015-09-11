@@ -1,6 +1,6 @@
   {include file="../global/header.tpl"}
-  <h1>An error occured!</h1>
-  <p>This should never happen. Please review the error output below.</p>
+  <h1>{t}An error occured!{/t}</h1>
+  <p>{t}This should never happen. Please review the error output below.{/t}</p>
   <table cellpadding="0" cellspacing="0" border="0" id="backgroundTable">
   <tr>
     <td>

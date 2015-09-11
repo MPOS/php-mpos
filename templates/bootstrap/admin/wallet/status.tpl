@@ -1,18 +1,18 @@
   <div class="col-lg-8">
     <div class="panel panel-info">
       <div class="panel-heading">
-        <i class="fa fa-info fa-fw"></i> Wallet Status
+        <i class="fa fa-info fa-fw"></i> {t}Wallet Status{/t}
       </div>
       <div class="panel-body no-padding">
         <table class="table table-striped table-bordered table-hover">
           <thead>
-            <th>Version</th>
-            <th>Protocol Version</th>
-            <th>Wallet Version</th>
-            <th>Peers</th>
-            <th>Status</th>
-            <th>Blocks</th>
-            <th>Accounts</th>
+            <th>{t}Version{/t}</th>
+            <th>{t}Protocol Version{/t}</th>
+            <th>{t}Wallet Version{/t}</th>
+            <th>{t}Peers{/t}</th>
+            <th>{t}Status{/t}</th>
+            <th>{t}Blocks{/t}</th>
+            <th>{t}Accounts{/t}</th>
           </thead>
           <tbody>
             <tr>

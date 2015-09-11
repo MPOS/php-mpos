@@ -6,14 +6,14 @@
     <input type="hidden" name="ctoken" value="{$CTOKEN|escape|default:""}">
     <div class="panel panel-info">
       <div class="panel-heading">
-        <i class="fa fa-gear fa-fw"></i> Notification Settings
+        <i class="fa fa-gear fa-fw"></i> {t}Notification Settings{/t}
       </div>
       <div class="panel-body no-padding">
         <table class="table table-striped table-bordered table-hover">
             {if $DISABLE_IDLEWORKERNOTIFICATIONS|default:"" != 1}
             <tr>
               <td>
-                <label>Idle Worker</label>
+                <label>{t}Idle Worker{/t}</label>
               </td>
               <td>
                 <input type="hidden" name="data[idle_worker]" value="0" />
@@ -24,7 +24,7 @@
             {if $DISABLE_BLOCKNOTIFICATIONS|default:"" != 1}
             <tr>
               <td>
-                <label>New Blocks</label>
+                <label>{t}New Blocks{/t}</label>
               </td>
               <td>
                 <input type="hidden" name="data[new_block]" value="0" />
@@ -34,7 +34,7 @@
             {/if}
             <tr>
               <td>
-                <label>Payout</label>
+                <label>{t}Payout{/t}</label>
               </td>
               <td>
                 <input type="hidden" name="data[payout]" value="0" />
@@ -43,7 +43,7 @@
             </tr>
             <tr>
               <td>
-                <label>Successful Login</label>
+                <label>{t}Successful Login{/t}</label>
               </td>
               <td>
                 <input type="hidden" name="data[success_login]" value="0" />
@@ -53,7 +53,7 @@
             {if $DISABLE_POOLNEWSLETTER|default:"" != 1}
             <tr>
               <td>
-                <label>Pool Newsletter</label>
+                <label>{t}Pool Newsletter{/t}</label>
               </td>
               <td>
                 <input type="hidden" name="data[newsletter]" value="0" />
@@ -64,7 +64,7 @@
         </table>
       </div>
       <div class="panel-footer">
-        <input type="submit" value="Update" class="btn btn-success btn-sm">
+        <input type="submit" value="{t}Update{/t}" class="btn btn-success btn-sm">
       </div>
     </form>
   </div>
@@ -72,17 +72,17 @@
   <div class="col-lg-8">
     <div class="panel panel-info">
       <div class="panel-heading">
-        <i class="fa fa-clock-o fa-fw"></i> Notification History
+        <i class="fa fa-clock-o fa-fw"></i> {t}Notification History{/t}
       </div>
       <div class="panel-body no-padding">
         <div class="table-responsive">
           <table class="table table-striped table-bordered table-hover">
             <thead>
               <tr>
-                <th>ID</th>
-                <th>Time</th>
-                <th>Type</th>
-                <th>Active</th>
+                <th>{t}ID{/t}</th>
+                <th>{t}Time{/t}</th>
+                <th>{t}Type{/t}</th>
+                <th>{t}Active{/t}</th>
               </tr>
             </thead>
             <tbody>
@@ -91,10 +91,10 @@
                 <td>{$NOTIFICATIONS[notification].id}</td>
                 <td>{$NOTIFICATIONS[notification].time}</td>
                 <td>
-{if $NOTIFICATIONS[notification].type == new_block}New Block
-{else if $NOTIFICATIONS[notification].type == payout}Payout
-{else if $NOTIFICATIONS[notification].type == idle_worker}Idle Worker
-{else if $NOTIFICATIONS[notification].type == success_login}Successful Login
+{if $NOTIFICATIONS[notification].type == new_block}{t}New Block{/t}
+{else if $NOTIFICATIONS[notification].type == payout}{t}Payout{/t}
+{else if $NOTIFICATIONS[notification].type == idle_worker}{t}Idle Worker{/t}
+{else if $NOTIFICATIONS[notification].type == success_login}{t}Successful Login{/t}
 {/if}
                 </td>
                 <td>

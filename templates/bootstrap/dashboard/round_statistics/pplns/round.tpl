@@ -10,7 +10,7 @@
                   <p class="h5 up-more" id="b-nblock">{$NETWORK.block}</p>
                 </div>
                 <div class="circle-tile-number text-faded">
-                  <p class="h6">Current Block</p>
+                  <p class="h6">{t}Current Block{/t}</p>
                 </div>
               </div>
             </div>
@@ -25,7 +25,7 @@
                   <p class="h5 up-more" id="b-roundprogress">{$ESTIMATES.percent|number_format:"2"}%</p>
                 </div>
                 <div class="circle-tile-number text-faded">
-                  <p class="h6">Of Expected Shares</p>
+                  <p class="h6">{t}Of Expected Shares{/t}</p>
                 </div>
               </div>
             </div>
@@ -40,7 +40,7 @@
                   <p class="h5 up-more" id="b-payout">{$GLOBAL.userdata.estimates.payout|number_format:$PRECISION}</p>
                 </div>
                 <div class="circle-tile-number text-faded">
-                  <p class="h6">{$GLOBAL.config.currency} Est. Earnings</p>
+                  <p class="h6">{$GLOBAL.config.currency} {t}Est. Earnings{/t}</p>
                 </div>
               </div>
             </div>
@@ -55,7 +55,7 @@
                   <p class="h5 up-more" id="b-diff">{$NETWORK.difficulty|number_format:"8"}</p>
                 </div>
                 <div class="circle-tile-number text-faded">
-                  <p class="h6">Difficulty</p>
+                  <p class="h6">{t}Difficulty{/t}</p>
                 </div>
               </div>
             </div>
@@ -70,7 +70,7 @@
                   <p class="h5" id="b-nextdiff">{if $GLOBAL.nethashrate > 0}{$NETWORK.EstNextDifficulty|number_format:"8"}{else}n/a{/if}</p>
                 </div>
                 <div class="circle-tile-number text-faded">
-                  <p class="h6">Est Next Difficulty{if $GLOBAL.nethashrate > 0}<br/>Change in {$NETWORK.BlocksUntilDiffChange} Blocks{else}No Estimates{/if}</p>
+                  <p class="h6">{t}Est Next Difficulty{/t}{if $GLOBAL.nethashrate > 0}<br/>{t 1=$NETWORK.BlocksUntilDiffChange}Change in %1 Blocks{/t}{else}{t}No Estimates{/t}{/if}</p>
                 </div>
               </div>
             </div> 
@@ -85,7 +85,7 @@
                   <p class="h5 up-more" id="b-esttimeperblock">{$NETWORK.EstTimePerBlock|seconds_to_hhmmss}</p>
                 </div>
                 <div class="circle-tile-number text-faded">
-                  <p class="h6">Est. Avg. Time per Block</p>
+                  <p class="h6">{t}Est. Avg. Time per Block{/t}</p>
                 </div>
               </div>
             </div>

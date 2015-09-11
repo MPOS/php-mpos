@@ -1,16 +1,16 @@
   <div class="col-lg-6">
     <div class="panel panel-info">
       <div class="panel-heading">
-        <i class="fa fa-desktop fa-fw"></i> Blocks found by own Workers
+        <i class="fa fa-desktop fa-fw"></i> {t}Blocks found by own Workers{/t}
       </div>
       <div class="panel-body no-padding table-responsive">
         <table class="table table-striped table-bordered table-hover">
           <thead>
             <tr>
-              <th>Rank</th>
-              <th>Worker</th>
-              <th>Blocks</th>
-              <th>Coins Generated</th>
+              <th>{t}Rank{/t}</th>
+              <th>{t}Worker{/t}</th>
+              <th>{t}Blocks{/t}</th>
+              <th>{t}Coins Generated{/t}</th>
             </tr>
           </thead>
           <tbody>

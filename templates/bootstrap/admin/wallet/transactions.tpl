@@ -2,20 +2,20 @@
   <div class="col-lg-12">
     <div class="panel panel-info">
       <div class="panel-heading">
-        <i class="fa fa-connectdevelop fa-fw"></i> Last {$TRANSACTIONS|count} transactions
+        <i class="fa fa-connectdevelop fa-fw"></i> {t 1=$TRANSACTIONS|count}Last %1 transactions{/t}
       </div>
       <div class="panel-body no-padding">
         <div class="table-responsive">
           <table class="table table-striped table-bordered table-hover">
             <thead>
             <tr>
-              <th class="text-center">Account</th>
-              <th class="text-center">Address</th>
-              <th class="text-center">Category</th>
-              <th class="text-right">Amount</th>
-              <th class="text-right">Confirmations</th>
-              <th class="text-center">Transaction ID</th>
-              <th class="text-right">Time</th>
+              <th class="text-center">{t}Account{/t}</th>
+              <th class="text-center">{t}Address{/t}</th>
+              <th class="text-center">{t}Category{/t}</th>
+              <th class="text-right">{t}Amount{/t}</th>
+              <th class="text-right">{t}Confirmations{/t}</th>
+              <th class="text-center">{t}Transaction ID{/t}</th>
+              <th class="text-right">{t}Time{/t}</th>
             </tr>
             </thead>
             <tbody>

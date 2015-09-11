@@ -2,7 +2,7 @@
     <div class="panel panel-info">
       <div class="panel-heading">
         <h4 class="panel-title">
-          <i class="fa fa-spinner fa-fw"></i> Round Information
+          <i class="fa fa-spinner fa-fw"></i> {t}Round Information{/t}
         </h4>
       </div>
       {assign var=PAYOUT_SYSTEM value=$GLOBAL.config.payout_system}
@@ -13,7 +13,7 @@
     <div class="panel panel-info">
       <div class="panel-heading">
         <h4 class="panel-title">
-          <i class="fa fa-cloud fa-fw"></i> Share Information
+          <i class="fa fa-cloud fa-fw"></i> {t}Share Information{/t}
         </h4>
       </div>
       {assign var=PAYOUT_SYSTEM value=$GLOBAL.config.payout_system}

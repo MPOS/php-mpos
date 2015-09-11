@@ -2,7 +2,7 @@
   <div class="col-lg-12">
     <div class="panel panel-info">
       <div class="panel-heading">
-        <i class="fa fa-comments-o fa-fw"></i> Web Chat
+        <i class="fa fa-comments-o fa-fw"></i> {t}Web Chat{/t}
       </div>
       <div class="panel-body">
         <table class="table table-bordered">

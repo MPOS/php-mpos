@@ -2,12 +2,12 @@
   <div class="col-lg-12">
     <div class="panel panel-info">
       <div class="panel-heading">
-        Contact &amp; Support
+        {t}Contact &amp; Support{/t}
       </div>
       <div class="panel-body">
         <center>
         <table width="100%">
-        <p>This product comes 'as-is' without any warranty. Please check the Apache License, Version 2.0, for details.</p>
+        <p>{t}This product comes 'as-is' without any warranty. Please check the Apache License, Version 2.0, for details.{/t}</p>
         </table>
         </center>
       </div>

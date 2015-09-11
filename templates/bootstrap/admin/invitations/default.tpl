@@ -3,17 +3,17 @@
   <div class="col-lg-12">
     <div class="panel panel-info">
       <div class="panel-heading">
-        <i class="fa fa-envelope fa-fw"></i> Top Inviters
+        <i class="fa fa-envelope fa-fw"></i> {t}Top Inviters{/t}
       </div>
       <div class="panel-body no-padding table-responsive">
         <table class="table table-striped table-bordered table-hover">
           <thead>
             <tr>
-              <th>Username</th>
-              <th>eMail</th>
-              <th>Amount</th>
-              <th>Outstanding</th>
-              <th>Activated</th>
+              <th>{t}Username{/t}</th>
+              <th>{t}eMail{/t}</th>
+              <th>{t}Amount{/t}</th>
+              <th>{t}Outstanding{/t}</th>
+              <th>{t}Activated{/t}</th>
             </tr>
           </thead>
           <tbody>
@@ -32,10 +32,10 @@
       <div class="panel-footer">
         <ul class="pager">
           <li class="previous {if $smarty.get.invitersstart|default:"0" <= 0}disabled{/if}">
-            <a href="{if $smarty.get.invitersstart|default:"0" <= 0}#{else}{$smarty.server.SCRIPT_NAME}?page={$smarty.request.page|escape}&action={$smarty.request.action|escape}&invitersstart={$smarty.request.invitersstart|escape|default:"0" - $LIMIT}{if $FILTERS|default:""}{$FILTERS}{/if}{/if}">&larr; Prev</a>
+            <a href="{if $smarty.get.invitersstart|default:"0" <= 0}#{else}{$smarty.server.SCRIPT_NAME}?page={$smarty.request.page|escape}&action={$smarty.request.action|escape}&invitersstart={$smarty.request.invitersstart|escape|default:"0" - $LIMIT}{if $FILTERS|default:""}{$FILTERS}{/if}{/if}">&larr; {t}Prev{/t}</a>
           </li>
           <li class="next">
-            <a href="{$smarty.server.SCRIPT_NAME}?page={$smarty.request.page|escape}&action={$smarty.request.action|escape}&invitersstart={$smarty.request.invitersstart|escape|default:"0" + $LIMIT}{if $FILTERS|default:""}{$FILTERS}{/if}">Next &rarr;</a>
+            <a href="{$smarty.server.SCRIPT_NAME}?page={$smarty.request.page|escape}&action={$smarty.request.action|escape}&invitersstart={$smarty.request.invitersstart|escape|default:"0" + $LIMIT}{if $FILTERS|default:""}{$FILTERS}{/if}">{t}Next{/t} &rarr;</a>
           </li>
         </ul> 
       </div>

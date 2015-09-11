@@ -2,7 +2,7 @@
   <div class="col-lg-12">
     <div class="panel panel-info">
       <div class="panel-heading">
-        <i class="fa fa-gear fa-fw"></i> Settings
+        <i class="fa fa-gear fa-fw"></i> {t}Settings{/t}
       </div>           
       <form method="POST" role="form">
         <input type="hidden" name="page" value="{$smarty.request.page|escape}" />
@@ -30,7 +30,7 @@
               {else if $SETTINGS.$TAB[setting].type == 'textarea'}
                 <textarea class="form-control" name="data[{$SETTINGS.$TAB[setting].name}]" cols="{$SETTINGS.$TAB[setting].size|default:"1"}" rows="{$SETTINGS.$TAB[setting].height|default:"1"}">{$SETTINGS.$TAB[setting].value|default:$SETTINGS.$TAB[setting].default}</textarea>
               {else}
-                Unknown option type: {$SETTINGS.$TAB[setting].type}
+                {t}Unknown option type{/t}: {$SETTINGS.$TAB[setting].type}
               {/if}
               </div>
               {/section}
@@ -40,7 +40,7 @@
           
         </div>
         <div class="panel-footer">
-          <input type="submit" value="Save" class="btn btn-success btn-sm">
+          <input type="submit" value="{t}Save{/t}" class="btn btn-success btn-sm">
         </div>
       </form>
     </div>

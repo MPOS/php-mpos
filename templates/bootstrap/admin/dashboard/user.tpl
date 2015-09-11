@@ -2,17 +2,17 @@
   <div class="col-lg-6">
     <div class="panel panel-info">
       <div class="panel-heading">
-        <i class="fa fa-user fa-fw"></i> Users
+        <i class="fa fa-user fa-fw"></i> {t}Users{/t}
       </div>
       <div class="panel-body no-padding">
         <table class="table table-striped table-bordered table-hover">
           <thead>
             <tr>
-              <th>Total</th>
-              <th>Active</th>
-              <th>Locked</th>
-              <th>Admins</th>
-              <th>No Fees</th>
+              <th>{t}Total{/t}</th>
+              <th>{t}Active{/t}</th>
+              <th>{t}Locked{/t}</th>
+              <th>{t}Admins{/t}</th>
+              <th>{t}No Fees{/t}</th>
             </tr>
           </thead>
           <tbody>
@@ -32,17 +32,17 @@
   <div class="col-lg-6">
     <div class="panel panel-info">
       <div class="panel-heading">
-        <i class="fa fa-sign-in fa-fw"></i> Logins
+        <i class="fa fa-sign-in fa-fw"></i> {t}Logins{/t}
       </div>
       <div class="panel-body no-padding">
         <table class="table table-striped table-bordered table-hover">
           <thead>
             <tr>
-              <th>24 hours</th>
-              <th>7 days</th>
-              <th>1 month</th>
-              <th>6 months</th>
-              <th>1 year</th>
+              <th>{t 1=24}%1 hours{/t}</th>
+              <th>{t 1=7}%1 days{/t}</th>
+              <th>{t}1 month{/t}</th>
+              <th>{t 1=6}%1 months{/t}</th>
+              <th>{t}1 year{/t}</th>
             </tr>
           </thead>
           <tbody>

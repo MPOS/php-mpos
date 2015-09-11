@@ -6,7 +6,7 @@
     <div class="col-lg-12">
       <div class="panel panel-info">
         <div class="panel-heading">
-          Earnings Information
+          {t}Earnings Information{/t}
         </div>
         <div class="panel-body">
           <div class="table-responsive">
@@ -23,25 +23,25 @@
                 <tr>
                   <td>
                     <div class="form-group">
-                      <label>Select User</label>
+                      <label>{t}Select User{/t}</label>
                       {html_options class="form-control select-mini" name="id" options=$USERLIST selected=$USERID|default:"0"}
                     </div>
                   </td>
                   <td>
                     <div class="form-group">
-                      <label>Block Limit</label>
+                      <label>{t}Block Limit{/t}</label>
                       <input size="10" class="form-control" type="text" name="limit" value="{$BLOCKLIMIT|default:"20"}" />
                     </div>
                   </td>
                     <td>
                       <div class="form-group">
-                      <label>Starting block height</label>
+                      <label>{t}Starting block height{/t}</label>
                       <input type="text" class="form-control" name="search" value="{$HEIGHT|default:"%"}">
                     </div>
                   </td>
                   <td>
                     <div class="form-group">
-                      <label>Show empty rounds</label>
+                      <label>{t}Show empty rounds{/t}</label>
                       <br>
                       <input type="hidden" name="filter" value="0" />
                       <input type="checkbox" data-size="small"  name="filter" id="filter" value="1" {if $FILTER}checked{/if}/>
@@ -55,7 +55,7 @@
             </div>
           </div>
           <div class="panel-footer">
-            <input type="submit" value="Submit" class="btn btn-success btn-sm">
+            <input type="submit" value="{t}Submit{/t}" class="btn btn-success btn-sm">
           </div>
         </div>
       </div>
