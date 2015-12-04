@@ -84,7 +84,7 @@ class Tools extends Base {
     } else if (preg_match('/bittrex.com/', $url)) {
       return 'bittrex';
     } else if (preg_match('/bleutrade.com/', $url)) {
-      return 'bittrex';
+      return 'bleutrade';
     }
     $this->setErrorMessage("API URL unknown");
     return false;
