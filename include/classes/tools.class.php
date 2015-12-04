@@ -83,8 +83,6 @@ class Tools extends Base {
       return 'mintpal';
     } else if (preg_match('/bittrex.com/', $url)) {
       return 'bittrex';
-    } else if (preg_match('/bleutrade.com/', $url)) {
-      return 'bleutrade';
     }
     $this->setErrorMessage("API URL unknown");
     return false;
@@ -120,10 +118,7 @@ class Tools extends Base {
       	case 'mintpal':
       	  return @$aData['0']['last_price'];
       	  break;
-      	case 'bittrex':
-      	  return @$aData['result']['Last'];
-      	  break;
-      	case 'bleutrade':
+      	  case 'bittrex':
       	  return @$aData['result']['Last'];
       	  break;
       }
