@@ -19,7 +19,7 @@ limitations under the License.
  */
 
 // We need to find our include files so set this properly
-define('BASEPATH', dirname(__FILE__) . '/');
+define('BASEPATH', dirname(__FILE__).'/');
 
 /*****************************************************
  * No need to change beyond this point               *
@@ -31,18 +31,27 @@ define('SECHASH_CHECK', false);
 
 // change SECHASH every second, we allow up to 3 sec back for slow servers
 if (SECHASH_CHECK) {
-  function fip($tr=0) { return md5(SECURITY.(time()-$tr).SECURITY); }
+    function fip($tr = 0)
+    {
+        return md5(SECURITY.(time() - $tr).SECURITY);
+    }
     define('SECHASH', fip());
-  function cfip() { return (fip()==SECHASH||fip(1)==SECHASH||fip(2)==SECHASH) ? 1 : 0; }
+    function cfip()
+    {
+        return (fip() == SECHASH || fip(1) == SECHASH || fip(2) == SECHASH) ? 1 : 0;
+    }
 } else {
-  function cfip() { return (@defined('SECURITY')) ? 1 : 0; }
+    function cfip()
+    {
+        return (@defined('SECURITY')) ? 1 : 0;
+    }
 }
 
 // Include our configuration (holding defines for the requires)
-require_once(BASEPATH . '../include/bootstrap.php');
-require_once(BASEPATH . '../include/version.inc.php');
+require_once BASEPATH.'../include/bootstrap.php';
+require_once BASEPATH.'../include/version.inc.php';
 
-/**
+/*
  * Not used as of yet, may be added later
  **/
 // Command line switches
@@ -51,3 +60,4 @@ require_once(BASEPATH . '../include/version.inc.php');
 //   switch ($option) {
 //   }
 // }
+

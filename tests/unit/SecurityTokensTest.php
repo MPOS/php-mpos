@@ -3,11 +3,11 @@
 class Security_Tokens extends \Codeception\TestCase\Test
 {
     /**
-     * Tests tokens CRUD
+     * Tests tokens CRUD.
      */
     public function testTokens_CRUD()
     {
-//        global $config;
+        //        global $config;
 //        global $mysqli;
 //        $mysqli = new DBConnection($config);
 //        global $tokentype;

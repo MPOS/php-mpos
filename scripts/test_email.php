@@ -4,7 +4,7 @@
 chdir(dirname(__FILE__));
 
 // Include all settings and classes
-require_once('shared.inc.php');
+require_once 'shared.inc.php';
 
 // Send email
 $aMailData = array(
@@ -12,8 +12,9 @@ $aMailData = array(
     'subject' => 'Test email from mining pool',
     'coinname' => $config['gettingstarted']['coinname'],
     'stratumurl' => $config['gettingstarted']['stratumurl'],
-    'stratumport' => $config['gettingstarted']['stratumport']
+    'stratumport' => $config['gettingstarted']['stratumport'],
 );
 
-if (!$mail->sendMail('notifications/test_email', $aMailData))
-    echo "Failed to send test email" . PHP_EOL;
+if (!$mail->sendMail('notifications/test_email', $aMailData)) {
+    echo 'Failed to send test email'.PHP_EOL;
+}

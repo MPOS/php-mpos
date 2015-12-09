@@ -23,10 +23,10 @@ limitations under the License.
 chdir(dirname(__FILE__));
 
 // Include all settings and classes
-require_once('shared.inc.php');
+require_once 'shared.inc.php';
 
 // Header
-$strLogMask = "| %-20.20s | %10.10s | %8.8s | %6.6s | %-40s |";
+$strLogMask = '| %-20.20s | %10.10s | %8.8s | %6.6s | %-40s |';
 $log->logInfo(sprintf($strLogMask, 'Process', 'Affected', 'Runtime', 'Status', 'Message'));
 
 // Cleanup old notifications
@@ -35,12 +35,12 @@ $status = 'OK';
 $message = '';
 $affected = 0;
 if ($notification->cleanupNotifications($setting->getValue('notifications_cleanup_time', 7))) {
-  $affected = $notification->deleted;
-  $affected == 0 ? $message = 'No notifications deleted' : $message = 'Deleted notifications older than ' . $setting->getValue('notifications_cleanup_time', 7) . ' days';
+    $affected = $notification->deleted;
+    $affected == 0 ? $message = 'No notifications deleted' : $message = 'Deleted notifications older than '.$setting->getValue('notifications_cleanup_time', 7).' days';
 } else {
-  $message = 'Failed to delete notifications: ' . $notification->getCronError();
-  $status = 'ERROR';
-  $monitoring->endCronjob($cron_name, 'E0074', 0, false, false);
+    $message = 'Failed to delete notifications: '.$notification->getCronError();
+    $status = 'ERROR';
+    $monitoring->endCronjob($cron_name, 'E0074', 0, false, false);
 }
 $log->logInfo(sprintf($strLogMask, 'cleanupNotifications', $affected, number_format(microtime(true) - $start, 3), $status, $message));
 
@@ -50,12 +50,12 @@ $status = 'OK';
 $message = '';
 $affected = 0;
 if ($oToken->cleanupTokens()) {
-  $affected = $oToken->deleted;
-  $affected == 0 ? $message = 'No tokens deleted' : $message = 'Deleted expired tokens';
+    $affected = $oToken->deleted;
+    $affected == 0 ? $message = 'No tokens deleted' : $message = 'Deleted expired tokens';
 } else {
-  $message = 'Failed to delete notifications: ' . $oToken->getCronError();
-  $status = 'ERROR';
-  $monitoring->endCronjob($cron_name, 'E0074', 0, false, false);
+    $message = 'Failed to delete notifications: '.$oToken->getCronError();
+    $status = 'ERROR';
+    $monitoring->endCronjob($cron_name, 'E0074', 0, false, false);
 }
 $log->logInfo(sprintf($strLogMask, 'cleanupTokens', $affected, number_format(microtime(true) - $start, 3), $status, $message));
 
@@ -65,11 +65,11 @@ $status = 'OK';
 $message = '';
 $affected = $share->purgeArchive();
 if ($affected === false) {
-  $message = 'Failed to delete shares: ' . $share->getCronError();
-  $status = 'ERROR';
-  $monitoring->endCronjob($cron_name, 'E0008', 0, false, false);
+    $message = 'Failed to delete shares: '.$share->getCronError();
+    $status = 'ERROR';
+    $monitoring->endCronjob($cron_name, 'E0008', 0, false, false);
 } else {
-  $affected == 0 ? $message = 'No shares deleted' : $message = 'Deleted old shares';
+    $affected == 0 ? $message = 'No shares deleted' : $message = 'Deleted old shares';
 }
 $log->logInfo(sprintf($strLogMask, 'purgeArchive', $affected, number_format(microtime(true) - $start, 3), $status, $message));
 
@@ -79,13 +79,13 @@ $status = 'OK';
 $message = '';
 $affected = $statistics->purgeUserStats($setting->getValue('statistics_graphing_days', 1));
 if ($affected === false) {
-  $message = 'Failed to delete entries: ' . $statistics->getCronError();
-  $status = 'ERROR';
-  $monitoring->endCronjob($cron_name, 'E0008', 0, false, false);
+    $message = 'Failed to delete entries: '.$statistics->getCronError();
+    $status = 'ERROR';
+    $monitoring->endCronjob($cron_name, 'E0008', 0, false, false);
 } else {
-  $affected == 0 ? $message = 'No entries deleted' : $message = 'Deleted old entries';
+    $affected == 0 ? $message = 'No entries deleted' : $message = 'Deleted old entries';
 }
 $log->logInfo(sprintf($strLogMask, 'purgeUserStats', $affected, number_format(microtime(true) - $start, 3), $status, $message));
 
 // Cron cleanup and monitoring
-require_once('cron_end.inc.php');
+require_once 'cron_end.inc.php';

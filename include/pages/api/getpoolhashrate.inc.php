@@ -1,4 +1,5 @@
 <?php
+
 $defflip = (!cfip()) ? exit(header('HTTP/1.1 401 Unauthorized')) : 1;
 
 // Check if the API is activated
@@ -8,7 +9,9 @@ $api->isActive();
 $user_id = $api->checkAccess($user->checkApiKey($_REQUEST['api_key']), @$_REQUEST['id']);
 
 // Fetch settings
-if ( ! $interval = $setting->getValue('statistics_ajax_data_interval')) $interval = 300;
+if (!$interval = $setting->getValue('statistics_ajax_data_interval')) {
+    $interval = 300;
+}
 
 // Output JSON format
 $statistics->setGetCache(false);

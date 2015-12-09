@@ -20,5 +20,5 @@ limitations under the License.
 
 // Monitoring cleanup and status update
 $monitoring->endCronjob($cron_name, 'OK', 0, false, false);
-$monitoring->setStatus($cron_name . "_runtime", "time", microtime(true) - $cron_start[$cron_name]);
-$monitoring->setStatus($cron_name . "_endtime", "date", time());
+$monitoring->setStatus($cron_name.'_runtime', 'time', microtime(true) - $cron_start[$cron_name]);
+$monitoring->setStatus($cron_name.'_endtime', 'date', time());

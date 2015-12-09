@@ -7,7 +7,7 @@ switch ($config['payout_system']) {
     $sPayoutSystem = 'proportional_payout';
     break;
   default: // pps && pplns land here
-    $sPayoutSystem = $config['payout_system'] . '_payout';
+    $sPayoutSystem = $config['payout_system'].'_payout';
 }
 
-$aMonitorCrons = array('statistics','tickerupdate','notifications','tables_cleanup','findblock',$sPayoutSystem,'blockupdate','payouts');
+$aMonitorCrons = array('statistics', 'tickerupdate', 'notifications', 'tables_cleanup', 'findblock', $sPayoutSystem, 'blockupdate', 'payouts');

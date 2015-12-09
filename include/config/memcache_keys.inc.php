@@ -1,4 +1,5 @@
 <?php
+
 $defflip = (!cfip()) ? exit(header('HTTP/1.1 401 Unauthorized')) : 1;
 
 define('STATISTICS_ALL_USER_SHARES', 'STATISTICS_ALL_USER_SHARES');

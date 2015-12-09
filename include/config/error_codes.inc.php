@@ -1,4 +1,5 @@
 <?php
+
 $defflip = (!cfip()) ? exit(header('HTTP/1.1 401 Unauthorized')) : 1;
 
 $aErrorCodes['OK'] = 'OK';
@@ -20,7 +21,7 @@ $aErrorCodes['E0015'] = 'Potential Double Payout detected';
 $aErrorCodes['E0016'] = 'Failed to delete accounted shares';
 $aErrorCodes['E0017'] = 'Failed to update Uptime Robot status';
 $aErrorCodes['E0018'] = 'Cron disbaled due to errors';
-$aErrorCodes['E0019'] = "SQL Query failed: %s";
+$aErrorCodes['E0019'] = 'SQL Query failed: %s';
 $aErrorCodes['E0020'] = 'Internal error while executing SQL';
 $aErrorCodes['E0021'] = 'Unable to fetch invitiations send from your account';
 $aErrorCodes['E0022'] = 'Unable to create invitation record';
@@ -48,7 +49,7 @@ $aErrorCodes['E0043'] = 'Unable to add new notification';
 $aErrorCodes['E0044'] = 'Failed to fetch notifications for user account';
 $aErrorCodes['E0045'] = 'Failed fetching notification settings for user account';
 $aErrorCodes['E0046'] = 'Failed to fetch notification setting for user account';
-$aErrorCodes['E0047'] = "Failed to update %s settings";
+$aErrorCodes['E0047'] = 'Failed to update %s settings';
 $aErrorCodes['E0048'] = 'Failed to check for existing active payouts';
 $aErrorCodes['E0049'] = 'Unable to create new payout request';
 $aErrorCodes['E0050'] = 'Failed to fetch unprocessed payouts';
