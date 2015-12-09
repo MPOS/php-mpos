@@ -23,14 +23,14 @@ limitations under the License.
 chdir(dirname(__FILE__));
 
 // Include all settings and classes
-require_once('shared.inc.php');
+require_once 'shared.inc.php';
 
 // Include additional file not set in autoloader
-require_once(CLASS_DIR . '/tools.class.php');
+require_once CLASS_DIR.'/tools.class.php';
 
 // Header and info
 $log->logInfo('Running periodic tasks to update database values for GUI access');
-$strLogMask = "| %-25.25s | %15.15s | %8.8s | %-6.6s | %-80.80s |";
+$strLogMask = '| %-25.25s | %15.15s | %8.8s | %-6.6s | %-80.80s |';
 $log->logInfo(sprintf($strLogMask, 'Method', 'Value', 'Runtime', 'Status', 'Message'));
 
 empty($config['price']['enabled']) ? $tickerupdate = false : $tickerupdate = $config['price']['enabled'];
@@ -38,41 +38,40 @@ empty($config['price']['enabled']) ? $tickerupdate = false : $tickerupdate = $co
 // Fetch latest coin price via API call
 $start = microtime(true);
 if ($tickerupdate) {
-  $message = 'Updated latest ' . $config['currency'] . ' price from ' . $config['price']['url'] . ' API';
-  $status = 'OK';
-  if ($price = $tools->getPrice()) {
-    if (!$setting->setValue('price', $price)) {
-      $message = 'Unable to store new price value: ' . $setting->getCronError();
-      $status = 'ERROR';
+    $message = 'Updated latest '.$config['currency'].' price from '.$config['price']['url'].' API';
+    $status = 'OK';
+    if ($price = $tools->getPrice()) {
+        if (!$setting->setValue('price', $price)) {
+            $message = 'Unable to store new price value: '.$setting->getCronError();
+            $status = 'ERROR';
+        }
+    } else {
+        $message = 'Failed to fetch price from API: '.$tools->getCronError();
+        $status = 'ERROR';
     }
-  } else {
-    $message = 'Failed to fetch price from API: ' . $tools->getCronError();
-    $status = 'ERROR';
-  }
 } else {
-  $message = 'Tickerupdate is disabled';
-  $status = 'OK';
-  $price = 0;
+    $message = 'Tickerupdate is disabled';
+    $status = 'OK';
+    $price = 0;
 }
 $log->logInfo(sprintf($strLogMask, 'Price Update', $price, number_format(microtime(true) - $start, 3), $status, $message));
-
 
 // Update Uptime Robot status in Settings table via API call
 $start = microtime(true);
 $message = 'Updated Uptime Robot status from API';
 $status = 'OK';
 if ($api_keys = $setting->getValue('monitoring_uptimerobot_api_keys')) {
-  if (!strstr($api_keys, 'MONITOR_API_KEY|MONITOR_NAME')) {
-    $monitoring->setTools($tools);
-    if (!$monitoring->storeUptimeRobotStatus()) {
-      $message = $monitoring->getCronError();
-      $status = 'ERROR';
+    if (!strstr($api_keys, 'MONITOR_API_KEY|MONITOR_NAME')) {
+        $monitoring->setTools($tools);
+        if (!$monitoring->storeUptimeRobotStatus()) {
+            $message = $monitoring->getCronError();
+            $status = 'ERROR';
+        }
     }
-  }
 } else {
-  $status = 'SKIPED';
-  $message = 'Missing API keys and monitor names';
+    $status = 'SKIPED';
+    $message = 'Missing API keys and monitor names';
 }
 $log->logInfo(sprintf($strLogMask, 'Uptime Robot', 'n/a', number_format(microtime(true) - $start, 3), $status, $message));
 
-require_once('cron_end.inc.php');
+require_once 'cron_end.inc.php';

@@ -23,11 +23,11 @@ limitations under the License.
 chdir(dirname(__FILE__));
 
 // Include all settings and classes
-require_once('shared.inc.php');
+require_once 'shared.inc.php';
 
 // Header
 $log->logInfo('Running statistical queries, errors may just mean no shares were available');
-$strLogMask = "| %-33.33s | %8.8s | %-6.6s |";
+$strLogMask = '| %-33.33s | %8.8s | %-6.6s |';
 $log->logInfo(sprintf($strLogMask, 'Method', 'Runtime', 'Status'));
 
 // Per user share statistics based on all shares submitted
@@ -54,4 +54,4 @@ $start = microtime(true);
 $statistics->getCurrentHashrate() ? $status = 'OK' : $status = 'ERROR';
 $log->logInfo(sprintf($strLogMask, 'getTopContributors(shares)', number_format(microtime(true) - $start, 3), $status));
 
-require_once('cron_end.inc.php');
+require_once 'cron_end.inc.php';

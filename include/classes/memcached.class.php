@@ -1,4 +1,5 @@
 <?php
+
 $defflip = (!cfip()) ? exit(header('HTTP/1.1 401 Unauthorized')) : 1;
 
 /**
@@ -9,8 +10,8 @@ $defflip = (!cfip()) ? exit(header('HTTP/1.1 401 Unauthorized')) : 1;
 class Memcached
   extends Memcache
 {
-  public function set($key, $value, $expiration = 0)
-  {
-    return parent::set($key, $value, 0, $expiration);
-  }
-} 
+    public function set($key, $value, $expiration = 0)
+    {
+        return parent::set($key, $value, 0, $expiration);
+    }
+}

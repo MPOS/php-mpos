@@ -8,17 +8,25 @@ define('SECHASH_CHECK', false);
 
 // change SECHASH every second, we allow up to 3 sec back for slow servers
 if (SECHASH_CHECK) {
-  function fip($tr=0) { return md5(SECURITY.(time()-$tr).SECURITY); }
-  define('SECHASH', fip());
-  function cfip() { return (fip()==SECHASH||fip(1)==SECHASH||fip(2)==SECHASH) ? 1 : 0; }
+    function fip($tr = 0)
+    {
+        return md5(SECURITY.(time() - $tr).SECURITY);
+    }
+    define('SECHASH', fip());
+    function cfip()
+    {
+        return (fip() == SECHASH || fip(1) == SECHASH || fip(2) == SECHASH) ? 1 : 0;
+    }
 } else {
-  function cfip() { return (@defined('SECURITY')) ? 1 : 0; }
+    function cfip()
+    {
+        return (@defined('SECURITY')) ? 1 : 0;
+    }
 }
 
+define('BASEPATH', dirname(__FILE__).'/');
 
-define("BASEPATH", dirname(__FILE__) . "/");
-
-define('INCLUDE_DIR', BASEPATH . '../include');
-define('CLASS_DIR', INCLUDE_DIR . '/classes');
-define('PAGES_DIR', INCLUDE_DIR . '/pages');
-define('TEMPLATE_DIR', BASEPATH . '../templates');
+define('INCLUDE_DIR', BASEPATH.'../include');
+define('CLASS_DIR', INCLUDE_DIR.'/classes');
+define('PAGES_DIR', INCLUDE_DIR.'/pages');
+define('TEMPLATE_DIR', BASEPATH.'../templates');

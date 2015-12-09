@@ -1,4 +1,5 @@
 <?php
+
 $defflip = (!cfip()) ? exit(header('HTTP/1.1 401 Unauthorized')) : 1;
 
 // Check if the API is activated
@@ -21,7 +22,7 @@ echo json_encode(
     'last_block' => $aLastBlock['height'],
     'network_hashrate' => $dNetworkHashrate,
     'fee' => $config['fees'],
-    'payout' => $config['payout_system']
+    'payout' => $config['payout_system'],
   )
 );
 

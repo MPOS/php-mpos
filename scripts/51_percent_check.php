@@ -28,7 +28,7 @@ limitations under the License.
 chdir(dirname(__FILE__));
 
 // Include all settings and classes
-require_once('shared.inc.php');
+require_once 'shared.inc.php';
 
 // Fetch hashrates
 $dNetworkHashrate = $bitcoin->getnetworkhashps() / 1000;
@@ -36,8 +36,8 @@ $dPoolHashrate = $statistics->getCurrentHashrate();
 $iPercentage = round(100 / $dNetworkHashrate * $dPoolHashrate, 0);
 
 if ($iPercentage >= 51) {
-  echo 'Your pool has ' . $iPercentage . '% of the network hashrate. Registrations will be disabled.' . PHP_EOL;
-  $setting->setValue('lock_registration', 1);
+    echo 'Your pool has '.$iPercentage.'% of the network hashrate. Registrations will be disabled.'.PHP_EOL;
+    $setting->setValue('lock_registration', 1);
 } else {
-  $setting->setValue('lock_registration', 0);
+    $setting->setValue('lock_registration', 0);
 }

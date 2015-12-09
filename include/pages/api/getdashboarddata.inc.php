@@ -1,18 +1,19 @@
 <?php
+
 $defflip = (!cfip()) ? exit(header('HTTP/1.1 401 Unauthorized')) : 1;
 
 // Check if the system is enabled
 if ($setting->getValue('disable_dashboard_api')) {
-  echo $api->get_json(array('error' => 'disabled'));
-  die();
+    echo $api->get_json(array('error' => 'disabled'));
+    die();
 }
 
 // System load check
 if ($load = @sys_getloadavg()) {
-  if (isset($config['system']['load']['max']) && $load[0] > $config['system']['load']['max']) {
-    header('HTTP/1.1 503 Too busy, try again later');
-    die('Server too busy. Please try again later.');
-  }
+    if (isset($config['system']['load']['max']) && $load[0] > $config['system']['load']['max']) {
+        header('HTTP/1.1 503 Too busy, try again later');
+        die('Server too busy. Please try again later.');
+    }
 }
 
 // Supress master template
@@ -24,25 +25,35 @@ $username = $user->getUsername($user_id);
 
 // Fetch RPC information
 if ($bitcoin->can_connect() === true) {
-  $dNetworkHashrate = $bitcoin->getnetworkhashps();
-  $dDifficulty = $bitcoin->getdifficulty();
-  $iBlock = $bitcoin->getblockcount();
+    $dNetworkHashrate = $bitcoin->getnetworkhashps();
+    $dDifficulty = $bitcoin->getdifficulty();
+    $iBlock = $bitcoin->getblockcount();
 } else {
-  $dNetworkHashrate = 0;
-  $dDifficulty = 1;
-  $iBlock = 0;
+    $dNetworkHashrate = 0;
+    $dDifficulty = 1;
+    $iBlock = 0;
 }
 
 // Some settings
-if ( ! $interval = $setting->getValue('statistics_ajax_data_interval')) $interval = 300;
-if ( ! $dPoolHashrateModifier = $setting->getValue('statistics_pool_hashrate_modifier') ) $dPoolHashrateModifier = 1;
-if ( ! $dPersonalHashrateModifier = $setting->getValue('statistics_personal_hashrate_modifier') ) $dPersonalHashrateModifier = 1;
-if ( ! $dNetworkHashrateModifier = $setting->getValue('statistics_network_hashrate_modifier') ) $dNetworkHashrateModifier = 1;
+if (!$interval = $setting->getValue('statistics_ajax_data_interval')) {
+    $interval = 300;
+}
+if (!$dPoolHashrateModifier = $setting->getValue('statistics_pool_hashrate_modifier')) {
+    $dPoolHashrateModifier = 1;
+}
+if (!$dPersonalHashrateModifier = $setting->getValue('statistics_personal_hashrate_modifier')) {
+    $dPersonalHashrateModifier = 1;
+}
+if (!$dNetworkHashrateModifier = $setting->getValue('statistics_network_hashrate_modifier')) {
+    $dNetworkHashrateModifier = 1;
+}
 
 // Fetch raw data
 $statistics->setGetCache(false);
 $dPoolHashrate = $statistics->getCurrentHashrate($interval);
-if ($dPoolHashrate > $dNetworkHashrate) $dNetworkHashrate = $dPoolHashrate;
+if ($dPoolHashrate > $dNetworkHashrate) {
+    $dNetworkHashrate = $dPoolHashrate;
+}
 $aUserMiningStats = $statistics->getUserMiningStats($username, $user_id, $interval);
 $dPersonalHashrate = $aUserMiningStats['hashrate'];
 $dPersonalSharerate = $aUserMiningStats['sharerate'];
@@ -54,11 +65,11 @@ $aUserRoundShares = $statistics->getUserShares($username, $user_id);
 $aRoundShares = $statistics->getRoundShares();
 
 if ($config['payout_system'] != 'pps') {
-  $aEstimates = $statistics->getUserEstimates($aRoundShares, $aUserRoundShares, $user->getUserDonatePercent($user_id), $user->getUserNoFee($user_id));
-  $dUnpaidShares = 0;
+    $aEstimates = $statistics->getUserEstimates($aRoundShares, $aUserRoundShares, $user->getUserDonatePercent($user_id), $user->getUserNoFee($user_id));
+    $dUnpaidShares = 0;
 } else {
-  $dUnpaidShares = $statistics->getUserUnpaidPPSShares($username, $user_id, $setting->getValue('pps_last_share_id'));
-  $aEstimates = $statistics->getUserEstimates($dPersonalSharerate, $dPersonalShareDifficulty, $user->getUserDonatePercent($user_id), $user->getUserNoFee($user_id), $statistics->getPPSValue());
+    $dUnpaidShares = $statistics->getUserUnpaidPPSShares($username, $user_id, $setting->getValue('pps_last_share_id'));
+    $aEstimates = $statistics->getUserEstimates($dPersonalSharerate, $dPersonalShareDifficulty, $user->getUserDonatePercent($user_id), $user->getUserNoFee($user_id), $statistics->getPPSValue());
 }
 
 // Round/user percentages
@@ -86,36 +97,36 @@ $iBlocksUntilDiffChange = $statistics->getBlocksUntilDiffChange();
 // Block statistics
 $aLastBlocks = $statistics->getBlocksFound(5);
 if (!$user->isAdmin(@$_SESSION['USERDATA']['id'])) {
-  foreach ($aLastBlocks as $key => $data) {
-    if ($data['is_anonymous'] == 1) {
-      $aLastBlocks[$key]['worker_name'] = 'anonymous';
-      $aLastBlocks[$key]['finder'] = 'anonymous';
+    foreach ($aLastBlocks as $key => $data) {
+        if ($data['is_anonymous'] == 1) {
+            $aLastBlocks[$key]['worker_name'] = 'anonymous';
+            $aLastBlocks[$key]['finder'] = 'anonymous';
+        }
     }
-  }
 }
 
 // Output JSON format
 $data = array(
-  'raw' => array( 'personal' => array( 'hashrate' => $dPersonalHashrate ), 'pool' => array( 'hashrate' => $dPoolHashrate ), 'network' => array( 'hashrate' => $dNetworkHashrate / 1000, 'esttimeperblock' => $dExpectedTimePerBlock, 'nextdifficulty' => $dEstNextDifficulty, 'blocksuntildiffchange' => $iBlocksUntilDiffChange ) ),
-  'personal' => array (
+  'raw' => array('personal' => array('hashrate' => $dPersonalHashrate), 'pool' => array('hashrate' => $dPoolHashrate), 'network' => array('hashrate' => $dNetworkHashrate / 1000, 'esttimeperblock' => $dExpectedTimePerBlock, 'nextdifficulty' => $dEstNextDifficulty, 'blocksuntildiffchange' => $iBlocksUntilDiffChange)),
+  'personal' => array(
     'hashrate' => $dPersonalHashrateAdjusted, 'sharerate' => $dPersonalSharerate, 'sharedifficulty' => $dPersonalShareDifficulty,
-    'shares' => array('valid' => $aUserRoundShares['valid'], 'invalid' => $aUserRoundShares['invalid'], 'invalid_percent' => $dUserInvalidPercent, 'unpaid' => $dUnpaidShares ),
-    'estimates' => $aEstimates),
+    'shares' => array('valid' => $aUserRoundShares['valid'], 'invalid' => $aUserRoundShares['invalid'], 'invalid_percent' => $dUserInvalidPercent, 'unpaid' => $dUnpaidShares),
+    'estimates' => $aEstimates, ),
   'pool' => array(
     'info' => array(
       'name' => $setting->getValue('website_name'),
-      'currency' => $config['currency']
+      'currency' => $config['currency'],
     ),
     'esttimeperblock' => round($dPoolExpectedTimePerBlock, 2),
     'blocks' => $aLastBlocks,
     'workers' => $worker->getCountAllActiveWorkers(), 'hashrate' => $dPoolHashrateAdjusted,
-    'shares' => array( 'valid' => $aRoundShares['valid'], 'invalid' => $aRoundShares['invalid'], 'invalid_percent' => $dPoolInvalidPercent, 'estimated' => $iEstShares, 'progress' => $dEstPercent ),
+    'shares' => array('valid' => $aRoundShares['valid'], 'invalid' => $aRoundShares['invalid'], 'invalid_percent' => $dPoolInvalidPercent, 'estimated' => $iEstShares, 'progress' => $dEstPercent),
     'price' => $aPrice,
     'difficulty' => pow(2, $config['difficulty'] - 16),
-    'target_bits' => $coin->getTargetBits()
+    'target_bits' => $coin->getTargetBits(),
   ),
-  'system' => array( 'load' => sys_getloadavg() ),
-  'network' => array( 'hashrate' => $dNetworkHashrateAdjusted, 'difficulty' => $dDifficulty, 'block' => $iBlock, 'esttimeperblock' => round($dExpectedTimePerBlock ,2), 'nextdifficulty' => $dEstNextDifficulty, 'blocksuntildiffchange' => $iBlocksUntilDiffChange ),
+  'system' => array('load' => sys_getloadavg()),
+  'network' => array('hashrate' => $dNetworkHashrateAdjusted, 'difficulty' => $dDifficulty, 'block' => $iBlock, 'esttimeperblock' => round($dExpectedTimePerBlock, 2), 'nextdifficulty' => $dEstNextDifficulty, 'blocksuntildiffchange' => $iBlocksUntilDiffChange),
 );
 
 echo $api->get_json($data);

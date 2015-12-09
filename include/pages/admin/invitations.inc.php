@@ -1,10 +1,11 @@
 <?php
+
 $defflip = (!cfip()) ? exit(header('HTTP/1.1 401 Unauthorized')) : 1;
 
 // Check user to ensure they are admin
 if (!$user->isAuthenticated() || !$user->isAdmin($_SESSION['USERDATA']['id'])) {
-  header("HTTP/1.1 404 Page not found");
-  die("404 Page not found");
+    header('HTTP/1.1 404 Page not found');
+    die('404 Page not found');
 }
 
 // Some defaults
@@ -14,10 +15,10 @@ empty($_REQUEST['invitersstart']) ? $invitersstart = 0 : $invitersstart = $_REQU
 
 // Fetching invitation Informations
 if (!$setting->getValue('disable_invitations')) {
-  // get last 10 Inviters
+    // get last 10 Inviters
   $aTopInviters = $user->getTopInviters($iLimit, $invitersstart);
-  $smarty->assign("TOPINVITERS", $aTopInviters);
+    $smarty->assign('TOPINVITERS', $aTopInviters);
 }
 
 // Tempalte specifics
-$smarty->assign("CONTENT", "default.tpl");
+$smarty->assign('CONTENT', 'default.tpl');

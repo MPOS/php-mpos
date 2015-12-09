@@ -28,7 +28,7 @@ limitations under the License.
 chdir(dirname(__FILE__));
 
 // Include all settings and classes
-require_once('shared.inc.php');
+require_once 'shared.inc.php';
 
 // Fetch all users
 $users = $user->getAllAssoc();
@@ -38,27 +38,27 @@ $aAllAddresses = array();
 
 // Table mask
 $mask = "| %-35.35s | %-35.35s | %-40.40s | %-7.7s |\n";
-echo 'Validating all coin addresses. This may take some time.' . PHP_EOL . PHP_EOL;
+echo 'Validating all coin addresses. This may take some time.'.PHP_EOL.PHP_EOL;
 
 printf($mask, 'Username', 'E-Mail', 'Address', 'Status');
 foreach ($users as $aData) {
-  $aData['coin_address'] = $coin_address->getCoinAddress($aData['id']);
-  if (empty($aData['coin_address']) && $aData['is_locked'] == 0) {
-    $status = 'UNSET';
-  } else if ($aData['is_locked'] == 1) {
-    $status = 'LOCKED';
-  } else {
-    if ($bitcoin->validateaddress($aData['coin_address'])) {
-      $status = 'VALID';
+    $aData['coin_address'] = $coin_address->getCoinAddress($aData['id']);
+    if (empty($aData['coin_address']) && $aData['is_locked'] == 0) {
+        $status = 'UNSET';
+    } elseif ($aData['is_locked'] == 1) {
+        $status = 'LOCKED';
     } else {
-      $status = 'INVALID';
+        if ($bitcoin->validateaddress($aData['coin_address'])) {
+            $status = 'VALID';
+        } else {
+            $status = 'INVALID';
+        }
     }
-  }
   // Duplicate check
   if (in_array($aData['coin_address'], $aAllAddresses)) {
-    $status = 'DUPE';
-  } else if (!empty($aData['coin_address'])) {
-    $aAllAddresses[] = $aData['coin_address'];
+      $status = 'DUPE';
+  } elseif (!empty($aData['coin_address'])) {
+      $aAllAddresses[] = $aData['coin_address'];
   }
-  printf($mask, $aData['username'], $aData['email'], $aData['coin_address'], $status);
+    printf($mask, $aData['username'], $aData['email'], $aData['coin_address'], $status);
 }

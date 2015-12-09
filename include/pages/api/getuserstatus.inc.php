@@ -1,4 +1,5 @@
 <?php
+
 $defflip = (!cfip()) ? exit(header('HTTP/1.1 401 Unauthorized')) : 1;
 
 // Check if the API is activated
@@ -9,7 +10,9 @@ $user_id = $api->checkAccess($user->checkApiKey($_REQUEST['api_key']), @$_REQUES
 $username = $user->getUsername($user_id);
 
 // Fetch some settings
-if ( ! $interval = $setting->getValue('statistics_ajax_data_interval')) $interval = 300;
+if (!$interval = $setting->getValue('statistics_ajax_data_interval')) {
+    $interval = 300;
+}
 
 // Fetch transaction summary
 $aTransactionSummary = $transaction->getTransactionSummary($user_id);
@@ -20,9 +23,9 @@ $aUserMiningStats = $statistics->getUserMiningStats($username, $user_id, $interv
 // Output JSON format
 $data = array(
   'username' => $username,
-  'shares' =>  $statistics->getUserShares($username, $user_id),
+  'shares' => $statistics->getUserShares($username, $user_id),
   'hashrate' => $aUserMiningStats['hashrate'],
-  'sharerate' => $aUserMiningStats['sharerate']
+  'sharerate' => $aUserMiningStats['sharerate'],
 );
 echo $api->get_json($data);
 

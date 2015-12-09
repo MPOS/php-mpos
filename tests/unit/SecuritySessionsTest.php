@@ -3,11 +3,11 @@
 class Security_Sessions extends \Codeception\TestCase\Test
 {
     /**
-     * Tests if our current session checking will throw errors or take a malformed id
+     * Tests if our current session checking will throw errors or take a malformed id.
      */
     public function testSessions_destruction_malformed_id()
     {
-//        global $config;
+        //        global $config;
 //
 //        $malformed_ids = array(
 //            "",
@@ -28,5 +28,3 @@ class Security_Sessions extends \Codeception\TestCase\Test
 //        }
     }
 }
-
-?>

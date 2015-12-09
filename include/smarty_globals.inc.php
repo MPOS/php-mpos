@@ -1,4 +1,5 @@
 <?php
+
 $defflip = (!cfip()) ? exit(header('HTTP/1.1 401 Unauthorized')) : 1;
 
 // Globally available variables
@@ -10,27 +11,35 @@ $dDifficulty = 1;
 
 // Fetch round shares
 if (!$aRoundShares = $statistics->getRoundShares()) {
-  $aRoundShares = array('valid' => 0, 'invalid' => 0);
+    $aRoundShares = array('valid' => 0, 'invalid' => 0);
 }
 
 if ($bitcoin->can_connect() === true) {
-  $dDifficulty = $bitcoin->getdifficulty();
-  $dNetworkHashrate = $bitcoin->getnetworkhashps();
+    $dDifficulty = $bitcoin->getdifficulty();
+    $dNetworkHashrate = $bitcoin->getnetworkhashps();
 } else {
-  $dDifficulty = 1;
-  $dNetworkHashrate = 0;
+    $dDifficulty = 1;
+    $dNetworkHashrate = 0;
 }
 
 // Baseline pool hashrate for templates
-if ( ! $dPoolHashrateModifier = $setting->getValue('statistics_pool_hashrate_modifier') ) $dPoolHashrateModifier = 1;
-$iCurrentPoolHashrate =  $statistics->getCurrentHashrate();
+if (!$dPoolHashrateModifier = $setting->getValue('statistics_pool_hashrate_modifier')) {
+    $dPoolHashrateModifier = 1;
+}
+$iCurrentPoolHashrate = $statistics->getCurrentHashrate();
 
 // Avoid confusion, ensure our nethash isn't higher than poolhash
-if ($iCurrentPoolHashrate > $dNetworkHashrate / 1000) $dNetworkHashrate = $iCurrentPoolHashrate * 1000;
+if ($iCurrentPoolHashrate > $dNetworkHashrate / 1000) {
+    $dNetworkHashrate = $iCurrentPoolHashrate * 1000;
+}
 
 // Baseline network hashrate for templates
-if ( ! $dPersonalHashrateModifier = $setting->getValue('statistics_personal_hashrate_modifier') ) $dPersonalHashrateModifier = 1;
-if ( ! $dNetworkHashrateModifier = $setting->getValue('statistics_network_hashrate_modifier') ) $dNetworkHashrateModifier = 1;
+if (!$dPersonalHashrateModifier = $setting->getValue('statistics_personal_hashrate_modifier')) {
+    $dPersonalHashrateModifier = 1;
+}
+if (!$dNetworkHashrateModifier = $setting->getValue('statistics_network_hashrate_modifier')) {
+    $dNetworkHashrateModifier = 1;
+}
 
 // Apply modifier now
 $dNetworkHashrate = $dNetworkHashrate / 1000 * $dNetworkHashrateModifier;
@@ -40,19 +49,25 @@ $iCurrentPoolHashrate = $iCurrentPoolHashrate * $dPoolHashrateModifier;
 $iCurrentPoolShareRate = $statistics->getCurrentShareRate();
 
 // Active workers
-if (!$iCurrentActiveWorkers = $worker->getCountAllActiveWorkers()) $iCurrentActiveWorkers = 0;
+if (!$iCurrentActiveWorkers = $worker->getCountAllActiveWorkers()) {
+    $iCurrentActiveWorkers = 0;
+}
 
 // Some settings to propagate to template
-if (! $statistics_ajax_refresh_interval = $setting->getValue('statistics_ajax_refresh_interval')) $statistics_ajax_refresh_interval = 10;
-if (! $statistics_ajax_long_refresh_interval = $setting->getValue('statistics_ajax_long_refresh_interval')) $statistics_ajax_long_refresh_interval = 10;
+if (!$statistics_ajax_refresh_interval = $setting->getValue('statistics_ajax_refresh_interval')) {
+    $statistics_ajax_refresh_interval = 10;
+}
+if (!$statistics_ajax_long_refresh_interval = $setting->getValue('statistics_ajax_long_refresh_interval')) {
+    $statistics_ajax_long_refresh_interval = 10;
+}
 
 // Small helper array
-$aHashunits = array( '1' => 'KH/s', '0.001' => 'MH/s', '0.000001' => 'GH/s', '0.000000001' => 'TH/s' );
+$aHashunits = array('1' => 'KH/s', '0.001' => 'MH/s', '0.000001' => 'GH/s', '0.000000001' => 'TH/s');
 
 // Global data for Smarty
 $aGlobal = array(
-  'hashunits' => array( 'pool' => $aHashunits[$dPoolHashrateModifier], 'network' => $aHashunits[$dNetworkHashrateModifier], 'personal' => $aHashunits[$dPersonalHashrateModifier]),
-  'hashmods' => array( 'personal' => $dPersonalHashrateModifier ),
+  'hashunits' => array('pool' => $aHashunits[$dPoolHashrateModifier], 'network' => $aHashunits[$dNetworkHashrateModifier], 'personal' => $aHashunits[$dPersonalHashrateModifier]),
+  'hashmods' => array('personal' => $dPersonalHashrateModifier),
   'hashrate' => $iCurrentPoolHashrate,
   'nethashrate' => $dNetworkHashrate,
   'sharerate' => $iCurrentPoolShareRate,
@@ -101,9 +116,9 @@ $aGlobal = array(
     'mp_threshold' => $config['mp_threshold'],
     'ap_threshold' => array(
       'min' => $config['ap_threshold']['min'],
-      'max' => $config['ap_threshold']['max']
-    )
-  )
+      'max' => $config['ap_threshold']['max'],
+    ),
+  ),
 );
 
 // Website configurations
@@ -143,22 +158,22 @@ $aGlobal['acl']['qrcode'] = $setting->getValue('acl_qrcode');
 
 // We don't want these session infos cached
 if (@$_SESSION['USERDATA']['id']) {
-  $aGlobal['userdata'] = $_SESSION['USERDATA']['id'] ? $user->getUserData($_SESSION['USERDATA']['id']) : array();
-  $aGlobal['userdata']['balance'] = $transaction->getBalance($_SESSION['USERDATA']['id']);
+    $aGlobal['userdata'] = $_SESSION['USERDATA']['id'] ? $user->getUserData($_SESSION['USERDATA']['id']) : array();
+    $aGlobal['userdata']['balance'] = $transaction->getBalance($_SESSION['USERDATA']['id']);
 
   // Fetch Last 5 notifications
   $aLastNotifications = $notification->getNotifications($_SESSION['USERDATA']['id'], 5);
-  $aGlobal['userdata']['lastnotifications'] = $aLastNotifications;
+    $aGlobal['userdata']['lastnotifications'] = $aLastNotifications;
 
   // Other userdata that we can cache savely
   $aGlobal['userdata']['shares'] = $statistics->getUserShares($_SESSION['USERDATA']['username'], $_SESSION['USERDATA']['id']);
-  $aUserMiningStats = $statistics->getUserMiningStats($_SESSION['USERDATA']['username'], $_SESSION['USERDATA']['id']);
-  $aGlobal['userdata']['rawhashrate'] = $aUserMiningStats['hashrate'];
-  $aGlobal['userdata']['hashrate'] = $aGlobal['userdata']['rawhashrate'] * $dPersonalHashrateModifier;
-  $aGlobal['userdata']['sharerate'] = $aUserMiningStats['sharerate'];
-  $aGlobal['userdata']['sharedifficulty'] = $aUserMiningStats['avgsharediff'];
+    $aUserMiningStats = $statistics->getUserMiningStats($_SESSION['USERDATA']['username'], $_SESSION['USERDATA']['id']);
+    $aGlobal['userdata']['rawhashrate'] = $aUserMiningStats['hashrate'];
+    $aGlobal['userdata']['hashrate'] = $aGlobal['userdata']['rawhashrate'] * $dPersonalHashrateModifier;
+    $aGlobal['userdata']['sharerate'] = $aUserMiningStats['sharerate'];
+    $aGlobal['userdata']['sharedifficulty'] = $aUserMiningStats['avgsharediff'];
 
-  switch ($config['payout_system']) {
+    switch ($config['payout_system']) {
   case 'prop':
     // Some estimations
     $aEstimates = $statistics->getUserEstimates($aRoundShares, $aGlobal['userdata']['shares'], $aGlobal['userdata']['donate_percent'], $aGlobal['userdata']['no_fees']);
@@ -167,9 +182,9 @@ if (@$_SESSION['USERDATA']['id']) {
   case 'pplns':
     $aGlobal['pplns']['target'] = $config['pplns']['shares']['default'];
     if ($aLastBlock = $block->getLast()) {
-      if ($iAvgBlockShares = round($block->getAvgBlockShares($aLastBlock['height'], $config['pplns']['blockavg']['blockcount']))) {
-        $aGlobal['pplns']['target'] = $iAvgBlockShares;
-      }
+        if ($iAvgBlockShares = round($block->getAvgBlockShares($aLastBlock['height'], $config['pplns']['blockavg']['blockcount']))) {
+            $aGlobal['pplns']['target'] = $iAvgBlockShares;
+        }
     }
     $aEstimates = $statistics->getUserEstimates($aRoundShares, $aGlobal['userdata']['shares'], $aGlobal['userdata']['donate_percent'], $aGlobal['userdata']['no_fees']);
     $aGlobal['userdata']['estimates'] = $aEstimates;
@@ -184,54 +199,58 @@ if (@$_SESSION['USERDATA']['id']) {
   }
 
   // Site-wide notifications, based on user events
-  if ($aGlobal['userdata']['balance']['confirmed'] >= $config['ap_threshold']['max'])
-    $_SESSION['POPUP'][] = array('CONTENT' => 'You have exceeded the pools configured ' . $config['currency'] . ' warning threshold. Please initiate a transfer!', 'TYPE' => 'alert alert-danger');
-  if ($user->getUserFailed($_SESSION['USERDATA']['id']) > 0)
-    $_SESSION['POPUP'][] = array('CONTENT' => 'You have ' . $user->getUserFailed($_SESSION['USERDATA']['id']) . ' failed login attempts! <a href="?page=account&action=reset_failed">Reset Counter</a>', 'TYPE' => 'alert alert-danger');
+  if ($aGlobal['userdata']['balance']['confirmed'] >= $config['ap_threshold']['max']) {
+      $_SESSION['POPUP'][] = array('CONTENT' => 'You have exceeded the pools configured '.$config['currency'].' warning threshold. Please initiate a transfer!', 'TYPE' => 'alert alert-danger');
+  }
+    if ($user->getUserFailed($_SESSION['USERDATA']['id']) > 0) {
+        $_SESSION['POPUP'][] = array('CONTENT' => 'You have '.$user->getUserFailed($_SESSION['USERDATA']['id']).' failed login attempts! <a href="?page=account&action=reset_failed">Reset Counter</a>', 'TYPE' => 'alert alert-danger');
+    }
 }
 
-if ($setting->getValue('maintenance'))
-  $_SESSION['POPUP'][] = array('CONTENT' => 'This pool is currently in maintenance mode.', 'TYPE' => 'alert alert-warning');
+if ($setting->getValue('maintenance')) {
+    $_SESSION['POPUP'][] = array('CONTENT' => 'This pool is currently in maintenance mode.', 'TYPE' => 'alert alert-warning');
+}
 if ($motd = $setting->getValue('system_motd')) {
-  if ($setting->getValue('system_motd_dismiss')) {
-    $motd_dismiss = "yes";
-  } else {
-    $motd_dismiss = "no";
-  }
-  switch ($setting->getValue('system_motd_style', 0)) {
+    if ($setting->getValue('system_motd_dismiss')) {
+        $motd_dismiss = 'yes';
+    } else {
+        $motd_dismiss = 'no';
+    }
+    switch ($setting->getValue('system_motd_style', 0)) {
     case 0:
-        $motd_style = "alert-success";
+        $motd_style = 'alert-success';
         break;
     case 1:
-        $motd_style = "alert-info";
+        $motd_style = 'alert-info';
         break;
     case 2:
-        $motd_style = "alert-warning";
+        $motd_style = 'alert-warning';
         break;
     case 3:
-        $motd_style = "alert-danger";
+        $motd_style = 'alert-danger';
         break;
     default:
-       $motd_style = "alert-info";
+       $motd_style = 'alert-info';
   }
-  $_SESSION['POPUP'][] = array('CONTENT' => $motd, 'DISMISS' => $motd_dismiss, 'ID' => 'motd', 'TYPE' => 'alert ' . $motd_style . '');
+    $_SESSION['POPUP'][] = array('CONTENT' => $motd, 'DISMISS' => $motd_dismiss, 'ID' => 'motd', 'TYPE' => 'alert '.$motd_style.'');
 }
 
 // check for deprecated theme
-if ($setting->getValue('website_theme') == "mpos")
-  $_SESSION['POPUP'][] = array('CONTENT' => 'You are using an old Theme that will not be maintained in the future.', 'TYPE' => 'alert alert-warning');
+if ($setting->getValue('website_theme') == 'mpos') {
+    $_SESSION['POPUP'][] = array('CONTENT' => 'You are using an old Theme that will not be maintained in the future.', 'TYPE' => 'alert alert-warning');
+}
 
 // So we can display additional info
 $smarty->assign('DEBUG', $config['DEBUG']);
 
 // Lets check for our cron status and render a message
-require_once(INCLUDE_DIR . '/config/monitor_crons.inc.php');
+require_once INCLUDE_DIR.'/config/monitor_crons.inc.php';
 $bMessage = false;
 $aCronMessage[] = 'We are investigating issues in the backend. Your shares and hashrate are safe and we will fix things ASAP.</br><br/>';
 foreach ($aMonitorCrons as $strCron) {
-  if ($monitoring->isDisabled($strCron) == 1) {
-    $bMessage = true;
-    switch ($strCron) {
+    if ($monitoring->isDisabled($strCron) == 1) {
+        $bMessage = true;
+        switch ($strCron) {
     case 'payouts':
       $aCronMessage[] = '<li> Payouts disabled, you will not receive any coins to your offline wallet for the time being</li>';
       break;
@@ -251,12 +270,13 @@ foreach ($aMonitorCrons as $strCron) {
       $aCronMessage[] = '<li> PPS payout disabled, share credit transactions are delayed</li>';
       break;
     }
-  }
+    }
 }
-if ($bMessage)
-  $_SESSION['POPUP'][] = array('CONTENT' => implode($aCronMessage, ''), 'DISMISS' => 'yes', 'ID' => 'backend', 'TYPE' => 'alert alert-warning');
+if ($bMessage) {
+    $_SESSION['POPUP'][] = array('CONTENT' => implode($aCronMessage, ''), 'DISMISS' => 'yes', 'ID' => 'backend', 'TYPE' => 'alert alert-warning');
+}
 
 // Make it available in Smarty
-$smarty->assign('PATH', 'site_assets/' . THEME);
+$smarty->assign('PATH', 'site_assets/'.THEME);
 $smarty->assign('GLOBALASSETS', 'site_assets/global');
 $smarty->assign('GLOBAL', $aGlobal);

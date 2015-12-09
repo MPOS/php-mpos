@@ -1,4 +1,5 @@
 <?php
+
 $defflip = (!cfip()) ? exit(header('HTTP/1.1 401 Unauthorized')) : 1;
 
 // Check if the API is activated
@@ -11,7 +12,7 @@ $username = $user->getUsername($user_id);
 // Output JSON format
 $data = array(
   'mine' => $statistics->getHourlyHashrateByAccount($username, $user_id),
-  'pool' => $statistics->getHourlyHashrateByPool()
+  'pool' => $statistics->getHourlyHashrateByPool(),
 );
 
 echo $api->get_json($data);

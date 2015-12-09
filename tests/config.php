@@ -1,4 +1,5 @@
-<?php 
+<?php
+
 
 // full path to mpos public directory, with trailing slash
 define('BASEPATH', '/var/www/php-mpos-allbranches/php-mpos/public/');
@@ -9,5 +10,3 @@ define('DIST_OR_REAL_CONFIG', 1);
 
 // because php cli defaults are shit, the socket might be wrong
 ini_set('mysqli.default_socket', '/var/run/mysqld/mysqld.sock');
-
-?>

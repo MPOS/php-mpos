@@ -1,25 +1,22 @@
 <?php
 
-use Codeception\Util\Stub;
 
 class SecurityCSRFTokenTest extends \Codeception\TestCase\Test
 {
     public function _before()
     {
-
     }
 
     public function _after()
     {
-
     }
 
-
     /**
-     * Tests if a CSRF token succeeds for a matching user and type
+     * Tests if a CSRF token succeeds for a matching user and type.
      */
-    public function testCSRFToken_success() {
-//        global $config;
+    public function testCSRFToken_success()
+    {
+        //        global $config;
 //        global $user;
 //        global $csrftoken;
 //
@@ -31,10 +28,11 @@ class SecurityCSRFTokenTest extends \Codeception\TestCase\Test
     }
 
     /**
-     * Tests if a CSRF token correctly fails
+     * Tests if a CSRF token correctly fails.
      */
-    public function testCSRFToken_fail() {
-//        global $config;
+    public function testCSRFToken_fail()
+    {
+        //        global $config;
 //        global $user;
 //        global $csrftoken;
 //
@@ -55,4 +53,3 @@ class SecurityCSRFTokenTest extends \Codeception\TestCase\Test
 //        $this->assertFalse($test_token3);
     }
 }
-
