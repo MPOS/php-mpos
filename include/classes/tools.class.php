@@ -81,6 +81,8 @@ class Tools extends Base {
       return 'cryptorush';
     } else if (preg_match('/mintpal.com/', $url)) {
       return 'mintpal';
+    } else if (preg_match('/c-cex.com/', $url)) {
+      return 'c-cex';
     } else if (preg_match('/bittrex.com/', $url)) {
       return 'bittrex';
     }
@@ -118,7 +120,10 @@ class Tools extends Base {
       	case 'mintpal':
       	  return @$aData['0']['last_price'];
       	  break;
-      	  case 'bittrex':
+        case 'c-cex':
+          return @$aData['ticker']['lastprice'];
+          break;
+      	case 'bittrex':
       	  return @$aData['result']['Last'];
       	  break;
       }
