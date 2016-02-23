@@ -1,1 +1,1 @@
-No action specified
+{t}No action specified{/t}

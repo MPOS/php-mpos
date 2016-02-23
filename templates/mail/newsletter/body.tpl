@@ -1,6 +1,6 @@
 <html>
 <body>
-<p>Dear {nocache}{$DATA.username}{/nocache},</p>
+<p>{t}Dear{/t} {nocache}{$DATA.username}{/nocache},</p>
 <div>
 {$DATA.CONTENT}
 </div>

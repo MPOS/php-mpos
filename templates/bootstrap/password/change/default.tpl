@@ -8,18 +8,18 @@
     <input type="hidden" name="do" value="resetPassword">
     <div class="panel panel-default">
       <div class="panel-heading">
-        <h3 class="panel-title">Password reset</h3>
+        <h3 class="panel-title">{t}Password reset{/t}</h3>
       </div>
       <div class="panel-body">
         <div class="form-group">
           <fieldset>
-            <label>New Password</label>
+            <label>{t}New Password{/t}</label>
             <input class="form-control" type="password" name="newPassword" required>
           </fieldset>
         </div>
         <div class="form-group">
           <fieldset>
-            <label>Repeat New Password</label>
+            <label>{t}Repeat New Password{/t}</label>
             <input class="form-control" type="password" name="newPassword2" required>
           </fieldset>
         </div>
@@ -30,14 +30,14 @@
           <input type="hidden" name="utype" value="change_pw">
           {if $GLOBAL.twofactor.enabled && $GLOBAL.twofactor.options.changepw}
             {if $CHANGEPASSSENT == 1 && $CHANGEPASSUNLOCKED == 1}
-              <input type="submit" value="Change Password" class="btn btn-warning btn-sm">
+              <input type="submit" value="{t}Change Password{/t}" class="btn btn-warning btn-sm">
             {elseif $CHANGEPASSSENT == 0 && $CHANGEPASSUNLOCKED == 1 || $CHANGEPASSSENT == 1 && $CHANGEPASSUNLOCKED == 0}
-              <input type="submit" value="Change Password" class="btn btn-warning btn-sm" disabled="disabled">
+              <input type="submit" value="{t}Change Password{/t}" class="btn btn-warning btn-sm" disabled="disabled">
             {elseif $CHANGEPASSSENT == 0 && $CHANGEPASSUNLOCKED == 0}
-              <input type="submit" value="Unlock" class="btn btn-warning btn-sm" name="unlock">
+              <input type="submit" value="{t}Unlock{/t}" class="btn btn-warning btn-sm" name="unlock">
             {/if}
           {else}
-            <input type="submit" value="Change Password" class="btn btn-warning btn-sm">
+            <input type="submit" value="{t}Change Password{/t}" class="btn btn-warning btn-sm">
           {/if}
         {/nocache}
       </div>

@@ -2,7 +2,7 @@
     <div class="panel panel-info">
       <div class="panel-heading">
         <h4 class="panel-title">
-          <i class="fa fa-dot-circle-o fa-fw"></i> Pool Information
+          <i class="fa fa-dot-circle-o fa-fw"></i> {t}Pool Information{/t}
         </h4>
       </div>
       <div class="panel-footer">

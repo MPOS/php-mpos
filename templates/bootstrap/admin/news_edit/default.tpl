@@ -9,7 +9,7 @@
   <form class="col-lg-12" method="POST" action="{$smarty.server.SCRIPT_NAME}" role="form">
     <div class="panel panel-info">
       <div class="panel-heading">
-        <i class="fa fa-edit fa-fw"></i> Edit news entry #{$NEWS.id}
+        <i class="fa fa-edit fa-fw"></i> {t}Edit news entry #{/t}{$NEWS.id}
       </div>
       <div class="panel-body">
         <div class="row">
@@ -28,18 +28,18 @@
                 </td>
               </div>
               <div class="form-group">
-                  <th>Header</th>
+                  <th>{t}Header{/t}</th>
                   <td><input class="form-control" name="header" type="text" size="30" value="{nocache}{$NEWS.header}{/nocache}" required /></td>
               </div>
               <div class="form-group">
-                  <th>Content</th>
+                  <th>{t}Content{/t}</th>
                   <td><textarea class="cleditor form-control" name="content" rows="15" cols="150" type="text" required>{nocache}{$NEWS.content nofilter}{/nocache}</textarea></td>
               </div>
           </div>
         </div>  
       </div>
       <div class="panel-footer">
-        <input type="submit" value="Save" class="btn btn-success btn-sm">
+        <input type="submit" value="{t}Save{/t}" class="btn btn-success btn-sm">
       </div>
     </div>
   </form>

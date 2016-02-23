@@ -2,25 +2,25 @@
     <div class="col-lg-12">
       <div class="panel panel-info">
         <div class="panel-heading">
-          <i class="fa fa-users fa-fw"></i> Wallet Accounts
+          <i class="fa fa-users fa-fw"></i> {t}Wallet Accounts{/t}
         </div>
         <div class="panel-body ">
           <div class="panel-group">
 {foreach key=NAME item=VALUE from=$ACCOUNTS}
             <div class="panel panel-default">
               <div class="panel-heading">
-                <i class="fa fa-user fa-fw"></i> Account: {$NAME|default:"Default"}
+                <i class="fa fa-user fa-fw"></i> {t}Account:{/t} {$NAME|default:"Default"}
               </div>
               <div class="panel-body">
                 <div class="col-lg-4">
                   <div class="panel panel-info">
                     <div class="panel-heading">
-                      <i class="fa fa-money fa-fw"></i> Balance Info
+                      <i class="fa fa-money fa-fw"></i> {t}Balance Info{/t}
                     </div>
                     <div class="table-responsive panel-body no-padding">
                       <table class="table table-striped table-bordered table-hover">
                         <tr>
-                          <td class="col-lg-4">Balance</td>
+                          <td class="col-lg-4">{t}Balance{/t}</td>
                           <td class="col-lg-12">{$VALUE|number_format:"8"}</td>
                         </tr>
                       </table>
@@ -34,7 +34,7 @@
                 <div class="col-lg-8">
                   <div class="panel panel-info">
                     <div class="panel-heading">
-                      <i class="fa fa-book fa-fw"></i> Addresses assigned to Account {$ACCOUNT|default:"Default"}
+                      <i class="fa fa-book fa-fw"></i> {t}Addresses assigned to Account{/t} {$ACCOUNT|default:"Default"}
                     </div>
                     <div class="table-responsive panel-body no-padding">
                       <table class="table table-striped table-bordered table-hover">

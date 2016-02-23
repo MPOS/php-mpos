@@ -1,16 +1,16 @@
   <div class="col-lg-6">
     <div class="panel panel-info">
       <div class="panel-heading">
-        <i class="fa fa-user fa-fw"></i> Top 25 Blockfinder
+        <i class="fa fa-user fa-fw"></i> {t}Top 25 Blockfinder{/t}
       </div>
       <div class="panel-body no-padding table-responsive">
         <table class="table table-striped table-bordered table-hover">
           <thead>
             <tr>
-              <th>Rank</th>
-              <th>Username</th>
-              <th>Blocks</th>
-              <th>Coins Generated</th>
+              <th>{t}Rank{/t}</th>
+              <th>{t}Username{/t}</th>
+              <th>{t}Blocks{/t}</th>
+              <th>{t}Coins Generated{/t}</th>
             </tr>
           </thead>
           <tbody>

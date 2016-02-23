@@ -70,7 +70,7 @@
       {if file_exists($smarty.current_dir|cat:"/$PAGE/$ACTION/$CONTENT")}
         {include file="$PAGE/$ACTION/$CONTENT"}
       {else}
-        Missing template for this page
+        {t}Missing template for this page{/t}
       {/if}
     {/if}
     </div>

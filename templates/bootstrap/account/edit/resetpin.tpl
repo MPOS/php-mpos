@@ -6,20 +6,20 @@
   <div class="col-lg-6">
     <div class="panel panel-info">
       <div class="panel-heading">
-        <i class="fa fa-lock fa-fw"></i> Reset PIN
+        <i class="fa fa-lock fa-fw"></i> {t}Reset PIN{/t}
       </div>
       <div class="panel-body">
         <div class="row">
           <div class="col-lg-12">
             <div class="form-group">
-              <label>Current Password</label>
+              <label>{t}Current Password{/t}</label>
               <input class="form-control" type="password" name="currentPassword">
             </div>
           </div>
         </div>
       </div>
       <div class="panel-footer">
-        <input type="submit" class="btn btn-success btn-sm" value="Reset PIN">
+        <input type="submit" class="btn btn-success btn-sm" value="{t}Reset PIN{/t}">
       </div>
     </div>
   </div>

@@ -1,0 +1,2328 @@
+msgid ""
+msgstr ""
+"Content-Type: text/plain; charset=UTF-8\n"
+"Project-Id-Version: \n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: Russian\n"
+"MIME-Version: 1.0\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 1.5.4\n"
+
+#: templates/mail/newsletter/body.tpl:3
+msgid "Dear"
+msgstr "Уважаемый"
+
+#: templates/mail/register/confirm_email.tpl:3
+#: templates/mail/password/reset.tpl:3 templates/mail/pin/reset.tpl:3
+msgid "Hello"
+msgstr "Здравствуйте"
+
+#: templates/mail/register/confirm_email.tpl:4
+msgid ""
+"You have created a new account. In order to complete the registration "
+"process please follow this link:"
+msgstr ""
+"Вы создали новую учетную запись. Чтобы завершить процесс регистрации, "
+"пожалуйста, проследуйте по ссылке:"
+
+#: templates/mail/register/confirm_email.tpl:7
+#: templates/mail/password/reset.tpl:7 templates/mail/invitations/body.tpl:8
+#: templates/mail/pin/reset.tpl:6
+msgid "Cheers,"
+msgstr "С наилучшими пожеланиями,"
+
+#: templates/mail/password/reset.tpl:4
+msgid ""
+"You have requested a password reset through our online form. In order to "
+"complete the request please follow this link:"
+msgstr ""
+"Вы запросили сброс пароля. Чтобы сбросить ваш пароль, проследуйте, "
+"пожалуйста, по ссылке:"
+
+#: templates/mail/password/reset.tpl:6
+msgid ""
+"You will be asked to change your password. You can then use this new "
+"password to login to your account."
+msgstr ""
+"Вам будет необходимо сменить ваш пароль. После этого вы сможете войти в ваш "
+"профиль  с новым паролем."
+
+#: templates/mail/notifications/idle_worker.tpl:3
+msgid "One of your workers is currently IDLE:"
+msgstr "Один из ваших воркеров сейчас ПРОСТАИВАЕТ:"
+
+#: templates/mail/notifications/idle_worker.tpl:4
+msgid "We have not received any shares for this worker in the past 10 minutes."
+msgstr "Мы не получили ни одной шары от этого воркера за крайние 10 минут."
+
+#: templates/mail/notifications/idle_worker.tpl:5
+msgid ""
+"Since monitoring is enabled for this worker, this notification was sent."
+msgstr "Вы получили это сообщение, т.к. для этого воркера включен мониторинг."
+
+#: templates/mail/notifications/idle_worker.tpl:7
+msgid "Please check your workers!"
+msgstr "Пожалуйста, проверьте ваши воркеры!"
+
+#: templates/mail/notifications/payout.tpl:3
+msgid ""
+"You account has been debited and the coins have been sent to your wallet."
+msgstr "С вашего счета были списаны средства и отправлены на ваш кошелек."
+
+#: templates/mail/notifications/payout.tpl:4
+msgid "Amount:"
+msgstr "Сумма:"
+
+#: templates/mail/notifications/account_edit.tpl:3
+msgid "You have a pending request to change your account details."
+msgstr "Имеется ожидающий запрос на изменение деталей вашего профиля."
+
+#: templates/mail/notifications/account_edit.tpl:4
+#: templates/mail/notifications/change_pw.tpl:4
+#: templates/mail/notifications/withdraw_funds.tpl:4
+msgid ""
+"If you initiated this request, please follow the link below to confirm your "
+"changes. If you did NOT, please notify an administrator."
+msgstr ""
+"Если вы инициировали этот запрос, то, пожалуйста, проследуйте по ссылке, "
+"чтобы подтвердить изменения.Если вы этого НЕ делали, пожалуйста, обратитесь "
+"к администратору."
+
+#: templates/mail/notifications/error.tpl:2
+msgid "An error occured!"
+msgstr "Возникла ошибка!"
+
+#: templates/mail/notifications/error.tpl:3
+msgid "This should never happen. Please review the error output below."
+msgstr ""
+"Этого не должно было произойти никогда. Пожалуйста, просмотрите отчет ниже."
+
+#: templates/mail/notifications/change_pw.tpl:3
+msgid "You have a pending request to change your password."
+msgstr "Имеется ожидающий запрос на изменение вашего пароля."
+
+#: templates/mail/notifications/withdraw_funds.tpl:3
+msgid "You have a pending request to manually withdraw funds."
+msgstr "Имеется ожидающий запрос на ручной вывод средств с вашего счета."
+
+#: templates/mail/notifications/locked.tpl:3
+msgid ""
+"You account has been locked due to too many failed password or PIN attempts. "
+"Please follow the URL below to unlock your account."
+msgstr ""
+"Ваша учетная запись была заблокирована, т.к. было совершено слишком много "
+"неудачных попыток войти или использовать неверный ПИН код. Пожалуйста, "
+"проследуйте по ссылке, чтобы разблокировать вашу учетную запись."
+
+#: templates/mail/notifications/new_block.tpl:2
+msgid "Block Number %1 has been discovered by %2 with a total value of %3 %4!"
+msgstr "Блок номер %1 был найден %2 с общей суммой %3 %4!"
+
+#: templates/mail/notifications/new_block.tpl:2
+msgid "The current difficulty is %1"
+msgstr "Текущая сложность %1"
+
+#: templates/mail/notifications/success_login.tpl:3
+msgid "Your account has successfully logged in"
+msgstr "Успешный вход вваш профиль"
+
+#: templates/mail/notifications/success_login.tpl:4
+msgid "User: %1"
+msgstr "Пользователь: %1"
+
+#: templates/mail/notifications/success_login.tpl:6
+msgid "Time: %1"
+msgstr "Время: %1"
+
+#: templates/mail/notifications/success_login.tpl:7
+msgid ""
+"If you initiated this login, you can ignore this message. If you did NOT, "
+"please notify an administrator."
+msgstr ""
+"Если это вошли вы, то все в порядке. Если же НЕТ, то срочно обратитесь к "
+"администратору."
+
+#: templates/mail/notifications/test_email.tpl:2
+msgid "Test email"
+msgstr "Тестовове сообщение"
+
+#: templates/mail/notifications/test_email.tpl:3
+msgid "If you see this email - your email protocol is configured correctly"
+msgstr ""
+
+#: templates/mail/notifications/test_email.tpl:4
+msgid "Coin name: %1"
+msgstr ""
+
+#: templates/mail/notifications/test_email.tpl:5
+msgid "Stratum: %1:%2"
+msgstr "Стратум: %1:%2"
+
+#: templates/mail/contactform/body.tpl:3
+msgid "%1 Message,"
+msgstr ""
+
+#: templates/mail/contactform/body.tpl:4
+msgid "Sent you a message"
+msgstr "Отправил вам сообщение"
+
+#: templates/mail/contactform/body.tpl:5
+msgid "Senders Email: "
+msgstr "Email отправителя:"
+
+#: templates/mail/contactform/body.tpl:6
+msgid "Subject: "
+msgstr "Тема"
+
+#: templates/mail/contactform/body.tpl:7 templates/mail/invitations/body.tpl:6
+msgid "Personal message"
+msgstr "Персональное сообщение"
+
+#: templates/mail/invitations/body.tpl:3
+msgid "Hello valued miner"
+msgstr "Дорогой майнер"
+
+#: templates/mail/invitations/body.tpl:4
+msgid "invited you to participate on this pool"
+msgstr "Пригласил вас для майнинга на этом пуле"
+
+#: templates/mail/pin/reset.tpl:4
+msgid "You have requested a PIN reset through our online form."
+msgstr "Вы запросили сброс ПИН кода через онлайн форму."
+
+#: templates/mail/pin/reset.tpl:5
+msgid "Randomly Generated PIN:"
+msgstr ""
+
+#: templates/bootstrap/account/default.tpl:1
+msgid "No action specified"
+msgstr ""
+
+#: templates/bootstrap/account/workers/default.tpl:9
+#: templates/bootstrap/account/workers/default.tpl:22
+msgid "Add New Worker"
+msgstr "Добавить воркер"
+
+#: templates/bootstrap/account/workers/default.tpl:13
+#: templates/bootstrap/admin/poolworkers/default.tpl:12
+msgid "Worker Name"
+msgstr "Имя воркера"
+
+#: templates/bootstrap/account/workers/default.tpl:17
+#: templates/bootstrap/account/workers/default.tpl:43
+msgid "Worker Password"
+msgstr "Пароль воркера"
+
+#: templates/bootstrap/account/workers/default.tpl:30
+msgid "Worker Configuration"
+msgstr "Настройки воркера"
+
+#: templates/bootstrap/account/workers/default.tpl:42
+msgid "Worker Login"
+msgstr "Логин для воркера"
+
+#: templates/bootstrap/account/workers/default.tpl:44
+#: templates/bootstrap/account/notifications/default.tpl:85
+#: templates/bootstrap/admin/poolworkers/default.tpl:14
+#: templates/bootstrap/admin/monitoring/default.tpl:13
+#: templates/bootstrap/admin/dashboard/user.tpl:12
+#: templates/bootstrap/admin/news/default.tpl:22
+msgid "Active"
+msgstr "Активен"
+
+#: templates/bootstrap/account/workers/default.tpl:46
+#: templates/bootstrap/admin/poolworkers/default.tpl:16
+msgid "Khash/s"
+msgstr "Кхеш/с"
+
+#: templates/bootstrap/account/workers/default.tpl:47
+#: templates/bootstrap/dashboard/account_data/_workers.tpl:7
+#: templates/bootstrap/dashboard/round_statistics/pps/round.tpl:118
+#: templates/bootstrap/dashboard/round_statistics/pplns/round.tpl:58
+#: templates/bootstrap/dashboard/round_statistics/prop/round.tpl:58
+#: templates/bootstrap/dashboard/worker_information/default.tpl:13
+#: templates/bootstrap/dashboard/blocks/default.tpl:14
+#: templates/bootstrap/statistics/round/block_stats.tpl:36
+#: templates/bootstrap/statistics/blocks/blocks_found_details.tpl:16
+#: templates/bootstrap/admin/poolworkers/default.tpl:17
+msgid "Difficulty"
+msgstr "Сложность"
+
+#: templates/bootstrap/account/workers/default.tpl:48
+msgid "Action"
+msgstr "Действие"
+
+#: templates/bootstrap/account/workers/default.tpl:80
+msgid "Update Workers"
+msgstr "Обновить воркеры"
+
+#: templates/bootstrap/account/transactions/default.tpl:8
+#: templates/bootstrap/admin/transactions/default.tpl:40
+msgid "Transaction Filter"
+msgstr "Фильтр транзакций"
+
+#: templates/bootstrap/account/transactions/default.tpl:20
+#: templates/bootstrap/account/notifications/default.tpl:84
+#: templates/bootstrap/statistics/round/round_transactions.tpl:12
+#: templates/bootstrap/admin/transactions/default.tpl:52
+msgid "Type"
+msgstr "Тип"
+
+#: templates/bootstrap/account/transactions/default.tpl:24
+#: templates/bootstrap/account/transactions/default.tpl:47
+#: templates/bootstrap/admin/wallet/status.tpl:13
+#: templates/bootstrap/admin/transactions/default.tpl:56
+msgid "Status"
+msgstr "Статус"
+
+#: templates/bootstrap/account/transactions/default.tpl:37
+msgid "Transaction History"
+msgstr "История транзакций"
+
+#: templates/bootstrap/account/transactions/default.tpl:44
+#: templates/bootstrap/account/notifications/default.tpl:82
+#: templates/bootstrap/admin/registrations/default.tpl:13
+#: templates/bootstrap/admin/user/default.tpl:89
+msgid "ID"
+msgstr ""
+
+#: templates/bootstrap/account/transactions/default.tpl:45
+msgid "Date"
+msgstr "Дата"
+
+#: templates/bootstrap/account/transactions/default.tpl:46
+msgid "TX Type"
+msgstr "Тип транзакции"
+
+#: templates/bootstrap/account/transactions/default.tpl:48
+#: templates/bootstrap/account/edit/detail.tpl:42
+msgid "Payment Address"
+msgstr "Платежный адрес"
+
+#: templates/bootstrap/account/transactions/default.tpl:49
+msgid "TX #"
+msgstr "Тр. №"
+
+#: templates/bootstrap/account/transactions/default.tpl:50
+msgid "Block #"
+msgstr "Блок №"
+
+#: templates/bootstrap/account/transactions/default.tpl:51
+#: templates/bootstrap/dashboard/blocks/default.tpl:15
+#: templates/bootstrap/statistics/round/block_stats.tpl:25
+#: templates/bootstrap/statistics/round/round_transactions.tpl:15
+#: templates/bootstrap/statistics/blocks/blocks_found_details.tpl:17
+#: templates/bootstrap/statistics/blocks/block_overview_time.tpl:22
+#: templates/bootstrap/admin/wallet/transactions.tpl:15
+#: templates/bootstrap/admin/reports/earnings_report.tpl:26
+#: templates/bootstrap/admin/invitations/default.tpl:14
+msgid "Amount"
+msgstr "Сумма"
+
+#: templates/bootstrap/account/transactions/default.tpl:69
+#: templates/bootstrap/dashboard/account_data/default.tpl:31
+#: templates/bootstrap/statistics/round/block_stats.tpl:29
+#: templates/bootstrap/statistics/blocks/blocks_found_details.tpl:41
+msgid "Confirmed"
+msgstr "Подтверждено"
+
+#: templates/bootstrap/account/transactions/default.tpl:71
+msgid "Orphaned"
+msgstr "Покинутый"
+
+#: templates/bootstrap/account/transactions/default.tpl:73
+#: templates/bootstrap/dashboard/account_data/default.tpl:37
+#: templates/bootstrap/admin/wallet/balance.tpl:17
+msgid "Unconfirmed"
+msgstr "Неподтверждено"
+
+#: templates/bootstrap/account/transactions/default.tpl:91
+msgid "Auto Threshold Payment"
+msgstr "Автоматическая выплата"
+
+#: templates/bootstrap/account/transactions/default.tpl:91
+msgid "Manual Payment"
+msgstr "Ручная выплата"
+
+#: templates/bootstrap/account/transactions/default.tpl:91
+#: templates/bootstrap/account/earnings/default.tpl:57
+#: templates/bootstrap/admin/userdetails/default.tpl:52
+msgid "Donation"
+msgstr "Пожертвование"
+
+#: templates/bootstrap/account/transactions/default.tpl:91
+msgid "Pool Fees (if applicable)"
+msgstr "Комиссия пула (если применимо)"
+
+#: templates/bootstrap/account/earnings/default.tpl:6
+msgid "Total %1 Earning Reports"
+msgstr "Общие выплаты %1"
+
+#: templates/bootstrap/account/earnings/default.tpl:13
+msgid "Summary"
+msgstr "Сводка"
+
+#: templates/bootstrap/account/earnings/default.tpl:28
+#: templates/bootstrap/statistics/blocks/block_overview_time.tpl:28
+msgid "All Time"
+msgstr "Все время"
+
+#: templates/bootstrap/account/earnings/default.tpl:45
+msgid "Sorted by Time"
+msgstr "Отсортировано по времени"
+
+#: templates/bootstrap/account/earnings/default.tpl:53
+#: templates/bootstrap/admin/userdetails/default.tpl:48
+msgid "Credit"
+msgstr "Начисление"
+
+#: templates/bootstrap/account/earnings/default.tpl:54
+#: templates/bootstrap/admin/userdetails/default.tpl:49
+msgid "Bonus"
+msgstr "Бонус"
+
+#: templates/bootstrap/account/earnings/default.tpl:55
+#: templates/bootstrap/admin/userdetails/default.tpl:50
+msgid "Debit AP"
+msgstr "Автовыплата"
+
+msgid "Debit_AP"
+msgstr "Автовыплата"
+
+#: templates/bootstrap/account/earnings/default.tpl:56
+#: templates/bootstrap/admin/userdetails/default.tpl:51
+msgid "Debit MP"
+msgstr "Ручн. выплата"
+
+#: templates/bootstrap/account/earnings/default.tpl:59
+#: templates/bootstrap/admin/userdetails/default.tpl:54
+msgid "Fee"
+msgstr "Комиссия"
+
+#: templates/bootstrap/account/earnings/default.tpl:61
+#: templates/bootstrap/admin/userdetails/default.tpl:56
+msgid "TXFee"
+msgstr "Комиссия за транзакцию"
+
+#: templates/bootstrap/account/earnings/default.tpl:66
+#: templates/bootstrap/admin/userdetails/default.tpl:61
+msgid "Last Hour"
+msgstr "Крайний час"
+
+#: templates/bootstrap/account/earnings/default.tpl:78
+#: templates/bootstrap/admin/userdetails/default.tpl:73
+msgid "Last Day"
+msgstr "Крайний день"
+
+msgid "Last 24 Hours"
+msgstr "Крайние 24 часа"
+
+#: templates/bootstrap/account/earnings/default.tpl:90
+#: templates/bootstrap/admin/userdetails/default.tpl:85
+msgid "Last Week"
+msgstr "Крайняя неделя"
+
+#: templates/bootstrap/account/earnings/default.tpl:102
+#: templates/bootstrap/admin/userdetails/default.tpl:97
+msgid "Last Month"
+msgstr "Крайний месяц"
+
+#: templates/bootstrap/account/earnings/default.tpl:114
+#: templates/bootstrap/admin/userdetails/default.tpl:109
+msgid "Last Year"
+msgstr "Крайний год"
+
+#: templates/bootstrap/account/edit/password.tpl:9
+#: templates/bootstrap/account/edit/password.tpl:55
+#: templates/bootstrap/password/change/default.tpl:33
+#: templates/bootstrap/password/change/default.tpl:35
+#: templates/bootstrap/password/change/default.tpl:40
+msgid "Change Password"
+msgstr "Изменить пароль"
+
+#: templates/bootstrap/account/edit/password.tpl:16
+#: templates/bootstrap/statistics/blocks/small_table.tpl:35
+msgid "Note"
+msgstr "Обратите внимание"
+
+#: templates/bootstrap/account/edit/password.tpl:16
+msgid ""
+"You will be redirected to login on successful completion of a password change"
+msgstr "Вы будете перенаправлены на страницу входа после успешной смены пароля"
+
+#: templates/bootstrap/account/edit/password.tpl:20
+#: templates/bootstrap/account/edit/resetpin.tpl:15
+msgid "Current Password"
+msgstr "Текущий пароль"
+
+#: templates/bootstrap/account/edit/password.tpl:24
+#: templates/bootstrap/password/change/default.tpl:16
+msgid "New Password"
+msgstr "Новый пароль"
+
+#: templates/bootstrap/account/edit/password.tpl:29
+#: templates/bootstrap/password/change/default.tpl:22
+msgid "Repeat New Password"
+msgstr "Повторите новый пароль"
+
+#: templates/bootstrap/account/edit/password.tpl:34
+#: templates/bootstrap/account/edit/cashout.tpl:31
+#: templates/bootstrap/account/edit/detail.tpl:65
+msgid "4 Digit PIN"
+msgstr "ПИН код"
+
+#: templates/bootstrap/account/edit/resetpin.tpl:9
+msgid "Reset PIN"
+msgstr "Сбросить ПИН код"
+
+#: templates/bootstrap/account/edit/cashout.tpl:9
+msgid "Cash Out"
+msgstr "Выплата"
+
+#: templates/bootstrap/account/edit/cashout.tpl:19
+msgid "Minimum Cashout"
+msgstr "Минимальная выплата"
+
+#: templates/bootstrap/account/edit/cashout.tpl:23
+#: templates/bootstrap/dashboard/account_data/default.tpl:27
+msgid "Account Balance"
+msgstr "Баланс"
+
+#: templates/bootstrap/account/edit/cashout.tpl:27
+msgid "Payout to"
+msgstr "Вылатить на"
+
+#: templates/bootstrap/account/edit/cashout.tpl:44
+#: templates/bootstrap/account/edit/cashout.tpl:50
+#: templates/bootstrap/account/edit/detail.tpl:83
+#: templates/bootstrap/password/change/default.tpl:37
+msgid "Unlock"
+msgstr "Разблокировать"
+
+#: templates/bootstrap/account/edit/cashout.tpl:46
+#: templates/bootstrap/account/edit/cashout.tpl:48
+#: templates/bootstrap/account/edit/cashout.tpl:53
+msgid "Cash Out!"
+msgstr "Выплатить!"
+
+#: templates/bootstrap/account/edit/detail.tpl:9
+msgid "Account Details"
+msgstr "Детали профиля"
+
+#: templates/bootstrap/account/edit/detail.tpl:15
+#: templates/bootstrap/register/default.tpl:20
+#: templates/bootstrap/admin/registrations/default.tpl:14
+#: templates/bootstrap/admin/user/default.tpl:90
+#: templates/bootstrap/admin/invitations/default.tpl:12
+msgid "Username"
+msgstr "Имя пользователя"
+
+#: templates/bootstrap/account/edit/detail.tpl:19
+msgid "User Id"
+msgstr "Id пользователя"
+
+#: templates/bootstrap/account/edit/detail.tpl:24
+msgid "API Key"
+msgstr "Ключ API"
+
+#: templates/bootstrap/account/edit/detail.tpl:30
+#: templates/bootstrap/account/invitations/default.tpl:13
+#: templates/bootstrap/account/invitations/default.tpl:38
+#: templates/bootstrap/admin/user/default.tpl:54
+msgid "E-Mail"
+msgstr ""
+
+#: templates/bootstrap/account/edit/detail.tpl:34
+msgid "Timezone"
+msgstr "Часовой пояс"
+
+#: templates/bootstrap/account/edit/detail.tpl:46
+msgid "Donation Percentage"
+msgstr "Процент пожертвований"
+
+#: templates/bootstrap/account/edit/detail.tpl:47
+msgid "Donation amount in percent"
+msgstr "Размер пожертовования в процентах"
+
+#: templates/bootstrap/account/edit/detail.tpl:51
+msgid "Automatic Payout Threshold"
+msgstr "Порог для автоматических выплат"
+
+#: templates/bootstrap/account/edit/detail.tpl:58
+msgid "Anonymous Account"
+msgstr "Анонимный профиль"
+
+#: templates/bootstrap/account/edit/detail.tpl:62
+msgid ""
+"Hide username on website from others. Admins can still get your user "
+"information."
+msgstr ""
+"Скрыть имя пользователя от других пользователей сайта. Информация остается "
+"доступной для администратора сайта."
+
+#: templates/bootstrap/account/edit/detail.tpl:66
+msgid "The 4 digit PIN you chose when registering"
+msgstr "состоящий из 4 цифр, который Вы указали при регистрации"
+
+#: templates/bootstrap/account/edit/detail.tpl:79
+#: templates/bootstrap/account/edit/detail.tpl:81
+#: templates/bootstrap/account/edit/detail.tpl:86
+msgid "Update Account"
+msgstr "Обновить профиль"
+
+#: templates/bootstrap/account/notifications/default.tpl:9
+msgid "Notification Settings"
+msgstr "Настройки уведомлений"
+
+#: templates/bootstrap/account/notifications/default.tpl:16
+#: templates/bootstrap/account/notifications/default.tpl:96
+msgid "Idle Worker"
+msgstr "Простаивающий воркер"
+
+#: templates/bootstrap/account/notifications/default.tpl:27
+msgid "New Blocks"
+msgstr "Новые блоки"
+
+#: templates/bootstrap/account/notifications/default.tpl:37
+#: templates/bootstrap/account/notifications/default.tpl:95
+#: templates/bootstrap/global/header.tpl:44
+msgid "Payout"
+msgstr "Выплата"
+
+#: templates/bootstrap/account/notifications/default.tpl:46
+#: templates/bootstrap/account/notifications/default.tpl:97
+#: templates/bootstrap/global/header.tpl:46
+msgid "Successful Login"
+msgstr "Успешный вход"
+
+#: templates/bootstrap/account/notifications/default.tpl:56
+msgid "Pool Newsletter"
+msgstr "Новости пула"
+
+#: templates/bootstrap/account/notifications/default.tpl:67
+msgid "Update"
+msgstr "Обновить"
+
+#: templates/bootstrap/account/notifications/default.tpl:75
+msgid "Notification History"
+msgstr "История уведомлений"
+
+#: templates/bootstrap/account/notifications/default.tpl:83
+#: templates/bootstrap/dashboard/blocks/default.tpl:13
+#: templates/bootstrap/statistics/round/block_stats.tpl:38
+#: templates/bootstrap/statistics/blocks/blocks_found_details.tpl:15
+#: templates/bootstrap/statistics/blocks/small_table.tpl:12
+#: templates/bootstrap/admin/wallet/transactions.tpl:18
+msgid "Time"
+msgstr "Время"
+
+#: templates/bootstrap/account/notifications/default.tpl:94
+#: templates/bootstrap/global/header.tpl:43
+msgid "New Block"
+msgstr "Новый блок"
+
+#: templates/bootstrap/account/invitations/default.tpl:5
+msgid "Invitation"
+msgstr "Приглашение"
+
+#: templates/bootstrap/account/invitations/default.tpl:17
+#: templates/bootstrap/admin/monitoring/default.tpl:17
+msgid "Message"
+msgstr "Сообщение"
+
+#: templates/bootstrap/account/invitations/default.tpl:30
+msgid "Past Invitations"
+msgstr "Отправленные приглашения"
+
+#: templates/bootstrap/account/invitations/default.tpl:39
+msgid "Sent"
+msgstr "Отправлено"
+
+#: templates/bootstrap/account/invitations/default.tpl:40
+#: templates/bootstrap/admin/dashboard/invitation.tpl:11
+#: templates/bootstrap/admin/invitations/default.tpl:16
+msgid "Activated"
+msgstr "Активирован"
+
+#: templates/bootstrap/account/qrcode/default.tpl:21
+msgid "API String"
+msgstr "Строка API"
+
+#: templates/bootstrap/account/qrcode/default.tpl:24
+msgid ""
+"This code will allow you to import the full API string into your mobile "
+"application."
+msgstr ""
+
+#: templates/bootstrap/global/footer.tpl:5
+msgid "Powered by"
+msgstr "Работает на платформе"
+
+#: templates/bootstrap/global/navigation.tpl:5
+msgid "Home"
+msgstr "Главная"
+
+#: templates/bootstrap/global/navigation.tpl:9
+#: templates/bootstrap/global/navigation.tpl:34
+#: templates/bootstrap/global/header.tpl:70
+msgid "Dashboard"
+msgstr "Обзор"
+
+#: templates/bootstrap/global/navigation.tpl:13
+msgid "My Account"
+msgstr "Мой профиль"
+
+#: templates/bootstrap/global/navigation.tpl:15
+msgid "Edit Account"
+msgstr "Редактировать профиль"
+
+#: templates/bootstrap/global/navigation.tpl:16
+msgid "My Workers"
+msgstr "Мои воркеры"
+
+#: templates/bootstrap/global/navigation.tpl:17
+#: templates/bootstrap/global/navigation.tpl:43
+msgid "Transactions"
+msgstr "Транзакции"
+
+#: templates/bootstrap/global/navigation.tpl:18
+msgid "Earnings"
+msgstr "Доходы"
+
+#: templates/bootstrap/global/navigation.tpl:19
+msgid "Notifications"
+msgstr "Уведомления"
+
+#: templates/bootstrap/global/navigation.tpl:20
+#: templates/bootstrap/global/navigation.tpl:59
+#: templates/bootstrap/admin/dashboard/invitation.tpl:4
+msgid "Invitations"
+msgstr "Приглашения"
+
+#: templates/bootstrap/global/navigation.tpl:21
+msgid "QR Codes"
+msgstr "QR коды"
+
+#: templates/bootstrap/global/navigation.tpl:28
+msgid "Admin Panel"
+msgstr "Админ Панель"
+
+#: templates/bootstrap/global/navigation.tpl:31
+msgid "System"
+msgstr "Система"
+
+#: templates/bootstrap/global/navigation.tpl:33
+msgid "Setup"
+msgstr "Установка"
+
+#: templates/bootstrap/global/navigation.tpl:35
+#: templates/bootstrap/admin/monitoring/default.tpl:5
+msgid "Monitoring"
+msgstr "Мониторинг"
+
+#: templates/bootstrap/global/navigation.tpl:36
+#: templates/bootstrap/global/header.tpl:71
+#: templates/bootstrap/admin/settings/default.tpl:5
+msgid "Settings"
+msgstr "Настройки"
+
+#: templates/bootstrap/global/navigation.tpl:40
+msgid "Funds"
+msgstr "Средства"
+
+#: templates/bootstrap/global/navigation.tpl:42
+msgid "Wallet Info"
+msgstr "Информация о кошельке"
+
+#: templates/bootstrap/global/navigation.tpl:47
+msgid "News"
+msgstr "Новости"
+
+#: templates/bootstrap/global/navigation.tpl:49
+msgid "Site News"
+msgstr "Новости сайта"
+
+#: templates/bootstrap/global/navigation.tpl:50
+msgid "Newsletter"
+msgstr "Рассылка"
+
+#: templates/bootstrap/global/navigation.tpl:54
+#: templates/bootstrap/admin/dashboard/user.tpl:5
+msgid "Users"
+msgstr "Пользователи"
+
+#: templates/bootstrap/global/navigation.tpl:56
+msgid "User Info"
+msgstr "Информация о пользователе"
+
+#: templates/bootstrap/global/navigation.tpl:57
+msgid "Reports"
+msgstr "Отчеты"
+
+#: templates/bootstrap/global/navigation.tpl:58
+#: templates/bootstrap/admin/dashboard/registrations.tpl:4
+msgid "Registrations"
+msgstr "Регистрации"
+
+#: templates/bootstrap/global/navigation.tpl:60
+#: templates/bootstrap/dashboard/overview/_with_price_graph.tpl:62
+#: templates/bootstrap/dashboard/overview/_without_price_graph.tpl:62
+msgid "Pool Workers"
+msgstr "Воркеры пула"
+
+#: templates/bootstrap/global/navigation.tpl:68
+msgid "Statistics"
+msgstr "Статистика"
+
+#: templates/bootstrap/global/navigation.tpl:81
+msgid "Help"
+msgstr "Помощь"
+
+#: templates/bootstrap/global/navigation.tpl:83
+msgid "Getting Started"
+msgstr "Как начать добывать"
+
+#: templates/bootstrap/global/navigation.tpl:91
+msgid "Other"
+msgstr "Другое"
+
+#: templates/bootstrap/global/navigation.tpl:94
+#: templates/bootstrap/global/header.tpl:75
+msgid "Logout"
+msgstr "Выход"
+
+#: templates/bootstrap/global/navigation.tpl:96
+#: templates/bootstrap/global/header.tpl:78
+msgid "Login"
+msgstr "Войти"
+
+#: templates/bootstrap/global/navigation.tpl:97
+#: templates/bootstrap/global/header.tpl:79
+msgid "Sign Up"
+msgstr "Регистрация"
+
+#: templates/bootstrap/global/navigation.tpl:100
+#: templates/bootstrap/register/default.tpl:59
+#: templates/bootstrap/register/default.tpl:77
+msgid "Terms and Conditions"
+msgstr "Пользовательское соглашение"
+
+#: templates/bootstrap/global/header.tpl:45
+msgid "IDLE Worker"
+msgstr "ПРОСТАИВАЮЩИЙ Воркер"
+
+#: templates/bootstrap/global/header.tpl:57
+msgid "See All Notifications"
+msgstr "Смотреть все уведомления"
+
+#: templates/bootstrap/global/header.tpl:72
+msgid "Workers"
+msgstr "Воркеры"
+
+#: templates/bootstrap/home/news_all.tpl:8
+#: templates/bootstrap/home/news_accordion.tpl:14
+#: templates/bootstrap/admin/news/default.tpl:51
+msgid "posted"
+msgstr "опубликовано"
+
+#: templates/bootstrap/home/news_accordion.tpl:5
+msgid "latest News"
+msgstr "последние новости"
+
+#: templates/bootstrap/master.tpl:73
+msgid "Missing template for this page"
+msgstr "Отсутствует шаблон для данной страницы"
+
+#: templates/bootstrap/register/default.tpl:16
+msgid "Register new account"
+msgstr "Регистрация нового пользователя"
+
+#: templates/bootstrap/register/default.tpl:26
+msgid "Coin Address"
+msgstr "Адрес для выплат"
+
+#: templates/bootstrap/register/default.tpl:32
+#: templates/bootstrap/login/default.tpl:16
+#: templates/bootstrap/admin/poolworkers/default.tpl:13
+msgid "Password"
+msgstr "Пароль "
+
+#: templates/bootstrap/register/default.tpl:32
+msgid "Strength"
+msgstr "Надежность"
+
+#: templates/bootstrap/register/default.tpl:42
+msgid "Email"
+msgstr ""
+
+#: templates/bootstrap/register/default.tpl:51
+msgid "PIN"
+msgstr "ПИН код"
+
+#: templates/bootstrap/register/default.tpl:52
+msgid "Four digit number."
+msgstr "4 цифры"
+
+#: templates/bootstrap/register/default.tpl:52
+msgid "Remember this pin!"
+msgstr "Запомните этот ПИН код!"
+
+#: templates/bootstrap/register/default.tpl:59
+msgid "I Accept The"
+msgstr "Я принимаю"
+
+#: templates/bootstrap/register/default.tpl:66
+msgid "Register"
+msgstr "Зарегистрироваться"
+
+#: templates/bootstrap/register/default.tpl:83
+msgid "Close"
+msgstr "Закрыть"
+
+#: templates/bootstrap/register/disabled.tpl:1
+msgid "We are currently not accepting new user registrations."
+msgstr "Регистрация новых пользователей отключена."
+
+#: templates/bootstrap/password/default.tpl:8
+#: templates/bootstrap/password/change/default.tpl:11
+msgid "Password reset"
+msgstr "Сбросить пароль"
+
+#: templates/bootstrap/password/default.tpl:12
+msgid ""
+"If you have an email set for your account, enter your username to get your "
+"password reset"
+msgstr ""
+"Если для вашей учетной записи установлен адрес эл. почты, то, пожалуйста, "
+"введите ваше имя пользователя, чтобы получить ссылку для сброса пароля"
+
+#: templates/bootstrap/password/default.tpl:15
+msgid "Username or E-mail"
+msgstr "Имя пользователя или E-mail"
+
+#: templates/bootstrap/password/default.tpl:20
+msgid "Reset password"
+msgstr "Сбросить пароль"
+
+#: templates/bootstrap/dashboard/account_data/default.tpl:4
+msgid "Account Information"
+msgstr "Информация о профиле"
+
+#: templates/bootstrap/dashboard/account_data/default.tpl:11
+msgid "You are mining without any pool fees applied and"
+msgstr ""
+
+#: templates/bootstrap/dashboard/account_data/default.tpl:13
+msgid "You are mining at"
+msgstr ""
+
+#: templates/bootstrap/dashboard/account_data/default.tpl:15
+msgid "This pool does not apply fees and"
+msgstr "Этот пул не взымает комиссий и"
+
+#: templates/bootstrap/dashboard/account_data/default.tpl:18
+msgid "you donate"
+msgstr "вы вносите пожертвования"
+
+#: templates/bootstrap/dashboard/account_data/default.tpl:20
+msgid "you are not"
+msgstr "вы не"
+
+#: templates/bootstrap/dashboard/account_data/default.tpl:20
+msgid "donating"
+msgstr "вносите пожертвования"
+
+#: templates/bootstrap/dashboard/account_data/_workers.tpl:5
+#: templates/bootstrap/dashboard/worker_information/default.tpl:11
+msgid "Worker"
+msgstr "Воркер"
+
+#: templates/bootstrap/dashboard/account_data/_workers.tpl:6
+#: templates/bootstrap/dashboard/worker_information/default.tpl:12
+#: templates/bootstrap/admin/user/default.tpl:93
+msgid "Hashrate"
+msgstr "Мощность"
+
+#: templates/bootstrap/dashboard/account_data/_workers.tpl:11
+#: templates/bootstrap/dashboard/worker_information/default.tpl:17
+msgid "No worker information available"
+msgstr "Информация о воркерах отсутствует"
+
+#: templates/bootstrap/dashboard/default.tpl:9
+msgid "Overview"
+msgstr "Обзор"
+
+#: templates/bootstrap/dashboard/default.tpl:27
+msgid "Refresh interval"
+msgstr "Время обновления"
+
+#: templates/bootstrap/dashboard/default.tpl:27
+#: templates/bootstrap/admin/monitoring/default.tpl:43
+msgid "seconds"
+msgstr "секунд"
+
+#: templates/bootstrap/dashboard/default.tpl:27
+msgid "worker and account"
+msgstr "воркеры и счет"
+
+#: templates/bootstrap/dashboard/default.tpl:27
+msgid "Hashrate based on shares submitted in the past"
+msgstr "Хешрейт расчитан на основе отправленных шар, за последние"
+
+#: templates/bootstrap/dashboard/default.tpl:27
+msgid "minutes"
+msgstr "минут"
+
+#: templates/bootstrap/dashboard/overview/default.tpl:5
+msgid "Pool Information"
+msgstr "Информация о пуле"
+
+#: templates/bootstrap/dashboard/overview/_with_price_graph.tpl:8
+#: templates/bootstrap/dashboard/overview/_without_price_graph.tpl:8
+msgid "My Hashrate"
+msgstr "Мой хешрейт"
+
+#: templates/bootstrap/dashboard/overview/_with_price_graph.tpl:26
+#: templates/bootstrap/dashboard/overview/_without_price_graph.tpl:26
+msgid "Pool Hashrate"
+msgstr "Мощность пула"
+
+#: templates/bootstrap/dashboard/overview/_with_price_graph.tpl:44
+#: templates/bootstrap/dashboard/overview/_without_price_graph.tpl:44
+msgid "My Sharerate"
+msgstr "Мои шары, скорость"
+
+#: templates/bootstrap/dashboard/overview/_with_price_graph.tpl:79
+#: templates/bootstrap/dashboard/overview/_without_price_graph.tpl:79
+msgid "Net Hashrate"
+msgstr "Мощность сети"
+
+#: templates/bootstrap/dashboard/round_statistics/pps/default.tpl:5
+#: templates/bootstrap/dashboard/round_statistics/pplns/default.tpl:5
+msgid "Round Information"
+msgstr "Информация о раунде"
+
+#: templates/bootstrap/dashboard/round_statistics/pps/default.tpl:16
+#: templates/bootstrap/dashboard/round_statistics/pplns/default.tpl:16
+#: templates/bootstrap/dashboard/round_statistics/prop/default.tpl:16
+msgid "Share Information"
+msgstr "Информация о шарах"
+
+#: templates/bootstrap/dashboard/round_statistics/pps/shares.tpl:5
+#: templates/bootstrap/dashboard/round_statistics/pplns/shares.tpl:5
+#: templates/bootstrap/dashboard/round_statistics/prop/shares.tpl:5
+msgid "Own"
+msgstr "Мои"
+
+#: templates/bootstrap/dashboard/round_statistics/pps/shares.tpl:6
+#: templates/bootstrap/dashboard/round_statistics/pplns/shares.tpl:6
+#: templates/bootstrap/dashboard/round_statistics/prop/shares.tpl:6
+msgid "Pool"
+msgstr "Пул"
+
+#: templates/bootstrap/dashboard/round_statistics/pps/shares.tpl:9
+#: templates/bootstrap/dashboard/round_statistics/pplns/shares.tpl:9
+#: templates/bootstrap/dashboard/round_statistics/prop/shares.tpl:9
+#: templates/bootstrap/statistics/round/round_shares.tpl:13
+#: templates/bootstrap/statistics/blocks/block_overview_time.tpl:15
+msgid "Valid"
+msgstr "Подтвержденные"
+
+#: templates/bootstrap/dashboard/round_statistics/pps/shares.tpl:22
+#: templates/bootstrap/dashboard/round_statistics/pplns/shares.tpl:22
+#: templates/bootstrap/dashboard/round_statistics/prop/shares.tpl:22
+#: templates/bootstrap/statistics/round/round_shares.tpl:14
+#: templates/bootstrap/statistics/round/round_shares.tpl:15
+#: templates/bootstrap/admin/reports/earnings_report.tpl:15
+#: templates/bootstrap/admin/reports/earnings_report.tpl:21
+msgid "Invalid"
+msgstr "Неподтвержденные"
+
+#: templates/bootstrap/dashboard/round_statistics/pps/shares.tpl:35
+#: templates/bootstrap/dashboard/round_statistics/pplns/shares.tpl:35
+#: templates/bootstrap/dashboard/round_statistics/prop/shares.tpl:35
+msgid "Efficiency"
+msgstr "Эффективность"
+
+#: templates/bootstrap/dashboard/round_statistics/pps/round.tpl:13
+msgid "1 Hour Estimated Earnings"
+msgstr "Ожидаемые доходы за 1 час"
+
+#: templates/bootstrap/dashboard/round_statistics/pps/round.tpl:28
+msgid "24 Hour Estimated Earnings"
+msgstr "Ожидаемые доходы за 24 часа"
+
+#: templates/bootstrap/dashboard/round_statistics/pps/round.tpl:43
+msgid "7 Days Estimated Earnings"
+msgstr "Ожидаемые доходы за 7 дней"
+
+#: templates/bootstrap/dashboard/round_statistics/pps/round.tpl:58
+msgid "14 Days Estimated Earnings"
+msgstr "Ожидаемые доходы за 14 дней"
+
+#: templates/bootstrap/dashboard/round_statistics/pps/round.tpl:73
+msgid "30 Days Estimated Earnings"
+msgstr "Ожидаемые доходы за 30 дней"
+
+#: templates/bootstrap/dashboard/round_statistics/pps/round.tpl:88
+msgid "PPS<br/>Value"
+msgstr ""
+
+#: templates/bootstrap/dashboard/round_statistics/pps/round.tpl:103
+msgid "Unpaid<br/>difficulty shares"
+msgstr ""
+
+#: templates/bootstrap/dashboard/round_statistics/pps/round.tpl:133
+#: templates/bootstrap/dashboard/round_statistics/pplns/round.tpl:73
+#: templates/bootstrap/dashboard/round_statistics/prop/round.tpl:73
+msgid "Est Next Difficulty"
+msgstr "Ож. сл. сложность"
+
+#: templates/bootstrap/dashboard/round_statistics/pps/round.tpl:133
+#: templates/bootstrap/dashboard/round_statistics/pplns/round.tpl:73
+#: templates/bootstrap/dashboard/round_statistics/prop/round.tpl:73
+msgid "Change in %1 Blocks"
+msgstr ""
+
+#: templates/bootstrap/dashboard/round_statistics/pps/round.tpl:133
+#: templates/bootstrap/dashboard/round_statistics/pplns/round.tpl:73
+#: templates/bootstrap/dashboard/round_statistics/prop/round.tpl:73
+msgid "No Estimates"
+msgstr "Нет оценки"
+
+#: templates/bootstrap/dashboard/round_statistics/pps/round.tpl:148
+msgid "Estimated Average<br/>Time per Block"
+msgstr "Ожидаемой среднее<br/>время на блок"
+
+#: templates/bootstrap/dashboard/round_statistics/pplns/round.tpl:13
+#: templates/bootstrap/dashboard/round_statistics/prop/round.tpl:13
+msgid "Current Block"
+msgstr "Текущий блок"
+
+#: templates/bootstrap/dashboard/round_statistics/pplns/round.tpl:28
+#: templates/bootstrap/dashboard/round_statistics/prop/round.tpl:28
+msgid "Of Expected Shares"
+msgstr "от ожидаемых шар"
+
+#: templates/bootstrap/dashboard/round_statistics/pplns/round.tpl:43
+#: templates/bootstrap/dashboard/round_statistics/prop/round.tpl:43
+msgid "Est. Earnings"
+msgstr "Ожидаемые доходы"
+
+#: templates/bootstrap/dashboard/round_statistics/pplns/round.tpl:88
+#: templates/bootstrap/dashboard/round_statistics/prop/round.tpl:88
+msgid "Est. Avg. Time per Block"
+msgstr "Ож. ср. время на блок"
+
+#: templates/bootstrap/dashboard/round_statistics/prop/default.tpl:5
+msgid "ound Information"
+msgstr ""
+
+#: templates/bootstrap/dashboard/worker_information/default.tpl:5
+msgid "Worker Information"
+msgstr "Информация о воркере"
+
+#: templates/bootstrap/dashboard/blocks/default.tpl:5
+msgid "Last Found Blocks"
+msgstr "Крайние найденные блоки"
+
+#: templates/bootstrap/dashboard/blocks/default.tpl:11
+#: templates/bootstrap/statistics/round/block_stats.tpl:19
+msgid "Height"
+msgstr "Высота"
+
+#: templates/bootstrap/dashboard/blocks/default.tpl:12
+#: templates/bootstrap/statistics/round/block_stats.tpl:42
+#: templates/bootstrap/statistics/blocks/blocks_found_details.tpl:14
+#: templates/bootstrap/statistics/blocks/small_table.tpl:11
+msgid "Finder"
+msgstr "Нашел"
+
+#: templates/bootstrap/dashboard/blocks/default.tpl:16
+#: templates/bootstrap/statistics/blocks/blocks_found_details.tpl:18
+msgid "Expected Shares"
+msgstr "Ожид. шары"
+
+#: templates/bootstrap/dashboard/blocks/default.tpl:17
+#: templates/bootstrap/statistics/blocks/blocks_found_details.tpl:20
+#: templates/bootstrap/statistics/blocks/small_table.tpl:13
+msgid "Actual Shares"
+msgstr "Шары"
+
+#: templates/bootstrap/dashboard/blocks/default.tpl:18
+#: templates/bootstrap/statistics/blocks/blocks_found_details.tpl:21
+#: templates/bootstrap/statistics/blocks/block_overview_time.tpl:21
+msgid "Percentage"
+msgstr "Процент"
+
+#: templates/bootstrap/dashboard/blocks/default.tpl:25
+msgid "anonymous"
+msgstr ""
+
+#: templates/bootstrap/login/default.tpl:6
+msgid "Login with existing account"
+msgstr "Вход"
+
+#: templates/bootstrap/login/default.tpl:12
+msgid "E-mail"
+msgstr ""
+
+#: templates/bootstrap/login/default.tpl:23
+msgid "Forgot your password?"
+msgstr "Забыли пароль?"
+
+#: templates/bootstrap/about/moot/default.tpl:5
+msgid "Moot Forum"
+msgstr ""
+
+#: templates/bootstrap/about/pool/default.tpl:5
+msgid "Frequently Asked Questions"
+msgstr "Часто задаваемые вопросы"
+
+#: templates/bootstrap/about/pool/default.tpl:9
+#: templates/bootstrap/about/pool/default.tpl:24
+#: templates/bootstrap/about/pool/default.tpl:27
+#: templates/bootstrap/about/pool/default.tpl:31
+#: templates/bootstrap/about/pool/default.tpl:35
+#: templates/bootstrap/about/pool/default.tpl:46
+msgid "Q:"
+msgstr "Вопрос:"
+
+#: templates/bootstrap/about/pool/default.tpl:9
+msgid "When will I get paid?"
+msgstr "Когда будет сделана выплата?"
+
+#: templates/bootstrap/about/pool/default.tpl:10
+msgid "This pool uses the following payout system"
+msgstr "Этот пул использует следующую системы выплат"
+
+#: templates/bootstrap/about/pool/default.tpl:13
+msgid "Proportional (Prop)"
+msgstr "Пропорциональная (Prop)"
+
+#: templates/bootstrap/about/pool/default.tpl:13
+msgid ""
+"The block reward is distributed among miners in proportion to the number of "
+"shares they submitted in a round. The expected reward per share depends on "
+"the number of shares already submitted in the round."
+msgstr ""
+"Вознаграждение за блок распределяется среди участников пропорционально "
+"количеству валидных \"шар\", которые они отправили на пул в течение раунда. "
+"Ожидаемая награда за шару зависит от количества шар, которые были отправлены "
+"в течение раунда всеми участниками."
+
+#: templates/bootstrap/about/pool/default.tpl:17
+msgid "Pay Per Last N Shares (PPLNS)"
+msgstr ""
+
+#: templates/bootstrap/about/pool/default.tpl:17
+msgid ""
+"Block rewards are distributed among the last shares, disregarding round "
+"boundaries. In the accurate implementation, the number of shares is deter- "
+"mined so that their total will be a specified quantity of score (where the "
+"score of a share is the inverse of the difficulty). Most pools use a naive "
+"implementation based on a fixed number of shares or a fixed multiple of the "
+"difficulty. The share-variance can be reduced at the cost of increased "
+"maturity time, but there is no way to decrease the long-term pool-variance."
+msgstr ""
+
+#: templates/bootstrap/about/pool/default.tpl:21
+msgid "Pay Per Share (PPS)"
+msgstr ""
+
+#: templates/bootstrap/about/pool/default.tpl:21
+msgid ""
+"Each share receives a fixed reward known in advance. This is the ultimate "
+"low- variance, low-maturity simple method, but has the highest risk for the "
+"operator, and hence lower expected returns than other methods and risk of "
+"collapse if not managed properly."
+msgstr ""
+
+#: templates/bootstrap/about/pool/default.tpl:24
+msgid "What is a orphan block?"
+msgstr "Что такое отброшенный (или покинутый) блок?"
+
+#: templates/bootstrap/about/pool/default.tpl:25
+#: templates/bootstrap/about/pool/default.tpl:28
+#: templates/bootstrap/about/pool/default.tpl:32
+#: templates/bootstrap/about/pool/default.tpl:36
+#: templates/bootstrap/about/pool/default.tpl:47
+msgid "A:"
+msgstr "Ответ:"
+
+#: templates/bootstrap/about/pool/default.tpl:25
+msgid ""
+"Coins generated by a block will not be available to you right away. They "
+"will take some time to be confirmed by the entire network before you are "
+"allowed to transfer them out of the pool. Usually coins have a confirmation "
+"set to 120. What that actually means: the network (not the pool) has to "
+"discover 120 additional blocks on top of the one found by the pool to "
+"confirm it."
+msgstr ""
+"Монеты, создаваемые при генерации нового блока, не доступны для выплат в тот "
+"же момент. Прежде чем монеты станут доступны для перевода должно пройти "
+"некоторое время, за которое блок должен быть подтвержден всей сетью. Обычно "
+"нужно 120 подтверждений. Это означает, что должно быть найдено 120 блоков "
+"после того блока, который найден пулом, чтобы подтвердить его."
+
+#: templates/bootstrap/about/pool/default.tpl:27
+msgid "What is estimated payout?"
+msgstr "Что такое ожидаемая выплата?"
+
+#: templates/bootstrap/about/pool/default.tpl:28
+msgid ""
+"Estimated payout is your estimated payout if a block is found at that time. "
+"This is an estimate according to your amount of shares submitted for the "
+"round(s)."
+msgstr ""
+"Ожидаемая выплата это ваша ожидаемая выплата, если блок был найден. Эта "
+"оценка вычисляется согласно количеству шар, вычисленных в течение раунда."
+
+#: templates/bootstrap/about/pool/default.tpl:31
+msgid "What is pool-variance?"
+msgstr ""
+
+#: templates/bootstrap/about/pool/default.tpl:32
+msgid ""
+"This is the variance caused by the pool being too small. Using a method with "
+"high pool-variance does no harm to large pools."
+msgstr ""
+
+#: templates/bootstrap/about/pool/default.tpl:35
+msgid "What is a share?"
+msgstr "Что такое \"шара\" (share)?"
+
+#: templates/bootstrap/about/pool/default.tpl:36
+msgid ""
+"Finding blocks is not an easy task. Since it would take a really long time "
+"on some coins, finding a block is broken down into shares. Depending on the "
+"server side setting, each share can be a certain difficulty. The more "
+"difficult each share is to find by miners, the fewer total shares are "
+"required to eventually find a block."
+msgstr ""
+"Нахождение блоков это сложная вычислительная задача. И хотя это может "
+"занимать очень длительное время для некоторых монет, нахождение блока "
+"разбивается на нахождение так называем \"шар\" (shares). В зависимости от "
+"настроек сервера, каждая шара может иметь заданную сложность. Чем более "
+"высокая сложность у каждой шары, тем меньшее количество шар необходимо, "
+"чтобы в конечном итоге найти блок."
+
+#: templates/bootstrap/about/pool/default.tpl:38
+msgid ""
+"On the server side, each share is checked against the coin daemon (a server "
+"side wallet with more features) if it is indeed a valid block solution. "
+"Every share computed has the potential to be a block solution. I will not go "
+"into details why this is, but rest assured that share estimates for blocks "
+"can sometimes be exceeded. In the long run though, shorter round with less "
+"shares than required will make up for those taking very long."
+msgstr ""
+"На стороне сервера, каждая шара проверяется серверной версией кошелька "
+"(программа-кошелек для серверов) на то, является ли она возможным решением "
+"для нахождения блока. Каждая найденная шара может оказаться решением задачи "
+"нахождения блока. Не вдаваясь глубоко в детали, можно сказать что примерная "
+"оценка количества шар иногда может быть превышена. Тем не менее, если "
+"рассмореть процесс нахождение блоков в целом, то более короткие раунды, "
+"когда потребовалось меньше шар, чем ожидалось, чередуются с длинными, когда "
+"шар нужно найти больше, чем ожидалось."
+
+#: templates/bootstrap/about/pool/default.tpl:40
+msgid ""
+"Keep in mind: shares are not blocks! Shares are part of a block and will "
+"count towards the block payout!"
+msgstr ""
+"Обратите внимание: шары это не блоки! Шары это части задачи по нахождению "
+"блока и будут учтены пулом при выплате вознаграждения за блок!"
+
+#: templates/bootstrap/about/pool/default.tpl:42
+msgid ""
+"At times, you will see shares being rejected by the pool. This can happen if "
+"you try to send an outdated share right after a block was found. Stratum, a "
+"protocol used by a miner to request work from a server, is used for share "
+"submission and getting new work. It is very solid when it comes to avoiding "
+"rejects but they can still happen once in a while."
+msgstr ""
+"Иногда, вы можете увидеть шары, отвергнутые пулом (rejected). Это может "
+"случиться, если ваш майнер пытается отправить устаревшую шару сразу после "
+"того, как блок был найден. Стратум, протокол, который используется "
+"программой-майнером для запроса работы у пула, а также для отправки "
+"обработанных шар на пул, призван обеспечить непрерывную работу майнера и "
+"достаточно хорошо справляется с этой задачей, однако, изредка, отвергнутые "
+"шары могут иметь место."
+
+#: templates/bootstrap/about/pool/default.tpl:44
+msgid ""
+"If you are seeing reject all the time, then something isn’t working right on "
+"your end. You may also notice that your hashrate on the pool website is not "
+"increasing while your invalid share count keeps climbing up. In that case "
+"turn off your miner and check your settings!"
+msgstr ""
+"Если же вы постоянно видите отвергнутые шары (rejected), то это означает, "
+"что что-то явно не так на вашей стороне. Вы также можете заметить, что "
+"мощность вашего майнера (или хешрейт) на пуле отображается некорректно. В "
+"этом случае выключите ваш майнер и проверьте настройки!"
+
+#: templates/bootstrap/about/pool/default.tpl:46
+msgid "I am having problems connecting to the pool"
+msgstr "У меня проблемы при соединении с пулом"
+
+#: templates/bootstrap/about/pool/default.tpl:47
+msgid "Double check your settings against our"
+msgstr "Пожалуйста, дважды проверьте ваши настройки согласно странице"
+
+#: templates/bootstrap/about/pool/default.tpl:47
+msgid "getting started page"
+msgstr "как начать добывать"
+
+#: templates/bootstrap/about/pool/default.tpl:51
+msgid "This Pool is running"
+msgstr "Этот пул работает на платформе"
+
+#: templates/bootstrap/about/pool/default.tpl:51
+msgid ""
+"project code. This frontend was  created by TheSerapher aka Sebastian Grewe. "
+"The operation of the pool is soley at the hand of your trusted pool operator."
+msgstr ""
+". Этот веб-интерфейс был реализаван разработчиком TheSerapher aka Sebastian "
+"Grewe. Функционирование пула полностью в руках владельца/оператора пула."
+
+#: templates/bootstrap/about/chat/default.tpl:5
+msgid "Web Chat"
+msgstr "Веб Чат"
+
+#: templates/bootstrap/about/api/default.tpl:5
+msgid "API Reference"
+msgstr ""
+
+#: templates/bootstrap/about/api/default.tpl:8
+msgid "Please head over to the"
+msgstr ""
+
+#: templates/bootstrap/about/api/default.tpl:8
+msgid "official documentation"
+msgstr ""
+
+#: templates/bootstrap/contactform/default.tpl:9
+#: templates/bootstrap/contactform/contactform/default.tpl:9
+msgid "Contact Us"
+msgstr "Обратная связь"
+
+#: templates/bootstrap/contactform/default.tpl:15
+#: templates/bootstrap/contactform/contactform/default.tpl:15
+msgid "Your Name"
+msgstr "Ваше имя"
+
+#: templates/bootstrap/contactform/default.tpl:19
+#: templates/bootstrap/contactform/contactform/default.tpl:19
+msgid "Your Email Address"
+msgstr "Ваш E-mail"
+
+#: templates/bootstrap/contactform/default.tpl:23
+#: templates/bootstrap/contactform/contactform/default.tpl:23
+msgid "Your Subject"
+msgstr "Тема"
+
+#: templates/bootstrap/contactform/default.tpl:32
+#: templates/bootstrap/contactform/contactform/default.tpl:32
+msgid "Your Message"
+msgstr "Ваше сообщение"
+
+#: templates/bootstrap/contactform/default.tpl:39
+#: templates/bootstrap/contactform/contactform/default.tpl:39
+msgid "Send Email"
+msgstr "Отправить сообщение"
+
+#: templates/bootstrap/contactform/default.tpl:40
+#: templates/bootstrap/contactform/contactform/default.tpl:40
+msgid "Reset Values"
+msgstr "Обнулить значения"
+
+#: templates/bootstrap/contactform/disabled.tpl:5
+msgid "Contact &amp; Support"
+msgstr ""
+
+#: templates/bootstrap/contactform/disabled.tpl:10
+msgid ""
+"This product comes 'as-is' without any warranty. Please check the Apache "
+"License, Version 2.0, for details."
+msgstr ""
+
+#: templates/bootstrap/statistics/donors/default.tpl:5
+msgid "Pool Donors"
+msgstr "Наши благодетели"
+
+#: templates/bootstrap/statistics/donors/default.tpl:11
+msgid "Name"
+msgstr "Имя"
+
+#: templates/bootstrap/statistics/donors/default.tpl:13
+#: templates/bootstrap/admin/dashboard/user.tpl:11
+#: templates/bootstrap/admin/dashboard/invitation.tpl:10
+msgid "Total"
+msgstr "Всего"
+
+#: templates/bootstrap/statistics/donors/default.tpl:25
+msgid "No confirmed donations yet, please be patient!"
+msgstr "В данный момент нет подтвержденных пожертвований, будьте терпеливы!"
+
+#: templates/bootstrap/statistics/round/block_stats.tpl:5
+msgid "Block Statistics"
+msgstr "Статистика блоков"
+
+#: templates/bootstrap/statistics/round/block_stats.tpl:27
+#: templates/bootstrap/admin/wallet/transactions.tpl:16
+msgid "Confirmations"
+msgstr "Подтверждения"
+
+#: templates/bootstrap/statistics/round/block_stats.tpl:31
+#: templates/bootstrap/statistics/blocks/blocks_found_details.tpl:43
+#: templates/bootstrap/statistics/blocks/block_overview_time.tpl:16
+#: templates/bootstrap/statistics/blocks/block_overview_time.tpl:17
+msgid "Orphan"
+msgstr "Отброшенный"
+
+#: templates/bootstrap/statistics/round/block_stats.tpl:33
+msgid "left"
+msgstr "осталось"
+
+#: templates/bootstrap/statistics/round/block_stats.tpl:40
+#: templates/bootstrap/statistics/blocks/block_overview_time.tpl:20
+#: templates/bootstrap/admin/user/default.tpl:92
+msgid "Shares"
+msgstr "Шары"
+
+#: templates/bootstrap/statistics/round/round_shares.tpl:4
+#: templates/bootstrap/statistics/round/round_transactions.tpl:13
+#: templates/bootstrap/admin/reports/earnings_report.tpl:13
+msgid "Round Shares"
+msgstr "Шары раунда"
+
+#: templates/bootstrap/statistics/round/round_shares.tpl:11
+msgid "Rank"
+msgstr "Ранг"
+
+#: templates/bootstrap/statistics/round/round_shares.tpl:12
+#: templates/bootstrap/statistics/round/round_transactions.tpl:11
+msgid "User Name"
+msgstr "Имя Пользователя"
+
+#: templates/bootstrap/statistics/round/round_transactions.tpl:4
+msgid "Round Transactions"
+msgstr "Транзакции раунда"
+
+#: templates/bootstrap/statistics/round/round_transactions.tpl:14
+#: templates/bootstrap/admin/reports/earnings_report.tpl:17
+msgid "Round %"
+msgstr "Раунд %"
+
+msgid "Round"
+msgstr "Раунд"
+
+#: templates/bootstrap/statistics/pool/general_stats.tpl:10
+msgid "Pool Hash Rate"
+msgstr "Мощность пула"
+
+#: templates/bootstrap/statistics/pool/general_stats.tpl:14
+msgid "Pool Efficiency"
+msgstr "Эффективность пула"
+
+#: templates/bootstrap/statistics/pool/general_stats.tpl:18
+msgid "Current Active Workers"
+msgstr "Текущие активные воркеры"
+
+#: templates/bootstrap/statistics/pool/general_stats.tpl:22
+msgid "Current Difficulty"
+msgstr "Текущая сложность"
+
+#: templates/bootstrap/statistics/pool/general_stats.tpl:30
+msgid "Est. Next Difficulty"
+msgstr "Ожид. след. сложность"
+
+#: templates/bootstrap/statistics/pool/general_stats.tpl:38
+msgid "Est. Avg. Time per Round (Network)"
+msgstr "Ожид. средн. время на раунд (сеть)"
+
+#: templates/bootstrap/statistics/pool/general_stats.tpl:42
+msgid "Est. Avg. Time per Round (Pool)"
+msgstr "Ожид. средн. время на раунд (пул)"
+
+#: templates/bootstrap/statistics/pool/general_stats.tpl:46
+msgid "Est. Shares this Round"
+msgstr "Ожид. шары на этот раунд"
+
+#: templates/bootstrap/statistics/pool/general_stats.tpl:51
+#: templates/bootstrap/statistics/pool/general_stats.tpl:56
+msgid "Next Network Block"
+msgstr "Следующий блок в сети"
+
+#: templates/bootstrap/statistics/pool/general_stats.tpl:61
+msgid "Last Block Found"
+msgstr "Крайний найденный блок"
+
+#: templates/bootstrap/statistics/pool/general_stats.tpl:65
+msgid "Time Since Last Block"
+msgstr "Время от крайнего блока"
+
+#: templates/bootstrap/statistics/pool/general_stats.tpl:72
+msgid "These stats are also available in JSON format"
+msgstr "Эти данные также доступны в формате JSON"
+
+#: templates/bootstrap/statistics/pool/general_stats.tpl:72
+msgid "HERE"
+msgstr "ТУТ"
+
+#: templates/bootstrap/statistics/blocks/blocks_found_details.tpl:5
+msgid "Last %1 Blocks Found"
+msgstr "Крайние %1 блоков"
+
+#: templates/bootstrap/statistics/blocks/blocks_found_details.tpl:12
+#: templates/bootstrap/statistics/blocks/small_table.tpl:10
+msgid "Block"
+msgstr "Блок"
+
+#: templates/bootstrap/statistics/blocks/blocks_found_details.tpl:13
+msgid "Validity"
+msgstr "Подтвержденность"
+
+#: templates/bootstrap/statistics/blocks/blocks_found_details.tpl:19
+#: templates/bootstrap/admin/reports/earnings_report.tpl:19
+msgid "PPLNS Shares"
+msgstr ""
+
+#: templates/bootstrap/statistics/blocks/blocks_found_details.tpl:67
+msgid "Totals"
+msgstr ""
+
+#: templates/bootstrap/statistics/blocks/blocks_found_details.tpl:80
+#: templates/bootstrap/statistics/blocks/small_table.tpl:35
+msgid "Round Earnings are not credited until"
+msgstr "Доходы раунда не начисляются пока не будет"
+
+#: templates/bootstrap/statistics/blocks/blocks_found_details.tpl:80
+#: templates/bootstrap/statistics/blocks/small_table.tpl:35
+#: templates/bootstrap/statistics/blocks/block_overview_time.tpl:188
+msgid "confirms"
+msgstr "подтверждений"
+
+#: templates/bootstrap/statistics/blocks/block_shares_graph.tpl:41
+msgid "Block Shares"
+msgstr "Шары блока"
+
+#: templates/bootstrap/statistics/blocks/block_overview_time.tpl:5
+msgid "Block Overview"
+msgstr "Обзор блоков"
+
+#: templates/bootstrap/statistics/blocks/block_overview_time.tpl:13
+msgid "Gen. Est."
+msgstr "Всего, ожид."
+
+#: templates/bootstrap/statistics/blocks/block_overview_time.tpl:14
+msgid "Found"
+msgstr "Найдено"
+
+#: templates/bootstrap/statistics/blocks/block_overview_time.tpl:18
+msgid "Avg. Diff"
+msgstr "Ср. сложность"
+
+#: templates/bootstrap/statistics/blocks/block_overview_time.tpl:19
+msgid "Shares Est."
+msgstr "Шары, ожид."
+
+#: templates/bootstrap/statistics/blocks/block_overview_time.tpl:23
+msgid "Rate Est."
+msgstr "Соотн., ожид."
+
+#: templates/bootstrap/statistics/blocks/block_overview_time.tpl:106
+msgid "Last 7 Days"
+msgstr "Крайние 7 дней"
+
+#: templates/bootstrap/statistics/blocks/block_overview_time.tpl:132
+msgid "Last 4 Weeks"
+msgstr "Крайние 4 недели"
+
+#: templates/bootstrap/statistics/blocks/block_overview_time.tpl:158
+msgid "The Past 12 Months"
+msgstr "Крайние 12 месяцев"
+
+#: templates/bootstrap/statistics/blocks/block_overview_time.tpl:188
+msgid "Round earnings are not credited until"
+msgstr ""
+
+#: templates/bootstrap/admin/wallet/accounts.tpl:5
+msgid "Wallet Accounts"
+msgstr "Аккаунты кошелька"
+
+#: templates/bootstrap/admin/wallet/accounts.tpl:12
+msgid "Account:"
+msgstr ""
+
+#: templates/bootstrap/admin/wallet/accounts.tpl:18
+msgid "Balance Info"
+msgstr "Информация о балансе"
+
+#: templates/bootstrap/admin/wallet/accounts.tpl:23
+#: templates/bootstrap/admin/user/default.tpl:100
+msgid "Balance"
+msgstr "Баланс"
+
+#: templates/bootstrap/admin/wallet/accounts.tpl:37
+msgid "Addresses assigned to Account"
+msgstr ""
+
+#: templates/bootstrap/admin/wallet/peers.tpl:5
+msgid "Peer Information"
+msgstr "Информация о соединениях"
+
+#: templates/bootstrap/admin/wallet/peers.tpl:11
+msgid "Host"
+msgstr "Хост"
+
+#: templates/bootstrap/admin/wallet/peers.tpl:12
+msgid "Protocol"
+msgstr "Протокол"
+
+#: templates/bootstrap/admin/wallet/peers.tpl:13
+msgid "Identity"
+msgstr ""
+
+#: templates/bootstrap/admin/wallet/peers.tpl:14
+msgid "Connected"
+msgstr ""
+
+#: templates/bootstrap/admin/wallet/peers.tpl:15
+msgid "Traffic"
+msgstr "Трафик"
+
+#: templates/bootstrap/admin/wallet/peers.tpl:25
+msgid "MB"
+msgstr "Мб"
+
+#: templates/bootstrap/admin/wallet/transactions.tpl:5
+msgid "Last %1 transactions"
+msgstr "Крайние %1 транзакций"
+
+#: templates/bootstrap/admin/wallet/transactions.tpl:12
+#: templates/bootstrap/admin/transactions/default.tpl:60
+#: templates/bootstrap/admin/user/default.tpl:50
+msgid "Account"
+msgstr "Аккаунт"
+
+#: templates/bootstrap/admin/wallet/transactions.tpl:13
+#: templates/bootstrap/admin/transactions/default.tpl:64
+msgid "Address"
+msgstr "Адрес"
+
+#: templates/bootstrap/admin/wallet/transactions.tpl:14
+msgid "Category"
+msgstr "Категория"
+
+#: templates/bootstrap/admin/wallet/transactions.tpl:17
+msgid "Transaction ID"
+msgstr "ID транзакции"
+
+#: templates/bootstrap/admin/wallet/status.tpl:4
+msgid "Wallet Status"
+msgstr "Статус кошелька"
+
+#: templates/bootstrap/admin/wallet/status.tpl:9
+msgid "Version"
+msgstr "Версия"
+
+#: templates/bootstrap/admin/wallet/status.tpl:10
+msgid "Protocol Version"
+msgstr "Версия протокола"
+
+#: templates/bootstrap/admin/wallet/status.tpl:11
+msgid "Wallet Version"
+msgstr "Версия кошелька"
+
+#: templates/bootstrap/admin/wallet/status.tpl:12
+msgid "Peers"
+msgstr "Соединения"
+
+#: templates/bootstrap/admin/wallet/status.tpl:14
+msgid "Blocks"
+msgstr "Блоки"
+
+#: templates/bootstrap/admin/wallet/status.tpl:15
+msgid "Accounts"
+msgstr "Счета"
+
+#: templates/bootstrap/admin/wallet/balance.tpl:4
+msgid "Balance Summary"
+msgstr "Сводка о балансе"
+
+#: templates/bootstrap/admin/wallet/balance.tpl:9
+msgid "Wallet Balance"
+msgstr "Баланс кошелька"
+
+#: templates/bootstrap/admin/wallet/balance.tpl:13
+msgid "Locked for users"
+msgstr "Заблокировано для пользователей"
+
+#: templates/bootstrap/admin/wallet/balance.tpl:22
+#: templates/bootstrap/admin/wallet/balance.tpl:35
+msgid "Liquid Assets"
+msgstr "Доход пула"
+
+#: templates/bootstrap/admin/wallet/balance.tpl:30
+msgid "PoS New Mint"
+msgstr ""
+
+#: templates/bootstrap/admin/newsletter/default.tpl:10
+msgid "Write Newsletter"
+msgstr "Разослать новость"
+
+#: templates/bootstrap/admin/newsletter/default.tpl:12
+msgid "Newsletters support the Markdown syntax"
+msgstr ""
+
+#: templates/bootstrap/admin/newsletter/default.tpl:22
+msgid "Subject"
+msgstr "Тема"
+
+#: templates/bootstrap/admin/newsletter/default.tpl:26
+#: templates/bootstrap/admin/news/default.tpl:30
+#: templates/bootstrap/admin/news_edit/default.tpl:35
+msgid "Content"
+msgstr "Содержание"
+
+#: templates/bootstrap/admin/newsletter/default.tpl:33
+msgid "Send"
+msgstr "Отправить"
+
+#: templates/bootstrap/admin/transactions/default.tpl:6
+msgid "Transaction Summary"
+msgstr "Сводка о транзакции"
+
+#: templates/bootstrap/admin/transactions/default.tpl:45
+#: templates/bootstrap/admin/user/default.tpl:39
+#: templates/bootstrap/admin/user/default.tpl:42
+#: templates/bootstrap/admin/invitations/default.tpl:35
+msgid "Prev"
+msgstr "Пред."
+
+#: templates/bootstrap/admin/transactions/default.tpl:48
+#: templates/bootstrap/admin/user/default.tpl:46
+#: templates/bootstrap/admin/invitations/default.tpl:38
+msgid "Next"
+msgstr "След."
+
+#: templates/bootstrap/admin/transactions/default.tpl:69
+msgid "Filter"
+msgstr "Отфильтровать"
+
+#: templates/bootstrap/admin/registrations/default.tpl:6
+msgid "Last Registered Users"
+msgstr "Крайние зарегистрированные пользователи"
+
+#: templates/bootstrap/admin/registrations/default.tpl:15
+#: templates/bootstrap/admin/user/default.tpl:91
+#: templates/bootstrap/admin/invitations/default.tpl:13
+msgid "eMail"
+msgstr "Эл. почта"
+
+#: templates/bootstrap/admin/registrations/default.tpl:16
+#: templates/bootstrap/admin/user/default.tpl:101
+msgid "Reg. Date"
+msgstr "Дата регистрации"
+
+#: templates/bootstrap/admin/registrations/default.tpl:17
+msgid "Invite"
+msgstr "Пригласить"
+
+#: templates/bootstrap/admin/registrations/default.tpl:18
+msgid "Invited From"
+msgstr "По приглашению от"
+
+#: templates/bootstrap/admin/poolworkers/default.tpl:5
+msgid "Current Active Pool Workers"
+msgstr "Текущие активные воркеры пула"
+
+#: templates/bootstrap/admin/poolworkers/default.tpl:15
+msgid "Monitor"
+msgstr "Мониторинг"
+
+#: templates/bootstrap/admin/poolworkers/default.tpl:18
+msgid "Avg Difficulty"
+msgstr "Средняяя сложность"
+
+#: templates/bootstrap/admin/user/default.tpl:33
+msgid "User Search"
+msgstr "Поиск пользователей"
+
+#: templates/bootstrap/admin/user/default.tpl:58
+msgid "Is Admin"
+msgstr "Администратор"
+
+#: templates/bootstrap/admin/user/default.tpl:62
+msgid "Is Locked"
+msgstr "Заблокирован"
+
+#: templates/bootstrap/admin/user/default.tpl:66
+#: templates/bootstrap/admin/user/default.tpl:105
+#: templates/bootstrap/admin/dashboard/user.tpl:15
+msgid "No Fees"
+msgstr "Нет комиссий"
+
+#: templates/bootstrap/admin/user/default.tpl:71
+msgid "Search!"
+msgstr "Искать!"
+
+#: templates/bootstrap/admin/user/default.tpl:82
+msgid "User Information"
+msgstr "Информация о пользователе"
+
+#: templates/bootstrap/admin/user/default.tpl:95
+msgid "Est. Donation"
+msgstr "Ожид. пожертвования"
+
+#: templates/bootstrap/admin/user/default.tpl:96
+msgid "Est. Payout"
+msgstr "Ож. выплаты"
+
+#: templates/bootstrap/admin/user/default.tpl:98
+msgid "Est. 24 Hours"
+msgstr ""
+
+#: templates/bootstrap/admin/user/default.tpl:102
+msgid "Last Login"
+msgstr "Крайний вход"
+
+#: templates/bootstrap/admin/user/default.tpl:103
+msgid "Admin"
+msgstr "Админ"
+
+#: templates/bootstrap/admin/user/default.tpl:104
+#: templates/bootstrap/admin/dashboard/user.tpl:13
+msgid "Locked"
+msgstr "Заблокирован"
+
+#: templates/bootstrap/admin/monitoring/default.tpl:10
+msgid "Cronjob"
+msgstr ""
+
+#: templates/bootstrap/admin/monitoring/default.tpl:11
+#: templates/bootstrap/admin/dashboard/mpos.tpl:68
+msgid "Disabled"
+msgstr "Отключено"
+
+#: templates/bootstrap/admin/monitoring/default.tpl:12
+msgid "Exit Code"
+msgstr "Код выхода"
+
+#: templates/bootstrap/admin/monitoring/default.tpl:14
+msgid "Runtime"
+msgstr ""
+
+#: templates/bootstrap/admin/monitoring/default.tpl:15
+msgid "Start Time"
+msgstr "Время начала"
+
+#: templates/bootstrap/admin/monitoring/default.tpl:16
+msgid "End Time"
+msgstr "Время завершения"
+
+#: templates/bootstrap/admin/monitoring/default.tpl:29
+msgid "ERROR"
+msgstr "ОШИБКА"
+
+#: templates/bootstrap/admin/dashboard/user.tpl:14
+msgid "Admins"
+msgstr "Администаторы"
+
+#: templates/bootstrap/admin/dashboard/user.tpl:35
+msgid "Logins"
+msgstr "Входы"
+
+#: templates/bootstrap/admin/dashboard/user.tpl:41
+#: templates/bootstrap/admin/dashboard/registrations.tpl:11
+msgid "%1 hours"
+msgstr "%1 часов"
+
+#: templates/bootstrap/admin/dashboard/user.tpl:42
+#: templates/bootstrap/admin/dashboard/registrations.tpl:12
+msgid "%1 days"
+msgstr "%1 дней"
+
+#: templates/bootstrap/admin/dashboard/user.tpl:43
+#: templates/bootstrap/admin/dashboard/registrations.tpl:13
+msgid "1 month"
+msgstr "1 месяц"
+
+#: templates/bootstrap/admin/dashboard/user.tpl:44
+#: templates/bootstrap/admin/dashboard/registrations.tpl:14
+msgid "%1 months"
+msgstr "%1 месяцев"
+
+#: templates/bootstrap/admin/dashboard/user.tpl:45
+#: templates/bootstrap/admin/dashboard/registrations.tpl:15
+msgid "1 year"
+msgstr "1 год"
+
+#: templates/bootstrap/admin/dashboard/invitation.tpl:12
+#: templates/bootstrap/admin/invitations/default.tpl:15
+msgid "Outstanding"
+msgstr "Невероятно"
+
+#: templates/bootstrap/admin/dashboard/mpos.tpl:5
+msgid "MPOS Version Information"
+msgstr "Информация о версии MPOS"
+
+#: templates/bootstrap/admin/dashboard/mpos.tpl:11
+msgid "Component"
+msgstr "Компонент"
+
+#: templates/bootstrap/admin/dashboard/mpos.tpl:12
+msgid "Current"
+msgstr "Текущий"
+
+#: templates/bootstrap/admin/dashboard/mpos.tpl:13
+msgid "Installed"
+msgstr "Установлено"
+
+#: templates/bootstrap/admin/dashboard/mpos.tpl:14
+msgid "Online"
+msgstr "Онлайн"
+
+#: templates/bootstrap/admin/dashboard/mpos.tpl:29
+msgid "Config"
+msgstr "Конфиг"
+
+#: templates/bootstrap/admin/dashboard/mpos.tpl:39
+msgid "Database"
+msgstr "База данных"
+
+#: templates/bootstrap/admin/dashboard/mpos.tpl:57
+msgid "MPOS Status"
+msgstr "Статус MPOS"
+
+#: templates/bootstrap/admin/dashboard/mpos.tpl:63
+msgid "Cronjobs"
+msgstr ""
+
+#: templates/bootstrap/admin/dashboard/mpos.tpl:64
+msgid "Wallet"
+msgstr "Кошелек"
+
+#: templates/bootstrap/admin/dashboard/mpos.tpl:67
+#: templates/bootstrap/admin/dashboard/mpos.tpl:69
+msgid "Errors"
+msgstr "Ошибки"
+
+#: templates/bootstrap/admin/dashboard/mpos.tpl:75
+#: templates/bootstrap/admin/dashboard/mpos.tpl:78
+msgid "None - OK"
+msgstr ""
+
+#: templates/bootstrap/admin/reports/earnings_control.tpl:9
+msgid "Earnings Information"
+msgstr "Информация о доходах"
+
+#: templates/bootstrap/admin/reports/earnings_control.tpl:26
+msgid "Select User"
+msgstr "Выберите пользователя"
+
+#: templates/bootstrap/admin/reports/earnings_control.tpl:32
+msgid "Block Limit"
+msgstr "Количество блоков"
+
+#: templates/bootstrap/admin/reports/earnings_control.tpl:38
+msgid "Starting block height"
+msgstr "Начиная с высоты блока"
+
+#: templates/bootstrap/admin/reports/earnings_control.tpl:44
+msgid "Show empty rounds"
+msgstr "Показывать пустые раунды"
+
+#: templates/bootstrap/admin/reports/earnings_control.tpl:58
+msgid "Submit"
+msgstr "Подтвердить"
+
+#: templates/bootstrap/admin/reports/earnings_report.tpl:5
+msgid "Earnings Report Last %1 Blocks For User: %2"
+msgstr "Отчет о доходах пользователя %2 за крайние %1 блоков"
+
+#: templates/bootstrap/admin/reports/earnings_report.tpl:14
+msgid "Round Valid"
+msgstr ""
+
+#: templates/bootstrap/admin/reports/earnings_report.tpl:16
+#: templates/bootstrap/admin/reports/earnings_report.tpl:22
+msgid "Invalid %"
+msgstr "Негодные %"
+
+#: templates/bootstrap/admin/reports/earnings_report.tpl:20
+msgid "PPLNS Valid"
+msgstr ""
+
+#: templates/bootstrap/admin/reports/earnings_report.tpl:23
+msgid "PPLNS %"
+msgstr ""
+
+#: templates/bootstrap/admin/reports/earnings_report.tpl:24
+msgid "Variance"
+msgstr ""
+
+#: templates/bootstrap/admin/userdetails/default.tpl:6
+msgid "%1 Account Information"
+msgstr "Информация о профиле %1"
+
+#: templates/bootstrap/admin/userdetails/default.tpl:13
+msgid "All Time Transaction Totals"
+msgstr ""
+
+#: templates/bootstrap/admin/userdetails/default.tpl:41
+msgid "Transactions over time"
+msgstr ""
+
+#: templates/bootstrap/admin/news/default.tpl:10
+msgid "Write News"
+msgstr "Опубликовать новость"
+
+#: templates/bootstrap/admin/news/default.tpl:12
+msgid "News posts support the Markdown syntax"
+msgstr ""
+
+#: templates/bootstrap/admin/news/default.tpl:26
+#: templates/bootstrap/admin/news_edit/default.tpl:31
+msgid "Header"
+msgstr "Заголовок"
+
+#: templates/bootstrap/admin/news/default.tpl:37
+msgid "Add"
+msgstr "Добавить"
+
+#: templates/bootstrap/admin/invitations/default.tpl:6
+msgid "Top Inviters"
+msgstr "Топ пригласивших"
+
+#: templates/bootstrap/admin/setup/default.tpl:5
+msgid "Setup Checks"
+msgstr "Проверка установки"
+
+#: templates/bootstrap/admin/setup/default.tpl:6
+msgid ""
+"To disable these checks, set skip_config_tests to true in global.inc.php"
+msgstr ""
+"Чтобы отключить проверки, установите true для опции skip_config_tests в "
+"global.inc.php"
+
+#: templates/bootstrap/admin/news_edit/default.tpl:12
+msgid "Edit news entry #"
+msgstr "Редактировать новость №"
+
+#: templates/bootstrap/admin/news_edit/default.tpl:42
+#: templates/bootstrap/admin/settings/default.tpl:43
+msgid "Save"
+msgstr "Сохранить"
+
+#: templates/bootstrap/admin/settings/default.tpl:33
+msgid "Unknown option type"
+msgstr "Неизвестый тип опции"
+
+#: templates/bootstrap/tac/default.tpl:5
+msgid "Terms &amp; Conditions"
+msgstr "Пользовательское соглашение"
+
+#: templates/bootstrap/tac/content.tpl:1
+msgid "This Agreement governs your use of %1"
+msgstr ""
+"Это соглашение, далее \"Соглашение\", об использовании %1, далее \"Пул\""
+
+#: templates/bootstrap/tac/content.tpl:3
+msgid ""
+"By using any of the Pools or registering an account on the website, you "
+"agree to be bound by the terms and conditions below. If you do not agree "
+"with the terms and conditions in this Agreement you may not use the Pool."
+msgstr ""
+"Используя любой из серверов Пула и/или регистрируя учетную запись на сайте, "
+"Вы соглашаетесь со всеми условиями настоящего Пользовательского Соглашения, "
+"которые указаны ниже. Если Вы несогласны с условиями данного Соглашения, Вы "
+"не имеете права использовать Пул."
+
+#: templates/bootstrap/tac/content.tpl:4
+msgid ""
+"The %1 staff may modify this Agreement and any policies affecting the Site "
+"at any point of time. Such modification is effective immediately upon "
+"posting to the website and will be distribution via email, forum post and a "
+"link in chat. Your continued use of the Pool following any modification to "
+"this Agreement shall be deemed an acceptance of all modifications."
+msgstr ""
+"Операторы Пула могут вносить изменения в настоящее Соглашение в любое время. "
+"Такие изменения вступают в силу незамедлительно после публикации на "
+"вебсайте. Информация о факте изменения условий Соглашения должна быть "
+"опубликована в виде новости на сайте Пула. Информация о факте внесения "
+"изменений, а также текст нового Соглашения, могут быть разосланы "
+"пользователям по электронной почте. Продолжение использования Пула вами, "
+"после внесения изменений в условия Соглашения, будет считаться принятием "
+"нового Соглашения со всеми изменениями."
+
+#: templates/bootstrap/tac/content.tpl:5
+msgid "The Pool rewards miners according to a "
+msgstr "Пул распределяет  выплаты среди участников согласно системе выплат "
+
+#: templates/bootstrap/tac/content.tpl:5
+msgid "system with"
+msgstr "с комиссией в "
+
+#: templates/bootstrap/tac/content.tpl:5
+msgid ""
+" fee. The fee may change at any time, but notice will be given before doing "
+"so. Any fee change will be communicated through the pools news page."
+msgstr ""
+". Размер комиссии может быть изменен в любое время, но при условии "
+"предварительного уведомления пользователей. Информация об изменении комиссии "
+"должна быть опубликована в виде новости, на странице новостей пула. С "
+"момента такой публикации, пользователь считается уведомленным об изменении "
+"комиссии."
+
+#: templates/bootstrap/tac/content.tpl:6
+msgid ""
+"The Pool is not an e-wallet or a bank for your coins. The Pool and it's "
+"operators are not responsible for any loss of coins which are stored on the "
+"Pool. It is your responsibility to configure your account so that the coins "
+"you mine are regularly transferred to your own secured offline wallet."
+msgstr ""
+"Пул не является электронным кошельком или любым иным видом хранилища для "
+"монет пользователя. Пул и его операторы не являются ответственными за любые "
+"потери пользовательских монет и иных средств, которые хранились на Пуле. "
+"Пользователь обязан настроить свою учетную запись таким образом, чтобы "
+"добытые им монеты регулярно переводились на защищенный оффлайн кошелек "
+"пользователя. "
+
+#: templates/bootstrap/tac/content.tpl:7
+msgid ""
+"The uptime of the pool or website is not guaranteed, maintenance and "
+"downtime may be required at times. Users are responsible for configuring "
+"their miners so that they will automatically reconnect, switch to all the "
+"pools we offer or a backup pool in the case of downtime."
+msgstr ""
+"Непрерывное время работы Пула не гарантировано. Иногда могут проводиться "
+"технические работы, которые требуют временного прекращения работы Пула. Мы "
+"рекомендуем пользователям настроить свои майнеры таким образом, чтобы они "
+"автоматически делали попытки повторного соединения с Пулом, либо "
+"переключались на другие пулы в случае  длительного прекращения работы Пула. "
+"Ответственность за настройку своих майнеров целиком лежит на пользователях "
+"Пула. Пул не несет ответственности за любые потери пользователей, связанные "
+"с временным прекращением работы Пула."
+
+#: templates/bootstrap/tac/content.tpl:8
+msgid ""
+"Botnets are not welcome. Accounts with a large amount of miners connecting "
+"from different IPs may be suspended without prior notice. If we are "
+"uncertian then an investigation will be opened and the user will be notified "
+"via their configured e-mail address. If we do not receive a response your "
+"account may be suspended."
+msgstr ""
+"Ботнеты не приветствуются. Обслуживание учетных записей с большим "
+"количеством майнеров, которые соединяются с Пулом с разных IP адресов, может "
+"быть приостановлено без предварительного уведомления. В случае, если "
+"операторы пула не уверены в том, имеет ли место ботнет, может быть открыто "
+"внутреннее расследование. В этом случае, пользователь будет уведомлен о "
+"начале внутреннего расследования по электронной почте. В ходе внутреннего "
+"расследования, операторы пула могут обращаться за письменными разъяснениями "
+"к пользователю, по электронной почте. В случае отсутствия ответов, на такие "
+"запросы, обслуживание учетной записи может быть временно приостановлено."
+
+#: templates/bootstrap/tac/content.tpl:9
+msgid ""
+"Multiple accounts controlled by one person may be considered as a botnet and "
+"an investigation will be opened, see above point."
+msgstr ""
+"Несколько учетных записей, которые контролируются одним лицом, могут быть  "
+"рассмотрены как ботнет. При соответствующих подозрениях будет открыто "
+"внутреннее расследование, подробнее см.пункт выше."
+
+#: templates/bootstrap/error/default.tpl:4
+#: templates/bootstrap/error/404/default.tpl:4
+msgid "The page you requested was not found"
+msgstr "Страница не найдена"
+
+#: templates/bootstrap/error/ratelimit/default.tpl:2
+msgid "Request rate limit exceeded"
+msgstr "Превышен лимит количества запросов"
+
+#: templates/bootstrap/error/ratelimit/default.tpl:4
+msgid "You're sending too many requests too fast!"
+msgstr "Вы отправляете запросы к серверу слишком часто!"
+
+msgid "Contact"
+msgstr "Обратная связь"
+
+msgid "About"
+msgstr "О пуле"
+
+msgid "Guest"
+msgstr "Гость"
+
+msgid "Uptime"
+msgstr "Время работы"
+
+msgid "Donors"
+msgstr "Пожертвования"
+
+msgid "Donate to"
+msgstr "Поддержи разработчика"
+
+msgid "General Statistics"
+msgstr "Общие данные"
+
+msgid "Current Total Miners"
+msgstr "Всего майнеров"
+
+msgid "Contributor Hashrates"
+msgstr "Хешрейты участников"
+
+msgid "Contributor Shares"
+msgstr "Шары участников"
+
+msgid "Donor"
+msgstr "Благ. взнос"
+
+msgid "no Donation"
+msgstr "нет пожертвований"
+
+msgid "or more Donation"
+msgstr "или более пожертвований пулу"
+
+msgid "Blockfinder"
+msgstr "Поиск блоков"
+
+msgid "Graphs"
+msgstr "Графики"
+
+msgid "Search"
+msgstr "Поиск"
+
+msgid "Blocks found by own Workers"
+msgstr "Блоки, найденные моими воркерами"
+
+msgid "Coins Generated"
+msgstr "Монет добыто"
+
+msgid "Top 25 Blockfinder"
+msgstr "Топ 25 пользователей, нашедших блок"
+
+msgid "Average Hashrate past 24h"
+msgstr "Средний хешрейт за крайние 24 часа"
+
+msgid "Your average hashrate per hour, updated every backend cron run."
+msgstr "Почасовая мощность (хешрейт) ваших воркеров."
+
+msgid "Average Workers past 24h"
+msgstr "Среднее количество воркеров за крайние 24 часа"
+
+msgid "Your average active workers per hour, updated every backend cron run."
+msgstr "Почасовая среднее количество ваших воркеров."
+
+msgid "Average Sharerate past 24h"
+msgstr "Средний \"шаререйт\" за крайние 24 часа"
+
+msgid "Your share rate per hour, updated every backend cron run."
+msgstr "Средняя почасовая скорость нахождения \"шар\" (\"шаререйт\")"
+
+msgid "You last logged in from <b>%s</b> on %s"
+msgstr "Вы заходили последний раз с IP адреса <b>%s</b>, в %s"

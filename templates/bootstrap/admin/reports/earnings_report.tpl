@@ -2,28 +2,28 @@
   <div class="col-lg-12">
     <div class="panel panel-info">
       <div class="panel-heading">
-        <i class="fa fa-info fa-fw"></i> Earnings Report Last {$BLOCKLIMIT} Blocks For User: {$USERNAME}
+        <i class="fa fa-info fa-fw"></i> {t 1=$BLOCKLIMIT 2=$USERNAME}Earnings Report Last %1 Blocks For User: %2{/t}
       </div>
       <div class="panel-body no-padding">
         <div class="table-responsive">
           <table class="table table-striped table-bordered table-hover">
             <thead>
               <tr>
-                <th class="h6">Block</th>
-                <th class="h6">Round Shares</th>
-                <th class="h6">Round Valid</th>
-                <th class="h6">Invalid</th>
-                <th class="h6">Invalid %</th>
-                <th class="h6">Round %</th>
+                <th class="h6">{t}Block{/t}</th>
+                <th class="h6">{t}Round Shares{/t}</th>
+                <th class="h6">{t}Round Valid{/t}</th>
+                <th class="h6">{t}Invalid{/t}</th>
+                <th class="h6">{t}Invalid %{/t}</th>
+                <th class="h6">{t}Round %{/t}</th>
                 {if $GLOBAL.config.payout_system == 'pplns'}
-                <th class="h6">PPLNS Shares</th>
-                <th class="h6">PPLNS Valid</th>
-                <th class="h6">Invalid</th>
-                <th class="h6">Invalid %</th>
-                <th class="h6">PPLNS %</th>
-                <th class="h6">Variance</th>
+                <th class="h6">{t}PPLNS Shares{/t}</th>
+                <th class="h6">{t}PPLNS Valid{/t}</th>
+                <th class="h6">{t}Invalid{/t}</th>
+                <th class="h6">{t}Invalid %{/t}</th>
+                <th class="h6">{t}PPLNS %{/t}</th>
+                <th class="h6">{t}Variance{/t}</th>
                 {/if}
-                <th class="h6" style="padding-right: 25px;">Amount</th>
+                <th class="h6" style="padding-right: 25px;">{t}Amount{/t}</th>
               </tr>
             </thead>
             <tbody>

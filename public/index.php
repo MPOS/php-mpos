@@ -91,12 +91,13 @@ if (@$_GET['clp'] == 1 && @$_SESSION['last_ip_pop']) unset($_SESSION['last_ip_po
 if (count(@$_SESSION['last_ip_pop']) == 2) {
   $data = $_SESSION['last_ip_pop'];
   $ip = filter_var($data[0], FILTER_VALIDATE_IP);
-  $time = date("l, F jS \a\\t g:i a", $data[1]);
+  $time = strftime('%c', $data[1]);// date("l, F jS \a\\t g:i a", );
+  $alert_type = 'alert alert-info';
+  $content = sprintf(_('You last logged in from <b>%s</b> on %s'),$ip,$time);
   if (@$_SESSION['AUTHENTICATED'] && $_SESSION['last_ip_pop'][0] !== $user->getCurrentIP()) {
-    $_SESSION['POPUP'][] = array('CONTENT' => "You last logged in from <b>$ip</b> on $time", 'DISMISS' => 'yes', 'ID' => 'lastlogin', 'TYPE' => 'alert alert-warning');
-  } else {
-    $_SESSION['POPUP'][] = array('CONTENT' => "You last logged in from <b>$ip</b> on $time", 'DISMISS' => 'yes', 'ID' => 'lastlogin', 'TYPE' => 'alert alert-info');
-  }
+    $alert_type = 'alert alert-warning';
+  } 
+  $_SESSION['POPUP'][] = array('CONTENT' => $content, 'DISMISS' => 'yes', 'ID' => 'lastlogin', 'TYPE' => $alert_type);
 }
 
 // version check and config check if not disabled

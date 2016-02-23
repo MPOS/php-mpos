@@ -2,13 +2,13 @@
         <table class="table table-bordered table-hover table-striped"> 
          <thead>
           <tr>
-            <th>Worker</th>
-            <th>Hashrate</th>
-            <th>Difficulty</th>
+            <th>{t}Worker{/t}</th>
+            <th>{t}Hashrate{/t}</th>
+            <th>{t}Difficulty{/t}</th>
           </tr>
           </thead>
           <tbody id="b-workers">
-            <td colspan="3" class="text-center">No worker information available</td>
+            <td colspan="3" class="text-center">{t}No worker information available{/t}</td>
           </tbody>
           </tr>
         </table>

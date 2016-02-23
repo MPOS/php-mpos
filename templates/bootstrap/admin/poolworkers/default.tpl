@@ -2,20 +2,20 @@
   <div class="col-lg-12">
     <div class="panel panel-info">
       <div class="panel-heading">
-        <i class="fa fa-desktop fa-fw"></i> {$GLOBAL.workers} Current Active Pool Workers
+        <i class="fa fa-desktop fa-fw"></i> {$GLOBAL.workers} {t}Current Active Pool Workers{/t}
       </div>
       <div class="panel-body no-padding">
         <div class="table-responsive">
           <table class="table table-striped table-bordered table-hover">
             <thead>
               <tr>
-                <th>Worker Name</th>
-                <th>Password</th>
-                <th>Active</th>
-                {if $GLOBAL.config.disable_notifications != 1 && $DISABLE_IDLEWORKERNOTIFICATIONS != 1}<th>Monitor</th>{/if}
-                <th>Khash/s</th>
-                <th>Difficulty</th>
-                <th style="padding-right: 25px;">Avg Difficulty</th>
+                <th>{t}Worker Name{/t}</th>
+                <th>{t}Password{/t}</th>
+                <th>{t}Active{/t}</th>
+                {if $GLOBAL.config.disable_notifications != 1 && $DISABLE_IDLEWORKERNOTIFICATIONS != 1}<th>{t}Monitor{/t}</th>{/if}
+                <th>{t}Khash/s{/t}</th>
+                <th>{t}Difficulty{/t}</th>
+                <th style="padding-right: 25px;">{t}Avg Difficulty{/t}</th>
               </tr>
             </thead>
             {nocache}

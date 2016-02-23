@@ -3,6 +3,14 @@ $defflip = (!cfip()) ? exit(header('HTTP/1.1 401 Unauthorized')) : 1;
 // Used for performance calculations
 $dStartTime = microtime(true);
 
+// set locale
+$language_code = 'ru_RU.utf8';
+putenv("LANG=$language_code");
+setlocale(LC_ALL, $language_code);
+$domain = 'pool_ru';
+bindtextdomain($domain, '../locales');
+textdomain($domain); 
+
 define('INCLUDE_DIR', BASEPATH . '../include');
 define('CLASS_DIR', INCLUDE_DIR . '/classes');
 define('PAGES_DIR', INCLUDE_DIR . '/pages');

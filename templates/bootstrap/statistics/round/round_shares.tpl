@@ -1,18 +1,18 @@
   <div class="col-lg-6">
     <div class="panel panel-info">
       <div class="panel-heading">
-        <i class="fa fa-refresh fa-fw"></i> Round Shares
+        <i class="fa fa-refresh fa-fw"></i> {t}Round Shares{/t}
       </div>
       <div class="panel-body">
         <div class="table-responsive">
           <table class="table table-striped table-bordered table-hover {if $ROUNDSHARES}datatable{/if}">
             <thead>
               <tr>
-                <th>Rank</th>
-                <th>User Name</th>
-                <th>Valid</th>
-                <th>Invalid</th>
-                <th>Invalid %</th>
+                <th>{t}Rank{/t}</th>
+                <th>{t}User Name{/t}</th>
+                <th>{t}Valid{/t}</th>
+                <th>{t}Invalid{/t}</th>
+                <th>{t}Invalid{/t} %</th>
               </tr>
             </thead>
             <tbody>

@@ -7,9 +7,9 @@
   <form class="col-lg-12" method="POST" action="{$smarty.server.SCRIPT_NAME}" role="form">
     <div class="panel panel-info">
       <div class="panel-heading">
-        <i class="fa fa-edit fa-fw"></i> Write News 
+        <i class="fa fa-edit fa-fw"></i> {t}Write News{/t} 
         <br>
-        <font size="1px">News posts support the Markdown syntax</font>
+        <font size="1px">{t}News posts support the Markdown syntax{/t}</font>
       </div>
       <div class="panel-body">
         <div class="row">
@@ -19,22 +19,22 @@
             <input type="hidden" name="do" value="add">
             <input type="hidden" name="ctoken" value="{$CTOKEN|escape|default:""}" />
             <div class="form-group">
-              <label>Active</label>
+              <label>{t}Active{/t}</label>
               <input type="checkbox" class="switch" data-size="mini" name="data[active]" value="1" checked>
             </div>
             <div class="form-group">
-              <label>Header</label>
+              <label>{t}Header{/t}</label>
               <input class="form-control" size="30" type="text" name="data[header]" required />
             </div>
             <div class="form-group">
-              <label>Content</label>
+              <label>{t}Content{/t}</label>
               <textarea class="form-control cleditor" name="data[content]" rows="5" required></textarea>
             </div>
           </div>
         </div>
       </div>
       <div class="panel-footer">
-        <input type="submit" value="Add" class="btn btn-success btn-sm">
+        <input type="submit" value="{t}Add{/t}" class="btn btn-success btn-sm">
       </div>
     </div>
   </form>
@@ -48,7 +48,7 @@
       <div class="panel-heading">
         <i class="fa fa-info fa-fw"></i> {$NEWS[news].header}</a>
         <br />
-        <font size="1px">posted {$NEWS[news].time|date_format:$GLOBAL.config.date}{if $HIDEAUTHOR|default:"0" == 0} by <b>{$NEWS[news].author}</b>{/if}</font>
+        <font size="1px">{t}posted{/t} {$NEWS[news].time|date_format:$GLOBAL.config.date}{if $HIDEAUTHOR|default:"0" == 0} by <b>{$NEWS[news].author}</b>{/if}</font>
       </div>
 
       <div class="panel-body">

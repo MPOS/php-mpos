@@ -1,16 +1,16 @@
   <div class="col-lg-6">
     <div class="panel panel-info">
       <div class="panel-heading">
-        <i class="fa fa-th fa-fw"></i> Last Found Blocks
+        <i class="fa fa-th fa-fw"></i> {t}Last Found Blocks{/t}
       </div>
       <div class="panel-body no-padding table-responsive">
         <table class="table table-striped table-bordered table-hover">
           <thead>
             <tr>
-              <th>Block</th>
-              <th>Finder</th>
-              <th>Time</th>
-              <th class="text-right">Actual Shares</th>
+              <th>{t}Block{/t}</th>
+              <th>{t}Finder{/t}</th>
+              <th>{t}Time{/t}</th>
+              <th class="text-right">{t}Actual Shares{/t}</th>
             </tr>
           </thead>
           <tbody>
@@ -32,7 +32,7 @@
       </div>
 {if $GLOBAL.config.payout_system != 'pps'}
       <div class="panel-footer">
-          <h6>Note: Round Earnings are not credited until <font class="confirmations">{$GLOBAL.confirmations}</font> confirms.</h6>
+          <h6>{t}Note{/t}: {t}Round Earnings are not credited until{/t} <font class="confirmations">{$GLOBAL.confirmations}</font> {t}confirms{/t}.</h6>
       </div>
 {/if}
     </div>

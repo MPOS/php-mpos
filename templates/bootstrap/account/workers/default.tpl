@@ -6,20 +6,20 @@
     <input type="hidden" name="ctoken" value="{$CTOKEN|escape|default:""}">
     <div class="panel panel-info">
       <div class="panel-heading">
-        <i class="fa fa-plus-square-o fa-fw"></i> Add New Worker
+        <i class="fa fa-plus-square-o fa-fw"></i> {t}Add New Worker{/t}
       </div>
         <div class="panel-body">
           <div class="form-group">
-            <label>Worker Name</label>
+            <label>{t}Worker Name{/t}</label>
             <input class="form-control" type="text" name="username" value="user" size="10" maxlength="20" required>
           </div>
           <div class="form-group">
-            <label>Worker Password</label>
+            <label>{t}Worker Password{/t}</label>
             <input class="form-control" type="text" name="password" value="password" size="10" maxlength="20" required>
           </div>
         </div>
       <div class="panel-footer">
-        <input type="submit" value="Add New Worker" class="btn btn-success btn-sm">
+        <input type="submit" value="{t}Add New Worker{/t}" class="btn btn-success btn-sm">
       </div>
     </div>
   </form>
@@ -27,7 +27,7 @@
   <div class="col-lg-9">
     <div class="panel panel-info">
       <div class="panel-heading">
-        <i class="fa fa-gears fa-fw"></i> Worker Configuration
+        <i class="fa fa-gears fa-fw"></i> {t}Worker Configuration{/t}
       </div>
       <form action="{$smarty.server.SCRIPT_NAME}" method="post" role="form">
         <input type="hidden" name="page" value="{$smarty.request.page|escape}">
@@ -39,13 +39,13 @@
           <table class="table">
              <thead>
                 <tr>
-                  <th class="smallwidth">Worker Login</th>
-                  <th class="smallwidth">Worker Password</th>
-                  <th class="text-center">Active</th>
-                  {if $GLOBAL.config.disable_notifications != 1 && $DISABLE_IDLEWORKERNOTIFICATIONS != 1}<th class="text-center">Monitor</th>{/if}
-                  <th class="text-right">Khash/s</th>
-                  <th class="text-right">Difficulty</th>
-                  <th class="text-center">Action</th>
+                  <th class="smallwidth">{t}Worker Login{/t}</th>
+                  <th class="smallwidth">{t}Worker Password{/t}</th>
+                  <th class="text-center">{t}Active{/t}</th>
+                  {if $GLOBAL.config.disable_notifications != 1 && $DISABLE_IDLEWORKERNOTIFICATIONS != 1}<th class="text-center">{t}Monitor{/t}</th>{/if}
+                  <th class="text-right">{t}Khash/s{/t}</th>
+                  <th class="text-right">{t}Difficulty{/t}</th>
+                  <th class="text-center">{t}Action{/t}</th>
                 </tr>
              </thead>
              <tbody>
@@ -77,7 +77,7 @@
             </table>
           </div>
           <div class="panel-footer">
-            <input type="submit" class="btn btn-success btn-sm" value="Update Workers">
+            <input type="submit" class="btn btn-success btn-sm" value="{t}Update Workers{/t}">
           </div>
         </div>
       </form>

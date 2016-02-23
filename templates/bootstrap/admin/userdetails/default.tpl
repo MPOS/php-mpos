@@ -3,14 +3,14 @@
   <div class="col-lg-12">
     <div class="panel panel-info">
       <div class="panel-heading">
-        <i class="fa fa-money fa-fw"></i> {$USERNAME} Account Information
+        <i class="fa fa-money fa-fw"></i> {t 1=$USERNAME}%1 Account Information{/t}
       </div>
       <div class="panel-body">
         <div class="row">
           <div class="col-lg-12">
             <div class="panel panel-info">
               <div class="panel-heading">
-                <i class="fa fa-credit-card fa-fw"></i> All Time Transaction Totals
+                <i class="fa fa-credit-card fa-fw"></i> {t}All Time Transaction Totals{/t}
               </div>
               <div class="panel-body">
                 <table class="table table-striped table-bordered table-hover">
@@ -38,27 +38,27 @@
           <div class="col-lg-12">
             <div class="panel panel-info">
               <div class="panel-heading">
-                <i class="fa fa-clock-o fa-fw"></i> Transactions over time
+                <i class="fa fa-clock-o fa-fw"></i> {t}Transactions over time{/t}
               </div>
               <div class="panel-body">
                 <table class="table table-striped table-bordered table-hover">
                   <thead>
                     <tr>
                       <th></th>
-                      <th>Credit</th>
-                      <th>Bonus</th>
-                      <th>Debit AP</th>
-                      <th>Debit MP</th>
-                      <th>Donation</th>
+                      <th>{t}Credit{/t}</th>
+                      <th>{t}Bonus{/t}</th>
+                      <th>{t}Debit AP{/t}</th>
+                      <th>{t}Debit MP{/t}</th>
+                      <th>{t}Donation{/t}</th>
                       {if $GLOBAL.fees > 0}
-                      <th>Fee</th>
+                      <th>{t}Fee{/t}</th>
                       {/if}
-                      <th>TXFee</th>
+                      <th>{t}TXFee{/t}</th>
                     </tr>
                   </thead>
                   <tbody>
                     <tr>
-                      <td>Last Hour</th>
+                      <td>{t}Last Hour{/t}</th>
                       <td>{$BYTIME.1HourCredit|number_format:"8"}</td>
                       <td>{$BYTIME.1HourBonus|number_format:"8"}</td>
                       <td>{$BYTIME.1HourDebitAP|number_format:"8"}</td>
@@ -70,7 +70,7 @@
                       <td>{$BYTIME.1HourTXFee|number_format:"8"}</td>
                     </tr>
                     <tr>
-                      <td>Last Day</th>
+                      <td>{t}Last Day{/t}</th>
                       <td>{$BYTIME.24HourCredit|number_format:"8"}</td>
                       <td>{$BYTIME.24HourBonus|number_format:"8"}</td>
                       <td>{$BYTIME.24HourDebitAP|number_format:"8"}</td>
@@ -82,7 +82,7 @@
                       <td>{$BYTIME.24HourTXFee|number_format:"8"}</td>
                     </tr>
                     <tr>
-                      <td>Last Week</th>
+                      <td>{t}Last Week{/t}</th>
                       <td>{$BYTIME.1WeekCredit|number_format:"8"}</td>
                       <td>{$BYTIME.1WeekBonus|number_format:"8"}</td>
                       <td>{$BYTIME.1WeekDebitAP|number_format:"8"}</td>
@@ -94,7 +94,7 @@
                       <td>{$BYTIME.1WeekTXFee|number_format:"8"}</td>
                     </tr>
                     <tr>
-                      <td>Last Month</th>
+                      <td>{t}Last Month{/t}</th>
                       <td>{$BYTIME.1MonthCredit|number_format:"8"}</td>
                       <td>{$BYTIME.1MonthBonus|number_format:"8"}</td>
                       <td>{$BYTIME.1MonthDebitAP|number_format:"8"}</td>
@@ -106,7 +106,7 @@
                       <td>{$BYTIME.1MonthTXFee|number_format:"8"}</td>
                     </tr>
                     <tr>
-                      <td>Last Year</th>
+                      <td>{t}Last Year{/t}</th>
                       <td>{$BYTIME.1YearCredit|number_format:"8"}</td>
                       <td>{$BYTIME.1YearBonus|number_format:"8"}</td>
                       <td>{$BYTIME.1YearDebitAP|number_format:"8"}</td>

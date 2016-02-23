@@ -1,9 +1,9 @@
 <html>
 <body>
-<p>Hello {$DATA.username},</p><br />
-<p>You have requested a PIN reset through our online form.</p>
-<p>Randomly Generated PIN: {$DATA.pin}</p>
-<p>Cheers,</p>
+<p>{t}Hello{/t} {$DATA.username},</p><br />
+<p>{t}You have requested a PIN reset through our online form.{/t}</p>
+<p>{t}Randomly Generated PIN:{/t} {$DATA.pin}</p>
+<p>{t}Cheers,{/t}</p>
 <p>{$WEBSITENAME}</p>
 </body>
 </html>

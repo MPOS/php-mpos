@@ -2,15 +2,15 @@
   <div class="col-lg-12">
     <div class="panel panel-info">
       <div class="panel-heading">
-        <i class="fa fa-bitbucket fa-fw"></i> Pool Donors
+        <i class="fa fa-bitbucket fa-fw"></i> {t}Pool Donors{/t}
       </div>
       <div class="panel-body table-responsive">
       <table class="table table-striped table-bordered table-hover {if $DONORS}datatable{/if}">
         <thead>
           <tr>
-            <th>Name</th>
+            <th>{t}Name{/t}</th>
             <th>%</th>
-            <th>{$GLOBAL.config.currency} Total</th>
+            <th>{$GLOBAL.config.currency} {t}Total{/t}</th>
           </tr>
         </thead>
         <tbody>
@@ -22,7 +22,7 @@
           </tr>
 {sectionelse}
           <tr>
-            <td colspan="3">No confirmed donations yet, please be patient!</td>
+            <td colspan="3">{t}No confirmed donations yet, please be patient!{/t}</td>
           </tr>
 {/section}
         </tbody>
