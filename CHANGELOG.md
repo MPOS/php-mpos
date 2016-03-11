@@ -1,5 +1,16 @@
+1.0.5 (XXX XXth XXXX)
+---------------------
+
+* Fixed worker name scaling issues on mobile devices (Thanks @nrpatten)
+* Fixed user information table formatting (Thanks @pokari1986)
+* Fixed empty auto-payout threshold value for accounts page
+* Removed config disable check popup for admins on all pages
+* Added blockchain download status for admin feedback (admin setup check)
+* Added peer state to wallet info state if no peers are connected
+
 1.0.4 (Jun 19th 2015)
 ---------------------
+
 * Honor anonymous attribute when sending block finder mails
 * Display admin warning if no transfer fees are set
 * Moved admin_checks.php into the admin panel/system/setup

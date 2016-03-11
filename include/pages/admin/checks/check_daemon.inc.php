@@ -13,8 +13,7 @@ try {
     $newerror['helplink'] = "https://github.com/MPOS/php-mpos/wiki/Config-Setup#wiki-local-wallet-rpc";
     $error[] = $newerror;
     $newerror = null;
-  }
-  else {
+  } else {
     // validate that the wallet service is not in test mode
     if ($bitcoin->is_testnet() == true) {
       $newerror = array();
@@ -25,6 +24,18 @@ try {
       $newerror['configvalue'] = "wallet.host";
       $newerror['helplink'] = "https://github.com/MPOS/php-mpos/wiki/Config-Setup#wiki-local-wallet-rpc";
       $error[] = $newerror;
+      $newerror = null;
+    }
+    // Check if chain is currently downloading
+    if ($dDownloadPercentage = $bitcoin->getblockchaindownload()) {
+      $newerror = array();
+      $newerror['name'] = "Coin daemon";
+      $newerror['level'] = 1;
+      $newerror['extdesc'] = "Your coin daemon is currently downloading the blockchain. Your miners won't be able to connect until this is completed.";
+      $newerror['description'] = "Blockchain download progress is at an estimated $dDownloadPercentage%. It may take a while to complete.";
+      $newerror['configvalue'] = "wallet.host";
+      $newerror['helplink'] = "https://github.com/MPOS/php-mpos/wiki/Config-Setup#wiki-local-wallet-rpc";
+      $error[] = $newerror; 
       $newerror = null;
     }
     // check if there is more than one account set on wallet

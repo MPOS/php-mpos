@@ -227,7 +227,7 @@ $smarty->assign('DEBUG', $config['DEBUG']);
 // Lets check for our cron status and render a message
 require_once(INCLUDE_DIR . '/config/monitor_crons.inc.php');
 $bMessage = false;
-$aCronMessage[] = 'We are investingating issues in the backend. Your shares and hashrate are safe and we will fix things ASAP.</br><br/>';
+$aCronMessage[] = 'We are investigating issues in the backend. Your shares and hashrate are safe and we will fix things ASAP.</br><br/>';
 foreach ($aMonitorCrons as $strCron) {
   if ($monitoring->isDisabled($strCron) == 1) {
     $bMessage = true;

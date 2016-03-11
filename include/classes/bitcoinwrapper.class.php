@@ -66,6 +66,19 @@ class BitcoinWrapper extends BitcoinClient {
     $dDifficulty = $this->getdifficulty();
     return $this->memcache->setCache(__FUNCTION__, $dDifficulty * pow(2,32) / $iCurrentPoolHashrate, 30);
   }
+  public function getblockchaindownload() {
+    $aPeerInfo = $this->getpeerinfo();
+    $aInfo = $this->getinfo();
+    $iStartingHeight = 0;
+    foreach ($aPeerInfo as $aPeerData) {
+      if ($iStartingHeight < $aPeerData['startingheight']) $iStartingHeight = $aPeerData['startingheight'];
+    }
+    if ($iStartingHeight > $aInfo['blocks']) {
+      return number_format(round($aInfo['blocks'] / $iStartingHeight * 100, 2), 2);
+    } else {
+      return false;
+    }
+  }
   public function getnetworkhashps() {
     $this->oDebug->append("STA " . __METHOD__, 4);
     if ($data = $this->memcache->get(__FUNCTION__)) return $data;

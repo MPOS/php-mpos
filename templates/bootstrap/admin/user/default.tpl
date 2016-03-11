@@ -95,7 +95,7 @@
                 <th class="h6" style="padding-right:10px">Est. Donation</th>
                 <th class="h6" style="padding-right:10px">Est. Payout</th>
 {else}
-                <th class="h6" colspan="2" style="padding-right:10px">Est. 24 Hours</th>
+                <th class="h6" style="padding-right:10px">Est. 24 Hours</th>
 {/if}
                 <th class="h6" style="padding-right:10px">Balance</th>
                 <th class="h6" style="padding-right:10px">Reg. Date</th>
@@ -118,7 +118,7 @@
                 <td>{$USERS[user].estimates.donation|number_format:"8"}</td>
                 <td>{$USERS[user].estimates.payout|number_format:"8"}</td>
 {else}
-                <td colspan="2">{$USERS[user].estimates.hours24|number_format:"8"}</td>
+                <td>{$USERS[user].estimates.hours24|number_format:"8"}</td>
 {/if}
                 <td>{$USERS[user].balance|number_format:"8"}</td>
                 <td>{$USERS[user].signup_timestamp|date_format:$GLOBAL.config.date}</td>
