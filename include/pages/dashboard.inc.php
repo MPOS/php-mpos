@@ -59,5 +59,3 @@ if ($user->isAuthenticated()) {
   $smarty->assign('INTERVAL', $interval / 60);
   $smarty->assign('CONTENT', 'default.tpl');
 }
-
-?>

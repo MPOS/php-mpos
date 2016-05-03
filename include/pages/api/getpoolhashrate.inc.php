@@ -19,4 +19,3 @@ echo $api->get_json($dPoolHashrate);
 
 // Supress master template
 $supress_master = 1;
-?>

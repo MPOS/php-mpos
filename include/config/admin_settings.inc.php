@@ -146,6 +146,13 @@ $aSettings['wallet'][] = array(
   'name' => 'wallet_cold_coins', 'value' => $setting->getValue('wallet_cold_coins'),
   'tooltip' => 'Amount of coins held in a pools cold wallet.'
 );
+$aSettings['wallet'][] = array(
+  'display' => 'Transaction Limit', 'type' => 'text',
+  'size' => 6,
+  'default' => 25,
+  'name' => 'wallet_transaction_limit', 'value' => $setting->getValue('wallet_transaction_limit'),
+  'tooltip' => 'Maximum amount of transactions to list in Admin Wallet Info.'
+);
 $aSettings['statistics'][] = array(
   'display' => 'Ajax Refresh Interval', 'type' => 'select',
   'options' => array('5' => '5', '10' => '10', '15' => '15', '30' => '30', '60' => '60' ),
@@ -190,21 +197,21 @@ $aSettings['statistics'][] = array(
 );
 $aSettings['statistics'][] = array(
   'display' => 'Pool Hashrate Modifier', 'type' => 'select',
-  'options' => array( '1' => 'KH/s', '0.001' => 'MH/s', '0.000001' => 'GH/s', '0.000000001' => 'TH/s' ),
+  'options' => array( '1' => 'KH/s', '0.001' => 'MH/s', '0.000001' => 'GH/s', '0.000000001' => 'TH/s', '0.000000000001' => 'PH/s', '0.000000000000001' => 'EH/s' ),
   'default' => '1',
   'name' => 'statistics_pool_hashrate_modifier', 'value' => $setting->getValue('statistics_pool_hashrate_modifier'),
   'tooltip' => 'Auto-adjust displayed pool hashrates to a certain limit.'
 );
 $aSettings['statistics'][] = array(
   'display' => 'Network Hashrate Modifier', 'type' => 'select',
-  'options' => array( '1' => 'KH/s', '0.001' => 'MH/s', '0.000001' => 'GH/s', '0.000000001' => 'TH/s' ),
+  'options' => array( '1' => 'KH/s', '0.001' => 'MH/s', '0.000001' => 'GH/s', '0.000000001' => 'TH/s', '0.000000000001' => 'PH/s', '0.000000000000001' => 'EH/s' ),
   'default' => '1',
   'name' => 'statistics_network_hashrate_modifier', 'value' => $setting->getValue('statistics_network_hashrate_modifier'),
   'tooltip' => 'Auto-adjust displayed network hashrates to a certain limit.'
 );
 $aSettings['statistics'][] = array(
   'display' => 'Personal Hashrate Modifier', 'type' => 'select',
-  'options' => array( '1' => 'KH/s', '0.001' => 'MH/s', '0.000001' => 'GH/s', '0.000000001' => 'TH/s' ),
+  'options' => array( '1' => 'KH/s', '0.001' => 'MH/s', '0.000001' => 'GH/s', '0.000000001' => 'TH/s', '0.000000000001' => 'PH/s', '0.000000000000001' => 'EH/s' ),
   'default' => '1',
   'name' => 'statistics_personal_hashrate_modifier', 'value' => $setting->getValue('statistics_personal_hashrate_modifier'),
   'tooltip' => 'Auto-adjust displayed personal hashrates to a certain limit.'

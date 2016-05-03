@@ -111,4 +111,3 @@ class Debug {
 
 // Instantiate this class
 $debug = new Debug($log, $config['DEBUG']);
-?>

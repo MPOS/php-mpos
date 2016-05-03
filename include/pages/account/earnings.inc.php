@@ -19,5 +19,3 @@ if ($user->isAuthenticated() AND !$setting->getValue('disable_transactionsummary
 } else {
   $smarty->assign('CONTENT', 'disabled.tpl');
 }
-
-?>

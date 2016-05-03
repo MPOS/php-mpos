@@ -6,6 +6,17 @@ class User extends Base {
   private $userID = false;
   private $user = array();
 
+  /**
+   * We allow changing the database for shared accounts across pools
+   * Load the config on construct so we can assign the DB name
+   * @param config array MPOS configuration
+   * @return none
+   **/
+  public function __construct($config) {
+    $this->setConfig($config);
+    $this->table = $this->config['db']['shared']['accounts'] . '.' . $this->table;
+  }
+
   // get and set methods
   private function getHash($string, $version=0, $pepper='') {
     switch($version) {
@@ -19,6 +30,9 @@ class User extends Base {
   }
   public function getUserName($id) {
     return $this->getSingle($id, 'username', 'id');
+  }
+  public function getUserNameAnon($id) {
+    return $this->getSingle($id, 'is_anonymous', 'id');
   }
   public function getUserNameByEmail($email) {
     return $this->getSingle($email, 'username', 'email', 's');
@@ -175,7 +189,7 @@ class User extends Base {
       return $result->fetch_all(MYSQLI_ASSOC);
     }
   }
-  
+
   /**
    * Check user login
    * @param username string Username
@@ -340,11 +354,11 @@ class User extends Base {
     $this->debug->append("STA " . __METHOD__, 4);
     $stmt = $this->mysqli->prepare("
       SELECT
-        a.id, a.username, ca.coin_address AS coin_address, a.ap_threshold
+        a.id, a.username, ca.coin_address AS coin_address, ca.ap_threshold
       FROM " . $this->getTableName() . " AS a
       LEFT JOIN " . $this->coin_address->getTableName() . " AS ca
       ON a.id = ca.account_id
-      WHERE ap_threshold > 0 AND ca.currency = ?
+      WHERE ca.ap_threshold > 0 AND ca.currency = ?
       AND ca.coin_address IS NOT NULL
       ");
     if ( $this->checkStmt($stmt) && $stmt->bind_param('s', $this->config['currency']) && $stmt->execute() && $result = $stmt->get_result()) {
@@ -544,12 +558,12 @@ class User extends Base {
     if ($email == 'hidden' || $email == NULL)
       $email = $this->getUserEmailById($userID);
     // We passed all validation checks so update the account
-    $stmt = $this->mysqli->prepare("UPDATE $this->table SET ap_threshold = ?, donate_percent = ?, email = ?, timezone = ?, is_anonymous = ? WHERE id = ?");
-    if ($this->checkStmt($stmt) && $stmt->bind_param('ddssii', $threshold, $donate, $email, $timezone, $is_anonymous, $userID) && $stmt->execute()) {
+    $stmt = $this->mysqli->prepare("UPDATE $this->table SET donate_percent = ?, email = ?, timezone = ?, is_anonymous = ? WHERE id = ?");
+    if ($this->checkStmt($stmt) && $stmt->bind_param('dssii', $donate, $email, $timezone, $is_anonymous, $userID) && $stmt->execute()) {
       $this->log->log("info", $this->getUserName($userID)." updated their account details");
-      // Update coin address too
+      // Update coin address and ap_threshold if coin_address is set
       if ($address) {
-        if ($this->coin_address->update($userID, $address)) {
+        if ($this->coin_address->update($userID, $address, $threshold)) {
           return true;
         }
       } else {
@@ -698,12 +712,14 @@ class User extends Base {
     $stmt = $this->mysqli->prepare("
       SELECT
       id AS id, username, pin, api_key, is_admin, is_anonymous, email, timezone, no_fees,
-      IFNULL(donate_percent, '0') as donate_percent, ap_threshold
+      IFNULL(donate_percent, '0') as donate_percent
       FROM " . $this->getTableName() . "
       WHERE id = ? LIMIT 0,1");
     if ($this->checkStmt($stmt) && $stmt->bind_param('i', $userID) && $stmt->execute() && $result = $stmt->get_result()) {
       $aData = $result->fetch_assoc();
       $aData['coin_address'] = $this->coin_address->getCoinAddress($userID);
+      if (! $aData['ap_threshold'] = $this->coin_address->getAPThreshold($userID))
+        $aData['ap_threshold'] = 0;
       $stmt->close();
       return $aData;
     }
@@ -983,13 +999,12 @@ public function isAuthenticated($logout=true) {
 }
 
 // Make our class available automatically
-$user = new User();
+$user = new User($config);
 $user->setDebug($debug);
 $user->setLog($log);
 $user->setMysql($mysqli);
 $user->setSalt($config['SALT']);
 $user->setSmarty($smarty);
-$user->setConfig($config);
 $user->setMail($mail);
 $user->setToken($oToken);
 $user->setBitcoin($bitcoin);

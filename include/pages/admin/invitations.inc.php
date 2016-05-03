@@ -21,4 +21,3 @@ if (!$setting->getValue('disable_invitations')) {
 
 // Tempalte specifics
 $smarty->assign("CONTENT", "default.tpl");
-?>

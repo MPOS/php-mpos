@@ -10,14 +10,14 @@ $(document).ready(function(){
   if (!createjs.Sound.initializeDefaultPlugins()) {
     $('#togglesound').hide();
   // don't create object and hide toggle on mobile devices. must be started inside a touch event, else sound doesn't start
-  } else if (createjs.Sound.BrowserDetect.isIOS || createjs.Sound.BrowserDetect.isAndroid || createjs.Sound.BrowserDetect.isBlackberry) {
+  } else if (createjs.BrowserDetect.isIOS || createjs.BrowserDetect.isAndroid || createjs.BrowserDetect.isBlackberry) {
     $('#togglesound').hide();
   } else {
     var audioPath = "{/literal}{$PATH}{literal}/audio/";
-    var manifest = [ {id:"ding", src:"ding.ogg"} ];
+    var sound = [ {id:"ding", src:"ding.mp3"} ];
     var muteFlag = 1;
     createjs.Sound.alternateExtensionseExtensions = ["mp3"];
-    createjs.Sound.registerManifest(manifest, audioPath);
+    createjs.Sound.registerSounds(sound, audioPath);
     canCreateSoundJS = true;
   }
 

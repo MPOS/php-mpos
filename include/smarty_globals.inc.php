@@ -47,7 +47,7 @@ if (! $statistics_ajax_refresh_interval = $setting->getValue('statistics_ajax_re
 if (! $statistics_ajax_long_refresh_interval = $setting->getValue('statistics_ajax_long_refresh_interval')) $statistics_ajax_long_refresh_interval = 10;
 
 // Small helper array
-$aHashunits = array( '1' => 'KH/s', '0.001' => 'MH/s', '0.000001' => 'GH/s', '0.000000001' => 'TH/s' );
+$aHashunits = array( '1' => 'KH/s', '0.001' => 'MH/s', '0.000001' => 'GH/s', '0.000000001' => 'TH/s', '0.000000000001' => 'PH/s', '0.000000000000001' => 'EH/s' );
 
 // Global data for Smarty
 $aGlobal = array(
@@ -227,7 +227,7 @@ $smarty->assign('DEBUG', $config['DEBUG']);
 // Lets check for our cron status and render a message
 require_once(INCLUDE_DIR . '/config/monitor_crons.inc.php');
 $bMessage = false;
-$aCronMessage[] = 'We are investingating issues in the backend. Your shares and hashrate are safe and we will fix things ASAP.</br><br/>';
+$aCronMessage[] = 'We are investigating issues in the backend. Your shares and hashrate are safe and we will fix things ASAP.</br><br/>';
 foreach ($aMonitorCrons as $strCron) {
   if ($monitoring->isDisabled($strCron) == 1) {
     $bMessage = true;
@@ -260,4 +260,3 @@ if ($bMessage)
 $smarty->assign('PATH', 'site_assets/' . THEME);
 $smarty->assign('GLOBALASSETS', 'site_assets/global');
 $smarty->assign('GLOBAL', $aGlobal);
-?>

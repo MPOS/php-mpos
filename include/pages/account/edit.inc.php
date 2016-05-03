@@ -103,7 +103,7 @@ if ($user->isAuthenticated()) {
           } else if ($config['twofactor']['enabled'] && $config['twofactor']['options']['withdraw'] && !$wf_editable) {
             $_SESSION['POPUP'][] = array('CONTENT' => 'You have not yet unlocked account withdrawls.', 'TYPE' => 'alert alert-danger');
           } else if ($aBalance['confirmed'] < $config['mp_threshold']) {
-            $_SESSION['POPUP'][] = array('CONTENT' => 'Payout must be greater or equal than ' . $config['mp_threshold'] . '.', 'TYPE' => 'info');
+            $_SESSION['POPUP'][] = array('CONTENT' => 'Account balance must be >= ' . $config['mp_threshold'] . ' to do a Manual Payout.', 'TYPE' => 'alert alert-warning');
           } else if (!$coin_address->getCoinAddress($_SESSION['USERDATA']['id'])) {
             $_SESSION['POPUP'][] = array('CONTENT' => 'You have no payout address set.', 'TYPE' => 'alert alert-danger');
         	} else {
@@ -181,7 +181,7 @@ if ($config['twofactor']['enabled'] && $user->isAuthenticated()) {
     $wf_editable = $user->token->isTokenValid($_SESSION['USERDATA']['id'], $wf_token, 7);
     $wf_sent = $user->token->doesTokenExist('withdraw_funds', $_SESSION['USERDATA']['id']);
   }
-  
+
   // display token info per each - only when sent and editable or just sent, not by default
   (!empty($eaprep_sent) && !empty($eaprep_edit)) ? $_SESSION['POPUP'][] = array('CONTENT' => $eaprep_sent, 'TYPE' => 'alert alert-success'):"";
   (!empty($eaprep_sent) && empty($eaprep_edit)) ? $_SESSION['POPUP'][] = array('CONTENT' => $message_tokensent_invalid.$messages_tokensent_status['ea'], 'TYPE' => 'alert alert-success'):"";
@@ -206,4 +206,3 @@ $smarty->assign("DONATE_THRESHOLD", $config['donate_threshold']);
 
 // Tempalte specifics
 $smarty->assign("CONTENT", "default.tpl");
-?>

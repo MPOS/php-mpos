@@ -15,4 +15,3 @@ if ($setting->getValue('lock_registration') && $setting->getValue('disable_invit
   // Load news entries for Desktop site and unauthenticated users
   $smarty->assign("CONTENT", "default.tpl");
 }
-?>

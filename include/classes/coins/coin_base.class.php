@@ -85,5 +85,3 @@ class CoinBase extends Base {
     }
   }
 }
-
-?>

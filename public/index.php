@@ -99,13 +99,6 @@ if (count(@$_SESSION['last_ip_pop']) == 2) {
   }
 }
 
-// version check and config check if not disabled
-if (@$_SESSION['USERDATA']['is_admin'] && $user->isAdmin(@$_SESSION['USERDATA']['id'])) {
-  if (!@$config['skip_config_tests']) {
-    require_once(INCLUDE_DIR . '/admin_checks.php');
-  }
-}
-
 // Create our pages array from existing files
 if (is_dir(INCLUDE_DIR . '/pages/')) {
   foreach (glob(INCLUDE_DIR . '/pages/*.inc.php') as $filepath) {
@@ -175,5 +168,3 @@ if (!@$supress_master) $smarty->display($master_template, $smarty_cache_key);
 
 // Unset any temporary values here
 unset($_SESSION['POPUP']);
-
-?>

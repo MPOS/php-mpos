@@ -77,10 +77,14 @@ class Tools extends Base {
       return 'btce';
     } else if (preg_match('/cryptsy.com/', $url)) {
       return 'cryptsy';
+    } else if (preg_match('/cryptopia.co.nz/', $url)) {
+     return 'cryptopia';
     } else if (preg_match('/cryptorush.in/', $url)) {
       return 'cryptorush';
     } else if (preg_match('/mintpal.com/', $url)) {
       return 'mintpal';
+    } else if (preg_match('/c-cex.com/', $url)) {
+      return 'c-cex';
     } else if (preg_match('/bittrex.com/', $url)) {
       return 'bittrex';
     }
@@ -112,13 +116,19 @@ class Tools extends Base {
       	case 'cryptsy':
       	  return @$aData['return']['markets'][$strCurrency]['lasttradeprice'];
       	  break;
+        case 'cryptopia':
+      	  return @$aData['Data']['LastPrice'];
+      	  break;
       	case 'cryptorush':
       	  return @$aData["$strCurrency/" . $this->config['price']['currency']]['last_trade'];
       	  break;
       	case 'mintpal':
       	  return @$aData['0']['last_price'];
       	  break;
-      	  case 'bittrex':
+        case 'c-cex':
+          return @$aData['ticker']['lastprice'];
+          break;
+      	case 'bittrex':
       	  return @$aData['result']['Last'];
       	  break;
       }

@@ -81,4 +81,3 @@ if ($user->isAuthenticated(false)) {
 } else {
   $smarty->assign("CONTENT", "empty");
 }
-?>

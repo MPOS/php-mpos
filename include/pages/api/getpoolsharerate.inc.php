@@ -15,4 +15,3 @@ echo json_encode(array('getpoolsharerate' => $statistics->getCurrentShareRate())
 
 // Supress master template
 $supress_master = 1;
-?>

@@ -157,8 +157,12 @@ if (empty($aAllBlocks)) {
         // Notify users
         $aAccounts = $notification->getNotificationAccountIdByType('new_block');
         if (is_array($aAccounts)) {
-		
-          $finder = $user->getUserName($iAccountId);
+          if ($user->getUserNameAnon($iAccountId) == 1) {
+                $finder = "Anonymous";
+          } else {
+               $finder = $user->getUserName($iAccountId);
+          }
+
           foreach ($aAccounts as $aData) {
             $aMailData['height'] = $aBlock['height'];
             $aMailData['subject'] = 'New Block';
@@ -178,4 +182,3 @@ if (empty($aAllBlocks)) {
 }
 
 require_once('cron_end.inc.php');
-?>

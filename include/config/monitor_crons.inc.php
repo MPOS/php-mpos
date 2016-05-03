@@ -11,5 +11,3 @@ switch ($config['payout_system']) {
 }
 
 $aMonitorCrons = array('statistics','tickerupdate','notifications','tables_cleanup','findblock',$sPayoutSystem,'blockupdate','payouts');
-
-?>
