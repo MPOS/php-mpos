@@ -7,8 +7,8 @@ $(document).ready(function(){
   {/literal}
   {if $GLOBAL.website.blockfindersound.enabled|default:"1"}
   {literal}
+  var playSound = localStorage.getItem('playsound') === 'False' ? false : true;
   var canCreateSoundJS = false;
-
   // check if the default plugins can be loaded, if not, disable button and don't load soundjs
   if (!createjs.Sound.initializeDefaultPlugins()) {
     $('#togglesound').hide();
@@ -16,12 +16,19 @@ $(document).ready(function(){
   } else if (createjs.BrowserDetect.isIOS || createjs.BrowserDetect.isAndroid || createjs.BrowserDetect.isBlackberry) {
     $('#togglesound').hide();
   } else {
-    var audioPath = "{/literal}{$PATH}{literal}/audio/";
-    var sound = [ {id:"ding", src:"ding.mp3"} ];
-    var muteFlag = 1;
-    createjs.Sound.alternateExtensionseExtensions = ["mp3"];
-    createjs.Sound.registerSounds(sound, audioPath);
-    canCreateSoundJS = true;
+    if (playSound) {
+      var audioPath = "{/literal}{$PATH}{literal}/audio/";
+      var sound = [ {id:"ding", src:"ding.mp3"} ];
+      var muteFlag = 1;
+      createjs.Sound.alternateExtensionseExtensions = ["mp3"];
+      createjs.Sound.registerSounds(sound, audioPath);
+      canCreateSoundJS = true;
+      $('#muteButton').toggleClass("btn-xs btn-danger").toggleClass("btn-xs btn-success");
+      $('#muteButton').find($(".fa")).removeClass('fa-volume-off').addClass('fa-volume-up');
+    } else {
+      $('#muteButton').toggleClass("btn-xs btn-success").toggleClass("btn-xs btn-danger");
+      $('#muteButton').find($(".fa")).removeClass('fa-volume-up').addClass('fa-volume-off');
+    }
   }
   {/literal}
   {/if}
@@ -279,11 +286,13 @@ $(document).ready(function(){
   // Mute Button
   $('#muteButton').click(function(){
     if(muteFlag == 2) {
+      localStorage.setItem('playsound', 'True');
       muteFlag = 1;
       createjs.Sound.setMute(false);
       $(this).toggleClass("btn-xs btn-danger").toggleClass("btn-xs btn-success");
       $(this).find($(".fa")).removeClass('fa-volume-off').addClass('fa-volume-up');
     } else {
+      localStorage.setItem('playsound', 'False');
       muteFlag = 2;
       createjs.Sound.setMute(true);
       $(this).toggleClass("btn-xs btn-success").toggleClass("btn-xs btn-danger");
