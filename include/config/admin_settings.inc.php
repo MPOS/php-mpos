@@ -97,6 +97,13 @@ $aSettings['website'][] = array(
   'name' => 'website_notification_autohide', 'value' => $setting->getValue('website_notification_autohide'),
   'tooltip' => 'Hides Notifications after 5 seconds.'
 );
+$aSettings['website'][] = array(
+  'display' => 'Disable Block Notification Sound', 'type' => 'select',
+  'options' => array( 0 => 'Do not notify', 1 => 'Notify when Block is found' ),
+  'default' => 0,
+  'name' => 'website_blockfinder_notification', 'value' => $setting->getValue('website_blockfinder_notification'),
+  'tooltip' => 'Enable/Disable Blockfinder Sound.'
+);
 $aSettings['blockchain'][] = array(
   'display' => 'Disable Blockexplorer', 'type' => 'select',
   'options' => array( 0 => 'No', 1 => 'Yes' ),
