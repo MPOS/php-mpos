@@ -119,6 +119,7 @@ $aGlobal['website']['transactionexplorer']['disabled'] = $setting->getValue('web
 $aGlobal['website']['chaininfo']['disabled'] = $setting->getValue('website_chaininfo_disabled');
 $aGlobal['website']['donors']['disabled'] = $setting->getValue('disable_donors');
 $aGlobal['website']['about']['disabled'] = $setting->getValue('disable_about');
+$aGlobal['website']['blockfindersound']['enabled'] = $setting->getValue('website_blockfinder_notification');
 $setting->getValue('website_blockexplorer_url') ? $aGlobal['website']['blockexplorer']['url'] = $setting->getValue('website_blockexplorer_url') : $aGlobal['website']['blockexplorer']['url'] = 'http://explorer.litecoin.net/block/';
 $setting->getValue('website_transactionexplorer_url') ? $aGlobal['website']['transactionexplorer']['url'] = $setting->getValue('website_transactionexplorer_url') : $aGlobal['website']['transactionexplorer']['url'] = 'http://explorer.litecoin.net/tx/';
 $setting->getValue('website_chaininfo_url') ? $aGlobal['website']['chaininfo']['url'] = $setting->getValue('website_chaininfo_url') : $aGlobal['website']['chaininfo']['url'] = 'http://allchains.info';
