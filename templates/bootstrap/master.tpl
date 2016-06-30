@@ -21,6 +21,7 @@
   <link href="{$PATH}/css/plugins/timeline/timeline.css" rel="stylesheet">
   <link href="{$PATH}/css/plugins/dataTables/dataTables.bootstrap.css" rel="stylesheet">
   <link href="{$PATH}/css/mpos.css" rel="stylesheet">
+  <link href="{$PATH}/css/plugins/metisMenu/metisMenu.css" rel="stylesheet">
   <link href="{$PATH}/css/sparklines.css" rel="stylesheet">
   {if $GLOBAL.config.website_design|default:"default" != "default"}
   <link href="{$PATH}/css/design/{$GLOBAL.config.website_design}.css" rel="stylesheet">
