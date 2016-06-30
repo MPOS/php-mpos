@@ -38,4 +38,4 @@
 /vendor/
 
 tests/_output/*
-/nbproject/private/
+/nbproject/*
