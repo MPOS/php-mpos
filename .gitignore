@@ -38,3 +38,6 @@
 /vendor/
 
 tests/_output/*
+
+# NetBeans Project Directory
+/nbproject/*
