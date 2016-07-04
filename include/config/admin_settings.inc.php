@@ -239,6 +239,20 @@ $aSettings['statistics'][] = array(
   'tooltip' => '.'
 );
 $aSettings['acl'][] = array(
+  'display' => 'Show Stats for logged in users only', 'type' => 'select',
+  'options' => array( 0 => 'No', 1 => 'Yes' ),
+  'default' => 0,
+  'name' => 'acl_show_stats_loggedin', 'value' => $setting->getValue('acl_show_stats_loggedin'),
+  'tooltip' => 'Should statistics be visible for logged in users only.'
+);
+$aSettings['acl'][] = array(
+  'display' => 'Show Help for logged in users only', 'type' => 'select',
+  'options' => array( 0 => 'No', 1 => 'Yes' ),
+  'default' => 0,
+  'name' => 'acl_show_help_loggedin', 'value' => $setting->getValue('acl_show_help_loggedin'),
+  'tooltip' => 'Should Help Page be visible for logged in users only.'
+);
+$aSettings['acl'][] = array(
   'display' => 'Hide news post author', 'type' => 'select',
   'options' => array( 0 => 'No', 1 => 'Yes' ),
   'default' => 0,
