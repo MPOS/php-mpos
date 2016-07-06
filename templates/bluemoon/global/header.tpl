@@ -9,7 +9,7 @@
             <i class="fa fa-bullhorn"></i>
           </a>
             <span class="info-label warning-bg">{$GLOBAL.userdata.lastnotifications|@count|default:"0"}</span>
-            <ul class="dropdown-menu server-activity">
+            <ul class="dropdown-menu user-activity">
               {section notification $GLOBAL.userdata.lastnotifications}
               <li>
                 <p>
@@ -28,7 +28,7 @@
           <a id="drop7" href="#" role="button" class="dropdown-toggle user-avtar" data-toggle="dropdown">
             <img src="{$PATH}/img/profile.png" alt="logged in user">
           </a>
-          <ul class="dropdown-menu server-activity">
+          <ul class="dropdown-menu user-activity">
             <li>
               <p id="header_dashboard"><i title="" data-original-title="" class="fa fa-dashboard text-info"></i> Dashboard</p>
             </li>

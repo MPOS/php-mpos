@@ -860,18 +860,18 @@ ul.stats-widget {
     ul.stats-widget li:hover {
       background-color: #f7f7f7; }
 
-ul.server-activity {
+ul.user-activity {
   padding: 10px 15px;
   margin: 0;
   list-style-type: none; }
-  ul.server-activity li {
+  ul.user-activity li {
     padding: 6px 0px;
     border-bottom: 1px solid #f2f2f2; }
-    ul.server-activity li p {
+    ul.user-activity li p {
       font-size: 12px;
       padding: 0;
       margin: 0; }
-      ul.server-activity li p i {
+      ul.user-activity li p i {
         height: 30px;
         width: 30px;
         background: #f2f2f2;
@@ -881,13 +881,13 @@ ul.server-activity {
         line-height: 30px;
         text-align: center;
         margin-right: 10px; }
-      ul.server-activity li p .time {
+      ul.user-activity li p .time {
         text-align: right;
         color: #3693cf;
         float: right;
         line-height: 30px;
         font-weight: 700; }
-    ul.server-activity li:last-child {
+    ul.user-activity li:last-child {
       border-bottom: 0; }
 
 ul.project-activity {
@@ -3387,4 +3387,8 @@ div.blockMsg {
   color: inherit;
   text-decoration: none;
   cursor: pointer;
+}
+
+.dropdown-menu {
+  z-index: 9999;
 }
