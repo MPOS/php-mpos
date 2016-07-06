@@ -111,6 +111,7 @@
     <div class="sub-nav hidden-sm hidden-xs">
       <ul>
         <li><a class="heading">Dashboard</a></li>
+        <li class="hidden-sm hidden-xs"><a>Refresh interval: {$GLOBAL.config.statistics_ajax_refresh_interval|default:"10"} seconds, worker and account {$GLOBAL.config.statistics_ajax_long_refresh_interval|default:"10"} seconds. Hashrate based on shares submitted in the past {$INTERVAL|default:"5"} minutes.</a></li>
       </ul>
     </div>
     {/if}
