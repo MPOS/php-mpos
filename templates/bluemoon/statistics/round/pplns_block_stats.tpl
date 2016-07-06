@@ -1,10 +1,15 @@
 <div class="row">
   <div class="col-lg-12">
-    <div class="panel panel-info">
-      <div class="panel-heading">
-        <i class="fa fa-refresh fa-fw"></i> Round Statistics
+    <div class="widget">
+      <div class="widget-header">
+        <div class="title">
+          Round Statistics
+        </div>
+        <span class="tools">
+          <i class="fa fa-refresh"></i>
+        </span>
       </div>
-      <div class="panel-body no-padding">
+      <div class="widget-body">
         <div class="table-responsive">
           <table class="table table-striped table-bordered table-hover">
             <thead>
@@ -22,11 +27,11 @@
               </tr>
               <tr class="even">
                 <td>Height</td>
-	{if ! $GLOBAL.website.blockexplorer.disabled}
+                {if ! $GLOBAL.website.blockexplorer.disabled}
                 <td><a href="{$GLOBAL.website.blockexplorer.url}{$BLOCKDETAILS.blockhash}" target="_new">{$BLOCKDETAILS.height|number_format:"0"|default:"0"}</a></td>
-	{else}
+                {else}
                 <td>{$BLOCKDETAILS.height|number_format:"0"|default:"0"}</td>
-	{/if}
+                {/if}
                 <td>Estimated Shares</td>
                 <td>{$BLOCKDETAILS.estshares|number_format|default:"0"}</td>
               </tr>
@@ -34,19 +39,20 @@
                 <td>Amount</td>
                 <td>{$BLOCKDETAILS.amount|default:"0"}</td>
                 <td>Target Variance</td>
-{assign var=percentage value=0}
-{assign var=percentage1 value=0}
-{assign var=percentage2 value=0}
+                {assign var=percentage value=0}
+                {assign var=percentage1 value=0}
+                {assign var=percentage2 value=0}
                 <td>{if $PPLNSSHARES > 0}{math assign="percentage" equation=(($BLOCKDETAILS.estshares / $PPLNSSHARES) * 100)}{/if}<font color="{if ($percentage >= 100)}green{else}red{/if}">{$percentage|number_format:"2"} %</font></td>
               </tr>
               <tr class="even">
                 <td>Confirmations</td>
-                <td>{if $BLOCKDETAILS.confirmations >= $GLOBAL.confirmations}
+                <td>
+                  {if $BLOCKDETAILS.confirmations >= $GLOBAL.confirmations}
                   <font color="green">Confirmed</font>
-                {else if $BLOCKDETAILS.confirmations == -1}
+                  {else if $BLOCKDETAILS.confirmations == -1}
                   <font color="red">Orphan</font>
-                {else if $BLOCKDETAILS.confirmations == 0}0
-                {else}{($GLOBAL.confirmations - $BLOCKDETAILS.confirmations)|default:"0"} left{/if}</td>
+                  {else if $BLOCKDETAILS.confirmations == 0}0
+                  {else}{($GLOBAL.confirmations - $BLOCKDETAILS.confirmations)|default:"0"} left{/if}</td>
                 <td>Block Average</td>
                 <td>{$BLOCKAVERAGE|number_format:"0"|default:"0"}</td>
               </tr>
@@ -109,7 +115,6 @@
             </td>
             </tr>
             </table>
-
         </div>
       </div>
     </div>

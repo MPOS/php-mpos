@@ -1,5 +1,5 @@
-<script src="{$PATH}/js/cleditor/jquery.cleditor.min.js"></script>
-<link rel="stylesheet" href="{$PATH}/js/cleditor/jquery.cleditor.css">
+<script src="{$GLOBALASSETS}/js/plugins/cleditor/jquery.cleditor.min.js"></script>
+<link rel="stylesheet" href="{$GLOBALASSETS}/js/plugins/cleditor/jquery.cleditor.css">
 <script type="text/javascript">
   $(document).ready(function () { $(".cleditor").cleditor(); });
 </script>

@@ -1,10 +1,15 @@
 {if !$DISABLED_DASHBOARD and !$DISABLED_DASHBOARD_API}
-  <div class="col-lg-12">
-    <div class="panel panel-info">
-      <div class="panel-heading">
-        <h4 class="panel-title"><i class="fa fa-desktop fa-fw"></i> Last Found Blocks</h4>
+  <div class="widget">
+    <div class="widget-header">
+      <div class="title">
+        Last Found Blocks
       </div>
-      <div class="panel-body no-padding table-responsive">
+      <span class="tools">
+        <i class="fa fa-cubes"></i>
+      </span>
+    </div>
+    <div class="widget-body">
+      <div class="table-responsive">
         <table class="table table-bordered table-hover table-striped"> 
          <thead>
           <tr>
@@ -19,7 +24,7 @@
           </tr>
           </thead>
           <tbody id="b-blocks">
-{section block $BLOCKSFOUND}
+            {section block $BLOCKSFOUND}
             <tr>
               <td class="text-right">{$BLOCKSFOUND[block].height}</td>
               <td>{if $BLOCKSFOUND[block].is_anonymous|default:"0" == 1 && $GLOBAL.userdata.is_admin|default:"0" == 0}anonymous{else}{$BLOCKSFOUND[block].finder|default:"unknown"|escape}{/if}</td>
@@ -33,17 +38,17 @@
                 <font color="{if ($percentage <= 100)}green{else}red{/if}">{$percentage|number_format:"2"}</font>
               </td>
             </tr>
-{/section}
+            {/section}
           </tbody>
         </table>
       </div>
       {if $GLOBAL.website.blockfindersound.enabled|default:"1"}
       <div id="togglesound" class="togglesound">
-        <div class="panel-footer text-right">
+        <div class="text-right">
           <button id="muteButton" type="button" class="btn-xs btn-success toggleSoundButton"><i class="fa fa-volume-up"></i></button>
         </div>
       </div>
-      {/if}
     </div>
+    {/if}
   </div>
 {/if}

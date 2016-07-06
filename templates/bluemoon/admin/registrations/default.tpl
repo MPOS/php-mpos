@@ -1,11 +1,16 @@
 {nocache}
 <div class="row">
   <div class="col-lg-12">
-    <div class="panel panel-info">
-      <div class="panel-heading">
-        <i class="fa fa-user fa-fw"></i> Last Registered Users
+    <div class="widget">
+      <div class="widget-header">
+        <div class="title">
+          Last Registered Users
+        </div>
+        <span class="tools">
+          <i class="fa fa-user"></i>
+        </span>
       </div>
-      <div class="panel-body no-padding">
+      <div class="widget-body">
         <div class="table-responsive">
           <table class="table table-striped table-bordered table-hover">
             <thead>
@@ -33,7 +38,7 @@
           </table>
         </div>
       </div>
-      <div class="panel-footer">
+      <div class="widget-footer">
         <ul class="pager">
           <li class="previous {if $smarty.get.registeredstart|default:"0" <= 0}disabled{/if}">
             <a href="{if $smarty.get.registeredstart|default:"0" <= 0}#{else}{$smarty.server.SCRIPT_NAME}?page={$smarty.request.page|escape}&action={$smarty.request.action|escape}&registeredstart={$smarty.request.registeredstart|escape|default:"0" - $LIMIT}{if $FILTERS|default:""}{$FILTERS}{/if}{/if}">&larr; Prev</a>

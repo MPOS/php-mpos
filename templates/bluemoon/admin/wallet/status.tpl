@@ -1,9 +1,14 @@
   <div class="col-lg-8">
-    <div class="panel panel-info">
-      <div class="panel-heading">
-        <i class="fa fa-info fa-fw"></i> Wallet Status
+    <div class="widget">
+      <div class="widget-header">
+        <div class="title">
+          Wallet Status
+        </div>
+        <span class="tools">
+          <i class="fa fa-info"></i>
+        </span>
       </div>
-      <div class="panel-body no-padding">
+      <div class="widget-body">
         <table class="table table-striped table-bordered table-hover">
           <thead>
             <th>Version</th>
@@ -24,9 +29,8 @@
               <td>{$COININFO.blocks|default:"0"}</td>
               <td>{$ADDRESSCOUNT}</td>
             </tr>
-            </tbody>
-          </table>
-        </div>
+          </tbody>
+        </table>
       </div>
     </div>
   </div>

@@ -1,12 +1,17 @@
 <div class="row">
   <div class="col-lg-12">
-    <div class="panel panel-info">
-      <div class="panel-heading">
-        <i class="fa fa-desktop fa-fw"></i> {$GLOBAL.workers} Current Active Pool Workers
+    <div class="widget">
+      <div class="widget-header">
+        <div class="title">
+          {$GLOBAL.workers} Current Active Pool Workers
+        </div>
+        <span class="tools">
+          <i class="fa fa-desktop"></i>
+        </span>
       </div>
-      <div class="panel-body no-padding">
+      <div class="widget-body">
         <div class="table-responsive">
-          <table class="table table-striped table-bordered table-hover">
+          <table class="table table-bordered table-hover">
             <thead>
               <tr>
                 <th>Worker Name</th>
@@ -37,7 +42,7 @@
             </tbody>
           </table>
         </div>
-        <div class="panel-body">
+        <div class="widget-footer">
           <form action="{$smarty.server.SCRIPT_NAME}">
             <input type="hidden" name="page" value="{$smarty.request.page|escape}" />
             <input type="hidden" name="action" value="{$smarty.request.action|escape}" />

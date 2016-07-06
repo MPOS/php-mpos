@@ -4,11 +4,16 @@
   <input type="hidden" name="do" value="updatePassword">
   <input type="hidden" name="ctoken" value="{$CTOKEN|escape|default:""}" />
   <div class="col-lg-6">
-    <div class="panel panel-info">
-      <div class="panel-heading">
-        <i class="fa fa-key fa-fw"></i> Change Password
+    <div class="widget">
+      <div class="widget-header">
+        <div class="title">
+          Change Password
+        </div>
+        <span class="tools">
+          <i class="fa fa-key"></i>
+        </span>
       </div>
-      <div class="panel-body">
+      <div class="widget-body">
         <div class="row">
           <div class="col-lg-12">
             <div class="form-group">
@@ -37,8 +42,6 @@
 
           </div>
         </div>
-      </div>
-      <div class="panel-footer">
         {nocache}
         <input type="hidden" name="cp_token" value="{$smarty.request.cp_token|escape|default:""}">
         <input type="hidden" name="ctoken" value="{$CTOKEN|escape|default:""}" />

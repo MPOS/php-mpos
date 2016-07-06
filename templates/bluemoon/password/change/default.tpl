@@ -6,11 +6,16 @@
     <input type="hidden" name="ctoken" value="{$CTOKEN|escape|default:""}" />
 
     <input type="hidden" name="do" value="resetPassword">
-    <div class="panel panel-default">
-      <div class="panel-heading">
-        <h3 class="panel-title">Password reset</h3>
+    <div class="widget">
+      <div class="widget-header">
+        <div class="title">
+          Password reset
+        </div>
+        <span class="tools">
+          <i class="fa fa-book"></i>
+        </span>
       </div>
-      <div class="panel-body">
+      <div class="widget-body">
         <div class="form-group">
           <fieldset>
             <label>New Password</label>
@@ -23,8 +28,6 @@
             <input class="form-control" type="password" name="newPassword2" required>
           </fieldset>
         </div>
-      </div>
-      <div class="panel-footer">
         {nocache}
           <input type="hidden" name="cp_token" value="{$smarty.request.cp_token|escape|default:""}">
           <input type="hidden" name="utype" value="change_pw">

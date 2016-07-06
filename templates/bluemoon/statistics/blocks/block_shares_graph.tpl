@@ -36,11 +36,16 @@ $(function () {
 
 <div class="row">
   <div class="col-lg-12">
-    <div class="panel panel-info">
-      <div class="panel-heading">
-        <i class="fa fa-th fa-fw"></i> Block Shares
+    <div class="widget">
+      <div class="widget-header">
+        <div class="title">
+          Block Shares
+        </div>
+        <span class="tools">
+          <i class="fa fa-th"></i>
+        </span>
       </div>
-      <div class="panel-body">
+      <div class="widget-body">
         <ul class="pager">
           <li class="previous">
             <a href="{$smarty.server.SCRIPT_NAME}?page={$smarty.request.page|escape}&action={$smarty.request.action|escape}&height={if is_array($BLOCKSFOUND) && count($BLOCKSFOUND) > ($BLOCKLIMIT - 1)}{$BLOCKSFOUND[$BLOCKLIMIT - 1].height}{/if}&prev=1"> &larr;</a>

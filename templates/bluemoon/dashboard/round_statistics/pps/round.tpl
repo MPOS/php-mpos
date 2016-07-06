@@ -1,4 +1,4 @@
-      <div class="panel-footer">
+      <div class="widget-body">
         <div class="row text-center">
           <div class="col-lg-2 col-sm-6">
             <div class="circle-tile fade">

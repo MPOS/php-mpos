@@ -1,5 +1,5 @@
 {if !$GLOBAL.website.api.disabled}
-<script type="text/javascript" src="{$PATH}/js/jquery.qrcode.min.js"></script>
+<script type="text/javascript" src="{$GLOBALASSETS}/js/jquery.qrcode.min.js"></script>
 <script type="text/javascript">
   {literal}
   $(document).ready(function(){
@@ -15,12 +15,17 @@
   {/literal}
 </script>
 <div class="row">
-  <div class="col-lg-4">
-    <div class="panel panel-info">
-      <div class="panel-heading">
-        <i class="fa fa-qrcode fa-fw"></i> API String
+  <div class="col-lg-12">
+    <div class="widget">
+      <div class="widget-header">
+        <div class="title">
+          API String
+        </div>
+        <span class="tools">
+          <i class="fa fa-qrcode"></i>
+        </span>
       </div>
-      <div class="panel-body text-center">
+      <div class="widget-body text-center">
         <p>This code will allow you to import the full API string into your mobile application.</p>
         <div id="qrcodeholder"></div>
       </div>

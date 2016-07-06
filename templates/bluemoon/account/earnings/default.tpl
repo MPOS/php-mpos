@@ -1,18 +1,28 @@
 {if $DISABLE_TRANSACTIONSUMMARY|default:"0" != 1}
 <div class="row">
   <div class="col-lg-12">
-    <div class="panel panel-info">
-      <div class="panel-heading">
-        <i class="fa fa-money fa-fw"></i> Total {$GLOBAL.config.currency} Earning Reports
+    <div class="widget">
+      <div class="widget-header">
+        <div class="title">
+          Total {$GLOBAL.config.currency} Earning Reports
+        </div>
+        <span class="tools">
+          <i class="fa fa-money"></i>
+        </span>
       </div>
-      <div class="panel-body">
+      <div class="widget-body">
         <div class="row">
           <div class="col-lg-12">
-            <div class="panel panel-info">
-              <div class="panel-heading">
-                <i class="fa fa-credit-card fa-fw"></i> Summary
+            <div class="widget">
+              <div class="widget-header">
+                <div class="title">
+                  Summary
+                </div>
+                <span class="tools">
+                  <i class="fa fa-credit-card"></i>
+                </span>
               </div>
-              <div class="panel-body">
+              <div class="widget-body">
                 <div class="table-responsive">
                   <table class="table table-striped table-bordered table-condensed">
                     <thead>
@@ -40,11 +50,16 @@
 
         <div class="row">
           <div class="col-lg-12">
-            <div class="panel panel-info">
-              <div class="panel-heading">
-                <i class="fa fa-clock-o fa-fw"></i> Sorted by Time
+            <div class="widget">
+              <div class="widget-header">
+                <div class="title">
+                  Sorted by Time
+                </div>
+                <span class="tools">
+                  <i class="fa fa-clock-o"></i>
+                </span>
               </div>
-              <div class="panel-body">
+              <div class="widget-body">
                 <div class="table-responsive">
                   <table class="table table-striped table-bordered table-condensed">
                     <thead>

@@ -239,6 +239,13 @@ $aSettings['statistics'][] = array(
   'tooltip' => '.'
 );
 $aSettings['acl'][] = array(
+  'display' => 'Show Menu for logged in users only', 'type' => 'select',
+  'options' => array( 0 => 'No', 1 => 'Yes' ),
+  'default' => 0,
+  'name' => 'acl_show_menu_loggedin', 'value' => $setting->getValue('acl_show_menu_loggedin'),
+  'tooltip' => 'Should Menu be visible for logged in users only.'
+);
+$aSettings['acl'][] = array(
   'display' => 'Show Stats for logged in users only', 'type' => 'select',
   'options' => array( 0 => 'No', 1 => 'Yes' ),
   'default' => 0,

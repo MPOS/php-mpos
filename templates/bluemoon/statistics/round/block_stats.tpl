@@ -1,8 +1,13 @@
 <div class="row">
   <div class="col-lg-12">
-    <div class="panel panel-info">
-      <div class="panel-heading">
-        <i class="fa fa-bar-chart fa-fw"></i> Block Statistics
+    <div class="widget">
+      <div class="widget-header">
+        <div class="title">
+          Block Statistics
+        </div>
+        <span class="tools">
+          <i class="fa fa-bar-chart"></i>
+        </span>
       </div>
       <div class="table-responsive">
         <table class="table table-striped table-bordered table-hover">
@@ -45,7 +50,7 @@
           </tbody>
         </table>
       </div>
-      <div class="panel-footer">
+      <div class="widget-footer">
         <div class="submit_link">
           <form action="{$smarty.server.SCRIPT_NAME}" method="POST" id='search'>
             <input type="hidden" name="page" value="{$smarty.request.page|escape}">

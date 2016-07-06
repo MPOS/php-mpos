@@ -3,7 +3,6 @@
 <script>
 {literal}
 $(document).ready(function(){
-
   {/literal}
   {if $GLOBAL.website.blockfindersound.enabled|default:"1"}
   {literal}
@@ -48,41 +47,34 @@ $(document).ready(function(){
   var storedNetHashrate = [ null, null, null, null, null, null, null, null, null, null, null, null, {/literal}{$GLOBAL.nethashrate|round:"2"}{literal} ];
   var storedPoolWorkers = [ null, null, null, null, null, null, null, null, null, null, null, null, {/literal}{$GLOBAL.workers}{literal} ];
   var storedCoinPrice = [ null, null, null, null, null, null, null, null, null, null, null, null,
-                          null, null, null, null, null, null, null, null, null, null, null, null,
-                          null, null, null, null, null, null, null, null, null, null, null, null,
-                          {/literal}{$GLOBAL.price}{literal} ];
+                          null, null, null, null, null, null, null, null, null, null, null, null, null, {/literal}{$GLOBAL.price}{literal} ];
   var lastBlock = 0;
-
-  // Sparkline options applied to all graphs
-  var sparklineBarOptions = {
-    type: 'bar',
-    height: '35',
-    barWidth: 6,
-    barSpacing: 2,
-    chartRangeMin: 0,
-    barColor: '#41fc41'
-  };
 
   // Sparkline options applied to line graphs
   var sparklineLineOptions = {
+    type: 'line',
+    spotRadius: 1,
+    lineWidth: 2,
+    width: '77',
     height: '35',
     chartRangeMin: {/literal}{$GLOBAL.price}{literal} - 5,
     chartRangeMax: {/literal}{$GLOBAL.price}{literal} + 5,
     composite: false,
-    lineColor: 'black',
-    fillColor: '#41fc41',
-    chartRangeClip: true
+    lineColor: '#ffff00',
+    fillColor: '#4F5152',
+    chartRangeClip: true,
+    drawNormalOnTop: true
   };
 
   // Draw our sparkline graphs with our current static content
-  $('.personal-hashrate-bar').sparkline(storedPersonalHashrate, sparklineBarOptions);
-  $('.personal-sharerate-bar').sparkline(storedPersonalSharerate, sparklineBarOptions);
-  $('.pool-hashrate-bar').sparkline(storedPoolHashrate, sparklineBarOptions);
-  $('.pool-nethashrate-bar').sparkline(storedNetHashrate, sparklineBarOptions);
-  $('.pool-workers-bar').sparkline(storedPoolWorkers, sparklineBarOptions);
-{/literal}{if $GLOBAL.config.price.enabled}{literal}
+  $('.personal-hashrate-bar').sparkline(storedPersonalHashrate, {type: 'bar', height: '35', barWidth: 5, barSpacing: 1, chartRangeMin: 0, barColor: '#74b749'});
+  $('.personal-sharerate-bar').sparkline(storedPersonalSharerate, {type: 'bar', height: '35', barWidth: 5, barSpacing: 1, chartRangeMin: 0, barColor: '#0daed3'});
+  $('.pool-hashrate-bar').sparkline(storedPoolHashrate, {type: 'bar', height: '35', barWidth: 5, barSpacing: 1, chartRangeMin: 0, barColor: '#ffb400'});
+  $('.pool-nethashrate-bar').sparkline(storedNetHashrate, {type: 'bar', height: '35', barWidth: 5, barSpacing: 1, chartRangeMin: 0, barColor: '#ed6d49'});
+  $('.pool-workers-bar').sparkline(storedPoolWorkers, {type: 'bar', height: '35', barWidth: 5, barSpacing: 1, chartRangeMin: 0, barColor: '#f63131'});
+  {/literal}{if $GLOBAL.config.price.enabled}{literal}
   $('.coin-price-line').sparkline(storedCoinPrice, sparklineLineOptions);
-{/literal}{/if}{literal}
+  {/literal}{/if}{literal}
 
   function refreshInformation(data) {
     // Drop one value, add the latest new one to each array
@@ -99,21 +91,21 @@ $(document).ready(function(){
     storedCoinPrice.shift();
     storedCoinPrice.push(parseFloat(data.getdashboarddata.data.pool.price).toFixed(8));
     // Redraw all bar graphs
-    $('.personal-hashrate-bar').sparkline(storedPersonalHashrate, sparklineBarOptions);
-    $('.personal-sharerate-bar').sparkline(storedPersonalSharerate, sparklineBarOptions);
-    $('.pool-hashrate-bar').sparkline(storedPoolHashrate, sparklineBarOptions);
-    $('.pool-nethashrate-bar').sparkline(storedNetHashrate, sparklineBarOptions);
-    $('.pool-workers-bar').sparkline(storedPoolWorkers, sparklineBarOptions);
-  {/literal}{if $GLOBAL.config.price.enabled}{literal}
+    $('.personal-hashrate-bar').sparkline(storedPersonalHashrate, {type: 'bar', height: '35', barWidth: 5, barSpacing: 1, chartRangeMin: 0, barColor: '#74b749'});
+    $('.personal-sharerate-bar').sparkline(storedPersonalSharerate, {type: 'bar', height: '35', barWidth: 5, barSpacing: 1, chartRangeMin: 0, barColor: '#0daed3'});
+    $('.pool-hashrate-bar').sparkline(storedPoolHashrate, {type: 'bar', height: '35', barWidth: 5, barSpacing: 1, chartRangeMin: 0, barColor: '#ffb400'});
+    $('.pool-nethashrate-bar').sparkline(storedNetHashrate, {type: 'bar', height: '35', barWidth: 5, barSpacing: 1, chartRangeMin: 0, barColor: '#ed6d49'});
+    $('.pool-workers-bar').sparkline(storedPoolWorkers, {type: 'bar', height: '35', barWidth: 5, barSpacing: 1, chartRangeMin: 0, barColor: '#f63131'});
+    {/literal}{if $GLOBAL.config.price.enabled}{literal}
     $('.coin-price-line').sparkline(storedCoinPrice, sparklineLineOptions);
-  {/literal}{/if}{literal}
+    {/literal}{/if}{literal}
   }
 
   // Refresh other static numbers on the template
   function refreshStaticData(data) {
-  {/literal}{if $GLOBAL.config.price.enabled}{literal}
+    {/literal}{if $GLOBAL.config.price.enabled}{literal}
     $('#b-price').html((parseFloat(data.getdashboarddata.data.pool.price).toFixed(8)));
-  {/literal}{/if}{literal}
+    {/literal}{/if}{literal}
     $('#b-poolworkers').html(number_format(data.getdashboarddata.data.pool.workers));
     $('#b-hashrate').html((number_format(data.getdashboarddata.data.personal.hashrate, 2)));
     $('#b-poolhashrate').html(number_format(data.getdashboarddata.data.pool.hashrate, 2));
@@ -145,15 +137,26 @@ $(document).ready(function(){
       $('#b-nextdiff').html('n/a');
       $('#b-nextdiffc').html(' No Estimates');
     }
+    if (data.getdashboarddata.data.pool.esttimeperblock > data.getdashboarddata.data.pool.timesincelastblock) {
+      $('#widgetblocktime').attr( 'class', 'mini-widget mini-widget-green');
+    } else {
+      $('#widgetblocktime').attr( 'class', 'mini-widget mini-widget-red');
+    }
     $('#b-esttimeperblock').html(data.getdashboarddata.data.pool.esttimeperblock.toHHMMSS());
+    $('#b-timesincelastblock').html(data.getdashboarddata.data.pool.timesincelastblock.toHHMMSS());
     $('#b-nblock').html(data.getdashboarddata.data.network.block);
+    if (number_format(parseFloat(data.getdashboarddata.data.pool.shares.progress).toFixed(2), 2) <= 100) {
+      $('#widgetblockpercent').attr( 'class', 'mini-widget mini-widget-green');
+    } else {
+      $('#widgetblockpercent').attr( 'class', 'mini-widget mini-widget-red');
+    }
     $('#b-roundprogress').html(number_format(parseFloat(data.getdashboarddata.data.pool.shares.progress).toFixed(2), 2) + "%");
     {/literal}{if $GLOBAL.config.payout_system != 'pps'}{literal }
     $('#b-payout').html(number_format(data.getdashboarddata.data.personal.estimates.payout, {/literal}{$PRECISION}{literal}));
     $('#b-block').html(number_format(data.getdashboarddata.data.personal.estimates.block, {/literal}{$PRECISION}{literal}));
     $('#b-fee').html(number_format(data.getdashboarddata.data.personal.estimates.fee, {/literal}{$PRECISION}{literal}));
     $('#b-donation').html(number_format(data.getdashboarddata.data.personal.estimates.donation, {/literal}{$PRECISION}{literal}));
-{/literal}{else}{literal}
+    {/literal}{else}{literal}
     $('#b-ppsunpaid').html(number_format(data.getdashboarddata.data.personal.shares.unpaid));
     $('#b-ppsdiff').html(number_format(data.getdashboarddata.data.personal.sharedifficulty, 2));
     $('#b-est1').html(number_format(data.getdashboarddata.data.personal.estimates.hours1, {/literal}{$PRECISION}{literal}));
@@ -161,10 +164,10 @@ $(document).ready(function(){
     $('#b-est7days').html(number_format(data.getdashboarddata.data.personal.estimates.days7, {/literal}{$PRECISION}{literal}));
     $('#b-est14days').html(number_format(data.getdashboarddata.data.personal.estimates.days14, {/literal}{$PRECISION}{literal}));
     $('#b-est30days').html(number_format(data.getdashboarddata.data.personal.estimates.days30, {/literal}{$PRECISION}{literal}));
-{/literal}{/if}{literal}
-{/literal}{if $GLOBAL.config.payout_system == 'pplns'}{literal}
+    {/literal}{/if}{literal}
+    {/literal}{if $GLOBAL.config.payout_system == 'pplns'}{literal}
     $('#b-pplns').html({/literal}{$GLOBAL.pplns.target}{literal});
-{/literal}{/if}{literal}
+    {/literal}{/if}{literal}
   }
 
   // Refresh worker information
@@ -187,7 +190,7 @@ $(document).ready(function(){
   function refreshBlockData(data) {
     blocks = data.getdashboarddata.data.pool.blocks;
     if (blocks.length <= 0) return;
-    // Initilize
+    // Initialize
     if (lastBlock == 0) {
       lastBlock = blocks[0].height;
       return;
@@ -196,6 +199,8 @@ $(document).ready(function(){
       if(canCreateSoundJS) {
         createjs.Sound.play('ding');
       }
+      $('#widgetblockpercent').attr( 'class', 'mini-widget mini-widget-green');
+      $('#widgetblocktime').attr( 'class', 'mini-widget mini-widget-green');
       lastBlock = blocks[0].height;
       var table_content = '<tbody id="b-blocks">';
       for (index = 0; index < blocks.length; ++index) {

@@ -4,9 +4,14 @@
   <input type="hidden" name="do" value="updateAccount">
   <input type="hidden" name="ctoken" value="{$CTOKEN|escape|default:""}" />
   <div class="col-lg-6">
-    <div class="panel panel-info">
-      <div class="panel-heading">
-        <i class="fa fa-edit fa-fw"></i> Account Details
+    <div class="widget">
+      <div class="widget-header">
+        <div class="title">
+          Account Details
+        </div>
+        <span class="tools">
+          <i class="fa fa-edit"></i>
+        </span>
       </div>
       <div class="panel-body">
         <div class="row">
@@ -68,24 +73,22 @@
             </div>
           </div>
         </div>
-      </div>
-      <div class="panel-footer">
-      {nocache}
-      <input type="hidden" name="ctoken" value="{$CTOKEN|escape|default:""}" />
-      <input type="hidden" name="ea_token" value="{$smarty.request.ea_token|escape|default:""}">
-      <input type="hidden" name="utype" value="account_edit">
-      {if $GLOBAL.twofactor.enabled && $GLOBAL.twofactor.options.details}
-      {if $DETAILSSENT == 1 && $DETAILSUNLOCKED == 1}
-      <input type="submit" value="Update Account" class="btn btn-success btn-sm">
-      {elseif $DETAILSSENT == 0 && $DETAILSUNLOCKED == 1 || $DETAILSSENT == 1 && $DETAILSUNLOCKED == 0}
-      <input type="submit" value="Update Account" class="btn btn-danger btn-sm" disabled>
-      {elseif $DETAILSSENT == 0 && $DETAILSUNLOCKED == 0}
-      <input type="submit" value="Unlock" class="btn btn-warning btn-sm" name="unlock">
-      {/if}
-      {else}
-      <input type="submit" value="Update Account" class="btn btn-success btn-sm">
-      {/if}
-      {/nocache}
+        {nocache}
+        <input type="hidden" name="ctoken" value="{$CTOKEN|escape|default:""}" />
+        <input type="hidden" name="ea_token" value="{$smarty.request.ea_token|escape|default:""}">
+        <input type="hidden" name="utype" value="account_edit">
+        {if $GLOBAL.twofactor.enabled && $GLOBAL.twofactor.options.details}
+        {if $DETAILSSENT == 1 && $DETAILSUNLOCKED == 1}
+        <input type="submit" value="Update Account" class="btn btn-success btn-sm">
+        {elseif $DETAILSSENT == 0 && $DETAILSUNLOCKED == 1 || $DETAILSSENT == 1 && $DETAILSUNLOCKED == 0}
+        <input type="submit" value="Update Account" class="btn btn-danger btn-sm" disabled>
+        {elseif $DETAILSSENT == 0 && $DETAILSUNLOCKED == 0}
+        <input type="submit" value="Unlock" class="btn btn-warning btn-sm" name="unlock">
+        {/if}
+        {else}
+        <input type="submit" value="Update Account" class="btn btn-success btn-sm">
+        {/if}
+        {/nocache}
       </div>
     </div>
   </div>

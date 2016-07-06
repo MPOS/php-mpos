@@ -84,6 +84,9 @@ $dEstNextDifficulty = $statistics->getExpectedNextDifficulty();
 $iBlocksUntilDiffChange = $statistics->getBlocksUntilDiffChange();
 
 // Block statistics
+$now = new DateTime( "now" );
+$aLastBlock = $block->getLast();
+$dTimeSinceLast = ($now->getTimestamp() - $aLastBlock['time']);
 $aLastBlocks = $statistics->getBlocksFound(5);
 if (!$user->isAdmin(@$_SESSION['USERDATA']['id'])) {
   foreach ($aLastBlocks as $key => $data) {
@@ -107,6 +110,7 @@ $data = array(
       'currency' => $config['currency']
     ),
     'esttimeperblock' => round($dPoolExpectedTimePerBlock, 2),
+    'timesincelastblock' => round($dTimeSinceLast, 2),
     'blocks' => $aLastBlocks,
     'workers' => $worker->getCountAllActiveWorkers(), 'hashrate' => $dPoolHashrateAdjusted,
     'shares' => array( 'valid' => $aRoundShares['valid'], 'invalid' => $aRoundShares['invalid'], 'invalid_percent' => $dPoolInvalidPercent, 'estimated' => $iEstShares, 'progress' => $dEstPercent ),

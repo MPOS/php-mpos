@@ -1,18 +1,28 @@
 {if $DISABLE_TRANSACTIONSUMMARY|default:"0" != 1}
 <div class="row">
   <div class="col-lg-12">
-    <div class="panel panel-info">
-      <div class="panel-heading">
-        <i class="fa fa-money fa-fw"></i> {$USERNAME} Account Information
+    <div class="widget">
+      <div class="widget-header">
+        <div class="title">
+          {$USERNAME} Account Information
+        </div>
+        <span class="tools">
+          <i class="fa fa-money"></i>
+        </span>
       </div>
-      <div class="panel-body">
+      <div class="widget-body">
         <div class="row">
           <div class="col-lg-12">
-            <div class="panel panel-info">
-              <div class="panel-heading">
-                <i class="fa fa-credit-card fa-fw"></i> All Time Transaction Totals
+            <div class="widget">
+              <div class="widget-header">
+                <div class="title">
+                  All Time Transaction Totals
+                </div>
+                <span class="tools">
+                  <i class="fa fa-credit-card"></i>
+                </span>
               </div>
-              <div class="panel-body">
+              <div class="widget-body">
                 <table class="table table-striped table-bordered table-hover">
                   <thead>
                     <tr>
@@ -36,11 +46,16 @@
 
         <div class="row">
           <div class="col-lg-12">
-            <div class="panel panel-info">
-              <div class="panel-heading">
-                <i class="fa fa-clock-o fa-fw"></i> Transactions over time
+            <div class="widget">
+              <div class="widget-header">
+                <div class="title">
+                  Transactions over time
+                </div>
+                <span class="tools">
+                  <i class="fa fa-clock-o"></i>
+                </span>
               </div>
-              <div class="panel-body">
+              <div class="widget-body">
                 <table class="table table-striped table-bordered table-hover">
                   <thead>
                     <tr>
@@ -123,7 +138,6 @@
             </div>
           </div>
         </div>
-
       </div>
     </div>
   </div>

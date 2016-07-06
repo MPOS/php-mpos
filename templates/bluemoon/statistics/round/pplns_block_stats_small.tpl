@@ -1,8 +1,13 @@
 <div class="row">
   <div class="col-lg-6">
-    <div class="panel panel-info table-responsive">
-      <div class="panel-heading">
-        <i class="fa fa-bar-chart fa-fw"></i> Block Statistics
+    <div class="widget">
+      <div class="widget-header">
+        <div class="title">
+          Block Statistics
+        </div>
+        <span class="tools">
+          <i class="fa fa-bar-chart"></i>
+        </span>
       </div>
       <ul class="pager">
         <li class="previous">

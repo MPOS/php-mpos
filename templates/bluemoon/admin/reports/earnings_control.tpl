@@ -4,11 +4,16 @@
   <input type="hidden" name="ctoken" value="{$CTOKEN|escape|default:""}" />
   <div class="row">
     <div class="col-lg-12">
-      <div class="panel panel-info">
-        <div class="panel-heading">
-          Earnings Information
+      <div class="widget">
+        <div class="widget-header">
+          <div class="title">
+            Earnings Information
+          </div>
+          <span class="tools">
+            <i class="fa fa-money"></i>
+          </span>
         </div>
-        <div class="panel-body">
+        <div class="widget-body">
           <div class="table-responsive">
             <table class="table table-striped table-bordered table-hover">
               <thead>
@@ -50,14 +55,13 @@
                       </script>
                     </div>
                   </td>
-                </tbody>
-              </table>
-            </div>
+                </tr>
+              </tbody>
+            </table>
           </div>
-          <div class="panel-footer">
-            <input type="submit" value="Submit" class="btn btn-success btn-sm">
-          </div>
+          <input type="submit" value="Submit" class="btn btn-success btn-sm">
         </div>
       </div>
     </div>
-  </form>
+  </div>
+</form>

@@ -1,10 +1,15 @@
 <div class="row">
   <div class="col-lg-12">
-    <div class="panel panel-info">
-      <div class="panel-heading">
-        <i class="fa fa-tasks fa-fw"></i> Last {$BLOCKLIMIT} Blocks Found
+    <div class="widget">
+      <div class="widget-header">
+        <div class="title">
+          Last {$BLOCKLIMIT} Blocks Found
+        </div>
+        <span class="tools">
+          <i class="fa fa-tasks"></i>
+        </span>
       </div>
-      <div class="panel-body no-padding">
+      <div class="widget-body">
         <div class="table-responsive">
           <table class="table table-striped table-bordered table-hover">
             <thead>
@@ -76,7 +81,7 @@
           </table>
         </div>
       </div>
-      <div class="panel-footer">
+      <div class="widget-footer">
         <h6>{if $GLOBAL.config.payout_system != 'pps'}Round Earnings are not credited until <font class="confirmations">{$GLOBAL.confirmations}</font> confirms.{/if}</h6>
       </div>
     </div>

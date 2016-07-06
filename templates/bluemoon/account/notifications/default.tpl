@@ -4,12 +4,18 @@
     <input type="hidden" name="action" value="{$smarty.request.action|escape}">
     <input type="hidden" name="do" value="save">
     <input type="hidden" name="ctoken" value="{$CTOKEN|escape|default:""}">
-    <div class="panel panel-info">
-      <div class="panel-heading">
-        <i class="fa fa-gear fa-fw"></i> Notification Settings
+    <div class="widget">
+      <div class="widget-header">
+        <div class="title">
+          Notification Settings
+        </div>
+        <span class="tools">
+          <i class="fa fa-gear"></i>
+        </span>
       </div>
-      <div class="panel-body no-padding">
-        <table class="table table-striped table-bordered table-hover">
+      <div class="widget-body">
+        <div class="table-responsive">
+          <table class="table table-striped table-bordered table-hover">
             {if $DISABLE_IDLEWORKERNOTIFICATIONS|default:"" != 1}
             <tr>
               <td>
@@ -61,20 +67,24 @@
               </td>
             </tr>
             {/if}
-        </table>
-      </div>
-      <div class="panel-footer">
+          </table>
+        </div>
         <input type="submit" value="Update" class="btn btn-success btn-sm">
       </div>
     </form>
   </div>
 
   <div class="col-lg-8">
-    <div class="panel panel-info">
-      <div class="panel-heading">
-        <i class="fa fa-clock-o fa-fw"></i> Notification History
+    <div class="widget">
+      <div class="widget-header">
+        <div class="title">
+          Notification History
+        </div>
+        <span class="tools">
+          <i class="fa fa-clock-o"></i>
+        </span>
       </div>
-      <div class="panel-body no-padding">
+      <div class="widget-body">
         <div class="table-responsive">
           <table class="table table-striped table-bordered table-hover">
             <thead>
@@ -86,22 +96,22 @@
               </tr>
             </thead>
             <tbody>
-{section notification $NOTIFICATIONS}
+              {section notification $NOTIFICATIONS}
               <tr>
                 <td>{$NOTIFICATIONS[notification].id}</td>
                 <td>{$NOTIFICATIONS[notification].time}</td>
                 <td>
-{if $NOTIFICATIONS[notification].type == new_block}New Block
-{else if $NOTIFICATIONS[notification].type == payout}Payout
-{else if $NOTIFICATIONS[notification].type == idle_worker}Idle Worker
-{else if $NOTIFICATIONS[notification].type == success_login}Successful Login
-{/if}
+                {if $NOTIFICATIONS[notification].type == new_block}New Block
+                {else if $NOTIFICATIONS[notification].type == payout}Payout
+                {else if $NOTIFICATIONS[notification].type == idle_worker}Idle Worker
+                {else if $NOTIFICATIONS[notification].type == success_login}Successful Login
+                {/if}
                 </td>
                 <td>
                  <i class="fa fa-{if $NOTIFICATIONS[notification].active}check{else}times{/if} fa-fw"></i>
                 </td>
               </tr>
-{/section}
+              {/section}
             <tbody>
           </table>
         </div>

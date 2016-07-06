@@ -1,9 +1,14 @@
   <div class="col-lg-6">
-    <div class="panel panel-info">
-      <div class="panel-heading">
-        <i class="fa fa-refresh fa-fw"></i> PPLNS Round Shares
+    <div class="widget">
+      <div class="widget-header">
+        <div class="title">
+          PPLNS Round Shares
+        </div>
+        <span class="tools">
+          <i class="fa fa-refresh"></i>
+        </span>
       </div>
-      <div class="panel-body">
+      <div class="widget-body">
         <div class="table-responsive">
           <table class="table table-striped table-bordered table-hover {if $PPLNSROUNDSHARES}datatable{/if}">
             <thead>
@@ -16,8 +21,8 @@
               </tr>
             </thead>
             <tbody>
-{assign var=rank value=1}
-{section contrib $PPLNSROUNDSHARES}
+              {assign var=rank value=1}
+              {section contrib $PPLNSROUNDSHARES}
               <tr{if $GLOBAL.userdata.username|default:"" == $PPLNSROUNDSHARES[contrib].username} style="background-color:#99EB99;"{else}{/if}>
                 <td>{$rank++}</td>
                 <td>{if $PPLNSROUNDSHARES[contrib].is_anonymous|default:"0" == 1 && $GLOBAL.userdata.is_admin|default:"0" == 0}anonymous{else}{$PPLNSROUNDSHARES[contrib].username|default:"unknown"|escape}{/if}</td>
@@ -25,7 +30,7 @@
                 <td>{$PPLNSROUNDSHARES[contrib].pplns_invalid|number_format}</td>
                 <td>{if $PPLNSROUNDSHARES[contrib].pplns_invalid > 0 && $PPLNSROUNDSHARES[contrib].pplns_valid > 0}{($PPLNSROUNDSHARES[contrib].pplns_invalid / $PPLNSROUNDSHARES[contrib].pplns_valid * 100)|number_format:"2"|default:"0"}{else}0.00{/if}</td>
               </tr>
-{/section}
+              {/section}
             </tbody>
           </table>
         </div>

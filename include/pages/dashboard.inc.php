@@ -38,6 +38,9 @@ if ($user->isAuthenticated()) {
   $iBlocksUntilDiffChange = $statistics->getBlocksUntilDiffChange();
 
   // Block statistics
+  $now = new DateTime( "now" );
+  $aLastBlock = $block->getLast();
+  $dTimeSinceLast = ($now->getTimestamp() - $aLastBlock['time']);
   $aLastBlocks = $statistics->getBlocksFound(5);
   if (!$user->isAdmin(@$_SESSION['USERDATA']['id'])) {
     foreach ($aLastBlocks as $key => $data) {
@@ -50,6 +53,7 @@ if ($user->isAuthenticated()) {
 
   // Make it available in Smarty
   $smarty->assign('PRECISION', $coin->getCoinValuePrevision());
+  $smarty->assign('LASTBLOCKTIME', $dTimeSinceLast);
   $smarty->assign('BLOCKSFOUND', $aLastBlocks);
   $smarty->assign('DISABLED_DASHBOARD', $setting->getValue('disable_dashboard'));
   $smarty->assign('DISABLED_DASHBOARD_API', $setting->getValue('disable_dashboard_api'));

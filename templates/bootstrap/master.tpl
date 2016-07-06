@@ -15,14 +15,14 @@
   {$GLOBAL.statistics.analytics.code nofilter}
   {/if}
   <link href="{$GLOBALASSETS}/css/bootstrap.min.css" rel="stylesheet">
-  <link href="{$PATH}/css/bootstrap-switch.min.css" rel="stylesheet">
-  <link href="{$GLOBALASSETS}/font-awesome/css/font-awesome.min.css" rel="stylesheet">
-  <link href="{$PATH}/css/plugins/morris/morris-0.5.1.css" rel="stylesheet">
+  <link href="{$GLOBALASSETS}/css/bootstrap-switch.min.css" rel="stylesheet">
+  <link href="{$GLOBALASSETS}/css/font-awesome.min.css" rel="stylesheet">
+  <link href="{$GLOBALASSETS}/css/plugins/morris/morris-0.5.1.css" rel="stylesheet">
   <link href="{$PATH}/css/plugins/timeline/timeline.css" rel="stylesheet">
   <link href="{$GLOBALASSETS}/css/plugins/dataTables/dataTables.bootstrap.css" rel="stylesheet">
   <link href="{$PATH}/css/mpos.css" rel="stylesheet">
   <link href="{$PATH}/css/plugins/metisMenu/metisMenu.css" rel="stylesheet">
-  <link href="{$PATH}/css/sparklines.css" rel="stylesheet">
+  <link href="{$GLOBALASSETS}/css/plugins/sparkline/sparklines.css" rel="stylesheet">
   {if $GLOBAL.config.website_design|default:"default" != "default"}
   <link href="{$PATH}/css/design/{$GLOBAL.config.website_design}.css" rel="stylesheet">
   {/if}
@@ -31,13 +31,13 @@
   <script src="{$GLOBALASSETS}/js/jquery.cookie.js"></script>
   <script src="{$GLOBALASSETS}/js/jquery.md5.js"></script>
   <script src="{$GLOBALASSETS}/js/bootstrap.min.js"></script>
-  <script src="{$PATH}/js/bootstrap-switch.min.js"></script>
+  <script src="{$GLOBALASSETS}/js/bootstrap-switch.min.js"></script>
   <script src="{$GLOBALASSETS}/js/plugins/dataTables/jquery.dataTables.js"></script>
   <script src="{$GLOBALASSETS}/js/plugins/dataTables/dataTables.bootstrap.js"></script>
   <script src="{$PATH}/js/plugins/metisMenu/jquery.metisMenu.js"></script>
-  <script src="{$PATH}/js/plugins/raphael-2.1.2.min.js"></script>
-  <script src="{$PATH}/js/plugins/morris/morris-0.5.1.min.js"></script>
-  <script src="{$PATH}/js/plugins/sparkline/jquery.sparkline.min.js"></script>
+  <script src="{$GLOBALASSETS}/js/plugins/raphael-2.1.2.min.js"></script>
+  <script src="{$GLOBALASSETS}/js/plugins/morris/morris-0.5.1.min.js"></script>
+  <script src="{$GLOBALASSETS}/js/plugins/sparkline/jquery.sparkline.min.js"></script>
   <script src="{$PATH}/js/mpos.js"></script>
 </head>
 <body>

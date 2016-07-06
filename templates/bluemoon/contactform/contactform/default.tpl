@@ -4,11 +4,16 @@
   <input type="hidden" name="ctoken" value="{$CTOKEN|escape|default:""}" />
   <div class="row">
     <div class="col-lg-12">
-      <div class="panel panel-info">
-        <div class="panel-heading">
-          <i class="fa fa-envelope fa-fw"></i> Contact Us
+      <div class="widget">
+        <div class="widget-header">
+          <div class="title">
+            Contact Us
+          </div>
+          <span class="tools">
+            <i class="fa fa-envelope"></i>
+          </span>
         </div>
-        <div class="panel-body">
+        <div class="widget-body">
           <div class="row">
             <div class="col-lg-6">
               <div class="form-group">
@@ -34,8 +39,6 @@
               </div>
             </div>
           </div>
-        </div>
-        <div class="panel-footer">
           <button type="submit" class="btn btn-success btn-sm">Send Email</button>
           <button type="reset" class="btn btn-warning btn-sm">Reset Values</button></center>
         </div>

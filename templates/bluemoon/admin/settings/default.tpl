@@ -1,16 +1,21 @@
 <div class="row">
   <div class="col-lg-12">
-    <div class="panel panel-info">
-      <div class="panel-heading">
-        <i class="fa fa-gear fa-fw"></i> Settings
-      </div>           
+    <div class="widget">
+      <div class="widget-header">
+        <div class="title">
+          Settings
+        </div>
+        <span class="tools">
+          <i class="fa fa-gear"></i>
+        </span>
+      </div>
       <form method="POST" role="form">
         <input type="hidden" name="page" value="{$smarty.request.page|escape}" />
         <input type="hidden" name="action" value="{$smarty.request.action|escape}" />
         <input type="hidden" name="do" value="save" />
         <input type="hidden" name="ctoken" value="{$CTOKEN|escape|default:""}" />
-        <div class="panel-body">
-          <ul class="nav nav-pills">
+        <div class="widget-body">
+          <ul class="nav nav-tabs">
             {foreach item=TAB from=array_keys($SETTINGS)}
             <li {if $TAB == 'website'}class="active"{/if}><a href="#{$TAB}" data-toggle="tab">{$TAB|capitalize}</a></li>
             {/foreach}
@@ -37,10 +42,8 @@
             </div>
             {/foreach}
           </div>
-          
-        </div>
-        <div class="panel-footer">
-          <input type="submit" value="Save" class="btn btn-success btn-sm">
+          <br/>
+          <input type="submit" value="Save Settings" class="btn btn-success btn-sm">
         </div>
       </form>
     </div>

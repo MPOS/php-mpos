@@ -28,11 +28,16 @@
     <input type="hidden" name="action" value="{$smarty.request.action|escape}">
     <input type="hidden" name="do" value="query">
     <input type="hidden" name="ctoken" value="{$CTOKEN|escape|default:""}" />
-    <div class="panel panel-info">
-      <div class="panel-heading">
-        <i class="fa fa-search fa-fw"></i> User Search
+    <div class="widget">
+      <div class="widget-header">
+        <div class="title">
+          User Search
+        </div>
+        <span class="tools">
+          <i class="fa fa-search"></i>
+        </span>
       </div>
-      <div class="panel-body">
+      <div class="widget-body">
         <ul class="pager">
           {if $smarty.request.start|default:"0" > 0} 
           <li class="previous" disabled>
@@ -66,22 +71,23 @@
           <label>No Fees</label>
           {html_options class="form-control select-mini" name="filter[no_fees]" options=$NOFEE selected=$smarty.request.filter.no_fees|default:""}
         </div>
-      </div>
-      <div class="panel-footer">
         <input type="submit" value="Search" class="btn btn-success btn-sm">
       </div>
     </div>
   </form>
 </div>
-
-
 <div class="row">
   <div class="col-lg-12">
-    <div class="panel panel-info">
-      <div class="panel-heading">
-        <i class="fa fa-info fa-fw"></i> User Information
+    <div class="widget">
+      <div class="widget-header">
+        <div class="title">
+          User Information
+        </div>
+        <span class="tools">
+          <i class="fa fa-info"></i>
+        </span>
       </div>
-      <div class="panel-body">
+      <div class="widget-body">
         <div class="table-responsive">
           <table class="table table-striped table-bordered table-hover {if $USERS}datatable{/if}">
             <thead>
@@ -91,12 +97,12 @@
                 <th class="h6">eMail</th>
                 <th class="h6" style="padding-right:10px">Shares</th>
                 <th class="h6" style="padding-right:10px">Hashrate</th>
-{if $GLOBAL.config.payout_system != 'pps'}
+                {if $GLOBAL.config.payout_system != 'pps'}
                 <th class="h6" style="padding-right:10px">Est. Donation</th>
                 <th class="h6" style="padding-right:10px">Est. Payout</th>
-{else}
+                {else}
                 <th class="h6" style="padding-right:10px">Est. 24 Hours</th>
-{/if}
+                {/if}
                 <th class="h6" style="padding-right:10px">Balance</th>
                 <th class="h6" style="padding-right:10px">Reg. Date</th>
                 <th class="h6" style="padding-right:10px">Last Login</th>
@@ -106,20 +112,20 @@
               </tr>
             </thead>
             <tbody>
-{nocache}
-{section name=user loop=$USERS|default}
+            {nocache}
+            {section name=user loop=$USERS|default}
               <tr>
                 <td>{$USERS[user].id}</td>
                 <td><a href="{$smarty.server.SCRIPT_NAME}?page={$smarty.request.page|escape}&action=userdetails&id={$USERS[user].id}">{$USERS[user].username|escape}</a></td>
                 <td>{$USERS[user].email|escape}</td>
                 <td>{$USERS[user].shares.valid}</td>
                 <td>{$USERS[user].hashrate}</td>
-{if $GLOBAL.config.payout_system != 'pps'}
+                {if $GLOBAL.config.payout_system != 'pps'}
                 <td>{$USERS[user].estimates.donation|number_format:"8"}</td>
                 <td>{$USERS[user].estimates.payout|number_format:"8"}</td>
-{else}
+                {else}
                 <td>{$USERS[user].estimates.hours24|number_format:"8"}</td>
-{/if}
+                {/if}
                 <td>{$USERS[user].balance|number_format:"8"}</td>
                 <td>{$USERS[user].signup_timestamp|date_format:$GLOBAL.config.date}</td>
                 <td>{$USERS[user].last_login|date_format:$GLOBAL.config.date}</td>
@@ -139,8 +145,8 @@
                   <label for="nofee[{$USERS[user].id}]"></label>
                 </td>
               </tr>
-{/section}
-{/nocache}
+              {/section}
+              {/nocache}
             </tbody>
           </table>
         </div>

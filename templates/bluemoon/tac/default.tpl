@@ -1,10 +1,15 @@
   <div class="row">
     <div class="col-lg-12">
-      <div class="panel panel-info">
-        <div class="panel-heading">
-          <i class="fa fa-book fa-fw"></i> Terms &amp; Conditions
+      <div class="widget">
+        <div class="widget-header">
+          <div class="title">
+            Terms &amp; Conditions
+          </div>
+          <span class="tools">
+            <i class="fa fa-book"></i>
+          </span>
         </div>
-        <div class="panel-body">
+        <div class="widget-body">
         {include file="tac/content.tpl"}
         </div>
       </div>

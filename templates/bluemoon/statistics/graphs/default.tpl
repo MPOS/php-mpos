@@ -49,14 +49,19 @@ $(function () {
 
 <div class="row">
   <div class="col-lg-12">
-    <div class="panel panel-info">
-      <div class="panel-heading">
-        <i class="fa fa-signal fa-fw"></i> Average Hashrate past 24h
+    <div class="widget">
+      <div class="widget-header">
+        <div class="title">
+          Average Hashrate past 24h
+        </div>
+        <span class="tools">
+          <i class="fa fa-signal"></i>
+        </span>
       </div>
-      <div class="panel-body">
+      <div class="widget-body">
         <div id="hashrate-area-chart"></div>
       </div>
-      <div class="panel-footer">
+      <div class="widget-footer">
         Your average hashrate per hour, updated every backend cron run.
       </div>
     </div>
@@ -65,14 +70,19 @@ $(function () {
 
 <div class="row">
   <div class="col-lg-12">
-    <div class="panel panel-info">
-      <div class="panel-heading">
-        <i class="fa fa-signal fa-fw"></i> Average Workers past 24h
+    <div class="widget">
+      <div class="widget-header">
+        <div class="title">
+          Average Workers past 24h
+        </div>
+        <span class="tools">
+          <i class="fa fa-signal"></i>
+        </span>
       </div>
-      <div class="panel-body">
+      <div class="widget-body">
         <div id="workers-area-chart"></div>
       </div>
-      <div class="panel-footer">
+      <div class="widget-footer">
         Your average active workers per hour, updated every backend cron run.
       </div>
     </div>
@@ -81,14 +91,19 @@ $(function () {
 
 <div class="row">
   <div class="col-lg-12">
-    <div class="panel panel-info">
-      <div class="panel-heading">
-        <i class="fa fa-signal fa-fw"></i> Average Sharerate past 24h
+    <div class="widget">
+      <div class="widget-header">
+        <div class="title">
+          Average Sharerate past 24h
+        </div>
+        <span class="tools">
+          <i class="fa fa-signal"></i>
+        </span>
       </div>
-      <div class="panel-body">
+      <div class="widget-body">
         <div id="sharerate-area-chart"></div>
       </div>
-      <div class="panel-footer">
+      <div class="widget-footer">
         Your share rate per hour, updated every backend cron run.
       </div>
     </div>

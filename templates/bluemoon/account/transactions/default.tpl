@@ -3,40 +3,48 @@
     <input type="hidden" name="page" value="{$smarty.request.page|escape}">
     <input type="hidden" name="action" value="{$smarty.request.action|escape}">
     <input type="hidden" name="ctoken" value="{$CTOKEN|escape|default:""}" />
-    <div class="panel panel-info">
-      <div class="panel-heading">
-        <i class="fa fa-search fa-fw"></i> Transaction Filter
+    <div class="widget">
+      <div class="widget-header">
+        <div class="title">
+          Transaction Filter
+        </div>
+        <span class="tools">
+          <i class="fa fa-search"></i>
+        </span>
       </div>
-      <div class="panel-body">
-            <ul class="pager">
-              <li class="previous {if $smarty.get.start|default:"0" <= 0}disabled{/if}">
-                <a href="{if $smarty.get.start|default:"0" <= 0}#{else}{$smarty.server.SCRIPT_NAME}?page={$smarty.request.page|escape}&action={$smarty.request.action|escape}&start={$smarty.request.start|escape|default:"0" - $LIMIT}{if $FILTERS|default:""}{$FILTERS}{/if}{/if}">&larr; Prev</a>
-              </li>
-              <li class="next">
-                <a href="{$smarty.server.SCRIPT_NAME}?page={$smarty.request.page|escape}&action={$smarty.request.action|escape}&start={$smarty.request.start|escape|default:"0" + $LIMIT}{if $FILTERS|default:""}{$FILTERS}{/if}">Next &rarr;</a>
-              </li>
-            </ul>
-            <div class="form-group">
-              <label>Type</label>
-              {html_options class="form-control select-mini" name="filter[type]" options=$TRANSACTIONTYPES selected=$smarty.request.filter.type|default:""}
-            </div>
-            <div class="form-group">
-              <label>Status</label>
-              {html_options class="form-control select-mini" name="filter[status]" options=$TXSTATUS selected=$smarty.request.filter.status|default:""}
-            </div>
-      </div>
-      <div class="panel-footer">
+      <div class="widget-body">
+        <ul class="pager">
+          <li class="previous {if $smarty.get.start|default:"0" <= 0}disabled{/if}">
+            <a href="{if $smarty.get.start|default:"0" <= 0}#{else}{$smarty.server.SCRIPT_NAME}?page={$smarty.request.page|escape}&action={$smarty.request.action|escape}&start={$smarty.request.start|escape|default:"0" - $LIMIT}{if $FILTERS|default:""}{$FILTERS}{/if}{/if}">&larr; Prev</a>
+          </li>
+          <li class="next">
+            <a href="{$smarty.server.SCRIPT_NAME}?page={$smarty.request.page|escape}&action={$smarty.request.action|escape}&start={$smarty.request.start|escape|default:"0" + $LIMIT}{if $FILTERS|default:""}{$FILTERS}{/if}">Next &rarr;</a>
+          </li>
+        </ul>
+        <div class="form-group">
+          <label>Type</label>
+          {html_options class="form-control select-mini" name="filter[type]" options=$TRANSACTIONTYPES selected=$smarty.request.filter.type|default:""}
+        </div>
+        <div class="form-group">
+          <label>Status</label>
+          {html_options class="form-control select-mini" name="filter[status]" options=$TXSTATUS selected=$smarty.request.filter.status|default:""}
+        </div>
         <input type="submit" value="Filter" class="btn btn-success btn-sm">
       </div>
     </div>
   </form>
 
   <div class="col-lg-9">
-    <div class="panel panel-info">
-      <div class="panel-heading">
-        <i class="fa fa-clock-o fa-fw"></i> Transaction History
+    <div class="widget">
+      <div class="widget-header">
+        <div class="title">
+          Transaction History
+        </div>
+        <span class="tools">
+          <i class="fa fa-clock-o"></i>
+        </span>
       </div>
-      <div class="panel-body no-padding">
+      <div class="widget-body">
         <div class="table-responsive">
           <table class="table table-striped table-bordered table-condensed">
             <thead>
@@ -52,7 +60,7 @@
               </tr>
             </thead>
             <tbody>
-{section transaction $TRANSACTIONS}
+              {section transaction $TRANSACTIONS}
               <tr>
                 <td>{$TRANSACTIONS[transaction].id}</td>
                 <td>{$TRANSACTIONS[transaction].timestamp}</td>
@@ -82,12 +90,12 @@
                 <td>{if $TRANSACTIONS[transaction].height == 0}n/a{else}<a href="{$smarty.server.SCRIPT_NAME}?page=statistics&action=round&height={$TRANSACTIONS[transaction].height}">{$TRANSACTIONS[transaction].height}</a>{/if}</td>
                 <td><font color="{if $TRANSACTIONS[transaction].type == 'Credit' or $TRANSACTIONS[transaction].type == 'Credit_PPS' or $TRANSACTIONS[transaction].type == 'Bonus'}green{else}red{/if}">{$TRANSACTIONS[transaction].amount|number_format:"8"}</td>
               </tr>
-{/section}
+              {/section}
             </tbody>
           </table>
         </div>
       </div>
-      <div class="panel-footer">
+      <div class="widget-footer">
         <h6><b>Debit_AP</b> = Auto Threshold Payment, <b>Debit_MP</b> = Manual Payment, <b>Donation</b> = Donation, <b>Fee</b> = Pool Fees (if applicable)</h6>
       </div>
     </div>

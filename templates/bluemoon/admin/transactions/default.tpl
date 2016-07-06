@@ -1,11 +1,16 @@
 {if $DISABLE_TRANSACTIONSUMMARY|default:"0" != 1}
 <div class="row">
   <div class="col-lg-12">
-    <div class="panel panel-info">
-      <div class="panel-heading">
-        <i class="fa fa-money fa-fw"></i> Transaction Summary
+    <div class="widget">
+      <div class="widget-header">
+        <div class="title">
+          Transaction Summary
+        </div>
+        <span class="tools">
+          <i class="fa fa-money"></i>
+        </span>
       </div>
-      <div class="panel-body no-padding">
+      <div class="widget-body">
         <div class="table-responsive">
           <table class="table table-striped table-bordered table-condensed">
             <thead>
@@ -35,11 +40,16 @@
     <input type="hidden" name="page" value="{$smarty.request.page|escape}">
     <input type="hidden" name="action" value="{$smarty.request.action|escape}">
     <input type="hidden" name="ctoken" value="{$CTOKEN|escape|default:""}" />
-    <div class="panel panel-info">
-      <div class="panel-heading">
-        <i class="fa fa-search fa-fw"></i> Transaction Filter
+    <div class="widget">
+      <div class="widget-header">
+        <div class="title">
+          Transaction Filter
+        </div>
+        <span class="tools">
+          <i class="fa fa-search"></i>
+        </span>
       </div>
-      <div class="panel-body">
+      <div class="widget-body">
         <ul class="pager">
           <li class="previous {if $smarty.get.start|default:"0" <= 0}disabled{/if}">
             <a href="{if $smarty.get.start|default:"0" <= 0}#{else}{$smarty.server.SCRIPT_NAME}?page={$smarty.request.page|escape}&action={$smarty.request.action|escape}&start={$smarty.request.start|escape|default:"0" - $LIMIT}{if $FILTERS|default:""}{$FILTERS}{/if}{/if}">&larr; Prev</a>
@@ -64,8 +74,6 @@
           <label>Address</label>
           <input class="form-control" size="20" type="text" name="filter[address]" value="{$smarty.request.filter.address|default:""}" />
         </div>
-      </div>
-      <div class="panel-footer">
         <input type="submit" value="Filter" class="btn btn-success btn-sm">
       </div>
     </div>
@@ -74,11 +82,16 @@
 
 
   <div class="col-lg-9">
-    <div class="panel panel-info">
-      <div class="panel-heading">
-        <i class="fa fa-clock-o fa-fw"></i> Transaction History
+    <div class="widget">
+      <div class="widget-header">
+        <div class="title">
+          Transaction History
+        </div>
+        <span class="tools">
+          <i class="fa fa-clock-o"></i>
+        </span>
       </div>
-      <div class="panel-body no-padding">
+      <div class="widget-body">
         <div class="table-responsive">
           <table class="table table-striped table-bordered table-condensed">
             <thead>
@@ -127,7 +140,7 @@
           </table>
         </div>
       </div>
-      <div class="panel-footer">
+      <div class="widget-footer">
         <h6><b>Credit_AP</b> = Auto Threshold Payment, <b>Credit_MP</b> = Manual Payment, <b>Donation</b> = Donation, <b>Fee</b> = Pool Fees (if applicable)</h6>
       </div>
     </div>

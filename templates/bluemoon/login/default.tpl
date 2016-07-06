@@ -1,27 +1,32 @@
-<div class="row">
-  <form class="col-md-4" role="form" action="{$smarty.server.SCRIPT_NAME}?page=login" method="post" id="loginForm">
-    <input type="hidden" name="ctoken" value="{$CTOKEN|escape|default:""}">
-    <div class="panel panel-info">
-      <div class="panel-heading">
-        <i class="fa fa-sign-in fa-fw"></i> Login with existing account
-      </div>
-      <div class="panel-body">
-        <div class="form-group">
-          <div class="input-group input-group-sm">
-            <span class="input-group-addon"><i class="fa fa-envelope-o fa-fw"></i></span>
-            <input class="form-control" placeholder="E-mail" name="username" type="email" autofocus required>
+  <br/><br/>
+  <div class="row">
+    <div class="col-lg-4 col-md-4 col-md-offset-4">
+      <div class="sign-in-container">
+        <form class="login-wrapper" role="form" action="{$smarty.server.SCRIPT_NAME}?page=login" method="post" id="loginForm">
+          <input type="hidden" name="ctoken" value="{$CTOKEN|escape|default:""}">
+          <div class="header">
+            <div class="row">
+              <div class="col-md-12 col-lg-12">
+                <h2>Login<i class="fa fa-lock fa-2x pull-right"></i></h2>
+              </div>
+            </div>
           </div>
-          <div class="input-group input-group-sm">
-            <span class="input-group-addon"><i class="fa fa-key fa-fw"></i></span>
-            <input class="form-control" placeholder="Password" name="password" type="password" value="" required>
+          <div class="content">
+            <div class="form-group">
+              <label for="username">Benutzername</label>
+              <input type="text" class="form-control input-sm" name="username" id="username" placeholder="E-mail" autofocus required>
+            </div>
+            <div class="form-group">
+              <label for="password">Passwort</label>
+              <input type="password" class="form-control input-sm" name="password" id="password" placeholder="Password" required>
+            </div>
           </div>
-        </div>
-      </div>
-      <center>{nocache}{$RECAPTCHA|default:"" nofilter}{/nocache}</center>
-      <div class="panel-footer">
-        <input type="submit" class="btn btn-success btn-sm" value="Login" >
-        <a href="{$smarty.server.SCRIPT_NAME}?page=password"><font size="1">Forgot your password?</font></a>
+          <div class="actions">
+            <input class="btn btn-info btn-sm" name="Login" type="submit" value="Anmelden">
+            <a class="link" href="{$smarty.server.SCRIPT_NAME}?page=password">Forgot your password?</a>
+            <div class="clearfix"></div>
+          </div>
+        </form>
       </div>
     </div>
-  </form>
-</div>
+  </div>

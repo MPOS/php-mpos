@@ -4,11 +4,16 @@
   <input type="hidden" name="action" value="{$smarty.request.action|escape}">
   <input type="hidden" name="do" value="cashOut">
   <div class="col-lg-6">
-    <div class="panel panel-info">
-      <div class="panel-heading">
-        <i class="fa fa-money fa-fw"></i> Cash Out
+    <div class="widget">
+      <div class="widget-header">
+        <div class="title">
+          Cash Out
+        </div>
+        <span class="tools">
+          <i class="fa fa-money"></i>
+        </span>
       </div>
-      <div class="panel-body">
+      <div class="widget-body">
         <div class="row">
           <div class="col-lg-12">
             <div class="form-group">
@@ -33,26 +38,24 @@
             </div>
           </div>
         </div>
-      </div>
-      <div class="panel-footer">
-      {nocache}
-      <input type="hidden" name="wf_token" value="{$smarty.request.wf_token|escape|default:""}">
-      <input type="hidden" name="ctoken" value="{$CTOKEN|escape|default:""}" />
-      <input type="hidden" name="utype" value="withdraw_funds">
-      {if $GLOBAL.twofactor.enabled && $GLOBAL.twofactor.options.withdraw}
-      {if $GLOBAL.userdata.balance.confirmed|escape < $GLOBAL.config.mp_threshold}
-      <input type="submit" value="Unlock" class="btn btn-warning btn-sm" name="unlock"  disabled="disabled">
-      {elseif $WITHDRAWSENT == 1 && $WITHDRAWUNLOCKED == 1}
-      <input type="submit" value="Cash Out" class="btn btn-success btn-sm">
-      {elseif $WITHDRAWSENT == 0 && $WITHDRAWUNLOCKED == 1 || $WITHDRAWSENT == 1 && $WITHDRAWUNLOCKED == 0}
-      <input type="submit" value="Cash Out" class="btn btn-danger btn-sm" disabled="disabled">
-      {elseif $WITHDRAWSENT == 0 && $WITHDRAWUNLOCKED == 0}
-      <input type="submit" value="Unlock" class="btn btn-warning btn-sm" name="unlock">
-      {/if}
-      {else}
-      <input type="submit" value="Cash Out" class="btn btn-success btn-sm">
-      {/if}
-      {/nocache}
+        {nocache}
+        <input type="hidden" name="wf_token" value="{$smarty.request.wf_token|escape|default:""}">
+        <input type="hidden" name="ctoken" value="{$CTOKEN|escape|default:""}" />
+        <input type="hidden" name="utype" value="withdraw_funds">
+        {if $GLOBAL.twofactor.enabled && $GLOBAL.twofactor.options.withdraw}
+        {if $GLOBAL.userdata.balance.confirmed|escape < $GLOBAL.config.mp_threshold}
+        <input type="submit" value="Unlock" class="btn btn-warning btn-sm" name="unlock"  disabled="disabled">
+        {elseif $WITHDRAWSENT == 1 && $WITHDRAWUNLOCKED == 1}
+        <input type="submit" value="Cash Out" class="btn btn-success btn-sm">
+        {elseif $WITHDRAWSENT == 0 && $WITHDRAWUNLOCKED == 1 || $WITHDRAWSENT == 1 && $WITHDRAWUNLOCKED == 0}
+        <input type="submit" value="Cash Out" class="btn btn-danger btn-sm" disabled="disabled">
+        {elseif $WITHDRAWSENT == 0 && $WITHDRAWUNLOCKED == 0}
+        <input type="submit" value="Unlock" class="btn btn-warning btn-sm" name="unlock">
+        {/if}
+        {else}
+        <input type="submit" value="Cash Out" class="btn btn-success btn-sm">
+        {/if}
+        {/nocache}
       </div>
     </div>
   </div>

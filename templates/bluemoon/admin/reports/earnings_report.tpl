@@ -1,10 +1,15 @@
 <div class="row">
   <div class="col-lg-12">
-    <div class="panel panel-info">
-      <div class="panel-heading">
-        <i class="fa fa-info fa-fw"></i> Earnings Report Last {$BLOCKLIMIT} Blocks For User: {$USERNAME}
+    <div class="widget">
+      <div class="widget-header">
+        <div class="title">
+          Earnings Report Last {$BLOCKLIMIT} Blocks For User: {$USERNAME}
+        </div>
+        <span class="tools">
+          <i class="fa fa-info"></i>
+        </span>
       </div>
-      <div class="panel-body no-padding">
+      <div class="widget-body">
         <div class="table-responsive">
           <table class="table table-striped table-bordered table-hover">
             <thead>
@@ -27,33 +32,33 @@
               </tr>
             </thead>
             <tbody>
-{assign var=percentage value=0}
-{assign var=percentage1 value=0}
-{assign var=percentage2 value=0}
-{assign var=totalvalid value=0}
-{assign var=totalinvalid value=0}
-{assign var=totalshares value=0}
-{assign var=usertotalshares value=0}
-{assign var=totalpercentage value=0}
-{assign var=pplnsshares value=0}
-{assign var=userpplnsshares value=0}
-{assign var=pplnsvalid value=0}
-{assign var=pplnsinvalid value=0}
-{assign var=amount value=0}
-{section txs $REPORTDATA}
-      {assign var="totalshares" value=$totalshares+$REPORTDATA[txs].shares}
-      {assign var=totalvalid value=$totalvalid+$REPORTDATA[txs]['user'].valid}
-      {assign var=totalinvalid value=$totalinvalid+$REPORTDATA[txs]['user'].invalid}
-      {assign var="pplnsshares" value=$pplnsshares+$REPORTDATA[txs].pplns_shares}
-      {assign var=pplnsvalid value=$pplnsvalid+$REPORTDATA[txs]['user'].pplns_valid}
-      {assign var=pplnsinvalid value=$pplnsinvalid+$REPORTDATA[txs]['user'].pplns_invalid}
-      {assign var=amount value=$amount+$REPORTDATA[txs].user_credit}
-      {if $REPORTDATA[txs]['user'].pplns_valid > 0}
-        {assign var="userpplnsshares" value=$userpplnsshares+$REPORTDATA[txs].pplns_shares}
-      {/if}
-      {if $REPORTDATA[txs]['user'].valid > 0}
-        {assign var="usertotalshares" value=$usertotalshares+$REPORTDATA[txs].shares}
-      {/if}
+            {assign var=percentage value=0}
+            {assign var=percentage1 value=0}
+            {assign var=percentage2 value=0}
+            {assign var=totalvalid value=0}
+            {assign var=totalinvalid value=0}
+            {assign var=totalshares value=0}
+            {assign var=usertotalshares value=0}
+            {assign var=totalpercentage value=0}
+            {assign var=pplnsshares value=0}
+            {assign var=userpplnsshares value=0}
+            {assign var=pplnsvalid value=0}
+            {assign var=pplnsinvalid value=0}
+            {assign var=amount value=0}
+            {section txs $REPORTDATA}
+              {assign var="totalshares" value=$totalshares+$REPORTDATA[txs].shares}
+              {assign var=totalvalid value=$totalvalid+$REPORTDATA[txs]['user'].valid}
+              {assign var=totalinvalid value=$totalinvalid+$REPORTDATA[txs]['user'].invalid}
+              {assign var="pplnsshares" value=$pplnsshares+$REPORTDATA[txs].pplns_shares}
+              {assign var=pplnsvalid value=$pplnsvalid+$REPORTDATA[txs]['user'].pplns_valid}
+              {assign var=pplnsinvalid value=$pplnsinvalid+$REPORTDATA[txs]['user'].pplns_invalid}
+              {assign var=amount value=$amount+$REPORTDATA[txs].user_credit}
+              {if $REPORTDATA[txs]['user'].pplns_valid > 0}
+              {assign var="userpplnsshares" value=$userpplnsshares+$REPORTDATA[txs].pplns_shares}
+              {/if}
+              {if $REPORTDATA[txs]['user'].valid > 0}
+              {assign var="usertotalshares" value=$usertotalshares+$REPORTDATA[txs].shares}
+              {/if}
               <tr>
                 <td class="h6"><a href="{$smarty.server.SCRIPT_NAME}?page=statistics&action=round&height={$REPORTDATA[txs].height}">{$REPORTDATA[txs].height|default:"0"}</a></td>
                 <td class="h6">{$REPORTDATA[txs].shares|default:"0"}</td>
@@ -73,7 +78,7 @@
                 <td class="h6" style="padding-right: 25px;">{$REPORTDATA[txs].user_credit|default:"0"|number_format:"8"}</td>
                 {assign var=percentage1 value=0}
               </tr>
-{/section}
+              {/section}
               <tr>
                 <td class="h6"><b>Totals</b></td>
                 <td class="h6">{$totalshares|number_format}</td>

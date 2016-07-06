@@ -1,10 +1,15 @@
   <div class="row">
     <div class="col-lg-12">
-      <div class="panel panel-info">
-        <div class="panel-heading">
-          <i class="fa fa-info fa-fw"></i> Frequently Asked Questions
+      <div class="widget">
+        <div class="widget-header">
+          <div class="title">
+            Frequently Asked Questions
+          </div>
+          <span class="tools">
+            <i class="fa fa-info"></i>
+          </span>
         </div>
-        <div class="panel-body">
+        <div class="widget-body">
           <ul>
           <li><b><i>Q: When will I get paid?</b></i></li>
           &nbsp;<b>A:</b> This pool uses the following payout system.<br>
@@ -47,7 +52,7 @@
           &nbsp;<b>A:</b> Double check your settings against our <a href="{$smarty.server.SCRIPT_NAME}?page=gettingstarted">getting started page.</a>
           </ul>
         </div>
-        <div class="panel-footer">
+        <div class="widget-footer">
           <h6>This Pool is running <a href="https://github.com/TheSerapher/php-mpos">MPOS</a> project code. This frontend was  created by TheSerapher aka Sebastian Grewe. The operation of the pool is soley at the hand of your trusted pool operator.</h6>
         </div>
       </div>
