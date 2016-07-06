@@ -1354,6 +1354,26 @@ ul.appointments {
       top: 2px;
       display: none; }
 
+    
+    
+    
+.mini-widget-orange .mini-widget-heading {
+  background: #FAB20A;
+  color: black; }
+  .mini-widget-orange .mini-widget-heading .pull-right {
+    color: white; }
+.mini-widget-orange .mini-widget-body {
+  background: #EBAD1C; }
+  .mini-widget-orange .mini-widget-body i {
+    color: #FCCD60; }
+  .mini-widget-orange .mini-widget-body .number {
+    color: white; }
+.mini-widget-orange .mini-widget-footer {
+  color: white;
+  background: #CC930E; }
+    
+    
+    
 .mini-widget-yellow .mini-widget-heading {
   background: #ffff00;
   color: black; }

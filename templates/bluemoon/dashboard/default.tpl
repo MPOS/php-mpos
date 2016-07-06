@@ -18,11 +18,22 @@
             <div class="col-lg-12">
               {* Load our payout system so we can load some payout specific templates *}
               {assign var=PAYOUT_SYSTEM value=$GLOBAL.config.payout_system}
-              {include file="dashboard/round_statistics/$PAYOUT_SYSTEM/round.tpl"}
-              {include file="dashboard/blocks/default.tpl"}
-              {include file="dashboard/round_statistics/$PAYOUT_SYSTEM/shares.tpl"}
+              {include file="dashboard/round_statistics/$PAYOUT_SYSTEM/default.tpl"}
               {if !$DISABLED_API}
-              {include file="dashboard/worker_information/default.tpl"}
+                <div class="row">
+                  <div class="col-lg-8">
+                    {include file="dashboard/blocks/default.tpl"}
+                  </div>
+                  <div class="col-lg-4">
+                    {include file="dashboard/worker_information/default.tpl"}
+                  </div>
+                </div>
+              {else}
+                <div class="row">
+                  <div class="col-lg-12">
+                    {include file="dashboard/blocks/default.tpl"}
+                  </div>
+                </div>
               {/if}
             </div>
           </div>
