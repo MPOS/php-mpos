@@ -56,7 +56,7 @@
             UIkit.notify('{/literal}{$smarty.session.POPUP[popup].CONTENT nofilter}{literal}', {
               pos: 'top-center',
               notifyhandle: '{/literal}{$smarty.session.POPUP[popup].ID|default:"static"}{literal}',
-              {/literal}{if $GLOBAL.website.notificationshide != 0}{literal}timeout: 0,{/literal}{else}{literal}timeout: 5000,{/literal}{/if}
+              {/literal}{if $GLOBAL.website.notificationshide == 0}{literal}timeout: 0,{/literal}{else}{literal}timeout: 5000,{/literal}{/if}
               {if $smarty.session.POPUP[popup].TYPE|default:"alert alert-info" == "alert alert-info"}{literal}status: 'primary',{/literal}
               {elseif $smarty.session.POPUP[popup].TYPE|default:"alert alert-info" == "alert alert-warning"}{literal}status: 'warning',{/literal}
               {elseif $smarty.session.POPUP[popup].TYPE|default:"alert alert-info" == "alert alert-danger"}{literal}status: 'danger',{/literal}
