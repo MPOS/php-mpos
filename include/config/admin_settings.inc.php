@@ -97,6 +97,13 @@ $aSettings['website'][] = array(
   'name' => 'website_notification_autohide', 'value' => $setting->getValue('website_notification_autohide'),
   'tooltip' => 'Hides Notifications after 5 seconds.'
 );
+$aSettings['website'][] = array(
+  'display' => 'Disable Block Notification Sound', 'type' => 'select',
+  'options' => array( 0 => 'Do not notify', 1 => 'Notify when Block is found' ),
+  'default' => 0,
+  'name' => 'website_blockfinder_notification', 'value' => $setting->getValue('website_blockfinder_notification'),
+  'tooltip' => 'Enable/Disable Blockfinder Sound.'
+);
 $aSettings['blockchain'][] = array(
   'display' => 'Disable Blockexplorer', 'type' => 'select',
   'options' => array( 0 => 'No', 1 => 'Yes' ),
@@ -230,6 +237,20 @@ $aSettings['statistics'][] = array(
   'default' => 'Code from Google Analytics',
   'name' => 'statistics_analytics_code', 'value' => $setting->getValue('statistics_analytics_code'),
   'tooltip' => '.'
+);
+$aSettings['acl'][] = array(
+  'display' => 'Show Stats for logged in users only', 'type' => 'select',
+  'options' => array( 0 => 'No', 1 => 'Yes' ),
+  'default' => 0,
+  'name' => 'acl_show_stats_loggedin', 'value' => $setting->getValue('acl_show_stats_loggedin'),
+  'tooltip' => 'Should statistics be visible for logged in users only.'
+);
+$aSettings['acl'][] = array(
+  'display' => 'Show Help for logged in users only', 'type' => 'select',
+  'options' => array( 0 => 'No', 1 => 'Yes' ),
+  'default' => 0,
+  'name' => 'acl_show_help_loggedin', 'value' => $setting->getValue('acl_show_help_loggedin'),
+  'tooltip' => 'Should Help Page be visible for logged in users only.'
 );
 $aSettings['acl'][] = array(
   'display' => 'Hide news post author', 'type' => 'select',

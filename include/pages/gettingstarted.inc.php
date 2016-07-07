@@ -6,5 +6,13 @@ $smarty->assign("SITESTRATUMPORT", $config['gettingstarted']['stratumport']);
 $smarty->assign("SITECOINNAME", $config['gettingstarted']['coinname']);
 $smarty->assign("SITECOINURL", $config['gettingstarted']['coinurl']);
 
-// Tempalte specifics
-$smarty->assign("CONTENT", "default.tpl");
+switch($setting->getValue('acl_show_help_loggedin', 1)) {
+case '0':
+  $smarty->assign("CONTENT", "default.tpl");
+  break;
+case '1':
+  if ($user->isAuthenticated()) {
+    $smarty->assign("CONTENT", "default.tpl");
+  }
+  break;
+}
