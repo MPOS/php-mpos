@@ -31,6 +31,8 @@
                   {if $event.type == 'okerror'}
                     {if $event.value == 0}
                       <font color="green">OK</font>
+                    {else if $event.value == 2}
+                      <font color="orange">WARN</font>
                     {else}
                       <font color="red">ERROR</font>
                     {/if}
