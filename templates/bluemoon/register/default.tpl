@@ -7,10 +7,13 @@
 <div class="row">
   <div class="col-lg-6 col-md-6 col-md-offset-3">
     <div class="sign-in-container">
-      <form class="login-wrapper" role="form" action="{$smarty.server.SCRIPT_NAME}?page=login" method="post" id="loginForm">
-        <input type="hidden" name="page" value="password">
-        <input type="hidden" name="action" value="reset">
-        <input type="hidden" name="ctoken" value="{$CTOKEN|escape|default:""}" />
+      <form class="login-wrapper" role="form" method="post" id="loginForm">
+        <input type="hidden" name="page" value="{$smarty.request.page|escape}">
+        {if $smarty.request.token|default:""}
+        <input type="hidden" name="token" value="{$smarty.request.token|escape}">
+        {/if}
+        <input type="hidden" name="ctoken" value="{$CTOKEN|escape|default:""}">
+        <input type="hidden" name="action" value="register">
         <div class="header">
           <div class="row">
             <div class="col-md-12 col-lg-12">
