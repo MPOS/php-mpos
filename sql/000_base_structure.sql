@@ -248,11 +248,12 @@ CREATE TABLE `statistics_users` (
   KEY `account_id_timestamp` (`account_id`,`timestamp`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-CREATE TABLE IF NOT EXISTS `push_notification_settings` (
-	`account_id` int(11) NOT NULL,
-	`value` text DEFAULT NULL,
-	PRIMARY KEY (`account_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+CREATE TABLE IF NOT EXISTS `user_settings` (
+  `account_id` int(11) NOT NULL,
+  `name` varchar(50) NOT NULL,
+  `value` text DEFAULT NULL,
+  PRIMARY KEY (`account_id`,`name`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;

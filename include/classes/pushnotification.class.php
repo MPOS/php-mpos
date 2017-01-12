@@ -1,4 +1,6 @@
 <?php
+	$defflip = (!cfip()) ? exit(header('HTTP/1.1 401 Unauthorized')) : 1;
+
 	class PushNotification extends Base {
 		var $tableSettings = 'push_notification_settings';
 		
@@ -100,14 +102,7 @@
 		 * @return bool
 		 **/
 		public function updateSettings($account_id, $data) {
-			$this->debug->append("STA " . __METHOD__, 4);
-			
-			$stmt = $this->mysqli->prepare("INSERT INTO $this->tableSettings (value, account_id) VALUES (?, ?) ON DUPLICATE KEY UPDATE value = VALUES(value)");
-			if (!($stmt && $stmt->bind_param('si', json_encode($data), $account_id) && $stmt->execute())) {
-				$this->setErrorMessage($this->getErrorMsg('E0047', __CLASS__));
-				return $this->sqlError();
-			}
-			$this->log->log("info", "User $account_id updated notification settings");
+			UserSettings::construct($account_id)->PushNotifications = $data;
 			return true;
 		}
 		
@@ -117,22 +112,14 @@
 		 * @return array Notification settings
 		 **/
 		public function getNotificationSettings($account_id) {
-			$this->debug->append("STA " . __METHOD__, 4);
-			$stmt = $this->mysqli->prepare("SELECT value FROM $this->tableSettings WHERE account_id = ?");
-			if ($stmt && $stmt->bind_param('i', $account_id) && $stmt->execute() && $result = $stmt->get_result()) {
-				if ($result->num_rows) {
-					/* @var $result mysqli_result */
-					$aData = json_decode(current($result->fetch_row()), true);
-					return $aData;
-				} else {
-					return array(
-						'class' => false,
-						'params' => null,
-						'file' => null,
-					);
-				}
+			if ($settings = UserSettings::construct($account_id)->PushNotifications){
+				return $settings;
 			}
-			return $this->sqlError('E0045');
+			return array(
+				'class' => false,
+				'params' => null,
+				'file' => null,
+			);
 		}
 		
 		private static $instance = null;

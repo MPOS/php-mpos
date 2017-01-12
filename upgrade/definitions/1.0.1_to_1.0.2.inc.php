@@ -10,11 +10,12 @@ function run_102() {
 
   // Upgrade specific variables
   $aSql[] = "
-	CREATE TABLE IF NOT EXISTS `push_notification_settings` (
-  		`account_id` int(11) NOT NULL,
-  		`value` text DEFAULT NULL,
-  		PRIMARY KEY (`account_id`)
-	) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+		CREATE TABLE IF NOT EXISTS `user_settings` (
+		  `account_id` int(11) NOT NULL,
+		  `name` varchar(50) NOT NULL,
+		  `value` text DEFAULT NULL,
+		  PRIMARY KEY (`account_id`,`name`)
+		) ENGINE=InnoDB DEFAULT CHARSET=utf8 ROW_FORMAT=COMPACT;
   ";
 
   if ($db_version_now == $db_version_old && version_compare($db_version_now, DB_VERSION, '<')) {
