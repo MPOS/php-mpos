@@ -40,6 +40,10 @@ class Base {
   public function setSalty($salt) {
     $this->salty = $salt;
   }
+  /**
+   * @var Smarty
+   */
+  var $smarty;
   public function setSmarty($smarty) {
     $this->smarty = $smarty;
   }

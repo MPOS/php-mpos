@@ -8,7 +8,25 @@ if ($user->isAuthenticated()) {
   } else {
     if (@$_REQUEST['do'] == 'save') {
       if (!$config['csrf']['enabled'] || $config['csrf']['enabled'] && $csrftoken->valid) {
-        if ($notification->updateSettings($_SESSION['USERDATA']['id'], $_REQUEST['data'])) {
+
+      	$pushSettings = array(
+      		'class' => $_REQUEST['pushnotification-class'],
+      		'params' => null,
+      		'file' => null,
+      	);
+      	if ($pushSettings['class'] && array_key_exists($pushSettings['class'], $_REQUEST['pushnotification'])){
+      		$pushSettings['params'] = $_REQUEST['pushnotification'][$pushSettings['class']];
+      	}
+      	if ($pushSettings['class']){
+      		$c = $pushnotification->getClasses();
+      		if (array_key_exists($pushSettings['class'], $c)){
+      			$pushSettings['file'] = $c[$pushSettings['class']][0];
+      		}
+      	}
+      	
+      	if (!$pushnotification->updateSettings($_SESSION['USERDATA']['id'], $pushSettings)){
+      		$_SESSION['POPUP'][] = array('CONTENT' => $pushnotification->getError(), 'TYPE' => 'alert alert-danger');
+      	}elseif ($notification->updateSettings($_SESSION['USERDATA']['id'], $_REQUEST['data'])) {
           $_SESSION['POPUP'][] = array('CONTENT' => 'Updated notification settings', 'TYPE' => 'alert alert-success');
         } else {
           $_SESSION['POPUP'][] = array('CONTENT' => $notification->getError(), 'TYPE' => 'alert alert-danger');
@@ -29,8 +47,12 @@ if ($user->isAuthenticated()) {
 
     // Fetch user notification settings
     $aSettings = $notification->getNotificationSettings($_SESSION['USERDATA']['id']);
+    $aPushSettings = $pushnotification->getNotificationSettings($_SESSION['USERDATA']['id']);
+    $aSmartyClasses = $pushnotification->getClassesForSmarty();
 
     $smarty->assign('NOTIFICATIONS', $aNotifications);
+    $smarty->assign('PUSHNOTIFICATIONS', $aSmartyClasses);
+    $smarty->assign('PUSHSETTINGS', $aPushSettings);
     $smarty->assign('SETTINGS', $aSettings);
     $smarty->assign('CONTENT', 'default.tpl');
   }

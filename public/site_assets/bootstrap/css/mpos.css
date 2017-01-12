@@ -660,3 +660,8 @@ div.fade {
 }
 
 /* END EDIT */
+
+.push-notifications-params,
+.push-notifications-disabled .push-notifications {
+	display : none;
+}

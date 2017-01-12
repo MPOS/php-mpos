@@ -142,7 +142,7 @@ CREATE TABLE IF NOT EXISTS `settings` (
   UNIQUE KEY `setting` (`name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-INSERT INTO `settings` (`name`, `value`) VALUES ('DB_VERSION', '1.0.1');
+INSERT INTO `settings` (`name`, `value`) VALUES ('DB_VERSION', '1.0.2');
 
 CREATE TABLE IF NOT EXISTS `shares` (
   `id` bigint(30) NOT NULL AUTO_INCREMENT,
@@ -246,6 +246,12 @@ CREATE TABLE `statistics_users` (
   `timestamp` int(11) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `account_id_timestamp` (`account_id`,`timestamp`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+CREATE TABLE IF NOT EXISTS `push_notification_settings` (
+	`account_id` int(11) NOT NULL,
+	`value` text DEFAULT NULL,
+	PRIMARY KEY (`account_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
