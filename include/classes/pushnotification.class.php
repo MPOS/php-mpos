@@ -144,9 +144,10 @@
 						
 					$message = false;
 					foreach (array('/mail/push_notifications/', '/mail/notifications/') as $dir){
-							$this->smarty->clearCache($templateFile = TEMPLATE_DIR.$dir.$template.'.tpl');
+						$this->smarty->clearCache($templateFile = TEMPLATE_DIR.$dir.$template.'.tpl');
 						try {
 							$message = $this->smarty->fetch($templateFile);
+							break;
 						} catch (SmartyException $e){
 							
 						}
@@ -168,4 +169,3 @@
 	$pushnotification->setConfig($config);
 	$pushnotification->setSetting($setting);
 	$pushnotification->setErrorCodes($aErrorCodes);
-	
