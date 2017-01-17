@@ -28,7 +28,7 @@ class Base {
     $this->coin_address = $coin_address;
   }
   
-  protected $log;
+  public $log;
   public function setLog($log) {
     $this->log = $log;
   }
