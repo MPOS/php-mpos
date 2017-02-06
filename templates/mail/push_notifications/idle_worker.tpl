@@ -1,5 +1,5 @@
-<p>One of your workers is currently IDLE: {nocache}{$DATA.worker}{/nocache}</p>
-<p>We have not received any shares for this worker in the past 10 minutes.</p>
-<p>Since monitoring is enabled for this worker, this notification was sent.</p>
+One of your workers is currently IDLE: <b>{nocache}{$DATA.worker}{/nocache}</b><br/>
+We have not received any shares for this worker in the past 10 minutes.<br/>
+Since monitoring is enabled for this worker, this notification was sent.<br/>
 <br />
-<p>Please check your workers!</p>
+Please check your workers!
