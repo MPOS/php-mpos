@@ -17,7 +17,7 @@ $(document).ready(function(){
     $('#togglesound').hide();
   } else {
     if (playSound == 'True') {
-      var audioPath = "{/literal}{$PATH}{literal}/audio/";
+      var audioPath = "{/literal}{$GLOBALASSETS}{literal}/audio/";
       var sound = [ {id:"ding", src:"ding.mp3"} ];
       var playSound = 'True';
       createjs.Sound.alternateExtensionseExtensions = ["mp3"];

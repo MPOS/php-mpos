@@ -129,6 +129,7 @@ $aGlobal['statistics']['analytics']['enabled'] = $setting->getValue('statistics_
 $aGlobal['statistics']['analytics']['code'] = $setting->getValue('statistics_analytics_code');
 
 // ACLs
+$aGlobal['acl']['menu']['loggedin'] = $setting->getValue('acl_show_menu_loggedin');
 $aGlobal['acl']['statistics']['loggedin'] = $setting->getValue('acl_show_stats_loggedin');
 $aGlobal['acl']['help']['loggedin'] = $setting->getValue('acl_show_help_loggedin');
 $aGlobal['acl']['pool']['statistics'] = $setting->getValue('acl_pool_statistics');

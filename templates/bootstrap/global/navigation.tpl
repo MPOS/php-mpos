@@ -8,7 +8,6 @@
                     <li>
                         <a href="{$smarty.server.SCRIPT_NAME}?page=dashboard"><i class="fa fa-dashboard fa-fw"></i> Dashboard</a>
                     </li>
-
                     <li {if $smarty.get.page|default:"0" eq "account"}class="active"{/if}>
                         <a href="#"><i class="fa fa-user-md fa-fw"></i> My Account<span class="fa arrow"></span></a>
                         <ul class="nav nav-second-level">

@@ -1,7 +1,7 @@
 <script>
-  var zxcvbnPath = "{$PATH}/js/zxcvbn/zxcvbn.js";
+  var zxcvbnPath = "{$GLOBALASSETS}/js/plugins/zxcvbn/zxcvbn.js";
 </script>
-<script type="text/javascript" src="{$PATH}/js/pwcheck.js"></script>
+<script type="text/javascript" src="{$GLOBALASSETS}/js/pwcheck.js"></script>
 
 <div class="row">
   <div class="col-lg-5">
