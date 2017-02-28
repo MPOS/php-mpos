@@ -430,6 +430,7 @@ class Transaction extends Base {
     $aMailData['email'] = $this->user->getUserEmailById($account_id);
     $aMailData['subject'] = $type . ' Completed';
     $aMailData['amount'] = $amount;
+    $aMailData['currency'] = $this->config['currency'];
     if (!$this->notification->sendNotification($account_id, 'payout', $aMailData)) {
       $this->setErrorMessage('Failed to send notification email to users address: ' . $aMailData['email'] . 'ERROR: ' . $this->notification->getCronError());
     }

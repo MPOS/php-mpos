@@ -16,6 +16,8 @@ class Base {
   public function getTableName() {
     return $this->table;
   }
+  
+  protected $debug;
   public function setDebug($debug) {
     $this->debug = $debug;
   }
@@ -25,9 +27,13 @@ class Base {
   public function setCoinAddress($coin_address) {
     $this->coin_address = $coin_address;
   }
+  
+  public $log;
   public function setLog($log) {
     $this->log = $log;
   }
+  
+  protected $mysqli;
   public function setMysql($mysqli) {
     $this->mysqli = $mysqli;
   }
@@ -40,6 +46,10 @@ class Base {
   public function setSalty($salt) {
     $this->salty = $salt;
   }
+  /**
+   * @var Smarty
+   */
+  var $smarty;
   public function setSmarty($smarty) {
     $this->smarty = $smarty;
   }
@@ -52,6 +62,8 @@ class Base {
   public function setConfig($config) {
     $this->config = $config;
   }
+  
+  protected $aErrorCodes;
   public function setErrorCodes(&$aErrorCodes) {
     $this->aErrorCodes =& $aErrorCodes;
   }

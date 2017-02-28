@@ -88,3 +88,14 @@ $(function() {
     });
 
 });
+
+$(document).on('change', '#push-notifications', function(e){
+	var notificationClass = $(this).val();
+	$('#push-notifications-pannel').toggleClass('push-notifications-disabled', notificationClass == 0);
+	$('.push-notifications-params').each(function(){
+		var $this = $(this);
+		$this.toggle($this.attr('data-class-name') == notificationClass);
+	});
+}).ready(function(){
+	$('#push-notifications').trigger('change');
+});

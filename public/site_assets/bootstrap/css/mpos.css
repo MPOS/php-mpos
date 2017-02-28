@@ -659,4 +659,9 @@ div.fade {
     padding: 0px;
 }
 
+.push-notifications-params,
+.push-notifications-disabled .push-notifications {
+	display : none;
+}
+
 /* END EDIT */

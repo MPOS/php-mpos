@@ -149,14 +149,27 @@ class Notification extends Mail {
       return false;
     }
     // Check if this user wants strType notifications
-    $stmt = $this->mysqli->prepare("SELECT account_id FROM $this->tableSettings WHERE type = ? AND active = 1 AND account_id = ?");
-    if ($stmt && $stmt->bind_param('si', $strType, $account_id) && $stmt->execute() && $stmt->bind_result($id) && $stmt->fetch()) {
-      if ($stmt->close() && $this->sendMail('notifications/' . $strType, $aMailData) && $this->addNotification($account_id, $strType, $aMailData)) {
-        return true;
-      } else {
-        $this->setErrorMessage('SendMail call failed: ' . $this->getError());
-        return false;
-      }
+    $stmt = $this->mysqli->prepare("SELECT type FROM $this->tableSettings WHERE type IN (?, ?) AND active = 1 AND account_id = ?");
+    if ($stmt && $stmt->bind_param('ssi', $strType, substr('push_'.$strType, 0, 15), $account_id) && $stmt->execute() && $result = $stmt->get_result()) {
+    	$types = array_map(function($a){ return reset($a);}, $result->fetch_all(MYSQLI_ASSOC));
+    	$stmt->close();
+    	$result = true;
+    	foreach ($types as $type){
+    	  if (strpos($type, 'push_') === 0){
+    		if (PushNotification::Instance() instanceof PushNotification){
+    			$result &= PushNotification::Instance()->sendNotification($account_id, $strType, $aMailData); 
+    		}
+    	  } else {
+    		$result &= $this->sendMail('notifications/' . $strType, $aMailData); 
+    	  }
+    	}
+    	if ($result){
+    		$this->addNotification($account_id, $strType, $aMailData);
+    		return true;
+    	} else {
+          $this->setErrorMessage('SendMail call failed: ' . $this->getError());
+          return false;
+        }
     } else {
       $this->setErrorMessage('User disabled ' . $strType . ' notifications');
       return true;
