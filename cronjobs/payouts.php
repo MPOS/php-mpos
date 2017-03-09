@@ -67,7 +67,7 @@ if ($setting->getValue('disable_manual_payouts') != 1 && $aManualPayouts) {
   $dMPTotalAmount = 0;
   $aSendMany = NULL;
   foreach ($aManualPayouts as $aUserData) $dMPTotalAmount += $aUserData['confirmed'];
-  if ($dMPTotalAmount > $dWalletBalance) {
+  if ($dMPTotalAmount >= $dWalletBalance) {
     $log->logError(" Wallet does not cover MP payouts - Payout: " . $dMPTotalAmount . " - Balance: " . $dWalletBalance);
     $monitoring->endCronjob($cron_name, 'E0079', 1, true);
   }
@@ -154,7 +154,7 @@ if ($setting->getValue('disable_auto_payouts') != 1 && $aAutoPayouts) {
   // Calculate our sum first
   $dAPTotalAmount = 0;
   foreach ($aAutoPayouts as $aUserData) $dAPTotalAmount += $aUserData['confirmed'];
-  if ($dAPTotalAmount > $dWalletBalance) {
+  if ($dAPTotalAmount >= $dWalletBalance) {
     $log->logError(" Wallet does not cover AP payouts - Payout: " . $dAPTotalAmount . " - Balance: " . $dWalletBalance);
     $monitoring->endCronjob($cron_name, 'E0079', 1, true);
   }
