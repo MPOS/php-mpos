@@ -1,0 +1,1 @@
+{nocache}Block Number <b>{$DATA.height}</b> has been discovered by <b>{$DATA.finder}</b> with a total value of <b>{$DATA.amount} {$DATA.currency}</b>! The current difficulty is {$DATA.difficulty}.{/nocache}

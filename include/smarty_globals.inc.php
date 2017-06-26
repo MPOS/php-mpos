@@ -119,6 +119,7 @@ $aGlobal['website']['transactionexplorer']['disabled'] = $setting->getValue('web
 $aGlobal['website']['chaininfo']['disabled'] = $setting->getValue('website_chaininfo_disabled');
 $aGlobal['website']['donors']['disabled'] = $setting->getValue('disable_donors');
 $aGlobal['website']['about']['disabled'] = $setting->getValue('disable_about');
+$aGlobal['website']['blockfindersound']['enabled'] = $setting->getValue('website_blockfinder_notification');
 $setting->getValue('website_blockexplorer_url') ? $aGlobal['website']['blockexplorer']['url'] = $setting->getValue('website_blockexplorer_url') : $aGlobal['website']['blockexplorer']['url'] = 'http://explorer.litecoin.net/block/';
 $setting->getValue('website_transactionexplorer_url') ? $aGlobal['website']['transactionexplorer']['url'] = $setting->getValue('website_transactionexplorer_url') : $aGlobal['website']['transactionexplorer']['url'] = 'http://explorer.litecoin.net/tx/';
 $setting->getValue('website_chaininfo_url') ? $aGlobal['website']['chaininfo']['url'] = $setting->getValue('website_chaininfo_url') : $aGlobal['website']['chaininfo']['url'] = 'http://allchains.info';
@@ -128,6 +129,8 @@ $aGlobal['statistics']['analytics']['enabled'] = $setting->getValue('statistics_
 $aGlobal['statistics']['analytics']['code'] = $setting->getValue('statistics_analytics_code');
 
 // ACLs
+$aGlobal['acl']['statistics']['loggedin'] = $setting->getValue('acl_show_stats_loggedin');
+$aGlobal['acl']['help']['loggedin'] = $setting->getValue('acl_show_help_loggedin');
 $aGlobal['acl']['pool']['statistics'] = $setting->getValue('acl_pool_statistics');
 $aGlobal['acl']['block']['statistics'] = $setting->getValue('acl_block_statistics');
 $aGlobal['acl']['round']['statistics'] = $setting->getValue('acl_round_statistics');
@@ -220,6 +223,10 @@ if ($motd = $setting->getValue('system_motd')) {
 // check for deprecated theme
 if ($setting->getValue('website_theme') == "mpos")
   $_SESSION['POPUP'][] = array('CONTENT' => 'You are using an old Theme that will not be maintained in the future.', 'TYPE' => 'alert alert-warning');
+
+// Check we can load the theme at all
+if ( !in_array($setting->getValue('website_theme'), $template->getThemes()))
+  die('Unable to find your selected theme `' . $setting->getValue('website_theme') . '` in the list of available themes. Please reset your `website_theme` setting in your database.');
 
 // So we can display additional info
 $smarty->assign('DEBUG', $config['DEBUG']);

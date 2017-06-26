@@ -17,4 +17,14 @@ if (!$smarty->isCached('master.tpl', $smarty_cache_key)) {
   $debug->append('Using cached page', 3);
 }
 
-$smarty->assign("CONTENT", "default.tpl");
+switch($setting->getValue('acl_show_stats_loggedin', 1)) {
+case '0':
+  $smarty->assign("CONTENT", "default.tpl");
+  break;
+case '1':
+  if ($user->isAuthenticated()) {
+    $smarty->assign("CONTENT", "default.tpl");
+  }
+  break;
+}
+
