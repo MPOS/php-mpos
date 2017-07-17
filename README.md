@@ -12,6 +12,7 @@ Donations
 
 Donations to this project are going directly to [TheSerapher](https://github.com/TheSerapher), the original author of this project:
 
+* BTC address: `1HuYK6WPU8o3yWCrAaADDZPRpL5QiXitfv`
 * LTC address: `Lge95QR2frp9y1wJufjUPCycVsg5gLJPW8`
 
 Website Footer
