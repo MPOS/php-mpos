@@ -15,7 +15,7 @@ if (!$smarty->isCached('master.tpl', $smarty_cache_key)) {
     ));
     $content = 'default.tpl';
   } else {
-    $_SESSION['POPUP'][] = array('CONTENT' => 'UptimeRobot API Key not configured.', 'TYPE' => 'alert alert-warning');
+    $_SESSION['POPUP'][] = array('CONTENT' => 'UptimeRobot API Key not configured or no data available.', 'TYPE' => 'alert alert-warning');
     $content = '';
   }
 } else {

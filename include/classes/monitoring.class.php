@@ -12,7 +12,7 @@ class Monitoring extends Base {
   public function storeUptimeRobotStatus() {
     if ($api_keys = $this->setting->getValue('monitoring_uptimerobot_api_keys')) {
       $aJSONData = array();
-      $url = 'http://api.uptimerobot.com';
+      $url = 'https://api.uptimerobot.com';
       $aMonitors = explode(',', $api_keys);
       foreach ($aMonitors as $aData) {
         $temp = explode('|', $aData);
@@ -131,7 +131,7 @@ class Monitoring extends Base {
         $this->setErrorMessage('Failed to send mail notification');
     }
     if ($fatal) {
-      if ($exitCode != 0) $this->setStatus($cron_name . "_disabled", "yesno", 1);
+      if ($exitCode == 1) $this->setStatus($cron_name . "_disabled", "yesno", 1);
       exit($exitCode);
     }
   }
