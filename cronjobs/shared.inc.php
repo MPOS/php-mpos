@@ -69,6 +69,12 @@ $log->LogDebug('Starting ' . $cron_name);
 // Load the start time for later runtime calculations for monitoring
 $cron_start[$cron_name] = microtime(true);
 
+// Skip all crons if admin enabled pool maintenance
+if ($setting->getValue('maintenance')) {
+  $log->logInfo('Cronjobs disabled due to pool maintenance');
+  $monitoring->endCronjob($cron_name, 'E0083', 2, true, false);
+}
+
 // Check if our cron is activated
 if ($monitoring->isDisabled($cron_name)) {
   $log->logFatal('Cronjob is currently disabled due to errors, use -f option to force running cron.');
