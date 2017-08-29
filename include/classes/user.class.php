@@ -292,6 +292,7 @@ class User extends Base {
     count($aPin) == 1 ? $pin_hash = $this->getHash($pin, 0) : $pin_hash = $this->getHash($pin, $aPin[1], $aPin[2]);
     $stmt = $this->mysqli->prepare("SELECT pin FROM $this->table WHERE id = ? AND pin = ? LIMIT 1");
     if ($stmt->bind_param('is', $userId, $pin_hash) && $stmt->execute() && $stmt->bind_result($row_pin) && $stmt->fetch()) {
+      $stmt->close();
       $this->setUserPinFailed($userId, 0);
       return ($pin_hash === $row_pin);
     }
