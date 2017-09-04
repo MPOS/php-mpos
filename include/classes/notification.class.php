@@ -150,7 +150,8 @@ class Notification extends Mail {
     }
     // Check if this user wants strType notifications
     $stmt = $this->mysqli->prepare("SELECT type FROM $this->tableSettings WHERE type IN (?, ?) AND active = 1 AND account_id = ?");
-    if ($stmt && $stmt->bind_param('ssi', $strType, substr('push_'.$strType, 0, 15), $account_id) && $stmt->execute() && $result = $stmt->get_result()) {
+    $notStrType = substr('push_'.$strType, 0, 15);
+    if ($stmt && $stmt->bind_param('ssi', $strType, $notStrType, $account_id) && $stmt->execute() && $result = $stmt->get_result()) {
     	$types = array_map(function($a){ return reset($a);}, $result->fetch_all(MYSQLI_ASSOC));
     	$stmt->close();
     	$result = true;
