@@ -105,8 +105,9 @@ class Notification extends Mail {
    **/
   public function getNotificationAccountIdByType($strType) {
     $this->debug->append("STA " . __METHOD__, 4);
-    $stmt = $this->mysqli->prepare("SELECT account_id FROM $this->tableSettings WHERE type = ? AND active = 1");
-    if ($stmt && $stmt->bind_param('s', $strType) && $stmt->execute() && $result = $stmt->get_result()) {
+    $stmt = $this->mysqli->prepare("SELECT account_id FROM $this->tableSettings WHERE type IN (?, ?) AND active = 1 GROUP BY account_id");
+    $notStrType = substr('push_'.$strType, 0, 15);
+    if ($stmt && $stmt->bind_param('ss', $strType, $notStrType) && $stmt->execute() && $result = $stmt->get_result()) {
       return $result->fetch_all(MYSQLI_ASSOC);
     }
     return $this->sqlError('E0046');
