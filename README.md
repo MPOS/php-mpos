@@ -12,12 +12,8 @@ Donations
 
 Donations to this project are going directly to [TheSerapher](https://github.com/TheSerapher), the original author of this project:
 
-* LTC address: `Lge95QR2frp9y1wJufjUPCycVsg5gLJPW8`
 * BTC address: `1HuYK6WPU8o3yWCrAaADDZPRpL5QiXitfv`
-* DOGE address: `DANk8bnc3vHEf7Jthaxq1Xgn1BSiArNdjG`
-* 42Coin address: `4VxA6Ht59Mj6ikhA4gDXLiHuAaDCJEvYTZ`
-* FST address: `fiRqMgZyhjTN1GSEB3ZxV35JXsE5bjEaQ2`
-* FRK address: `FDcgGZjX2B29qevSuiuQVwXhkNhtQT4cEW`
+* LTC address: `Lge95QR2frp9y1wJufjUPCycVsg5gLJPW8`
 
 Website Footer
 ==============
