@@ -98,7 +98,7 @@ class Worker extends Base {
    **/
   public function getWorker($id, $interval=600) {
     $this->debug->append("STA " . __METHOD__, 4);
-    $stmt = $this->mysqli->prepare($q ="
+    $stmt = $this->mysqli->prepare("
       SELECT id, username, password, monitor,
         (
           SELECT COUNT(id) FROM " . $this->share->getTableName() . " WHERE our_result = 'Y' AND username = w.username AND time > DATE_SUB(now(), INTERVAL ? SECOND)
