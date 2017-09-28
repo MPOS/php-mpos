@@ -667,7 +667,7 @@ class User extends Base {
     // Enforce a page reload and point towards login with referrer included, if supplied
     $port = ($_SERVER["SERVER_PORT"] == "80" || $_SERVER["SERVER_PORT"] == "443") ? "" : (":".$_SERVER["SERVER_PORT"]);
     $pushto = $_SERVER['SCRIPT_NAME'].'?page=login';
-    $location = (@$_SERVER['HTTPS'] == 'on') ? 'https://' . $_SERVER['SERVER_NAME'] . $port . $pushto : 'http://' . $_SERVER['SERVER_NAME'] . $port . $pushto;
+    $location = (@$_SERVER['HTTPS'] == 'on') ? 'https://' . $_SERVER['HTTP_HOST'] . $port . $pushto : 'http://' . $_SERVER['HTTP_HOST'] . $port . $pushto;
     if (!headers_sent()) header('Location: ' . $location);
     exit('<meta http-equiv="refresh" content="0; url=' . $location . '"/>');
   }
