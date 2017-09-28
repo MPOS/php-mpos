@@ -29,7 +29,11 @@ require_once('shared.inc.php');
 $aLastBlock = @$block->getLastValid();
 $strLastBlockHash = $aLastBlock['blockhash'];
 if (!$strLastBlockHash) {
-  $strLastBlockHash = $bitcoin->getblockhash(1);
+  try {
+    $strLastBlockHash = $bitcoin->getblockhash(1);
+  } catch (Exception $e) {
+    $strLastBlockHash = "";
+  }
 }
 
 // Fetch all transactions since our last block
