@@ -30,7 +30,7 @@ These people have supported this project with a donation:
 * [WKNiGHT](https://github.com/WKNiGHT-)
 * [ZC](https://github.com/zccopwrx)
 * Nutnut
-* Caberhagen (http://litecoin-pool.ch)
+* Caberhagen (https://coin-mining.ch)
 * Mining4All (https://www.mining4all.eu/)
 * [xisi](https://github.com/xisi)
 * [PCFiL](https://github.com/PCFiL)
