@@ -124,8 +124,7 @@ class Worker extends Base {
          ) AS shares
        FROM $this->table AS w
        WHERE id = ?");
-    if ($this->checkStmt($stmt) && $stmt->bind_param('iiiii', $interval, $interval, $interval, $interval, $id) && $stmt->execute() && $result = $stmt->get_result()) {
-      $row = $result->fetch_assoc();
+    if ($this->checkStmt($stmt) && $stmt->bind_param('iiiii', $interval, $interval, $interval, $interval, $id) && $stmt->execute() && ($result = $stmt->get_result()) && ($row = $result->fetch_assoc())) {
       $row['hashrate'] = round($this->coin->calcHashrate($row['shares'], $interval), 2);
       if ($row['count_all'] > 0) {
         $row['difficulty'] = round($row['shares'] / $row['count_all'], 2);

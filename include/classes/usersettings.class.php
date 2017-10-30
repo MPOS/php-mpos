@@ -31,7 +31,8 @@
 			if (empty(self::$__SetSTMT)){
 				self::$__SetSTMT = $this->mysqli->prepare('REPLACE INTO '.$this->table.' (`account_id`, `name`, `value`) VALUES (?, ?, ?)');
 			}
-			if (!(self::$__SetSTMT && self::$__SetSTMT->bind_param('iss', $this->account_id, $name, serialize($value)) && self::$__SetSTMT->execute())) {
+			$val = serialize($value);
+			if (!(self::$__SetSTMT && self::$__SetSTMT->bind_param('iss', $this->account_id, $name, $val) && self::$__SetSTMT->execute())) {
 				$this->setErrorMessage($this->getErrorMsg('E0084', $this->table));
 				return $this->sqlError();
 			}

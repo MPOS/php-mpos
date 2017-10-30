@@ -105,8 +105,9 @@ class Notification extends Mail {
    **/
   public function getNotificationAccountIdByType($strType) {
     $this->debug->append("STA " . __METHOD__, 4);
-    $stmt = $this->mysqli->prepare("SELECT account_id FROM $this->tableSettings WHERE type = ? AND active = 1");
-    if ($stmt && $stmt->bind_param('s', $strType) && $stmt->execute() && $result = $stmt->get_result()) {
+    $stmt = $this->mysqli->prepare("SELECT account_id FROM $this->tableSettings WHERE type IN (?, ?) AND active = 1 GROUP BY account_id");
+    $notStrType = substr('push_'.$strType, 0, 15);
+    if ($stmt && $stmt->bind_param('ss', $strType, $notStrType) && $stmt->execute() && $result = $stmt->get_result()) {
       return $result->fetch_all(MYSQLI_ASSOC);
     }
     return $this->sqlError('E0046');
@@ -150,7 +151,8 @@ class Notification extends Mail {
     }
     // Check if this user wants strType notifications
     $stmt = $this->mysqli->prepare("SELECT type FROM $this->tableSettings WHERE type IN (?, ?) AND active = 1 AND account_id = ?");
-    if ($stmt && $stmt->bind_param('ssi', $strType, substr('push_'.$strType, 0, 15), $account_id) && $stmt->execute() && $result = $stmt->get_result()) {
+    $notStrType = substr('push_'.$strType, 0, 15);
+    if ($stmt && $stmt->bind_param('ssi', $strType, $notStrType, $account_id) && $stmt->execute() && $result = $stmt->get_result()) {
     	$types = array_map(function($a){ return reset($a);}, $result->fetch_all(MYSQLI_ASSOC));
     	$stmt->close();
     	$result = true;
