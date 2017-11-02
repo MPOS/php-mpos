@@ -2,7 +2,7 @@
     <div class="col-lg-12">
       <div class="panel panel-info">
         <div class="panel-heading">
-          <i class="fa fa-info fa-fw"></i> Frequently Asked Questions
+          <i class="fa fa-info fa-fw"></i>Frequently Asked Questions
         </div>
         <div class="panel-body">
           <ul>
@@ -14,11 +14,11 @@
           {/if}
           {if $GLOBAL.config.payout_system == 'pplns'}
           <br>
-          <b>Pay Per Last N Shares (PPLNS)</b> - Block rewards are distributed among the last shares, disregarding round boundaries. In the accurate implementation, the number of shares is deter- mined so that their total will be a specified quantity of score (where the score of a share is the inverse of the difficulty). Most pools use a naive implementation based on a fixed number of shares or a fixed multiple of the difficulty. The share-variance can be reduced at the cost of increased maturity time, but there is no way to decrease the long-term pool-variance.
+          <b>Pay Per Last N Shares (PPLNS)</b> - Block rewards are distributed among the last shares, disregarding round boundaries. In the accurate implementation, the number of shares is determined so that their total will be a specified quantity of score (where the score of a share is the inverse of the difficulty). Most pools use a naive implementation based on a fixed number of shares or a fixed multiple of the difficulty. The share-variance can be reduced at the cost of increased maturity time, but there is no way to decrease the long-term pool-variance.
           {/if}
           {if $GLOBAL.config.payout_system == 'pps'}
           <br>
-          <b>Pay Per Share (PPS)</b> - Each share receives a fixed reward known in advance. This is the ultimate low- variance, low-maturity simple method, but has the highest risk for the operator, and hence lower expected returns than other methods and risk of collapse if not managed properly.
+          <b>Pay Per Share (PPS)</b> - Each share receives a fixed reward known in advance. This is the ultimate low-variance, low-maturity simple method, but has the highest risk for the operator, and hence lower expected returns than other methods and risk of collapse if not managed properly.
           {/if}
           <br><br>
           <li><b><i>Q: What is a orphan block?</b></i></li>
@@ -48,7 +48,7 @@
           </ul>
         </div>
         <div class="panel-footer">
-          <h6>This Pool is running <a href="https://github.com/TheSerapher/php-mpos">MPOS</a> project code. This frontend was  created by TheSerapher aka Sebastian Grewe. The operation of the pool is soley at the hand of your trusted pool operator.</h6>
+          <h6>This Pool is running <a href="https://github.com/TheSerapher/php-mpos">MPOS</a> project code. This frontend was created by <a href="https://github.com/MPOS/php-mpos"TheSerapher aka Sebastian Grewe</a>. The operation of the pool is soley at the hand of your trusted pool operator.</h6>
         </div>
       </div>
     </div>

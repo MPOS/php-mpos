@@ -6,7 +6,7 @@ if ($user->isAuthenticated()) {
   $user->setUserFailed($_SESSION['USERDATA']['id'], 0);
   $port = ($_SERVER["SERVER_PORT"] == "80" || $_SERVER["SERVER_PORT"] == "443") ? "" : (":".$_SERVER["SERVER_PORT"]);
   $pushto = $_SERVER['SCRIPT_NAME'].'?page=dashboard';
-  $location = (@$_SERVER['HTTPS'] == 'on') ? 'https://' . $_SERVER['SERVER_NAME'] . $port . $pushto : 'http://' . $_SERVER['SERVER_NAME'] . $port . $pushto;
+  $location = (@$_SERVER['HTTPS'] == 'on') ? 'https://' . $_SERVER['HTTP_HOST'] . $port . $pushto : 'http://' . $_SERVER['HTTP_HOST'] . $port . $pushto;
   header("Location: " . $location);
 }
 // Somehow we still need to load this empty template
