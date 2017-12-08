@@ -9,6 +9,7 @@ require_once(CLASS_DIR . '/debug.class.php');
 if ($config['mysql_filter']) {
   require_once(CLASS_DIR . '/strict.class.php');
 }
+require_once(INCLUDE_DIR . '/classes/mysqlims.class.php');
 require_once(INCLUDE_DIR . '/database.inc.php');
 require_once(INCLUDE_DIR . '/config/memcache_keys.inc.php');
 require_once(INCLUDE_DIR . '/config/error_codes.inc.php');

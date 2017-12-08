@@ -60,6 +60,18 @@ $config['db']['name'] = 'mpos';
 // $config['db']['shared']['workers'] = $config['db']['name'];
 // $config['db']['shared']['news'] = $config['db']['name'];
 
+
+/**
+ * Setup read-only/slave database server for selects (read queries)
+**/
+$config['db-ro']['enabled'] = false;
+$config['db-ro']['host'] = 'localhost';
+$config['db-ro']['user'] = 'someuser';
+$config['db-ro']['pass'] = 'somepass';
+$config['db-ro']['port'] = 3306;
+$config['db-ro']['name'] = 'mpos';
+
+ 
 /**
  * Local wallet RPC
  *  RPC configuration for your daemon/wallet
