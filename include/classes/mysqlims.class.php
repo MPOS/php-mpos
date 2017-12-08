@@ -18,8 +18,6 @@ class mysqlims extends mysqli
      */
     public function __construct($main, $slave = false, $strict = false)
     {
-        var_dump($main);
-        var_dump($slave);
         if ($strict) {
             $this->mysqliW = new mysqli_strict($main['host'],
                 $main['user'], $main['pass'],
