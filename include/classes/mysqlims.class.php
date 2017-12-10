@@ -6,6 +6,7 @@ class mysqlims extends mysqli
 {
     private $mysqliW;
     private $mysqliR = null;
+    private $slave = false;
 
     /*
      * Pass main and slave connection arrays to the constructor, and strict as true/false
@@ -27,6 +28,7 @@ class mysqlims extends mysqli
                 $this->mysqliR = new mysqli_strict($slave['host'],
                     $slave['user'], $slave['pass'],
                     $slave['name'], $slave['port']);
+                $this->slave = true;
             }
         } else {
             $this->mysqliW = new mysqli($main['host'],
@@ -37,6 +39,7 @@ class mysqlims extends mysqli
                 $this->mysqliR = new mysqli($slave['host'],
                     $slave['user'], $slave['pass'],
                     $slave['name'], $slave['port']);
+                $this->slave = true;
             }
         }
 
@@ -44,7 +47,7 @@ class mysqlims extends mysqli
             throw new Exception("Failed to connect to MySQL: (".$this->mysqliW->connect_errno.") ".$this->mysqliW->connect_error);
         }
 
-        if ($this->mysqliR->connect_errno) {
+        if ($this->mysqliR->connect_errno && $this->slave === true) {
             throw new Exception("Failed to connect to MySQL: (".$this->mysqliR->connect_errno.") ".$this->mysqliR->connect_error);
         }
     }
