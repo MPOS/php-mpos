@@ -60,7 +60,7 @@ class mysqlims extends mysqli
      */
     public function prepare($query)
     {
-        if (stripos($query, "SELECT") && stripos($query, "FOR UPDATE") === false && $this->mysqliR !== null) {
+        if (stripos($query, "SELECT") && stripos($query, "FOR UPDATE") === false && $this->slave !== false) {
             return $this->mysqliR->prepare($query);
         } else {
             return $this->mysqliW->prepare($query);
