@@ -47,7 +47,7 @@ class mysqlims extends mysqli
             throw new Exception("Failed to connect to MySQL: (".$this->mysqliW->connect_errno.") ".$this->mysqliW->connect_error);
         }
 
-        if ($this->mysqliR->connect_errno && $this->slave === true) {
+        if ($this->slave === true && $this->mysqliR->connect_errno) {
             throw new Exception("Failed to connect to MySQL: (".$this->mysqliR->connect_errno.") ".$this->mysqliR->connect_error);
         }
     }
@@ -60,6 +60,7 @@ class mysqlims extends mysqli
      */
     public function prepare($query)
     {
+        mysqli::prepare($query);
         if (stripos($query, "SELECT") && stripos($query, "FOR UPDATE") === false && $this->slave !== false) {
             return $this->mysqliR->prepare($query);
         } else {
