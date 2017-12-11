@@ -23,8 +23,16 @@ class Notification extends Mail {
     $data = json_encode($aData);
     $stmt = $this->mysqli->prepare("SELECT id FROM $this->table WHERE data = ? AND active = 1 LIMIT 1");
     if ($stmt && $stmt->bind_param('s', $data) && $stmt->execute() && $stmt->store_result() && $stmt->num_rows == 1)
-      return true;
-    return $this->sqlError('E0041');
+    {
+        return true;
+    }
+
+    if( $stmt->errno )
+    {
+        return $this->sqlError();
+    }
+    
+    return false;
   }
 
   /**
