@@ -22,8 +22,10 @@ class Notification extends Mail {
     $this->debug->append("STA " . __METHOD__, 4);
     $data = json_encode($aData);
     $stmt = $this->mysqli->prepare("SELECT id FROM $this->table WHERE data = ? AND active = 1 LIMIT 1");
-    if ($stmt && $stmt->bind_param('s', $data) && $stmt->execute() && $stmt->store_result() && $stmt->num_rows == 1)
-      return true;
+    if ($stmt && $stmt->bind_param('s', $data) && $stmt->execute() && $stmt->store_result() && $stmt->num_rows == 1) {
+        return true;
+    }
+    
     return $this->sqlError('E0041');
   }
 

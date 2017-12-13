@@ -575,7 +575,7 @@ class User extends Base {
     }
     // Catchall
     $this->setErrorMessage('Failed to update your account');
-    $this->debug->append('Account update failed: ' . $this->mysqli->error);
+    $this->debug->append('Account update failed: ' . $this->mysqli->lastused->error);
     return false;
   }
 
@@ -832,7 +832,7 @@ class User extends Base {
     $signup_time = time();
 
     if ($this->checkStmt($stmt) && $stmt->bind_param('sssissi', $username_clean, $password_hash, $email1, $signup_time, $pin_hash, $apikey_hash, $is_locked) && $stmt->execute()) {
-      $new_account_id = $this->mysqli->insert_id;
+      $new_account_id = $this->mysqli->lastused->insert_id;
       if (!is_null($coinaddress)) $this->coin_address->add($new_account_id, $coinaddress);
       if (! $this->setting->getValue('accounts_confirm_email_disabled') && $is_admin != 1) {
         if ($token = $this->token->createToken('confirm_email', $stmt->insert_id)) {
@@ -855,8 +855,8 @@ class User extends Base {
       }
     } else {
       $this->setErrorMessage( 'Unable to register' );
-      $this->debug->append('Failed to insert user into DB: ' . $this->mysqli->error);
-      echo $this->mysqli->error;
+      $this->debug->append('Failed to insert user into DB: ' . $this->mysqli->lastused->error);
+      echo $this->mysqli->lastused->error;
       if ($stmt->sqlstate == '23000') $this->setErrorMessage( 'Username or email already registered' );
       return false;
     }
@@ -895,7 +895,7 @@ class User extends Base {
     } else {
       $this->setErrorMessage('Invalid token: ' . $this->token->getError());
     }
-    $this->debug->append('Failed to update password:' . $this->mysqli->error);
+    $this->debug->append('Failed to update password:' . $this->mysqli->lastused->error);
     return false;
   }
 

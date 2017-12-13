@@ -6,7 +6,9 @@ class mysqlims extends mysqli
 {
     private $mysqliW;
     private $mysqliR = null;
-
+    private $slave = false;
+    public $lastused = null;
+    
     /*
      * Pass main and slave connection arrays to the constructor, and strict as true/false
      *
@@ -27,6 +29,7 @@ class mysqlims extends mysqli
                 $this->mysqliR = new mysqli_strict($slave['host'],
                     $slave['user'], $slave['pass'],
                     $slave['name'], $slave['port']);
+                $this->slave = true;
             }
         } else {
             $this->mysqliW = new mysqli($main['host'],
@@ -37,6 +40,7 @@ class mysqlims extends mysqli
                 $this->mysqliR = new mysqli($slave['host'],
                     $slave['user'], $slave['pass'],
                     $slave['name'], $slave['port']);
+                $this->slave = true;
             }
         }
 
@@ -44,7 +48,7 @@ class mysqlims extends mysqli
             throw new Exception("Failed to connect to MySQL: (".$this->mysqliW->connect_errno.") ".$this->mysqliW->connect_error);
         }
 
-        if ($this->mysqliR->connect_errno) {
+        if ($this->slave === true && $this->mysqliR->connect_errno) {
             throw new Exception("Failed to connect to MySQL: (".$this->mysqliR->connect_errno.") ".$this->mysqliR->connect_error);
         }
     }
@@ -57,9 +61,11 @@ class mysqlims extends mysqli
      */
     public function prepare($query)
     {
-        if (stripos($query, "SELECT") && stripos($query, "FOR UPDATE") === false && $this->mysqliR !== null) {
+        if (stripos($query, "SELECT") && stripos($query, "FOR UPDATE") === false && $this->slave !== false) {
+            $this->lastused = $this->mysqliR;
             return $this->mysqliR->prepare($query);
         } else {
+            $this->lastused = $this->mysqliW;
             return $this->mysqliW->prepare($query);
         }
     }
@@ -74,9 +80,11 @@ class mysqlims extends mysqli
      */
     public function query($query, $resultmode = MYSQLI_STORE_RESULT)
     {
-        if (stripos($query, "SELECT") && stripos($query, "FOR UPDATE") === false && $this->mysqliR !== null) {/* Use readonly server */
+        if (stripos($query, "SELECT") && stripos($query, "FOR UPDATE") === false && $this->slave !== false) {/* Use readonly server */
+            $this->lastused = $this->mysqliR;
             return $this->mysqliR->query($query, $resultmode);
         } else {
+            $this->lastused = $this->mysqliW;
             return $this->mysqliW->query($query, $resultmode);
         }
     }
