@@ -61,7 +61,7 @@ class mysqlims extends mysqli
      */
     public function prepare($query)
     {
-        if (stripos($query, "SELECT") && stripos($query, "FOR UPDATE") === false && $this->slave !== false) {
+        if (stripos($query, "SELECT") && stripos($query, "FOR UPDATE") === false && stripos($query, "INSERT") === false  && $this->slave !== false) {
             $this->lastused = $this->mysqliR;
             return $this->mysqliR->prepare($query);
         } else {
@@ -80,7 +80,7 @@ class mysqlims extends mysqli
      */
     public function query($query, $resultmode = MYSQLI_STORE_RESULT)
     {
-        if (stripos($query, "SELECT") && stripos($query, "FOR UPDATE") === false && $this->slave !== false) {/* Use readonly server */
+        if (stripos($query, "SELECT") && stripos($query, "FOR UPDATE") === false && stripos($query, "INSERT") === false && $this->slave !== false) {/* Use readonly server */
             $this->lastused = $this->mysqliR;
             return $this->mysqliR->query($query, $resultmode);
         } else {
