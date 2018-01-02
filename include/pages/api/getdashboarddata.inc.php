@@ -8,7 +8,16 @@ if ($setting->getValue('disable_dashboard_api')) {
 }
 
 // System load check
-if ($load = @sys_getloadavg()) {
+if( !$config['system']['load']['remote']  )
+{
+  $load = @sys_getloadavg();
+}
+else
+{
+  $load = json_decode(file_get_contents($config['system']['load']['remote_url']), true);
+}
+
+if ( $load ) {
   if (isset($config['system']['load']['max']) && $load[0] > $config['system']['load']['max']) {
     header('HTTP/1.1 503 Too busy, try again later');
     die('Server too busy. Please try again later.');

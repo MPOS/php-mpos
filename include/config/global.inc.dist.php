@@ -313,4 +313,5 @@ $config['smarty']['cache_lifetime'] = 30;
  *  Disable some calls when high system load
  *   https://github.com/MPOS/php-mpos/wiki/Config-Setup#wiki-system-load
  **/
+$config['system']['load']['remote'] = false;
 $config['system']['load']['max'] = 10.0;
