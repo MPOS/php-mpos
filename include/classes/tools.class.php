@@ -1,4 +1,4 @@
-<?php
+ <?php
 $defflip = (!cfip()) ? exit(header('HTTP/1.1 401 Unauthorized')) : 1;
 
 /**
@@ -48,9 +48,9 @@ class Tools extends Base {
     }
     curl_setopt($ch, CURLOPT_URL, $url . $target);
     // curl_setopt($ch, CURLOPT_POSTFIELDS, $post_data);
-
+    
     curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
-
+    
     // run the query
     $res = curl_exec($ch);
     if ($res === false) {
@@ -64,7 +64,7 @@ class Tools extends Base {
     }
     return $dec;
   }
-
+  
   /**
    * Detect the API to properly extract information
    * @param url string API URL
@@ -78,18 +78,24 @@ class Tools extends Base {
     } else if (preg_match('/cryptsy.com/', $url)) {
       return 'cryptsy';
     } else if (preg_match('/cryptopia.co.nz/', $url)) {
-      return 'cryptopia';
+     return 'cryptopia';
     } else if (preg_match('/cryptorush.in/', $url)) {
       return 'cryptorush';
     } else if (preg_match('/mintpal.com/', $url)) {
       return 'mintpal';
+    } else if (preg_match('/c-cex.com/', $url)) {
+      return 'c-cex';
     } else if (preg_match('/bittrex.com/', $url)) {
-      return 'bittrex';
+      return 'bittrex';  
+    } else if (preg_match('/yobit.net/', $url)) {
+      return 'yobit';
+
+      
     }
     $this->setErrorMessage("API URL unknown");
     return false;
   }
-
+  
   /**
    * Extract price information from API data
    **/
@@ -114,7 +120,7 @@ class Tools extends Base {
       	case 'cryptsy':
       	  return @$aData['return']['markets'][$strCurrency]['lasttradeprice'];
       	  break;
-      	  case 'cryptopia':
+        case 'cryptopia':
       	  return @$aData['Data']['LastPrice'];
       	  break;
       	case 'cryptorush':
@@ -123,9 +129,16 @@ class Tools extends Base {
       	case 'mintpal':
       	  return @$aData['0']['last_price'];
       	  break;
-      	  case 'bittrex':
+        case 'c-cex':
+          return @$aData['ticker']['lastprice'];
+          break;
+      	case 'bittrex':
       	  return @$aData['result']['Last'];
       	  break;
+        case 'yobit':
+          return @$aData[$this->config['price']['target']]['last'];
+          break;
+  
       }
     } else {
       $this->setErrorMessage("Got an invalid response from ticker API");
