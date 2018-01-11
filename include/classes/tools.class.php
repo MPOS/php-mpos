@@ -87,6 +87,8 @@ class Tools extends Base {
       return 'c-cex';
     } else if (preg_match('/bittrex.com/', $url)) {
       return 'bittrex';
+    } else if (preg_match('/yobit.net/', $url)) {
+      return 'yobit';
     }
     $this->setErrorMessage("API URL unknown");
     return false;
@@ -131,6 +133,9 @@ class Tools extends Base {
       	case 'bittrex':
       	  return @$aData['result']['Last'];
       	  break;
+        case 'yobit':
+          return @$aData[$this->config['price']['target']]['last'];
+          break;
       }
     } else {
       $this->setErrorMessage("Got an invalid response from ticker API");
