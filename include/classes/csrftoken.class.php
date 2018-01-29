@@ -24,11 +24,14 @@ class CSRFToken Extends Base {
   public function checkAdditional($user, $type) {
     $date = date('m/d/y/H/i');
     $d = explode('/', $date);
-    // minute may have rolled over
-    $seed1 = $this->buildSeed($user.$type, $d[0], $d[1], $d[2], $d[3], ($d[4]-1));
-    // hour may have rolled over
-    $seed2 = $this->buildSeed($user.$type, $d[0], $d[1], $d[2], ($d[3]-1), 59);
-    return array($this->getHash($seed1), $this->getHash($seed2));
+    // Calculate hashes from the last 60 minutes
+    $hashes = array();
+    for ($x = 1; $x < 60; $x++){
+      for ($y = 4;$d[$y]-- == 0;$y--);
+      if ($d[4] < 0) { $d[4] = 59; }
+      $hashes[$x-1] = $this->getHash($this->buildSeed($user.$type, $d[0], $d[1], $d[2], $d[3], $d[4]));
+    }
+    return $hashes;
   }
   
   /**
