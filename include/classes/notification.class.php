@@ -190,7 +190,7 @@ class Notification extends Mail {
   public function cleanupNotifications($days=7) {
     $failed = 0;
     $this->deleted = 0;
-    $stmt = $this->mysqli->prepare("DELETE FROM $this->table WHERE time < (NOW() - ? * 24 * 60 * 60)");
+    $stmt = $this->mysqli->prepare("DELETE FROM $this->table WHERE time < (NOW() - INTERVAL ? DAY)");
     if (! ($this->checkStmt($stmt) && $stmt->bind_param('i', $days) && $stmt->execute())) {
       $failed++;
     } else {
