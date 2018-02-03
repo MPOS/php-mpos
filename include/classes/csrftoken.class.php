@@ -26,7 +26,7 @@ class CSRFToken Extends Base {
     $date = date('m/d/y/H/i');
     $d = explode('/', $date);
     $hashes = array();
-    for ($x = 1; $x < 16; $x++){ //Extend CRSF tokens to 15 minutes, because 2 minutes to enter information is just not enough!
+    for ($x = 1; $x < 16; $x++){
         for ($y = 4;$d[$y]-- == 0;$y--);
         if ($d[4] < 0) { $d[4] = 59; }
         $hashes[$x-1] = $this->getHash($this->buildSeed($user.$type, $d[0], $d[1], $d[2], $d[3], $d[4]));
