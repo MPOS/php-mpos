@@ -46,17 +46,25 @@ fi
 # My own name
 ME=$( basename $0 )
 
-# Overwrite some settings via command line arguments
-while getopts "hfvp:d:" opt; do
+while getopts "hfvt:p:d:" opt; do
   case "$opt" in
     h|\?)
-      echo "Usage: $0 [-v] [-p PHP_BINARY] [-d SUBFOLDER]";
+      echo "Usage: $0 [-v] [-f] [-t TIME_IN_SEC] [-p PHP_BINARY] [-d SUBFOLDER]";
       exit 0
       ;;
     v) VERBOSE=1 ;;
     f) PHP_OPTS="$PHP_OPTS -f";;
     p) PHP_BIN=$OPTARG ;;
     d) SUBFOLDER=$OPTARG ;;
+    t)
+      if [[ $OPTARG =~ ^[0-9]+$ ]]; then
+        TIMEOUT=$OPTARG
+        PHP_OPTS="$PHP_OPTS -t $OPTARG"
+      else
+        echo "Option -t requires an integer" >&2
+        exit 1
+      fi
+    ;;
     :)
       echo "Option -$OPTARG requires an argument." >&2
       exit 1
@@ -101,6 +109,16 @@ fi
 
 # Our PID of this shell
 PID=$$
+
+# If $PIDFILE exists and older than the time specified by -t, remove it.
+if [[ -e $PIDFILE ]]; then
+  if [[ -n $TIMEOUT ]] && \
+     [[ $(( $(date +%s) - $(stat -c %Y $PIDFILE) )) -gt $TIMEOUT ]]; then
+    echo "$PIDFILE exists but older than the time you specified in -t option ($TIMEOUT sec)."
+    echo "Removing PID file."
+    rm $PIDFILE
+  fi
+fi
 
 if [[ -e $PIDFILE ]]; then
   echo "Cron seems to be running already"
