@@ -10,5 +10,7 @@
             "email": "delboy1978uk@gmail.com"
         }
     ],
-    "require": {}
+    "require": {
+        "google/recaptcha": "~1.1"
+    }
 }

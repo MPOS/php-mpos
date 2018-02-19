@@ -2,6 +2,8 @@
 (SECURITY == "*)WT#&YHfd" && SECHASH_CHECK) ? die("public/index.php -> Set a new SECURITY value to continue") : 0;
 $defflip = (!cfip()) ? exit(header('HTTP/1.1 401 Unauthorized')) : 1;
 
+require_once(INCLUDE_DIR . '/../vendor/autoload.php');
+
 // Default classes
 require_once(INCLUDE_DIR . '/lib/KLogger.php');
 require_once(CLASS_DIR . '/logger.class.php');
