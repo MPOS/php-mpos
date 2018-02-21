@@ -314,5 +314,5 @@ $config['smarty']['cache_lifetime'] = 30;
  *   https://github.com/MPOS/php-mpos/wiki/Config-Setup#wiki-system-load
  **/
 $config['system']['load']['remote'] = false;
-$config['system']['load']['remote_url'] = "http://sql3.multipools.club/load.php";
+$config['system']['load']['remote_url'] = "http://sqlhost/load.php";
 $config['system']['load']['max'] = 10.0;
