@@ -16,20 +16,24 @@ class CSRFToken Extends Base {
   }
   
   /**
-   * Returns +1 min and +1 hour rollovers hashes
+   * Returns +1 min up to +15 min rollovers hashes
    * @param string $user user or IP/host address
    * @param string $type page name or other unique per-page identifier
-   * @return array 1min and 1hour hashes
+   * @return array 1 minute ago up to 15 minute ago hashes
    */
+  
   public function checkAdditional($user, $type) {
     $date = date('m/d/y/H/i');
     $d = explode('/', $date);
-    // minute may have rolled over
-    $seed1 = $this->buildSeed($user.$type, $d[0], $d[1], $d[2], $d[3], ($d[4]-1));
-    // hour may have rolled over
-    $seed2 = $this->buildSeed($user.$type, $d[0], $d[1], $d[2], ($d[3]-1), 59);
-    return array($this->getHash($seed1), $this->getHash($seed2));
+    $hashes = array();
+    for ($x = 1; $x < 16; $x++){
+        for ($y = 4;$d[$y]-- == 0;$y--);
+        if ($d[4] < 0) { $d[4] = 59; }
+        $hashes[$x-1] = $this->getHash($this->buildSeed($user.$type, $d[0], $d[1], $d[2], $d[3], $d[4]));
+    }
+    return $hashes;
   }
+
   
   /**
    * Builds a seed with the given data
