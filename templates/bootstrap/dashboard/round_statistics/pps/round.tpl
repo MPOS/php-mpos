@@ -130,7 +130,7 @@
                   <p id="b-nextdiff" class="h5">{if $GLOBAL.nethashrate > 0}{$NETWORK.EstNextDifficulty|number_format:"8"}{else}n/a{/if}</p>
                 </div>
                 <div class="circle-tile-number text-faded">
-                  <p class="h6">Est Next Difficulty{if $GLOBAL.nethashrate > 0}<br/>Change in {$NETWORK.BlocksUntilDiffChange} Blocks{else}No Estimates{/if}</p>
+                  <p class="h6">Est. Next Difficulty{if $GLOBAL.config.coindiffchangetarget > 1}{if $GLOBAL.nethashrate > 0}<br/>Change in {$NETWORK.BlocksUntilDiffChange} Blocks{else}No Estimates{/if}{/if}</p>
                 </div>
               </div>
             </div>
