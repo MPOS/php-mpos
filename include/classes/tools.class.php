@@ -44,6 +44,7 @@ class Tools extends Base {
       curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 30);
       curl_setopt($ch, CURLOPT_TIMEOUT, 30);
       curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+      curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
       curl_setopt($ch, CURLOPT_USERAGENT, 'Mozilla/4.0 (compatible; PHP client; '.php_uname('s').'; PHP/'.phpversion().')');
     }
     curl_setopt($ch, CURLOPT_URL, $url . $target);
@@ -87,6 +88,8 @@ class Tools extends Base {
       return 'c-cex';
     } else if (preg_match('/bittrex.com/', $url)) {
       return 'bittrex';
+    } else if (preg_match('/api.coinmarketcap.com/', $url)) {
+      return 'coinmarketcap';
     }
     $this->setErrorMessage("API URL unknown");
     return false;
@@ -130,7 +133,10 @@ class Tools extends Base {
           break;
       	case 'bittrex':
       	  return @$aData['result']['Last'];
-      	  break;
+          break;
+        case 'coinmarketcap':
+          return $aData[0]['price_usd'];
+          break;          
       }
     } else {
       $this->setErrorMessage("Got an invalid response from ticker API");
