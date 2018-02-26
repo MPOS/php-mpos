@@ -112,7 +112,7 @@ $(document).ready(function(){
   // Refresh other static numbers on the template
   function refreshStaticData(data) {
   {/literal}{if $GLOBAL.config.price.enabled}{literal}
-    $('#b-price').html((parseFloat(data.getdashboarddata.data.pool.price).toFixed(8)));
+    $('#b-price').html((number_format(parseFloat(data.getdashboarddata.data.pool.price).toFixed(8), 3)));
   {/literal}{/if}{literal}
     $('#b-poolworkers').html(number_format(data.getdashboarddata.data.pool.workers));
     $('#b-hashrate').html((number_format(data.getdashboarddata.data.personal.hashrate, 2)));
