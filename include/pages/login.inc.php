@@ -1,20 +1,25 @@
 <?php
 $defflip = (!cfip()) ? exit(header('HTTP/1.1 401 Unauthorized')) : 1;
 
+$recaptcha_enabled = ($setting->getValue('recaptcha_enabled') && $setting->getValue('recaptcha_enabled_logins'));
+
+if ($recaptcha_enabled) {
+  $recaptcha_secret = $setting->getValue('recaptcha_private_key');
+  $recaptcha_public_key = $setting->getValue('recaptcha_public_key');
+
+  $recaptcha = new \ReCaptcha\ReCaptcha($recaptcha_secret);
+  $smarty->assign("recaptcha_public_key", $recaptcha_public_key);
+}
+
+$smarty->assign("recaptcha_enabled", $recaptcha_enabled);
+
 // ReCaptcha handling if enabled
-if ($setting->getValue('recaptcha_enabled') && $setting->getValue('recaptcha_enabled_logins')) {
-  require_once(INCLUDE_DIR . '/lib/recaptchalib.php');
+if ($recaptcha_enabled) {
   if (!empty($_POST['username']) && !empty($_POST['password'])) {
     // Load re-captcha specific data
-    $rsp = recaptcha_check_answer (
-      $setting->getValue('recaptcha_private_key'),
-      $_SERVER["REMOTE_ADDR"],
-      ( (isset($_POST["recaptcha_challenge_field"])) ? $_POST["recaptcha_challenge_field"] : null ),
-      ( (isset($_POST["recaptcha_response_field"])) ? $_POST["recaptcha_response_field"] : null )
-    );
-    $smarty->assign("RECAPTCHA", recaptcha_get_html($setting->getValue('recaptcha_public_key'), $rsp->error, true));
-  } else {
-    $smarty->assign("RECAPTCHA", recaptcha_get_html($setting->getValue('recaptcha_public_key'), null, true));
+
+    $recaptcha_response = (isset($_POST["g-recaptcha-response"]) ? $_POST["g-recaptcha-response"] : null);
+    $rsp = $recaptcha->verify($recaptcha_response, $_SERVER["REMOTE_ADDRESS"]);
   }
 }
 
@@ -23,7 +28,7 @@ if (!empty($_POST['username']) && !empty($_POST['password'])) {
     $_SESSION['POPUP'][] = array('CONTENT' => 'You are not allowed to login during maintenace.', 'TYPE' => 'alert alert-info');
   } else {
     // Check if recaptcha is enabled, process form data if valid
-    if (!$setting->getValue('recaptcha_enabled') || !$setting->getValue('recaptcha_enabled_logins') || ($setting->getValue('recaptcha_enabled') && $setting->getValue('recaptcha_enabled_logins') && $rsp->is_valid)) {
+    if (($recaptcha_enabled && $rsp->isSuccess()) || !$recaptcha_enabled) {
       if (!$config['csrf']['enabled'] || $config['csrf']['enabled'] && $csrftoken->valid) {
         // check if login is correct
         if ($user->checkLogin(@$_POST['username'], @$_POST['password']) ) {

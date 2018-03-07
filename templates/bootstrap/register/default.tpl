@@ -52,7 +52,7 @@
           <font size="1">Four digit number. <b>Remember this pin!</b></font>
           <div class="input-group input-group-sm">
             <span class="input-group-addon"><i class="fa fa-shield fa-fw"></i></span>
-            <input type="password" class="form-control" name="pin" placeholder="PIN" value="" size="4" maxlength="4" required>   
+            <input type="password" class="form-control" name="pin" placeholder="PIN" value="" size="4" maxlength="4" required>
           </div>
           <div class="input-group input-group-sm">
             <label>
@@ -60,7 +60,14 @@
             </label>
           </div>
         </div>
-        <center>{nocache}{$RECAPTCHA|default:"" nofilter}{/nocache}</center>
+        <center>
+          {nocache}
+            {if $recaptcha_enabled}
+              <div class="g-recaptcha" data-sitekey="{$recaptcha_public_key}"></div>
+              <script type="text/javascript" src="https://www.google.com/recaptcha/api.js"></script>
+            {/if}
+          {/nocache}
+        </center>
       </div>
       <div class="panel-footer">
         <input type="submit" value="Register" class="btn btn-success btn-sm">
