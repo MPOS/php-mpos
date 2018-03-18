@@ -113,7 +113,7 @@ $config['gettingstarted']['stratumport'] = '3333';
  *   https://github.com/MPOS/php-mpos/wiki/Config-Setup#wiki-ticker-api
  **/
 $config['price']['enabled'] = false;
-$config['price']['url'] = 'https://btc-e.com';
+$config['price']['url'] = 'https://btc-e.nz';
 $config['price']['target'] = '/api/2/ltc_usd/ticker';
 $config['price']['currency'] = 'USD';
 
