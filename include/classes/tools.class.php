@@ -72,7 +72,7 @@ class Tools extends Base {
    **/
   private function getApiType($url) {
     if (preg_match('/coinchoose.com/', $url)) {
-      return 'coinchose';
+      return 'coinchoose';
     } else if (preg_match('/btc-e.nz/', $url)) {
       return 'btce';
     } else if (preg_match('/cryptopia.co.nz/', $url)) {
@@ -103,7 +103,7 @@ class Tools extends Base {
     // if api data is valid, extract price depending on API type
     if (is_array($aData)) {
       switch ($strApiType) {
-      	case 'coinchose':
+      	case 'coinchoose':
       	  foreach ($aData as $aItem) {
       	    if($strBase == $aItem[0])
       	      return $aItem['price'];
