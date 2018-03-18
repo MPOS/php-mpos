@@ -87,6 +87,8 @@ class Tools extends Base {
       return 'bittrex';
     } else if (preg_match('/crypto-bridge.org/', $url)) {
       return 'cryptobridge';
+    } else if (preg_match('/yobit.net/', $url)) {
+      return 'yobit';
     }
     $this->setErrorMessage("API URL unknown");
     return false;
@@ -134,6 +136,9 @@ class Tools extends Base {
             if("{$strBase}_{$strQuote}" == $aItem['id'])
               return $aItem['last'];
           }
+        case 'yobit':
+          return @$aData[strtolower($strBase) . "_" . strtolower($strQuote)]['last'];
+          break;
       }
     } else {
       $this->setErrorMessage("Got an invalid response from ticker API");
