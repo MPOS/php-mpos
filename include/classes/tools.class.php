@@ -44,9 +44,13 @@ class Tools extends Base {
       curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 30);
       curl_setopt($ch, CURLOPT_TIMEOUT, 30);
       curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+      curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
       curl_setopt($ch, CURLOPT_USERAGENT, 'Mozilla/4.0 (compatible; PHP client; '.php_uname('s').'; PHP/'.phpversion().')');
     }
-    curl_setopt($ch, CURLOPT_URL, $url . $target);
+    
+    $url = rtrim($url, '/');
+    $target = ltrim($target, '/');
+    curl_setopt($ch, CURLOPT_URL, $url . '/' . $target);
     // curl_setopt($ch, CURLOPT_POSTFIELDS, $post_data);
 
     curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, FALSE);
