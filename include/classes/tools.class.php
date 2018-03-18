@@ -97,7 +97,8 @@ class Tools extends Base {
    **/
   public function getPrice() {
     $aData = $this->getApi($this->config['price']['url'], $this->config['price']['target']);
-    $strCurrency = $this->config['currency'];
+    $strBase = $this->config['currency'];
+    $strQuote = $this->config['price']['currency'];
     // Check the API type for configured URL
     if (!$strApiType = $this->getApiType($this->config['price']['url']))
       return false;
@@ -106,7 +107,7 @@ class Tools extends Base {
       switch ($strApiType) {
       	case 'coinchose':
       	  foreach ($aData as $aItem) {
-      	    if($strCurrency == $aItem[0])
+      	    if($strBase == $aItem[0])
       	      return $aItem['price'];
       	  }
       	  break;
@@ -114,13 +115,13 @@ class Tools extends Base {
       	  return $aData['ticker']['last'];
       	  break;
       	case 'cryptsy':
-      	  return @$aData['return']['markets'][$strCurrency]['lasttradeprice'];
+      	  return @$aData['return']['markets'][$strBase]['lasttradeprice'];
       	  break;
         case 'cryptopia':
       	  return @$aData['Data']['LastPrice'];
       	  break;
       	case 'cryptorush':
-      	  return @$aData["$strCurrency/" . $this->config['price']['currency']]['last_trade'];
+      	  return @$aData["{$strBase}/{$strQuote}"]['last_trade'];
       	  break;
       	case 'mintpal':
       	  return @$aData['0']['last_price'];
