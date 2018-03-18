@@ -85,6 +85,8 @@ class Tools extends Base {
       return 'c-cex';
     } else if (preg_match('/bittrex.com/', $url)) {
       return 'bittrex';
+    } else if (preg_match('/crypto-bridge.org/', $url)) {
+      return 'cryptobridge';
     }
     $this->setErrorMessage("API URL unknown");
     return false;
@@ -127,6 +129,11 @@ class Tools extends Base {
       	case 'bittrex':
       	  return @$aData['result']['Last'];
       	  break;
+        case 'cryptobridge':
+          foreach ($aData as $aItem) {
+            if("{$strBase}_{$strQuote}" == $aItem['id'])
+              return $aItem['last'];
+          }
       }
     } else {
       $this->setErrorMessage("Got an invalid response from ticker API");
