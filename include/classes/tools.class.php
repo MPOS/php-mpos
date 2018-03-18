@@ -158,7 +158,7 @@ class Tools extends Base {
           return @$aData['Last'];
           break;
         case 'mercatox':
-          return @$aData["{$strBase}_{$strQuote}"]['last'];
+          return @$aData['pairs']["{$strBase}_{$strQuote}"]['last'];
           break;
         case 'tradeogre':
           return @$aData['price'];
