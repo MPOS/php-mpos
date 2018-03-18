@@ -91,6 +91,8 @@ class Tools extends Base {
       return 'yobit';
     } else if (preg_match('/binance.com/', $url)) {
       return 'binance';
+    } else if (preg_match('/southxchange.com/', $url)) {
+      return 'southxchange';
     }
     $this->setErrorMessage("API URL unknown");
     return false;
@@ -143,6 +145,9 @@ class Tools extends Base {
           break;
         case 'binance':
           return @$aData['price'];
+          break;
+        case 'southxchange':
+          return @$aData['Last'];
           break;
       }
     } else {
