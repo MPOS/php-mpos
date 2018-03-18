@@ -89,6 +89,8 @@ class Tools extends Base {
       return 'cryptobridge';
     } else if (preg_match('/yobit.net/', $url)) {
       return 'yobit';
+    } else if (preg_match('/binance.com/', $url)) {
+      return 'binance';
     }
     $this->setErrorMessage("API URL unknown");
     return false;
@@ -138,6 +140,9 @@ class Tools extends Base {
           }
         case 'yobit':
           return @$aData[strtolower($strBase) . "_" . strtolower($strQuote)]['last'];
+          break;
+        case 'binance':
+          return @$aData['price'];
           break;
       }
     } else {
