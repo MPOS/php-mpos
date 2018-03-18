@@ -75,8 +75,6 @@ class Tools extends Base {
       return 'coinchose';
     } else if (preg_match('/btc-e.nz/', $url)) {
       return 'btce';
-    } else if (preg_match('/cryptsy.com/', $url)) {
-      return 'cryptsy';
     } else if (preg_match('/cryptopia.co.nz/', $url)) {
      return 'cryptopia';
     } else if (preg_match('/cryptorush.in/', $url)) {
@@ -113,9 +111,6 @@ class Tools extends Base {
       	  break;
       	case 'btce':
       	  return $aData['ticker']['last'];
-      	  break;
-      	case 'cryptsy':
-      	  return @$aData['return']['markets'][$strBase]['lasttradeprice'];
       	  break;
         case 'cryptopia':
       	  return @$aData['Data']['LastPrice'];
