@@ -95,6 +95,8 @@ class Tools extends Base {
       return 'southxchange';
     } else if (preg_match('/mercatox.com/', $url)) {
       return 'mercatox';
+    } else if (preg_match('/tradeogre.com/', $url)) {
+      return 'tradeogre';
     }
     $this->setErrorMessage("API URL unknown");
     return false;
@@ -153,6 +155,9 @@ class Tools extends Base {
           break;
         case 'mercatox':
           return @$aData["{$strBase}_{$strQuote}"]['last'];
+          break;
+        case 'tradeogre':
+          return @$aData['price'];
           break;
       }
     } else {
