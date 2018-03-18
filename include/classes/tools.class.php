@@ -73,7 +73,7 @@ class Tools extends Base {
   private function getApiType($url) {
     if (preg_match('/coinchoose.com/', $url)) {
       return 'coinchose';
-    } else if (preg_match('/btc-e.com/', $url)) {
+    } else if (preg_match('/btc-e.nz/', $url)) {
       return 'btce';
     } else if (preg_match('/cryptsy.com/', $url)) {
       return 'cryptsy';
