@@ -8,13 +8,20 @@ $api->isActive();
 $user_id = $api->checkAccess($user->checkApiKey($_REQUEST['api_key']), @$_REQUEST['id']);
 
 // Fetch transactions
+if (isset($_REQUEST['start'])) {
+  $start = $_REQUEST['start'];
+} else {
+  // start at the beginning
+  $start = 0;
+}
 if (isset($_REQUEST['limit']) && $_REQUEST['limit'] <= 100) {
   $limit = $_REQUEST['limit'];
 } else {
   // Force limit
   $limit = 100;
 }
-$data['transactions'] = $transaction->getTransactions(0, NULL, $limit, $user_id);
+
+$data['transactions'] = $transaction->getTransactions($start, NULL, $limit, $user_id);
 
 // Fetch summary if enabled
 if (!$setting->getValue('disable_transactionsummary')) {

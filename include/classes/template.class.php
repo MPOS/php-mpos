@@ -79,7 +79,7 @@ class Template extends Base {
     }
 
     $this->setErrorMessage('Failed to get active templates');
-    $this->debug->append('Template::getActiveTemplates failed: ' . $this->mysqli->error);
+    $this->debug->append('Template::getActiveTemplates failed: ' . $this->mysqli->lastused->error);
     return false;
   }
 
@@ -172,7 +172,7 @@ class Template extends Base {
       return $result->fetch_assoc();
 
     $this->setErrorMessage('Failed to get the template');
-    $this->debug->append('Template::getEntry failed: ' . $this->mysqli->error);
+    $this->debug->append('Template::getEntry failed: ' . $this->mysqli->lastused->error);
     return false;
   }
 
@@ -206,7 +206,7 @@ class Template extends Base {
       return true;
 
     $this->setErrorMessage('Database error');
-    $this->debug->append('Template::updateEntry failed: ' . $this->mysqli->error);
+    $this->debug->append('Template::updateEntry failed: ' . $this->mysqli->lastused->error);
     return false;
   }
 }
