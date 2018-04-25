@@ -142,7 +142,7 @@ CREATE TABLE IF NOT EXISTS `settings` (
   UNIQUE KEY `setting` (`name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-INSERT INTO `settings` (`name`, `value`) VALUES ('DB_VERSION', '1.0.2');
+INSERT INTO `settings` (`name`, `value`) VALUES ('DB_VERSION', '1.0.3');
 
 CREATE TABLE IF NOT EXISTS `shares` (
   `id` bigint(30) NOT NULL AUTO_INCREMENT,
@@ -182,9 +182,9 @@ CREATE TABLE IF NOT EXISTS `statistics_shares` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `account_id` int(10) unsigned NOT NULL,
   `block_id` int(10) unsigned NOT NULL,
-  `valid` bigint(20) NOT NULL,
+  `valid` bigint(20) NOT NULL DEFAULT '0',
   `invalid` bigint(20) NOT NULL DEFAULT '0',
-  `pplns_valid` bigint(20) NOT NULL,
+  `pplns_valid` bigint(20) NOT NULL DEFAULT '0',
   `pplns_invalid` bigint(20) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   KEY `account_id` (`account_id`),
