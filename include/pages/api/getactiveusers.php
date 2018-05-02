@@ -8,8 +8,8 @@ $api->isActive();
 $user_id = $api->checkAccess($user->checkApiKey($_REQUEST['api_key']), @$_REQUEST['id']);
 
 // Output JSON format
-if ($this->getGetCache() && $data = $this->memcache->getStatic(STATISTICS_ALL_USER_HASHRATES)) {
-    echo $api->get_json($this->memcache->getStatic(STATISTICS_ALL_USER_HASHRATES));
+if ($this->getGetCache() && $data = $statistics->memcache->getStatic(STATISTICS_ALL_USER_HASHRATES)) {
+    echo $api->get_json($statistics->memcache->getStatic(STATISTICS_ALL_USER_HASHRATES));
 } else {
     echo $api->get_json('');
 }
