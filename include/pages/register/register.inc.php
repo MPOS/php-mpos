@@ -1,19 +1,24 @@
 <?php
 $defflip = (!cfip()) ? exit(header('HTTP/1.1 401 Unauthorized')) : 1;
 
+$recaptcha_enabled = ($setting->getValue('recaptcha_enabled') && $setting->getValue('recaptcha_enabled_registrations'));
+
+$smarty->assign("recaptcha_enabled", $recaptcha_enabled);
+
 // ReCaptcha handling if enabled
-if ($setting->getValue('recaptcha_enabled') && $setting->getValue('recaptcha_enabled_registrations')) {
-  require_once(INCLUDE_DIR . '/lib/recaptchalib.php');
+if ($recaptcha_enabled) {
+  $recaptcha_secret = $setting->getValue('recaptcha_private_key');
+  $recaptcha_public_key = $setting->getValue('recaptcha_public_key');
+
+  $smarty->assign("recaptcha_public_key", $recaptcha_public_key);
+
+  $recaptcha = new \ReCaptcha\ReCaptcha($recaptcha_secret);
+
   // Load re-captcha specific data
-  $rsp = recaptcha_check_answer (
-    $setting->getValue('recaptcha_private_key'),
-    $_SERVER["REMOTE_ADDR"],
-    ( (isset($_POST["recaptcha_challenge_field"])) ? $_POST["recaptcha_challenge_field"] : null ),
-    ( (isset($_POST["recaptcha_response_field"])) ? $_POST["recaptcha_response_field"] : null )
-  );
-  $smarty->assign("RECAPTCHA", recaptcha_get_html($setting->getValue('recaptcha_public_key'), $rsp->error, true));
-  if (!$rsp->is_valid) $_SESSION['POPUP'][] = array('CONTENT' => 'Invalid Captcha, please try again.', 'TYPE' => 'alert alert-danger');
-  $recaptcha = ($rsp->is_valid) ? 1 : 0;
+  $recaptcha_response = (isset($_POST["g-recaptcha-response"]) ? $_POST["g-recaptcha-response"] : null);
+  $rsp = $recaptcha->verify($recaptcha_response, $_SERVER["REMOTE_ADDRESS"]);
+
+  if (!$rsp->isSuccess()) $_SESSION['POPUP'][] = array('CONTENT' => 'Invalid Captcha, please try again.', 'TYPE' => 'alert alert-danger');
 }
 
 if ($setting->getValue('disable_invitations') && $setting->getValue('lock_registration')) {
@@ -23,10 +28,10 @@ if ($setting->getValue('disable_invitations') && $setting->getValue('lock_regist
 } else {
   // Check if csrf is enabled and fail if token is invalid
   if (!$config['csrf']['enabled'] || $config['csrf']['enabled'] && $csrftoken->valid) {
-    if ($setting->getValue('recaptcha_enabled') != 1 || $setting->getValue('recaptcha_enabled_registrations') != 1 || $rsp->is_valid) {
+    if (($recaptcha_enabled && $rsp->isSuccess()) || !$recaptcha_enabled) {
       // Check if recaptcha is enabled, process form data if valid or disabled
       isset($_POST['token']) ? $token = $_POST['token'] : $token = '';
-      isset($_POST['coinaddress']) ? $validcoinaddress = $_POST['coinaddress'] : $validcoinaddress = NULL;    
+      isset($_POST['coinaddress']) ? $validcoinaddress = $_POST['coinaddress'] : $validcoinaddress = NULL;
       if ($config['check_valid_coinaddress'] AND empty($validcoinaddress)) {
         $_SESSION['POPUP'][] = array('CONTENT' => 'Please enter a valid Wallet Address', 'TYPE' => 'alert alert-danger');
       } else {

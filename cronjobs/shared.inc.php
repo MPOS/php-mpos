@@ -51,19 +51,39 @@ $cron_name = basename($_SERVER['PHP_SELF'], '.php');
 require_once(BASEPATH . '../include/bootstrap.php');
 require_once(BASEPATH . '../include/version.inc.php');
 
+// Load 3rd party logging library for running crons
+$log = KLogger::instance( BASEPATH . '../logs/' . $cron_name, KLogger::INFO );
+
 // Command line switches
 array_shift($argv);
-foreach ($argv as $option) {
+foreach ($argv as $index => $option) {
   switch ($option) {
   case '-f':
     $monitoring->setStatus($cron_name . "_disabled", "yesno", 0);
     $monitoring->setStatus($cron_name . "_active", "yesno", 0);
     break;
+  case '-t':
+    // When `-t TIME_IN_SEC` is specified, we ignore the cron active flag
+    // if the time elapsed `TIME_IN_SEC` seconds after the last job started.
+
+    // Check the next argument is the value for -t option.
+    if (!($index + 1 < count($argv)) || // check if '-t' is not the last argument.
+        !(ctype_digit($argv[$index + 1]))) { // check the next argument is numeric string
+      $log->logFatal('Option -t requires an integer.');
+      $monitoring->endCronjob($cron_name, 'E0085', 3, true, false);
+    }
+
+    $timeout = intval($argv[$index + 1]);
+    $timeElapsedFromLastStart = $dStartTime - $monitoring->getLastCronStarted($cron_name);
+
+    if ($timeElapsedFromLastStart > $timeout) {
+      $log->logWarn("Previous cronjob `$cron_name` is started before than you specified by -t. Re-run forced.");
+      $monitoring->setStatus($cron_name . "_active", "yesno", 0);
+    }
+    break;
   }
 }
 
-// Load 3rd party logging library for running crons
-$log = KLogger::instance( BASEPATH . '../logs/' . $cron_name, KLogger::INFO );
 $log->LogDebug('Starting ' . $cron_name);
 
 // Load the start time for later runtime calculations for monitoring

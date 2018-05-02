@@ -59,7 +59,7 @@ if ($oToken->cleanupTokens()) {
 }
 $log->logInfo(sprintf($strLogMask, 'cleanupTokens', $affected, number_format(microtime(true) - $start, 3), $status, $message));
 
-// Clenaup shares archive
+// Cleanup shares archive
 $start = microtime(true);
 $status = 'OK';
 $message = '';
@@ -73,7 +73,7 @@ if ($affected === false) {
 }
 $log->logInfo(sprintf($strLogMask, 'purgeArchive', $affected, number_format(microtime(true) - $start, 3), $status, $message));
 
-// Clenaup shares archive
+// Cleanup shares archive
 $start = microtime(true);
 $status = 'OK';
 $message = '';
