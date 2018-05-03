@@ -253,8 +253,9 @@ class Base {
       $this->setErrorMessage(call_user_func_array(array($this, 'getErrorMsg'), func_get_args()));
     }
     // Default to SQL error for debug and cron errors
-    $this->debug->append($this->getErrorMsg('E0019', $this->mysqli->error));
-    $this->setCronMessage($this->getErrorMsg('E0019', $this->mysqli->error));
+    $this->debug->append($this->getErrorMsg('E0019', $this->mysqli->lastused->errno));
+    $this->setCronMessage($this->getErrorMsg('E0019', $this->mysqli->lastused->errno));
+    
     return false;
   }
 

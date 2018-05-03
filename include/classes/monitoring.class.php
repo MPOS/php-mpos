@@ -61,6 +61,16 @@ class Monitoring extends Base {
   }
 
   /**
+   * Get the timestamp that last time a cronjob started
+   * @param name string Cronjob name
+   * @return int unix timestamp of last time the cronjob started
+   **/
+  public function getLastCronStarted($name) {
+    $aStatus = $this->getStatus($name . '_starttime');
+    return $aStatus['value'];
+  }
+
+  /**
    * Fetch a value from our table
    * @param name string Setting name
    * @return value string Value

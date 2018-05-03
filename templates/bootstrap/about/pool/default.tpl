@@ -48,7 +48,7 @@
           </ul>
         </div>
         <div class="panel-footer">
-          <h6>This Pool is running <a href="https://github.com/TheSerapher/php-mpos">MPOS</a> project code. This frontend was created by <a href="https://github.com/MPOS/php-mpos"TheSerapher aka Sebastian Grewe</a>. The operation of the pool is soley at the hand of your trusted pool operator.</h6>
+          <h6>This Pool is running <a href="https://github.com/TheSerapher/php-mpos">MPOS</a> project code. This frontend was created by <a href="https://github.com/MPOS/php-mpos">TheSerapher aka Sebastian Grewe</a>. The operation of the pool is soley at the hand of your trusted pool operator.</h6>
         </div>
       </div>
     </div>

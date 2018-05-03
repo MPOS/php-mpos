@@ -3,13 +3,14 @@ $defflip = (!cfip()) ? exit(header('HTTP/1.1 401 Unauthorized')) : 1;
 
 // Instantiate class, we are using mysqlng
 if ($config['mysql_filter']) {
-  $mysqli = new mysqli_strict($config['db']['host'], $config['db']['user'], $config['db']['pass'], $config['db']['name'], $config['db']['port']);
+  $mysqli = new mysqlims($config['db'],$config['db-ro'], true);
 } else {
-  $mysqli = new mysqli($config['db']['host'], $config['db']['user'], $config['db']['pass'], $config['db']['name'], $config['db']['port']);
+  $mysqli = new mysqlims($config['db'],$config['db-ro'], false);
 }
 
-// Check if read-only and quit if it is on
-if ($mysqli->query('/* MYSQLND_MS_MASTER_SWITCH */SELECT @@global.read_only AS read_only')->fetch_object()->read_only == 1) {
+// Check if read-only and quit if it is on, disregard if slave is enabled
+
+if ($mysqli->query('/* MYSQLND_MS_MASTER_SWITCH */SELECT @@global.read_only AS read_only')->fetch_object()->read_only == 1 && $config['db-ro']['enabled'] === false ) {
   die('Database is in READ-ONLY mode');
 }
 

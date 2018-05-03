@@ -8,10 +8,14 @@ if ($setting->getValue('lock_registration') && $setting->getValue('disable_invit
   $_SESSION['POPUP'][] = array('CONTENT' => 'Only invited users are allowed to register.', 'TYPE' => 'alert alert-danger');
   $smarty->assign("CONTENT", "disabled.tpl");
 } else {
-  if ($setting->getValue('recaptcha_enabled') && $setting->getValue('recaptcha_enabled_registrations')) {
-    require_once(INCLUDE_DIR . '/lib/recaptchalib.php');
-    $smarty->assign("RECAPTCHA", recaptcha_get_html($setting->getValue('recaptcha_public_key'), null, true));
+  $recaptcha_enabled = ($setting->getValue('recaptcha_enabled') && $setting->getValue('recaptcha_enabled_registrations'));
+  $smarty->assign("recaptcha_enabled", $recaptcha_enabled);
+
+  if ($recaptcha_enabled) {
+    $recaptcha_public_key = $setting->getValue('recaptcha_public_key');
+    $smarty->assign("recaptcha_public_key", $recaptcha_public_key);
   }
+
   // Load news entries for Desktop site and unauthenticated users
   $smarty->assign("CONTENT", "default.tpl");
 }
