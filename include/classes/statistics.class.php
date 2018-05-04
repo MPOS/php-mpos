@@ -468,6 +468,7 @@ class Statistics extends Base {
       SELECT
         a.id AS id,
         a.username AS account,
+        ca.coin_address AS coin_address,
         COUNT(DISTINCT t1.username) AS workers,
         IFNULL(SUM(t1.difficulty), 0) AS shares,
         ROUND(SUM(t1.difficulty) / ?, 2) AS sharerate,
@@ -489,6 +490,8 @@ class Statistics extends Base {
       ) AS t1
       LEFT JOIN " . $this->user->getTableName() . " AS a
       ON SUBSTRING_INDEX( t1.username, '.', 1 ) = a.username
+      LEFT JOIN " . $this->user->coin_address->getTableName() . " AS ca
+      ON a.id = ca.account_id
       WHERE a.id IS NOT NULL
       GROUP BY account
       ORDER BY shares DESC
