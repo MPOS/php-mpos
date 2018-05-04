@@ -1,11 +1,10 @@
 [![Build Status](https://travis-ci.org/MPOS/php-mpos.png?branch=master)](https://travis-ci.org/MPOS/php-mpos) [![Code Climate](https://codeclimate.com/github/MPOS/php-mpos/badges/gpa.svg)](https://codeclimate.com/github/MPOS/php-mpos) [![Code Coverage](https://scrutinizer-ci.com/g/MPOS/php-mpos/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/MPOS/php-mpos/?branch=master) [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/MPOS/php-mpos/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/MPOS/php-mpos/?branch=master) master<br />
 [![Build Status](https://travis-ci.org/MPOS/php-mpos.png?branch=development)](https://travis-ci.org/MPOS/php-mpos) [![Code Coverage](https://scrutinizer-ci.com/g/MPOS/php-mpos/badges/coverage.png?b=development)](https://scrutinizer-ci.com/g/MPOS/php-mpos/?branch=development) [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/MPOS/php-mpos/badges/quality-score.png?b=development)](https://scrutinizer-ci.com/g/MPOS/php-mpos/?branch=development)  development
 
-
 Description
 ===========
 
-MPOS is a web based Mining Portal for various crypto currencies. It was created by [TheSerapher](https://github.com/TheSerapher) and has hence grown quite large. Recently it was migrated into a Github Organization to make development easier. It's a community driven open source project. Support can be requested on IRC at https://webchat.freenode.net/?channels=#mpos - Be **PATIENT** ... People listed in this channel may currently be inactive but most users there have offline logging of messages. They **will** see your questions and answer if they can. Don't join, ask the question and leave. Sit around if you want answers to your questions!
+MPOS is a web based Mining Portal for various crypto currencies. It was originally created by [TheSerapher](https://github.com/TheSerapher) and has hence grown quite large. It's now used by many pools out there and is a good starting point to learn more about mining and running pools in general. There is no active development done on the project by the orignal developers but we still merge PRs!
 
 Donations
 =========
@@ -19,24 +18,6 @@ Website Footer
 ==============
 
 When you decide to use `MPOS` please be so kind and leave the footer intact. You are not the author of the software and should honor those that have worked on it. Keeping the footer intact helps spreading the word. Leaving the donation address untouched allows miners to donate to the author.
-
-Donors
-======
-
-These people have supported this project with a donation:
-
-* [obigal](https://github.com/obigal)
-* [vias](https://github.com/vias79)
-* [WKNiGHT](https://github.com/WKNiGHT-)
-* [ZC](https://github.com/zccopwrx)
-* Nutnut
-* Caberhagen (https://coin-mining.ch)
-* Mining4All (https://www.mining4all.eu/)
-* [xisi](https://github.com/xisi)
-* [PCFiL](https://github.com/PCFiL)
-* [rog1121](https://github.com/rog1121)(https://rapidhash.net)
-* [Wow, Much Pool](http://www.wowmuchpool.com/)
-* webxassDE (https://www.suchcoins.com/)
 
 Pools running MPOS
 ==================
@@ -140,39 +121,27 @@ on non-existing features in `MPOS`. For the vast majority, adjusting themes shou
 
 In all that, I humbly ask to keep the `MPOS` author reference and Github URL intact.
 
-Related Software
-================
-
-There are a few other projects out there that take advantage of MPOS and it's included API. Here a quick list that you can check out for yourself:
-
-* [MPOS IRC Bot](https://github.com/WKNiGHT-/mpos-bot) written in Python, standalone bot, using the MPOS API
-* [MPOS Eggdrop Module](https://github.com/iAmShorty/mpos-eggdrop-tcl) written in TCL, adding MPOS commands to this bot, using the MPOS API
-* [Windows Phone Pool App](http://www.windowsphone.com/en-us/store/app/meeneminermonitor/7ec6eac7-a642-409b-96c8-57b5cfdf45cf)
-* [iPhone iMPOS App](https://itunes.apple.com/us/app/impos/id742179239?mt=8)
-* [Other Windows Phone App](http://www.windowsphone.com/en-us/store/app/mining-info/952f1137-eb62-4613-8057-34576d3c9c44)
-
 Contributing
 ============
 
 You can contribute to this project in different ways:
 
 * Report outstanding issues and bugs by creating an [Issue][1]
-* Suggest feature enhancements also via [Issues][1]
-* Fork the project, create a branch and file a pull request to improve the code itself
-
-If you wish to participate contact the team on IRC: https://webchat.freenode.net/?channels=#mpos - we will point you to the proper channels!
+* Fork the project, create a branch and file a pull request **against development** to improve the code itself
 
 Contact
 =======
 
-You can find the team on Freenode.net, #MPOS.
+This product is not actively developed anymore. For setup and installation support, please find help in other channels.
+This projects issue tracker is used for bugs and issues with the core code, not for general help in setting up and running 
+pool.
 
 Team Members
 ============
 
 Author and Project Owner: [TheSerapher](https://github.com/TheSerapher) aka Sebastian Grewe
 
-Developers:
+Past developers that helped on MPOS in the early days:
 
 * [nrpatten](https://github.com/nrpatten)
 * [Aim](https://github.com/fspijkerman)

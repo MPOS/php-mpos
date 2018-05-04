@@ -22,8 +22,10 @@ class Notification extends Mail {
     $this->debug->append("STA " . __METHOD__, 4);
     $data = json_encode($aData);
     $stmt = $this->mysqli->prepare("SELECT id FROM $this->table WHERE data = ? AND active = 1 LIMIT 1");
-    if ($stmt && $stmt->bind_param('s', $data) && $stmt->execute() && $stmt->store_result() && $stmt->num_rows == 1)
-      return true;
+    if ($stmt && $stmt->bind_param('s', $data) && $stmt->execute() && $stmt->store_result() && $stmt->num_rows == 1) {
+        return true;
+    }
+    
     return $this->sqlError('E0041');
   }
 
@@ -188,7 +190,7 @@ class Notification extends Mail {
   public function cleanupNotifications($days=7) {
     $failed = 0;
     $this->deleted = 0;
-    $stmt = $this->mysqli->prepare("DELETE FROM $this->table WHERE time < (NOW() - ? * 24 * 60 * 60)");
+    $stmt = $this->mysqli->prepare("DELETE FROM $this->table WHERE time < (NOW() - INTERVAL ? DAY)");
     if (! ($this->checkStmt($stmt) && $stmt->bind_param('i', $days) && $stmt->execute())) {
       $failed++;
     } else {

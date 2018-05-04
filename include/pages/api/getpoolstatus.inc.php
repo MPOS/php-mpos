@@ -12,7 +12,7 @@ $aLastBlock = $block->getLast();
 
 // Efficiency
 $aShares = $statistics->getRoundShares();
-$aShares['valid'] > 0 ? $dEfficiency = round((100 - (100 / $aShares['valid'] * $aShares['invalid'])), 2) : $dEfficiency = 0;
+$aShares['invalid'] > 0 ? $dEfficiency = round((1 - ($aShares['invalid'] / ($aShares['valid'] + $aShares['invalid']))) * 100, 2) : $dEfficiency = 100;
 
 // Fetch RPC data
 if ($bitcoin->can_connect() === true){

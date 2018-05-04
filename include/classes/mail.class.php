@@ -14,16 +14,8 @@ class Mail extends Base {
   **/
   public function contactform($senderName, $senderEmail, $senderSubject, $senderMessage) {
     $this->debug->append("STA " . __METHOD__, 4);
-    if (preg_match('/[^a-z_\.\!\?\-0-9\\s ]/i', $senderName)) {
-      $this->setErrorMessage($this->getErrorMsg('E0024'));
-      return false;
-    }
     if (empty($senderEmail) || !filter_var($senderEmail, FILTER_VALIDATE_EMAIL)) {
       $this->setErrorMessage($this->getErrorMsg('E0023'));
-      return false;
-    }
-    if (preg_match('/[^a-z_\.\!\?\-0-9\\s ]/i', $senderSubject)) {
-      $this->setErrorMessage($this->getErrorMsg('E0034'));
       return false;
     }
     if (strlen(strip_tags($senderMessage)) < strlen($senderMessage)) {

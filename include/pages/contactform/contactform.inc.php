@@ -25,7 +25,7 @@ if ($setting->getValue('acl_contactform') == 2) {
     if ($mail->contactform($_POST['senderName'], $_POST['senderEmail'], $_POST['senderSubject'], $_POST['senderMessage'])) {
       $_SESSION['POPUP'][] = array('CONTENT' => 'Thanks for sending your message! We will get back to you shortly');
     } else {
-      $_SESSION['POPUP'][] = array('CONTENT' => 'There was a problem sending your message. Please try again. ' . $user->getError(), 'TYPE' => 'alert alert-danger');
+      $_SESSION['POPUP'][] = array('CONTENT' => 'There was a problem sending your message. Check following error and please try again: ' . $mail->getError(), 'TYPE' => 'alert alert-danger');
     }
   }
 }

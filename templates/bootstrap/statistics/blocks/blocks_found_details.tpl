@@ -59,7 +59,7 @@
                 <td class="text-right">{$BLOCKSFOUND[block].shares|number_format}</td>
                 <td class="text-right">
                   {math assign="percentage" equation="shares / estshares * 100" shares=$BLOCKSFOUND[block].shares|default:"0" estshares=$BLOCKSFOUND[block].estshares}
-                  <font color="{if ($percentage <= 100)}green{else}red{/if}">{$percentage|number_format:"2"}</font>
+                  <font color="{if ($percentage <= 100)}green{elseif ($percentage <= 115)}orange{else}red{/if}">{$percentage|number_format:"2"}</font>
                 </td>
               </tr>
               {/section}
@@ -70,7 +70,7 @@
                 <td class="text-right">{$pplnsshares|number_format}</td>
                 {/if}
                 <td class="text-right">{$totalshares|number_format}</td>
-                <td class="text-right">{if $count > 0}<font color="{if (($totalshares / $totalexpectedshares * 100) <= 100)}green{else}red{/if}">{($totalshares / $totalexpectedshares * 100)|number_format:"2"}</font>{else}0{/if}</td>
+                <td class="text-right">{if $count > 0}<font color="{if (($totalshares / $totalexpectedshares * 100) <= 100)}green{elseif (($totalshares / $totalexpectedshares * 100) <= 115)}orange{else}red{/if}">{($totalshares / $totalexpectedshares * 100)|number_format:"2"}</font>{else}0{/if}</td>
               </tr>
             </tbody>
           </table>

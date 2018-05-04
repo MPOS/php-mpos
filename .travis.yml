@@ -34,6 +34,7 @@ before_script:
   - nohup php -S bone:8000 public/index.php &
 
 script:
+  - php vendor/bin/codecept build
   - php vendor/bin/codecept run unit --coverage --coverage-html --coverage-xml --env travis
 
 after_script:

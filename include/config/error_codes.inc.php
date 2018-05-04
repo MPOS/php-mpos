@@ -80,3 +80,4 @@ $aErrorCodes['E0081'] = 'Failed to insert new block into database';
 $aErrorCodes['E0082'] = 'Block does not supply any usable confirmation information';
 $aErrorCodes['E0083'] = 'Maintenance mode enabled, skipped';
 $aErrorCodes['E0084'] = 'Error updating %s table';
+$aErrorCodes['E0085'] = 'Cron disabled due to invalid arguments';
