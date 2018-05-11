@@ -51,12 +51,12 @@
                 <td class="text-right">{$BLOCKSFOUND[block].amount|number_format:"2"}</td>
                 <td class="text-right">
                 {assign var="totalexpectedshares" value=$totalexpectedshares+$BLOCKSFOUND[block].estshares}
-                  {$BLOCKSFOUND[block].estshares|number_format}
+                  {$BLOCKSFOUND[block].estshares|number_format:$GLOBAL.config.sharediffprecision}
                 </td>
                 {if $GLOBAL.config.payout_system == 'pplns'}
-                <td class="text-right">{$BLOCKSFOUND[block].pplns_shares|number_format}</td>
+                <td class="text-right">{$BLOCKSFOUND[block].pplns_shares|number_format:$GLOBAL.config.sharediffprecision}</td>
                 {/if}
-                <td class="text-right">{$BLOCKSFOUND[block].shares|number_format}</td>
+                <td class="text-right">{$BLOCKSFOUND[block].shares|number_format:$GLOBAL.config.sharediffprecision}</td>
                 <td class="text-right">
                   {math assign="percentage" equation="shares / estshares * 100" shares=$BLOCKSFOUND[block].shares|default:"0" estshares=$BLOCKSFOUND[block].estshares}
                   <font color="{if ($percentage <= 100)}green{elseif ($percentage <= 115)}orange{else}red{/if}">{$percentage|number_format:"2"}</font>

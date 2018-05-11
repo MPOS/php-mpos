@@ -24,7 +24,7 @@
               {/if}
               <td>{if $BLOCKSFOUND[block].is_anonymous|default:"0" == 1 && $GLOBAL.userdata.is_admin|default:"0" == 0}anonymous{else}{$BLOCKSFOUND[block].finder|default:"unknown"|escape}{/if}</td>
               <td>{$BLOCKSFOUND[block].time|date_format:$GLOBAL.config.date}</td>
-              <td class="text-right">{$BLOCKSFOUND[block].shares|number_format}</td>
+              <td class="text-right">{$BLOCKSFOUND[block].shares|number_format:$GLOBAL.config.sharediffprecision}</td>
             </tr>
 {/section}
           </tbody>

@@ -38,7 +38,7 @@
               <td>Time</td>
               <td>{$BLOCKDETAILS.time|default:"0"}</td>
               <td>Shares</td>
-              <td>{$BLOCKDETAILS.shares|number_format:"0"|default:"0"}</td>
+              <td>{$BLOCKDETAILS.shares|number_format:$GLOBAL.config.sharediffprecision|default:"0"}</td>
               <td>Finder</td>
               <td>{$BLOCKDETAILS.finder|default:"unknown"}</td>
             </tr>

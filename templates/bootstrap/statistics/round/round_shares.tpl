@@ -22,8 +22,8 @@
               <tr{if $GLOBAL.userdata.username|default:"" == $data.username}{assign var=listed value=1} style="background-color:#99EB99;"{else}{/if}>
                 <td>{$rank++}</td>
                 <td>{if $data.is_anonymous|default:"0" == 1 && $GLOBAL.userdata.is_admin|default:"0" == 0}anonymous{else}{$data.username|default:"unknown"|escape}{/if}</td>
-                <td>{$data.valid|number_format}</td>
-                <td>{$data.invalid|number_format}</td>
+                <td>{$data.valid|number_format:$GLOBAL.config.sharediffprecision|default:0}</td>
+                <td>{$data.invalid|number_format:$GLOBAL.config.sharediffprecision|default:0}</td>
                 <td>{if $data.invalid > 0 }{($data.invalid / $data.valid * 100)|number_format:"2"|default:"0"}{else}0.00{/if}</td>
               </tr>
 {/foreach}

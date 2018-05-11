@@ -20,7 +20,7 @@
               <tr{if $GLOBAL.userdata.username|default:"" == $ROUNDTRANSACTIONS[txs].username} style="background-color:#99EB99;"{else}{/if}>
                 <td>{if $ROUNDTRANSACTIONS[txs].is_anonymous|default:"0" == 1 && $GLOBAL.userdata.is_admin|default:"0" == 0}anonymous{else}{$ROUNDTRANSACTIONS[txs].username|default:"unknown"|escape}{/if}</td>
                 <td>{$ROUNDTRANSACTIONS[txs].type|default:""}</td>
-                <td>{$ROUNDSHARES[$ROUNDTRANSACTIONS[txs].uid].valid|number_format:$GLOBAL.config.sharediffprecision|default:"0"}</td>
+                <td>{$ROUNDSHARES[$ROUNDTRANSACTIONS[txs].uid].valid|number_format:$GLOBAL.config.sharediffprecision|default:0}</td>
                 <td>{(( 100 / $BLOCKDETAILS.shares) * $ROUNDSHARES[$ROUNDTRANSACTIONS[txs].uid].valid)|default:"0"|number_format:"2"}</td>
                 <td>{$ROUNDTRANSACTIONS[txs].amount|default:"0"|number_format:"8"}</td>
               </tr>

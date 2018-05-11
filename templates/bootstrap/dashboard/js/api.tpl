@@ -43,7 +43,7 @@ $(document).ready(function(){
 
   // Load initial sparkline values
   var storedPersonalHashrate = [ null, null, null, null, null, null, null, null, null, null, null, null, {/literal}{$GLOBAL.userdata.hashrate|round:"2"}{literal} ];
-  var storedPersonalSharerate = [ null, null, null, null, null, null, null, null, null, null, null, null, {/literal}{$GLOBAL.userdata.sharerate|round:"2"}{literal} ];
+  var storedPersonalSharerate = [ null, null, null, null, null, null, null, null, null, null, null, null, {/literal}{$GLOBAL.userdata.sharerate|round:$GLOBAL.config.sharediffprecision}{literal} ];
   var storedPoolHashrate = [ null, null, null, null, null, null, null, null, null, null, null, null, {/literal}{$GLOBAL.hashrate|round:"2"}{literal} ];
   var storedNetHashrate = [ null, null, null, null, null, null, null, null, null, null, null, null, {/literal}{$GLOBAL.nethashrate|round:"2"}{literal} ];
   var storedPoolWorkers = [ null, null, null, null, null, null, null, null, null, null, null, null, {/literal}{$GLOBAL.workers}{literal} ];
@@ -89,7 +89,7 @@ $(document).ready(function(){
     storedPersonalHashrate.shift();
     storedPersonalHashrate.push(parseFloat(data.getdashboarddata.data.personal.hashrate).toFixed(2))
     storedPersonalSharerate.shift();
-    storedPersonalSharerate.push(parseFloat(data.getdashboarddata.data.personal.sharerate).toFixed(2))
+    storedPersonalSharerate.push(parseFloat(data.getdashboarddata.data.personal.sharerate).toFixed({/literal}{$GLOBAL.config.sharediffprecision}{literal}))
     storedPoolHashrate.shift();
     storedPoolHashrate.push(parseFloat(data.getdashboarddata.data.pool.hashrate).toFixed(2))
     storedNetHashrate.shift();
@@ -122,7 +122,7 @@ $(document).ready(function(){
     } else {
       $('#b-nethashrate').html('n/a');
     }
-    $('#b-sharerate').html((parseFloat(data.getdashboarddata.data.personal.sharerate).toFixed(2)));
+    $('#b-sharerate').html((parseFloat(data.getdashboarddata.data.personal.sharerate).toFixed({/literal}{$GLOBAL.config.sharediffprecision}{literal})));
     $('#b-yvalid').html(number_format(data.getdashboarddata.data.personal.shares.valid, {/literal}{$GLOBAL.config.sharediffprecision}{literal}));
     $('#b-yivalid').html(number_format(data.getdashboarddata.data.personal.shares.invalid, {/literal}{$GLOBAL.config.sharediffprecision}{literal}));
     if ( data.getdashboarddata.data.personal.shares.valid > 0 ) {

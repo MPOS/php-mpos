@@ -9,6 +9,7 @@ function run_103() {
   $db_version_now = $setting->getValue('DB_VERSION');  // Our actual version installed
 
   // Upgrade specific variables
+  $aSql[] = "ALTER TABLE `blocks` CHANGE `shares` `shares` DOUBLE UNSIGNED DEFAULT NULL;";
   $aSql[] = "UPDATE `statistics_shares` SET `valid` = '0' WHERE `valid` IS NULL;";
   $aSql[] = "UPDATE `statistics_shares` SET `pplns_valid` = '0' WHERE `pplns_valid` IS NULL;";
   $aSql[] = "ALTER TABLE `statistics_shares` CHANGE `valid` `valid` FLOAT NOT NULL DEFAULT '0', CHANGE `invalid` `invalid` FLOAT NOT NULL DEFAULT '0', CHANGE `pplns_valid` `pplns_valid` FLOAT NOT NULL DEFAULT '0', CHANGE `pplns_invalid` `pplns_invalid` FLOAT NOT NULL DEFAULT '0';";
