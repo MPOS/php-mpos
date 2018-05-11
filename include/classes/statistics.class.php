@@ -203,7 +203,7 @@ class Statistics extends Base {
   public function updateShareStatistics($aStats, $iBlockId) {
     $this->debug->append("STA " . __METHOD__, 4);
     $stmt = $this->mysqli->prepare("INSERT INTO $this->table (account_id, valid, invalid, block_id) VALUES (?, ?, ?, ?)");
-    if ($this->checkStmt($stmt) && $stmt->bind_param('iiii', $aStats['id'], $aStats['valid'], $aStats['invalid'], $iBlockId) && $stmt->execute()) return true;
+    if ($this->checkStmt($stmt) && $stmt->bind_param('iddi', $aStats['id'], $aStats['valid'], $aStats['invalid'], $iBlockId) && $stmt->execute()) return true;
     return $this->sqlError();
   }
 
@@ -213,7 +213,7 @@ class Statistics extends Base {
   public function insertPPLNSStatistics($aStats, $iBlockId) {
     $this->debug->append("STA " . __METHOD__, 4);
     $stmt = $this->mysqli->prepare("INSERT INTO $this->table (account_id, valid, invalid, pplns_valid, pplns_invalid, block_id) VALUES (?, ?, ?, ?, ?, ?)");
-    if ($this->checkStmt($stmt) && $stmt->bind_param('iiiiii', $aStats['id'], $aStats['valid'], $aStats['invalid'], $aStats['pplns_valid'], $aStats['pplns_invalid'], $iBlockId) && $stmt->execute()) return true;
+    if ($this->checkStmt($stmt) && $stmt->bind_param('iddddi', $aStats['id'], $aStats['valid'], $aStats['invalid'], $aStats['pplns_valid'], $aStats['pplns_invalid'], $iBlockId) && $stmt->execute()) return true;
     return $this->sqlError();
   }
 
