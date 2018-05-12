@@ -12,7 +12,7 @@ function run_103() {
   $aSql[] = "ALTER TABLE `blocks` CHANGE `shares` `shares` DOUBLE UNSIGNED DEFAULT NULL;";
   $aSql[] = "UPDATE `statistics_shares` SET `valid` = '0' WHERE `valid` IS NULL;";
   $aSql[] = "UPDATE `statistics_shares` SET `pplns_valid` = '0' WHERE `pplns_valid` IS NULL;";
-  $aSql[] = "ALTER TABLE `statistics_shares` CHANGE `valid` `valid` FLOAT NOT NULL DEFAULT '0', CHANGE `invalid` `invalid` FLOAT NOT NULL DEFAULT '0', CHANGE `pplns_valid` `pplns_valid` FLOAT NOT NULL DEFAULT '0', CHANGE `pplns_invalid` `pplns_invalid` FLOAT NOT NULL DEFAULT '0';";
+  $aSql[] = "ALTER TABLE `statistics_shares` CHANGE `valid` `valid` FLOAT UNSIGNED NOT NULL DEFAULT '0', CHANGE `invalid` `invalid` FLOAT UNSIGNED NOT NULL DEFAULT '0', CHANGE `pplns_valid` `pplns_valid` FLOAT UNSIGNED NOT NULL DEFAULT '0', CHANGE `pplns_invalid` `pplns_invalid` FLOAT UNSIGNED NOT NULL DEFAULT '0';";
   $aSql[] = "UPDATE " . $setting->getTableName() . " SET value = '" . $db_version_new . "' WHERE name = 'DB_VERSION';";
 
   if ($db_version_now == $db_version_old && version_compare($db_version_now, DB_VERSION, '<')) {
