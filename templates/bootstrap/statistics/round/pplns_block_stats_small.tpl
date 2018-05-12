@@ -30,9 +30,9 @@
             <td>{$BLOCKDETAILS.height|number_format:"0"|default:"0"}</td>
             {/if}
             <td>PPLNS Shares</td>
-            <td>{$PPLNSSHARES|number_format:"0"|default:"0"}</td>
+            <td>{$PPLNSSHARES|number_format:$GLOBAL.config.sharediffprecision|default:"0"}</td>
             <td>Estimated Shares</td>
-            <td>{$BLOCKDETAILS.estshares|number_format|default:"0"}</td>
+            <td>{$BLOCKDETAILS.estshares|number_format:$GLOBAL.config.sharediffprecision|default:"0"}</td>
           </tr>
           <tr class="odd">
             <td>Amount</td>
@@ -61,7 +61,7 @@
           </tr>
           <tr class="odd">
             <td>Shares</td>
-            <td>{$BLOCKDETAILS.shares|number_format:"0"|default:"0"}</td>
+            <td>{$BLOCKDETAILS.shares|number_format:$GLOBAL.config.sharediffprecision|default:"0"}</td>
             <td>Finder</td>
             <td>{$BLOCKDETAILS.finder|default:"unknown"}</td>
             <td>Seconds This Round</td>

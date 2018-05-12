@@ -237,7 +237,7 @@ class Block extends Base {
    * @return bool
    **/
   public function setShares($block_id, $shares=NULL) {
-    $field = array( 'name' => 'shares', 'value' => $shares, 'type' => 'i');
+    $field = array( 'name' => 'shares', 'value' => $shares, 'type' => 'd');
     return $this->updateSingle($block_id, $field);
   }
 

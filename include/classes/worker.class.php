@@ -174,7 +174,7 @@ class Worker extends Base {
       while ($row = $result->fetch_assoc()) {
         $row['hashrate'] = round($this->coin->calcHashrate($row['shares'], $interval), 2);
         if ($row['count_all'] > 0) {
-          $row['difficulty'] = round($row['shares'] / $row['count_all'], 2);
+          $row['difficulty'] = round($row['shares'] / $row['count_all'], $this->coin->getShareDifficultyPrecision());
         } else {
           $row['difficulty'] = 0.00;
         }

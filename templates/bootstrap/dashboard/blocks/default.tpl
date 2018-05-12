@@ -26,8 +26,8 @@
               <td class="text-right">{$BLOCKSFOUND[block].time|date_format:$GLOBAL.config.date}</td>
               <td class="text-right">{$BLOCKSFOUND[block].difficulty|number_format:"4"}</td>
               <td class="text-right">{$BLOCKSFOUND[block].amount|number_format:"2"}</td>
-              <td class="text-right">{$BLOCKSFOUND[block].estshares|number_format}</td>
-              <td class="text-right">{$BLOCKSFOUND[block].shares|number_format}</td>
+              <td class="text-right">{$BLOCKSFOUND[block].estshares|number_format:$GLOBAL.config.sharediffprecision}</td>
+              <td class="text-right">{$BLOCKSFOUND[block].shares|number_format:$GLOBAL.config.sharediffprecision}</td>
               <td class="text-right">
                 {math assign="percentage" equation="shares / estshares * 100" shares=$BLOCKSFOUND[block].shares|default:"0" estshares=$BLOCKSFOUND[block].estshares}
                 <font color="{if ($percentage <= 100)}green{else}red{/if}">{$percentage|number_format:"2"}</font>

@@ -111,7 +111,7 @@ class Statistics extends Base {
         b.*,
         a.username AS finder,
         a.is_anonymous AS is_anonymous,
-        ROUND(difficulty * POW(2, 32 - " . $this->coin->getTargetBits() . "), 0) AS estshares
+        ROUND(difficulty * POW(2, 32 - " . $this->coin->getTargetBits() . "), " . $this->coin->getShareDifficultyPrecision() . ") AS estshares
       FROM " . $this->block->getTableName() . " AS b
       LEFT JOIN " . $this->user->getTableName() . " AS a
       ON b.account_id = a.id
@@ -261,12 +261,12 @@ class Statistics extends Base {
       SELECT
       (
         (
-          SELECT ROUND(SUM(difficulty) / ?, 2) AS sharerate
+          SELECT ROUND(SUM(difficulty) / ?, " . $this->coin->getShareDifficultyPrecision() . ") AS sharerate
           FROM " . $this->share->getTableName() . "
           WHERE time > DATE_SUB(now(), INTERVAL ? SECOND)
           AND our_result = 'Y'
         ) + (
-          SELECT ROUND(SUM(difficulty) / ?, 2) AS sharerate
+          SELECT ROUND(SUM(difficulty) / ?, " . $this->coin->getShareDifficultyPrecision() . ") AS sharerate
           FROM " . $this->share->getArchiveTableName() . "
           WHERE time > DATE_SUB(now(), INTERVAL ? SECOND)
           AND our_result = 'Y'
