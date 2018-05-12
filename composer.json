@@ -1,13 +1,13 @@
 {
-    "name": "delboy1978uk/mpos",
+    "name": "MPOS/php-mpos",
     "description": "MPOS stands for Mining Portal Open Source. A unified mining interface for various Scrypt and SHA256d Crypto-currencies!",
     "require-dev": {
         "codeception/codeception": "~2.0"
     },
     "authors": [
         {
-            "name": "Derek Stephen McLean",
-            "email": "delboy1978uk@gmail.com"
+            "name": "Sebastian Grewe",
+            "email": "sebastian.grewe@gmail.com"
         }
     ],
     "require": {
