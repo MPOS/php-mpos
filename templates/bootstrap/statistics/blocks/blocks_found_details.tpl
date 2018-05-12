@@ -65,11 +65,11 @@
               {/section}
               <tr>
                 <td colspan="6"><b>Totals</b></td>
-                <td class="text-right">{$totalexpectedshares|number_format}</td>
+                <td class="text-right">{$totalexpectedshares|number_format:$GLOBAL.config.sharediffprecision}</td>
                 {if $GLOBAL.config.payout_system == 'pplns'}
-                <td class="text-right">{$pplnsshares|number_format}</td>
+                <td class="text-right">{$pplnsshares|number_format:$GLOBAL.config.sharediffprecision}</td>
                 {/if}
-                <td class="text-right">{$totalshares|number_format}</td>
+                <td class="text-right">{$totalshares|number_format:$GLOBAL.config.sharediffprecision}</td>
                 <td class="text-right">{if $count > 0}<font color="{if (($totalshares / $totalexpectedshares * 100) <= 100)}green{elseif (($totalshares / $totalexpectedshares * 100) <= 115)}orange{else}red{/if}">{($totalshares / $totalexpectedshares * 100)|number_format:"2"}</font>{else}0{/if}</td>
               </tr>
             </tbody>
