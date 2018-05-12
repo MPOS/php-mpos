@@ -20,8 +20,13 @@ if (isset($_REQUEST['limit']) && $_REQUEST['limit'] <= 100) {
   // Force limit
   $limit = 100;
 }
+if (isset($_REQUEST['filter']) && is_array($_REQUEST['filter'])) {
+  $filter = $_REQUEST['filter'];
+} else {
+  $filter = NULL;
+}
 
-$data['transactions'] = $transaction->getTransactions($start, NULL, $limit, $user_id);
+$data['transactions'] = $transaction->getTransactions($start, $filter, $limit, $user_id);
 
 // Fetch summary if enabled
 if (!$setting->getValue('disable_transactionsummary')) {
