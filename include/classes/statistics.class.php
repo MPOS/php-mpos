@@ -575,9 +575,9 @@ class Statistics extends Base {
     if ($this->getGetCache() && $data = $this->memcache->get(__FUNCTION__ . $account_id)) return $data;
     $stmt = $this->mysqli->prepare("
       SELECT
-        IFNULL(SUM(difficulty) / ?, " . $this->coin->getShareDifficultyPrecision() . ") AS sharerate,
-        IFNULL(SUM(difficulty), " . $this->coin->getShareDifficultyPrecision() . ") AS shares,
-        IFNULL(AVG(difficulty), " . $this->coin->getShareDifficultyPrecision() . ") AS avgsharediff
+        IFNULL(SUM(difficulty) / ?, 0) AS sharerate,
+        IFNULL(SUM(difficulty), 0) AS shares,
+        IFNULL(AVG(difficulty), 0) AS avgsharediff
       FROM (
         SELECT
           id, our_result, IF(difficulty = 0, POW(2, (" . $this->config['difficulty'] . " - 16)), difficulty) AS difficulty
