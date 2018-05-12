@@ -30,6 +30,15 @@ class BitcoinWrapper extends BitcoinClient {
       return $this->memcache->setCache(__FUNCTION__, parent::getnetworkinfo()+parent::getmininginfo()+parent::getwalletinfo(), 30);
   }
 
+  public function is_testnet() {
+    $this->oDebug->append("STA " . __METHOD__, 4);
+    if ($data = $this->memcache->get(__FUNCTION__)) return $data;
+    if (!(parent::getblockchaininfo()))
+      return $this->memcache->setCache(__FUNCTION__, parent::is_testnet(), 30);
+    else
+      return $this->memcache->setCache(__FUNCTION__, parent::getblockchaininfo()['chain'] == 'test', 30);
+  }
+  
   public function getmininginfo() {
     $this->oDebug->append("STA " . __METHOD__, 4);
     if ($data = $this->memcache->get(__FUNCTION__)) return $data;
