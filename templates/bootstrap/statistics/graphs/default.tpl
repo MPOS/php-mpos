@@ -1,8 +1,9 @@
 <script>
 $(function () {
+  var miningstats = {$YOURMININGSTATS nofilter};
   var hashChart = Morris.Line({
     element: 'hashrate-area-chart',
-    data: {$YOURMININGSTATS nofilter},
+    data: miningstats,
     xkey: 'time',
     ykeys: ['hashrate'],
     labels: ['Hashrate'],
@@ -17,7 +18,7 @@ $(function () {
 
   var workersChart = Morris.Line({
     element: 'workers-area-chart',
-    data: {$YOURMININGSTATS nofilter},
+    data: miningstats,
     xkey: 'time',
     ykeys: ['workers'],
     labels: ['Workers'],
@@ -32,7 +33,7 @@ $(function () {
 
   var shareCharts= Morris.Line({
     element: 'sharerate-area-chart',
-    data: {$YOURMININGSTATS nofilter},
+    data: miningstats,
     xkey: 'time',
     ykeys: ['sharerate'],
     labels: ['Sharerate'],

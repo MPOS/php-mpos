@@ -470,7 +470,7 @@ class Statistics extends Base {
         a.username AS account,
         COUNT(DISTINCT t1.username) AS workers,
         IFNULL(SUM(t1.difficulty), 0) AS shares,
-        ROUND(SUM(t1.difficulty) / ?, 2) AS sharerate,
+        ROUND(SUM(t1.difficulty) / ?, " . $this->coin->getShareDifficultyPrecision() . ") AS sharerate,
         IFNULL(AVG(IF(difficulty=0, pow(2, (" . $this->config['difficulty'] . " - 16)), difficulty)), 0) AS avgsharediff
       FROM (
         SELECT
