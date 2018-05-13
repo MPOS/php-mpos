@@ -22,12 +22,12 @@ class Payout Extends Base {
    * @param strToken string Token to confirm
    * @return data mixed Inserted ID or false
    **/
-  public function createPayout($account_id=NULL, $strToken) {
+  public function createPayout($account_id=NULL, $strToken, $notoken=false) {
     $stmt = $this->mysqli->prepare("INSERT INTO $this->table (account_id) VALUES (?)");
     if ($stmt && $stmt->bind_param('i', $account_id) && $stmt->execute()) {
       $insert_id = $stmt->insert_id;
       // twofactor - consume the token if it is enabled and valid
-      if ($this->config['twofactor']['enabled'] && $this->config['twofactor']['options']['withdraw']) {
+      if ($this->config['twofactor']['enabled'] && $this->config['twofactor']['options']['withdraw'] && !$notoken) {
         $tValid = $this->token->isTokenValid($account_id, $strToken, 7);
         if ($tValid) {
           $delete = $this->token->deleteToken($strToken);
