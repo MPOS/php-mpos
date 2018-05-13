@@ -9,10 +9,10 @@ $user_id = $api->checkAccess($user->checkApiKey($_REQUEST['api_key']), @$_REQUES
 $username = $user->getUsername($user_id);
 
 // Check PIN (disabled, can be enabled or reworked)
-//if (!$user->checkPin($user_id, @$_REQUEST['pin'])){
-//  echo $api->get_json(array('error' => 'true', 'message' => 'Invalid PIN. ' . ($config['maxfailed']['pin'] - $user->getUserPinFailed($user_id)) . ' attempts remaining.'));
-//  break;
-//}
+if (!$user->checkPin($user_id, @$_REQUEST['pin'], true)){
+  echo $api->get_json(array('error' => 'true', 'message' => 'Invalid PIN. ' . ($config['maxfailed']['pin'] - $user->getUserPinFailed($user_id)) . ' attempts remaining.'));
+  break;
+}
 
 // Get balance
 $aBalance = $transaction->getBalance($user_id);

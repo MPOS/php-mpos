@@ -284,7 +284,7 @@ class User extends Base {
    * @param pin int PIN to check
    * @return bool
    **/
-  public function checkPin($userId, $pin='') {
+  public function checkPin($userId, $pin='', $notick=false) {
     $this->debug->append("STA " . __METHOD__, 4);
     $this->debug->append("Confirming PIN for $userId and pin $pin", 2);
     $strPinHash = $this->getUserPinHashById($userId);
@@ -297,6 +297,8 @@ class User extends Base {
       return ($pin_hash === $row_pin);
     }
     $this->log->log('info', $this->getUserName($userId).' incorrect pin');
+    // Give to log incorrect pin message, but block counter ticking and blocking
+    if ($notick) return false;
     $this->incUserPinFailed($userId);
     // Check if this account should be locked
     if (isset($this->config['maxfailed']['pin']) && $this->getUserPinFailed($userId) >= $this->config['maxfailed']['pin']) {
