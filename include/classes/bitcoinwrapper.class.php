@@ -27,6 +27,7 @@ class BitcoinWrapper extends BitcoinClient {
     try {
       return $this->memcache->setCache(__FUNCTION__, parent::getnetworkinfo()+parent::getmininginfo()+parent::getwalletinfo(), 30);
     } catch (Exception $e) {
+      $this->oDebug->append("DEPRECATED : RPC version < 0.16, fallback to `getinfo` RPC call", 2);
       return $this->memcache->setCache(__FUNCTION__, parent::getinfo(), 30);
     }
   }
