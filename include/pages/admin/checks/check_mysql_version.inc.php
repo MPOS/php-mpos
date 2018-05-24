@@ -8,7 +8,7 @@ $mysql_version = $mysqli->query('SELECT VERSION() AS version')->fetch_object()->
 $mysql_mode = $mysqli->query('SELECT @@GLOBAL.sql_mode AS sql_mode')->fetch_object()->sql_mode;
 
 // see if it includes 5.7
-if (strpos($mysql_version, '5.7') !== false && $mysql_mode != 'STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION') {
+if (strpos($mysql_version, '5.7') !== false && strpos($mysql_mode, 'ONLY_FULL_GROUP_BY') !== false) {
 	$newerror = array();
 	$newerror['name'] = "MySQL Version";
 	$newerror['level'] = 3;
