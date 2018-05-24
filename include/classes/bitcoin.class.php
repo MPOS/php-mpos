@@ -284,13 +284,15 @@ class BitcoinClient extends jsonRPCClient {
    * The check is done by calling the server's getinfo() method and checking
    * for a fault.
    *
+   * To turn code compatible with BTC >= 0.16, getmininginfo() method used instead of getinfo()
+   *
    * @return mixed boolean TRUE if successful, or a fault string otherwise
    * @access public
    * @throws none
    */
   public function can_connect() {
     try {
-      $r = $this->getinfo();
+      $r = $this->getmininginfo();
     } catch (Exception $e) {
       return $e->getMessage();
     }

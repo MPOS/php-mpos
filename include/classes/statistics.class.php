@@ -111,7 +111,7 @@ class Statistics extends Base {
         b.*,
         a.username AS finder,
         a.is_anonymous AS is_anonymous,
-        ROUND(difficulty * POW(2, 32 - " . $this->coin->getTargetBits() . "), 0) AS estshares
+        ROUND(difficulty * POW(2, 32 - " . $this->coin->getTargetBits() . "), " . $this->coin->getShareDifficultyPrecision() . ") AS estshares
       FROM " . $this->block->getTableName() . " AS b
       LEFT JOIN " . $this->user->getTableName() . " AS a
       ON b.account_id = a.id
@@ -203,7 +203,7 @@ class Statistics extends Base {
   public function updateShareStatistics($aStats, $iBlockId) {
     $this->debug->append("STA " . __METHOD__, 4);
     $stmt = $this->mysqli->prepare("INSERT INTO $this->table (account_id, valid, invalid, block_id) VALUES (?, ?, ?, ?)");
-    if ($this->checkStmt($stmt) && $stmt->bind_param('iiii', $aStats['id'], $aStats['valid'], $aStats['invalid'], $iBlockId) && $stmt->execute()) return true;
+    if ($this->checkStmt($stmt) && $stmt->bind_param('iddi', $aStats['id'], $aStats['valid'], $aStats['invalid'], $iBlockId) && $stmt->execute()) return true;
     return $this->sqlError();
   }
 
@@ -213,7 +213,7 @@ class Statistics extends Base {
   public function insertPPLNSStatistics($aStats, $iBlockId) {
     $this->debug->append("STA " . __METHOD__, 4);
     $stmt = $this->mysqli->prepare("INSERT INTO $this->table (account_id, valid, invalid, pplns_valid, pplns_invalid, block_id) VALUES (?, ?, ?, ?, ?, ?)");
-    if ($this->checkStmt($stmt) && $stmt->bind_param('iiiiii', $aStats['id'], $aStats['valid'], $aStats['invalid'], $aStats['pplns_valid'], $aStats['pplns_invalid'], $iBlockId) && $stmt->execute()) return true;
+    if ($this->checkStmt($stmt) && $stmt->bind_param('iddddi', $aStats['id'], $aStats['valid'], $aStats['invalid'], $aStats['pplns_valid'], $aStats['pplns_invalid'], $iBlockId) && $stmt->execute()) return true;
     return $this->sqlError();
   }
 
@@ -261,12 +261,12 @@ class Statistics extends Base {
       SELECT
       (
         (
-          SELECT ROUND(SUM(difficulty) / ?, 2) AS sharerate
+          SELECT ROUND(SUM(difficulty) / ?, " . $this->coin->getShareDifficultyPrecision() . ") AS sharerate
           FROM " . $this->share->getTableName() . "
           WHERE time > DATE_SUB(now(), INTERVAL ? SECOND)
           AND our_result = 'Y'
         ) + (
-          SELECT ROUND(SUM(difficulty) / ?, 2) AS sharerate
+          SELECT ROUND(SUM(difficulty) / ?, " . $this->coin->getShareDifficultyPrecision() . ") AS sharerate
           FROM " . $this->share->getArchiveTableName() . "
           WHERE time > DATE_SUB(now(), INTERVAL ? SECOND)
           AND our_result = 'Y'
@@ -470,7 +470,7 @@ class Statistics extends Base {
         a.username AS account,
         COUNT(DISTINCT t1.username) AS workers,
         IFNULL(SUM(t1.difficulty), 0) AS shares,
-        ROUND(SUM(t1.difficulty) / ?, 2) AS sharerate,
+        ROUND(SUM(t1.difficulty) / ?, " . $this->coin->getShareDifficultyPrecision() . ") AS sharerate,
         IFNULL(AVG(IF(difficulty=0, pow(2, (" . $this->config['difficulty'] . " - 16)), difficulty)), 0) AS avgsharediff
       FROM (
         SELECT

@@ -21,8 +21,8 @@
               <tr{if $GLOBAL.userdata.username|default:"" == $PPLNSROUNDSHARES[contrib].username} style="background-color:#99EB99;"{else}{/if}>
                 <td>{$rank++}</td>
                 <td>{if $PPLNSROUNDSHARES[contrib].is_anonymous|default:"0" == 1 && $GLOBAL.userdata.is_admin|default:"0" == 0}anonymous{else}{$PPLNSROUNDSHARES[contrib].username|default:"unknown"|escape}{/if}</td>
-                <td>{$PPLNSROUNDSHARES[contrib].pplns_valid|number_format}</td>
-                <td>{$PPLNSROUNDSHARES[contrib].pplns_invalid|number_format}</td>
+                <td>{$PPLNSROUNDSHARES[contrib].pplns_valid|number_format:$GLOBAL.config.sharediffprecision|default:0}</td>
+                <td>{$PPLNSROUNDSHARES[contrib].pplns_invalid|number_format:$GLOBAL.config.sharediffprecision|default:0}</td>
                 <td>{if $PPLNSROUNDSHARES[contrib].pplns_invalid > 0 && $PPLNSROUNDSHARES[contrib].pplns_valid > 0}{($PPLNSROUNDSHARES[contrib].pplns_invalid / $PPLNSROUNDSHARES[contrib].pplns_valid * 100)|number_format:"2"|default:"0"}{else}0.00{/if}</td>
               </tr>
 {/section}

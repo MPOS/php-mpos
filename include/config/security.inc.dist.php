@@ -23,7 +23,7 @@ $config['logging']['path'] = realpath(BASEPATH.'../logs');
 /**
  * Memcache Rate Limiting
  *  Rate limit requests using Memcache
- *   https://github.com/MPOS/php-mpos/wiki/Config-Setup#wiki-memcache-rate-limiting
+ *   https://github.com/MPOS/php-mpos/wiki/Config-Setup#memcache-rate-limiting
  */
 $config['mc_antidos']['enabled'] = true;
 $config['mc_antidos']['protect_ajax'] = true;
@@ -38,14 +38,14 @@ $config['mc_antidos']['error_push_page'] = array('page' => 'error', 'action' => 
 /**
  * CSRF Protection
  *  Enable or disable CSRF protection
- *   https://github.com/MPOS/php-mpos/wiki/Config-Setup#wiki-csrf-protection
+ *   https://github.com/MPOS/php-mpos/wiki/Config-Setup#csrf-protection
  */
 $config['csrf']['enabled'] = true;
 
 /**
  * E-mail confirmations for user actions
  *  Two-factor confirmation for user actions
- *   https://github.com/MPOS/php-mpos/wiki/Config-Setup#wiki-e-mail-confirmations
+ *   https://github.com/MPOS/php-mpos/wiki/Config-Setup#e-mail-confirmations
  */
 $config['twofactor']['enabled'] = true;
 $config['twofactor']['options']['details'] = true;
@@ -55,7 +55,7 @@ $config['twofactor']['options']['changepw'] = true;
 /**
  * Lock account after X
  *  Lock accounts after X invalid logins or pins
- *   https://github.com/MPOS/php-mpos/wiki/Config-Setup#wiki-lock-accounts-after-failed-logins
+ *   https://github.com/MPOS/php-mpos/wiki/Config-Setup#lock-accounts-after-failed-logins
  **/
 $config['maxfailed']['login'] = 3;
 $config['maxfailed']['pin'] = 3;
