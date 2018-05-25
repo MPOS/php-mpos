@@ -193,9 +193,15 @@ $(document).ready(function(){
       return;
     }
     if (blocks[0].height > lastBlock) {
+      {/literal}
+      {if $GLOBAL.website.blockfindersound.enabled|default:"1"}
+      {literal}
       if(canCreateSoundJS) {
         createjs.Sound.play('ding');
       }
+      {/literal}
+      {/if}
+      {literal}
       lastBlock = blocks[0].height;
       var table_content = '<tbody id="b-blocks">';
       for (index = 0; index < blocks.length; ++index) {
