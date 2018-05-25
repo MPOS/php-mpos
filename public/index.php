@@ -71,7 +71,7 @@ if ($config['memcache']['enabled'] && $config['mc_antidos']['enabled']) {
   if (!$skip_check) {
     $mcad = new MemcacheAntiDos($config, $memcache, $per_page);
     if ($config['mc_antidos']['protect_ajax'] && $is_ajax_call && $mcad->rate_limit_api_request) {
-      exit(header('HTTP/1.1 401 Unauthorized'));
+      exit(header('HTTP/1.1 429 Too Many Requests'));
     }
     $error_page = $config['mc_antidos']['error_push_page'];
     if ($mcad->rate_limit_site_request) {
