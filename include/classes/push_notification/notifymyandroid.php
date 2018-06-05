@@ -24,6 +24,7 @@ class Notifications_NotifyMyAndroid implements IPushNotification {
     public function notify($message, $severity = 'info', $event = null){
         global $setting;
         curl_setopt_array($ch = curl_init(), array(
+			CURLOPT_TIMEOUT_MS => 1500,
             CURLOPT_URL => "https://www.notifymyandroid.com/publicapi/notify",
             CURLOPT_POST => true,
             CURLOPT_RETURNTRANSFER => true,

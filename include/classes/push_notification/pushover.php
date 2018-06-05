@@ -27,6 +27,7 @@
 		
 		public function notify($message, $severity = 'info', $event = null){
 			curl_setopt_array($ch = curl_init(), array(
+				CURLOPT_TIMEOUT_MS => 1500,
 				CURLOPT_URL => "https://api.pushover.net/1/messages.json",
 				CURLOPT_POST => true,
 				CURLOPT_RETURNTRANSFER => true,
