@@ -40,7 +40,7 @@ class BitcoinWrapper extends BitcoinClient {
     else
       return $this->memcache->setCache(__FUNCTION__, parent::getblockchaininfo()['chain'] == 'test', 30);
   }
-  
+
   public function getmininginfo() {
     $this->oDebug->append("STA " . __METHOD__, 4);
     if ($data = $this->memcache->get(__FUNCTION__)) return $data;
@@ -55,15 +55,21 @@ class BitcoinWrapper extends BitcoinClient {
   // Wrapper method to get the real main account balance
   public function getrealbalance() {
     $this->oDebug->append("STA " . __METHOD__, 4);
-    $aAccounts = parent::listaccounts();
-    $dBalance = parent::getbalance('');
+    $aAccounts = [];
+
+    try {
+      $aAccounts = parent::listaccounts();
+    } catch (Exception $e) {
+      if ($e->getCode() == 404)
+        $aAccounts = array( '*' => parent::getbalance("*") );
+    }
+
     // Account checks
     if (count($aAccounts) == 1) {
       // We only have a single account so getbalance will be fine
-      return $dBalance;
+      return parent::getbalance("*");
     } else {
-      $dMainBalance = $aAccounts[''];
-      return $dMainBalance;
+      return $aAccounts[0];
     }
   }
   public function getdifficulty() {

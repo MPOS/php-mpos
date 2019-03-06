@@ -35,11 +35,17 @@ try {
       $newerror['description'] = "Blockchain download progress is at an estimated $dDownloadPercentage%. It may take a while to complete.";
       $newerror['configvalue'] = "wallet.host";
       $newerror['helplink'] = "https://github.com/MPOS/php-mpos/wiki/Config-Setup#wiki-local-wallet-rpc";
-      $error[] = $newerror; 
+      $error[] = $newerror;
       $newerror = null;
     }
     // check if there is more than one account set on wallet
-    $accounts = $bitcoin->listaccounts();
+    try {
+      $accounts = $bitcoin->listaccounts();
+    } catch (Exception $e) {
+      if ($e->getCode() == 404)
+        $accounts = $bitcoin->listwallets();
+    }
+
     if (count($accounts) > 1 && $accounts[''] <= 0) {
       $newerror = array();
       $newerror['name'] = "Coin daemon";

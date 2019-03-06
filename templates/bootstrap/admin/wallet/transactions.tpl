@@ -9,7 +9,11 @@
           <table class="table table-striped table-bordered table-hover">
             <thead>
             <tr>
-              <th class="text-center">Account</th>
+              {if $LABELSCOMMAND}
+                <th class="text-center">Label</th>
+              {else}
+                <th class="text-center">Account</th>
+              {/if}
               <th class="text-center">Address</th>
               <th class="text-center">Category</th>
               <th class="text-right">Amount</th>

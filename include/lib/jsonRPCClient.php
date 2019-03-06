@@ -58,7 +58,7 @@ class jsonRPCClient {
    */
   public function __construct($url, $debug = false) {
     $this->url = $url;
-    $this->debug = $debug;	
+    $this->debug = $debug;
     $this->debug_output = '';
     $this->id = rand(1, 100);
   }
@@ -97,7 +97,7 @@ class jsonRPCClient {
       'id' => $this->id
     );
     $request = json_encode($request);
-    if ($this->debug) $this->debug_output[] = 'Request: '.$request;
+    if ($this->debug) $this->debug_output = 'Request: '.$request[0];
 
     // performs the HTTP POST
     // extract information from URL for proper authentication
@@ -112,12 +112,12 @@ class jsonRPCClient {
     // curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
     $response = curl_exec($ch);
     if (curl_errno($ch)) throw new Exception('RPC call failed: ' . curl_error($ch));
-    if ($this->debug) $this->debug_output[] = 'Response: ' . $response;
+    if ($this->debug) $this->debug_output = 'Response: ' . $response[0];
     $response = json_decode($response, true);
     $resultStatus = curl_getinfo($ch);
     if ($resultStatus['http_code'] != '200') {
       if ($resultStatus['http_code'] == '401') throw new Exception('RPC call did not return 200: Authentication failed');
-      throw new Exception('RPC call did not return 200: HTTP error: ' . $resultStatus['http_code'] . ' - JSON Response: [' . @$response['error']['code'] . '] ' . @$response['error']['message']);
+      throw new Exception('RPC call did not return 200: HTTP error: ' . $resultStatus['http_code'] . ' - JSON Response: [' . @$response['error']['code'] . '] ' . @$response['error']['message'], $resultStatus['http_code']);
     }
     curl_close($ch);
 
