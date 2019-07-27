@@ -11,14 +11,32 @@ if (!$smarty->isCached('master.tpl', $smarty_cache_key)) {
   $debug->append('No cached version available, fetching from backend', 3);
   if ($bitcoin->can_connect() === true) {
     $dBalance = $bitcoin->getrealbalance();
+    $labelsCommand = false;
 
-    $dWalletAccounts = $bitcoin->listaccounts();
+    try {
+      $dWalletAccounts = $bitcoin->listaccounts();
+    } catch (Exception $e) {
+      if ($e->getCode() == 404) {
+        $dWalletAccounts = $bitcoin->listlabels();
+        $labelsCommand = true;
+      }
+    }
+
     $dAddressCount = count($dWalletAccounts);
 
     $dAccountAddresses = array();
     foreach($dWalletAccounts as $key => $value)
     {
-      $dAccountAddresses[$key] = $bitcoin->getaddressesbyaccount((string)$key);
+      if (!($labelsCommand))
+        $dAccountAddresses[$key] = $bitcoin->getaddressesbyaccount((string)$key);
+      else {
+        if (strlen($value) == 0)
+          $value = "";
+
+        foreach ($bitcoin->getaddressesbylabel((string)$value) as $key2 => $value2) {
+          $dAccountAddresses[$key][$key2] = $value2;
+        }
+      }
     }
 
     $aGetInfo = $bitcoin->getinfo();
@@ -26,7 +44,7 @@ if (!$smarty->isCached('master.tpl', $smarty_cache_key)) {
     if ($aGetInfo['connections'] == 0) $aGetInfo['errors'] = 'No peers';
     # Check if daemon is downloading the blockchain, estimated
     if ($dDownloadPercentage = $bitcoin->getblockchaindownload()) $aGetInfo['errors'] = "Downloading: $dDownloadPercentage%";
-    $aGetTransactions = $bitcoin->listtransactions('', (int)$setting->getValue('wallet_transaction_limit', 25));
+    $aGetTransactions = $bitcoin->listtransactions('*', (int)$setting->getValue('wallet_transaction_limit', 25));
     if (is_array($aGetInfo) && array_key_exists('newmint', $aGetInfo)) {
       $dNewmint = $aGetInfo['newmint'];
     } else {
@@ -69,6 +87,7 @@ if (!$smarty->isCached('master.tpl', $smarty_cache_key)) {
   $smarty->assign("PEERINFO", $aGetPeerInfo);
   $smarty->assign('PRECISION', $coin->getCoinValuePrevision());
   $smarty->assign("TRANSACTIONS", $aGetTransactions);
+  $smarty->assign("LABELSCOMMAND", $labelsCommand);
 } else {
   $debug->append('Using cached page', 3);
 }

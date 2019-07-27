@@ -14,7 +14,11 @@
 								<th>Peers</th>
 								<th>Status</th>
 								<th>Blocks</th>
-								<th>Accounts</th>
+								{if $LABELSCOMMAND}
+									<th>Labels</th>
+								{else}
+									<th>Accounts</th>
+								{/if}
 							</tr>
 						</thead>
 						<tbody>
